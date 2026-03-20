@@ -18,6 +18,7 @@
     --yellow: #eab308;
     --purple: #a855f7;
     --cyan: #06b6d4;
+    --orange: #f97316;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -57,10 +58,11 @@
   .yellow { color: var(--yellow); }
   .purple { color: var(--purple); }
   .cyan { color: var(--cyan); }
+  .orange { color: var(--orange); }
 
   .section-title { 
     font-size: 0.85em; font-weight: 600; color: var(--dim); 
-    margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px;
+    margin: 24px 0 10px; text-transform: uppercase; letter-spacing: 1px;
     border-bottom: 1px solid var(--border); padding-bottom: 6px;
   }
   
@@ -76,6 +78,52 @@
   .chart-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 0.75em; }
   .chart-label { width: 45px; color: var(--dim); text-align: right; }
   .chart-val { width: 60px; font-weight: 600; }
+
+  .pillar { margin-bottom: 20px; }
+  .pillar-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .pillar-title { font-size: 0.9em; font-weight: 700; }
+  .pillar-pct { font-size: 1.1em; font-weight: 700; }
+  .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+
+  .insight { 
+    background: #0d1117; border-left: 3px solid var(--cyan); 
+    padding: 8px 12px; margin: 6px 0; font-size: 0.75em; border-radius: 0 4px 4px 0;
+  }
+  .insight .label { color: var(--cyan); font-weight: 600; font-size: 0.85em; }
+  .insight .detail { color: var(--dim); margin-top: 2px; }
+
+  .evolution-item {
+    display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; font-size: 0.75em;
+  }
+  .evo-date { color: var(--dim); min-width: 50px; }
+  .evo-text { flex: 1; }
+  .evo-impact { font-weight: 600; min-width: 60px; text-align: right; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+  .tab { 
+    padding: 6px 14px; border-radius: 4px; font-size: 0.75em; cursor: pointer;
+    background: var(--card); border: 1px solid var(--border); color: var(--dim);
+  }
+  .tab.active { background: var(--border); color: var(--text); border-color: var(--blue); }
+
+  .metric-row {
+    display: flex; justify-content: space-between; padding: 6px 0;
+    border-bottom: 1px solid var(--border); font-size: 0.8em;
+  }
+  .metric-label { color: var(--dim); }
+  .metric-value { font-weight: 600; }
+
+  .copy-signal {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    font-size: 0.7em; font-weight: 600; margin: 2px;
+  }
+  .signal-bullish { background: rgba(34,197,94,0.15); color: var(--green); }
+  .signal-bearish { background: rgba(239,68,68,0.15); color: var(--red); }
+  .signal-neutral { background: rgba(107,114,128,0.15); color: var(--dim); }
 </style>
 </head>
 <body>
@@ -94,15 +142,23 @@
 <!-- Top cards -->
 <div class="grid" id="top-cards"></div>
 
-<!-- Strategy Status -->
-<div class="section-title">⚡ Active Strategies</div>
-<div id="strategies"></div>
-
 <!-- P&L Chart -->
 <div class="section-title">📈 Daily P&L</div>
 <div id="pnl-chart"></div>
 
-<!-- HL Positions -->
+<!-- ═══ PILLAR 1: COPY INTELLIGENCE ═══ -->
+<div class="section-title" style="color: var(--cyan);">🧠 PILLAR 1 — Copy Intelligence</div>
+<div class="pillar" id="pillar1"></div>
+
+<!-- ═══ PILLAR 2: EDGE DEVELOPMENT ═══ -->
+<div class="section-title" style="color: var(--purple);">⚡ PILLAR 2 — Edge Development</div>
+<div class="pillar" id="pillar2"></div>
+
+<!-- ═══ PILLAR 3: CONTINUOUS ITERATION ═══ -->
+<div class="section-title" style="color: var(--orange);">🔄 PILLAR 3 — Continuous Iteration</div>
+<div class="pillar" id="pillar3"></div>
+
+<!-- Open Positions -->
 <div class="section-title">📋 Open Positions</div>
 <div id="positions"></div>
 
@@ -148,38 +204,6 @@ async function loadData() {
       </div>
     `;
     
-    // Strategies
-    const strats = d.strategies || {};
-    document.getElementById('strategies').innerHTML = `
-      <table>
-        <tr><th>Strategy</th><th>Status</th><th>Platform</th><th>Edge</th></tr>
-        <tr>
-          <td>PM Smart Entry</td>
-          <td><span class="status-dot ${d.pm_bot_running ? 'on' : 'off'}"></span>${d.pm_bot_running ? 'LIVE' : 'DOWN'}</td>
-          <td>Polymarket</td>
-          <td class="cyan">SolSt1ne 4-stack (Kelly + conviction + divergence)</td>
-        </tr>
-        <tr>
-          <td>HL Directional</td>
-          <td><span class="status-dot ${d.hl_bot_running ? 'on' : 'off'}"></span>${d.hl_bot_running ? 'LIVE' : 'DOWN'}</td>
-          <td>Hyperliquid</td>
-          <td>Bias score + multi-coin</td>
-        </tr>
-        <tr>
-          <td>HL Funding Arb</td>
-          <td><span class="status-dot ${strats.funding_arb ? 'on' : 'off'}"></span>${strats.funding_arb || 'READY'}</td>
-          <td>Hyperliquid</td>
-          <td>Fade extreme funding rates</td>
-        </tr>
-        <tr>
-          <td>HL Momentum</td>
-          <td><span class="status-dot ${strats.momentum === 'LIVE' ? 'on' : 'off'}"></span>${strats.momentum || 'DRY-RUN'}</td>
-          <td>Hyperliquid</td>
-          <td>Breakout + volume confirmation</td>
-        </tr>
-      </table>
-    `;
-    
     // P&L Chart
     if (d.daily_pnl && d.daily_pnl.length) {
       const maxAbs = Math.max(...d.daily_pnl.map(x => Math.abs(x.pnl)), 1);
@@ -196,7 +220,142 @@ async function loadData() {
       }
       document.getElementById('pnl-chart').innerHTML = chartHtml;
     }
-    
+
+    // ═══ PILLAR 1: COPY INTELLIGENCE ═══
+    const p1 = d.pillar1 || {};
+    const p1pct = p1.completion || 80;
+    document.getElementById('pillar1').innerHTML = `
+      <div class="pillar-header">
+        <span class="pillar-title cyan">How well do I understand what winning traders do?</span>
+        <span class="pillar-pct cyan">${p1pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${p1pct}%;background:var(--cyan)"></div></div>
+      
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="card">
+          <div class="card-title">Traders Tracked</div>
+          <div class="card-value cyan">${p1.traders_tracked || 0}</div>
+          <div class="card-sub">Top PM wallets monitored</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Copy Signal</div>
+          <div class="card-value"><span class="copy-signal ${p1.current_bias === 'bullish' ? 'signal-bullish' : p1.current_bias === 'bearish' ? 'signal-bearish' : 'signal-neutral'}">${(p1.current_bias || 'neutral').toUpperCase()}</span></div>
+          <div class="card-sub">Confidence: ${p1.signal_confidence || 0}/100</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Signals Today</div>
+          <div class="card-value cyan">${p1.signals_today || 0}</div>
+          <div class="card-sub">Fed into trading decisions</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">📡 Latest Insights</div>
+        ${(p1.insights || []).map(i => `
+          <div class="insight">
+            <div class="label">${i.source}</div>
+            <div class="detail">${i.text}</div>
+          </div>
+        `).join('') || '<div class="card-sub">No insights yet — scanner collecting data</div>'}
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">🧬 Evolution Log</div>
+        ${(p1.evolution || []).map(e => `
+          <div class="evolution-item">
+            <span class="evo-date">${e.date}</span>
+            <span class="evo-text">${e.change}</span>
+            <span class="evo-impact ${e.impact_class || ''}">${e.impact || ''}</span>
+          </div>
+        `).join('') || '<div class="card-sub">Tracking starts today</div>'}
+      </div>
+    `;
+
+    // ═══ PILLAR 2: EDGE DEVELOPMENT ═══
+    const p2 = d.pillar2 || {};
+    const p2pct = p2.completion || 85;
+    document.getElementById('pillar2').innerHTML = `
+      <div class="pillar-header">
+        <span class="pillar-title purple">How sharp are my trading strategies?</span>
+        <span class="pillar-pct purple">${p2pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${p2pct}%;background:var(--purple)"></div></div>
+      
+      <table>
+        <tr><th>Strategy</th><th>Status</th><th>Trades</th><th>Win Rate</th><th>P&L</th><th>Sharpe</th></tr>
+        ${(p2.strategies || []).map(s => `
+          <tr>
+            <td>${s.name}</td>
+            <td><span class="status-dot ${s.status === 'LIVE' ? 'on' : 'off'}"></span>${s.status}</td>
+            <td>${s.trades}</td>
+            <td class="${s.win_rate >= 60 ? 'green' : s.win_rate >= 50 ? 'yellow' : 'red'}">${s.win_rate}%</td>
+            <td class="${s.pnl >= 0 ? 'green' : 'red'}">${s.pnl >= 0 ? '+' : ''}$${s.pnl.toFixed(2)}</td>
+            <td class="${s.sharpe >= 1 ? 'green' : s.sharpe >= 0.5 ? 'yellow' : 'red'}">${s.sharpe.toFixed(2)}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="6" class="card-sub">Loading strategies...</td></tr>'}
+      </table>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">🔬 Edge Metrics Over Time</div>
+        ${(p2.edge_history || []).map(e => `
+          <div class="evolution-item">
+            <span class="evo-date">${e.date}</span>
+            <span class="evo-text">${e.change}</span>
+            <span class="evo-impact ${e.impact_class || ''}">${e.impact || ''}</span>
+          </div>
+        `).join('') || '<div class="card-sub">Tracking starts today</div>'}
+      </div>
+    `;
+
+    // ═══ PILLAR 3: CONTINUOUS ITERATION ═══
+    const p3 = d.pillar3 || {};
+    const p3pct = p3.completion || 70;
+    document.getElementById('pillar3').innerHTML = `
+      <div class="pillar-header">
+        <span class="pillar-title orange">How fast am I learning and adapting?</span>
+        <span class="pillar-pct orange">${p3pct}%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${p3pct}%;background:var(--orange)"></div></div>
+      
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="card">
+          <div class="card-title">Parameters Changed</div>
+          <div class="card-value orange">${p3.params_changed || 0}</div>
+          <div class="card-sub">Data-backed adjustments</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Research Reports</div>
+          <div class="card-value orange">${p3.research_reports || 0}</div>
+          <div class="card-sub">Analysis documents generated</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Heartbeats Today</div>
+          <div class="card-value orange">${p3.heartbeats_today || 0}</div>
+          <div class="card-sub">Active review cycles</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">🔧 Recent Changes</div>
+        ${(p3.changes || []).map(c => `
+          <div class="evolution-item">
+            <span class="evo-date">${c.date}</span>
+            <span class="evo-text"><strong>${c.param}:</strong> ${c.old} → ${c.new}</span>
+            <span class="evo-impact ${c.impact_class || ''}">${c.reason || ''}</span>
+          </div>
+        `).join('') || '<div class="card-sub">No changes yet</div>'}
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">📊 Performance Trend</div>
+        <div class="metric-row"><span class="metric-label">Win Rate (7d)</span><span class="metric-value ${(p3.win_rate_7d||0) >= 60 ? 'green' : 'yellow'}">${p3.win_rate_7d || '—'}%</span></div>
+        <div class="metric-row"><span class="metric-label">Win Rate (24h)</span><span class="metric-value ${(p3.win_rate_24h||0) >= 60 ? 'green' : 'yellow'}">${p3.win_rate_24h || '—'}%</span></div>
+        <div class="metric-row"><span class="metric-label">Avg Trade Size</span><span class="metric-value">$${p3.avg_trade_size || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Sharpe Ratio</span><span class="metric-value ${(p3.sharpe||0) >= 1 ? 'green' : 'yellow'}">${p3.sharpe || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Max Drawdown</span><span class="metric-value red">${p3.max_drawdown || '—'}%</span></div>
+      </div>
+    `;
+
     // Positions
     if (d.hl_positions && d.hl_positions.length) {
       let posHtml = '<table><tr><th>Coin</th><th>Side</th><th>Size</th><th>Entry</th><th>PnL</th><th>Lev</th></tr>';
@@ -216,12 +375,12 @@ async function loadData() {
     } else {
       document.getElementById('positions').innerHTML = '<div class="card-sub">No open positions</div>';
     }
-    
+
     // Funding
     if (d.funding_opportunities && d.funding_opportunities.length) {
       let fundHtml = '<table><tr><th>Coin</th><th>Rate/8h</th><th>APR</th><th>Action</th><th>OI</th></tr>';
       for (const f of d.funding_opportunities.slice(0, 8)) {
-        const cls = f.apr > 0 ? 'red' : 'green';
+        const cls = f.apr.startsWith('+') ? 'red' : 'green';
         fundHtml += `<tr>
           <td>${f.coin}</td>
           <td class="${cls}">${f.rate}</td>

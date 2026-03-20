@@ -1,29 +1,25 @@
 {
-  "timestamp": "2026-03-20T18:00:03.577475+00:00",
-  "pm_balance": 488.44,
-  "hl_balance": 392.516818,
-  "today_pnl": 83.85824999999998,
-  "pm_pnl": 81.51499999999999,
-  "hl_pnl": 2.34325,
-  "today_trades": 30,
-  "today_wins": 8,
+  "timestamp": "2026-03-20T18:07:55.933148+00:00",
+  "pm_balance": 479.32,
+  "hl_balance": 392.485888,
+  "today_pnl": 74.70731999999998,
+  "pm_pnl": 72.39499999999998,
+  "hl_pnl": 2.31232,
+  "today_trades": 32,
+  "today_wins": 10,
   "today_losses": 4,
-  "all_time_pnl": 74.71681799999999,
-  "total_trades": 143,
+  "all_time_pnl": 65.56588799999997,
+  "total_trades": 40,
   "days_active": 5,
   "pm_bot_running": true,
   "hl_bot_running": true,
-  "strategies": {
-    "funding_arb": "READY",
-    "momentum": "DRY-RUN"
-  },
   "hl_positions": [
     {
       "coin": "BTC",
       "side": "SHORT",
       "size": 0.00279,
       "entry": 70249.0,
-      "pnl": 0.80073,
+      "pnl": 0.7254,
       "leverage": 10
     },
     {
@@ -31,7 +27,7 @@
       "side": "SHORT",
       "size": 0.0912,
       "entry": 2152.2,
-      "pnl": 1.51392,
+      "pnl": 1.65072,
       "leverage": 10
     },
     {
@@ -39,80 +35,24 @@
       "side": "SHORT",
       "size": 2.2,
       "entry": 88.861,
-      "pnl": 0.0286,
+      "pnl": -0.0638,
       "leverage": 10
     }
   ],
   "funding_opportunities": [
     {
       "coin": "XAI",
-      "rate": "-0.2263%",
-      "apr": "-248%",
+      "rate": "-0.2716%",
+      "apr": "-297%",
       "action": "LONG",
-      "oi": "91,701,250"
+      "oi": "91,788,985"
     },
     {
       "coin": "ZETA",
-      "rate": "-0.0560%",
-      "apr": "-61%",
+      "rate": "-0.0685%",
+      "apr": "-75%",
       "action": "LONG",
-      "oi": "16,866,009"
-    },
-    {
-      "coin": "STABLE",
-      "rate": "-0.0315%",
-      "apr": "-35%",
-      "action": "LONG",
-      "oi": "135,652,214"
-    },
-    {
-      "coin": "BLAST",
-      "rate": "-0.0184%",
-      "apr": "-20%",
-      "action": "LONG",
-      "oi": "1,905,157,510"
-    },
-    {
-      "coin": "MEME",
-      "rate": "-0.0154%",
-      "apr": "-17%",
-      "action": "LONG",
-      "oi": "1,155,004,832"
-    },
-    {
-      "coin": "MINA",
-      "rate": "-0.0133%",
-      "apr": "-15%",
-      "action": "LONG",
-      "oi": "5,694,772"
-    },
-    {
-      "coin": "MEW",
-      "rate": "-0.0139%",
-      "apr": "-15%",
-      "action": "LONG",
-      "oi": "126,192,468"
-    },
-    {
-      "coin": "BLUR",
-      "rate": "-0.0121%",
-      "apr": "-13%",
-      "action": "LONG",
-      "oi": "32,569,418"
-    },
-    {
-      "coin": "SUPER",
-      "rate": "-0.0111%",
-      "apr": "-12%",
-      "action": "LONG",
-      "oi": "2,758,862"
-    },
-    {
-      "coin": "kLUNC",
-      "rate": "-0.0113%",
-      "apr": "-12%",
-      "action": "LONG",
-      "oi": "5,812,860"
+      "oi": "16,683,128"
     }
   ],
   "daily_pnl": [
@@ -138,7 +78,178 @@
     },
     {
       "date": "03/20",
-      "pnl": 323.55773700000015
+      "pnl": 323.54823900000014
     }
-  ]
+  ],
+  "pillar1": {
+    "completion": 80,
+    "traders_tracked": 0,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
+    "signals_today": 50,
+    "insights": [
+      {
+        "source": "Copy Scanner",
+        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.995"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: XAI at -0.2716%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+      }
+    ],
+    "evolution": [
+      {
+        "date": "Mar 15",
+        "change": "PM copy scanner built \u2014 tracking top wallets",
+        "impact": "NEW",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "Mar 19",
+        "change": "SolSt1ne 4-stack strategy extracted (Kelly + conviction + divergence + AI)",
+        "impact": "EDGE",
+        "impact_class": "green"
+      },
+      {
+        "date": "Mar 20",
+        "change": "Copy signals wired into bot as conviction boost",
+        "impact": "+1 conv",
+        "impact_class": "green"
+      },
+      {
+        "date": "Mar 20",
+        "change": "Funding rate scanner: 2 opportunities identified",
+        "impact": "INTEL",
+        "impact_class": "cyan"
+      }
+    ]
+  },
+  "pillar2": {
+    "completion": 85,
+    "strategies": [
+      {
+        "name": "PM Smart Entry",
+        "status": "LIVE",
+        "trades": 40,
+        "win_rate": 71.4,
+        "pnl": 72.39499999999998,
+        "sharpe": -0.69
+      },
+      {
+        "name": "HL Directional",
+        "status": "LIVE",
+        "trades": 3,
+        "win_rate": 0,
+        "pnl": 2.31232,
+        "sharpe": 0.0
+      },
+      {
+        "name": "HL Funding Arb",
+        "status": "READY",
+        "trades": 0,
+        "win_rate": 0,
+        "pnl": 0.0,
+        "sharpe": 0.0
+      },
+      {
+        "name": "HL Momentum",
+        "status": "DRY-RUN",
+        "trades": 0,
+        "win_rate": 0,
+        "pnl": 0.0,
+        "sharpe": 0.0
+      }
+    ],
+    "edge_history": [
+      {
+        "date": "Mar 15",
+        "change": "PM bot launched \u2014 basic bias score only",
+        "impact": "55% WR",
+        "impact_class": "yellow"
+      },
+      {
+        "date": "Mar 16",
+        "change": "Added min price filter ($0.50) + entry delay (60s)",
+        "impact": "+6% WR",
+        "impact_class": "green"
+      },
+      {
+        "date": "Mar 19",
+        "change": "SolSt1ne upgrade: Kelly sizing, conviction 3/4, divergence 8%, confidence 62%",
+        "impact": "MAJOR",
+        "impact_class": "green"
+      },
+      {
+        "date": "Mar 20",
+        "change": "Fixed min_price $0.65\u2192$0.50 (was blocking all trades)",
+        "impact": "FIX",
+        "impact_class": "yellow"
+      },
+      {
+        "date": "Mar 20",
+        "change": "Built HL Funding Rate Arb + HL Momentum strategies",
+        "impact": "+2 strats",
+        "impact_class": "green"
+      }
+    ]
+  },
+  "pillar3": {
+    "completion": 70,
+    "params_changed": 6,
+    "research_reports": 2,
+    "heartbeats_today": 0,
+    "changes": [
+      {
+        "date": "Mar 16",
+        "param": "min_price",
+        "old": "none",
+        "new": "$0.50",
+        "reason": "Prices <$0.50 = losers"
+      },
+      {
+        "date": "Mar 16",
+        "param": "entry_delay",
+        "old": "0s",
+        "new": "60s",
+        "reason": "First 60s = coin flip"
+      },
+      {
+        "date": "Mar 19",
+        "param": "kelly_fraction",
+        "old": "0.10",
+        "new": "0.25",
+        "reason": "SolSt1ne: half-Kelly"
+      },
+      {
+        "date": "Mar 19",
+        "param": "conviction_min",
+        "old": "2",
+        "new": "3",
+        "reason": "SolSt1ne: stack edges"
+      },
+      {
+        "date": "Mar 19",
+        "param": "divergence_threshold",
+        "old": "0.0",
+        "new": "0.08",
+        "reason": "SolSt1ne: 8% AI filter"
+      },
+      {
+        "date": "Mar 20",
+        "param": "min_price",
+        "old": "$0.65",
+        "new": "$0.50",
+        "reason": "Was blocking all trades"
+      }
+    ],
+    "win_rate_7d": 71.4,
+    "win_rate_24h": 71.4,
+    "avg_trade_size": 0.53,
+    "sharpe": -0.69,
+    "max_drawdown": 306.4
+  }
 }
