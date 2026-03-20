@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>brainTrade — Trading Dashboard</title>
+<title>brainTrade — Live Trading Dashboard</title>
+<meta http-equiv="refresh" content="60">
 <style>
   :root {
     --bg: #0a0a0f;
@@ -16,468 +17,229 @@
     --blue: #3b82f6;
     --yellow: #eab308;
     --purple: #a855f7;
+    --cyan: #06b6d4;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     background: var(--bg);
     color: var(--text);
-    padding: 20px;
-    max-width: 1200px;
+    padding: 16px;
+    max-width: 1400px;
     margin: 0 auto;
   }
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
     border-bottom: 1px solid var(--border);
   }
-  .header h1 { font-size: 24px; font-weight: 700; }
-  .header h1 span { color: var(--blue); }
-  .header .updated { color: var(--dim); font-size: 12px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
+  .header h1 { font-size: 1.4em; }
+  .header .live { color: var(--green); font-size: 0.8em; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .header .updated { color: var(--dim); font-size: 0.75em; }
+  
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 16px; }
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  .card h3 {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--dim);
-    margin-bottom: 12px;
-  }
-  .big-number {
-    font-size: 32px;
-    font-weight: 700;
-  }
-  .positive { color: var(--green); }
-  .negative { color: var(--red); }
-  .neutral { color: var(--yellow); }
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--dim); }
-  .strategy-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    background: var(--bg);
     border-radius: 8px;
-    margin-bottom: 8px;
+    padding: 16px;
   }
-  .strategy-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  .card-title { color: var(--dim); font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .card-value { font-size: 1.8em; font-weight: 700; }
+  .card-sub { color: var(--dim); font-size: 0.75em; margin-top: 4px; }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .blue { color: var(--blue); }
+  .yellow { color: var(--yellow); }
+  .purple { color: var(--purple); }
+  .cyan { color: var(--cyan); }
+
+  .section-title { 
+    font-size: 0.85em; font-weight: 600; color: var(--dim); 
+    margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px;
+    border-bottom: 1px solid var(--border); padding-bottom: 6px;
   }
-  .dot-green { background: var(--green); }
-  .dot-red { background: var(--red); }
-  .dot-yellow { background: var(--yellow); }
-  .dot-blue { background: var(--blue); }
-  .phase-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-  .phase-1 { background: #ef444420; color: var(--red); }
-  .phase-2 { background: #eab30820; color: var(--yellow); }
-  .phase-3 { background: #22c55e20; color: var(--green); }
-  .trade-log {
-    max-height: 300px;
-    overflow-y: auto;
-    font-size: 12px;
-  }
-  .trade-row {
-    display: grid;
-    grid-template-columns: 100px 50px 60px 60px 80px;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .trade-header {
-    font-weight: 700;
-    color: var(--dim);
-    text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 1px;
-  }
-  .pnl-bar {
-    height: 24px;
-    background: var(--bg);
-    border-radius: 4px;
-    margin: 4px 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .pnl-fill {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s;
-  }
-  .pnl-label {
-    position: absolute;
-    right: 8px;
-    top: 4px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .section-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 24px 0 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .footer {
-    text-align: center;
-    padding: 24px;
-    color: var(--dim);
-    font-size: 11px;
-  }
-  .footer a { color: var(--blue); text-decoration: none; }
+  
+  table { width: 100%; border-collapse: collapse; font-size: 0.8em; }
+  th { text-align: left; color: var(--dim); padding: 8px; font-weight: 500; border-bottom: 1px solid var(--border); }
+  td { padding: 8px; border-bottom: 1px solid var(--border); }
+  
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .status-dot.on { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-dot.off { background: var(--red); }
+
+  .chart-bar { height: 24px; border-radius: 3px; margin: 2px 0; min-width: 2px; display: inline-block; vertical-align: middle; }
+  .chart-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 0.75em; }
+  .chart-label { width: 45px; color: var(--dim); text-align: right; }
+  .chart-val { width: 60px; font-weight: 600; }
 </style>
 </head>
 <body>
 
 <div class="header">
   <div>
-    <h1>📊 brain<span>Trade</span></h1>
-    <div style="font-size: 13px; color: var(--dim); margin-top: 4px;">
-      Trading & Market Intelligence — brainAI
-    </div>
+    <h1>📊 brainTrade</h1>
+    <span style="color: var(--dim); font-size: 0.75em;">Autonomous Trading Agent — brainAI</span>
   </div>
   <div style="text-align: right;">
-    <div class="updated" id="lastUpdate">Loading...</div>
-    <div style="margin-top: 4px;">
-      <span class="phase-badge phase-1" id="phaseBadge">PHASE 1: STOP THE BLEEDING</span>
-    </div>
+    <div class="live">● LIVE</div>
+    <div class="updated" id="updated"></div>
   </div>
 </div>
 
-<!-- Overview Cards -->
-<div class="grid">
-  <div class="card">
-    <h3>Total Capital</h3>
-    <div class="big-number" id="totalCapital">$0.00</div>
-    <div class="stat-row">
-      <span class="stat-label">Polymarket</span>
-      <span id="pmBalance">—</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Hyperliquid</span>
-      <span id="hlBalance">—</span>
-    </div>
-  </div>
+<!-- Top cards -->
+<div class="grid" id="top-cards"></div>
 
-  <div class="card">
-    <h3>Today's P&L</h3>
-    <div class="big-number" id="todayPnl">$0.00</div>
-    <div class="stat-row">
-      <span class="stat-label">PM P&L</span>
-      <span id="pmPnl">—</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">HL P&L</span>
-      <span id="hlPnl">—</span>
-    </div>
-  </div>
+<!-- Strategy Status -->
+<div class="section-title">⚡ Active Strategies</div>
+<div id="strategies"></div>
 
-  <div class="card">
-    <h3>Win Rate (Today)</h3>
-    <div class="big-number" id="winRate">—</div>
-    <div class="stat-row">
-      <span class="stat-label">Trades Today</span>
-      <span id="tradesToday">0</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">W / L</span>
-      <span id="winLoss">—</span>
-    </div>
-  </div>
+<!-- P&L Chart -->
+<div class="section-title">📈 Daily P&L</div>
+<div id="pnl-chart"></div>
 
-  <div class="card">
-    <h3>All-Time P&L</h3>
-    <div class="big-number" id="allTimePnl">$0.00</div>
-    <div class="stat-row">
-      <span class="stat-label">Total Trades</span>
-      <span id="totalTrades">0</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Days Active</span>
-      <span id="daysActive">0</span>
-    </div>
-  </div>
-</div>
+<!-- HL Positions -->
+<div class="section-title">📋 Open Positions</div>
+<div id="positions"></div>
 
-<!-- Active Strategies -->
-<div class="section-title">Active Strategies</div>
-<div class="grid">
-  <div class="card">
-    <div class="strategy-card">
-      <div class="strategy-dot dot-green"></div>
-      <div>
-        <strong>PM BTC 5min Up/Down</strong>
-        <div style="font-size: 12px; color: var(--dim);">Bias score signals with price & timing filters</div>
-      </div>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Status</span>
-      <span id="pmBotStatus" style="color: var(--green);">● LIVE</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Filters</span>
-      <span>$0.50 min | 60s delay | $20 bet</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Today Win Rate</span>
-      <span id="pmWinRate">—</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="strategy-card">
-      <div class="strategy-dot dot-yellow"></div>
-      <div>
-        <strong>HL Funding Rate Arb</strong>
-        <div style="font-size: 12px; color: var(--dim);">Collect funding by fading crowded trades</div>
-      </div>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Status</span>
-      <span style="color: var(--yellow);">◐ IN DEVELOPMENT</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">ETA</span>
-      <span>This week</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="strategy-card">
-      <div class="strategy-dot dot-blue"></div>
-      <div>
-        <strong>Copy Intelligence</strong>
-        <div style="font-size: 12px; color: var(--dim);">Track & replicate top trader patterns</div>
-      </div>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Status</span>
-      <span style="color: var(--blue);">○ PLANNED</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Top Traders Tracked</span>
-      <span id="tradersTracked">0</span>
-    </div>
-  </div>
-</div>
-
-<!-- Daily P&L History -->
-<div class="section-title">Daily P&L</div>
-<div class="card" id="dailyPnlChart">
-  <div id="pnlBars">
-    <div style="color: var(--dim); font-size: 13px; padding: 20px; text-align: center;">
-      Loading daily P&L data...
-    </div>
-  </div>
-</div>
-
-<!-- Risk Dashboard -->
-<div class="section-title">Risk Management</div>
-<div class="grid">
-  <div class="card">
-    <h3>Daily Loss Limit (10%)</h3>
-    <div class="pnl-bar">
-      <div class="pnl-fill" id="dailyLossBar" style="width: 0%; background: var(--green);"></div>
-      <div class="pnl-label" id="dailyLossLabel">0%</div>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Max daily loss</span>
-      <span id="maxDailyLoss">$0</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Weekly Drawdown Limit (20%)</h3>
-    <div class="pnl-bar">
-      <div class="pnl-fill" id="weeklyDrawdownBar" style="width: 0%; background: var(--green);"></div>
-      <div class="pnl-label" id="weeklyDrawdownLabel">0%</div>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Reserve (30% min)</span>
-      <span id="reservePct">—</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3>Consecutive Losses</h3>
-    <div class="big-number" id="consLosses">0</div>
-    <div class="stat-row">
-      <span class="stat-label">Max streak today</span>
-      <span id="maxStreak">0</span>
-    </div>
-    <div class="stat-row">
-      <span class="stat-label">Pause threshold</span>
-      <span>5</span>
-    </div>
-  </div>
-</div>
-
-<!-- Roadmap -->
-<div class="section-title">Profitability Roadmap</div>
-<div class="card">
-  <div class="strategy-card">
-    <div class="strategy-dot dot-red"></div>
-    <div style="flex: 1;">
-      <div style="display: flex; justify-content: space-between;">
-        <strong>Phase 1: Stop the Bleeding</strong>
-        <span class="phase-badge phase-1">CURRENT</span>
-      </div>
-      <div style="font-size: 12px; color: var(--dim); margin-top: 4px;">
-        Break even. 3 consecutive green days. Win rate >60%.
-      </div>
-    </div>
-  </div>
-  <div class="strategy-card">
-    <div class="strategy-dot dot-yellow"></div>
-    <div>
-      <strong>Phase 2: Consistent Small Profits</strong>
-      <div style="font-size: 12px; color: var(--dim); margin-top: 4px;">
-        $10-30/day. 70%+ green days. Add funding rate strategy.
-      </div>
-    </div>
-  </div>
-  <div class="strategy-card">
-    <div class="strategy-dot dot-green"></div>
-    <div>
-      <strong>Phase 3: Cover Operating Costs</strong>
-      <div style="font-size: 12px; color: var(--dim); margin-top: 4px;">
-        $50-100/day ($1,500-3,000/month). Multi-strategy portfolio.
-      </div>
-    </div>
-  </div>
-  <div class="strategy-card">
-    <div class="strategy-dot dot-blue"></div>
-    <div>
-      <strong>Phase 4: Growth Engine</strong>
-      <div style="font-size: 12px; color: var(--dim); margin-top: 4px;">
-        $200+/day. Compound returns. Scale capital.
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="footer">
-  brainTrade — Trading & Market Intelligence Agent — <a href="https://brainai.bot">brainAI</a>
-  <br>Auto-updated every 30 minutes. Data from Polymarket & Hyperliquid APIs.
-</div>
+<!-- Funding Opportunities -->
+<div class="section-title">💰 Top Funding Rate Opportunities</div>
+<div id="funding"></div>
 
 <script>
-// Dashboard data loader — reads from data.json
 async function loadData() {
   try {
     const resp = await fetch('data.json?' + Date.now());
-    const data = await resp.json();
+    const d = await resp.json();
     
-    // Update timestamp
-    document.getElementById('lastUpdate').textContent = 
-      'Last updated: ' + new Date(data.timestamp).toLocaleString();
+    document.getElementById('updated').textContent = new Date(d.timestamp).toLocaleString() + ' UTC';
     
-    // Capital
-    const total = (data.pm_balance || 0) + (data.hl_balance || 0);
-    document.getElementById('totalCapital').textContent = '$' + total.toFixed(2);
-    document.getElementById('pmBalance').textContent = '$' + (data.pm_balance || 0).toFixed(2);
-    document.getElementById('hlBalance').textContent = '$' + (data.hl_balance || 0).toFixed(2);
+    const totalBal = d.pm_balance + d.hl_balance;
+    const todayClass = d.today_pnl >= 0 ? 'green' : 'red';
+    const allTimeClass = d.all_time_pnl >= 0 ? 'green' : 'red';
+    const winRate = d.today_wins + d.today_losses > 0 
+      ? ((d.today_wins / (d.today_wins + d.today_losses)) * 100).toFixed(0) 
+      : '—';
     
-    // Today P&L
-    const todayPnl = (data.today_pnl || 0);
-    const el = document.getElementById('todayPnl');
-    el.textContent = (todayPnl >= 0 ? '+' : '') + '$' + todayPnl.toFixed(2);
-    el.className = 'big-number ' + (todayPnl >= 0 ? 'positive' : 'negative');
+    document.getElementById('top-cards').innerHTML = `
+      <div class="card">
+        <div class="card-title">Total Capital</div>
+        <div class="card-value">$${totalBal.toFixed(2)}</div>
+        <div class="card-sub">PM: $${d.pm_balance.toFixed(2)} · HL: $${d.hl_balance.toFixed(2)}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Today P&L</div>
+        <div class="card-value ${todayClass}">${d.today_pnl >= 0 ? '+' : ''}$${d.today_pnl.toFixed(2)}</div>
+        <div class="card-sub">PM: $${d.pm_pnl.toFixed(2)} · HL: $${d.hl_pnl.toFixed(2)}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">All-Time P&L</div>
+        <div class="card-value ${allTimeClass}">${d.all_time_pnl >= 0 ? '+' : ''}$${d.all_time_pnl.toFixed(2)}</div>
+        <div class="card-sub">${d.days_active} days active · ${d.total_trades} trades</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Today Stats</div>
+        <div class="card-value">${winRate}%</div>
+        <div class="card-sub">${d.today_wins}W / ${d.today_losses}L · ${d.today_trades} trades</div>
+      </div>
+    `;
     
-    document.getElementById('pmPnl').textContent = 
-      (data.pm_pnl >= 0 ? '+' : '') + '$' + (data.pm_pnl || 0).toFixed(2);
-    document.getElementById('hlPnl').textContent = 
-      (data.hl_pnl >= 0 ? '+' : '') + '$' + (data.hl_pnl || 0).toFixed(2);
+    // Strategies
+    const strats = d.strategies || {};
+    document.getElementById('strategies').innerHTML = `
+      <table>
+        <tr><th>Strategy</th><th>Status</th><th>Platform</th><th>Edge</th></tr>
+        <tr>
+          <td>PM Smart Entry</td>
+          <td><span class="status-dot ${d.pm_bot_running ? 'on' : 'off'}"></span>${d.pm_bot_running ? 'LIVE' : 'DOWN'}</td>
+          <td>Polymarket</td>
+          <td class="cyan">SolSt1ne 4-stack (Kelly + conviction + divergence)</td>
+        </tr>
+        <tr>
+          <td>HL Directional</td>
+          <td><span class="status-dot ${d.hl_bot_running ? 'on' : 'off'}"></span>${d.hl_bot_running ? 'LIVE' : 'DOWN'}</td>
+          <td>Hyperliquid</td>
+          <td>Bias score + multi-coin</td>
+        </tr>
+        <tr>
+          <td>HL Funding Arb</td>
+          <td><span class="status-dot ${strats.funding_arb ? 'on' : 'off'}"></span>${strats.funding_arb || 'READY'}</td>
+          <td>Hyperliquid</td>
+          <td>Fade extreme funding rates</td>
+        </tr>
+        <tr>
+          <td>HL Momentum</td>
+          <td><span class="status-dot ${strats.momentum === 'LIVE' ? 'on' : 'off'}"></span>${strats.momentum || 'DRY-RUN'}</td>
+          <td>Hyperliquid</td>
+          <td>Breakout + volume confirmation</td>
+        </tr>
+      </table>
+    `;
     
-    // Win rate
-    if (data.today_trades > 0) {
-      const wr = (data.today_wins / data.today_trades * 100).toFixed(1);
-      const wrEl = document.getElementById('winRate');
-      wrEl.textContent = wr + '%';
-      wrEl.className = 'big-number ' + (wr >= 60 ? 'positive' : wr >= 50 ? 'neutral' : 'negative');
+    // P&L Chart
+    if (d.daily_pnl && d.daily_pnl.length) {
+      const maxAbs = Math.max(...d.daily_pnl.map(x => Math.abs(x.pnl)), 1);
+      let chartHtml = '';
+      for (const day of d.daily_pnl) {
+        const pct = Math.abs(day.pnl) / maxAbs * 100;
+        const color = day.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+        const cls = day.pnl >= 0 ? 'green' : 'red';
+        chartHtml += `<div class="chart-row">
+          <span class="chart-label">${day.date}</span>
+          <div class="chart-bar" style="width:${Math.max(pct, 2)}%;background:${color}"></div>
+          <span class="chart-val ${cls}">${day.pnl >= 0 ? '+' : ''}$${day.pnl.toFixed(0)}</span>
+        </div>`;
+      }
+      document.getElementById('pnl-chart').innerHTML = chartHtml;
     }
-    document.getElementById('tradesToday').textContent = data.today_trades || 0;
-    document.getElementById('winLoss').textContent = 
-      (data.today_wins || 0) + ' / ' + (data.today_losses || 0);
     
-    // All-time
-    const atPnl = data.all_time_pnl || 0;
-    const atEl = document.getElementById('allTimePnl');
-    atEl.textContent = (atPnl >= 0 ? '+' : '') + '$' + atPnl.toFixed(2);
-    atEl.className = 'big-number ' + (atPnl >= 0 ? 'positive' : 'negative');
-    document.getElementById('totalTrades').textContent = data.total_trades || 0;
-    document.getElementById('daysActive').textContent = data.days_active || 0;
+    // Positions
+    if (d.hl_positions && d.hl_positions.length) {
+      let posHtml = '<table><tr><th>Coin</th><th>Side</th><th>Size</th><th>Entry</th><th>PnL</th><th>Lev</th></tr>';
+      for (const p of d.hl_positions) {
+        const pnlClass = p.pnl >= 0 ? 'green' : 'red';
+        posHtml += `<tr>
+          <td>${p.coin}</td>
+          <td>${p.side}</td>
+          <td>${p.size}</td>
+          <td>$${p.entry}</td>
+          <td class="${pnlClass}">${p.pnl >= 0 ? '+' : ''}$${p.pnl.toFixed(2)}</td>
+          <td>${p.leverage}x</td>
+        </tr>`;
+      }
+      posHtml += '</table>';
+      document.getElementById('positions').innerHTML = posHtml;
+    } else {
+      document.getElementById('positions').innerHTML = '<div class="card-sub">No open positions</div>';
+    }
     
-    // Risk
-    const dailyLossPct = Math.min(100, Math.abs(Math.min(0, todayPnl)) / (total * 0.10) * 100);
-    document.getElementById('dailyLossBar').style.width = dailyLossPct + '%';
-    document.getElementById('dailyLossBar').style.background = 
-      dailyLossPct > 80 ? 'var(--red)' : dailyLossPct > 50 ? 'var(--yellow)' : 'var(--green)';
-    document.getElementById('dailyLossLabel').textContent = dailyLossPct.toFixed(0) + '%';
-    document.getElementById('maxDailyLoss').textContent = '$' + (total * 0.10).toFixed(2);
-    
-    // Bot status
-    document.getElementById('pmBotStatus').textContent = data.pm_bot_running ? '● LIVE' : '○ DOWN';
-    document.getElementById('pmBotStatus').style.color = data.pm_bot_running ? 'var(--green)' : 'var(--red)';
-    
-    // Daily P&L bars
-    if (data.daily_pnl && data.daily_pnl.length > 0) {
-      const maxAbs = Math.max(...data.daily_pnl.map(d => Math.abs(d.pnl)), 1);
-      let barsHtml = '';
-      data.daily_pnl.forEach(d => {
-        const pct = Math.abs(d.pnl) / maxAbs * 100;
-        const color = d.pnl >= 0 ? 'var(--green)' : 'var(--red)';
-        const sign = d.pnl >= 0 ? '+' : '';
-        barsHtml += `
-          <div style="display: flex; align-items: center; margin: 4px 0; font-size: 12px;">
-            <span style="width: 70px; color: var(--dim);">${d.date}</span>
-            <div style="flex: 1; height: 20px; position: relative;">
-              <div style="position: absolute; left: 50%; width: ${pct/2}%; height: 100%; 
-                          ${d.pnl >= 0 ? 'left: 50%' : 'right: 50%'}; 
-                          background: ${color}; border-radius: 3px; opacity: 0.7;"></div>
-            </div>
-            <span style="width: 80px; text-align: right; color: ${color};">${sign}$${d.pnl.toFixed(2)}</span>
-          </div>`;
-      });
-      document.getElementById('pnlBars').innerHTML = barsHtml;
+    // Funding
+    if (d.funding_opportunities && d.funding_opportunities.length) {
+      let fundHtml = '<table><tr><th>Coin</th><th>Rate/8h</th><th>APR</th><th>Action</th><th>OI</th></tr>';
+      for (const f of d.funding_opportunities.slice(0, 8)) {
+        const cls = f.apr > 0 ? 'red' : 'green';
+        fundHtml += `<tr>
+          <td>${f.coin}</td>
+          <td class="${cls}">${f.rate}</td>
+          <td class="${cls}">${f.apr}</td>
+          <td>${f.action}</td>
+          <td>$${f.oi}</td>
+        </tr>`;
+      }
+      fundHtml += '</table>';
+      document.getElementById('funding').innerHTML = fundHtml;
     }
     
   } catch(e) {
     console.error('Failed to load data:', e);
   }
 }
-
 loadData();
-setInterval(loadData, 60000); // Refresh every minute
+setInterval(loadData, 60000);
 </script>
 </body>
 </html>

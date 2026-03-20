@@ -1,160 +1,158 @@
 #!/bin/bash
-# brainTrade Dashboard Data Updater
-# Runs every 30 min via cron, generates data.json for the dashboard
+# Dashboard data updater — runs every 30 min via cron
+# Collects data from PM bot, HL engine, funding arb, momentum
 
-DASH_DIR="/home/ubuntu/clawd/dashboard"
-PROXY="0x2e6325f52CF4c0F77c719296f1A4332557B393C2"
-HL_WALLET="0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba"
+cd /home/ubuntu/clawd
 
 python3 << 'PYEOF'
-import json, time, datetime, requests, sys, os
+import json, datetime, os, subprocess, requests
 
-PROXY = os.environ.get("PROXY", "0x2e6325f52CF4c0F77c719296f1A4332557B393C2")
-HL_WALLET = os.environ.get("HL_WALLET", "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba")
-DASH_DIR = os.environ.get("DASH_DIR", "/home/ubuntu/clawd/dashboard")
+now = datetime.datetime.now(datetime.timezone.utc)
 
-now = time.time()
-today_start = int(datetime.datetime.now(datetime.timezone.utc).replace(hour=0, minute=0, second=0).timestamp())
+# ── PM Balance ──
+pm_balance = 0
+try:
+    proxy = os.environ.get("PROXY", "0x2e6325f52CF4c0F77c719296f1A4332557B393C2")
+    resp = requests.post("https://polygon-rpc.com", json={
+        "jsonrpc": "2.0", "method": "eth_call",
+        "params": [{"to": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+                     "data": "0x70a08231000000000000000000000000" + proxy.replace("0x","")}, "latest"],
+        "id": 1}, timeout=10)
+    pm_balance = int(resp.json()["result"], 16) / 1e6
+except: pass
 
+# ── HL Balance + Positions ──
+hl_balance = 0
+hl_positions = []
+try:
+    resp = requests.post("https://api.hyperliquid.xyz/info", json={
+        "type": "clearinghouseState",
+        "user": os.environ.get("HL_WALLET", "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba")
+    }, timeout=10)
+    hl_data = resp.json()
+    hl_balance = float(hl_data["marginSummary"]["accountValue"])
+    for p in hl_data.get("assetPositions", []):
+        pos = p["position"]
+        szi = float(pos["szi"])
+        if szi == 0: continue
+        hl_positions.append({
+            "coin": pos["coin"],
+            "side": "LONG" if szi > 0 else "SHORT",
+            "size": abs(szi),
+            "entry": float(pos["entryPx"]),
+            "pnl": float(pos["unrealizedPnl"]),
+            "leverage": int(float(pos.get("leverage", {}).get("value", 1))) if isinstance(pos.get("leverage"), dict) else 10
+        })
+except Exception as e:
+    print(f"HL error: {e}")
+
+# ── PM Trades Today ──
+today_str = now.strftime("%Y-%m-%d")
+today_trades = 0; today_wins = 0; today_losses = 0
+try:
+    log = open("/home/ubuntu/clawd/polymarket-assistant/trading.log").read()
+    today_trades = log.count(f"{today_str}") and sum(1 for l in log.split('\n') if today_str in l and "TRADE EXECUTED" in l)
+    outcomes = open("/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl").read()
+    for line in outcomes.strip().split('\n'):
+        if not line: continue
+        o = json.loads(line)
+        if today_str in o.get("ts", ""):
+            if o.get("won"): today_wins += 1
+            else: today_losses += 1
+except: pass
+
+# ── Funding Opportunities ──
+funding_opps = []
+try:
+    resp = requests.post("https://api.hyperliquid.xyz/info", json={"type": "metaAndAssetCtxs"}, timeout=10)
+    meta, ctxs = resp.json()
+    for i, ctx in enumerate(ctxs):
+        coin = meta['universe'][i]['name']
+        funding = float(ctx.get('funding', 0))
+        oi = float(ctx.get('openInterest', 0))
+        if abs(funding) > 0.0001 and oi > 500000:
+            apr = funding * 3 * 365 * 100
+            funding_opps.append({
+                "coin": coin,
+                "rate": f"{funding*100:+.4f}%",
+                "apr": f"{apr:+.0f}%",
+                "action": "SHORT" if funding > 0 else "LONG",
+                "oi": f"{oi:,.0f}"
+            })
+    funding_opps.sort(key=lambda x: abs(float(x['apr'].replace('%','').replace('+',''))), reverse=True)
+except: pass
+
+# ── Strategy Status ──
+strategies = {
+    "funding_arb": "READY",
+    "momentum": "DRY-RUN"
+}
+try:
+    if subprocess.run(["pgrep", "-f", "hl_funding_arb"], capture_output=True).returncode == 0:
+        strategies["funding_arb"] = "LIVE"
+    if subprocess.run(["pgrep", "-f", "hl_momentum"], capture_output=True).returncode == 0:
+        strategies["momentum"] = "DRY-RUN"
+except: pass
+
+# ── Historical P&L ──
+daily_pnl = []
+try:
+    old = json.load(open("/home/ubuntu/clawd/dashboard/data.json"))
+    daily_pnl = old.get("daily_pnl", [])
+    # Update today's entry
+    today_label = now.strftime("%m/%d")
+    initial_pm = 406.925  # Starting PM balance
+    initial_hl = 399.315  # Starting HL balance
+    pm_pnl = pm_balance - initial_pm
+    hl_pnl = hl_balance - initial_hl
+    today_pnl_val = pm_pnl + hl_pnl
+    
+    # Subtract previous days' PnL to get today only
+    prev_pnl = sum(d['pnl'] for d in daily_pnl if d['date'] != today_label)
+    today_only = today_pnl_val - prev_pnl
+    
+    found = False
+    for d in daily_pnl:
+        if d['date'] == today_label:
+            d['pnl'] = today_only
+            found = True
+    if not found:
+        daily_pnl.append({"date": today_label, "pnl": today_only})
+    # Keep last 14 days
+    daily_pnl = daily_pnl[-14:]
+except: pass
+
+# ── Build Output ──
 data = {
-    "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-    "pm_balance": 0, "hl_balance": 0,
-    "today_pnl": 0, "pm_pnl": 0, "hl_pnl": 0,
-    "today_trades": 0, "today_wins": 0, "today_losses": 0,
-    "all_time_pnl": 0, "total_trades": 0, "days_active": 0,
-    "pm_bot_running": False, "hl_bot_running": False,
-    "daily_pnl": []
+    "timestamp": now.isoformat(),
+    "pm_balance": pm_balance,
+    "hl_balance": hl_balance,
+    "today_pnl": sum(p.get("pnl", 0) for p in hl_positions) + (pm_balance - 406.925),
+    "pm_pnl": pm_balance - 406.925,
+    "hl_pnl": sum(p.get("pnl", 0) for p in hl_positions),
+    "today_trades": today_trades,
+    "today_wins": today_wins,
+    "today_losses": today_losses,
+    "all_time_pnl": (pm_balance + hl_balance) - (406.925 + 399.315),
+    "total_trades": 113 + today_trades,
+    "days_active": (now - datetime.datetime(2026, 3, 15, tzinfo=datetime.timezone.utc)).days,
+    "pm_bot_running": subprocess.run(["pgrep", "-f", "trading_bot.py"], capture_output=True).returncode == 0,
+    "hl_bot_running": subprocess.run(["pgrep", "-f", "hl_trading_engine"], capture_output=True).returncode == 0,
+    "strategies": strategies,
+    "hl_positions": hl_positions,
+    "funding_opportunities": funding_opps[:10],
+    "daily_pnl": daily_pnl
 }
 
-# PM Balance via RPC
-try:
-    rpc = {
-        'jsonrpc': '2.0', 'method': 'eth_call',
-        'params': [{
-            'to': '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-            'data': '0x70a08231000000000000000000000000' + PROXY[2:]
-        }, 'latest'], 'id': 1
-    }
-    resp = requests.post('https://polygon-bor-rpc.publicnode.com', json=rpc, timeout=10)
-    if resp.status_code == 200:
-        result = resp.json().get('result', '0x0')
-        data["pm_balance"] = int(result, 16) / 1e6
-except: pass
-
-# HL Balance via API
-try:
-    resp = requests.post('https://api.hyperliquid.xyz/info', 
-                         json={"type": "clearinghouseState", "user": HL_WALLET}, timeout=10)
-    if resp.status_code == 200:
-        state = resp.json()
-        data["hl_balance"] = float(state.get("marginSummary", {}).get("accountValue", 0))
-except: pass
-
-# PM Activity (today)
-try:
-    resp = requests.get(f"https://data-api.polymarket.com/activity?user={PROXY}&limit=500", timeout=15)
-    if resp.status_code == 200:
-        items = resp.json()
-        trades = [i for i in items if i['type'] == 'TRADE' and i['timestamp'] >= today_start]
-        redeems = [i for i in items if i['type'] == 'REDEEM' and i['timestamp'] >= today_start]
-        all_trades = [i for i in items if i['type'] == 'TRADE']
-        all_redeems = [i for i in items if i['type'] == 'REDEEM']
-        
-        # Today's trades
-        from collections import defaultdict
-        markets = defaultdict(lambda: {'spent': 0, 'redeemed': 0})
-        for t in trades:
-            markets[t['conditionId']]['spent'] += t['usdcSize']
-        for r in redeems:
-            if r['timestamp'] >= today_start:
-                markets[r['conditionId']]['redeemed'] += r['usdcSize']
-        
-        for cid, m in markets.items():
-            data["today_trades"] += 1
-            if m['redeemed'] > m['spent'] * 0.5:
-                data["today_wins"] += 1
-            else:
-                data["today_losses"] += 1
-        
-        today_spent = sum(m['spent'] for m in markets.values())
-        today_back = sum(m['redeemed'] for m in markets.values())
-        data["pm_pnl"] = today_back - today_spent
-        
-        # All-time
-        all_markets = defaultdict(lambda: {'spent': 0, 'redeemed': 0})
-        for t in all_trades:
-            all_markets[t['conditionId']]['spent'] += t['usdcSize']
-        for r in all_redeems:
-            all_markets[r['conditionId']]['redeemed'] += r['usdcSize']
-        
-        total_spent = sum(m['spent'] for m in all_markets.values())
-        total_back = sum(m['redeemed'] for m in all_markets.values())
-        data["all_time_pnl"] = total_back - total_spent
-        data["total_trades"] = len(all_markets)
-        
-        # Daily P&L (last 7 days)
-        for day_offset in range(6, -1, -1):
-            day = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=day_offset)
-            day_start = int(day.replace(hour=0, minute=0, second=0).timestamp())
-            day_end = day_start + 86400
-            
-            day_markets = defaultdict(lambda: {'spent': 0, 'redeemed': 0})
-            for t in all_trades:
-                if day_start <= t['timestamp'] < day_end:
-                    day_markets[t['conditionId']]['spent'] += t['usdcSize']
-            for r in all_redeems:
-                if day_start <= r['timestamp'] < day_end:
-                    day_markets[r['conditionId']]['redeemed'] += r['usdcSize']
-            
-            if day_markets:
-                d_spent = sum(m['spent'] for m in day_markets.values())
-                d_back = sum(m['redeemed'] for m in day_markets.values())
-                data["daily_pnl"].append({
-                    "date": day.strftime("%m/%d"),
-                    "pnl": d_back - d_spent
-                })
-        
-        # Days active
-        if all_trades:
-            first = min(t['timestamp'] for t in all_trades)
-            data["days_active"] = max(1, int((now - first) / 86400))
-except Exception as e:
-    print(f"PM data error: {e}", file=sys.stderr)
-
-# HL P&L
-try:
-    resp = requests.post('https://api.hyperliquid.xyz/info',
-                         json={"type": "clearinghouseState", "user": HL_WALLET}, timeout=10)
-    if resp.status_code == 200:
-        state = resp.json()
-        positions = state.get("assetPositions", [])
-        hl_upnl = sum(float(p["position"].get("unrealizedPnl", 0)) for p in positions)
-        data["hl_pnl"] = hl_upnl
-except: pass
-
-data["today_pnl"] = data["pm_pnl"] + data["hl_pnl"]
-
-# Check if bots are running
-import subprocess
-try:
-    result = subprocess.run(['pgrep', '-f', 'trading_bot.py'], capture_output=True)
-    data["pm_bot_running"] = result.returncode == 0
-except: pass
-try:
-    result = subprocess.run(['pgrep', '-f', 'hl_trading_engine.py'], capture_output=True)
-    data["hl_bot_running"] = result.returncode == 0
-except: pass
-
-# Write data.json
-output = os.path.join(DASH_DIR, "data.json")
-with open(output, 'w') as f:
+dash_dir = os.environ.get("DASH_DIR", "/home/ubuntu/clawd/dashboard")
+with open(f"{dash_dir}/data.json", 'w') as f:
     json.dump(data, f, indent=2)
 
-print(f"Dashboard updated: PM=${data['pm_balance']:.2f} HL=${data['hl_balance']:.2f} PnL=${data['today_pnl']:+.2f}")
+print(f"Dashboard: PM=${pm_balance:.2f} HL=${hl_balance:.2f} | {len(hl_positions)} positions | {len(funding_opps)} funding opps")
 PYEOF
 
-# Auto-push to GitHub Pages
-cd /home/ubuntu/clawd/dashboard
-git add data.json 2>/dev/null
+# Push to GitHub
+cd ${DASH_DIR:-/home/ubuntu/clawd/dashboard}
+git add -A 2>/dev/null
 git commit -m "update $(date -u +%Y-%m-%dT%H:%M)" --allow-empty 2>/dev/null
 git push origin main 2>/dev/null
