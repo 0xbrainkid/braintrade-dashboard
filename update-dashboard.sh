@@ -11,6 +11,15 @@ now = datetime.datetime.now(datetime.timezone.utc)
 
 # ── PM Balance ──
 pm_balance = 0
+# Fallback: read from bot log
+try:
+    import re
+    with open("/home/ubuntu/clawd/polymarket-assistant/trading.log") as f:
+        for line in f:
+            if "Proxy Balance:" in line:
+                m = re.search(r"\$([\d.]+)", line)
+                if m: pm_balance = float(m.group(1))
+except: pass
 try:
     proxy = os.environ.get("PROXY", "0x2e6325f52CF4c0F77c719296f1A4332557B393C2")
     resp = requests.post("https://polygon-rpc.com", json={
