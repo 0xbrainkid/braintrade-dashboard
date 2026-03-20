@@ -152,3 +152,9 @@ with open(output, 'w') as f:
 
 print(f"Dashboard updated: PM=${data['pm_balance']:.2f} HL=${data['hl_balance']:.2f} PnL=${data['today_pnl']:+.2f}")
 PYEOF
+
+# Auto-push to GitHub Pages
+cd /home/ubuntu/clawd/dashboard
+git add data.json 2>/dev/null
+git commit -m "update $(date -u +%Y-%m-%dT%H:%M)" --allow-empty 2>/dev/null
+git push origin main 2>/dev/null
