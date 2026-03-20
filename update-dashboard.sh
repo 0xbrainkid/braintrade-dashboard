@@ -165,3 +165,6 @@ cd ${DASH_DIR:-/home/ubuntu/clawd/dashboard}
 git add -A 2>/dev/null
 git commit -m "update $(date -u +%Y-%m-%dT%H:%M)" --allow-empty 2>/dev/null
 git push origin main 2>/dev/null
+
+# Deploy to brainai.bot
+scp -o ConnectTimeout=5 ${DASH_DIR:-/home/ubuntu/clawd/dashboard}/data.json ubuntu@16.16.78.208:~/brainai-hq-v2/public/braintrade-dashboard/ 2>/dev/null
