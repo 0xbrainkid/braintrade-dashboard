@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-03-21T11:00:01.500134+00:00",
+  "timestamp": "2026-03-21T11:30:02.680319+00:00",
   "pm_balance": 444.02,
-  "hl_balance": 388.958025,
-  "today_pnl": 37.81022999999997,
+  "hl_balance": 389.188715,
+  "today_pnl": 38.04091999999997,
   "pm_pnl": 37.09499999999997,
-  "hl_pnl": 0.7152299999999999,
-  "today_trades": 16,
+  "hl_pnl": 0.94592,
+  "today_trades": 18,
   "today_wins": 1,
-  "today_losses": 4,
-  "all_time_pnl": 26.738024999999993,
-  "total_trades": 88,
+  "today_losses": 5,
+  "all_time_pnl": 26.968714999999975,
+  "total_trades": 90,
   "days_active": 6,
   "pm_bot_running": true,
   "hl_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00279,
       "entry": 70249.0,
-      "pnl": -0.89559,
+      "pnl": -0.8928,
       "leverage": 10
     },
     {
@@ -27,7 +27,7 @@
       "side": "LONG",
       "size": 0.2171,
       "entry": 2147.7,
-      "pnl": 1.17234,
+      "pnl": 1.38944,
       "leverage": 10
     },
     {
@@ -35,11 +35,19 @@
       "side": "LONG",
       "size": 2.16,
       "entry": 89.724,
-      "pnl": 0.43848,
+      "pnl": 0.44928,
       "leverage": 10
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "REZ",
+      "rate": "-0.0694%",
+      "apr": "-76%",
+      "action": "LONG",
+      "oi": "272,190,460"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "03/15",
@@ -67,7 +75,7 @@
     },
     {
       "date": "03/21",
-      "pnl": -11.663729999999994
+      "pnl": -11.433039999999991
     }
   ],
   "pillar1": {
@@ -79,7 +87,15 @@
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 26 buys, 24 sells \u2014 avg price $0.963"
+        "text": "Top traders: 17 buys, 33 sells \u2014 avg price $0.992"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: REZ at -0.0694%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -151,8 +167,8 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 88,
-        "win_rate": 54.3,
+        "trades": 90,
+        "win_rate": 52.8,
         "pnl": 37.09499999999997,
         "sharpe": -0.81
       },
@@ -161,7 +177,7 @@
         "status": "LIVE",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.7152299999999999,
+        "pnl": 0.94592,
         "sharpe": 0.0
       },
       {
@@ -182,12 +198,6 @@
       }
     ],
     "edge_history": [
-      {
-        "date": "03-20",
-        "change": "Built HL Funding Rate Arb",
-        "impact": "+1 strat",
-        "impact_class": "cyan"
-      },
       {
         "date": "03-20",
         "change": "Built HL Momentum",
@@ -241,6 +251,12 @@
         "change": "Narrowed to peak hours: 15-17, 20-22 UTC",
         "impact": "\ud83d\udcca TIMING",
         "impact_class": "cyan"
+      },
+      {
+        "date": "03-21",
+        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
+        "impact": "\ud83d\udd34 0%",
+        "impact_class": "red"
       }
     ]
   },
@@ -299,8 +315,8 @@
         "impact_class": "cyan"
       }
     ],
-    "win_rate_7d": 54.3,
-    "win_rate_24h": 20.0,
+    "win_rate_7d": 52.8,
+    "win_rate_24h": 16.7,
     "avg_trade_size": 0.53,
     "sharpe": -0.81,
     "max_drawdown": 306.4
