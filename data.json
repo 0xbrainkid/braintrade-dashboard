@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-21T06:06:24.706814+00:00",
+  "timestamp": "2026-03-21T06:09:14.716679+00:00",
   "pm_balance": 440.9,
-  "hl_balance": 388.80382,
-  "today_pnl": 34.54028999999996,
+  "hl_balance": 388.66449,
+  "today_pnl": 34.40095999999997,
   "pm_pnl": 33.974999999999966,
-  "hl_pnl": 0.56529,
+  "hl_pnl": 0.4259599999999999,
   "today_trades": 12,
   "today_wins": 1,
   "today_losses": 4,
-  "all_time_pnl": 23.46381999999994,
+  "all_time_pnl": 23.32448999999997,
   "total_trades": 84,
   "days_active": 6,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00279,
       "entry": 70249.0,
-      "pnl": -1.21086,
+      "pnl": -1.19412,
       "leverage": 10
     },
     {
@@ -27,7 +27,7 @@
       "side": "LONG",
       "size": 0.2171,
       "entry": 2147.7,
-      "pnl": 0.97695,
+      "pnl": 0.8684,
       "leverage": 10
     },
     {
@@ -35,17 +35,17 @@
       "side": "LONG",
       "size": 2.16,
       "entry": 89.724,
-      "pnl": 0.7992,
+      "pnl": 0.75168,
       "leverage": 10
     }
   ],
   "funding_opportunities": [
     {
       "coin": "XAI",
-      "rate": "-0.1483%",
-      "apr": "-162%",
+      "rate": "-0.1514%",
+      "apr": "-166%",
       "action": "LONG",
-      "oi": "108,801,402"
+      "oi": "108,806,434"
     }
   ],
   "daily_pnl": [
@@ -75,11 +75,11 @@
     },
     {
       "date": "03/21",
-      "pnl": -14.93367
+      "pnl": -15.072999999999993
     }
   ],
   "pillar1": {
-    "completion": 80,
+    "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
     "signal_confidence": 45,
@@ -91,7 +91,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: XAI at -0.1483%/8h \u2014 shorts paying longs"
+        "text": "Strongest: XAI at -0.1514%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -100,33 +100,39 @@
     ],
     "evolution": [
       {
-        "date": "Mar 15",
-        "change": "PM copy scanner built \u2014 tracking top wallets",
+        "date": "03-19",
+        "change": "Built PM copy scanner",
         "impact": "NEW",
         "impact_class": "cyan"
       },
       {
-        "date": "Mar 19",
-        "change": "SolSt1ne 4-stack strategy extracted (Kelly + conviction + divergence + AI)",
+        "date": "03-19",
+        "change": "Extracted SolSt1ne strategy",
         "impact": "EDGE",
-        "impact_class": "green"
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 20",
-        "change": "Copy signals wired into bot as conviction boost",
+        "date": "03-20",
+        "change": "Wired copy signals into bot",
         "impact": "+1 conv",
-        "impact_class": "green"
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 20",
-        "change": "Funding rate scanner: 1 opportunities identified",
-        "impact": "INTEL",
+        "date": "03-21",
+        "change": "Copy signal shifted to BEARISH",
+        "impact": "BEARISH",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-21",
+        "change": "Market sentiment shifted to BEARISH",
+        "impact": "BEARISH",
         "impact_class": "cyan"
       }
     ]
   },
   "pillar2": {
-    "completion": 85,
+    "completion": 55,
     "strategies": [
       {
         "name": "PM Smart Entry",
@@ -141,7 +147,7 @@
         "status": "LIVE",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.56529,
+        "pnl": 0.4259599999999999,
         "sharpe": 0.0
       },
       {
@@ -163,84 +169,78 @@
     ],
     "edge_history": [
       {
-        "date": "Mar 15",
-        "change": "PM bot launched \u2014 basic bias score only",
-        "impact": "55% WR",
-        "impact_class": "yellow"
-      },
-      {
-        "date": "Mar 16",
-        "change": "Added min price filter ($0.50) + entry delay (60s)",
-        "impact": "+6% WR",
-        "impact_class": "green"
-      },
-      {
-        "date": "Mar 19",
-        "change": "SolSt1ne upgrade: Kelly sizing, conviction 3/4, divergence 8%, confidence 62%",
-        "impact": "MAJOR",
-        "impact_class": "green"
-      },
-      {
-        "date": "Mar 20",
-        "change": "Fixed min_price $0.65\u2192$0.50 (was blocking all trades)",
+        "date": "03-20",
+        "change": "Fixed min_price $0.65\u2192$0.50",
         "impact": "FIX",
-        "impact_class": "yellow"
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 20",
-        "change": "Built HL Funding Rate Arb + HL Momentum strategies",
-        "impact": "+2 strats",
-        "impact_class": "green"
+        "date": "03-20",
+        "change": "Built HL Funding Rate Arb",
+        "impact": "+1 strat",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-20",
+        "change": "Built HL Momentum",
+        "impact": "+1 strat",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-21",
+        "change": "+35 trades at 54% WR (mediocre)",
+        "impact": "\u26a0\ufe0f 54%",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-21",
+        "change": "\u26a0\ufe0f Conviction 4 WORSE than conviction 3",
+        "impact": "PARADOX",
+        "impact_class": "cyan"
       }
     ]
   },
   "pillar3": {
-    "completion": 70,
+    "completion": 65,
     "params_changed": 6,
     "research_reports": 3,
     "heartbeats_today": 0,
     "changes": [
       {
-        "date": "Mar 16",
-        "param": "min_price",
-        "old": "none",
-        "new": "$0.50",
-        "reason": "Prices <$0.50 = losers"
+        "date": "03-20",
+        "change": "Dashboard deployed to brainai.bot",
+        "impact": "INFRA",
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 16",
-        "param": "entry_delay",
-        "old": "0s",
-        "new": "60s",
-        "reason": "First 60s = coin flip"
+        "date": "03-21",
+        "change": "Added hour filter (08-22 UTC only)",
+        "impact": "DATA-BACKED",
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 19",
-        "param": "kelly_fraction",
-        "old": "0.10",
-        "new": "0.25",
-        "reason": "SolSt1ne: half-Kelly"
+        "date": "03-21",
+        "change": "Performance analysis: conviction 4 = 40% WR",
+        "impact": "INSIGHT",
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 19",
-        "param": "conviction_min",
-        "old": "2",
-        "new": "3",
-        "reason": "SolSt1ne: stack edges"
+        "date": "03-21",
+        "change": "New research report generated",
+        "impact": "+1 report",
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 19",
-        "param": "divergence_threshold",
-        "old": "0.0",
-        "new": "0.08",
-        "reason": "SolSt1ne: 8% AI filter"
+        "date": "03-21",
+        "change": "Daily P&L report generated",
+        "impact": "+1 report",
+        "impact_class": "cyan"
       },
       {
-        "date": "Mar 20",
-        "param": "min_price",
-        "old": "$0.65",
-        "new": "$0.50",
-        "reason": "Was blocking all trades"
+        "date": "03-21",
+        "change": "Sharpe ratio degraded: 0.00 \u2192 -0.81",
+        "impact": "\ud83d\udd34 -0.81",
+        "impact_class": "red"
       }
     ],
     "win_rate_7d": 54.3,

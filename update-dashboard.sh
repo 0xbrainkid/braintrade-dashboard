@@ -282,6 +282,31 @@ try:
 except: pass
 
 # ── Build Output ──
+
+# ── Read dynamic pillar data ──
+_pscores = {}
+try:
+    with open("/home/ubuntu/clawd/dashboard/pillar-scores.json") as _pf:
+        _pscores = json.load(_pf)
+except: pass
+
+_pevents = {"1": [], "2": [], "3": []}
+try:
+    with open("/home/ubuntu/clawd/dashboard/pillar-log.jsonl") as _plf:
+        for _pline in _plf:
+            if _pline.strip():
+                _pe = json.loads(_pline)
+                p = str(_pe.get("pillar", 0))
+                if p in _pevents:
+                    _pevents[p].append({
+                        "date": _pe["ts"][:10].replace("2026-",""),
+                        "change": _pe["action"],
+                        "impact": _pe.get("impact",""),
+                        "impact_class": "green" if chr(10004) in _pe.get("impact","") else "red" if chr(128308) in _pe.get("impact","") else "cyan"
+                    })
+    for k in _pevents: _pevents[k] = _pevents[k][-10:]
+except: pass
+
 data = {
     "timestamp": now.isoformat(),
     "pm_balance": pm_balance,
@@ -302,31 +327,6 @@ data = {
     "daily_pnl": daily_pnl,
     
     # ═══ PILLAR 1: Copy Intelligence ═══
-    # Read dynamic scores
-    _pscores = {}
-    try:
-        with open("/home/ubuntu/clawd/dashboard/pillar-scores.json") as _pf:
-            _pscores = json.load(_pf)
-    except: pass
-    # Read recent pillar events
-    _pevents = {"1": [], "2": [], "3": []}
-    try:
-        with open("/home/ubuntu/clawd/dashboard/pillar-log.jsonl") as _plf:
-            for _pline in _plf:
-                if _pline.strip():
-                    _pe = json.loads(_pline)
-                    p = str(_pe.get("pillar", 0))
-                    if p in _pevents:
-                        _pevents[p].append({
-                            "date": _pe["ts"][:10].replace("2026-",""),
-                            "change": _pe["action"],
-                            "impact": _pe.get("impact",""),
-                            "impact_class": "green" if "✅" in _pe.get("impact","") else "red" if "🔴" in _pe.get("impact","") else "cyan"
-                        })
-        # Keep last 10 per pillar
-        for k in _pevents: _pevents[k] = _pevents[k][-10:]
-    except: pass
-
     "pillar1": {
         "completion": _pscores.get("p1", 60),
         "traders_tracked": p1_traders,
