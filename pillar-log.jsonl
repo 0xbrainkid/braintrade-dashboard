@@ -14,3 +14,7 @@
 {"ts": "2026-03-21T06:08:32.271768+00:00", "pillar": 3, "action": "New research report generated", "detail": "Total: 2 research files", "impact": "+1 report"}
 {"ts": "2026-03-21T06:08:32.271768+00:00", "pillar": 3, "action": "Daily P&L report generated", "detail": "Total: 1 P&L reports", "impact": "+1 report"}
 {"ts": "2026-03-21T06:08:32.271768+00:00", "pillar": 3, "action": "Sharpe ratio degraded: 0.00 \u2192 -0.81", "detail": "Target: >1.0. Current: -0.81", "impact": "\ud83d\udd34 -0.81"}
+{"pillar": 3, "action": "Fixed outcome logger: was recording previous_bias not current", "detail": "All bias scores in outcomes were from wrong cycle. Now records actual trade bias.", "impact": "BUG FIX", "ts": "2026-03-21T06:13:05.878251+00:00"}
+{"pillar": 2, "action": "Added max_edge=0.30 cap", "detail": "Data: edge>0.30 = 44% WR (worse than random). Capping overconfident trades.", "impact": "DATA-BACKED", "ts": "2026-03-21T06:13:05.878251+00:00"}
+{"pillar": 2, "action": "Deep outcome analysis: 35 trades", "detail": "Medium bias 30-50 = 70% WR (best). Weak <30 = 47%. Conv4 = 17% WR (paradox).", "impact": "INSIGHT", "ts": "2026-03-21T06:13:05.878251+00:00"}
+{"pillar": 1, "action": "Copy scanner audit: scoring redemptions not predictions", "detail": "Top wallets buying at $0.99 = resolved bets, not live intelligence. Scanner needs rewrite.", "impact": "\u26a0\ufe0f BROKEN", "ts": "2026-03-21T06:13:05.878251+00:00"}
