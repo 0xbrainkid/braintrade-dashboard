@@ -302,30 +302,55 @@ data = {
     "daily_pnl": daily_pnl,
     
     # ═══ PILLAR 1: Copy Intelligence ═══
+    # Read dynamic scores
+    _pscores = {}
+    try:
+        with open("/home/ubuntu/clawd/dashboard/pillar-scores.json") as _pf:
+            _pscores = json.load(_pf)
+    except: pass
+    # Read recent pillar events
+    _pevents = {"1": [], "2": [], "3": []}
+    try:
+        with open("/home/ubuntu/clawd/dashboard/pillar-log.jsonl") as _plf:
+            for _pline in _plf:
+                if _pline.strip():
+                    _pe = json.loads(_pline)
+                    p = str(_pe.get("pillar", 0))
+                    if p in _pevents:
+                        _pevents[p].append({
+                            "date": _pe["ts"][:10].replace("2026-",""),
+                            "change": _pe["action"],
+                            "impact": _pe.get("impact",""),
+                            "impact_class": "green" if "✅" in _pe.get("impact","") else "red" if "🔴" in _pe.get("impact","") else "cyan"
+                        })
+        # Keep last 10 per pillar
+        for k in _pevents: _pevents[k] = _pevents[k][-10:]
+    except: pass
+
     "pillar1": {
-        "completion": 80,
+        "completion": _pscores.get("p1", 60),
         "traders_tracked": p1_traders,
         "current_bias": p1_bias,
         "signal_confidence": p1_confidence,
         "signals_today": p1_signals_today,
         "insights": p1_insights,
-        "evolution": p1_evolution,
+        "evolution": _pevents.get("1", []),
     },
     
     # ═══ PILLAR 2: Edge Development ═══
     "pillar2": {
-        "completion": 85,
+        "completion": _pscores.get("p2", 55),
         "strategies": strategies,
-        "edge_history": p2_edge_history,
+        "edge_history": _pevents.get("2", []),
     },
     
     # ═══ PILLAR 3: Continuous Iteration ═══
     "pillar3": {
-        "completion": 70,
+        "completion": _pscores.get("p3", 65),
         "params_changed": params_changed,
         "research_reports": research_count + reports_count,
         "heartbeats_today": 0,  # TODO: count from logs
-        "changes": p3_changes,
+        "changes": _pevents.get("3", []),
         "win_rate_7d": win_rate_7d,
         "win_rate_24h": win_rate_24h,
         "avg_trade_size": avg_trade,
