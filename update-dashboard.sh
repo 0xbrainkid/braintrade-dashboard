@@ -14,7 +14,7 @@ pm_balance = 0
 try:
     with open("/home/ubuntu/clawd/polymarket-assistant/trading.log") as f:
         for line in f:
-            if "Proxy Balance:" in line:
+            if "CLOB Balance:" in line or "Proxy Balance:" in line:
                 m = re.search(r"\$([\d.]+)", line)
                 if m: pm_balance = float(m.group(1))
 except: pass
