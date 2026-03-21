@@ -164,7 +164,7 @@ p1_evolution = [
 
 # ── Strategy Performance (Pillar 2) ──
 pm_win_rate = (all_wins / (all_wins + all_losses) * 100) if (all_wins + all_losses) > 0 else 0
-pm_pnl = pm_balance - 1488.0  # PM deposits: $488 original + $1000 new deposit
+pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68 stuck (not trading loss)
 
 strategies = [
     {
@@ -317,7 +317,7 @@ data = {
     "today_trades": today_trades,
     "today_wins": today_wins,
     "today_losses": today_losses,
-    "all_time_pnl": (pm_balance + hl_balance) - (1488.0 + 391.0),  # Total deposits: PM=$1488 + HL=$391 = $1879
+    "all_time_pnl": (pm_balance + hl_balance) - (1009.32 + 391.0),  # Deposits minus stuck funds: PM=$1009.32 + HL=$391 = $1400.32
     "total_trades": total_trades,
     "days_active": (now - datetime.datetime(2026, 3, 15, tzinfo=datetime.timezone.utc)).days,
     "pm_bot_running": subprocess.run(["pgrep", "-f", "trading_bot.py"], capture_output=True).returncode == 0,
