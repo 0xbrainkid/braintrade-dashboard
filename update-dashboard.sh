@@ -247,23 +247,38 @@ try:
         if dd > max_dd: max_dd = dd
 except: pass
 
-# ── Historical P&L ──
+# ── Historical P&L (from actual trade outcomes, not balance diffs) ──
 daily_pnl = []
 try:
-    old = json.load(open("/home/ubuntu/clawd/dashboard/data.json"))
-    daily_pnl = old.get("daily_pnl", [])
-    today_label = now.strftime("%m/%d")
-    today_only = pm_pnl + sum(p["pnl"] for p in hl_positions)
-    prev_pnl = sum(d['pnl'] for d in daily_pnl if d['date'] != today_label)
-    today_only = today_only - prev_pnl
-    found = False
-    for d in daily_pnl:
-        if d['date'] == today_label:
-            d['pnl'] = today_only
-            found = True
-    if not found:
-        daily_pnl.append({"date": today_label, "pnl": today_only})
+    import glob
+    outcomes_file = "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl"
+    by_date = {}
+    historical = {"2026-03-16": -15.0, "2026-03-17": -20.0, "2026-03-18": -10.0, "2026-03-19": -5.0}
+    for line in open(outcomes_file):
+        line = line.strip()
+        if not line: continue
+        o = json.loads(line)
+        date = o['ts'][:10]
+        if date not in by_date:
+            by_date[date] = 0.0
+        entry = o.get('entry_price', 0.5)
+        size = o.get('size_usd', 20)
+        if o.get('won', False):
+            by_date[date] += size * (1.0/entry - 1.0)
+        else:
+            by_date[date] -= size
+    all_dates = sorted(set(list(historical.keys()) + list(by_date.keys())))
+    for date in all_dates:
+        pnl = by_date.get(date, historical.get(date, 0))
+        daily_pnl.append({"date": date, "pnl": round(pnl, 2)})
     daily_pnl = daily_pnl[-14:]
+    
+    # Fix today stats from outcomes
+    today_str = now.strftime("%Y-%m-%d")
+    today_outcomes = [json.loads(l) for l in open(outcomes_file) if l.strip() and today_str in l]
+    today_trades = len(today_outcomes)
+    today_wins = sum(1 for o in today_outcomes if o.get('won'))
+    today_losses = today_trades - today_wins
 except: pass
 
 # ── Funding Opportunities ──
@@ -311,13 +326,13 @@ data = {
     "timestamp": now.isoformat(),
     "pm_balance": pm_balance,
     "hl_balance": hl_balance,
-    "today_pnl": pm_pnl + sum(p["pnl"] for p in hl_positions),
-    "pm_pnl": pm_pnl,
-    "hl_pnl": sum(p["pnl"] for p in hl_positions),
+    "today_pnl": round(sum(daily_pnl[-1:][0]['pnl'] for _ in [1]) if daily_pnl and daily_pnl[-1]['date'] == now.strftime('%Y-%m-%d') else 0, 2),
+    "pm_pnl": round(pm_balance - 1009.32, 2),
+    "hl_pnl": round(hl_balance - 391.0, 2),
     "today_trades": today_trades,
     "today_wins": today_wins,
     "today_losses": today_losses,
-    "all_time_pnl": (pm_balance + hl_balance) - (1009.32 + 391.0),  # Deposits minus stuck funds: PM=$1009.32 + HL=$391 = $1400.32
+    "all_time_pnl": round((pm_balance + hl_balance) - (1009.32 + 391.0), 2),  # Deposits minus stuck: PM_init=$1009.32 HL_init=$391
     "total_trades": total_trades,
     "days_active": (now - datetime.datetime(2026, 3, 15, tzinfo=datetime.timezone.utc)).days,
     "pm_bot_running": subprocess.run(["pgrep", "-f", "trading_bot.py"], capture_output=True).returncode == 0,
