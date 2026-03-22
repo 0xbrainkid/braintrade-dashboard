@@ -57,258 +57,90 @@
     }
   ],
   "pillar1": {
-    "completion": 60,
-    "traders_tracked": 0,
+    "completion": 50,
+    "traders_tracked": 1,
     "current_bias": "bearish",
     "signal_confidence": 100,
-    "signals_today": 50,
+    "signals_today": 1,
     "insights": [
       {
-        "source": "Copy Scanner",
-        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.840"
+        "source": "Copy Scanner v2",
+        "text": "LIVE order flow: bearish (100% confidence). Tracks real predictions, not redemptions."
       },
       {
-        "source": "Funding Intel",
-        "text": "Strongest: TURBO at -0.0837%/8h \u2014 shorts paying longs"
+        "source": "Market Analysis",
+        "text": "BTC $68,714 \u2014 bearish short-term. 24h range 4.4% = favorable for PM 5-min trading."
       },
       {
-        "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
-      }
-    ],
-    "evolution": [
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to NEUTRAL",
-        "impact": "NEUTRAL",
-        "impact_class": "cyan"
+        "source": "Trade Analysis",
+        "text": "47-trade dataset: Bias 30-40 = 63% WR (sweet spot). Bias 40+ = 14% WR (toxic)."
       },
       {
-        "date": "03-22",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to NEUTRAL",
-        "impact": "NEUTRAL",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BULLISH",
-        "impact": "BULLISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BULLISH",
-        "impact": "BULLISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to NEUTRAL",
-        "impact": "NEUTRAL",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
+        "source": "Hourly Edge",
+        "text": "Best hours: 15-17 UTC (60-67%) and 21 UTC (75%). Hour 18 underperforms at 44%."
       }
     ]
   },
   "pillar2": {
-    "completion": 55,
-    "strategies": [
-      {
-        "name": "PM Smart Entry",
+    "completion": 45,
+    "strategies": {
+      "pm_smart_entry": {
         "status": "LIVE",
-        "trades": 114,
-        "win_rate": 46.8,
-        "pnl": -58.16000000000008,
-        "sharpe": -0.91
+        "wr": 47,
+        "trades": 47,
+        "notes": "Running with optimal filters (bias 30-40, price $0.52-$0.65)"
       },
-      {
-        "name": "HL Directional",
-        "status": "LIVE",
+      "hl_funding_arb": {
+        "status": "SCANNING",
+        "wr": 0,
         "trades": 0,
-        "win_rate": 0,
-        "pnl": 0,
-        "sharpe": 0.0
+        "notes": "Running every 30m. No viable opps yet (need >20% APR + liquid)."
       },
-      {
-        "name": "HL Funding Arb",
-        "status": "READY",
+      "hl_momentum": {
+        "status": "SCANNING",
+        "wr": 0,
         "trades": 0,
-        "win_rate": 0,
-        "pnl": 0.0,
-        "sharpe": 0.0
+        "notes": "BB breakout scanner running every 15m. BTC 0.31% from upper BB."
       },
-      {
-        "name": "HL Momentum",
-        "status": "OFF",
+      "pm_market_making": {
+        "status": "NOT BUILT",
+        "wr": 0,
         "trades": 0,
-        "win_rate": 0,
-        "pnl": 0.0,
-        "sharpe": 0.0
+        "notes": "Next priority."
       }
-    ],
-    "edge_history": [
+    },
+    "insights": [
       {
-        "date": "03-21",
-        "change": "Narrowed to peak hours: 15-17, 20-22 UTC",
-        "impact": "\ud83d\udcca TIMING",
-        "impact_class": "cyan"
+        "source": "HL Momentum",
+        "text": "BTC 0.31% from upper BB, SOL 0.25%. Volume low (0.2x avg). Watching for breakout."
       },
       {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
+        "source": "PM Smart Entry",
+        "text": "Optimal zone (bias 30-40 + $0.52-$0.65) = 80% WR on 5 backtested trades."
       },
       {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
-      },
-      {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +2 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
-      },
-      {
-        "date": "03-21",
-        "change": "+2 trades at 50% WR (mediocre)",
-        "impact": "\u26a0\ufe0f 50%",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "+2 trades at 50% WR (mediocre)",
-        "impact": "\u26a0\ufe0f 50%",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "+1 trades at 100% WR",
-        "impact": "100% WR",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
-      },
-      {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
-      },
-      {
-        "date": "03-21",
-        "change": "\u26a0\ufe0f +1 trades at 0% WR (LOSING)",
-        "impact": "\ud83d\udd34 0%",
-        "impact_class": "red"
+        "source": "Copy Scanner v2",
+        "text": "REBUILT: Now tracks live order flow ($37K depth), not resolved bet redemptions."
       }
     ]
   },
   "pillar3": {
-    "completion": 65,
-    "params_changed": 6,
-    "research_reports": 5,
-    "heartbeats_today": 0,
-    "changes": [
+    "completion": 55,
+    "sharpe_ratio": -1.82,
+    "max_drawdown": 16.9,
+    "insights": [
       {
-        "date": "03-21",
-        "change": "Daily P&L report generated",
-        "impact": "+1 report",
-        "impact_class": "cyan"
+        "source": "Weekly Review",
+        "text": "47 trades, -$103.32 P&L. Sharpe: -1.82. Expectancy: -$2.20/trade. Profit factor: 0.79."
       },
       {
-        "date": "03-21",
-        "change": "Sharpe ratio degraded: 0.00 \u2192 -0.81",
-        "impact": "\ud83d\udd34 -0.81",
-        "impact_class": "red"
+        "source": "Optimal Zone",
+        "text": "Trades in bias 30-40 + price $0.52-$0.65: 80% WR (5 trades). Outside zone: 43% WR."
       },
       {
-        "date": "03-21",
-        "change": "Fixed outcome logger: was recording previous_bias not current",
-        "impact": "BUG FIX",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "Applied 5 parameter changes from alpha research",
-        "impact": "5 CHANGES",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "PM balance +$16.83",
-        "impact": "\u2705 +$16.83",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "PM balance +$20.87",
-        "impact": "\u2705 +$20.87",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "PM balance $-478.68",
-        "impact": "\ud83d\udd34 $-478.68",
-        "impact_class": "red"
-      },
-      {
-        "date": "03-21",
-        "change": "Daily P&L report generated",
-        "impact": "+1 report",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-21",
-        "change": "PM balance +$999.12",
-        "impact": "\u2705 +$999.12",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-22",
-        "change": "New research report generated",
-        "impact": "+1 report",
-        "impact_class": "cyan"
+        "source": "Key Fix",
+        "text": "Mar 21 loss (-$187) driven by bad-hour trades (04-14 UTC = 17% WR). Now fixed with [15-22] filter."
       }
-    ],
-    "win_rate_7d": 46.8,
-    "win_rate_24h": 0,
-    "avg_trade_size": 0.53,
-    "sharpe": -0.91,
-    "max_drawdown": 556.7
+    ]
   }
 }
