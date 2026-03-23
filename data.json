@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-23T08:30:02.752592+00:00",
+  "timestamp": "2026-03-23T09:00:02.345286+00:00",
   "pm_balance": 827.49,
   "hl_balance": 37.391639,
   "today_pnl": -42.65,
@@ -14,7 +14,22 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "TURBO",
+      "rate": "-0.0704%",
+      "apr": "-77%",
+      "action": "LONG",
+      "oi": "776,705,826"
+    },
+    {
+      "coin": "STABLE",
+      "rate": "-0.0683%",
+      "apr": "-75%",
+      "action": "LONG",
+      "oi": "119,834,408"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -52,24 +67,26 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 0,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 48 buys, 2 sells \u2014 avg price $0.604"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.895"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: TURBO at -0.0704%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-23",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-23",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
         "impact_class": "cyan"
@@ -120,6 +137,12 @@
         "date": "03-23",
         "change": "Copy signal shifted to NEUTRAL",
         "impact": "NEUTRAL",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-23",
+        "change": "Copy signal shifted to BEARISH",
+        "impact": "BEARISH",
         "impact_class": "cyan"
       }
     ]
