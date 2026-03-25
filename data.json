@@ -1,20 +1,28 @@
 {
-  "timestamp": "2026-03-25T14:30:01.827446+00:00",
+  "timestamp": "2026-03-25T15:00:01.917726+00:00",
   "pm_balance": 847.89,
   "hl_balance": 37.391639,
-  "today_pnl": 141.44,
+  "today_pnl": 120.27,
   "pm_pnl": -161.43,
   "hl_pnl": -353.61,
-  "today_trades": 22,
-  "today_wins": 15,
-  "today_losses": 7,
+  "today_trades": 25,
+  "today_wins": 16,
+  "today_losses": 9,
   "all_time_pnl": -515.04,
-  "total_trades": 176,
+  "total_trades": 178,
   "days_active": 10,
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "BLAST",
+      "rate": "-0.1203%",
+      "apr": "-132%",
+      "action": "LONG",
+      "oi": "2,135,929,696"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -54,30 +62,32 @@
     },
     {
       "date": "2026-03-25",
-      "pnl": 141.44
+      "pnl": 120.27
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 0,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 26 buys, 24 sells \u2014 avg price $0.794"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.991"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: BLAST at -0.1203%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-25",
-        "change": "Copy signal shifted to NEUTRAL",
-        "impact": "NEUTRAL",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-25",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
         "impact_class": "cyan"
@@ -128,6 +138,12 @@
         "date": "03-25",
         "change": "Copy signal shifted to NEUTRAL",
         "impact": "NEUTRAL",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-25",
+        "change": "Copy signal shifted to BEARISH",
+        "impact": "BEARISH",
         "impact_class": "cyan"
       }
     ]
@@ -138,10 +154,10 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 176,
-        "win_rate": 52.3,
+        "trades": 178,
+        "win_rate": 51.8,
         "pnl": -161.43000000000006,
-        "sharpe": 0.36
+        "sharpe": 0.26
       },
       {
         "name": "HL Directional",
@@ -169,12 +185,6 @@
       }
     ],
     "edge_history": [
-      {
-        "date": "03-24",
-        "change": "+1 trades at 100% WR",
-        "impact": "100% WR",
-        "impact_class": "cyan"
-      },
       {
         "date": "03-25",
         "change": "+1 trades at 100% WR",
@@ -227,6 +237,12 @@
         "date": "03-25",
         "change": "\u26a0\ufe0f +5 trades at 40% WR (LOSING)",
         "impact": "\ud83d\udd34 40%",
+        "impact_class": "red"
+      },
+      {
+        "date": "03-25",
+        "change": "\u26a0\ufe0f +3 trades at 33% WR (LOSING)",
+        "impact": "\ud83d\udd34 33%",
         "impact_class": "red"
       }
     ]
@@ -298,10 +314,10 @@
         "impact_class": "red"
       }
     ],
-    "win_rate_7d": 52.3,
-    "win_rate_24h": 68.2,
-    "avg_trade_size": 0.52,
-    "sharpe": 0.36,
+    "win_rate_7d": 51.8,
+    "win_rate_24h": 64.0,
+    "avg_trade_size": 0.53,
+    "sharpe": 0.26,
     "max_drawdown": 822.0
   }
 }
