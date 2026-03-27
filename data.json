@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-27T08:30:01.608560+00:00",
+  "timestamp": "2026-03-27T09:00:01.319597+00:00",
   "pm_balance": 885.3,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -11,10 +11,18 @@
   "all_time_pnl": -477.63,
   "total_trades": 217,
   "days_active": 12,
-  "pm_bot_running": true,
+  "pm_bot_running": false,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "RESOLV",
+      "rate": "-0.0969%",
+      "apr": "-106%",
+      "action": "LONG",
+      "oi": "30,892,568"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -64,24 +72,26 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 100,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 34 buys, 16 sells \u2014 avg price $0.964"
+        "text": "Top traders: 39 buys, 11 sells \u2014 avg price $0.925"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: RESOLV at -0.0969%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-26",
-        "change": "Copy signal shifted to NEUTRAL",
-        "impact": "NEUTRAL",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-26",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
         "impact_class": "cyan"
@@ -132,6 +142,12 @@
         "date": "03-27",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-27",
+        "change": "Copy signal shifted to NEUTRAL",
+        "impact": "NEUTRAL",
         "impact_class": "cyan"
       }
     ]
@@ -141,7 +157,7 @@
     "strategies": [
       {
         "name": "PM Smart Entry",
-        "status": "LIVE",
+        "status": "DOWN",
         "trades": 217,
         "win_rate": 53.1,
         "pnl": -124.0200000000001,
