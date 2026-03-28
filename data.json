@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-28T15:00:01.489247+00:00",
+  "timestamp": "2026-03-28T15:30:01.961623+00:00",
   "pm_balance": 911.95,
-  "hl_balance": 360.641053,
+  "hl_balance": 359.830513,
   "today_pnl": -21.94,
   "pm_pnl": -97.37,
-  "hl_pnl": -30.36,
+  "hl_pnl": -31.17,
   "today_trades": 5,
   "today_wins": 2,
   "today_losses": 3,
-  "all_time_pnl": -127.73,
+  "all_time_pnl": -128.54,
   "total_trades": 225,
   "days_active": 13,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 1.04463,
+      "pnl": 0.60261,
       "leverage": 3
     },
     {
@@ -27,7 +27,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 1.47696,
+      "pnl": 1.88964,
       "leverage": 3
     },
     {
@@ -35,11 +35,19 @@
       "side": "SHORT",
       "size": 1.26,
       "entry": 84.37,
-      "pnl": 1.50444,
+      "pnl": 0.72324,
       "leverage": 3
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "0G",
+      "rate": "-0.0544%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "1,293,124"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -97,24 +105,26 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 42 buys, 8 sells \u2014 avg price $0.686"
+        "text": "Top traders: 30 buys, 20 sells \u2014 avg price $0.972"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: 0G at -0.0544%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-28",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-28",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
         "impact_class": "cyan"
@@ -165,6 +175,12 @@
         "date": "03-28",
         "change": "Copy signal shifted to BEARISH",
         "impact": "BEARISH",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-28",
+        "change": "Copy signal shifted to NEUTRAL",
+        "impact": "NEUTRAL",
         "impact_class": "cyan"
       }
     ]
@@ -185,7 +201,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.02603,
+        "pnl": 3.21549,
         "sharpe": 0.0
       },
       {
@@ -350,7 +366,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "NEUTRAL consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -360,7 +376,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
