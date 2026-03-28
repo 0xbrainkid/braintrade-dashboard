@@ -5,7 +5,7 @@
 cd /home/ubuntu/clawd
 
 # Update AI Fund prices
-python3 /home/ubuntu/clawd/dashboard/update-ai-fund.py 2>/dev/null
+# AI Fund removed from dashboard
 
 python3 << 'PYEOF'
 import json, datetime, os, subprocess, re, glob
@@ -374,6 +374,22 @@ data = {
         "avg_trade_size": avg_trade,
         "sharpe": strategies[0]["sharpe"],
         "max_drawdown": round(max_dd, 1),
+    },
+    
+    # ═══ PILLAR 4: Alpha Research Pipeline ═══
+    "pillar4": {
+        "completion": 15,
+        "data_sources": 4,
+        "signals_generated": 0,
+        "research_files": len(glob.glob("/home/ubuntu/clawd/research/*.md")),
+        "sources": [
+            {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
+            {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
+            {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities"},
+            {"name": "SolSt1ne Content", "status": "BUILDING", "last_signal": "—"},
+            {"name": "On-Chain Flows", "status": "PLANNED", "last_signal": "—"},
+            {"name": "Fear & Greed Index", "status": "PLANNED", "last_signal": "—"},
+        ],
     },
 }
 
