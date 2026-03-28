@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-03-28T09:00:02.944260+00:00",
-  "pm_balance": 901.99,
-  "hl_balance": 359.790197,
-  "today_pnl": 0,
-  "pm_pnl": -107.33,
-  "hl_pnl": -31.21,
-  "today_trades": 0,
-  "today_wins": 0,
+  "timestamp": "2026-03-28T09:30:02.116378+00:00",
+  "pm_balance": 914.1,
+  "hl_balance": 360.155567,
+  "today_pnl": 38.06,
+  "pm_pnl": -95.22,
+  "hl_pnl": -30.84,
+  "today_trades": 2,
+  "today_wins": 2,
   "today_losses": 0,
-  "all_time_pnl": -138.54,
-  "total_trades": 220,
+  "all_time_pnl": -126.06,
+  "total_trades": 222,
   "days_active": 13,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 1.59318,
+      "pnl": 1.68222,
       "leverage": 3
     },
     {
@@ -27,7 +27,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 0.28236,
+      "pnl": 0.28779,
       "leverage": 3
     },
     {
@@ -35,11 +35,19 @@
       "side": "SHORT",
       "size": 1.26,
       "entry": 84.37,
-      "pnl": 1.2978,
+      "pnl": 1.5687,
       "leverage": 3
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "TURBO",
+      "rate": "-0.0657%",
+      "apr": "-72%",
+      "action": "LONG",
+      "oi": "485,948,922"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -88,29 +96,35 @@
     {
       "date": "2026-03-27",
       "pnl": 59.72
+    },
+    {
+      "date": "2026-03-28",
+      "pnl": 38.06
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 57,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.955"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.931"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: TURBO at -0.0657%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-28",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-28",
         "change": "Copy signal shifted to NEUTRAL",
         "impact": "NEUTRAL",
         "impact_class": "cyan"
@@ -161,6 +175,12 @@
         "date": "03-28",
         "change": "Copy signal shifted to BEARISH",
         "impact": "BEARISH",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-28",
+        "change": "Copy signal shifted to NEUTRAL",
+        "impact": "NEUTRAL",
         "impact_class": "cyan"
       }
     ]
@@ -171,9 +191,9 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 220,
-        "win_rate": 54.0,
-        "pnl": -107.33000000000004,
+        "trades": 222,
+        "win_rate": 54.6,
+        "pnl": -95.22000000000003,
         "sharpe": -0.18
       },
       {
@@ -181,7 +201,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.17334,
+        "pnl": 3.53871,
         "sharpe": 0.0
       },
       {
@@ -202,12 +222,6 @@
       }
     ],
     "edge_history": [
-      {
-        "date": "03-26",
-        "change": "+1 trades at 100% WR",
-        "impact": "100% WR",
-        "impact_class": "cyan"
-      },
       {
         "date": "03-26",
         "change": "+1 trades at 100% WR",
@@ -259,6 +273,12 @@
       {
         "date": "03-27",
         "change": "+1 trades at 100% WR",
+        "impact": "100% WR",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-28",
+        "change": "+2 trades at 100% WR",
         "impact": "100% WR",
         "impact_class": "cyan"
       }
@@ -331,8 +351,8 @@
         "impact_class": "cyan"
       }
     ],
-    "win_rate_7d": 54.0,
-    "win_rate_24h": 0,
+    "win_rate_7d": 54.6,
+    "win_rate_24h": 100.0,
     "avg_trade_size": 0.52,
     "sharpe": -0.18,
     "max_drawdown": 822.0
