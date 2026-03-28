@@ -188,7 +188,7 @@ strategies = [
     },
     {
         "name": "HL Funding Arb",
-        "status": "READY",
+        "status": "SHELVED",
         "trades": 0,
         "win_rate": 0,
         "pnl": 0.0,
