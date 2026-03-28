@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-03-28T19:00:01.730314+00:00",
-  "pm_balance": 911.95,
-  "hl_balance": 360.247239,
+  "timestamp": "2026-03-28T19:30:01.741459+00:00",
+  "pm_balance": 901.45,
+  "hl_balance": 360.444309,
   "today_pnl": -21.94,
-  "pm_pnl": -97.37,
-  "hl_pnl": -30.75,
+  "pm_pnl": -107.87,
+  "hl_pnl": -30.56,
   "today_trades": 5,
   "today_wins": 2,
   "today_losses": 3,
-  "all_time_pnl": -128.12,
-  "total_trades": 225,
+  "all_time_pnl": -138.43,
+  "total_trades": 226,
   "days_active": 13,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 0.79182,
+      "pnl": 0.87291,
       "leverage": 3
     },
     {
@@ -27,7 +27,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 1.5204,
+      "pnl": 1.43352,
       "leverage": 3
     },
     {
@@ -35,11 +35,19 @@
       "side": "SHORT",
       "size": 1.26,
       "entry": 84.37,
-      "pnl": 1.33182,
+      "pnl": 1.53468,
       "leverage": 3
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "HEMI",
+      "rate": "-0.0635%",
+      "apr": "-69%",
+      "action": "LONG",
+      "oi": "233,101,460"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -97,22 +105,24 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.869"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.930"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: HEMI at -0.0635%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
-      {
-        "date": "03-28",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
       {
         "date": "03-28",
         "change": "Copy signal shifted to NEUTRAL",
@@ -166,6 +176,12 @@
         "change": "Copy signal shifted to BEARISH",
         "impact": "BEARISH",
         "impact_class": "cyan"
+      },
+      {
+        "date": "03-28",
+        "change": "Copy signal shifted to NEUTRAL",
+        "impact": "NEUTRAL",
+        "impact_class": "cyan"
       }
     ]
   },
@@ -175,9 +191,9 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 225,
+        "trades": 226,
         "win_rate": 53.5,
-        "pnl": -97.37,
+        "pnl": -107.87,
         "sharpe": -0.23
       },
       {
@@ -185,7 +201,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.64404,
+        "pnl": 3.84111,
         "sharpe": 0.0
       },
       {
@@ -350,7 +366,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "NEUTRAL consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -360,7 +376,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
