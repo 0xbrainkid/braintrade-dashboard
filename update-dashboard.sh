@@ -4,6 +4,9 @@
 
 cd /home/ubuntu/clawd
 
+# Update AI Fund prices
+python3 /home/ubuntu/clawd/dashboard/update-ai-fund.py 2>/dev/null
+
 python3 << 'PYEOF'
 import json, datetime, os, subprocess, re, glob
 
@@ -26,7 +29,7 @@ try:
     import requests
     resp = requests.post("https://api.hyperliquid.xyz/info", json={
         "type": "clearinghouseState",
-        "user": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba"
+        "user": "0x51F290588E0fB3107D9cde00984fA16f3dDA3191"
     }, timeout=10)
     hl_data = resp.json()
     hl_balance = float(hl_data["marginSummary"]["accountValue"])
