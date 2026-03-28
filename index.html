@@ -142,6 +142,10 @@
 <!-- Top cards -->
 <div class="grid" id="top-cards"></div>
 
+<!-- AI Fund -->
+<div class="section-title">🏦 AI Fund ($400K)</div>
+<div id="ai-fund"></div>
+
 <!-- P&L Chart -->
 <div class="section-title">📈 Daily P&L</div>
 <div id="pnl-chart"></div>
@@ -204,6 +208,27 @@ async function loadData() {
       </div>
     `;
     
+    // AI Fund
+    if (d.ai_fund && d.ai_fund.active_trades && d.ai_fund.active_trades.length) {
+      let fundHtml = '<table><tr><th>Asset</th><th>Direction</th><th>Size</th><th>Entry</th><th>Current</th><th>uPnL</th></tr>';
+      for (const t of d.ai_fund.active_trades) {
+        const pnlClass = t.unrealized_pnl >= 0 ? 'green' : 'red';
+        const pnlSign = t.unrealized_pnl >= 0 ? '+' : '';
+        fundHtml += `<tr>
+          <td>${t.asset}</td>
+          <td style="color: ${t.direction === 'LONG' ? 'var(--green)' : 'var(--red)'}">${t.direction}</td>
+          <td>${t.size}</td>
+          <td>$${Number(t.entry_price).toLocaleString()}</td>
+          <td>$${Number(t.current_price).toLocaleString()}</td>
+          <td style="color: var(--${pnlClass})">${pnlSign}$${Number(t.unrealized_pnl).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+        </tr>`;
+      }
+      fundHtml += '</table>';
+      document.getElementById('ai-fund').innerHTML = fundHtml;
+    } else {
+      document.getElementById('ai-fund').innerHTML = '<div style="color: var(--muted); padding: 10px;">No active trades</div>';
+    }
+
     // P&L Chart
     if (d.daily_pnl && d.daily_pnl.length) {
       const maxAbs = Math.max(...d.daily_pnl.map(x => Math.abs(x.pnl)), 1);
