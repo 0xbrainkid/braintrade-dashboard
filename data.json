@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-03-29T23:00:02.107122+00:00",
+  "timestamp": "2026-03-29T23:10:41.224440+00:00",
   "pm_balance": 922.45,
   "hl_balance": 400.157893,
   "today_pnl": 18.83,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "SOPH",
-      "rate": "-0.1279%",
-      "apr": "-140%",
+      "rate": "-0.1939%",
+      "apr": "-212%",
       "action": "LONG",
-      "oi": "60,807,912"
+      "oi": "57,728,110"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0798%",
-      "apr": "-87%",
+      "rate": "-0.0852%",
+      "apr": "-93%",
       "action": "LONG",
-      "oi": "2,374,006,946"
+      "oi": "2,372,532,956"
     }
   ],
   "daily_pnl": [
@@ -91,17 +91,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 84,
+    "current_bias": "bearish",
+    "signal_confidence": 68,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.967"
+        "text": "Top traders: 11 buys, 39 sells \u2014 avg price $0.967"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SOPH at -0.1279%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SOPH at -0.1939%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-29 22:42 UTC \u2014 Pillar 3: End-of-Day Report\n\n**Task:** Write comprehensive daily P&L report for Sunday March 29.\n\n**Summary:** 1 trade, 1 win, +$10.36. Total capital $1,321.36. But Sunday was a BUILD day \u2014 4 strategy deployments, 2 bug fixes, W14 projection showing 82% WR / $53/day potential. W13 closed at +$216.35 (101 trades, 55% WR). V3.1+V3.2+V3.3 should transform W14.\n\n---\n\n## 2026-03-29 22:08 UTC \u2014 Pillar 2: Edge Development \u2014 Sub-Hour Timing Analysis\n\n**Task:** Find sub-hour sweet spots within V3 active hours using 40 weekday YES trades.\n\n**Key Findings:**\n\n1. **First 30 min beats second 30 min:** 86% WR (18W/3L) vs 79% (15W/4L). The edge degrades as the hour progresses.\n\n2. **Hour 12h is the gold mine:** 14W/2L (88% WR) across the full hour. Only weakness: :20-29 bucket (1W/2L, 33%). All other 10-min buckets are 100% WR.\n\n3. **Hour 19h degrades after :30:** First 30 min = 6W/0L (100%). After :30 = 3W/3L (50%). The signal quality drops sharply mid-hour.\n\n4. **V4 idea: Half-hour filter for 19h and 20h.** Only trade 19:00-19:29 (100% WR) and skip 19:30-19:59 (50% WR). For 20h, 20:00-20:19 shows 4W/1L (80%). Small sample but consistent pattern.\n\n5. **12h:20-29 is an anomaly:** Only 33% WR in an otherwise perfect hour. Could be 5-min market reset timing.\n\n**Action:** Log this as V4 candidate. Need 20+ more trades to validate half-hour patterns before implementing.\n\n---\n\n## 2026-03-29 21:38 UTC \u2014 Pillar 1: Copy Intelligence \u2014 Bot Farm Filter\n\n**Task:** Quantify and filter bot farm contamination in copy signal data.\n\n**Finding:** **90% of top wallets (18/20) are bot farm accounts** \u2014 all with exactly 30 trades in 1 market at $0.94+ avg price. Only 2 legit wallets remain: Considerate-Racer (150 trades, 2 markets, $11k vol) and Dental-Latex (60 trades, 1 market, $1.2k vol).\n\n**Fix:** Added bot farm filter to copy-signal-integrator.py \u2014 skips wallets matching (30 trades + 1 market + avg_price > 0.90). This only affects the fallback path when no recent signals exist, but prevents score inflation from fake wallets.\n\n**Impact:** Copy signal quality improved. The 2 legit wallets have much more meaningful trading patterns. When integrator falls back to wallet analysis, it now reads real trader behavior instead of bot noise.\n\n---\n\n## 2026-03-29 20:38 UTC \u2014 Pillar 3: Continuous Iteration \u2014 W14 Projection\n\n**Task:** Backtest V3.1+V3.2+V3.3 retroactively on W13 data to project W14 performance.\n\n**Method:** Applied all three filters to 103 W13 trades:\n- V3.3 weekend disable: cut 6 trades (5 losses)\n- Hour filter: cut 53 trades from non-V3 hours\n- V3.2 YES-only: cut 4 NO trades\n- Net: 40 trades remain (from 103)\n\n**Results:**\n| Metric | Actual W13 | Simulated W13 | Improvement |\n|--------|-----------|---------------|-------------|\n| Win rate | 58% | **82%** | +24pp |\n| P&L | +$150.70 | +$266.30 | +77% |\n| Daily avg | $21.5/day | **$53.3/day** | +147% |\n| Trade count | 103 | 40 | -61% (good \u2014 fewer, higher quality) |\n\n**W14 projection:** $53/day \u00d7 5 ",
+  "worklog": "## 2026-03-29 23:08 UTC \u2014 Pillar 1: Copy Intelligence \u2014 SELL Signal Fix\n\n**Task:** Investigate signal count discrepancy between integrator (11 signals) and raw data (50 signals).\n\n**Root cause:** Integrator only counted BUY side signals, completely ignoring 39 SELL signals. SELL Up = bearish (dumping up tokens), SELL Down = bullish. This is critical directional information that was being discarded.\n\n**Fix:** Added SELL-side counting \u2014 SELL Up/Yes increments down_count, SELL Down/No increments up_count. Now reads all 50 signals.\n\n**Before fix:** bearish@100% confidence (based on 11/50 signals \u2014 overconfident)\n**After fix:** bearish@68% confidence (based on 50/50 signals \u2014 properly calibrated)\n\n**Impact:** The copy conviction boost fires at confidence >= 100. With properly calibrated confidence, it will be much more selective \u2014 only boosting when there's overwhelming consensus, not just when we're reading a tiny sample. This prevents false conviction boosts.\n\n---\n\n## 2026-03-29 22:42 UTC \u2014 Pillar 3: End-of-Day Report\n\n**Task:** Write comprehensive daily P&L report for Sunday March 29.\n\n**Summary:** 1 trade, 1 win, +$10.36. Total capital $1,321.36. But Sunday was a BUILD day \u2014 4 strategy deployments, 2 bug fixes, W14 projection showing 82% WR / $53/day potential. W13 closed at +$216.35 (101 trades, 55% WR). V3.1+V3.2+V3.3 should transform W14.\n\n---\n\n## 2026-03-29 22:08 UTC \u2014 Pillar 2: Edge Development \u2014 Sub-Hour Timing Analysis\n\n**Task:** Find sub-hour sweet spots within V3 active hours using 40 weekday YES trades.\n\n**Key Findings:**\n\n1. **First 30 min beats second 30 min:** 86% WR (18W/3L) vs 79% (15W/4L). The edge degrades as the hour progresses.\n\n2. **Hour 12h is the gold mine:** 14W/2L (88% WR) across the full hour. Only weakness: :20-29 bucket (1W/2L, 33%). All other 10-min buckets are 100% WR.\n\n3. **Hour 19h degrades after :30:** First 30 min = 6W/0L (100%). After :30 = 3W/3L (50%). The signal quality drops sharply mid-hour.\n\n4. **V4 idea: Half-hour filter for 19h and 20h.** Only trade 19:00-19:29 (100% WR) and skip 19:30-19:59 (50% WR). For 20h, 20:00-20:19 shows 4W/1L (80%). Small sample but consistent pattern.\n\n5. **12h:20-29 is an anomaly:** Only 33% WR in an otherwise perfect hour. Could be 5-min market reset timing.\n\n**Action:** Log this as V4 candidate. Need 20+ more trades to validate half-hour patterns before implementing.\n\n---\n\n## 2026-03-29 21:38 UTC \u2014 Pillar 1: Copy Intelligence \u2014 Bot Farm Filter\n\n**Task:** Quantify and filter bot farm contamination in copy signal data.\n\n**Finding:** **90% of top wallets (18/20) are bot farm accounts** \u2014 all with exactly 30 trades in 1 market at $0.94+ avg price. Only 2 legit wallets remain: Considerate-Racer (150 trades, 2 markets, $11k vol) and Dental-Latex (60 trades, 1 market, $1.2k vol).\n\n**Fix:** Added bot farm filter to copy-signal-integrator.py \u2014 skips wallets matching (30 trades + 1 market + avg_price > 0.90). This only affects the fallback path when no recent signals exist, but prevents s",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -353,7 +353,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
