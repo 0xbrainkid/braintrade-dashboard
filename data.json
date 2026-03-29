@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-29T16:30:02.341324+00:00",
+  "timestamp": "2026-03-29T17:00:01.888783+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 397.516575,
+  "hl_balance": 397.823232,
   "today_pnl": 18.83,
   "pm_pnl": -86.87,
-  "hl_pnl": 6.52,
+  "hl_pnl": 6.82,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -80.35,
+  "all_time_pnl": -80.05,
   "total_trades": 227,
   "days_active": 14,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 1.27041,
+      "pnl": 1.4469,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 0.39096,
+      "pnl": 0.23349,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,12 +37,27 @@
       "side": "SHORT",
       "size": 1.31,
       "entry": 82.252,
-      "pnl": 0.48994,
+      "pnl": 0.78207,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "PROVE",
+      "rate": "-0.0510%",
+      "apr": "-56%",
+      "action": "LONG",
+      "oi": "3,127,570"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0501%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "2,178,349,090"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-16",
@@ -104,24 +119,26 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 36,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 47 buys, 3 sells \u2014 avg price $0.942"
+        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.930"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: PROVE at -0.0510%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
       {
         "date": "03-29",
-        "change": "Copy signal shifted to BEARISH",
-        "impact": "BEARISH",
-        "impact_class": "cyan"
-      },
-      {
-        "date": "03-29",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
         "impact_class": "cyan"
@@ -172,6 +189,12 @@
         "date": "03-29",
         "change": "Copy signal shifted to BULLISH",
         "impact": "BULLISH",
+        "impact_class": "cyan"
+      },
+      {
+        "date": "03-29",
+        "change": "Copy signal shifted to BEARISH",
+        "impact": "BEARISH",
         "impact_class": "cyan"
       }
     ]
@@ -192,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.15131,
+        "pnl": 2.46246,
         "sharpe": 0.0
       },
       {
@@ -358,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -368,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
