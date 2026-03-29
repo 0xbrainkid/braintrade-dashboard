@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-29T20:00:01.262841+00:00",
+  "timestamp": "2026-03-29T20:10:11.349719+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 398.072782,
+  "hl_balance": 397.768722,
   "today_pnl": 18.83,
   "pm_pnl": -86.87,
-  "hl_pnl": 7.07,
+  "hl_pnl": 6.77,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -79.8,
+  "all_time_pnl": -80.1,
   "total_trades": 227,
   "days_active": 14,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 1.70448,
+      "pnl": 1.51845,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 0.10317,
+      "pnl": 0.21177,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "SHORT",
       "size": 1.31,
       "entry": 82.252,
-      "pnl": 0.917,
+      "pnl": 0.69037,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "BLAST",
-      "rate": "-0.0504%",
-      "apr": "-55%",
+      "rate": "-0.0833%",
+      "apr": "-91%",
       "action": "LONG",
-      "oi": "2,308,203,422"
+      "oi": "2,314,831,532"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.968"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.931"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLAST at -0.0504%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLAST at -0.0833%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.72465,
+        "pnl": 2.4205900000000002,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-29 19:40 UTC \u2014 Pillar 1: Copy Intelligence Audit\n\n**Task:** Analyze fresh copy scanner data, check signal quality.\n\n**Findings:**\n1. **Bot farm detected** in top wallet rankings: 10+ wallets with identical patterns (30 trades, 1 market, $0.960 avg, 11.6 score). Likely same entity. Copy scores inflated.\n2. **Real signal:** Traders buying UP at $0.680 for current window. Also buying 'BTC above $64k' at $0.914, 'BTC NOT $80k' at $0.997. Smart money is mildly bullish short-term, strongly bullish medium-term.\n3. **Signal inversion bug?** Live signals report 'bearish @ 100% confidence' but actual trader activity is buying UP. The copy-signal-integrator.py may be miscalculating direction. This affects our copy signal boost (adds conviction on wrong signal).\n\n**Action needed:** Audit copy-signal-integrator.py bias calculation on Monday. If inverted, the copy boost is HURTING our trades, not helping.\n\n---\n\n# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-03-29 19:38 UTC \u2014 P1 Copy Intelligence: Signal Shift Detected\n\n**Task:** Pillar 1 rotation \u2014 analyze copy signal quality and fix stale data.\n\n**Finding:** MAJOR sentiment shift in PM copy signals:\n- Morning (09:08 UTC): 35/50 signals buying DOWN at $0.85-$0.999 (bearish, 100% confidence)\n- Evening (19:38 UTC): 36/50 signals buying UP at $0.680 (bullish flip!)\n- Biggest trader \"Open-Semiconduc\": $219 on UP in last 30 min alone\n\n**Analysis:** Smart money flipped from bearish to bullish during the afternoon session. BTC drifted from $66,643 to $66,271 (-0.5%) since morning \u2014 the bearish view played out, and now they're positioning for a bounce. This aligns with BTC being near the bottom of its $66k-$67.3k range.\n\n**Monday implication:** If bullish sentiment persists, our contrarian YES bot will see positive bias (bullish indicators) \u2192 would buy NO \u2192 blocked by V3.2 YES-only filter. But if the bounce actually happens, BTC moves UP \u2192 negative bias (our indicators lag the move) \u2192 YES trade = correct.\n\n**Infrastructure:** pm-top-traders.json still stale (Mar 19). Scanner runs but doesn't update this file \u2014 needs fix. Live signals and copy signals are fresh.\n\n**Action:** None needed. Signal flow is informational. V3.2 handles direction automatically.\n\n---\n\n---\n\n## 2026-03-29 11:48 UTC \u2014 HL Leaderboard Deep Dive\n\n**Task:** Analyze what top 10 most profitable HL traders are doing right now.\n\n**Finding:** 7 out of 10 are FLAT. Zero positions. They made $10-33M this month and closed everything.\n\n**My thinking:** If the best traders on the platform are in cash, that's a signal. They don't see edge right now. Our HL positions (BTC short $107, ETH long $108, SOL short $106) are tiny but we should ask: why are we positioned when $40M+ accounts are flat?\n\n**Counter-argument:** Our positions are so small ($107 notional) that the carry cost is negligible. And our BTC short is actually right \u2014 the few top traders still positioned long BTC are all losing.\n\n**Decision:*",
+  "worklog": "## 2026-03-29 20:08 UTC \u2014 Pillar 2: Edge Development \u2014 Copy Integrator Bug Fix\n\n**Task:** Audit copy-signal-integrator.py for signal inversion bug found at 19:40.\n\n**Root cause:** Integrator only matched outcome==\"Yes\"/\"No\" but BTC 5-min markets use \"Up\"/\"Down\". Result: **90% of signals (45/50) were being IGNORED.** Bias was calculated from just 5 monthly resolution market signals \u2014 wrong data entirely.\n\n**Fix:** Added \"Up\"/\"Down\" outcome matching alongside \"Yes\"/\"No\". Now correctly reads all 50 signals.\n\n**Impact on bot:** Copy boost only activates when signal is \"bullish\" AND we're taking a YES trade. With the fix, the integrator now correctly shows \"bearish\" based on 45 real DOWN bets (was showing bearish before too, but based on wrong data). The bot correctly does NOT boost conviction during bearish periods. When smart money flips bullish, the boost will now fire with real confidence.\n\n**Verification:** Re-ran integrator \u2192 0 UP, 45 DOWN, bearish@100%. Correct.\n\n---\n\n## 2026-03-29 19:40 UTC \u2014 Pillar 1: Copy Intelligence Audit\n\n**Task:** Analyze fresh copy scanner data, check signal quality.\n\n**Findings:**\n1. **Bot farm detected** in top wallet rankings: 10+ wallets with identical patterns (30 trades, 1 market, $0.960 avg, 11.6 score). Likely same entity. Copy scores inflated.\n2. **Real signal:** Traders buying UP at $0.680 for current window. Also buying 'BTC above $64k' at $0.914, 'BTC NOT $80k' at $0.997. Smart money is mildly bullish short-term, strongly bullish medium-term.\n3. **Signal inversion bug?** Live signals report 'bearish @ 100% confidence' but actual trader activity is buying UP. The copy-signal-integrator.py may be miscalculating direction. This affects our copy signal boost (adds conviction on wrong signal).\n\n**Action needed:** Audit copy-signal-integrator.py bias calculation on Monday. If inverted, the copy boost is HURTING our trades, not helping.\n\n---\n\n# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-03-29 19:38 UTC \u2014 P1 Copy Intelligence: Signal Shift Detected\n\n**Task:** Pillar 1 rotation \u2014 analyze copy signal quality and fix stale data.\n\n**Finding:** MAJOR sentiment shift in PM copy signals:\n- Morning (09:08 UTC): 35/50 signals buying DOWN at $0.85-$0.999 (bearish, 100% confidence)\n- Evening (19:38 UTC): 36/50 signals buying UP at $0.680 (bullish flip!)\n- Biggest trader \"Open-Semiconduc\": $219 on UP in last 30 min alone\n\n**Analysis:** Smart money flipped from bearish to bullish during the afternoon session. BTC drifted from $66,643 to $66,271 (-0.5%) since morning \u2014 the bearish view played out, and now they're positioning for a bounce. This aligns with BTC being near the bottom of its $66k-$67.3k range.\n\n**Monday implication:** If bullish sentiment persists, our contrarian YES bot will see positive bias (bullish indicators) \u2192 would buy NO \u2192 blocked by V3.2 YES-only filter. But if the bounce actually happens, BTC moves UP \u2192 negative bias (our indicators lag the move) \u2192 YES trad",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
