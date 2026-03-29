@@ -143,6 +143,10 @@
 <div class="grid" id="top-cards"></div>
 
 <!-- P&L Chart -->
+<!-- Work Log -->
+<div class="section-title">📝 Live Work Log</div>
+<div id="worklog" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; font-family: monospace; margin-bottom: 20px;"></div>
+
 <div class="section-title">📈 Daily P&L</div>
 <div id="pnl-chart"></div>
 
@@ -226,6 +230,13 @@ async function loadData() {
         html += '</table>';
       }
       document.getElementById('pillar4').innerHTML = html;
+    }
+
+    // Work Log
+    if (d.worklog) {
+      document.getElementById('worklog').textContent = d.worklog;
+    } else {
+      document.getElementById('worklog').textContent = 'No work log entries yet.';
     }
 
     // P&L Chart

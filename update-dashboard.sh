@@ -412,6 +412,9 @@ data = {
         "max_drawdown": round(max_dd, 1),
     },
     
+    # ═══ WORK LOG ═══
+    "worklog": open("/home/ubuntu/clawd/WORKLOG.md").read()[:3000] if os.path.exists("/home/ubuntu/clawd/WORKLOG.md") else "",
+    
     # ═══ PILLAR 4: Alpha Research Pipeline ═══
     "pillar4": {
         "completion": 15,

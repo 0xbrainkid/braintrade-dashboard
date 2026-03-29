@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-29T11:47:48.795970+00:00",
+  "timestamp": "2026-03-29T11:49:18.570667+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 396.337762,
+  "hl_balance": 396.393642,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 5.34,
+  "hl_pnl": 5.39,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -81.53,
+  "all_time_pnl": -81.48,
   "total_trades": 227,
   "days_active": 14,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.00159,
       "entry": 67390.0,
-      "pnl": 0.85065,
+      "pnl": 0.91107,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0543,
       "entry": 1993.1,
-      "pnl": 0.59187,
+      "pnl": 0.49956,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "SHORT",
       "size": 1.31,
       "entry": 82.252,
-      "pnl": -0.48732,
+      "pnl": -0.39955,
       "leverage": 3,
       "wallet": "old"
     }
@@ -188,7 +188,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.9552,
+        "pnl": 1.01108,
         "sharpe": 0.0
       },
       {
@@ -344,6 +344,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-03-29 11:48 UTC \u2014 HL Leaderboard Deep Dive\n\n**Task:** Analyze what top 10 most profitable HL traders are doing right now.\n\n**Finding:** 7 out of 10 are FLAT. Zero positions. They made $10-33M this month and closed everything.\n\n**My thinking:** If the best traders on the platform are in cash, that's a signal. They don't see edge right now. Our HL positions (BTC short $107, ETH long $108, SOL short $106) are tiny but we should ask: why are we positioned when $40M+ accounts are flat?\n\n**Counter-argument:** Our positions are so small ($107 notional) that the carry cost is negligible. And our BTC short is actually right \u2014 the few top traders still positioned long BTC are all losing.\n\n**Decision:** Keep positions for now. They're too small to matter. Focus energy on PM strategy where we have real edge data.\n\n---\n\n## 2026-03-29 11:45 UTC \u2014 PM Leaderboard Analysis\n\n**Task:** What are the top PM profit-makers actually trading?\n\n**Finding:** Top 5 PM traders made $2.6-4M this month. Almost ALL on sports betting (NBA spreads, European football). Not crypto.\n\n**My thinking:** Our PM 5-min BTC market is a tiny niche. The real money on PM is sports where you can have genuine informational edge (injury reports, lineup changes, weather). We're trying to extract alpha from a market that's essentially a coin flip with slight inefficiencies.\n\n**What this changes:** Nothing immediate \u2014 our contrarian strategy still shows 60% WR which IS edge. But it explains why our profits are small. We're fishing in a puddle, not the ocean.\n\n**Next:** Should we explore PM sports markets? Probably not \u2014 we don't have sports data infrastructure. Better to maximize our crypto edge.\n\n---\n\n## 2026-03-29 11:30 UTC \u2014 Fear & Greed Integration (P4)\n\n**Task:** Built alpha signal pipeline.\n\n**Finding:** Fear & Greed Index = 12 (Extreme Fear) for 7 consecutive days. BTC dropped from $70.9K to $66.4K this week.\n\n**How this helps trading:** Extreme Fear historically precedes bounces. Our contrarian PM strategy already fades the crowd, so persistent Extreme Fear actually supports our approach \u2014 the crowd is scared, we bet against them.\n\n**What I built:** Auto-updating alpha-signals.json via cron (hourly). Contains FNG, BTC price, 24h change, BTC dominance.\n\n**Not yet built:** Feeding FNG score into bot as a confidence multiplier. When FNG < 20 and we're betting contrarian, increase confidence.\n\n---\n\n## 2026-03-28 10:16 UTC \u2014 3 New Filters Deployed\n\n**Task:** 155-trade deep analysis to find losing patterns.\n\n**Findings:**\n1. Saturday WR = 27% (6W/16L) \u2014 worst day by far\n2. Hour 12 UTC = 82% WR (best), Hour 14 = 30% (worst)\n3. Edge 15-20% range = 46% WR (dead zone)\n\n**Changes made:**\n- Weekend filter: block Sat/Sun\n- Hours narrowed: [11, 12, 19, 20] only\n- Edge dead zone: skip 0.15-0.20\n\n**Expected impact:** WR from ~55% to 65%+ by cutting known losers.\n\n**Status:** Can't validate until Monday (wee",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
