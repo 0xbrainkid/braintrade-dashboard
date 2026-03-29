@@ -27,13 +27,29 @@ hl_balance = 0
 hl_positions = []
 try:
     import requests
+    # Query BOTH HL wallets and combine
+    # Old wallet (HYPERLIQUID_PRIVATE_KEY): has positions
     resp = requests.post("https://api.hyperliquid.xyz/info", json={
         "type": "clearinghouseState",
         "user": "0x51F290588E0fB3107D9cde00984fA16f3dDA3191"
     }, timeout=10)
-    hl_data = resp.json()
-    hl_balance = float(hl_data["marginSummary"]["accountValue"])
-    for p in hl_data.get("assetPositions", []):
+    hl_data_old = resp.json()
+    hl_balance_old = float(hl_data_old["marginSummary"]["accountValue"])
+    
+    # New wallet (hl.js seed phrase): trading wallet
+    resp2 = requests.post("https://api.hyperliquid.xyz/info", json={
+        "type": "clearinghouseState",
+        "user": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba"
+    }, timeout=10)
+    hl_data_new = resp2.json()
+    hl_balance_new = float(hl_data_new["marginSummary"]["accountValue"])
+    
+    # Combined
+    hl_balance = hl_balance_old + hl_balance_new
+    hl_data = hl_data_old  # Use old wallet for positions (it has the active ones)
+    
+    # Merge positions from both wallets
+    for p in hl_data_old.get("assetPositions", []):
         pos = p["position"]
         szi = float(pos["szi"])
         if szi == 0: continue
@@ -48,8 +64,28 @@ try:
             "size": abs(szi),
             "entry": float(pos["entryPx"]),
             "pnl": float(pos["unrealizedPnl"]),
-            "leverage": lev
+            "leverage": lev,
+            "wallet": "old"
         })
+    for p in hl_data_new.get("assetPositions", []):
+        pos = p["position"]
+        szi = float(pos["szi"])
+        if szi == 0: continue
+        lev = 10
+        try:
+            if isinstance(pos.get("leverage"), dict):
+                lev = int(float(pos["leverage"].get("value", 10)))
+        except: pass
+        hl_positions.append({
+            "coin": pos["coin"],
+            "side": "LONG" if szi > 0 else "SHORT",
+            "size": abs(szi),
+            "entry": float(pos["entryPx"]),
+            "pnl": float(pos["unrealizedPnl"]),
+            "leverage": lev,
+            "wallet": "new"
+        })
+    # (old single-wallet block removed — both wallets handled above)
 except Exception as e:
     print(f"HL error: {e}")
 
