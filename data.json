@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T10:30:02.654482+00:00",
+  "timestamp": "2026-03-30T10:43:59.585919+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 404.557376,
+  "hl_balance": 404.011186,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 13.56,
+  "hl_pnl": 13.01,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -73.31,
+  "all_time_pnl": -73.86,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.8991,
+      "pnl": 0.88938,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.7787,
+      "pnl": 1.62239,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.87308,
+      "pnl": 1.49292,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1212%",
-      "apr": "-133%",
+      "rate": "-0.1322%",
+      "apr": "-145%",
       "action": "LONG",
-      "oi": "243,597,644"
+      "oi": "252,166,446"
     },
     {
       "coin": "PROVE",
-      "rate": "-0.0715%",
-      "apr": "-78%",
+      "rate": "-0.0661%",
+      "apr": "-72%",
       "action": "LONG",
-      "oi": "3,062,152"
+      "oi": "3,061,684"
     }
   ],
   "daily_pnl": [
@@ -120,16 +120,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 84,
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.963"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.991"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1212%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1322%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.55088,
+        "pnl": 4.00469,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 10:08 UTC \u2014 [Pillar 4] SolSt1ne Audit: V4.1 Implements 90%+ of Strategy\n\n**Task:** Audit V4.1 against SolSt1ne's published strategy. Identify remaining gaps.\n\n**Finding:** V4.1 now implements nearly all of SolSt1ne's core framework:\n\n| SolSt1ne Principle | Status | V4.1 Implementation |\n|---|---|---|\n| Conviction filter (3/4 indicators) | \u2705 | OBI, CVD, MACD, VWAP |\n| Edge calculation (implied vs market) | \u2705 | `implied_prob - target_price` |\n| Quarter-Kelly sizing | \u2705 | `kelly_fraction = 0.25` |\n| 8% divergence threshold | \u2705 | `divergence_threshold = 0.08` |\n| Signal inversion detection | \u2705 | 50-point swing = pause |\n| Conv4 = overconfidence cap | \u2705 | Capped to 3 (conv4 = 40% WR) |\n| Market clustering (edge in specific type) | \u2705 | BTC 5-min only, 4 active hours |\n| Time filters (avoid chaos hours) | \u2705 | [11,12,19,20] only |\n| Edge dead zone | \u2705 | 0.15-0.20 blocked (46% WR) |\n| Volume filter | \u26a0\ufe0f | LOW_VOL exists but rarely triggers |\n| FOMC/CPI avoidance | \u274c | Not implemented |\n| Volatility pause (1-min >0.5%) | \u274c | Not implemented |\n\n**Key SolSt1ne insight confirmed by our data:**\n- \"Confidence is inversely correlated with edge\" \u2192 our conv4 = 40% WR validates this\n- \"Edge is concentrated in ONE market type\" \u2192 our 4-hour BTC window = 70%+ WR vs 45% elsewhere\n- \"Minimum confidence cutoff: 62%\" \u2192 we use 65% estimated WR for Kelly\n\n**Remaining gaps (low priority):**\n1. **FOMC/CPI calendar avoidance** \u2014 blocks trading during macro events. Could add as cron-updated blocklist.\n2. **Volatility pause** \u2014 if 1-min range > 0.5%, pause. Our regime filter partially covers this but operates on 1h timeframe.\n\n**Decision:** No changes. V4.1 is 90%+ aligned with SolSt1ne's framework. The two gaps (FOMC, vol pause) are edge cases that affect <5% of trading hours. Will revisit if we see losses during macro events.\n\n**Next P4 heartbeat:** Monitor V4.1 first trades at 11h. Check if SolSt1ne's \"AI divergence filter\" interacts correctly with F&G edge modifier.\n\n## 2026-03-30 09:38 UTC \u2014 [Pillar 3] Pre-Session Final Check: RANGE 0/6, All Systems Go\n\n**Task:** Final regime verification before 11h active trading. Compile overnight session summary.\n\n**Finding:** Internal regime filter now reads **RANGE score 0/6** \u2014 fully cleared:\n- Consistency: 0.62 (< 0.625 threshold)\n- Range: 0.80% (< 1.0% threshold)\n- Trend: +0.31% (< 0.5% threshold)\n- 11h projection: RANGE 0/6 \u2014 **V4.1 WILL TRADE** \u2705\n\n**Overnight Session Summary (00:08-09:38 UTC, 25 worklog entries):**\n\n**Infrastructure (fixed):**\n- Root cause: watchdog + regime-detector killing bot every 5 min \u2192 removed STOP_TRADING, changed cron to log-only\n- PM bot stable 175+ min (longest uptime in days)\n\n**V4.1 Deployed (3 changes):**\n1. Copy boost disabled (bot farms, not profitable traders)\n2. VWAP relaxed at 11h/12h (recovers est. $18/day)\n3. F&G integration (+0.05 edge, 1.10x size at F&G=8)\n\n**Research produced:**\n- regime_classifier.py \u2014 real-time BTC regime detection\n- src/fear_greed.py \u2014 F&G API module with c",
+  "worklog": "## 2026-03-30 10:42 UTC \u2014 [Pillar 1] T-18 Min: BTC Below VWAP = Perfect V4.1 VWAP_RELAXED Test\n\n**Task:** Final pre-trade intelligence scan. Check copy signal, regime, and VWAP position.\n\n**Finding:**\n1. **Copy signal flipped:** 100% bearish (04:44) \u2192 23% bullish (10:43). Order flow more balanced (75 UP bids vs 24 UP asks). Low confidence (46%) = no copy boost = baseline. Good \u2014 clean V4.1 test.\n\n2. **Regime: RANGE 0/6.** All metrics well below thresholds. CONFIRMED will trade at 11h.\n\n3. **BTC $187 below VWAP** ($67,408 vs $67,596 VWAP). This means:\n   - Bearish bias (-37 to -80 recent readings) \u2192 YES direction\n   - VWAP disagrees (price below VWAP = bearish, YES expects UP)\n   - **V3.3: Would BLOCK** (VWAP_DISAGREES)\n   - **V4.1 at 11h: Will ALLOW** (VWAP_RELAXED at peak hour)\n   \n   This is the exact scenario our overnight research predicted and optimized for. First live test of VWAP relaxation is imminent.\n\n4. **Recent bias readings:** consistently -37 to -80 (strong YES direction). If PM prices are 0.505-0.515 at 11h window, all conditions align for V4.1's first trade.\n\n**My thinking:** Everything converges: regime RANGE, bias strong YES, VWAP disagrees (perfect VWAP_RELAXED test), copy signal neutral (no interference), F&G at 8 (mild edge boost). If this trade fires and wins, it validates the entire V4.1 thesis. If it loses, one data point \u2014 need 20+ to judge.\n\n**Decision:** Watch. No changes. Let V4.1 execute as designed.\n\n**Next heartbeat at 11h:** Monitor for TRADE SIGNAL, VWAP_RELAXED, F&G edge adjustment, and OUTCOME logs.\n\n## 2026-03-30 10:08 UTC \u2014 [Pillar 4] SolSt1ne Audit: V4.1 Implements 90%+ of Strategy\n\n**Task:** Audit V4.1 against SolSt1ne's published strategy. Identify remaining gaps.\n\n**Finding:** V4.1 now implements nearly all of SolSt1ne's core framework:\n\n| SolSt1ne Principle | Status | V4.1 Implementation |\n|---|---|---|\n| Conviction filter (3/4 indicators) | \u2705 | OBI, CVD, MACD, VWAP |\n| Edge calculation (implied vs market) | \u2705 | `implied_prob - target_price` |\n| Quarter-Kelly sizing | \u2705 | `kelly_fraction = 0.25` |\n| 8% divergence threshold | \u2705 | `divergence_threshold = 0.08` |\n| Signal inversion detection | \u2705 | 50-point swing = pause |\n| Conv4 = overconfidence cap | \u2705 | Capped to 3 (conv4 = 40% WR) |\n| Market clustering (edge in specific type) | \u2705 | BTC 5-min only, 4 active hours |\n| Time filters (avoid chaos hours) | \u2705 | [11,12,19,20] only |\n| Edge dead zone | \u2705 | 0.15-0.20 blocked (46% WR) |\n| Volume filter | \u26a0\ufe0f | LOW_VOL exists but rarely triggers |\n| FOMC/CPI avoidance | \u274c | Not implemented |\n| Volatility pause (1-min >0.5%) | \u274c | Not implemented |\n\n**Key SolSt1ne insight confirmed by our data:**\n- \"Confidence is inversely correlated with edge\" \u2192 our conv4 = 40% WR validates this\n- \"Edge is concentrated in ONE market type\" \u2192 our 4-hour BTC window = 70%+ WR vs 45% elsewhere\n- \"Minimum confidence cutoff: 62%\" \u2192 we use 65% estimated WR for Kelly\n\n**Remaining gaps (low priority):**\n1. **FOMC/CPI calendar avoidance** \u2014 blo",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
