@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T07:00:02.561390+00:00",
+  "timestamp": "2026-03-30T07:10:09.305475+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 402.885736,
+  "hl_balance": 403.624456,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 11.89,
+  "hl_pnl": 12.62,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.98,
+  "all_time_pnl": -74.25,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.68202,
+      "pnl": 0.8505,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.14807,
+      "pnl": 1.47147,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.04808,
+      "pnl": 1.29492,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,31 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.2863%",
-      "apr": "-313%",
+      "rate": "-0.3456%",
+      "apr": "-378%",
       "action": "LONG",
-      "oi": "276,804,534"
-    },
-    {
-      "coin": "MOODENG",
-      "rate": "-0.0810%",
-      "apr": "-89%",
-      "action": "LONG",
-      "oi": "21,755,508"
+      "oi": "272,516,018"
     },
     {
       "coin": "USUAL",
-      "rate": "-0.0712%",
-      "apr": "-78%",
+      "rate": "-0.0796%",
+      "apr": "-87%",
       "action": "LONG",
-      "oi": "24,794,260"
+      "oi": "25,726,122"
+    },
+    {
+      "coin": "MOODENG",
+      "rate": "-0.0758%",
+      "apr": "-83%",
+      "action": "LONG",
+      "oi": "21,668,378"
+    },
+    {
+      "coin": "REZ",
+      "rate": "-0.0550%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "262,879,472"
     }
   ],
   "daily_pnl": [
@@ -126,21 +133,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 40,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.959"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.2863%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.3456%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "4 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -222,7 +229,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.87817,
+        "pnl": 3.61689,
         "sharpe": 0.0
       },
       {
@@ -378,7 +385,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 06:42 UTC \u2014 [Pillar 4] F&G Backtest: Weak Correlation \u2192 Reduced Modifiers (V4.1)\n\n**Task:** Backtest Fear & Greed correlation against actual daily trading performance. Validate the V4 modifier thresholds.\n\n**Finding:** F&G correlation is weaker than assumed:\n\n| F&G Range | WR | Days | Trades |\n|-----------|-----|------|--------|\n| 0-10 (deepest fear) | **47.5%** | 4 | 61 |\n| 11-15 | **57.7%** | 6 | 142 |\n\n**All our trading data is in F&G 8-14.** We have zero data above F&G 15. Can't validate any threshold above that. The 0-10 bucket actually performs WORSE \u2014 possibly because deepest fear = most volatility = more noise in 5-min predictions.\n\nDaily breakdown shows high variance driven by filter quality, not F&G:\n- Mar 20 (F&G=11): 60% WR, +$114 \u2190 great day, but early filters\n- Mar 22 (F&G=10): 33% WR, -$23 \u2190 terrible, weekend effect\n- Mar 27 (F&G=13): 100% WR, +$31 \u2190 V3 filters active, low trade count\n\n**My thinking:** The F&G signal may still be valid at macro level (fear = more overreaction = our contrarian edge exists). But the +0.10 edge / 1.25x size was overfit to an assumption, not data. Cut both in half until we have 100+ trades across different F&G regimes.\n\n**Decision:** Deployed V4.1 with reduced modifiers:\n- Edge modifier: +0.10 \u2192 **+0.05** at F&G \u226415\n- Size multiplier: 1.25x \u2192 **1.10x** at F&G \u226410\n- Greed penalties also halved (-0.10 \u2192 -0.05)\n- Bot restarted, confirmed: `F&G: 8 \u2192 edge mod +0.05, size 1.10x`\n\n**Next P4 heartbeat:** When F&G moves above 20 (fear easing), compare WR vs Extreme Fear period. This is the real test \u2014 does our strategy degrade when fear drops?\n\n## 2026-03-30 06:13 UTC \u2014 [Pillar 3] Strategy Scope Validated: No Adjacent Hours or Markets to Add\n\n**Task:** Evaluate strategy expansion: could we add more active hours or new markets (ETH, SOL)?\n\n**Finding:**\n\n1. **Adjacent hours are all losers:**\n\n| Hour | WR | Trades | Est $/day | Verdict |\n|------|-----|--------|-----------|---------|\n| 10h | 44.4% | 9 | -$1.4 | \u274c Pre-London noise |\n| 13h | 42.9% | 7 | -$1.4 | \u274c NY open chaos |\n| 18h | 55.6% | 18 | +$1.9 | \u274c Marginal, not worth risk |\n| 21h | 43.8% | 16 | -$2.8 | \u274c Post-NY decay |\n\n14h/15h showed 58-60% WR but ALL pre-V3 (weaker filters). With V3+ conviction requirements, likely 50-55% = unprofitable.\n\n2. **No ETH/SOL 5-min markets on PM.** API search returned 0 short-term ETH/SOL markets. Only BTC 5-min exists as a dynamic rolling market. Long-term crypto markets exist (e.g., \"Will BTC hit $1M?\") but our strategy is 5-min specific.\n\n3. **V4 bot stability confirmed** \u2014 running for 2+ minutes post-deploy, correctly logging OUTSIDE_ACTIVE_HOURS with bias and PM prices. F&G loaded at startup (8/Extreme Fear, +0.10 edge, 1.25x size).\n\n**My thinking:** Our edge is narrow and deep, not wide and shallow. BTC 5-min at 11h/12h/19h/20h with V4 filters is the right scope. Growth comes from:\n- Better WR per trade (V4 changes: copy disabled, VWAP relaxed, F&G)\n- More trades per active hour (VWAP relaxation unblocks",
+  "worklog": "## 2026-03-30 07:08 UTC \u2014 [Pillar 1] Copy Signal REINTERPRETED: Attention Signal, Not Directional\n\n**Task:** Deeper P1 analysis \u2014 is there any signal in the copy data, even from bot farms?\n\n**Finding:** The copy signal has asymmetric directional accuracy:\n- **bearish@100:** 34.6% directional accuracy (BTC goes UP 65.4% of the time!)\n- **bullish@100:** 70.0% directional accuracy (actually predictive)\n- Fading bearish@100 = 65.4% accuracy \u2014 better than our overall WR\n\n**Critical insight: Our YES WR by copy signal:**\n\n| Combo | WR | Trades |\n|---|---|---|\n| YES + bearish@100 | **65.2%** | 23 |\n| YES + bullish@100 | **68.4%** | 19 |\n| YES + no_copy | 60.0% | 30 |\n| YES + bearish_low | 50.0% | 20 |\n\nBOTH high-confidence signals (bearish AND bullish at 100) improve our YES WR by 5-8pp over baseline. The copy signal isn't a directional predictor \u2014 it's a **market attention indicator**. When order flow is extreme in EITHER direction, our contrarian YES strategy performs better because there's concentrated activity creating overreaction.\n\nLow-confidence signals (conf < 100) = 50% WR = pure noise. Only high-confidence matters.\n\n**My thinking:** We disabled copy boost because it was checking directional agreement (bullish agrees with YES \u2192 boost). Wrong model. The correct model is: high confidence in ANY direction \u2192 market is paying attention \u2192 our contrarian edge is stronger. This is actually the V5 copy signal design.\n\n**Decision:** \n- V4.1 keeps copy boost at 0 (correct \u2014 the OLD directional model was wrong)\n- **V5 idea:** `copy_attention_boost` \u2014 when copy_conf >= 100 (any direction), add +1 conviction for YES trades. This would have captured 42 trades at 66.7% WR vs 30 trades at 60% WR baseline. Needs 20+ post-V4 trades before deploying.\n- Don't deploy now \u2014 let V4.1 run clean first, collect baseline data.\n\n**Next P1 heartbeat:** After V4.1 collects 30+ trades, compare WR vs this analysis. If baseline (no copy) WR \u2265 60%, the attention signal is confirmed as additive.\n\n## 2026-03-30 06:42 UTC \u2014 [Pillar 4] F&G Backtest: Weak Correlation \u2192 Reduced Modifiers (V4.1)\n\n**Task:** Backtest Fear & Greed correlation against actual daily trading performance. Validate the V4 modifier thresholds.\n\n**Finding:** F&G correlation is weaker than assumed:\n\n| F&G Range | WR | Days | Trades |\n|-----------|-----|------|--------|\n| 0-10 (deepest fear) | **47.5%** | 4 | 61 |\n| 11-15 | **57.7%** | 6 | 142 |\n\n**All our trading data is in F&G 8-14.** We have zero data above F&G 15. Can't validate any threshold above that. The 0-10 bucket actually performs WORSE \u2014 possibly because deepest fear = most volatility = more noise in 5-min predictions.\n\nDaily breakdown shows high variance driven by filter quality, not F&G:\n- Mar 20 (F&G=11): 60% WR, +$114 \u2190 great day, but early filters\n- Mar 22 (F&G=10): 33% WR, -$23 \u2190 terrible, weekend effect\n- Mar 27 (F&G=13): 100% WR, +$31 \u2190 V3 filters active, low trade count\n\n**My thinking:** The F&G signal may still be valid at macro level (fear = m",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -388,7 +395,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -398,7 +405,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
