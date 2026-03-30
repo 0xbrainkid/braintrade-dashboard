@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-03-30T04:12:41.638828+00:00",
+  "timestamp": "2026-03-30T04:27:43.083079+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.173074,
+  "hl_balance": 403.474944,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.17,
+  "hl_pnl": 12.47,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.7,
+  "all_time_pnl": -74.4,
   "total_trades": 227,
   "days_active": 15,
-  "pm_bot_running": false,
+  "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [
     {
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.87156,
+      "pnl": 0.94122,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.21275,
+      "pnl": 1.33672,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.07844,
+      "pnl": 1.18668,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1397%",
-      "apr": "-153%",
+      "rate": "-0.1216%",
+      "apr": "-133%",
       "action": "LONG",
-      "oi": "202,927,896"
+      "oi": "202,947,810"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1397%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1216%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -197,7 +197,7 @@
     "strategies": [
       {
         "name": "PM Smart Entry",
-        "status": "DOWN",
+        "status": "LIVE",
         "trades": 227,
         "win_rate": 53.8,
         "pnl": -86.87,
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.16275,
+        "pnl": 3.46462,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 04:10 UTC \u2014 [Pillar 2] VWAP Filter Killing Profitable Trades at Peak Hours\n\n**Task:** Analyze why the PM bot executed only 1 trade on Saturday Mar 29 despite active hours having signals. Determine if conviction/VWAP filters are too aggressive.\n\n**Finding:** VWAP_DISAGREES filter is blocking high-WR trades at our best hours:\n- **11h UTC:** 12 YES signals blocked by VWAP. Hour's actual WR = 88% (7W/1L). Estimated missed profit: +$41.\n- **12h UTC:** 8 YES signals blocked by VWAP. Hour's actual WR = 82% (14W/3L). Estimated missed profit: +$21.\n- **19h UTC:** 1 blocked. WR = 75%. Minimal impact.\n- **20h UTC:** 6 blocked. WR = 58%. VWAP filter is protective here (-$8 if allowed).\n- LOW_CONVICTION also blocked 15 YES signals at 12h, 8 at 11h, 8 at 19h.\n- Saturday Mar 29: 70 signals were NO_TRADE_SKIPPED (positive bias = NO direction, V3.2 correctly blocks).\n\nThe VWAP stats (54% vs 45% WR) were computed across ALL hours. But 11h and 12h have structural edge (London session, clean signals) where VWAP disagree doesn't matter \u2014 prices move our way regardless.\n\n**Mar 28 (Friday) results:** 6 trades total. 5 at 09h (before V3 active hours deployed): 2W/3L. 1 at 19h: WIN. Validates cutting 09h.\n\n**My thinking:** The VWAP filter was correct as a universal gate when we traded all hours. But now we only trade 4 golden hours. At 11h (88% WR) and 12h (82% WR), the edge is so strong that VWAP disagreement is noise \u2014 we're leaving ~$62/week on the table. At 20h (58% WR), VWAP filtering is protective. Hour-specific filter thresholds are the play.\n\n**Decision:** Design V4 hour-adaptive filters:\n- 11h + 12h: Relax VWAP gate (allow trades if 2/3 other indicators agree, regardless of VWAP)\n- 19h + 20h: Keep VWAP mandatory (lower WR hours need all confirmation)\n- Need to backtest this against full Mar 23-28 data before deploying.\n\n**Also fixed:** PM bot screen was dead (crashed ~01:03 UTC). Restarted as LIVE in screen \"pm-bot\".\n\n**Next P2 heartbeat:** Backtest V4 hour-adaptive VWAP relaxation. Quantify exact WR impact from confidence_outcomes.jsonl by simulating: \"what if VWAP-blocked trades at 11h/12h were executed?\"\n\n## 2026-03-30 03:38 UTC \u2014 Pillar 1: STRONG_TREND Alert + Position Check\n\n**REGIME ESCALATED: 5/8 \u2192 7/8 (STRONG_TREND) in 30 min**\n\nBTC rallying hard: $66,289 \u2192 $67,178 (+1.3%) since midnight. Direction consistency jumped to 88% UP. Range crossed 2.0% threshold. All 4 regime components now contributing points.\n\n**Score breakdown (7/8):**\n- ATR 1.38% (+1) \u2014 elevated vol\n- DIR 88% UP (+2) \u2014 strong directional consensus\n- RNG 2.07% (+2) \u2014 wide range broke threshold\n- TRD +1.41% (+2) \u2014 clear uptrend\n\n**HL positions:** Account $364.61. All 3 still green (+$2.00 total uPnL).\n- BTC LONG(!) size=0.00162 entry=$66,836 uPnL=+$0.51\n- Note: entry prices differ from MEMORY.md \u2014 may have been adjusted by funding or partial fills. Need to verify.\n\n**Revised RANGE ETA:** 08:00-10:00 UTC at earliest. BTC must fully exhaust this rally AND consolidate for 4+ hours",
+  "worklog": "## 2026-03-30 04:23 UTC \u2014 [Pillar 3] STRONG_TREND Rally Analysis + PM Bot Crash Fix\n\n**Task:** Analyze current BTC regime and its implications for strategy. PM bot had crashed again \u2014 diagnose and fix. Check HL positions.\n\n**Finding:**\n1. **BTC rallied from $65,000 \u2192 $67,468** since 22:00 UTC Sunday. Classic V-shaped recovery: liquidation cascade at 22:00 (2,219 BTC volume \u2014 7x normal), then steady grind up. +3.8% off the low. Current regime: STRONG_TREND (UP).\n\n2. **PM bot crashed at ~01:03 UTC** \u2014 process died silently (no error in logs). Restarted at 04:09, died again within 20 seconds. Second restart at 04:26 \u2014 stable so far. Added EXIT_CODE capture to screen command for next crash. Watchdog cron (every 5 min) should catch this.\n\n3. **HL old wallet positions all GREEN** \u2014 all 3 are LONG (memory was stale, said BTC SHORT/SOL SHORT):\n   - BTC LONG 3x: +$0.97 (+2.7%)\n   - ETH LONG 3x: +$1.34 (+3.7%)\n   - SOL LONG 3x: +$1.21 (+3.3%)\n   - Total uPnL: +$3.53\n\n4. **STRONG_TREND regime = no PM trades.** The regime filter blocks trades during trend/strong_trend. This is correct \u2014 5-min binary prediction is noise during a directional move. The edge is in HL leveraged positions (which are long and winning).\n\n**My thinking:** The $65K sweep was institutional \u2014 2,219 BTC in one hour at a round number. The bounce was immediate and aggressive. This pattern often leads to continued upside. HL longs are positioned correctly. PM bot will resume trading when regime rotates back to RANGE \u2014 likely once BTC consolidates above $67K for a few hours.\n\n**Decision:** No changes needed. HL longs correctly positioned. PM regime filter is doing its job. Updated memory to correct HL position info (all LONG, not mixed). Monitor regime score \u2014 when it drops below 3, PM trading resumes.\n\n**Next P3 heartbeat:** Design a \"trend-following\" strategy for PM \u2014 when regime is TREND, could we trade the 5-min with-trend instead of blocking? Need historical data on 5-min UP/DOWN bias during confirmed trends.\n\n## 2026-03-30 04:10 UTC \u2014 [Pillar 2] VWAP Filter Killing Profitable Trades at Peak Hours\n\n**Task:** Analyze why the PM bot executed only 1 trade on Saturday Mar 29 despite active hours having signals. Determine if conviction/VWAP filters are too aggressive.\n\n**Finding:** VWAP_DISAGREES filter is blocking high-WR trades at our best hours:\n- **11h UTC:** 12 YES signals blocked by VWAP. Hour's actual WR = 88% (7W/1L). Estimated missed profit: +$41.\n- **12h UTC:** 8 YES signals blocked by VWAP. Hour's actual WR = 82% (14W/3L). Estimated missed profit: +$21.\n- **19h UTC:** 1 blocked. WR = 75%. Minimal impact.\n- **20h UTC:** 6 blocked. WR = 58%. VWAP filter is protective here (-$8 if allowed).\n- LOW_CONVICTION also blocked 15 YES signals at 12h, 8 at 11h, 8 at 19h.\n- Saturday Mar 29: 70 signals were NO_TRADE_SKIPPED (positive bias = NO direction, V3.2 correctly blocks).\n\nThe VWAP stats (54% vs 45% WR) were computed across ALL hours. But 11h and 12h have structural edge (London session, ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
