@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T09:09:47.108118+00:00",
+  "timestamp": "2026-03-30T09:11:53.172437+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 405.70675,
+  "hl_balance": 405.91904,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 14.71,
+  "hl_pnl": 14.92,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -72.16,
+  "all_time_pnl": -71.95,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.19718,
+      "pnl": 1.3284,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 2.17217,
+      "pnl": 2.19912,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 2.3298,
+      "pnl": 2.38392,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0739%",
-      "apr": "-81%",
+      "rate": "-0.0790%",
+      "apr": "-87%",
       "action": "LONG",
       "oi": "245,843,874"
     },
     {
       "coin": "POLYX",
-      "rate": "-0.0552%",
-      "apr": "-60%",
+      "rate": "-0.0561%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "10,367,192"
+      "oi": "10,368,548"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0739%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0790%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 5.6991499999999995,
+        "pnl": 5.91144,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 09:08 UTC \u2014 [Pillar 1] HL Leaderboard Shift: SOL Flipped Bearish 7:3\n\n**Task:** Fresh copy-intel-tracker scan. Compare HL leaderboard positioning vs earlier today.\n\n**Finding:** Top trader positioning shifted in 4.5 hours:\n\n| Asset | 04:44 UTC | 09:08 UTC | Shift |\n|-------|-----------|-----------|-------|\n| BTC | 9L/2S | 8L/2S | -1 long (still bullish) |\n| ETH | 5L/6S | 5L/6S | unchanged (mixed) |\n| SOL | 6L/4S | **3L/7S** | **-3 longs \u2192 bearish flip** |\n\nSOL: top traders flipped from bullish (6:4) to bearish (3:7) while SOL rallied +2.5% in the same window. Classic \"sell the rally\" positioning by smart money.\n\n**Our HL positions (all green):**\n- BTC LONG 3x: +$1.22 (+3.4%) \u2014 leaderboard still bullish, hold\n- ETH LONG 3x: +$2.19 (+6.0%) \u2014 leaderboard mixed, watch\n- SOL LONG 3x: +$2.34 (+6.4%) \u2014 **leaderboard now bearish** \u26a0\ufe0f\n- Total uPnL: +$5.75\n\n**My thinking:** The SOL leaderboard flip is a caution signal. Our SOL long is profitable (+6.4%) but smart money is positioning for a retrace. This is Hani's call \u2014 we don't have authority to manage HL positions (per MEMORY: \"Need Hani's decision: close or actively manage\"). But the alpha is clear: SOL long-term momentum may be weakening.\n\n**Decision:** Log the intelligence. No action on HL positions without Hani. If SOL drops below $83 (our entry + 0.5%), the smart money was right and we should recommend closing.\n\n**Next P1 heartbeat:** Track SOL leaderboard through the day. If it stays 7:3 short and SOL starts declining, escalate to Hani via daily report.\n\n## 2026-03-30 08:38 UTC \u2014 [Pillar 4] Volatility Heatmap: 11h = 2x Average Vol, Explains 88% WR\n\n**Task:** Build hourly volatility profile from 7-day 5-min candle data. Identify WHY certain hours perform better.\n\n**Finding:** 7 days \u00d7 288 candles/day = 2,016 data points. Weekday-only analysis:\n\n| Hour | Avg 5m Range | Volume | Up% | Active? | WR |\n|------|-------------|--------|-----|---------|-----|\n| 11h | **0.334%** | 185.8 BTC | 53% | \u2705 | 88% |\n| 12h | 0.231% | 82.7 | **58%** | \u2705 | 82% |\n| 13h | 0.287% | 136.9 | 47% | \u274c | 43% |\n| 14h | 0.323% | 131.1 | 52% | \u274c | 58% |\n| 19h | 0.171% | 50.6 | 47% | \u2705 | 75% |\n| 20h | 0.196% | 70.1 | 55% | \u2705 | 58% |\n\n**Key insights:**\n1. **11h = highest volatility hour (0.334%, 2x median).** High vol + London institutional flow = clear directional signals. 88% of 5-min candles have tradeable range. This is why VWAP relaxation at 11h is safe \u2014 moves are big enough that indicator disagreement is noise.\n\n2. **12h has 58% up-bias** \u2014 BTC drifts up during London midday. Our YES contrarian strategy aligns: buying YES (expecting UP) works because the underlying market has a bullish drift at this hour.\n\n3. **13h-14h have similar volatility but terrible WR** \u2014 proves volatility \u2260 edge. NY open creates competing institutional flows (London vs NY) that make direction unpredictable despite large moves.\n\n4. **19h = low vol, high WR paradox** \u2014 the 75% WR comes from signal QUALITY. Fewer large moves mean when our i",
+  "worklog": "## 2026-03-30 09:10 UTC \u2014 [Pillar 2] V4.1 Dry Run: VWAP Relaxation + F&G Dead Zone Escape Verified\n\n**Task:** Trace V4.1 code path for realistic 11h scenario. Verify all 3 changes interact correctly.\n\n**Finding:**\n1. **Dry run successful.** Simulated: bias=-45, VWAP disagrees, 3/4 conviction at 11h.\n   - V3.3: BLOCKED (VWAP_DISAGREES)\n   - V4.1: ALLOWED \u2192 $12.18 YES trade (VWAP_RELAXED at 11h)\n\n2. **F&G edge modifier helps most at bias 35-40:**\n\n| Bias | Raw Edge | + F&G | Effect |\n|------|----------|-------|--------|\n| 25 | 0.120 | 0.170 | +5pp |\n| 35 | 0.170 | 0.220 | **Escapes dead zone!** |\n| 40 | 0.195 | 0.245 | **Escapes dead zone!** |\n| 45 | 0.220 | 0.270 | +3pp (capped to 0.250) |\n| 55+ | 0.270+ | capped | No effect (max_edge=0.25) |\n\nF&G rescues trades from the edge dead zone (0.15-0.20 = 46% WR). At bias 35-40, F&G pushes edge above 0.20 into the profitable zone. This is the primary value of the F&G modifier \u2014 NOT sizing, but dead zone escape.\n\n3. **Estimated V4.1 uplift at 11h:**\n   - V3.3: ~0.9 trades/day (63% VWAP-blocked)\n   - V4.1: ~2.4 trades/day (VWAP relaxed + F&G dead zone escape)\n   - Extra profit: ~$11.70/day from 11h alone\n\n**Decision:** V4.1 code verified correct. All filter interactions work as designed. Ready for 11h first live test. No changes needed.\n\n**Next P2 heartbeat:** Monitor 11h active hour. Log first VWAP_RELAXED and F&G edge adjustment trades. Compare outcome vs prediction.\n\n## 2026-03-30 09:08 UTC \u2014 [Pillar 1] HL Leaderboard Shift: SOL Flipped Bearish 7:3\n\n**Task:** Fresh copy-intel-tracker scan. Compare HL leaderboard positioning vs earlier today.\n\n**Finding:** Top trader positioning shifted in 4.5 hours:\n\n| Asset | 04:44 UTC | 09:08 UTC | Shift |\n|-------|-----------|-----------|-------|\n| BTC | 9L/2S | 8L/2S | -1 long (still bullish) |\n| ETH | 5L/6S | 5L/6S | unchanged (mixed) |\n| SOL | 6L/4S | **3L/7S** | **-3 longs \u2192 bearish flip** |\n\nSOL: top traders flipped from bullish (6:4) to bearish (3:7) while SOL rallied +2.5% in the same window. Classic \"sell the rally\" positioning by smart money.\n\n**Our HL positions (all green):**\n- BTC LONG 3x: +$1.22 (+3.4%) \u2014 leaderboard still bullish, hold\n- ETH LONG 3x: +$2.19 (+6.0%) \u2014 leaderboard mixed, watch\n- SOL LONG 3x: +$2.34 (+6.4%) \u2014 **leaderboard now bearish** \u26a0\ufe0f\n- Total uPnL: +$5.75\n\n**My thinking:** The SOL leaderboard flip is a caution signal. Our SOL long is profitable (+6.4%) but smart money is positioning for a retrace. This is Hani's call \u2014 we don't have authority to manage HL positions (per MEMORY: \"Need Hani's decision: close or actively manage\"). But the alpha is clear: SOL long-term momentum may be weakening.\n\n**Decision:** Log the intelligence. No action on HL positions without Hani. If SOL drops below $83 (our entry + 0.5%), the smart money was right and we should recommend closing.\n\n**Next P1 heartbeat:** Track SOL leaderboard through the day. If it stays 7:3 short and SOL starts declining, escalate to Hani via daily report.\n\n## 2026-03-30 08:38 UTC ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
