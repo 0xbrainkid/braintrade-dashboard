@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T12:00:01.756772+00:00",
+  "timestamp": "2026-03-30T12:10:07.309882+00:00",
   "pm_balance": 916.31,
-  "hl_balance": 406.12143,
+  "hl_balance": 406.54791,
   "today_pnl": 0.46,
   "pm_pnl": -93.01,
-  "hl_pnl": 15.12,
+  "hl_pnl": 15.55,
   "today_trades": 4,
   "today_wins": 2,
   "today_losses": 2,
-  "all_time_pnl": -77.89,
+  "all_time_pnl": -77.46,
   "total_trades": 232,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.29438,
+      "pnl": 1.50174,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 2.71117,
+      "pnl": 2.84053,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 2.10936,
+      "pnl": 2.19912,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0534%",
-      "apr": "-59%",
+      "rate": "-0.0925%",
+      "apr": "-101%",
       "action": "LONG",
-      "oi": "252,838,848"
+      "oi": "256,012,660"
     }
   ],
   "daily_pnl": [
@@ -112,17 +112,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "bullish",
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
+        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.991"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0534%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0925%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 6.11491,
+        "pnl": 6.541390000000001,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 11:43 UTC \u2014 [Pillar 2] Enhanced Outcome Logging: Per-Indicator Values for Future Analysis\n\n**Task:** Fix data gap \u2014 confidence_outcomes.jsonl doesn't have individual indicator values, preventing per-indicator analysis.\n\n**Change:** Added `_last_indicators` dict stored at trade signal time, merged into outcome log entry. New fields:\n- `obi`: Order Book Imbalance value (float)\n- `cvd`: Cumulative Volume Delta (float)\n- `macd_h`: MACD histogram value (float)\n- `vwap`: VWAP price (float)\n- `btc_price`: BTC mid price at trade time\n- `hour`: UTC hour\n- `fg_value`: Fear & Greed index value\n\n**Why:** Today's first 5 trades showed clear OBI pattern (\u274c=-0.88 on losses, \u2705=+0.86 on wins) but couldn't backtest against historical data. With these fields logged, after 50+ trades we can:\n- Rank indicators by predictive power\n- Find optimal OBI/CVD thresholds\n- Test if OBI should have higher weight than other indicators\n- Analyze CVD/OBI divergence patterns\n\n**Decision:** Bot restarted at 11:45 with enhanced logging. No strategy changes \u2014 data collection improvement only.\n\n## 2026-03-30 11:41 UTC \u2014 [Pillar 1] Copy Signal + OBI Pattern in First V4.1 Trades\n\n**Task:** Analyze copy signal and indicator patterns from first 5 V4.1 trades.\n\n**Finding:** Clear pattern emerging from 5 trades:\n\n| Trade | Copy Signal | OBI | Result |\n|-------|-------------|-----|--------|\n| 11:19 \u00d72 | bullish@84 (low conf) | \u274c -0.88, -0.28 | \u274c LOSS |\n| 11:38 \u00d73 | bearish@100 (high conf) | \u274c\u2192\u2705 -0.83\u2192+0.86 | \u2705 WIN |\n\n**Copy signal as attention indicator (V5 theory) validated:**\n- Low conf (84) = no attention boost = baseline \u2192 LOSS\n- High conf (100, bearish) = attention signal \u2192 WIN\n- Consistent with Mar 29 analysis: ANY high-conf copy signal boosts YES WR by 5-8pp\n\n**OBI is the most predictive single indicator:**\n- OBI \u274c (strong sell pressure) = both losses had OBI strongly negative\n- OBI \u2705 (+0.86 in winning trades) = buy pressure confirmed the move\n- When OBI disagrees strongly, the contrarian signal fails because the order book IS the market\n\n**Balance: $916.31** (down from $922.45). Expected +$12.76 from 3W/2L. Discrepancy likely due to PM payout settlement timing \u2014 wins may not have credited yet.\n\n**Post-restart 11:42 signal:** Bias -32, rejected LOW_CONVICTION 2/4 (CVD flipped positive while MACD stayed negative). Bot correctly waiting for cleaner signal.\n\n**Decision:** OBI weight may need increasing in V5. Currently OBI is 1 of 4 equal indicators \u2014 but its predictive power seems higher. Collect 20+ post-fix trades before deciding.\n\n## 2026-03-30 11:38 UTC \u2014 [Pillar 4] DOUBLE-TRADE BUG FOUND AND FIXED + 5 Trades Analyzed\n\n**Task:** Analyze V4.1 first live trades. Found critical bug.\n\n**Bug:** `window_traded = True` was set AFTER `await execute_trade()`. During the async API call, the loop continued and triggered additional trades in the same 5-min window. Result: 2 trades at 11:19, 3 trades at 11:38 \u2014 **5 trades instead of 2**.\n\n**Fix applied:** Moved `window_traded = Tru",
+  "worklog": "## 2026-03-30 12:08 UTC \u2014 [Pillar 3] 11h Post-Mortem: Pullback Trading in a Rally\n\n**Task:** Full analysis of V4.1's first active hour. Understand signal-to-trade ratio and loss patterns.\n\n**Finding:**\n- **204 rejections, 5 trades** (2.4% signal-to-trade ratio)\n- **56% YES_ONLY_FILTER** \u2014 market was predominantly bullish (BTC rallied $422)\n- WR: 2W/2L = 50% (1 trade unconfirmed) \u2014 below 88% historical\n- Only 18% of bias readings were YES-qualifying (< -25)\n\n**Bias oscillation pattern:**\n| Window | Avg Bias | YES Signals | Trades | Result |\n|--------|----------|-------------|--------|--------|\n| 11:00-11:14 | +16.9 | 0 | 0 | \u2014 |\n| 11:15-11:24 | **-7.0** | 4 | 2 | \u274c\u274c |\n| 11:25-11:34 | +45.6 | 0 | 0 | \u2014 |\n| 11:35-11:44 | **-25.2** | 13 | 3 | \u2705\u2705(\u2705) |\n| 11:45-11:59 | +24.2 | 6 | 0 | \u2014 |\n\n**Key insight:** In a trending market, our contrarian strategy fires on pullbacks. The deeper the pullback, the more reliable the signal:\n- 11:15 pullback: BTC -$17 \u2192 noise \u2192 LOSS\n- 11:35 pullback: BTC -$47 \u2192 genuine dip \u2192 WIN\n\n**V5 idea: BTC move minimum filter.** If the current 5-min candle range is < $40 at entry time, the pullback may be noise. Would have filtered both losses today (range $17) while keeping all wins (range $45+). Need 20+ trades to validate.\n\n**Decision:** Collect data. Current filters are working (the 50% WR is just 4 trades \u2014 not statistically significant). The double-trade bug inflated both wins and losses. Clean data starts from 11:45 restart.\n\n## 2026-03-30 11:43 UTC \u2014 [Pillar 2] Enhanced Outcome Logging: Per-Indicator Values for Future Analysis\n\n**Task:** Fix data gap \u2014 confidence_outcomes.jsonl doesn't have individual indicator values, preventing per-indicator analysis.\n\n**Change:** Added `_last_indicators` dict stored at trade signal time, merged into outcome log entry. New fields:\n- `obi`: Order Book Imbalance value (float)\n- `cvd`: Cumulative Volume Delta (float)\n- `macd_h`: MACD histogram value (float)\n- `vwap`: VWAP price (float)\n- `btc_price`: BTC mid price at trade time\n- `hour`: UTC hour\n- `fg_value`: Fear & Greed index value\n\n**Why:** Today's first 5 trades showed clear OBI pattern (\u274c=-0.88 on losses, \u2705=+0.86 on wins) but couldn't backtest against historical data. With these fields logged, after 50+ trades we can:\n- Rank indicators by predictive power\n- Find optimal OBI/CVD thresholds\n- Test if OBI should have higher weight than other indicators\n- Analyze CVD/OBI divergence patterns\n\n**Decision:** Bot restarted at 11:45 with enhanced logging. No strategy changes \u2014 data collection improvement only.\n\n## 2026-03-30 11:41 UTC \u2014 [Pillar 1] Copy Signal + OBI Pattern in First V4.1 Trades\n\n**Task:** Analyze copy signal and indicator patterns from first 5 V4.1 trades.\n\n**Finding:** Clear pattern emerging from 5 trades:\n\n| Trade | Copy Signal | OBI | Result |\n|-------|-------------|-----|--------|\n| 11:19 \u00d72 | bullish@84 (low conf) | \u274c -0.88, -0.28 | \u274c LOSS |\n| 11:38 \u00d73 | bearish@100 (high conf) | \u274c\u2192\u2705 -0.83\u2192+0.86 | \u2705 WIN |\n\n**Copy signal as ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +374,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
