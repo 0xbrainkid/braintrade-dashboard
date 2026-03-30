@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T02:30:02.269756+00:00",
+  "timestamp": "2026-03-30T02:44:15.117695+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 399.572321,
+  "hl_balance": 400.484981,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 8.57,
+  "hl_pnl": 9.48,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -78.3,
+  "all_time_pnl": -77.39,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.19602,
+      "pnl": 0.14904,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": -0.35035,
+      "pnl": -0.09163,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.1056,
+      "pnl": 0.41448,
       "leverage": 3,
       "wallet": "old"
     }
@@ -104,13 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 100,
+    "current_bias": "bearish",
+    "signal_confidence": 20,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.992"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.991"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -0.44077,
+        "pnl": 0.47189000000000003,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 02:08 UTC \u2014 ALERT: STOP_TRADING Flag Active (Regime=TREND)\n\n**Discovery:** pm-bot screen missing! Regime detector set STOP_TRADING at 01:00 UTC (TREND score 5/8).\n\n**Root cause:** BTC recovered from $64,904 to $66,771 (+2.9%) \u2014 clear uptrend triggered regime detection. Bot correctly stopped.\n\n**Watchdog behavior issue:** Restart loop \u2014 watchdog restarts bot every 5 min, regime detector stops it every 15 min. Not harmful (bot just cycles) but noisy. Could optimize by having watchdog check STOP_TRADING before restarting.\n\n**Impact on Monday:** Regime detector auto-clears flag when RANGE returns (score \u22642). Cron runs every 15 min. If BTC stabilizes before 11h UTC, flag clears and bot resumes. If TREND persists at 11h, bot stays stopped (correct behavior \u2014 our 73% WR is in RANGE only).\n\n**No manual action needed.** System working as designed. Just noisy.\n\n---\n\n## 2026-03-30 01:38 UTC \u2014 Daily Intel for Monday March 30\n\n**Task:** Write daily-intel-2026-03-30.md (HEARTBEAT.md Step 1 \u2014 was missing).\n\n**Key findings:**\n- BTC at $66,582, recovering from $64,904 low (+0.93% last 4h)\n- 24h range 3.3% \u2014 wide enough for good trading\n- Volume expanding (272% of prior) \u2014 healthy market\n- Copy intel: 84% bearish consensus (42/50 signals)\n- Funding extremes: SOPH -63.4% APR, REZ -52.2% APR (short crowding)\n\n**Monday outlook:** BTC ranging $65-67k with expanding volume = ideal conditions for contrarian bot. If this holds to 11h UTC, expect strong bias signals.\n\n---\n\n## 2026-03-30 01:08 UTC \u2014 Pillar 2: Monday Monitoring Plan\n\n**Task:** Write structured monitoring plan for 5 simultaneous changes going live Monday.\n\n**Created:** `strategies/monday-monitoring-plan.md` with:\n- Monitoring commands for each trading window (11h, 12h, 19h, 20h)\n- Rollback triggers (3 consecutive losses at |bias|>55, <50% WR after 10 trades in 55-70)\n- \"What good looks like\" (4-8 trades, 70%+ WR, copy boost fires \u22651x)\n- \"What bad looks like\" (0 trades, <50% WR, copy never fires)\n- End-of-day metrics to capture\n\n**Why this matters:** With 5 changes going live simultaneously, we need to attribute outcomes correctly. If Monday fails, we need to know WHICH change caused it, not just \"something broke.\"\n\n---\n\n## 2026-03-30 00:38 UTC \u2014 Pillar 1: Overnight Funding & Position Check\n\n**Task:** Check 00:00 UTC funding settlement and position status.\n\n**Funding rates (00:00 UTC settlement):**\n- BTC: -0.0006%/8h (shorts receive) \u2014 neutral\n- ETH: +0.0004%/8h (longs pay) \u2014 neutral  \n- SOL: -0.0019%/8h (shorts receive) \u2014 slightly favors our short\n\n**Net funding income:** +$0.007/day ($0.20/month) \u2014 confirms negligible, not worth holding for.\n\n**Position uPnL:** All 3 green. BTC SHORT +$1.75 (+1.7%), ETH LONG +$0.24 (+0.2%), SOL SHORT +$0.63 (+0.6%). Total uPnL +$2.62. Account ~$362.62.\n\n**Recommendation unchanged:** Close all 3, move $362 to PM. The $2.62 profit + $360 base earning $0.007/day in funding vs adding 39% to PM capital ($42.53/day \u00d7 0.39 = +$16.59/day estimated). Payoff ratio: 2,37",
+  "worklog": "## 2026-03-30 02:42 UTC \u2014 Pillar 2: Regime Detector Hysteresis Fix\n\n**Task:** Fix watchdog/regime detector restart loop.\n\n**Problem:** Regime oscillates between TREND and MIXED at boundaries. Each MIXED reading removed STOP flag \u2192 watchdog restarted bot \u2192 next TREND reading stopped it again. Cycle every 30 min.\n\n**Fix:** Added 2-reading hysteresis to regime detector:\n1. First non-TREND reading after TREND \u2192 enters cooldown (flag stays)\n2. Second consecutive non-TREND \u2192 removes flag (bot restarts)\n3. Any TREND reading resets cooldown counter\n\n**Effect:** Bot now needs 30 min (2 \u00d7 15-min checks) of sustained non-TREND before restarting. Eliminates churn at regime boundaries. When regime genuinely returns to RANGE, bot still starts within 30 min.\n\n---\n\n## 2026-03-30 02:08 UTC \u2014 ALERT: STOP_TRADING Flag Active (Regime=TREND)\n\n**Discovery:** pm-bot screen missing! Regime detector set STOP_TRADING at 01:00 UTC (TREND score 5/8).\n\n**Root cause:** BTC recovered from $64,904 to $66,771 (+2.9%) \u2014 clear uptrend triggered regime detection. Bot correctly stopped.\n\n**Watchdog behavior issue:** Restart loop \u2014 watchdog restarts bot every 5 min, regime detector stops it every 15 min. Not harmful (bot just cycles) but noisy. Could optimize by having watchdog check STOP_TRADING before restarting.\n\n**Impact on Monday:** Regime detector auto-clears flag when RANGE returns (score \u22642). Cron runs every 15 min. If BTC stabilizes before 11h UTC, flag clears and bot resumes. If TREND persists at 11h, bot stays stopped (correct behavior \u2014 our 73% WR is in RANGE only).\n\n**No manual action needed.** System working as designed. Just noisy.\n\n---\n\n## 2026-03-30 01:38 UTC \u2014 Daily Intel for Monday March 30\n\n**Task:** Write daily-intel-2026-03-30.md (HEARTBEAT.md Step 1 \u2014 was missing).\n\n**Key findings:**\n- BTC at $66,582, recovering from $64,904 low (+0.93% last 4h)\n- 24h range 3.3% \u2014 wide enough for good trading\n- Volume expanding (272% of prior) \u2014 healthy market\n- Copy intel: 84% bearish consensus (42/50 signals)\n- Funding extremes: SOPH -63.4% APR, REZ -52.2% APR (short crowding)\n\n**Monday outlook:** BTC ranging $65-67k with expanding volume = ideal conditions for contrarian bot. If this holds to 11h UTC, expect strong bias signals.\n\n---\n\n## 2026-03-30 01:08 UTC \u2014 Pillar 2: Monday Monitoring Plan\n\n**Task:** Write structured monitoring plan for 5 simultaneous changes going live Monday.\n\n**Created:** `strategies/monday-monitoring-plan.md` with:\n- Monitoring commands for each trading window (11h, 12h, 19h, 20h)\n- Rollback triggers (3 consecutive losses at |bias|>55, <50% WR after 10 trades in 55-70)\n- \"What good looks like\" (4-8 trades, 70%+ WR, copy boost fires \u22651x)\n- \"What bad looks like\" (0 trades, <50% WR, copy never fires)\n- End-of-day metrics to capture\n\n**Why this matters:** With 5 changes going live simultaneously, we need to attribute outcomes correctly. If Monday fails, we need to know WHICH change caused it, not just \"something broke.\"\n\n---\n\n## 2026-03-30 00:38 UTC \u2014 Pil",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
