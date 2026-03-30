@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T21:30:01.638176+00:00",
+  "timestamp": "2026-03-30T21:49:18.130022+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 403.025108,
+  "hl_balance": 403.083168,
   "today_pnl": 65.19,
   "pm_pnl": -87.57,
-  "hl_pnl": 12.03,
+  "hl_pnl": 12.08,
   "today_trades": 7,
   "today_wins": 5,
   "today_losses": 2,
-  "all_time_pnl": -75.54,
+  "all_time_pnl": -75.49,
   "total_trades": 235,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.0243,
+      "pnl": 0.03564,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 0.6313,
+      "pnl": 0.5885,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,12 +37,20 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.93588,
+      "pnl": 0.9768,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "REZ",
+      "rate": "-0.0528%",
+      "apr": "-58%",
+      "action": "LONG",
+      "oi": "256,440,532"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-17",
@@ -104,13 +112,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 16,
+    "current_bias": "bearish",
+    "signal_confidence": 52,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 29 buys, 21 sells \u2014 avg price $0.990"
+        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.946"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: REZ at -0.0528%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -192,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.54288,
+        "pnl": 1.60094,
         "sharpe": 0.0
       },
       {
@@ -348,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 21:08 UTC \u2014 [Pillar 4] End-of-Day Analysis: Indicator Logging Bug Found\n\n**Task:** Comprehensive Day 1 analysis for V4.1. Update MEMORY.\n\n**Finding 1: Indicator data NOT being saved to outcomes JSONL**\nAll 7 today's trades have zero indicator fields in `confidence_outcomes.jsonl`. Code path looks correct: `_last_indicators` set in `should_trade()` \u2192 `trade_indicators = dict(self._last_indicators)` \u2192 passed to `_check_outcome()` \u2192 `log_trade_outcome(indicators=...)`. But data isn't showing up. Added debug logging to trace the issue. Next trade will reveal if the dict is empty or if the update() call is failing.\n\n**Finding 2: OBI analysis was wrong**\nAll 7 trades had OBI\u274c (negative). This is EXPECTED for contrarian YES \u2014 we buy YES when order book is bearish (OBI negative). The earlier \"OBI\u2705=win, OBI\u274c=loss\" pattern was from pre-fix data where indicators were read at outcome time (5 min later), not trade time.\n\n**V4.1 Day 1 FINAL:**\n| Metric | Value |\n|--------|-------|\n| Trades | 7 (5W/2L = 71% WR) |\n| 11h | 2W/2L (50%) \u2014 includes bug dupes |\n| 12h | 1W/0L (100%) |\n| 20h | 2W/0L (100%) \u2014 includes bug dupes |\n| 19h | 0 trades (STRONG_TREND 5/6) |\n| PM Balance | $921.75 (settlements pending) |\n| HL uPnL | +$0.58 |\n\n**Deployed fixes:** Double-trade 30s timestamp guard + indicator debug logging. Bot restarted at 21:10.\n\n## 2026-03-30 20:38 UTC \u2014 [Pillar 3] Double-Trade Bug Persists: Added Timestamp Guard\n\n**Task:** Investigate why double-trade bug recurred at 20:17 despite `window_",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 21:38 UTC \u2014 [Pillar 1] Copy Signal Evolution & Tomorrow Setup\n\n**Task:** Analyze copy signal vs actual outcomes today. Assess tomorrow morning setup.\n\n**Copy Signal Evolution Today:**\n| Time | Signal | Confidence | Context |\n|------|--------|-----------|---------|\n| ~10:43 | stale | \u2014 | Pre-session |\n| 18:08 | bearish | 83% | BTC mid-selloff ($66,789) |\n| 21:39 | bullish | 100% | BTC stabilizing ($66,600+) |\n| 21:42 | bullish | 79% | Volatile OB, settling |\n\n**Copy vs Trade Outcomes (Day 1):**\n- 20:17 trades: copy bullish@32 (low confidence) \u2192 both WON\n- Bearish@83 at 19h: no trades (correctly blocked by regime)\n- Pattern: **any high-conf signal (direction matters less than level) = real attention**\n\n**V5 Copy Attention Design Validated:**\n- Bearish@100 = 34% directional accuracy (fade = 65%) \u2192 treat as attention, not direction\n- Bullish@100 = 70% accuracy \u2192 AND points to our YES direction = strong boost\n- Low conf (<80) = no boost regardless of direction\n\n**Tomorrow Morning Assessment:**\n- BTC: $66,891 (+$600 recovery from $66,262 low, +0.32% 24h)\n- 24h range: $65,000-$68,170 ($3,170 range \u2014 wide day)\n- Copy: bullish@79 \u2192 if holds at 11h, good attention signal for YES\n- Regime: If overnight consolidates, 11h regime score could drop to RANGE\n- Setup quality: **good if BTC stabilizes above $66,500 overnight**\n\n## 2026-03-30 21:08 UTC \u2014 [Pillar 4] End-of-Day Analysis: Indicator Logging Bug Found\n\n**Task:** Comprehensive Day 1 analysis for V4.1. Update MEMORY.\n\n**Finding 1: Indi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +374,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -368,7 +384,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
