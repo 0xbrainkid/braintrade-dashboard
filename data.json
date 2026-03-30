@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T06:30:01.895888+00:00",
+  "timestamp": "2026-03-30T06:44:09.394657+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.299145,
+  "hl_balance": 403.311215,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.3,
+  "hl_pnl": 12.31,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.57,
+  "all_time_pnl": -74.56,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.73548,
+      "pnl": 0.80838,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.33672,
+      "pnl": 1.39601,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.21968,
+      "pnl": 1.09956,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.6630%",
-      "apr": "-726%",
+      "rate": "-0.6432%",
+      "apr": "-704%",
       "action": "LONG",
-      "oi": "278,681,580"
+      "oi": "286,785,778"
     },
     {
       "coin": "MOODENG",
-      "rate": "-0.1299%",
-      "apr": "-142%",
+      "rate": "-0.1253%",
+      "apr": "-137%",
       "action": "LONG",
-      "oi": "20,482,248"
+      "oi": "20,694,098"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0577%",
-      "apr": "-63%",
+      "rate": "-0.0565%",
+      "apr": "-62%",
       "action": "LONG",
-      "oi": "262,677,374"
+      "oi": "262,907,996"
     }
   ],
   "daily_pnl": [
@@ -126,17 +126,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 64,
+    "current_bias": "bullish",
+    "signal_confidence": 40,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.762"
+        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.959"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.6630%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.6432%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.29188,
+        "pnl": 3.30395,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 06:13 UTC \u2014 [Pillar 3] Strategy Scope Validated: No Adjacent Hours or Markets to Add\n\n**Task:** Evaluate strategy expansion: could we add more active hours or new markets (ETH, SOL)?\n\n**Finding:**\n\n1. **Adjacent hours are all losers:**\n\n| Hour | WR | Trades | Est $/day | Verdict |\n|------|-----|--------|-----------|---------|\n| 10h | 44.4% | 9 | -$1.4 | \u274c Pre-London noise |\n| 13h | 42.9% | 7 | -$1.4 | \u274c NY open chaos |\n| 18h | 55.6% | 18 | +$1.9 | \u274c Marginal, not worth risk |\n| 21h | 43.8% | 16 | -$2.8 | \u274c Post-NY decay |\n\n14h/15h showed 58-60% WR but ALL pre-V3 (weaker filters). With V3+ conviction requirements, likely 50-55% = unprofitable.\n\n2. **No ETH/SOL 5-min markets on PM.** API search returned 0 short-term ETH/SOL markets. Only BTC 5-min exists as a dynamic rolling market. Long-term crypto markets exist (e.g., \"Will BTC hit $1M?\") but our strategy is 5-min specific.\n\n3. **V4 bot stability confirmed** \u2014 running for 2+ minutes post-deploy, correctly logging OUTSIDE_ACTIVE_HOURS with bias and PM prices. F&G loaded at startup (8/Extreme Fear, +0.10 edge, 1.25x size).\n\n**My thinking:** Our edge is narrow and deep, not wide and shallow. BTC 5-min at 11h/12h/19h/20h with V4 filters is the right scope. Growth comes from:\n- Better WR per trade (V4 changes: copy disabled, VWAP relaxed, F&G)\n- More trades per active hour (VWAP relaxation unblocks ~20 signals/week)\n- Slightly larger positions (F&G 1.25x at current fear levels)\n- NOT from adding marginal hours or untested markets\n\n**Decision:** No changes to active hours or market scope. Strategy expansion will come from V4 parameter improvements, not surface area. Next growth vector: V5 idea \u2014 when $1,000 balance reached, increase max_position_pct from 1.2% to 1.5%.\n\n**Next P3 heartbeat:** After V4 produces 10+ trades, analyze whether the combined changes (VWAP relaxation + F&G boost + copy disabled) are net positive. Design V5 position sizing schedule.\n\n## 2026-03-30 06:08 UTC \u2014 [Pillar 2] V4 DEPLOYED LIVE \u2014 3 Changes Applied\n\n**Task:** Deploy V4 package to live PM bot. All 3 changes had been designed, patched, and tested in prior heartbeats. Deploy early (5h before active trading) to catch any crashes.\n\n**Changes deployed:**\n1. **Copy boost disabled** (`copy_conviction_boost = 0`) \u2014 bot farms were poisoning signal, WR 77% without vs 45% with\n2. **VWAP relaxation at 11h/12h** \u2014 hour-adaptive: relaxed at peak WR hours (88%/82%), mandatory at 19h/20h. Recovers est. $18/day in blocked signals.\n3. **Fear & Greed integration** \u2014 edge modifier (+0.10 at F&G=8) and position multiplier (1.25x at F&G=8). Refreshes hourly.\n\n**Deployment log:**\n```\n06:11:01 - \ud83d\udcca F&G: 8 (Extreme Fear) \u2192 edge mod +0.10, size 1.25x\n06:11:01 - \ud83d\udcb0 CLOB Balance: $922.45\n06:11:02 - \ud83d\udcca Bootstrapped 100 candles\n06:11:02 - \ud83d\udd01 Entering main trading loop...\n```\n\n**V4 impact estimate (combined):**\n- VWAP relaxation: +$18/day from unblocked 11h/12h trades\n- Copy disabled: WR improvement from ~55% \u2192 ~65%+ (removing 45% WR noise tra",
+  "worklog": "## 2026-03-30 06:42 UTC \u2014 [Pillar 4] F&G Backtest: Weak Correlation \u2192 Reduced Modifiers (V4.1)\n\n**Task:** Backtest Fear & Greed correlation against actual daily trading performance. Validate the V4 modifier thresholds.\n\n**Finding:** F&G correlation is weaker than assumed:\n\n| F&G Range | WR | Days | Trades |\n|-----------|-----|------|--------|\n| 0-10 (deepest fear) | **47.5%** | 4 | 61 |\n| 11-15 | **57.7%** | 6 | 142 |\n\n**All our trading data is in F&G 8-14.** We have zero data above F&G 15. Can't validate any threshold above that. The 0-10 bucket actually performs WORSE \u2014 possibly because deepest fear = most volatility = more noise in 5-min predictions.\n\nDaily breakdown shows high variance driven by filter quality, not F&G:\n- Mar 20 (F&G=11): 60% WR, +$114 \u2190 great day, but early filters\n- Mar 22 (F&G=10): 33% WR, -$23 \u2190 terrible, weekend effect\n- Mar 27 (F&G=13): 100% WR, +$31 \u2190 V3 filters active, low trade count\n\n**My thinking:** The F&G signal may still be valid at macro level (fear = more overreaction = our contrarian edge exists). But the +0.10 edge / 1.25x size was overfit to an assumption, not data. Cut both in half until we have 100+ trades across different F&G regimes.\n\n**Decision:** Deployed V4.1 with reduced modifiers:\n- Edge modifier: +0.10 \u2192 **+0.05** at F&G \u226415\n- Size multiplier: 1.25x \u2192 **1.10x** at F&G \u226410\n- Greed penalties also halved (-0.10 \u2192 -0.05)\n- Bot restarted, confirmed: `F&G: 8 \u2192 edge mod +0.05, size 1.10x`\n\n**Next P4 heartbeat:** When F&G moves above 20 (fear easing), compare WR vs Extreme Fear period. This is the real test \u2014 does our strategy degrade when fear drops?\n\n## 2026-03-30 06:13 UTC \u2014 [Pillar 3] Strategy Scope Validated: No Adjacent Hours or Markets to Add\n\n**Task:** Evaluate strategy expansion: could we add more active hours or new markets (ETH, SOL)?\n\n**Finding:**\n\n1. **Adjacent hours are all losers:**\n\n| Hour | WR | Trades | Est $/day | Verdict |\n|------|-----|--------|-----------|---------|\n| 10h | 44.4% | 9 | -$1.4 | \u274c Pre-London noise |\n| 13h | 42.9% | 7 | -$1.4 | \u274c NY open chaos |\n| 18h | 55.6% | 18 | +$1.9 | \u274c Marginal, not worth risk |\n| 21h | 43.8% | 16 | -$2.8 | \u274c Post-NY decay |\n\n14h/15h showed 58-60% WR but ALL pre-V3 (weaker filters). With V3+ conviction requirements, likely 50-55% = unprofitable.\n\n2. **No ETH/SOL 5-min markets on PM.** API search returned 0 short-term ETH/SOL markets. Only BTC 5-min exists as a dynamic rolling market. Long-term crypto markets exist (e.g., \"Will BTC hit $1M?\") but our strategy is 5-min specific.\n\n3. **V4 bot stability confirmed** \u2014 running for 2+ minutes post-deploy, correctly logging OUTSIDE_ACTIVE_HOURS with bias and PM prices. F&G loaded at startup (8/Extreme Fear, +0.10 edge, 1.25x size).\n\n**My thinking:** Our edge is narrow and deep, not wide and shallow. BTC 5-min at 11h/12h/19h/20h with V4 filters is the right scope. Growth comes from:\n- Better WR per trade (V4 changes: copy disabled, VWAP relaxed, F&G)\n- More trades per active hour (VWAP relaxation unblocks",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -388,7 +388,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
