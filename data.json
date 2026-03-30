@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T06:00:02.065698+00:00",
+  "timestamp": "2026-03-30T06:12:53.220378+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.720345,
+  "hl_balance": 403.607465,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.72,
+  "hl_pnl": 12.61,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.15,
+  "all_time_pnl": -74.26,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.9963,
+      "pnl": 0.93798,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.43374,
+      "pnl": 1.3475,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.28304,
+      "pnl": 1.31472,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.4482%",
-      "apr": "-491%",
+      "rate": "-0.6017%",
+      "apr": "-659%",
       "action": "LONG",
-      "oi": "260,046,710"
+      "oi": "265,085,134"
     },
     {
       "coin": "MOODENG",
-      "rate": "-0.1496%",
-      "apr": "-164%",
+      "rate": "-0.1307%",
+      "apr": "-143%",
       "action": "LONG",
-      "oi": "20,632,676"
+      "oi": "20,622,634"
     },
     {
-      "coin": "BLAST",
-      "rate": "-0.0502%",
-      "apr": "-55%",
+      "coin": "REZ",
+      "rate": "-0.0545%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "2,358,516,774"
+      "oi": "262,742,346"
     }
   ],
   "daily_pnl": [
@@ -127,16 +127,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 88,
+    "signal_confidence": 64,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.740"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.762"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.4482%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.6017%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.7130799999999997,
+        "pnl": 3.6002,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 05:38 UTC \u2014 [Pillar 1] Copy Signal Following Bot Farms \u2014 Confirmed Root Cause\n\n**Task:** Investigate WHY copy signal hurts WR. Analyze the top wallet database feeding the signal.\n\n**Finding:** **ALL 20 \"top\" wallets in the copy intelligence database are bot farm wallets with $0 earnings.**\n\n| Metric | Value |\n|--------|-------|\n| Wallets with exactly 30 trades | 11 |\n| Wallets with exactly 60 trades | 7 |\n| Wallets with exactly 90 trades | 2 |\n| Wallets with positive earnings | **0** |\n| Biggest loser | \"Warped-Cloak\": -$50,285 |\n\nPerfect multiples of 30 = coordinated bot farm (identified in Mar 29 bug fix but wallet list never refreshed). The copy intelligence pipeline is: bot farm wallets \u2192 copy-signals.json \u2192 live-signals.json \u2192 conviction boost in trading_bot.py \u2192 WORSE WR.\n\nCurrent live signal: 88% bearish confidence based on 47/50 down signals from these bot wallets. This is noise, not alpha.\n\n**Signal chain audit:**\n- `pm-copy-scanner.py` (30 min cron) \u2192 produces bot-farm-polluted wallet list\n- `copy_scanner_v2.py` (5 min cron) \u2192 order flow data (fresh but from bad wallets)\n- `copy-signal-integrator.py` (30 min cron) \u2192 combines into live-signals.json\n- `trading_bot.py` reads live-signals.json \u2192 +1 conviction boost when \"confident\"\n\n**My thinking:** The copy signal was designed to reverse-engineer profitable traders. Instead it found bot farms (high activity = high score, no profit tracking). The Mar 29 bug fixes (Up/Down matching, bot farm filter, SELL-side) were applied to the integrator but the upstream wallet scanner was never updated. We need to either:\n- (a) Rebuild the scanner with profit tracking + bot farm filter\n- (b) Disable the entire copy pipeline and rely on our 4 core indicators (77% WR without copy)\n\nOption (b) is correct for now. Our core indicators work. Copy is broken. Fix it later when we have a proper profit-tracking scanner.\n\n**Decision:**\n1. V4 will set `copy_conviction_boost = 0` (CONFIRMED \u2014 this is the #1 priority V4 change)\n2. Copy crons remain running (cheap, data may be useful for future analysis)\n3. Future: rebuild pm-wallet-scanner.py with outcome tracking (needs PM resolution API)\n\n**Next P1 heartbeat:** After V4 deploys with copy disabled, track WR of first 30 trades as baseline. If WR \u2265 65%, copy stays disabled permanently.\n\n## 2026-03-30 05:08 UTC \u2014 [Pillar 4] Fear & Greed Module Built + Bot Stability Confirmed\n\n**Task:** Wire F&G signal into bot confidence scoring (HEARTBEAT.md P4 task). Confirm bot stability after infra fix.\n\n**Finding:**\n1. **Built `src/fear_greed.py`** \u2014 production-ready module with:\n   - `get_fear_greed()` \u2192 fetches current F&G with 1h cache\n   - `fg_confidence_modifier(value)` \u2192 edge adjustment (-0.10 to +0.10)\n   - `fg_position_multiplier(value)` \u2192 size scaling (0.50x to 1.25x)\n   - Tested: F&G=8 \u2192 +0.10 edge boost, 1.25x position size\n\n2. **V4 integration plan written** (`patches/v4-fear-greed.patch.md`):\n   - 6 exact code insertion points in trading_bot.py\n   - Edge ",
+  "worklog": "## 2026-03-30 06:08 UTC \u2014 [Pillar 2] V4 DEPLOYED LIVE \u2014 3 Changes Applied\n\n**Task:** Deploy V4 package to live PM bot. All 3 changes had been designed, patched, and tested in prior heartbeats. Deploy early (5h before active trading) to catch any crashes.\n\n**Changes deployed:**\n1. **Copy boost disabled** (`copy_conviction_boost = 0`) \u2014 bot farms were poisoning signal, WR 77% without vs 45% with\n2. **VWAP relaxation at 11h/12h** \u2014 hour-adaptive: relaxed at peak WR hours (88%/82%), mandatory at 19h/20h. Recovers est. $18/day in blocked signals.\n3. **Fear & Greed integration** \u2014 edge modifier (+0.10 at F&G=8) and position multiplier (1.25x at F&G=8). Refreshes hourly.\n\n**Deployment log:**\n```\n06:11:01 - \ud83d\udcca F&G: 8 (Extreme Fear) \u2192 edge mod +0.10, size 1.25x\n06:11:01 - \ud83d\udcb0 CLOB Balance: $922.45\n06:11:02 - \ud83d\udcca Bootstrapped 100 candles\n06:11:02 - \ud83d\udd01 Entering main trading loop...\n```\n\n**V4 impact estimate (combined):**\n- VWAP relaxation: +$18/day from unblocked 11h/12h trades\n- Copy disabled: WR improvement from ~55% \u2192 ~65%+ (removing 45% WR noise trades)\n- F&G at current 8: +0.10 edge \u2192 more marginal trades pass threshold + 1.25x size\n- Conservative combined estimate: $25-40/day (up from $20-30/day W13)\n\n**Rollback plan:** `cp trading_bot.py.v3.3.bak trading_bot.py` and restart screen.\n\n**Monitoring plan:**\n- 06-11h UTC: verify bot runs stable, no crashes, log output clean\n- 11h UTC: first active hour \u2014 watch for VWAP_RELAXED log lines and F&G edge adjustments\n- End of day: compare V4 day WR vs V3.3 average\n\n**Next P2 heartbeat:** Monitor V4 during 11h active hour. Check first trades for VWAP_RELAXED, F&G edge mod, and outcomes.\n\n## 2026-03-30 05:38 UTC \u2014 [Pillar 1] Copy Signal Following Bot Farms \u2014 Confirmed Root Cause\n\n**Task:** Investigate WHY copy signal hurts WR. Analyze the top wallet database feeding the signal.\n\n**Finding:** **ALL 20 \"top\" wallets in the copy intelligence database are bot farm wallets with $0 earnings.**\n\n| Metric | Value |\n|--------|-------|\n| Wallets with exactly 30 trades | 11 |\n| Wallets with exactly 60 trades | 7 |\n| Wallets with exactly 90 trades | 2 |\n| Wallets with positive earnings | **0** |\n| Biggest loser | \"Warped-Cloak\": -$50,285 |\n\nPerfect multiples of 30 = coordinated bot farm (identified in Mar 29 bug fix but wallet list never refreshed). The copy intelligence pipeline is: bot farm wallets \u2192 copy-signals.json \u2192 live-signals.json \u2192 conviction boost in trading_bot.py \u2192 WORSE WR.\n\nCurrent live signal: 88% bearish confidence based on 47/50 down signals from these bot wallets. This is noise, not alpha.\n\n**Signal chain audit:**\n- `pm-copy-scanner.py` (30 min cron) \u2192 produces bot-farm-polluted wallet list\n- `copy_scanner_v2.py` (5 min cron) \u2192 order flow data (fresh but from bad wallets)\n- `copy-signal-integrator.py` (30 min cron) \u2192 combines into live-signals.json\n- `trading_bot.py` reads live-signals.json \u2192 +1 conviction boost when \"confident\"\n\n**My thinking:** The copy signal was designed to reverse-engineer profitable trader",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
