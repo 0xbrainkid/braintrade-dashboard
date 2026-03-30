@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T20:30:01.455334+00:00",
+  "timestamp": "2026-03-30T20:40:38.360784+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.926308,
+  "hl_balance": 402.895108,
   "today_pnl": 65.19,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.93,
+  "hl_pnl": 11.9,
   "today_trades": 7,
   "today_wins": 5,
   "today_losses": 2,
-  "all_time_pnl": -75.64,
+  "all_time_pnl": -75.67,
   "total_trades": 235,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.34182,
+      "pnl": -0.32724,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.5194,
+      "pnl": 1.5515,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.26928,
+      "pnl": 0.1914,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0661%",
-      "apr": "-72%",
+      "rate": "-0.0623%",
+      "apr": "-68%",
       "action": "LONG",
-      "oi": "285,693,158"
+      "oi": "284,142,114"
     }
   ],
   "daily_pnl": [
@@ -112,17 +112,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 32,
+    "current_bias": "bearish",
+    "signal_confidence": 84,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 37 buys, 13 sells \u2014 avg price $0.960"
+        "text": "Top traders: 12 buys, 38 sells \u2014 avg price $0.914"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0661%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0623%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.44686,
+        "pnl": 1.4156600000000001,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 20:10 UTC \u2014 [Pillar 2] 20h = Weakest Active Hour: 60% WR, Zero Signals in Downtrends\n\n**Task:** Analyze 20h signal availability and historical performance.\n\n**Finding:**\n- **20h today: 0/24 negative bias readings.** 100% positive (mean +44.8). No YES opportunities in a down-trending market.\n- **Historical 20h WR: 60% (6W/4L, n=10)** \u2014 lowest of all active hours:\n  - 12h: 83% (n=18, best)\n  - 19h: 73% (n=15)\n  - 11h: 64% (n=11)\n  - 20h: 60% (n=10, worst)\n\n**Why 20h underperforms:**\n- Late US afternoon \u2014 institutional positioning done, retail selling into close\n- In downtrend days: 100% positive bias (sellers dominate) \u2192 no contrarian YES signals\n- In uptrend days: may get signals but edge is weaker than 11-12h\n- Sample size small (10 trades) but directionally concerning\n\n**V5 consideration:** 20h may not be worth keeping as an active hour. Removing it would lose ~1 trade/day on average but could improve overall WR from 55% to 58%+. Need 20+ more 20h trades to confirm \u2014 current n=10 is borderline significant.\n\n**Decision:** Keep 20h active for now (need more data). Flag for V5 review when we have 30+ trades at 20h.\n\n## 2026-03-30 20:08 UTC \u2014 [Pillar 1] 20h Active But Bullish: Regime Cleared, Bias Positive\n\n**Task:** Monitor 20h session. Check if regime cleared and analyze signal availability.\n\n**Finding:**\n1. **Regime: RANGE 2/6 \u2705** \u2014 cleared at ~20:05 (was TREND 3/6 at 20:04). The 4h lookback shift dropped trend from -0.4% to -0.33% and consistency from 0.88 to 0.75.\n\n2. **All",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 20:38 UTC \u2014 [Pillar 3] Double-Trade Bug Persists: Added Timestamp Guard\n\n**Task:** Investigate why double-trade bug recurred at 20:17 despite `window_traded` fix.\n\n**Bug:** Two trades at 20:17:40 and 20:17:44 (3 seconds apart) in same 5-min window. Both YES @ $0.484, both WON (BTC 66574\u219266607). The `window_traded = True` fix from 11:38 was in place but didn't prevent it.\n\n**Root cause hypothesis:** The asyncio event loop processes WebSocket data between the `window_traded = True` assignment and the `await execute_trade()` call. During the first trade's API call, the loop picks up new WS data, re-enters the main loop, and fires a second trade before `window_traded` is checked. The 10s poll interval (`asyncio.sleep(10)`) should prevent re-entry, but WebSocket callbacks may trigger additional iterations.\n\n**Fix applied:** Added timestamp-based guard \u2014 minimum 30 seconds between trades:\n```python\nif hasattr(self, '_last_trade_ts') and (time.time() - self._last_trade_ts) < 30:\n    continue\n```\nThis is a belt-and-suspenders fix alongside `window_traded`. Even if the event loop somehow re-enters, the 30s cooldown prevents double-fire.\n\n**Bot restarted at 20:40.** Balance: $921.75 (PM payouts settling).\n\n**20h results:** 2 trades, 2 wins (bug dupes). Updated Day 1: **7 trades, 5W/2L = 71% WR**.\n\n## 2026-03-30 20:10 UTC \u2014 [Pillar 2] 20h = Weakest Active Hour: 60% WR, Zero Signals in Downtrends\n\n**Task:** Analyze 20h signal availability and historical performance.\n\n**Finding:**\n- **20h",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +374,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
