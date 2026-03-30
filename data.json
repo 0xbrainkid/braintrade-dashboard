@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T18:30:01.626880+00:00",
+  "timestamp": "2026-03-30T18:44:04.057830+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 402.407608,
+  "hl_balance": 402.497838,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 11.41,
+  "hl_pnl": 11.5,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -67.54,
+  "all_time_pnl": -67.45,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.27378,
+      "pnl": -0.22356,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 0.95765,
+      "pnl": 0.8881,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.25344,
+      "pnl": 0.363,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0732%",
-      "apr": "-80%",
+      "rate": "-0.0764%",
+      "apr": "-84%",
       "action": "LONG",
-      "oi": "279,848,898"
+      "oi": "280,465,258"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0573%",
-      "apr": "-63%",
+      "rate": "-0.0556%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "257,975,072"
+      "oi": "258,187,054"
     }
   ],
   "daily_pnl": [
@@ -119,17 +119,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 0,
+    "current_bias": "bullish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 20 buys, 30 sells \u2014 avg price $0.995"
+        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0732%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0764%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.93731,
+        "pnl": 1.02754,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 18:08 UTC \u2014 [Pillar 1] \u26a0\ufe0f 19h Session at Risk: TREND Score 3/6 \u2014 $36 From Threshold\n\n**Task:** Pre-session check for 19h. Verify all systems.\n\n**Finding:** BTC dropped $1,092 (67,881\u219266,789) since 12h. Internal regime shifted to **TREND score 3/6** \u2014 bot will BLOCK trades at 19h!\n\n| Factor | Value | Points | Threshold |\n|--------|-------|--------|-----------|\n| Consistency | 0.62 | 0 | 0.625 |\n| Range | 1.66% | **+1** | 1.0% |\n| Trend | -1.23% | **+2** | 1.0% |\n| **Total** | | **3/6** | **\u22653 = TREND = BLOCKED** |\n\n**Critical margin:** BTC needs to recover just **$36** (to ~$66,825) for trend to drop below 1.0%, reducing score from 3\u21922 = RANGE = tradeable. This is a coin-flip \u2014 could go either way in the next 52 minutes.\n\n**Copy signal:** bearish@83% confidence (up from 46% morning). If we trade, attention signal is active.\n\n**Pre-session status:**\n- \u2705 Bot alive (298 min uptime)\n- \u2705 Balance: $930.37\n- \u2705 F&G: 8 (edge mod +0.05, size 1.10x)\n- \u26a0\ufe0f External regime: TREND 7/10 (DOWN direction)\n- \u26a0\ufe0f Internal regime: TREND 3/6 (borderline!)\n- \u2705 No STOP_TRADING flag\n\n**Decision:** No intervention. The regime filter exists for a reason \u2014 trading in a downtrend historically had 22% WR. If BTC bounces $36, great. If not, the bot correctly sits out. Either way, the filter is protecting us.\n\n## 2026-03-30 17:38 UTC \u2014 [Pillar 4] HL Funding Rate Scan: No Viable Arb Opportunities\n\n**Task:** Scan HL funding rates for arb opportunities (HEARTBEAT P4: funding arb strategy).\n\n**Finding:** Funding rates are flat across all major coins:\n| Coin | Rate/8h | Annualized | Signal |\n|------|---------|------------|--------|\n| BTC | -0.0011% | -1.2% | \u2705 LOW |\n| ETH | -0.0002% | -0.3% | \u2705 LOW |\n| SOL | -0.0033% | -3.6% | \u2705 LOW |\n\n- Negative funding on BTC/ETH/SOL = shorts paying longs. Our LONG positions are collecting (tiny) funding.\n- **BLAST** is the only >15% annualized coin (-31.1%), but $1M OI = illiquid, risky for our $37 HL balance.\n- Funding arb requires >20% ann to cover fees. Market is balanced \u2014 no crowded positions to exploit.\n\n**My thinking:** Funding arb goes on the shelf. It's a strategy for: (a) extreme sentiment (F&G < 5 or > 80), (b) post-liquidation events, or (c) token-specific catalysts. Current Extreme Fear (F&G=8) should produce negative funding (shorts paying longs), but rates are mild because the selloff was orderly, not a cascade.\n\n**Decision:** No HL trades. Strategy shelved until funding rates exceed 20% annualized on liquid coins (BTC/ETH/SOL). Will re-scan weekly.\n\n## 2026-03-30 17:08 UTC \u2014 [Pillar 3] Automated Daily P&L Report Generator\n\n**Task:** Build automated daily P&L report. AGENTS.md requires daily reports at ~/clawd/reports/daily-pnl-YYYY-MM-DD.md.\n\n**Built:** `scripts/daily-pnl-report.sh` \u2014 generates structured daily report with:\n- PM + HL balances (live API queries)\n- BTC price and F&G index\n- Trade count, W/L, WR%\n- Individual trade details (time, direction, price, bias, conviction, outcome)\n- Filter distribution (which fi",
+  "worklog": "## 2026-03-30 18:42 UTC \u2014 [Pillar 2] 19h Blocked, 20h Likely Clear: Regime Projection\n\n**Task:** Real-time regime projection for evening session.\n\n**Finding:** BTC dropped to $66,685 (-1.8% from daily high). Regime now firmly TREND 3/6:\n- Range: 1.77% \u2192 1 pt\n- Trend: -1.33% \u2192 **2 pts** (the blocker)\n- BTC needs +$1,571 to clear \u2192 **not happening in 18 min**\n\n**19h: BLOCKED \u274c** (TREND 3/6, needs $68,256)\n\n**20h: LIKELY CLEAR \u2705** (projected RANGE 2/6)\n- At 20h, 4h lookback shifts to 16h-20h\n- 16h close: $67,327. If BTC stays ~$66,700: trend = -0.93% (below 1.0% threshold)\n- Score drops from 3 to 2 = RANGE = tradeable\n- Even a bounce to $67,000 gives score 1/6\n\n**Why 20h works:** The 14h high candle ($67,754) exits the 4h trend window. The afternoon decline becomes the baseline, and small movements around $66,700 read as RANGE.\n\n**Decision:** No intervention. 19h will likely be a no-trade hour. 20h is our opportunity. Bot will correctly recognize the regime shift and trade at 20h if conditions allow.\n\n## 2026-03-30 18:08 UTC \u2014 [Pillar 1] \u26a0\ufe0f 19h Session at Risk: TREND Score 3/6 \u2014 $36 From Threshold\n\n**Task:** Pre-session check for 19h. Verify all systems.\n\n**Finding:** BTC dropped $1,092 (67,881\u219266,789) since 12h. Internal regime shifted to **TREND score 3/6** \u2014 bot will BLOCK trades at 19h!\n\n| Factor | Value | Points | Threshold |\n|--------|-------|--------|-----------|\n| Consistency | 0.62 | 0 | 0.625 |\n| Range | 1.66% | **+1** | 1.0% |\n| Trend | -1.23% | **+2** | 1.0% |\n| **Total** | | **3/6** | **\u22653 = TREND = BLOCKED** |\n\n**Critical margin:** BTC needs to recover just **$36** (to ~$66,825) for trend to drop below 1.0%, reducing score from 3\u21922 = RANGE = tradeable. This is a coin-flip \u2014 could go either way in the next 52 minutes.\n\n**Copy signal:** bearish@83% confidence (up from 46% morning). If we trade, attention signal is active.\n\n**Pre-session status:**\n- \u2705 Bot alive (298 min uptime)\n- \u2705 Balance: $930.37\n- \u2705 F&G: 8 (edge mod +0.05, size 1.10x)\n- \u26a0\ufe0f External regime: TREND 7/10 (DOWN direction)\n- \u26a0\ufe0f Internal regime: TREND 3/6 (borderline!)\n- \u2705 No STOP_TRADING flag\n\n**Decision:** No intervention. The regime filter exists for a reason \u2014 trading in a downtrend historically had 22% WR. If BTC bounces $36, great. If not, the bot correctly sits out. Either way, the filter is protecting us.\n\n## 2026-03-30 17:38 UTC \u2014 [Pillar 4] HL Funding Rate Scan: No Viable Arb Opportunities\n\n**Task:** Scan HL funding rates for arb opportunities (HEARTBEAT P4: funding arb strategy).\n\n**Finding:** Funding rates are flat across all major coins:\n| Coin | Rate/8h | Annualized | Signal |\n|------|---------|------------|--------|\n| BTC | -0.0011% | -1.2% | \u2705 LOW |\n| ETH | -0.0002% | -0.3% | \u2705 LOW |\n| SOL | -0.0033% | -3.6% | \u2705 LOW |\n\n- Negative funding on BTC/ETH/SOL = shorts paying longs. Our LONG positions are collecting (tiny) funding.\n- **BLAST** is the only >15% annualized coin (-31.1%), but $1M OI = illiquid, risky for our $37 HL balance.\n- Funding arb requires >20% an",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -381,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
