@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T04:30:01.874954+00:00",
+  "timestamp": "2026-03-30T04:46:33.390299+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.589184,
+  "hl_balance": 403.484244,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.59,
+  "hl_pnl": 12.48,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.28,
+  "all_time_pnl": -74.39,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.93798,
+      "pnl": 0.9558,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.4014,
+      "pnl": 1.27204,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.23948,
+      "pnl": 1.24608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1183%",
-      "apr": "-130%",
+      "rate": "-0.0988%",
+      "apr": "-108%",
       "action": "LONG",
-      "oi": "202,881,838"
+      "oi": "202,635,824"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0500%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "2,355,110,620"
     }
   ],
   "daily_pnl": [
@@ -112,21 +119,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 92,
+    "current_bias": "bearish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.948"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.862"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1183%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0988%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -208,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.5788599999999997,
+        "pnl": 3.47392,
         "sharpe": 0.0
       },
       {
@@ -364,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 04:28 UTC \u2014 [Pillar 4] Regime Classifier Built + Fear & Greed Alpha Signal\n\n**Task:** Build BTC regime classifier for alpha research pipeline. Analyze Fear & Greed correlation. Wire new data source into confidence scoring.\n\n**Finding:**\n1. **Built `regime_classifier.py`** \u2014 standalone module that classifies BTC into 4 regimes using 5-min candle data:\n   - `RANGE` \ud83c\udfaf \u2014 PM contrarian trades work best (low vol, mean-reverting)\n   - `TREND` \ud83d\udcc8 \u2014 directional, orderly moves (PM risky, filter/reduce)\n   - `HIGH_VOL` \u26a1 \u2014 extreme moves (DO NOT trade PM)\n   - `CRASH_RECOVERY` \ud83d\udd04 \u2014 post-crash V-bounce (HL long bias signal)\n   - Uses: avg range, max range, volume ratio, net change, directional consistency\n   - Current output: TREND (UP), score 5/10, PM not tradeable \u274c\n\n2. **Crash anatomy (22:40-22:45 UTC Sunday):**\n   - 22:40: 0.95% range, 443 BTC \u2192 $66,255\u2192$65,684\n   - 22:45: 1.04% range, 933 BTC \u2192 $65,684\u2192$65,046 (cascade bottom)\n   - 22:50-23:00: V-bounce $65,046\u2192$66,036\n   - 00:15: Monster spike 1.72% range, 328 BTC \u2192 $65,853\u2192$66,909\n   - Total: $65,046\u2192$67,468 = +3.7% recovery in 6 hours\n\n3. **Fear & Greed Index: 8/100 (Extreme Fear)** \u2014 10+ consecutive days of Extreme Fear (range 8-14). Our entire W13 profit (+$216, 55% WR) was generated during this fear regime. Contrarian 5-min binary strategy + Extreme Fear = edge amplifier.\n\n**My thinking:** The Fear & Greed signal is macro-level alpha. During Extreme Fear, retail panics and overreacts on 5-min timeframes \u2014 exactly what our contrarian bias-fading strategy exploits. The regime classifier gives us micro-level (5-min) regime detection. Together: Fear&Greed < 20 = boost PM trade confidence by 5-10%, Fear&Greed > 70 = reduce confidence (greed = less overreaction to fade).\n\n**Decision:**\n- `regime_classifier.py` is built and tested. Ready to wire into bot as import.\n- **V4 enhancement queued:** Add F&G API call at bot startup, use as confidence modifier:\n  - F&G \u2264 15: +10% confidence boost (contrarian edge amplified)\n  - F&G 15-30: +5% boost\n  - F&G 30-70: neutral\n  - F&G \u2265 70: -10% (reduce size, less overreaction to fade)\n- Don't deploy at 4 AM \u2014 queue for Monday active hours when we can monitor.\n\n**Next P4 heartbeat:** Wire regime_classifier into bot's should_trade() as supplementary signal. Add F&G API lookup at session start. Backtest F&G correlation against all 277 trades in trades.jsonl.\n\n## 2026-03-30 04:23 UTC \u2014 [Pillar 3] STRONG_TREND Rally Analysis + PM Bot Crash Fix\n\n**Task:** Analyze current BTC regime and its implications for strategy. PM bot had crashed again \u2014 diagnose and fix. Check HL positions.\n\n**Finding:**\n1. **BTC rallied from $65,000 \u2192 $67,468** since 22:00 UTC Sunday. Classic V-shaped recovery: liquidation cascade at 22:00 (2,219 BTC volume \u2014 7x normal), then steady grind up. +3.8% off the low. Current regime: STRONG_TREND (UP).\n\n2. **PM bot crashed at ~01:03 UTC** \u2014 process died silently (no error in logs). Restarted at 04:09, died again within 20 seconds. Second restart",
+  "worklog": "## 2026-03-30 04:43 UTC \u2014 [Pillar 1] Copy Signal is HURTING Performance + PM Bot Restart Loop\n\n**Task:** Run copy-intel-tracker, analyze copy signal correlation with trade outcomes. Fix PM bot stability.\n\n**Finding:**\n1. **Copy signal is degrading WR, not improving it:**\n\n| Copy Signal | WR | Trades |\n|---|---|---|\n| No copy signal | **76.9%** | 13 |\n| bearish@100 | 50.0% | 10 |\n| bearish_low | 50.0% | 8 |\n| bullish@100 | **25.0%** | 4 |\n| bullish_low | 50.0% | 2 |\n\nTrades WITHOUT copy signal: 77% WR. Trades WITH copy: ~45% WR. The copy conviction boost (+1 to aligned count) is letting marginal trades through that lose at coinflip rate.\n\n2. **Current PM order flow: 100% bearish** (UP token: 0 bids/99 asks, DN token: 99 bids/0 asks) while BTC is flat at $67,430 in an uptrend. Classic divergence \u2014 PM flow is lagging the rally.\n\n3. **HL leaderboard: BTC 9L/2S** \u2014 overwhelming long bias from top traders. ETH 5L/6S (mixed), SOL 6L/4S (slight long).\n\n4. **PM bot infrastructure fix:** Killed rogue test process (pid 3832809) consuming resources. Bot was crashing because test process occupied the venv/connections. Restarted with **self-healing bash wrapper** (`while true; do ... sleep 10; done`) so screen won't die permanently.\n\n**My thinking:** The copy signal was rebuilt Mar 29 with 3 bug fixes, so all pre-Mar-29 copy data is tainted. The 37-trade sample includes mostly pre-fix data. But the pattern is clear: when copy agrees and boosts conviction, the added trades underperform. Two possible explanations:\n- (a) Copy signal was garbage pre-fix \u2192 poisoned data \u2192 ignore until we have post-fix sample\n- (b) Copy signal genuinely adds noise \u2192 the 4 core indicators ARE the edge, copy is false confidence\n\n**Decision:** \n- **Disable copy conviction boost for now.** Change `copy_conviction_boost = 0` (log copy signal but don't let it affect trade decisions). Wait for 30+ post-fix trades to re-evaluate.\n- NOT deploying at 4 AM \u2014 queue for Monday active hours.\n- Monitor: if no-copy WR holds at 70%+ over next 30 trades, keep boost disabled permanently.\n\n**Next P1 heartbeat:** After 30 trades with copy-boost disabled, compare WR vs the 37-trade baseline. Also analyze: do no-copy trades correlate with specific hours or bias levels?\n\n## 2026-03-30 04:28 UTC \u2014 [Pillar 4] Regime Classifier Built + Fear & Greed Alpha Signal\n\n**Task:** Build BTC regime classifier for alpha research pipeline. Analyze Fear & Greed correlation. Wire new data source into confidence scoring.\n\n**Finding:**\n1. **Built `regime_classifier.py`** \u2014 standalone module that classifies BTC into 4 regimes using 5-min candle data:\n   - `RANGE` \ud83c\udfaf \u2014 PM contrarian trades work best (low vol, mean-reverting)\n   - `TREND` \ud83d\udcc8 \u2014 directional, orderly moves (PM risky, filter/reduce)\n   - `HIGH_VOL` \u26a1 \u2014 extreme moves (DO NOT trade PM)\n   - `CRASH_RECOVERY` \ud83d\udd04 \u2014 post-crash V-bounce (HL long bias signal)\n   - Uses: avg range, max range, volume ratio, net change, directional consistency\n   - Current output: TREND (UP), sc",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -384,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
