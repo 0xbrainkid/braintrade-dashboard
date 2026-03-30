@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T19:25:00.933532+00:00",
+  "timestamp": "2026-03-30T19:27:03.431374+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 401.993425,
+  "hl_balance": 402.068425,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 10.99,
+  "hl_pnl": 11.07,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -67.96,
+  "all_time_pnl": -67.88,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -1.01898,
+      "pnl": -0.83106,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 2.16675,
+      "pnl": 1.90995,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.62964,
+      "pnl": -0.48576,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0851%",
+      "rate": "-0.0852%",
       "apr": "-93%",
       "action": "LONG",
-      "oi": "283,851,440"
+      "oi": "283,867,268"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0600%",
+      "rate": "-0.0604%",
       "apr": "-66%",
       "action": "LONG",
-      "oi": "257,669,440"
+      "oi": "257,651,260"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0851%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0852%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.51813,
+        "pnl": 0.5931299999999999,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 19:23 UTC \u2014 [Pillar 3] Evening Session: STRONG_TREND 5/6 Blocks 19h AND 20h\n\n**Task:** Monitor evening session. Check if 19h/20h projections held.\n\n**Finding:** Selloff accelerated beyond projection. Both sessions blocked:\n\n| Time | Score | Regime | Status |\n|------|-------|--------|--------|\n| 18:08 | 3/6 | TREND | \u274c Blocked |\n| 19:10 | **5/6** | **STRONG_TREND** | \u274c Blocked |\n| 20h proj | **5/6** | **STRONG_TREND** | \u274c Blocked |\n\nBTC: $67,881 (12h peak) \u2192 $66,262 (19:24) = **-$1,619 (-2.4%)**\n- Range: 2.83% (+2 pts)\n- Trend: -1.58% (+2 pts)\n- Consistency: 0.75 (+1 pt)\n\n**Regime filter saved us.** At 19h, bias was -49 to -84 (multiple strong YES signals). If we traded contrarian YES (expecting UP), we'd have LOST \u2014 BTC kept falling. This validates the regime filter's 22% WR in trends.\n\n**HL Position Update \u2014 ETH Flipped to SHORT:**\n- ETH LONG closed \u2192 ETH SHORT opened ($2,052.80 entry) \u2192 +$2.08 (+5.7%) \u2705\n- BTC LONG: -$0.95 (-2.6%) \u274c\n- SOL LONG: -$0.55 (-1.5%) \u274c  \n- Net HL uPnL: +$0.58 (ETH SHORT offsetting BTC/SOL losses)\n- Aligned with leaderboard (ETH 2L/9S = 82% short)\n\n**Decision:** No trades today evening. Correct outcome \u2014 regime filter working exactly as designed. Final Day 1 PM result: +$7.92 from morning only.\n\n## 2026-03-30 18:42 UTC \u2014 [Pillar 2] 19h Blocked, 20h Likely Clear: Regime Projection\n\n**Task:** Real-time regime projection for evening session.\n\n**Finding:** BTC dropped to $66,685 (-1.8% from daily high). Regime now firmly TREND 3/6:\n- Range: 1.77% \u2192 1 pt\n- Trend: -1.33% \u2192 **2 pts** (the blocker)\n- BTC needs +$1,571 to clear \u2192 **not happening in 18 min**\n\n**19h: BLOCKED \u274c** (TREND 3/6, needs $68,256)\n\n**20h: LIKELY CLEAR \u2705** (projected RANGE 2/6)\n- At 20h, 4h lookback shifts to 16h-20h\n- 16h close: $67,327. If BTC stays ~$66,700: trend = -0.93% (below 1.0% threshold)\n- Score drops from 3 to 2 = RANGE = tradeable\n- Even a bounce to $67,000 gives score 1/6\n\n**Why 20h works:** The 14h high candle ($67,754) exits the 4h trend window. The afternoon decline becomes the baseline, and small movements around $66,700 read as RANGE.\n\n**Decision:** No intervention. 19h will likely be a no-trade hour. 20h is our opportunity. Bot will correctly recognize the regime shift and trade at 20h if conditions allow.\n\n## 2026-03-30 18:08 UTC \u2014 [Pillar 1] \u26a0\ufe0f 19h Session at Risk: TREND Score 3/6 \u2014 $36 From Threshold\n\n**Task:** Pre-session check for 19h. Verify all systems.\n\n**Finding:** BTC dropped $1,092 (67,881\u219266,789) since 12h. Internal regime shifted to **TREND score 3/6** \u2014 bot will BLOCK trades at 19h!\n\n| Factor | Value | Points | Threshold |\n|--------|-------|--------|-----------|\n| Consistency | 0.62 | 0 | 0.625 |\n| Range | 1.66% | **+1** | 1.0% |\n| Trend | -1.23% | **+2** | 1.0% |\n| **Total** | | **3/6** | **\u22653 = TREND = BLOCKED** |\n\n**Critical margin:** BTC needs to recover just **$36** (to ~$66,825) for trend to drop below 1.0%, reducing score from 3\u21922 = RANGE = tradeable. This is a coin-flip \u2014 could go either way in the next",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 19:23 UTC \u2014 [Pillar 3] Evening Session: STRONG_TREND 5/6 Blocks 19h AND 20h\n\n**Task:** Monitor evening session. Check if 19h/20h projections held.\n\n**Finding:** Selloff accelerated beyond projection. Both sessions blocked:\n\n| Time | Score | Regime | Status |\n|------|-------|--------|--------|\n| 18:08 | 3/6 | TREND | \u274c Blocked |\n| 19:10 | **5/6** | **STRONG_TREND** | \u274c Blocked |\n| 20h proj | **5/6** | **STRONG_TREND** | \u274c Blocked |\n\nBTC: $67,881 (12h peak) \u2192 $66,262 (19:24) = **-$1,619 (-2.4%)**\n- Range: 2.83% (+2 pts)\n- Trend: -1.58% (+2 pts)\n- Consistency: 0.75 (+1 pt)\n\n**Regime filter saved us.** At 19h, bias was -49 to -84 (multiple strong YES signals). If we traded contrarian YES (expecting UP), we'd have LOST \u2014 BTC kept falling. This validates the regime filter's 22% WR in trends.\n\n**HL Position Update \u2014 ETH Flipped to SHORT:**\n- ETH LONG closed \u2192 ETH SHORT opened ($2,052.80 entry) \u2192 +$2.08 (+5.7%) \u2705\n- BTC LONG: -$0.95 (-2.6%) \u274c\n- SOL LONG: -$0.55 (-1.5%) \u274c  \n- Net HL uPnL: +$0.58 (ETH SHORT offsetting BTC/SOL losses)\n- Aligned with leaderboard (ETH 2L/9S = 82% short)\n\n**Decision:** No trades today evening. Correct outcome \u2014 regime filter working exactly as designed. Final Day 1 PM result: +$7.92 from morning only.\n\n## 2026-03-30 18:42 UTC \u2014 [Pillar 2] 19h Blocked, 20h Likely Clear: Regime Projection\n\n**Task:** Real-time regime projection for evening session.\n\n**Finding:** BTC dropped to $66,685 (-1.8% from daily high). Regime now firmly TREND 3/6:\n- Range: 1.77% \u2192 1 pt\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
