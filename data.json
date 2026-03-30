@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T03:30:01.841787+00:00",
+  "timestamp": "2026-03-30T03:39:25.943971+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 402.523958,
+  "hl_balance": 401.910038,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 11.52,
+  "hl_pnl": 10.91,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -75.35,
+  "all_time_pnl": -75.96,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.60426,
+      "pnl": 0.46818,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 0.93247,
+      "pnl": 0.73843,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,18 +37,18 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.97548,
+      "pnl": 0.69168,
       "leverage": 3,
       "wallet": "old"
     }
   ],
   "funding_opportunities": [
     {
-      "coin": "BLAST",
-      "rate": "-0.0505%",
-      "apr": "-55%",
+      "coin": "DOOD",
+      "rate": "-0.0736%",
+      "apr": "-81%",
       "action": "LONG",
-      "oi": "2,355,532,760"
+      "oi": "201,342,182"
     }
   ],
   "daily_pnl": [
@@ -113,16 +113,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 60,
+    "signal_confidence": 84,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.998"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.982"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLAST at -0.0505%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0736%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.51221,
+        "pnl": 1.89829,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 03:08 UTC \u2014 Pillar 3: Regime Score Decomposition\n\n**Task:** Analyze what needs to change for TREND\u2192RANGE before 11h trading window.\n\n**Current score: 5/8 (TREND)**\n| Component | Value | Score | Threshold to drop |\n|-----------|-------|-------|--------------------|\n| ATR | 1.38% | +1 | < 1.0% (vol calms) |\n| Direction | 75% UP | +1 | < 62.5% (more mixed candles) |\n| Range | 1.93% | +1 | < 1.0% (tighter range) |\n| 4h Trend | +1.09% | **+2** | < 0.5% (flatten out) |\n\n**Most likely path to RANGE (score \u22642):**\n1. 4h trend calms below 0.5% (-2 points) \u2014 this happens naturally as BTC consolidates\n2. Direction drops below 62.5% (-1 point) \u2014 mixed candles as momentum fades\n\n**ETA:** If BTC stops at ~$67k and consolidates, trend_4h decays by ~06:00-08:00 UTC. The 4h candle that started the rally will roll off. RANGE should return well before our 11h trading window.\n\n**If TREND persists at 11h:** Bot stays stopped. Correct behavior \u2014 our 73% WR is RANGE-only.\n\n---\n\n## 2026-03-30 02:42 UTC \u2014 Pillar 2: Regime Detector Hysteresis Fix\n\n**Task:** Fix watchdog/regime detector restart loop.\n\n**Problem:** Regime oscillates between TREND and MIXED at boundaries. Each MIXED reading removed STOP flag \u2192 watchdog restarted bot \u2192 next TREND reading stopped it again. Cycle every 30 min.\n\n**Fix:** Added 2-reading hysteresis to regime detector:\n1. First non-TREND reading after TREND \u2192 enters cooldown (flag stays)\n2. Second consecutive non-TREND \u2192 removes flag (bot restarts)\n3. Any TREND reading resets cooldown counter\n\n**Effect:** Bot now needs 30 min (2 \u00d7 15-min checks) of sustained non-TREND before restarting. Eliminates churn at regime boundaries. When regime genuinely returns to RANGE, bot still starts within 30 min.\n\n---\n\n## 2026-03-30 02:08 UTC \u2014 ALERT: STOP_TRADING Flag Active (Regime=TREND)\n\n**Discovery:** pm-bot screen missing! Regime detector set STOP_TRADING at 01:00 UTC (TREND score 5/8).\n\n**Root cause:** BTC recovered from $64,904 to $66,771 (+2.9%) \u2014 clear uptrend triggered regime detection. Bot correctly stopped.\n\n**Watchdog behavior issue:** Restart loop \u2014 watchdog restarts bot every 5 min, regime detector stops it every 15 min. Not harmful (bot just cycles) but noisy. Could optimize by having watchdog check STOP_TRADING before restarting.\n\n**Impact on Monday:** Regime detector auto-clears flag when RANGE returns (score \u22642). Cron runs every 15 min. If BTC stabilizes before 11h UTC, flag clears and bot resumes. If TREND persists at 11h, bot stays stopped (correct behavior \u2014 our 73% WR is in RANGE only).\n\n**No manual action needed.** System working as designed. Just noisy.\n\n---\n\n## 2026-03-30 01:38 UTC \u2014 Daily Intel for Monday March 30\n\n**Task:** Write daily-intel-2026-03-30.md (HEARTBEAT.md Step 1 \u2014 was missing).\n\n**Key findings:**\n- BTC at $66,582, recovering from $64,904 low (+0.93% last 4h)\n- 24h range 3.3% \u2014 wide enough for good trading\n- Volume expanding (272% of prior) \u2014 healthy market\n- Copy intel: 84% bearish consensus (42/50 signals)\n- ",
+  "worklog": "## 2026-03-30 03:38 UTC \u2014 Pillar 1: STRONG_TREND Alert + Position Check\n\n**REGIME ESCALATED: 5/8 \u2192 7/8 (STRONG_TREND) in 30 min**\n\nBTC rallying hard: $66,289 \u2192 $67,178 (+1.3%) since midnight. Direction consistency jumped to 88% UP. Range crossed 2.0% threshold. All 4 regime components now contributing points.\n\n**Score breakdown (7/8):**\n- ATR 1.38% (+1) \u2014 elevated vol\n- DIR 88% UP (+2) \u2014 strong directional consensus\n- RNG 2.07% (+2) \u2014 wide range broke threshold\n- TRD +1.41% (+2) \u2014 clear uptrend\n\n**HL positions:** Account $364.61. All 3 still green (+$2.00 total uPnL).\n- BTC LONG(!) size=0.00162 entry=$66,836 uPnL=+$0.51\n- Note: entry prices differ from MEMORY.md \u2014 may have been adjusted by funding or partial fills. Need to verify.\n\n**Revised RANGE ETA:** 08:00-10:00 UTC at earliest. BTC must fully exhaust this rally AND consolidate for 4+ hours. If rally continues, could push to 11h and we miss the first window.\n\n**Bot correctly stopped.** STRONG_TREND is exactly when contrarian strategies get killed.\n\n---\n\n## 2026-03-30 03:08 UTC \u2014 Pillar 3: Regime Score Decomposition\n\n**Task:** Analyze what needs to change for TREND\u2192RANGE before 11h trading window.\n\n**Current score: 5/8 (TREND)**\n| Component | Value | Score | Threshold to drop |\n|-----------|-------|-------|--------------------|\n| ATR | 1.38% | +1 | < 1.0% (vol calms) |\n| Direction | 75% UP | +1 | < 62.5% (more mixed candles) |\n| Range | 1.93% | +1 | < 1.0% (tighter range) |\n| 4h Trend | +1.09% | **+2** | < 0.5% (flatten out) |\n\n**Most likely path to RANGE (score \u22642):**\n1. 4h trend calms below 0.5% (-2 points) \u2014 this happens naturally as BTC consolidates\n2. Direction drops below 62.5% (-1 point) \u2014 mixed candles as momentum fades\n\n**ETA:** If BTC stops at ~$67k and consolidates, trend_4h decays by ~06:00-08:00 UTC. The 4h candle that started the rally will roll off. RANGE should return well before our 11h trading window.\n\n**If TREND persists at 11h:** Bot stays stopped. Correct behavior \u2014 our 73% WR is RANGE-only.\n\n---\n\n## 2026-03-30 02:42 UTC \u2014 Pillar 2: Regime Detector Hysteresis Fix\n\n**Task:** Fix watchdog/regime detector restart loop.\n\n**Problem:** Regime oscillates between TREND and MIXED at boundaries. Each MIXED reading removed STOP flag \u2192 watchdog restarted bot \u2192 next TREND reading stopped it again. Cycle every 30 min.\n\n**Fix:** Added 2-reading hysteresis to regime detector:\n1. First non-TREND reading after TREND \u2192 enters cooldown (flag stays)\n2. Second consecutive non-TREND \u2192 removes flag (bot restarts)\n3. Any TREND reading resets cooldown counter\n\n**Effect:** Bot now needs 30 min (2 \u00d7 15-min checks) of sustained non-TREND before restarting. Eliminates churn at regime boundaries. When regime genuinely returns to RANGE, bot still starts within 30 min.\n\n---\n\n## 2026-03-30 02:08 UTC \u2014 ALERT: STOP_TRADING Flag Active (Regime=TREND)\n\n**Discovery:** pm-bot screen missing! Regime detector set STOP_TRADING at 01:00 UTC (TREND score 5/8).\n\n**Root cause:** BTC recovered from $64,904 to $66,771 (+",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
