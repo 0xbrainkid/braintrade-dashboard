@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T13:30:01.874213+00:00",
+  "timestamp": "2026-03-30T13:41:01.940308+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 406.894003,
+  "hl_balance": 406.399093,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 15.89,
+  "hl_pnl": 15.4,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -63.06,
+  "all_time_pnl": -63.55,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.58922,
+      "pnl": 1.53576,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0535,
       "entry": 2081.4,
-      "pnl": -0.47615,
+      "pnl": -0.6206,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 2.53308,
+      "pnl": 2.23608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1173%",
-      "apr": "-128%",
+      "rate": "-0.1198%",
+      "apr": "-131%",
       "action": "LONG",
-      "oi": "264,038,800"
+      "oi": "263,661,172"
     }
   ],
   "daily_pnl": [
@@ -112,17 +112,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 8,
+    "current_bias": "bearish",
+    "signal_confidence": 88,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 43 buys, 7 sells \u2014 avg price $0.896"
+        "text": "Top traders: 29 buys, 21 sells \u2014 avg price $0.993"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1173%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1198%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.64615,
+        "pnl": 3.1512399999999996,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 13:08 UTC \u2014 [Pillar 1] V4.1 Day 1 Results: +$7.92 (3W/2L) + Indicator Logging Fix\n\n**Task:** Compile V4.1 Day 1 morning session results. Fix enhanced outcome logging.\n\n**V4.1 Morning Session (11:00-13:00 UTC):**\n- **Trades: 6 total** (5 logged in outcomes, 1 missing due to restart)\n- **Results: 4W/2L = 67% WR**\n- **Balance: $922.45 \u2192 $930.37 = +$7.92**\n- **12:43 clean trade (post-fix):** YES $12.10 @ 0.474 \u2192 \u2705 WIN (+$13.44 payout)\n  - OBI\u2705(+0.69), CVD\u2705, MACD\u2705, VWAP\u274c \u2014 VWAP disagreed but 12h = relaxed hour\n  - Copy bullish@100 \u2014 attention signal theory holds (high conf = WIN)\n\n**Bug fix #2: Indicator logging race condition**\n- `_last_indicators` was being read at OUTCOME time (5 min later), not TRADE time\n- By outcome check, `_last_indicators` was overwritten by subsequent `should_trade()` calls\n- Fix: capture indicators dict at trade execution, pass to `_check_outcome()` as frozen copy\n- Bot restarted at 13:10 with fix. Next trade will have full indicator data in outcomes.\n\n**Balance confirmed: $930.37** \u2014 PM payouts settled from 3 wins. Net positive day despite double-trade bug.\n\n**Copy signal analysis for today's trades:**\n| Trade | Copy Signal | OBI | Result |\n|-------|-------------|-----|--------|\n| 11:19 | bullish@84 | \u274c | \u274c LOSS |\n| 11:38 | bearish@100 | \u274c\u2192\u2705 | \u2705 WIN |\n| 12:43 | bullish@100 | \u2705 | \u2705 WIN |\n\n**Pattern confirmed:** High-conf copy (100) = WIN regardless of direction. Low-conf (84) = LOSS.\n\n## 2026-03-30 12:38 UTC \u2014 [Pillar 4] F&G/Price Divergence: Fear at 8, BTC Up 2.8%\n\n**Task:** Analyze why 12h produced zero trades. Understand F&G/price relationship.\n\n**Finding:**\n- **12h: zero trades.** 38 minutes of 100% bullish bias. Not a single negative reading. PM YES at 0.465 (market strongly pricing UP).\n- **BTC rallied $66,011 \u2192 $67,881 (+2.8%) while F&G = 8 (Extreme Fear)**\n- This is a classic \"wall of worry\" climb \u2014 maximum bearish sentiment, bullish price\n\n**Why our strategy struggles in this regime:**\n1. Our strategy is contrarian to ORDER FLOW (fading bearish bias)\n2. In an uptrend, order flow is persistently bullish \u2192 no bearish signals to fade\n3. When pullbacks do occur, they're shallow ($17 range) \u2192 noise, not signal\n4. The market is ALREADY contrarian to sentiment (price up despite fear) \u2014 there's no additional contrarian edge\n\n**Trade frequency analysis:**\n- Pre-V3 (Mar 20-26): 20.5 trades/day\n- Post-V3 (Mar 27-30): 3.25 trades/day\n- Today: 2 real signals in 1.5 active hours (double-fire bug inflated to 5 executions)\n\n**BTC context:**\n- Dropped $72K\u2192$65K (Mar 25-29), now bouncing\n- Current $67,857 = 41% of weekly range (mid-range, not overbought)\n- Key level: $68,042 (today's high) \u2014 break above = continuation, fail = pullback\n- 50% Fibonacci retrace of drop = $68,500\n\n**Decision:** No changes. Low trade days are expected in strong trends. Our edge is in RANGE-bound markets with oscillating bias. Today is trending bullish \u2014 patience is correct. The 19h/20h session may see different dynamics as US traders enter.\n",
+  "worklog": "## 2026-03-30 13:38 UTC \u2014 [Pillar 2] MEMORY.md Updated: V4.1 Config, Day 1 Results, Research Findings\n\n**Task:** Update MEMORY.md with today's critical findings, config changes, and live results during inter-session downtime.\n\n**Changes:**\n1. **Config section:** Updated from V4 to V4.1 \u2014 added VWAP relaxation, copy disabled, F&G integration, double-trade fix, enhanced logging\n2. **W14 Day 1 section:** Added morning session results (4W/2L, +$7.92, $930.37 balance)\n3. **Queued changes:** Reorganized as V5 pipeline \u2014 attention boost, tiered sizing, hour-specific conviction, BTC move filter, OBI weighting\n4. **Research findings:** Volatility heatmap, F&G correlation, pullback trading pattern, SolSt1ne audit, SOL leaderboard flip\n5. **Infrastructure:** Added new tools (pre-session-check.sh, regime-detector, copy scanner, watchdog)\n\n**Decision:** Memory is now current. Future heartbeats can reference these findings without re-running analysis. 5.5h until 19h session.\n\n## 2026-03-30 13:08 UTC \u2014 [Pillar 1] V4.1 Day 1 Results: +$7.92 (3W/2L) + Indicator Logging Fix\n\n**Task:** Compile V4.1 Day 1 morning session results. Fix enhanced outcome logging.\n\n**V4.1 Morning Session (11:00-13:00 UTC):**\n- **Trades: 6 total** (5 logged in outcomes, 1 missing due to restart)\n- **Results: 4W/2L = 67% WR**\n- **Balance: $922.45 \u2192 $930.37 = +$7.92**\n- **12:43 clean trade (post-fix):** YES $12.10 @ 0.474 \u2192 \u2705 WIN (+$13.44 payout)\n  - OBI\u2705(+0.69), CVD\u2705, MACD\u2705, VWAP\u274c \u2014 VWAP disagreed but 12h = relaxed hour\n  - Copy bullish@100 \u2014 attention signal theory holds (high conf = WIN)\n\n**Bug fix #2: Indicator logging race condition**\n- `_last_indicators` was being read at OUTCOME time (5 min later), not TRADE time\n- By outcome check, `_last_indicators` was overwritten by subsequent `should_trade()` calls\n- Fix: capture indicators dict at trade execution, pass to `_check_outcome()` as frozen copy\n- Bot restarted at 13:10 with fix. Next trade will have full indicator data in outcomes.\n\n**Balance confirmed: $930.37** \u2014 PM payouts settled from 3 wins. Net positive day despite double-trade bug.\n\n**Copy signal analysis for today's trades:**\n| Trade | Copy Signal | OBI | Result |\n|-------|-------------|-----|--------|\n| 11:19 | bullish@84 | \u274c | \u274c LOSS |\n| 11:38 | bearish@100 | \u274c\u2192\u2705 | \u2705 WIN |\n| 12:43 | bullish@100 | \u2705 | \u2705 WIN |\n\n**Pattern confirmed:** High-conf copy (100) = WIN regardless of direction. Low-conf (84) = LOSS.\n\n## 2026-03-30 12:38 UTC \u2014 [Pillar 4] F&G/Price Divergence: Fear at 8, BTC Up 2.8%\n\n**Task:** Analyze why 12h produced zero trades. Understand F&G/price relationship.\n\n**Finding:**\n- **12h: zero trades.** 38 minutes of 100% bullish bias. Not a single negative reading. PM YES at 0.465 (market strongly pricing UP).\n- **BTC rallied $66,011 \u2192 $67,881 (+2.8%) while F&G = 8 (Extreme Fear)**\n- This is a classic \"wall of worry\" climb \u2014 maximum bearish sentiment, bullish price\n\n**Why our strategy struggles in this regime:**\n1. Our strategy is contrarian to ORDER FLOW (fading bearish",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +374,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
