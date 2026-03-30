@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T06:12:53.220378+00:00",
+  "timestamp": "2026-03-30T06:15:21.289737+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.607465,
+  "hl_balance": 403.64205499999997,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.61,
+  "hl_pnl": 12.64,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.26,
+  "all_time_pnl": -74.23,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.93798,
+      "pnl": 0.95904,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.3475,
+      "pnl": 1.36367,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.31472,
+      "pnl": 1.31208,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.6017%",
-      "apr": "-659%",
+      "rate": "-0.6071%",
+      "apr": "-665%",
       "action": "LONG",
-      "oi": "265,085,134"
+      "oi": "265,427,464"
     },
     {
       "coin": "MOODENG",
-      "rate": "-0.1307%",
-      "apr": "-143%",
+      "rate": "-0.1291%",
+      "apr": "-141%",
       "action": "LONG",
-      "oi": "20,622,634"
+      "oi": "20,588,628"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0545%",
-      "apr": "-60%",
+      "rate": "-0.0570%",
+      "apr": "-62%",
       "action": "LONG",
-      "oi": "262,742,346"
+      "oi": "262,716,914"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.6017%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.6071%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.6002,
+        "pnl": 3.6347899999999997,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 06:08 UTC \u2014 [Pillar 2] V4 DEPLOYED LIVE \u2014 3 Changes Applied\n\n**Task:** Deploy V4 package to live PM bot. All 3 changes had been designed, patched, and tested in prior heartbeats. Deploy early (5h before active trading) to catch any crashes.\n\n**Changes deployed:**\n1. **Copy boost disabled** (`copy_conviction_boost = 0`) \u2014 bot farms were poisoning signal, WR 77% without vs 45% with\n2. **VWAP relaxation at 11h/12h** \u2014 hour-adaptive: relaxed at peak WR hours (88%/82%), mandatory at 19h/20h. Recovers est. $18/day in blocked signals.\n3. **Fear & Greed integration** \u2014 edge modifier (+0.10 at F&G=8) and position multiplier (1.25x at F&G=8). Refreshes hourly.\n\n**Deployment log:**\n```\n06:11:01 - \ud83d\udcca F&G: 8 (Extreme Fear) \u2192 edge mod +0.10, size 1.25x\n06:11:01 - \ud83d\udcb0 CLOB Balance: $922.45\n06:11:02 - \ud83d\udcca Bootstrapped 100 candles\n06:11:02 - \ud83d\udd01 Entering main trading loop...\n```\n\n**V4 impact estimate (combined):**\n- VWAP relaxation: +$18/day from unblocked 11h/12h trades\n- Copy disabled: WR improvement from ~55% \u2192 ~65%+ (removing 45% WR noise trades)\n- F&G at current 8: +0.10 edge \u2192 more marginal trades pass threshold + 1.25x size\n- Conservative combined estimate: $25-40/day (up from $20-30/day W13)\n\n**Rollback plan:** `cp trading_bot.py.v3.3.bak trading_bot.py` and restart screen.\n\n**Monitoring plan:**\n- 06-11h UTC: verify bot runs stable, no crashes, log output clean\n- 11h UTC: first active hour \u2014 watch for VWAP_RELAXED log lines and F&G edge adjustments\n- End of day: compare V4 day WR vs V3.3 average\n\n**Next P2 heartbeat:** Monitor V4 during 11h active hour. Check first trades for VWAP_RELAXED, F&G edge mod, and outcomes.\n\n## 2026-03-30 05:38 UTC \u2014 [Pillar 1] Copy Signal Following Bot Farms \u2014 Confirmed Root Cause\n\n**Task:** Investigate WHY copy signal hurts WR. Analyze the top wallet database feeding the signal.\n\n**Finding:** **ALL 20 \"top\" wallets in the copy intelligence database are bot farm wallets with $0 earnings.**\n\n| Metric | Value |\n|--------|-------|\n| Wallets with exactly 30 trades | 11 |\n| Wallets with exactly 60 trades | 7 |\n| Wallets with exactly 90 trades | 2 |\n| Wallets with positive earnings | **0** |\n| Biggest loser | \"Warped-Cloak\": -$50,285 |\n\nPerfect multiples of 30 = coordinated bot farm (identified in Mar 29 bug fix but wallet list never refreshed). The copy intelligence pipeline is: bot farm wallets \u2192 copy-signals.json \u2192 live-signals.json \u2192 conviction boost in trading_bot.py \u2192 WORSE WR.\n\nCurrent live signal: 88% bearish confidence based on 47/50 down signals from these bot wallets. This is noise, not alpha.\n\n**Signal chain audit:**\n- `pm-copy-scanner.py` (30 min cron) \u2192 produces bot-farm-polluted wallet list\n- `copy_scanner_v2.py` (5 min cron) \u2192 order flow data (fresh but from bad wallets)\n- `copy-signal-integrator.py` (30 min cron) \u2192 combines into live-signals.json\n- `trading_bot.py` reads live-signals.json \u2192 +1 conviction boost when \"confident\"\n\n**My thinking:** The copy signal was designed to reverse-engineer profitable trader",
+  "worklog": "## 2026-03-30 06:13 UTC \u2014 [Pillar 3] Strategy Scope Validated: No Adjacent Hours or Markets to Add\n\n**Task:** Evaluate strategy expansion: could we add more active hours or new markets (ETH, SOL)?\n\n**Finding:**\n\n1. **Adjacent hours are all losers:**\n\n| Hour | WR | Trades | Est $/day | Verdict |\n|------|-----|--------|-----------|---------|\n| 10h | 44.4% | 9 | -$1.4 | \u274c Pre-London noise |\n| 13h | 42.9% | 7 | -$1.4 | \u274c NY open chaos |\n| 18h | 55.6% | 18 | +$1.9 | \u274c Marginal, not worth risk |\n| 21h | 43.8% | 16 | -$2.8 | \u274c Post-NY decay |\n\n14h/15h showed 58-60% WR but ALL pre-V3 (weaker filters). With V3+ conviction requirements, likely 50-55% = unprofitable.\n\n2. **No ETH/SOL 5-min markets on PM.** API search returned 0 short-term ETH/SOL markets. Only BTC 5-min exists as a dynamic rolling market. Long-term crypto markets exist (e.g., \"Will BTC hit $1M?\") but our strategy is 5-min specific.\n\n3. **V4 bot stability confirmed** \u2014 running for 2+ minutes post-deploy, correctly logging OUTSIDE_ACTIVE_HOURS with bias and PM prices. F&G loaded at startup (8/Extreme Fear, +0.10 edge, 1.25x size).\n\n**My thinking:** Our edge is narrow and deep, not wide and shallow. BTC 5-min at 11h/12h/19h/20h with V4 filters is the right scope. Growth comes from:\n- Better WR per trade (V4 changes: copy disabled, VWAP relaxed, F&G)\n- More trades per active hour (VWAP relaxation unblocks ~20 signals/week)\n- Slightly larger positions (F&G 1.25x at current fear levels)\n- NOT from adding marginal hours or untested markets\n\n**Decision:** No changes to active hours or market scope. Strategy expansion will come from V4 parameter improvements, not surface area. Next growth vector: V5 idea \u2014 when $1,000 balance reached, increase max_position_pct from 1.2% to 1.5%.\n\n**Next P3 heartbeat:** After V4 produces 10+ trades, analyze whether the combined changes (VWAP relaxation + F&G boost + copy disabled) are net positive. Design V5 position sizing schedule.\n\n## 2026-03-30 06:08 UTC \u2014 [Pillar 2] V4 DEPLOYED LIVE \u2014 3 Changes Applied\n\n**Task:** Deploy V4 package to live PM bot. All 3 changes had been designed, patched, and tested in prior heartbeats. Deploy early (5h before active trading) to catch any crashes.\n\n**Changes deployed:**\n1. **Copy boost disabled** (`copy_conviction_boost = 0`) \u2014 bot farms were poisoning signal, WR 77% without vs 45% with\n2. **VWAP relaxation at 11h/12h** \u2014 hour-adaptive: relaxed at peak WR hours (88%/82%), mandatory at 19h/20h. Recovers est. $18/day in blocked signals.\n3. **Fear & Greed integration** \u2014 edge modifier (+0.10 at F&G=8) and position multiplier (1.25x at F&G=8). Refreshes hourly.\n\n**Deployment log:**\n```\n06:11:01 - \ud83d\udcca F&G: 8 (Extreme Fear) \u2192 edge mod +0.10, size 1.25x\n06:11:01 - \ud83d\udcb0 CLOB Balance: $922.45\n06:11:02 - \ud83d\udcca Bootstrapped 100 candles\n06:11:02 - \ud83d\udd01 Entering main trading loop...\n```\n\n**V4 impact estimate (combined):**\n- VWAP relaxation: +$18/day from unblocked 11h/12h trades\n- Copy disabled: WR improvement from ~55% \u2192 ~65%+ (removing 45% WR noise tra",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
