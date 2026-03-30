@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T12:30:01.637191+00:00",
+  "timestamp": "2026-03-30T12:39:45.831854+00:00",
   "pm_balance": 916.31,
-  "hl_balance": 406.34228,
+  "hl_balance": 406.50853,
   "today_pnl": 0.46,
   "pm_pnl": -93.01,
-  "hl_pnl": 15.34,
+  "hl_pnl": 15.51,
   "today_trades": 4,
   "today_wins": 2,
   "today_losses": 2,
-  "all_time_pnl": -77.67,
+  "all_time_pnl": -77.5,
   "total_trades": 232,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.59894,
+      "pnl": 1.59084,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 2.68422,
+      "pnl": 2.81897,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 2.0526,
+      "pnl": 2.0922,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0909%",
-      "apr": "-100%",
+      "rate": "-0.0998%",
+      "apr": "-109%",
       "action": "LONG",
-      "oi": "264,840,674"
+      "oi": "273,919,378"
     }
   ],
   "daily_pnl": [
@@ -113,16 +113,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 60,
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.991"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0909%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0998%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 6.33576,
+        "pnl": 6.50201,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 12:08 UTC \u2014 [Pillar 3] 11h Post-Mortem: Pullback Trading in a Rally\n\n**Task:** Full analysis of V4.1's first active hour. Understand signal-to-trade ratio and loss patterns.\n\n**Finding:**\n- **204 rejections, 5 trades** (2.4% signal-to-trade ratio)\n- **56% YES_ONLY_FILTER** \u2014 market was predominantly bullish (BTC rallied $422)\n- WR: 2W/2L = 50% (1 trade unconfirmed) \u2014 below 88% historical\n- Only 18% of bias readings were YES-qualifying (< -25)\n\n**Bias oscillation pattern:**\n| Window | Avg Bias | YES Signals | Trades | Result |\n|--------|----------|-------------|--------|--------|\n| 11:00-11:14 | +16.9 | 0 | 0 | \u2014 |\n| 11:15-11:24 | **-7.0** | 4 | 2 | \u274c\u274c |\n| 11:25-11:34 | +45.6 | 0 | 0 | \u2014 |\n| 11:35-11:44 | **-25.2** | 13 | 3 | \u2705\u2705(\u2705) |\n| 11:45-11:59 | +24.2 | 6 | 0 | \u2014 |\n\n**Key insight:** In a trending market, our contrarian strategy fires on pullbacks. The deeper the pullback, the more reliable the signal:\n- 11:15 pullback: BTC -$17 \u2192 noise \u2192 LOSS\n- 11:35 pullback: BTC -$47 \u2192 genuine dip \u2192 WIN\n\n**V5 idea: BTC move minimum filter.** If the current 5-min candle range is < $40 at entry time, the pullback may be noise. Would have filtered both losses today (range $17) while keeping all wins (range $45+). Need 20+ trades to validate.\n\n**Decision:** Collect data. Current filters are working (the 50% WR is just 4 trades \u2014 not statistically significant). The double-trade bug inflated both wins and losses. Clean data starts from 11:45 restart.\n\n## 2026-03-30 11:43 UTC \u2014 [Pillar 2] Enhanced Outcome Logging: Per-Indicator Values for Future Analysis\n\n**Task:** Fix data gap \u2014 confidence_outcomes.jsonl doesn't have individual indicator values, preventing per-indicator analysis.\n\n**Change:** Added `_last_indicators` dict stored at trade signal time, merged into outcome log entry. New fields:\n- `obi`: Order Book Imbalance value (float)\n- `cvd`: Cumulative Volume Delta (float)\n- `macd_h`: MACD histogram value (float)\n- `vwap`: VWAP price (float)\n- `btc_price`: BTC mid price at trade time\n- `hour`: UTC hour\n- `fg_value`: Fear & Greed index value\n\n**Why:** Today's first 5 trades showed clear OBI pattern (\u274c=-0.88 on losses, \u2705=+0.86 on wins) but couldn't backtest against historical data. With these fields logged, after 50+ trades we can:\n- Rank indicators by predictive power\n- Find optimal OBI/CVD thresholds\n- Test if OBI should have higher weight than other indicators\n- Analyze CVD/OBI divergence patterns\n\n**Decision:** Bot restarted at 11:45 with enhanced logging. No strategy changes \u2014 data collection improvement only.\n\n## 2026-03-30 11:41 UTC \u2014 [Pillar 1] Copy Signal + OBI Pattern in First V4.1 Trades\n\n**Task:** Analyze copy signal and indicator patterns from first 5 V4.1 trades.\n\n**Finding:** Clear pattern emerging from 5 trades:\n\n| Trade | Copy Signal | OBI | Result |\n|-------|-------------|-----|--------|\n| 11:19 \u00d72 | bullish@84 (low conf) | \u274c -0.88, -0.28 | \u274c LOSS |\n| 11:38 \u00d73 | bearish@100 (high conf) | \u274c\u2192\u2705 -0.83\u2192+0.86 | \u2705 WIN |\n\n**Copy signal as ",
+  "worklog": "## 2026-03-30 12:38 UTC \u2014 [Pillar 4] F&G/Price Divergence: Fear at 8, BTC Up 2.8%\n\n**Task:** Analyze why 12h produced zero trades. Understand F&G/price relationship.\n\n**Finding:**\n- **12h: zero trades.** 38 minutes of 100% bullish bias. Not a single negative reading. PM YES at 0.465 (market strongly pricing UP).\n- **BTC rallied $66,011 \u2192 $67,881 (+2.8%) while F&G = 8 (Extreme Fear)**\n- This is a classic \"wall of worry\" climb \u2014 maximum bearish sentiment, bullish price\n\n**Why our strategy struggles in this regime:**\n1. Our strategy is contrarian to ORDER FLOW (fading bearish bias)\n2. In an uptrend, order flow is persistently bullish \u2192 no bearish signals to fade\n3. When pullbacks do occur, they're shallow ($17 range) \u2192 noise, not signal\n4. The market is ALREADY contrarian to sentiment (price up despite fear) \u2014 there's no additional contrarian edge\n\n**Trade frequency analysis:**\n- Pre-V3 (Mar 20-26): 20.5 trades/day\n- Post-V3 (Mar 27-30): 3.25 trades/day\n- Today: 2 real signals in 1.5 active hours (double-fire bug inflated to 5 executions)\n\n**BTC context:**\n- Dropped $72K\u2192$65K (Mar 25-29), now bouncing\n- Current $67,857 = 41% of weekly range (mid-range, not overbought)\n- Key level: $68,042 (today's high) \u2014 break above = continuation, fail = pullback\n- 50% Fibonacci retrace of drop = $68,500\n\n**Decision:** No changes. Low trade days are expected in strong trends. Our edge is in RANGE-bound markets with oscillating bias. Today is trending bullish \u2014 patience is correct. The 19h/20h session may see different dynamics as US traders enter.\n\n## 2026-03-30 12:08 UTC \u2014 [Pillar 3] 11h Post-Mortem: Pullback Trading in a Rally\n\n**Task:** Full analysis of V4.1's first active hour. Understand signal-to-trade ratio and loss patterns.\n\n**Finding:**\n- **204 rejections, 5 trades** (2.4% signal-to-trade ratio)\n- **56% YES_ONLY_FILTER** \u2014 market was predominantly bullish (BTC rallied $422)\n- WR: 2W/2L = 50% (1 trade unconfirmed) \u2014 below 88% historical\n- Only 18% of bias readings were YES-qualifying (< -25)\n\n**Bias oscillation pattern:**\n| Window | Avg Bias | YES Signals | Trades | Result |\n|--------|----------|-------------|--------|--------|\n| 11:00-11:14 | +16.9 | 0 | 0 | \u2014 |\n| 11:15-11:24 | **-7.0** | 4 | 2 | \u274c\u274c |\n| 11:25-11:34 | +45.6 | 0 | 0 | \u2014 |\n| 11:35-11:44 | **-25.2** | 13 | 3 | \u2705\u2705(\u2705) |\n| 11:45-11:59 | +24.2 | 6 | 0 | \u2014 |\n\n**Key insight:** In a trending market, our contrarian strategy fires on pullbacks. The deeper the pullback, the more reliable the signal:\n- 11:15 pullback: BTC -$17 \u2192 noise \u2192 LOSS\n- 11:35 pullback: BTC -$47 \u2192 genuine dip \u2192 WIN\n\n**V5 idea: BTC move minimum filter.** If the current 5-min candle range is < $40 at entry time, the pullback may be noise. Would have filtered both losses today (range $17) while keeping all wins (range $45+). Need 20+ trades to validate.\n\n**Decision:** Collect data. Current filters are working (the 50% WR is just 4 trades \u2014 not statistically significant). The double-trade bug inflated both wins and losses. Clean data",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
