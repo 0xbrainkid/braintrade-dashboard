@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T23:00:01.800306+00:00",
+  "timestamp": "2026-03-30T23:10:17.488103+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.660231,
+  "hl_balance": 402.155671,
   "today_pnl": 65.19,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.66,
+  "hl_pnl": 11.16,
   "today_trades": 7,
   "today_wins": 5,
   "today_losses": 2,
-  "all_time_pnl": -75.91,
+  "all_time_pnl": -76.41,
   "total_trades": 235,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.14742,
+      "pnl": -0.67068,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.1021,
+      "pnl": 1.926,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,18 +37,25 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.21648,
+      "pnl": -0.58872,
       "leverage": 3,
       "wallet": "old"
     }
   ],
   "funding_opportunities": [
     {
-      "coin": "REZ",
-      "rate": "-0.0503%",
-      "apr": "-55%",
+      "coin": "DOOD",
+      "rate": "-0.0643%",
+      "apr": "-70%",
       "action": "LONG",
-      "oi": "258,549,192"
+      "oi": "306,074,122"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0637%",
+      "apr": "-70%",
+      "action": "LONG",
+      "oi": "2,478,738,214"
     }
   ],
   "daily_pnl": [
@@ -113,20 +120,20 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 28,
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 18 buys, 32 sells \u2014 avg price $0.862"
+        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: REZ at -0.0503%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0643%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -208,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.17116,
+        "pnl": 0.6665999999999999,
         "sharpe": 0.0
       },
       {
@@ -364,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 22:42 UTC \u2014 [Pillar 3] Indicator Logging Bug: Deep Trace + Debug Deploy\n\n**Task:** Fix indicator logging bug \u2014 outcomes JSONL has zero indicator fields.\n\n**Investigation:**\n1. `_last_indicators` set at L556 in `should_trade()` \u2014 only on SUCCESS path\n2. `execute_trade()` reads it at L612 \u2014 should have fresh data\n3. `log_trade_outcome()` has two paths: `indicators` param \u2192 `_last_indicators` fallback\n4. Code flow is: `should_trade()` returns direction + sets `_last_indicators` \u2192 main loop calls `execute_trade()` \u2192 which reads `_last_indicators` \u2192 passes to `_check_outcome()` \u2192 which passes to `log_trade_outcome()`\n\n**Root cause still unclear.** Flow looks correct on paper. Possible causes:\n- Asyncio timing: `_last_indicators` gets overwritten by next cycle before `_check_outcome` runs\n- But we capture `dict(self._last_indicators)` as a snapshot \u2014 should be safe\n- Maybe `should_trade` actually throws before L556 on some edge case\n\n**Debug deployed:** Added explicit logging BEFORE `execute_trade()`:\n- `\ud83d\udccb PRE-EXECUTE indicators: [keys] obi=value` \u2192 confirms they exist\n- `\ud83d\udc1b BUG: _last_indicators missing/empty` \u2192 confirms they don't\n\nBot restarted 22:43. First real test at 11h tomorrow.\n\n## 2026-03-30 22:08 UTC \u2014 [Pillar 2] MEMORY.md End-of-Day Update\n\n**Task:** Evening report window (22:00-23:00 UTC per AGENTS.md). Update MEMORY.md with all Day 1 learnings.\n\n**MEMORY.md updates made:**\n1. HL positions: ETH flipped LONG\u2192SHORT mid-day, net uPnL +$0.58\n2. W14 Day 1 FINAL: 7 trades, 5W",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 23:08 UTC \u2014 [Pillar 4] Day 1 Final P&L: +$37.67 Expected After Settlement\n\n**Task:** Verify 23:00 cron report, calculate actual P&L with settlement timing.\n\n**Finding:** PM balance shows $921.75 but expected $960.12 after all 5 wins settle.\n- Gap: $38.37 \u2014 consistent with 20h payouts still in transit\n- PM settlement can take hours for recently-resolved markets\n- **Actual Day 1 P&L: +$37.67** ($922.45 \u2192 ~$960.12)\n\n**Daily P&L cron: \u2705 WORKING** \u2014 fired at 23:00, generated report automatically.\nAppended evening session analysis, settlement status, and learnings to report.\n\n**Combined capital (after settlement):** ~$960 (PM) + $365 (HL) + $37 (HL new) = **~$1,362**\n\nThis puts us **above Phase 2 target** ($30.91/day avg W13) with a $37.67 single-day result \u2014 approaching Phase 3 territory on trading days.\n\n## 2026-03-30 22:42 UTC \u2014 [Pillar 3] Indicator Logging Bug: Deep Trace + Debug Deploy\n\n**Task:** Fix indicator logging bug \u2014 outcomes JSONL has zero indicator fields.\n\n**Investigation:**\n1. `_last_indicators` set at L556 in `should_trade()` \u2014 only on SUCCESS path\n2. `execute_trade()` reads it at L612 \u2014 should have fresh data\n3. `log_trade_outcome()` has two paths: `indicators` param \u2192 `_last_indicators` fallback\n4. Code flow is: `should_trade()` returns direction + sets `_last_indicators` \u2192 main loop calls `execute_trade()` \u2192 which reads `_last_indicators` \u2192 passes to `_check_outcome()` \u2192 which passes to `log_trade_outcome()`\n\n**Root cause still unclear.** Flow looks correct on p",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -384,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
