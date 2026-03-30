@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-03-30T00:30:01.646291+00:00",
+  "timestamp": "2026-03-30T00:39:28.039290+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 398.152771,
+  "hl_balance": 396.894951,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 7.15,
+  "hl_pnl": 5.89,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -79.72,
+  "all_time_pnl": -80.98,
   "total_trades": 227,
   "days_active": 15,
-  "pm_bot_running": false,
+  "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [
     {
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.48114,
+      "pnl": -0.83916,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": -0.73304,
+      "pnl": -1.16424,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.64416,
+      "pnl": -1.11276,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "SOPH",
-      "rate": "-0.1012%",
-      "apr": "-111%",
+      "rate": "-0.0967%",
+      "apr": "-106%",
       "action": "LONG",
-      "oi": "53,603,902"
+      "oi": "53,642,948"
     }
   ],
   "daily_pnl": [
@@ -112,17 +112,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "bullish",
+    "signal_confidence": 76,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.988"
+        "text": "Top traders: 48 buys, 2 sells \u2014 avg price $0.993"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SOPH at -0.1012%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SOPH at -0.0967%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -197,7 +197,7 @@
     "strategies": [
       {
         "name": "PM Smart Entry",
-        "status": "DOWN",
+        "status": "LIVE",
         "trades": 227,
         "win_rate": 53.8,
         "pnl": -86.87,
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -1.85834,
+        "pnl": -3.11616,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 00:08 UTC \u2014 Pillar 3: MEMORY.md Update\n\n**Task:** Update MEMORY.md with all Sunday deployments and findings.\n\n**Changes:**\n- Added V3.3 weekend disable to config section\n- Added copy boost threshold note (may need lowering)\n- Added 3 copy integrator bugs + fixes\n- Added \"Deployments Mar 29\" section listing all 6 changes\n- Updated W13 stats to final numbers ($216.35, 101 trades)\n- Added queued items: HL consolidation, copy threshold adjustment\n- Corrected total capital: $1,321.36\n\n**MEMORY.md is now current** for Monday operations. Any heartbeat can reference it for context.\n\n---\n\n## 2026-03-29 23:38 UTC \u2014 Pillar 2: Edge Development \u2014 Copy Boost Threshold Analysis\n\n**Task:** Assess impact of SELL-side fix on copy conviction boost threshold.\n\n**Finding:** The copy boost threshold (>=100 confidence) is now nearly unreachable:\n- Old code: 11 BUY-only signals \u2192 0/11 UP = 100% confidence (trivially achieved)\n- New code: 50 total signals \u2192 needs 50/50 same direction for 100% (impossible in practice)\n- Current session: 8 UP / 42 DOWN = 68% confidence \u2192 boost does NOT fire\n\n**Impact:** Today's WIN at 11:02 relied on copy boost (bullish@100 \u2192 conv 3\u21924). Without the boost, that trade wouldn't have fired (needed conv >= 3). The SELL-side fix may prevent similar winning trades from executing Monday.\n\n**Decision:** Do NOT lower threshold yet. Collect Monday data at new calibration. If we see conf 60-80% on trades that would have won, lower threshold to 80 on Tuesday. Logging already captures conf levels.\n\n**Risk:** If threshold is too high, bot takes fewer trades (lower volume but same WR). If too low, bot takes noisy trades (higher volume but lower WR). Current priority: collect data first, then adjust.\n\n---\n\n## 2026-03-29 23:08 UTC \u2014 Pillar 1: Copy Intelligence \u2014 SELL Signal Fix\n\n**Task:** Investigate signal count discrepancy between integrator (11 signals) and raw data (50 signals).\n\n**Root cause:** Integrator only counted BUY side signals, completely ignoring 39 SELL signals. SELL Up = bearish (dumping up tokens), SELL Down = bullish. This is critical directional information that was being discarded.\n\n**Fix:** Added SELL-side counting \u2014 SELL Up/Yes increments down_count, SELL Down/No increments up_count. Now reads all 50 signals.\n\n**Before fix:** bearish@100% confidence (based on 11/50 signals \u2014 overconfident)\n**After fix:** bearish@68% confidence (based on 50/50 signals \u2014 properly calibrated)\n\n**Impact:** The copy conviction boost fires at confidence >= 100. With properly calibrated confidence, it will be much more selective \u2014 only boosting when there's overwhelming consensus, not just when we're reading a tiny sample. This prevents false conviction boosts.\n\n---\n\n## 2026-03-29 22:42 UTC \u2014 Pillar 3: End-of-Day Report\n\n**Task:** Write comprehensive daily P&L report for Sunday March 29.\n\n**Summary:** 1 trade, 1 win, +$10.36. Total capital $1,321.36. But Sunday was a BUILD day \u2014 4 strategy deployments, 2 bug fixes, W14 projection showing 82% WR ",
+  "worklog": "## 2026-03-30 00:38 UTC \u2014 Pillar 1: Overnight Funding & Position Check\n\n**Task:** Check 00:00 UTC funding settlement and position status.\n\n**Funding rates (00:00 UTC settlement):**\n- BTC: -0.0006%/8h (shorts receive) \u2014 neutral\n- ETH: +0.0004%/8h (longs pay) \u2014 neutral  \n- SOL: -0.0019%/8h (shorts receive) \u2014 slightly favors our short\n\n**Net funding income:** +$0.007/day ($0.20/month) \u2014 confirms negligible, not worth holding for.\n\n**Position uPnL:** All 3 green. BTC SHORT +$1.75 (+1.7%), ETH LONG +$0.24 (+0.2%), SOL SHORT +$0.63 (+0.6%). Total uPnL +$2.62. Account ~$362.62.\n\n**Recommendation unchanged:** Close all 3, move $362 to PM. The $2.62 profit + $360 base earning $0.007/day in funding vs adding 39% to PM capital ($42.53/day \u00d7 0.39 = +$16.59/day estimated). Payoff ratio: 2,370:1 in favor of PM.\n\n---\n\n## 2026-03-30 00:08 UTC \u2014 Pillar 3: MEMORY.md Update\n\n**Task:** Update MEMORY.md with all Sunday deployments and findings.\n\n**Changes:**\n- Added V3.3 weekend disable to config section\n- Added copy boost threshold note (may need lowering)\n- Added 3 copy integrator bugs + fixes\n- Added \"Deployments Mar 29\" section listing all 6 changes\n- Updated W13 stats to final numbers ($216.35, 101 trades)\n- Added queued items: HL consolidation, copy threshold adjustment\n- Corrected total capital: $1,321.36\n\n**MEMORY.md is now current** for Monday operations. Any heartbeat can reference it for context.\n\n---\n\n## 2026-03-29 23:38 UTC \u2014 Pillar 2: Edge Development \u2014 Copy Boost Threshold Analysis\n\n**Task:** Assess impact of SELL-side fix on copy conviction boost threshold.\n\n**Finding:** The copy boost threshold (>=100 confidence) is now nearly unreachable:\n- Old code: 11 BUY-only signals \u2192 0/11 UP = 100% confidence (trivially achieved)\n- New code: 50 total signals \u2192 needs 50/50 same direction for 100% (impossible in practice)\n- Current session: 8 UP / 42 DOWN = 68% confidence \u2192 boost does NOT fire\n\n**Impact:** Today's WIN at 11:02 relied on copy boost (bullish@100 \u2192 conv 3\u21924). Without the boost, that trade wouldn't have fired (needed conv >= 3). The SELL-side fix may prevent similar winning trades from executing Monday.\n\n**Decision:** Do NOT lower threshold yet. Collect Monday data at new calibration. If we see conf 60-80% on trades that would have won, lower threshold to 80 on Tuesday. Logging already captures conf levels.\n\n**Risk:** If threshold is too high, bot takes fewer trades (lower volume but same WR). If too low, bot takes noisy trades (higher volume but lower WR). Current priority: collect data first, then adjust.\n\n---\n\n## 2026-03-29 23:08 UTC \u2014 Pillar 1: Copy Intelligence \u2014 SELL Signal Fix\n\n**Task:** Investigate signal count discrepancy between integrator (11 signals) and raw data (50 signals).\n\n**Root cause:** Integrator only counted BUY side signals, completely ignoring 39 SELL signals. SELL Up = bearish (dumping up tokens), SELL Down = bullish. This is critical directional information that was being discarded.\n\n**Fix:** Added SELL-side counting \u2014 SELL U",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +374,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
