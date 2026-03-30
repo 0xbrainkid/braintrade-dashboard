@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-03-30T11:30:01.554602+00:00",
-  "pm_balance": 920.82,
-  "hl_balance": 405.800794,
-  "today_pnl": -40.0,
-  "pm_pnl": -88.5,
-  "hl_pnl": 14.8,
-  "today_trades": 2,
-  "today_wins": 0,
+  "timestamp": "2026-03-30T11:41:21.706968+00:00",
+  "pm_balance": 916.31,
+  "hl_balance": 405.762144,
+  "today_pnl": 0.46,
+  "pm_pnl": -93.01,
+  "hl_pnl": 14.76,
+  "today_trades": 4,
+  "today_wins": 2,
   "today_losses": 2,
-  "all_time_pnl": -73.7,
-  "total_trades": 229,
+  "all_time_pnl": -78.25,
+  "total_trades": 232,
   "days_active": 15,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.35756,
+      "pnl": 1.16964,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 2.48479,
+      "pnl": 2.55486,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.95228,
+      "pnl": 2.03148,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0984%",
-      "apr": "-108%",
+      "rate": "-0.0968%",
+      "apr": "-106%",
       "action": "LONG",
-      "oi": "260,083,254"
+      "oi": "253,548,270"
     },
     {
       "coin": "PROVE",
-      "rate": "-0.0523%",
-      "apr": "-57%",
+      "rate": "-0.0510%",
+      "apr": "-56%",
       "action": "LONG",
-      "oi": "3,035,446"
+      "oi": "3,034,624"
     }
   ],
   "daily_pnl": [
@@ -113,23 +113,23 @@
     },
     {
       "date": "2026-03-30",
-      "pnl": -40.0
+      "pnl": 0.46
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 84,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.968"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0984%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0968%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -205,9 +205,9 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 229,
-        "win_rate": 53.2,
-        "pnl": -88.5,
+        "trades": 232,
+        "win_rate": 53.8,
+        "pnl": -93.0100000000001,
         "sharpe": -0.23
       },
       {
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 5.79463,
+        "pnl": 5.75598,
         "sharpe": 0.0
       },
       {
@@ -365,13 +365,13 @@
         "impact_class": "cyan"
       }
     ],
-    "win_rate_7d": 53.2,
-    "win_rate_24h": 0.0,
+    "win_rate_7d": 53.8,
+    "win_rate_24h": 50.0,
     "avg_trade_size": 0.52,
     "sharpe": -0.23,
-    "max_drawdown": 822.0
+    "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 11:11 UTC \u2014 [Pillar 3] 11h Bias Distribution: 79% Positive = YES Filter Patience Test\n\n**Task:** Analyze live 11h signal distribution. Quantify YES-only filter impact.\n\n**Finding:**\n- **24 bias readings in first 12 minutes:** 19 positive (79%), 5 negative (21%), 0 tradeable (< -25)\n- **30 NO_TRADE_SKIPPED blocks** in 11 minutes \u2014 YES-only filter blocking ~3/min\n- **Mean bias: +17.9** \u2014 market is mildly bullish at 11h Monday\n- **Range: -13.8 to +47.6** \u2014 no reading crossed YES threshold (-25)\n\nHistorical validation: NO trades = 38.2% WR (34 trades, all time). Decision to block NO trades is correct.\n\n**Strategic insight:** At 11h with 88% historical WR, our edge comes from RARE high-quality signals, not volume. The bot may only get 2-3 tradeable windows per hour (when bearish order flow creates momentary fear to fade). The 79% positive bias means BTC is in a bullish micro-regime \u2014 consistent with HL leaderboard (8L/2S).\n\n**Missing data:** confidence_outcomes.jsonl doesn't have hour/direction fields for older trades. Can't backtest NO trades at specific hours. This is a data gap \u2014 V4.1 logs both fields, so future analysis will be richer.\n\n**Decision:** No changes. YES-only filter is working correctly. Bot patience is a feature, not a bug. Will check again at end of 11h to see if any windows opened.\n\n## 2026-03-30 11:08 UTC \u2014 [Pillar 2] V4.1 First Active Hour: Monitoring Live Signals\n\n**Task:** Monitor V4.1's first active trading hour. Check filter behavior and trade execution.\n\n**Finding:** 11h active \u2014 bot is processing signals but no trade yet (8 minutes in):\n\n- **11:00-11:05 window:** Bias oscillated between +47 (NO direction, blocked by YES-only) and -4 to -13 (too weak, < 25 threshold). One BIAS_DEAD_ZONE hit at +37.1.\n- **11:05-11:10 window:** Persistent positive bias (+27 to +33). All blocked by YES_ONLY_FILTER. Market is mildly bullish \u2014 BTC order flow slightly favors UP.\n- PM prices: YES=0.510, NO=0.490 (near 50/50, slight YES premium)\n- Regime filter: RANGE (confirmed \u2014 bot is IN active trading mode)\n\n**Why no trade yet:** The pre-10h bearish bias readings (-37 to -80) have weakened. Current market is directionless-to-slightly-bullish. Our contrarian YES strategy needs negative bias (bearish order flow to fade). Positive bias = NO direction = blocked by V3.2.\n\n**This is correct behavior.** The bot is patiently waiting for signal quality. 11h has 12 five-min windows \u2014 trade opportunities come in waves, not every window. The YES_ONLY_FILTER is saving us from NO trades (40% WR).\n\n**Key observation:** If bias stays positive all hour, V4.1 VWAP_RELAXED won't fire because there are no YES signals to relax. The VWAP test requires: negative bias \u2192 YES direction \u2192 VWAP disagrees \u2192 relaxation triggers. Market conditions must cooperate.\n\n**Decision:** Continue monitoring. No intervention needed. Bot is filtering correctly.\n\n**Next heartbeat:** Check if any trades executed by end of 11h window. Analyze filter distribution for the full ho",
+  "worklog": "## 2026-03-30 11:38 UTC \u2014 [Pillar 4] DOUBLE-TRADE BUG FOUND AND FIXED + 5 Trades Analyzed\n\n**Task:** Analyze V4.1 first live trades. Found critical bug.\n\n**Bug:** `window_traded = True` was set AFTER `await execute_trade()`. During the async API call, the loop continued and triggered additional trades in the same 5-min window. Result: 2 trades at 11:19, 3 trades at 11:38 \u2014 **5 trades instead of 2**.\n\n**Fix applied:** Moved `window_traded = True` BEFORE `execute_trade()` call. Bot restarted at 11:39.\n\n**V4.1 Trade Results (11h, first 40 min):**\n\n| Time | Direction | Size | Price | BTC Move | Result |\n|------|-----------|------|-------|----------|--------|\n| 11:19:15 | YES | $11.07 | 0.484 | 67560\u219267543 | \u274c LOSS |\n| 11:19:22 | YES | $12.18 | 0.484 | 67550\u219267543 | \u274c LOSS (bug: double-fire) |\n| 11:38:46 | YES | $12.15 | 0.490 | 67561\u219267526 | \u2705 WIN |\n| 11:39:20 | YES | $11.05 | 0.490 | 67514\u219267526 | \u2705 WIN (bug: triple-fire) |\n| 11:39:39 | YES | $12.10 | 0.505 | 67515\u219267526 | \u2705 WIN (bug: triple-fire) |\n\n**Score: 3W/2L (60% WR).** Without double-fire bug: would have been 1W/1L (2 trades total).\n**P&L estimate:** 3 \u00d7 ~$10 wins - 2 \u00d7 ~$12 losses = ~+$6 net\n\n**Key observations:**\n1. OBI disagreed on all losing trades (-0.88, -0.28) \u2014 strong sell pressure in book\n2. OBI agreed on winning trades (+0.22, +0.86) \u2014 buy pressure confirmed\n3. All trades had VWAP agreement (no VWAP_RELAXED test yet)\n4. Copy signal bearish@100 on winners, bullish@84 on losers \u2014 attention signal theory holds\n5. F&G +0.05 edge mod active on all trades\n\n**Decision:** Bug fix deployed. Bot restarted. Will produce clean 1-trade-per-window data from now on.\n\n## 2026-03-30 11:11 UTC \u2014 [Pillar 3] 11h Bias Distribution: 79% Positive = YES Filter Patience Test\n\n**Task:** Analyze live 11h signal distribution. Quantify YES-only filter impact.\n\n**Finding:**\n- **24 bias readings in first 12 minutes:** 19 positive (79%), 5 negative (21%), 0 tradeable (< -25)\n- **30 NO_TRADE_SKIPPED blocks** in 11 minutes \u2014 YES-only filter blocking ~3/min\n- **Mean bias: +17.9** \u2014 market is mildly bullish at 11h Monday\n- **Range: -13.8 to +47.6** \u2014 no reading crossed YES threshold (-25)\n\nHistorical validation: NO trades = 38.2% WR (34 trades, all time). Decision to block NO trades is correct.\n\n**Strategic insight:** At 11h with 88% historical WR, our edge comes from RARE high-quality signals, not volume. The bot may only get 2-3 tradeable windows per hour (when bearish order flow creates momentary fear to fade). The 79% positive bias means BTC is in a bullish micro-regime \u2014 consistent with HL leaderboard (8L/2S).\n\n**Missing data:** confidence_outcomes.jsonl doesn't have hour/direction fields for older trades. Can't backtest NO trades at specific hours. This is a data gap \u2014 V4.1 logs both fields, so future analysis will be richer.\n\n**Decision:** No changes. YES-only filter is working correctly. Bot patience is a feature, not a bug. Will check again at end of 11h to see if any windows opened.\n\n## 2026-03-30 11:08 UTC",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -381,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
