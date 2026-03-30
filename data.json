@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T11:10:02.567569+00:00",
+  "timestamp": "2026-03-30T11:12:57.276588+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 404.959334,
+  "hl_balance": 405.028674,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 13.96,
+  "hl_pnl": 14.03,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -72.91,
+  "all_time_pnl": -72.84,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.1178,
+      "pnl": 1.12752,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 2.10749,
+      "pnl": 2.11827,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.72788,
+      "pnl": 1.77672,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1328%",
-      "apr": "-145%",
+      "rate": "-0.1264%",
+      "apr": "-138%",
       "action": "LONG",
-      "oi": "253,195,924"
+      "oi": "256,431,380"
     },
     {
       "coin": "PROVE",
-      "rate": "-0.0598%",
-      "apr": "-66%",
+      "rate": "-0.0580%",
+      "apr": "-63%",
       "action": "LONG",
-      "oi": "3,047,392"
+      "oi": "3,047,286"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1328%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1264%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.95317,
+        "pnl": 5.0225100000000005,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 11:08 UTC \u2014 [Pillar 2] V4.1 First Active Hour: Monitoring Live Signals\n\n**Task:** Monitor V4.1's first active trading hour. Check filter behavior and trade execution.\n\n**Finding:** 11h active \u2014 bot is processing signals but no trade yet (8 minutes in):\n\n- **11:00-11:05 window:** Bias oscillated between +47 (NO direction, blocked by YES-only) and -4 to -13 (too weak, < 25 threshold). One BIAS_DEAD_ZONE hit at +37.1.\n- **11:05-11:10 window:** Persistent positive bias (+27 to +33). All blocked by YES_ONLY_FILTER. Market is mildly bullish \u2014 BTC order flow slightly favors UP.\n- PM prices: YES=0.510, NO=0.490 (near 50/50, slight YES premium)\n- Regime filter: RANGE (confirmed \u2014 bot is IN active trading mode)\n\n**Why no trade yet:** The pre-10h bearish bias readings (-37 to -80) have weakened. Current market is directionless-to-slightly-bullish. Our contrarian YES strategy needs negative bias (bearish order flow to fade). Positive bias = NO direction = blocked by V3.2.\n\n**This is correct behavior.** The bot is patiently waiting for signal quality. 11h has 12 five-min windows \u2014 trade opportunities come in waves, not every window. The YES_ONLY_FILTER is saving us from NO trades (40% WR).\n\n**Key observation:** If bias stays positive all hour, V4.1 VWAP_RELAXED won't fire because there are no YES signals to relax. The VWAP test requires: negative bias \u2192 YES direction \u2192 VWAP disagrees \u2192 relaxation triggers. Market conditions must cooperate.\n\n**Decision:** Continue monitoring. No intervention needed. Bot is filtering correctly.\n\n**Next heartbeat:** Check if any trades executed by end of 11h window. Analyze filter distribution for the full hour.\n\n## 2026-03-30 10:42 UTC \u2014 [Pillar 1] T-18 Min: BTC Below VWAP = Perfect V4.1 VWAP_RELAXED Test\n\n**Task:** Final pre-trade intelligence scan. Check copy signal, regime, and VWAP position.\n\n**Finding:**\n1. **Copy signal flipped:** 100% bearish (04:44) \u2192 23% bullish (10:43). Order flow more balanced (75 UP bids vs 24 UP asks). Low confidence (46%) = no copy boost = baseline. Good \u2014 clean V4.1 test.\n\n2. **Regime: RANGE 0/6.** All metrics well below thresholds. CONFIRMED will trade at 11h.\n\n3. **BTC $187 below VWAP** ($67,408 vs $67,596 VWAP). This means:\n   - Bearish bias (-37 to -80 recent readings) \u2192 YES direction\n   - VWAP disagrees (price below VWAP = bearish, YES expects UP)\n   - **V3.3: Would BLOCK** (VWAP_DISAGREES)\n   - **V4.1 at 11h: Will ALLOW** (VWAP_RELAXED at peak hour)\n   \n   This is the exact scenario our overnight research predicted and optimized for. First live test of VWAP relaxation is imminent.\n\n4. **Recent bias readings:** consistently -37 to -80 (strong YES direction). If PM prices are 0.505-0.515 at 11h window, all conditions align for V4.1's first trade.\n\n**My thinking:** Everything converges: regime RANGE, bias strong YES, VWAP disagrees (perfect VWAP_RELAXED test), copy signal neutral (no interference), F&G at 8 (mild edge boost). If this trade fires and wins, it validates the entire ",
+  "worklog": "## 2026-03-30 11:11 UTC \u2014 [Pillar 3] 11h Bias Distribution: 79% Positive = YES Filter Patience Test\n\n**Task:** Analyze live 11h signal distribution. Quantify YES-only filter impact.\n\n**Finding:**\n- **24 bias readings in first 12 minutes:** 19 positive (79%), 5 negative (21%), 0 tradeable (< -25)\n- **30 NO_TRADE_SKIPPED blocks** in 11 minutes \u2014 YES-only filter blocking ~3/min\n- **Mean bias: +17.9** \u2014 market is mildly bullish at 11h Monday\n- **Range: -13.8 to +47.6** \u2014 no reading crossed YES threshold (-25)\n\nHistorical validation: NO trades = 38.2% WR (34 trades, all time). Decision to block NO trades is correct.\n\n**Strategic insight:** At 11h with 88% historical WR, our edge comes from RARE high-quality signals, not volume. The bot may only get 2-3 tradeable windows per hour (when bearish order flow creates momentary fear to fade). The 79% positive bias means BTC is in a bullish micro-regime \u2014 consistent with HL leaderboard (8L/2S).\n\n**Missing data:** confidence_outcomes.jsonl doesn't have hour/direction fields for older trades. Can't backtest NO trades at specific hours. This is a data gap \u2014 V4.1 logs both fields, so future analysis will be richer.\n\n**Decision:** No changes. YES-only filter is working correctly. Bot patience is a feature, not a bug. Will check again at end of 11h to see if any windows opened.\n\n## 2026-03-30 11:08 UTC \u2014 [Pillar 2] V4.1 First Active Hour: Monitoring Live Signals\n\n**Task:** Monitor V4.1's first active trading hour. Check filter behavior and trade execution.\n\n**Finding:** 11h active \u2014 bot is processing signals but no trade yet (8 minutes in):\n\n- **11:00-11:05 window:** Bias oscillated between +47 (NO direction, blocked by YES-only) and -4 to -13 (too weak, < 25 threshold). One BIAS_DEAD_ZONE hit at +37.1.\n- **11:05-11:10 window:** Persistent positive bias (+27 to +33). All blocked by YES_ONLY_FILTER. Market is mildly bullish \u2014 BTC order flow slightly favors UP.\n- PM prices: YES=0.510, NO=0.490 (near 50/50, slight YES premium)\n- Regime filter: RANGE (confirmed \u2014 bot is IN active trading mode)\n\n**Why no trade yet:** The pre-10h bearish bias readings (-37 to -80) have weakened. Current market is directionless-to-slightly-bullish. Our contrarian YES strategy needs negative bias (bearish order flow to fade). Positive bias = NO direction = blocked by V3.2.\n\n**This is correct behavior.** The bot is patiently waiting for signal quality. 11h has 12 five-min windows \u2014 trade opportunities come in waves, not every window. The YES_ONLY_FILTER is saving us from NO trades (40% WR).\n\n**Key observation:** If bias stays positive all hour, V4.1 VWAP_RELAXED won't fire because there are no YES signals to relax. The VWAP test requires: negative bias \u2192 YES direction \u2192 VWAP disagrees \u2192 relaxation triggers. Market conditions must cooperate.\n\n**Decision:** Continue monitoring. No intervention needed. Bot is filtering correctly.\n\n**Next heartbeat:** Check if any trades executed by end of 11h window. Analyze filter distribution for the full ho",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
