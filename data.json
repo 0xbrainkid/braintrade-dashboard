@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T04:27:43.083079+00:00",
+  "timestamp": "2026-03-30T04:29:59.143952+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.474944,
+  "hl_balance": 403.57059399999997,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.47,
+  "hl_pnl": 12.57,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.4,
+  "all_time_pnl": -74.3,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.94122,
+      "pnl": 0.93798,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.33672,
+      "pnl": 1.39601,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.18668,
+      "pnl": 1.22628,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1216%",
-      "apr": "-133%",
+      "rate": "-0.1183%",
+      "apr": "-130%",
       "action": "LONG",
-      "oi": "202,947,810"
+      "oi": "202,881,838"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1216%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1183%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.46462,
+        "pnl": 3.56027,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 04:23 UTC \u2014 [Pillar 3] STRONG_TREND Rally Analysis + PM Bot Crash Fix\n\n**Task:** Analyze current BTC regime and its implications for strategy. PM bot had crashed again \u2014 diagnose and fix. Check HL positions.\n\n**Finding:**\n1. **BTC rallied from $65,000 \u2192 $67,468** since 22:00 UTC Sunday. Classic V-shaped recovery: liquidation cascade at 22:00 (2,219 BTC volume \u2014 7x normal), then steady grind up. +3.8% off the low. Current regime: STRONG_TREND (UP).\n\n2. **PM bot crashed at ~01:03 UTC** \u2014 process died silently (no error in logs). Restarted at 04:09, died again within 20 seconds. Second restart at 04:26 \u2014 stable so far. Added EXIT_CODE capture to screen command for next crash. Watchdog cron (every 5 min) should catch this.\n\n3. **HL old wallet positions all GREEN** \u2014 all 3 are LONG (memory was stale, said BTC SHORT/SOL SHORT):\n   - BTC LONG 3x: +$0.97 (+2.7%)\n   - ETH LONG 3x: +$1.34 (+3.7%)\n   - SOL LONG 3x: +$1.21 (+3.3%)\n   - Total uPnL: +$3.53\n\n4. **STRONG_TREND regime = no PM trades.** The regime filter blocks trades during trend/strong_trend. This is correct \u2014 5-min binary prediction is noise during a directional move. The edge is in HL leveraged positions (which are long and winning).\n\n**My thinking:** The $65K sweep was institutional \u2014 2,219 BTC in one hour at a round number. The bounce was immediate and aggressive. This pattern often leads to continued upside. HL longs are positioned correctly. PM bot will resume trading when regime rotates back to RANGE \u2014 likely once BTC consolidates above $67K for a few hours.\n\n**Decision:** No changes needed. HL longs correctly positioned. PM regime filter is doing its job. Updated memory to correct HL position info (all LONG, not mixed). Monitor regime score \u2014 when it drops below 3, PM trading resumes.\n\n**Next P3 heartbeat:** Design a \"trend-following\" strategy for PM \u2014 when regime is TREND, could we trade the 5-min with-trend instead of blocking? Need historical data on 5-min UP/DOWN bias during confirmed trends.\n\n## 2026-03-30 04:10 UTC \u2014 [Pillar 2] VWAP Filter Killing Profitable Trades at Peak Hours\n\n**Task:** Analyze why the PM bot executed only 1 trade on Saturday Mar 29 despite active hours having signals. Determine if conviction/VWAP filters are too aggressive.\n\n**Finding:** VWAP_DISAGREES filter is blocking high-WR trades at our best hours:\n- **11h UTC:** 12 YES signals blocked by VWAP. Hour's actual WR = 88% (7W/1L). Estimated missed profit: +$41.\n- **12h UTC:** 8 YES signals blocked by VWAP. Hour's actual WR = 82% (14W/3L). Estimated missed profit: +$21.\n- **19h UTC:** 1 blocked. WR = 75%. Minimal impact.\n- **20h UTC:** 6 blocked. WR = 58%. VWAP filter is protective here (-$8 if allowed).\n- LOW_CONVICTION also blocked 15 YES signals at 12h, 8 at 11h, 8 at 19h.\n- Saturday Mar 29: 70 signals were NO_TRADE_SKIPPED (positive bias = NO direction, V3.2 correctly blocks).\n\nThe VWAP stats (54% vs 45% WR) were computed across ALL hours. But 11h and 12h have structural edge (London session, ",
+  "worklog": "## 2026-03-30 04:28 UTC \u2014 [Pillar 4] Regime Classifier Built + Fear & Greed Alpha Signal\n\n**Task:** Build BTC regime classifier for alpha research pipeline. Analyze Fear & Greed correlation. Wire new data source into confidence scoring.\n\n**Finding:**\n1. **Built `regime_classifier.py`** \u2014 standalone module that classifies BTC into 4 regimes using 5-min candle data:\n   - `RANGE` \ud83c\udfaf \u2014 PM contrarian trades work best (low vol, mean-reverting)\n   - `TREND` \ud83d\udcc8 \u2014 directional, orderly moves (PM risky, filter/reduce)\n   - `HIGH_VOL` \u26a1 \u2014 extreme moves (DO NOT trade PM)\n   - `CRASH_RECOVERY` \ud83d\udd04 \u2014 post-crash V-bounce (HL long bias signal)\n   - Uses: avg range, max range, volume ratio, net change, directional consistency\n   - Current output: TREND (UP), score 5/10, PM not tradeable \u274c\n\n2. **Crash anatomy (22:40-22:45 UTC Sunday):**\n   - 22:40: 0.95% range, 443 BTC \u2192 $66,255\u2192$65,684\n   - 22:45: 1.04% range, 933 BTC \u2192 $65,684\u2192$65,046 (cascade bottom)\n   - 22:50-23:00: V-bounce $65,046\u2192$66,036\n   - 00:15: Monster spike 1.72% range, 328 BTC \u2192 $65,853\u2192$66,909\n   - Total: $65,046\u2192$67,468 = +3.7% recovery in 6 hours\n\n3. **Fear & Greed Index: 8/100 (Extreme Fear)** \u2014 10+ consecutive days of Extreme Fear (range 8-14). Our entire W13 profit (+$216, 55% WR) was generated during this fear regime. Contrarian 5-min binary strategy + Extreme Fear = edge amplifier.\n\n**My thinking:** The Fear & Greed signal is macro-level alpha. During Extreme Fear, retail panics and overreacts on 5-min timeframes \u2014 exactly what our contrarian bias-fading strategy exploits. The regime classifier gives us micro-level (5-min) regime detection. Together: Fear&Greed < 20 = boost PM trade confidence by 5-10%, Fear&Greed > 70 = reduce confidence (greed = less overreaction to fade).\n\n**Decision:**\n- `regime_classifier.py` is built and tested. Ready to wire into bot as import.\n- **V4 enhancement queued:** Add F&G API call at bot startup, use as confidence modifier:\n  - F&G \u2264 15: +10% confidence boost (contrarian edge amplified)\n  - F&G 15-30: +5% boost\n  - F&G 30-70: neutral\n  - F&G \u2265 70: -10% (reduce size, less overreaction to fade)\n- Don't deploy at 4 AM \u2014 queue for Monday active hours when we can monitor.\n\n**Next P4 heartbeat:** Wire regime_classifier into bot's should_trade() as supplementary signal. Add F&G API lookup at session start. Backtest F&G correlation against all 277 trades in trades.jsonl.\n\n## 2026-03-30 04:23 UTC \u2014 [Pillar 3] STRONG_TREND Rally Analysis + PM Bot Crash Fix\n\n**Task:** Analyze current BTC regime and its implications for strategy. PM bot had crashed again \u2014 diagnose and fix. Check HL positions.\n\n**Finding:**\n1. **BTC rallied from $65,000 \u2192 $67,468** since 22:00 UTC Sunday. Classic V-shaped recovery: liquidation cascade at 22:00 (2,219 BTC volume \u2014 7x normal), then steady grind up. +3.8% off the low. Current regime: STRONG_TREND (UP).\n\n2. **PM bot crashed at ~01:03 UTC** \u2014 process died silently (no error in logs). Restarted at 04:09, died again within 20 seconds. Second restart",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
