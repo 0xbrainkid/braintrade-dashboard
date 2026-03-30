@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T20:09:55.118924+00:00",
+  "timestamp": "2026-03-30T20:11:02.438146+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 402.642968,
+  "hl_balance": 402.667288,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 11.64,
+  "hl_pnl": 11.67,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -67.31,
+  "all_time_pnl": -67.28,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.37422,
+      "pnl": -0.37908,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.5087,
+      "pnl": 1.5194,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.02904,
+      "pnl": 0.04752,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0693%",
-      "apr": "-76%",
+      "rate": "-0.0705%",
+      "apr": "-77%",
       "action": "LONG",
-      "oi": "285,214,014"
+      "oi": "285,214,136"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0693%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0705%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.1635199999999999,
+        "pnl": 1.18784,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 20:08 UTC \u2014 [Pillar 1] 20h Active But Bullish: Regime Cleared, Bias Positive\n\n**Task:** Monitor 20h session. Check if regime cleared and analyze signal availability.\n\n**Finding:**\n1. **Regime: RANGE 2/6 \u2705** \u2014 cleared at ~20:05 (was TREND 3/6 at 20:04). The 4h lookback shift dropped trend from -0.4% to -0.33% and consistency from 0.88 to 0.75.\n\n2. **All signals are NO-direction** (positive bias +32 to +77). YES_ONLY filter blocking everything. BTC at $66,617 in a day-long decline \u2014 order flow is bearish-on-5min which shows as positive bias (selling pressure).\n\n3. **PM YES price at $0.465** \u2014 cheapest entry all day. If we get a negative bias reading (bearish on BTC \u2192 contrarian YES), the entry price would give great risk/reward: $0.465 entry \u2192 $1.00 payout = 115% return on win.\n\n4. **Regime is borderline** \u2014 consistency at 0.75 (threshold is 0.75 for +2 pts). One more down candle could flip it back to TREND.\n\n**Decision:** Watching. 20h has 52 min remaining. A brief BTC bounce creating negative bias could trigger a trade at great entry prices. But market must cooperate \u2014 can't force it.\n\n## 2026-03-30 19:40 UTC \u2014 [Pillar 4] Day 1 V4.1 Final Analysis + Daily Report\n\n**Task:** Complete Day 1 analysis. Update daily report with evening session data.\n\n**V4.1 Day 1 Final Results:**\n- **PM Trades:** 6 (4W/2L = 67% WR, 2 were bug dupes)\n- **Clean trades:** 3 (2W/1L, post double-trade fix)\n- **PM P&L:** +$7.92 ($922.45 \u2192 $930.37)\n- **HL uPnL:** +$0.58 (ETH SHORT offsetting BTC/SOL losse",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 20:10 UTC \u2014 [Pillar 2] 20h = Weakest Active Hour: 60% WR, Zero Signals in Downtrends\n\n**Task:** Analyze 20h signal availability and historical performance.\n\n**Finding:**\n- **20h today: 0/24 negative bias readings.** 100% positive (mean +44.8). No YES opportunities in a down-trending market.\n- **Historical 20h WR: 60% (6W/4L, n=10)** \u2014 lowest of all active hours:\n  - 12h: 83% (n=18, best)\n  - 19h: 73% (n=15)\n  - 11h: 64% (n=11)\n  - 20h: 60% (n=10, worst)\n\n**Why 20h underperforms:**\n- Late US afternoon \u2014 institutional positioning done, retail selling into close\n- In downtrend days: 100% positive bias (sellers dominate) \u2192 no contrarian YES signals\n- In uptrend days: may get signals but edge is weaker than 11-12h\n- Sample size small (10 trades) but directionally concerning\n\n**V5 consideration:** 20h may not be worth keeping as an active hour. Removing it would lose ~1 trade/day on average but could improve overall WR from 55% to 58%+. Need 20+ more 20h trades to confirm \u2014 current n=10 is borderline significant.\n\n**Decision:** Keep 20h active for now (need more data). Flag for V5 review when we have 30+ trades at 20h.\n\n## 2026-03-30 20:08 UTC \u2014 [Pillar 1] 20h Active But Bullish: Regime Cleared, Bias Positive\n\n**Task:** Monitor 20h session. Check if regime cleared and analyze signal availability.\n\n**Finding:**\n1. **Regime: RANGE 2/6 \u2705** \u2014 cleared at ~20:05 (was TREND 3/6 at 20:04). The 4h lookback shift dropped trend from -0.4% to -0.33% and consistency from 0.88 to 0.75.\n\n2. **All",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
