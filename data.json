@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T07:30:01.577550+00:00",
+  "timestamp": "2026-03-30T07:40:29.013707+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.292056,
+  "hl_balance": 403.164976,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.29,
+  "hl_pnl": 12.16,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.58,
+  "all_time_pnl": -74.71,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.76626,
+      "pnl": 0.71442,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.27743,
+      "pnl": 1.21275,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.2408,
+      "pnl": 1.23024,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,31 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.2804%",
-      "apr": "-307%",
+      "rate": "-0.2671%",
+      "apr": "-292%",
       "action": "LONG",
-      "oi": "235,867,496"
+      "oi": "236,206,368"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0577%",
-      "apr": "-63%",
+      "rate": "-0.0551%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "262,764,164"
+      "oi": "261,818,076"
     },
     {
       "coin": "USUAL",
-      "rate": "-0.0558%",
-      "apr": "-61%",
+      "rate": "-0.0506%",
+      "apr": "-55%",
       "action": "LONG",
-      "oi": "26,702,627"
+      "oi": "27,200,513"
+    },
+    {
+      "coin": "MOODENG",
+      "rate": "-0.0503%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "21,665,554"
     }
   ],
   "daily_pnl": [
@@ -127,20 +134,20 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 100,
+    "signal_confidence": 52,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.990"
+        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.844"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.2804%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.2671%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "4 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -222,7 +229,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.28449,
+        "pnl": 3.15741,
         "sharpe": 0.0
       },
       {
@@ -378,7 +385,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 07:08 UTC \u2014 [Pillar 1] Copy Signal REINTERPRETED: Attention Signal, Not Directional\n\n**Task:** Deeper P1 analysis \u2014 is there any signal in the copy data, even from bot farms?\n\n**Finding:** The copy signal has asymmetric directional accuracy:\n- **bearish@100:** 34.6% directional accuracy (BTC goes UP 65.4% of the time!)\n- **bullish@100:** 70.0% directional accuracy (actually predictive)\n- Fading bearish@100 = 65.4% accuracy \u2014 better than our overall WR\n\n**Critical insight: Our YES WR by copy signal:**\n\n| Combo | WR | Trades |\n|---|---|---|\n| YES + bearish@100 | **65.2%** | 23 |\n| YES + bullish@100 | **68.4%** | 19 |\n| YES + no_copy | 60.0% | 30 |\n| YES + bearish_low | 50.0% | 20 |\n\nBOTH high-confidence signals (bearish AND bullish at 100) improve our YES WR by 5-8pp over baseline. The copy signal isn't a directional predictor \u2014 it's a **market attention indicator**. When order flow is extreme in EITHER direction, our contrarian YES strategy performs better because there's concentrated activity creating overreaction.\n\nLow-confidence signals (conf < 100) = 50% WR = pure noise. Only high-confidence matters.\n\n**My thinking:** We disabled copy boost because it was checking directional agreement (bullish agrees with YES \u2192 boost). Wrong model. The correct model is: high confidence in ANY direction \u2192 market is paying attention \u2192 our contrarian edge is stronger. This is actually the V5 copy signal design.\n\n**Decision:** \n- V4.1 keeps copy boost at 0 (correct \u2014 the OLD directional model was wrong)\n- **V5 idea:** `copy_attention_boost` \u2014 when copy_conf >= 100 (any direction), add +1 conviction for YES trades. This would have captured 42 trades at 66.7% WR vs 30 trades at 60% WR baseline. Needs 20+ post-V4 trades before deploying.\n- Don't deploy now \u2014 let V4.1 run clean first, collect baseline data.\n\n**Next P1 heartbeat:** After V4.1 collects 30+ trades, compare WR vs this analysis. If baseline (no copy) WR \u2265 60%, the attention signal is confirmed as additive.\n\n## 2026-03-30 06:42 UTC \u2014 [Pillar 4] F&G Backtest: Weak Correlation \u2192 Reduced Modifiers (V4.1)\n\n**Task:** Backtest Fear & Greed correlation against actual daily trading performance. Validate the V4 modifier thresholds.\n\n**Finding:** F&G correlation is weaker than assumed:\n\n| F&G Range | WR | Days | Trades |\n|-----------|-----|------|--------|\n| 0-10 (deepest fear) | **47.5%** | 4 | 61 |\n| 11-15 | **57.7%** | 6 | 142 |\n\n**All our trading data is in F&G 8-14.** We have zero data above F&G 15. Can't validate any threshold above that. The 0-10 bucket actually performs WORSE \u2014 possibly because deepest fear = most volatility = more noise in 5-min predictions.\n\nDaily breakdown shows high variance driven by filter quality, not F&G:\n- Mar 20 (F&G=11): 60% WR, +$114 \u2190 great day, but early filters\n- Mar 22 (F&G=10): 33% WR, -$23 \u2190 terrible, weekend effect\n- Mar 27 (F&G=13): 100% WR, +$31 \u2190 V3 filters active, low trade count\n\n**My thinking:** The F&G signal may still be valid at macro level (fear = m",
+  "worklog": "## 2026-03-30 07:38 UTC \u2014 [Pillar 2] Pre-Session Analysis: Regime Dropping to RANGE by 11h\n\n**Task:** Analyze market conditions for upcoming V4.1 first active hour (11h UTC). Build pre-session check tool.\n\n**Finding:**\n1. **Regime shifting TREND \u2192 RANGE:** My regime_classifier shows RANGE (score 3-4/10). The bot's internal filter currently reads TREND (score 3/6) because the $65K\u2192$67.5K crash candles are still in its 8h lookback. By 11h UTC, those candles roll out:\n   - Recent 5h range: 0.67% (under 1.0% threshold = 0 points)\n   - Recent consistency: 0.60 (under 0.625 = 0 points)\n   - **Projected 11h regime: RANGE (score 0/6) \u2192 bot WILL trade \u2705**\n\n2. **Market consolidating perfectly:** BTC in tight $67,277-$67,581 range for 5 hours. Low volume (0.58x normal). This is textbook RANGE \u2014 exactly where our contrarian strategy thrives.\n\n3. **Built `scripts/pre-session-check.sh`** \u2014 one-command health check before active hours:\n   - Bot alive? \u2705 | STOP_TRADING? \u2705 none | Balance: $922.45\n   - Regime: RANGE | BTC: $67,305 | F&G: 8 (Extreme Fear)\n   - V4.1 config confirmed: F&G +0.05 edge, 1.10x size\n\n**My thinking:** Conditions are ideal for V4.1's first live test:\n- RANGE regime = our 71% WR zone\n- Extreme Fear F&G = contrarian edge present\n- Low volatility = clean signals, less noise\n- 11h/12h = our 88%/82% WR hours with VWAP relaxation active\n\nIf V4.1 performs as expected: 3-5 trades at 11h/12h with ~70% WR, capturing previously VWAP-blocked signals.\n\n**Decision:** No changes before 11h. Run pre-session-check.sh at 10:30 UTC to confirm regime has fully transitioned. Monitor first trades for VWAP_RELAXED log lines.\n\n**Next P2 heartbeat:** Real-time V4.1 monitoring during 11h active hour.\n\n## 2026-03-30 07:08 UTC \u2014 [Pillar 1] Copy Signal REINTERPRETED: Attention Signal, Not Directional\n\n**Task:** Deeper P1 analysis \u2014 is there any signal in the copy data, even from bot farms?\n\n**Finding:** The copy signal has asymmetric directional accuracy:\n- **bearish@100:** 34.6% directional accuracy (BTC goes UP 65.4% of the time!)\n- **bullish@100:** 70.0% directional accuracy (actually predictive)\n- Fading bearish@100 = 65.4% accuracy \u2014 better than our overall WR\n\n**Critical insight: Our YES WR by copy signal:**\n\n| Combo | WR | Trades |\n|---|---|---|\n| YES + bearish@100 | **65.2%** | 23 |\n| YES + bullish@100 | **68.4%** | 19 |\n| YES + no_copy | 60.0% | 30 |\n| YES + bearish_low | 50.0% | 20 |\n\nBOTH high-confidence signals (bearish AND bullish at 100) improve our YES WR by 5-8pp over baseline. The copy signal isn't a directional predictor \u2014 it's a **market attention indicator**. When order flow is extreme in EITHER direction, our contrarian YES strategy performs better because there's concentrated activity creating overreaction.\n\nLow-confidence signals (conf < 100) = 50% WR = pure noise. Only high-confidence matters.\n\n**My thinking:** We disabled copy boost because it was checking directional agreement (bullish agrees with YES \u2192 boost). Wrong model. The correct model i",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -398,7 +405,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
