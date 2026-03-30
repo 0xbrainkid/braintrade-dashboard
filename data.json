@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-03-30T04:46:33.390299+00:00",
+  "timestamp": "2026-03-30T04:49:08.925089+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 403.484244,
+  "hl_balance": 403.676554,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 12.48,
+  "hl_pnl": 12.68,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.39,
+  "all_time_pnl": -74.19,
   "total_trades": 227,
   "days_active": 15,
-  "pm_bot_running": false,
+  "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [
     {
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.9558,
+      "pnl": 1.0611,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.27204,
+      "pnl": 1.33133,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.24608,
+      "pnl": 1.2738,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,14 +45,14 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0988%",
+      "rate": "-0.0989%",
       "apr": "-108%",
       "action": "LONG",
-      "oi": "202,635,824"
+      "oi": "202,606,414"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0500%",
+      "rate": "-0.0504%",
       "apr": "-55%",
       "action": "LONG",
       "oi": "2,355,110,620"
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0988%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0989%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -204,7 +204,7 @@
     "strategies": [
       {
         "name": "PM Smart Entry",
-        "status": "DOWN",
+        "status": "LIVE",
         "trades": 227,
         "win_rate": 53.8,
         "pnl": -86.87,
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.47392,
+        "pnl": 3.6662299999999997,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 04:43 UTC \u2014 [Pillar 1] Copy Signal is HURTING Performance + PM Bot Restart Loop\n\n**Task:** Run copy-intel-tracker, analyze copy signal correlation with trade outcomes. Fix PM bot stability.\n\n**Finding:**\n1. **Copy signal is degrading WR, not improving it:**\n\n| Copy Signal | WR | Trades |\n|---|---|---|\n| No copy signal | **76.9%** | 13 |\n| bearish@100 | 50.0% | 10 |\n| bearish_low | 50.0% | 8 |\n| bullish@100 | **25.0%** | 4 |\n| bullish_low | 50.0% | 2 |\n\nTrades WITHOUT copy signal: 77% WR. Trades WITH copy: ~45% WR. The copy conviction boost (+1 to aligned count) is letting marginal trades through that lose at coinflip rate.\n\n2. **Current PM order flow: 100% bearish** (UP token: 0 bids/99 asks, DN token: 99 bids/0 asks) while BTC is flat at $67,430 in an uptrend. Classic divergence \u2014 PM flow is lagging the rally.\n\n3. **HL leaderboard: BTC 9L/2S** \u2014 overwhelming long bias from top traders. ETH 5L/6S (mixed), SOL 6L/4S (slight long).\n\n4. **PM bot infrastructure fix:** Killed rogue test process (pid 3832809) consuming resources. Bot was crashing because test process occupied the venv/connections. Restarted with **self-healing bash wrapper** (`while true; do ... sleep 10; done`) so screen won't die permanently.\n\n**My thinking:** The copy signal was rebuilt Mar 29 with 3 bug fixes, so all pre-Mar-29 copy data is tainted. The 37-trade sample includes mostly pre-fix data. But the pattern is clear: when copy agrees and boosts conviction, the added trades underperform. Two possible explanations:\n- (a) Copy signal was garbage pre-fix \u2192 poisoned data \u2192 ignore until we have post-fix sample\n- (b) Copy signal genuinely adds noise \u2192 the 4 core indicators ARE the edge, copy is false confidence\n\n**Decision:** \n- **Disable copy conviction boost for now.** Change `copy_conviction_boost = 0` (log copy signal but don't let it affect trade decisions). Wait for 30+ post-fix trades to re-evaluate.\n- NOT deploying at 4 AM \u2014 queue for Monday active hours.\n- Monitor: if no-copy WR holds at 70%+ over next 30 trades, keep boost disabled permanently.\n\n**Next P1 heartbeat:** After 30 trades with copy-boost disabled, compare WR vs the 37-trade baseline. Also analyze: do no-copy trades correlate with specific hours or bias levels?\n\n## 2026-03-30 04:28 UTC \u2014 [Pillar 4] Regime Classifier Built + Fear & Greed Alpha Signal\n\n**Task:** Build BTC regime classifier for alpha research pipeline. Analyze Fear & Greed correlation. Wire new data source into confidence scoring.\n\n**Finding:**\n1. **Built `regime_classifier.py`** \u2014 standalone module that classifies BTC into 4 regimes using 5-min candle data:\n   - `RANGE` \ud83c\udfaf \u2014 PM contrarian trades work best (low vol, mean-reverting)\n   - `TREND` \ud83d\udcc8 \u2014 directional, orderly moves (PM risky, filter/reduce)\n   - `HIGH_VOL` \u26a1 \u2014 extreme moves (DO NOT trade PM)\n   - `CRASH_RECOVERY` \ud83d\udd04 \u2014 post-crash V-bounce (HL long bias signal)\n   - Uses: avg range, max range, volume ratio, net change, directional consistency\n   - Current output: TREND (UP), sc",
+  "worklog": "## 2026-03-30 04:47 UTC \u2014 [Pillar 2] V4 VWAP Relaxation Backtest + Deployment Patch Ready\n\n**Task:** Quantify VWAP filter impact precisely. Build deployable V4 patch for Monday active hours.\n\n**Finding:**\n- VWAP blocks at peak hours over 9 trading days:\n  - **11h: 63% block rate** (12 blocked, 7 executed). At 88% WR \u2192 $93.80 missed.\n  - **12h: 30% block rate** (8 blocked, 19 executed). At 82% WR \u2192 $53.60 missed.\n  - **19h: 5% block rate** (1 blocked). Minimal impact.\n  - **20h: 33% block rate** (6 blocked). At 58% WR \u2192 $9.30 missed (marginal).\n- **Total: $161.80 missed over 9 days = ~$18/day.**\n- VWAP-blocked signals have legitimate parameters: bias -27 to -54, PM prices 0.455-0.515, entry delays 134-274s. These look like real trades, not noise.\n\n**My thinking:** The VWAP all-hours stats (54% vs 45%) are misleading because they average across all hours including garbage hours we've already cut. At 11h (88% WR), the London session structural edge dominates \u2014 VWAP disagreement is a lagging indicator that doesn't capture intra-session momentum. At 20h (58% WR), VWAP adds genuine protective value.\n\n**Decision:** V4 patch written and saved to `patches/v4-vwap-relax.patch.md`:\n1. Relax VWAP at 11h/12h (log bypass, don't block)\n2. Keep VWAP mandatory at 19h/20h\n3. Deploy Monday before 11h UTC with reduced position size ($8 vs $11) for first 20 trades\n4. Rollback trigger: WR < 60% over 10 trades at 11h\n\nCombined V4 deployment plan (Monday AM):\n- VWAP relaxation at 11h/12h \u2190 this patch\n- Copy conviction boost \u2192 0 (log only)\n- F&G confidence modifier (from regime_classifier.py)\n\n**Next P2 heartbeat:** Deploy V4 before 11h UTC Monday. Monitor first hour in real-time.\n\n## 2026-03-30 04:43 UTC \u2014 [Pillar 1] Copy Signal is HURTING Performance + PM Bot Restart Loop\n\n**Task:** Run copy-intel-tracker, analyze copy signal correlation with trade outcomes. Fix PM bot stability.\n\n**Finding:**\n1. **Copy signal is degrading WR, not improving it:**\n\n| Copy Signal | WR | Trades |\n|---|---|---|\n| No copy signal | **76.9%** | 13 |\n| bearish@100 | 50.0% | 10 |\n| bearish_low | 50.0% | 8 |\n| bullish@100 | **25.0%** | 4 |\n| bullish_low | 50.0% | 2 |\n\nTrades WITHOUT copy signal: 77% WR. Trades WITH copy: ~45% WR. The copy conviction boost (+1 to aligned count) is letting marginal trades through that lose at coinflip rate.\n\n2. **Current PM order flow: 100% bearish** (UP token: 0 bids/99 asks, DN token: 99 bids/0 asks) while BTC is flat at $67,430 in an uptrend. Classic divergence \u2014 PM flow is lagging the rally.\n\n3. **HL leaderboard: BTC 9L/2S** \u2014 overwhelming long bias from top traders. ETH 5L/6S (mixed), SOL 6L/4S (slight long).\n\n4. **PM bot infrastructure fix:** Killed rogue test process (pid 3832809) consuming resources. Bot was crashing because test process occupied the venv/connections. Restarted with **self-healing bash wrapper** (`while true; do ... sleep 10; done`) so screen won't die permanently.\n\n**My thinking:** The copy signal was rebuilt Mar 29 with 3 bug fixes, so a",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
