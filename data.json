@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T11:00:02.043372+00:00",
+  "timestamp": "2026-03-30T11:10:02.567569+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 404.705314,
+  "hl_balance": 404.959334,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 13.71,
+  "hl_pnl": 13.96,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -73.16,
+  "all_time_pnl": -72.91,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.0125,
+      "pnl": 1.1178,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.99969,
+      "pnl": 2.10749,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.68696,
+      "pnl": 1.72788,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1265%",
-      "apr": "-139%",
+      "rate": "-0.1328%",
+      "apr": "-145%",
       "action": "LONG",
-      "oi": "250,571,820"
+      "oi": "253,195,924"
+    },
+    {
+      "coin": "PROVE",
+      "rate": "-0.0598%",
+      "apr": "-66%",
+      "action": "LONG",
+      "oi": "3,047,392"
     }
   ],
   "daily_pnl": [
@@ -112,21 +119,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "bullish",
+    "signal_confidence": 84,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.991"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.968"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1265%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1328%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -208,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.6991499999999995,
+        "pnl": 4.95317,
         "sharpe": 0.0
       },
       {
@@ -364,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 10:42 UTC \u2014 [Pillar 1] T-18 Min: BTC Below VWAP = Perfect V4.1 VWAP_RELAXED Test\n\n**Task:** Final pre-trade intelligence scan. Check copy signal, regime, and VWAP position.\n\n**Finding:**\n1. **Copy signal flipped:** 100% bearish (04:44) \u2192 23% bullish (10:43). Order flow more balanced (75 UP bids vs 24 UP asks). Low confidence (46%) = no copy boost = baseline. Good \u2014 clean V4.1 test.\n\n2. **Regime: RANGE 0/6.** All metrics well below thresholds. CONFIRMED will trade at 11h.\n\n3. **BTC $187 below VWAP** ($67,408 vs $67,596 VWAP). This means:\n   - Bearish bias (-37 to -80 recent readings) \u2192 YES direction\n   - VWAP disagrees (price below VWAP = bearish, YES expects UP)\n   - **V3.3: Would BLOCK** (VWAP_DISAGREES)\n   - **V4.1 at 11h: Will ALLOW** (VWAP_RELAXED at peak hour)\n   \n   This is the exact scenario our overnight research predicted and optimized for. First live test of VWAP relaxation is imminent.\n\n4. **Recent bias readings:** consistently -37 to -80 (strong YES direction). If PM prices are 0.505-0.515 at 11h window, all conditions align for V4.1's first trade.\n\n**My thinking:** Everything converges: regime RANGE, bias strong YES, VWAP disagrees (perfect VWAP_RELAXED test), copy signal neutral (no interference), F&G at 8 (mild edge boost). If this trade fires and wins, it validates the entire V4.1 thesis. If it loses, one data point \u2014 need 20+ to judge.\n\n**Decision:** Watch. No changes. Let V4.1 execute as designed.\n\n**Next heartbeat at 11h:** Monitor for TRADE SIGNAL, VWAP_RELAXED, F&G edge adjustment, and OUTCOME logs.\n\n## 2026-03-30 10:08 UTC \u2014 [Pillar 4] SolSt1ne Audit: V4.1 Implements 90%+ of Strategy\n\n**Task:** Audit V4.1 against SolSt1ne's published strategy. Identify remaining gaps.\n\n**Finding:** V4.1 now implements nearly all of SolSt1ne's core framework:\n\n| SolSt1ne Principle | Status | V4.1 Implementation |\n|---|---|---|\n| Conviction filter (3/4 indicators) | \u2705 | OBI, CVD, MACD, VWAP |\n| Edge calculation (implied vs market) | \u2705 | `implied_prob - target_price` |\n| Quarter-Kelly sizing | \u2705 | `kelly_fraction = 0.25` |\n| 8% divergence threshold | \u2705 | `divergence_threshold = 0.08` |\n| Signal inversion detection | \u2705 | 50-point swing = pause |\n| Conv4 = overconfidence cap | \u2705 | Capped to 3 (conv4 = 40% WR) |\n| Market clustering (edge in specific type) | \u2705 | BTC 5-min only, 4 active hours |\n| Time filters (avoid chaos hours) | \u2705 | [11,12,19,20] only |\n| Edge dead zone | \u2705 | 0.15-0.20 blocked (46% WR) |\n| Volume filter | \u26a0\ufe0f | LOW_VOL exists but rarely triggers |\n| FOMC/CPI avoidance | \u274c | Not implemented |\n| Volatility pause (1-min >0.5%) | \u274c | Not implemented |\n\n**Key SolSt1ne insight confirmed by our data:**\n- \"Confidence is inversely correlated with edge\" \u2192 our conv4 = 40% WR validates this\n- \"Edge is concentrated in ONE market type\" \u2192 our 4-hour BTC window = 70%+ WR vs 45% elsewhere\n- \"Minimum confidence cutoff: 62%\" \u2192 we use 65% estimated WR for Kelly\n\n**Remaining gaps (low priority):**\n1. **FOMC/CPI calendar avoidance** \u2014 blo",
+  "worklog": "## 2026-03-30 11:08 UTC \u2014 [Pillar 2] V4.1 First Active Hour: Monitoring Live Signals\n\n**Task:** Monitor V4.1's first active trading hour. Check filter behavior and trade execution.\n\n**Finding:** 11h active \u2014 bot is processing signals but no trade yet (8 minutes in):\n\n- **11:00-11:05 window:** Bias oscillated between +47 (NO direction, blocked by YES-only) and -4 to -13 (too weak, < 25 threshold). One BIAS_DEAD_ZONE hit at +37.1.\n- **11:05-11:10 window:** Persistent positive bias (+27 to +33). All blocked by YES_ONLY_FILTER. Market is mildly bullish \u2014 BTC order flow slightly favors UP.\n- PM prices: YES=0.510, NO=0.490 (near 50/50, slight YES premium)\n- Regime filter: RANGE (confirmed \u2014 bot is IN active trading mode)\n\n**Why no trade yet:** The pre-10h bearish bias readings (-37 to -80) have weakened. Current market is directionless-to-slightly-bullish. Our contrarian YES strategy needs negative bias (bearish order flow to fade). Positive bias = NO direction = blocked by V3.2.\n\n**This is correct behavior.** The bot is patiently waiting for signal quality. 11h has 12 five-min windows \u2014 trade opportunities come in waves, not every window. The YES_ONLY_FILTER is saving us from NO trades (40% WR).\n\n**Key observation:** If bias stays positive all hour, V4.1 VWAP_RELAXED won't fire because there are no YES signals to relax. The VWAP test requires: negative bias \u2192 YES direction \u2192 VWAP disagrees \u2192 relaxation triggers. Market conditions must cooperate.\n\n**Decision:** Continue monitoring. No intervention needed. Bot is filtering correctly.\n\n**Next heartbeat:** Check if any trades executed by end of 11h window. Analyze filter distribution for the full hour.\n\n## 2026-03-30 10:42 UTC \u2014 [Pillar 1] T-18 Min: BTC Below VWAP = Perfect V4.1 VWAP_RELAXED Test\n\n**Task:** Final pre-trade intelligence scan. Check copy signal, regime, and VWAP position.\n\n**Finding:**\n1. **Copy signal flipped:** 100% bearish (04:44) \u2192 23% bullish (10:43). Order flow more balanced (75 UP bids vs 24 UP asks). Low confidence (46%) = no copy boost = baseline. Good \u2014 clean V4.1 test.\n\n2. **Regime: RANGE 0/6.** All metrics well below thresholds. CONFIRMED will trade at 11h.\n\n3. **BTC $187 below VWAP** ($67,408 vs $67,596 VWAP). This means:\n   - Bearish bias (-37 to -80 recent readings) \u2192 YES direction\n   - VWAP disagrees (price below VWAP = bearish, YES expects UP)\n   - **V3.3: Would BLOCK** (VWAP_DISAGREES)\n   - **V4.1 at 11h: Will ALLOW** (VWAP_RELAXED at peak hour)\n   \n   This is the exact scenario our overnight research predicted and optimized for. First live test of VWAP relaxation is imminent.\n\n4. **Recent bias readings:** consistently -37 to -80 (strong YES direction). If PM prices are 0.505-0.515 at 11h window, all conditions align for V4.1's first trade.\n\n**My thinking:** Everything converges: regime RANGE, bias strong YES, VWAP disagrees (perfect VWAP_RELAXED test), copy signal neutral (no interference), F&G at 8 (mild edge boost). If this trade fires and wins, it validates the entire ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -384,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
