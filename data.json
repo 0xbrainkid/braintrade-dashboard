@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T17:00:01.620300+00:00",
+  "timestamp": "2026-03-30T17:09:40.414301+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 404.356821,
+  "hl_balance": 404.096361,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 13.36,
+  "hl_pnl": 13.1,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -65.59,
+  "all_time_pnl": -65.85,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.79866,
+      "pnl": 0.6966,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 2.04336,
+      "pnl": 1.88496,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,17 +36,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0573%",
-      "apr": "-63%",
+      "rate": "-0.0830%",
+      "apr": "-91%",
       "action": "LONG",
-      "oi": "266,942,702"
+      "oi": "270,363,284"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0504%",
-      "apr": "-55%",
+      "rate": "-0.0538%",
+      "apr": "-59%",
       "action": "LONG",
-      "oi": "252,195,398"
+      "oi": "252,147,746"
     }
   ],
   "daily_pnl": [
@@ -111,16 +111,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 64,
+    "signal_confidence": 32,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.994"
+        "text": "Top traders: 17 buys, 33 sells \u2014 avg price $0.966"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0573%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0830%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -206,7 +206,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.8420199999999998,
+        "pnl": 2.58156,
         "sharpe": 0.0
       },
       {
@@ -292,7 +292,7 @@
   "pillar3": {
     "completion": 65,
     "params_changed": 6,
-    "research_reports": 17,
+    "research_reports": 18,
     "heartbeats_today": 0,
     "changes": [
       {
@@ -362,7 +362,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "## 2026-03-30 16:39 UTC \u2014 [Pillar 2] 19h Pre-Session: VWAP Logic Clarified, Regime RANGE 0/6\n\n**Task:** Prepare for 19h session. Verify regime filter and VWAP behavior.\n\n**Finding:**\n1. **Regime: RANGE 0/6** \u2014 consistency 0.62, range 0.76%, trend -0.19%. Choppy action (3\u2191/3\u2193). Will trade \u2705\n\n2. **VWAP misconception corrected:** I initially thought BTC below VWAP would block 19h YES trades. WRONG. The VWAP check aligns with BIAS direction (not bet direction):\n   - Negative bias + price below VWAP \u2192 `(not bullish AND not above_vwap)` = **VWAP AGREES \u2705**\n   - The relaxation at 11h/12h only helps when price is ABOVE VWAP with negative bias (contradictory signals)\n   \n3. **19h conditions:** BTC $67,352, VWAP ~$67,573. Price below VWAP = agrees with negative bias. If bias stays negative, 19h will fire YES trades with VWAP agreement.\n\n4. **19h edge is bias-driven** (per MEMORY: higher |bias| = real signal at established trends). Current bias oscillating -71 to +52 \u2014 high amplitude. If it settles into consistent negative bias at 19h, conditions are good.\n\n**Decision:** No changes needed for 19h. VWAP will agree. Regime is RANGE. Bot will trade normally. The 12:43 VWAP_RELAXED trade was the exception (price above VWAP at 12h London midday), not the rule.\n\n## 2026-03-30 16:38 UTC \u2014 [Pillar 1] Leaderboard Shift: ETH 82% Short, SOL Flipped Bullish, ETH Position Closed\n\n**Task:** Fresh HL leaderboard scan. Compare positioning changes over 7.5 hours.\n\n**Finding:** Major shifts in top trader positioning:\n\n| Asset | 09:08 UTC | 16:38 UTC | Change |\n|-------|-----------|-----------|--------|\n| BTC | 8L/2S | 6L/3S | Less bullish (-2L) |\n| ETH | 5L/6S | **2L/9S** | **Heavily bearish (+3S)** |\n| SOL | 3L/7S | **7L/4S** | **Flipped bullish (+4L)** |\n\n**ETH: Top traders 82% short while ETH is +3.44%.** Classic smart money fade. Same pattern SOL showed this morning (which reversed \u2014 SOL now bullish per leaderboard).\n\n**ETH position closed on HL:** Was 3 positions (BTC/ETH/SOL), now 2 (BTC/SOL). ETH LONG disappeared. Account $368\u2192$367, margin util 30%\u219220%. Likely Hani closed it \u2014 aligned with bearish leaderboard signal.\n\n**SOL reversed:** From bearish 3L/7S (morning) to bullish 7L/4S (now). Our SOL LONG is +5.6% \u2014 smart money now agrees with our position.\n\n**HL Status:** Account $367.13, 2 positions, uPnL +$3.01\n\n**Decision:** ETH closure was correct \u2014 82% of top traders are short. SOL position now validated by leaderboard. BTC still majority long (6:3), aligned with our LONG. No action needed.\n\n## 2026-03-30 16:08 UTC \u2014 [Pillar 4] Streak Analysis: Trades Are Independent, Conv4 Confirmed Liability\n\n**Task:** Analyze serial correlation in outcomes and validate conviction/bias thresholds with full dataset.\n\n**Finding (161 trades):**\n\n1. **Trades are independent:** After WIN = 55% WR, After LOSS = 54% WR. No serial correlation. Consecutive loss breaker is pure risk management, not predictive.\n\n2. **Conviction performance:**\n   - Conv 3: 55% WR (n=150) \u2014 the sweet spot\n   - ",
+  "worklog": "## 2026-03-30 17:08 UTC \u2014 [Pillar 3] Automated Daily P&L Report Generator\n\n**Task:** Build automated daily P&L report. AGENTS.md requires daily reports at ~/clawd/reports/daily-pnl-YYYY-MM-DD.md.\n\n**Built:** `scripts/daily-pnl-report.sh` \u2014 generates structured daily report with:\n- PM + HL balances (live API queries)\n- BTC price and F&G index\n- Trade count, W/L, WR%\n- Individual trade details (time, direction, price, bias, conviction, outcome)\n- Filter distribution (which filters blocked how many signals)\n\n**Test run (interim, morning session only):**\n- PM: $930.37 | HL: $366.70 | Combined: $1,297.07\n- Trades: 5 (3W/2L = 60% WR)\n- 224 YES_ONLY blocks, 886 OUTSIDE_ACTIVE_HOURS\n\n**Cron:** Updated existing 23:00 UTC cron to use new script. Will auto-generate end-of-day reports.\n\n**Decision:** Report generation automated. No more manual daily reports needed. Will update after 19h/20h session to capture full day.\n\n## 2026-03-30 16:39 UTC \u2014 [Pillar 2] 19h Pre-Session: VWAP Logic Clarified, Regime RANGE 0/6\n\n**Task:** Prepare for 19h session. Verify regime filter and VWAP behavior.\n\n**Finding:**\n1. **Regime: RANGE 0/6** \u2014 consistency 0.62, range 0.76%, trend -0.19%. Choppy action (3\u2191/3\u2193). Will trade \u2705\n\n2. **VWAP misconception corrected:** I initially thought BTC below VWAP would block 19h YES trades. WRONG. The VWAP check aligns with BIAS direction (not bet direction):\n   - Negative bias + price below VWAP \u2192 `(not bullish AND not above_vwap)` = **VWAP AGREES \u2705**\n   - The relaxation at 11h/12h only helps when price is ABOVE VWAP with negative bias (contradictory signals)\n   \n3. **19h conditions:** BTC $67,352, VWAP ~$67,573. Price below VWAP = agrees with negative bias. If bias stays negative, 19h will fire YES trades with VWAP agreement.\n\n4. **19h edge is bias-driven** (per MEMORY: higher |bias| = real signal at established trends). Current bias oscillating -71 to +52 \u2014 high amplitude. If it settles into consistent negative bias at 19h, conditions are good.\n\n**Decision:** No changes needed for 19h. VWAP will agree. Regime is RANGE. Bot will trade normally. The 12:43 VWAP_RELAXED trade was the exception (price above VWAP at 12h London midday), not the rule.\n\n## 2026-03-30 16:38 UTC \u2014 [Pillar 1] Leaderboard Shift: ETH 82% Short, SOL Flipped Bullish, ETH Position Closed\n\n**Task:** Fresh HL leaderboard scan. Compare positioning changes over 7.5 hours.\n\n**Finding:** Major shifts in top trader positioning:\n\n| Asset | 09:08 UTC | 16:38 UTC | Change |\n|-------|-----------|-----------|--------|\n| BTC | 8L/2S | 6L/3S | Less bullish (-2L) |\n| ETH | 5L/6S | **2L/9S** | **Heavily bearish (+3S)** |\n| SOL | 3L/7S | **7L/4S** | **Flipped bullish (+4L)** |\n\n**ETH: Top traders 82% short while ETH is +3.44%.** Classic smart money fade. Same pattern SOL showed this morning (which reversed \u2014 SOL now bullish per leaderboard).\n\n**ETH position closed on HL:** Was 3 positions (BTC/ETH/SOL), now 2 (BTC/SOL). ETH LONG disappeared. Account $368\u2192$367, margin util 30%\u219220%. Likely Han",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
