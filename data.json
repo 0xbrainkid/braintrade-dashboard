@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T23:30:01.612334+00:00",
+  "timestamp": "2026-03-30T23:39:31.403611+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.601951,
+  "hl_balance": 402.621091,
   "today_pnl": 65.19,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.6,
+  "hl_pnl": 11.62,
   "today_trades": 7,
   "today_wins": 5,
   "today_losses": 2,
-  "all_time_pnl": -75.97,
+  "all_time_pnl": -75.95,
   "total_trades": 235,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.27216,
+      "pnl": -0.22356,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.5408,
+      "pnl": 1.5087,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.15576,
+      "pnl": -0.15312,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,15 +45,15 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0622%",
-      "apr": "-68%",
+      "rate": "-0.0677%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "310,534,832"
+      "oi": "311,334,006"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0610%",
-      "apr": "-67%",
+      "rate": "-0.0544%",
+      "apr": "-60%",
       "action": "LONG",
       "oi": "2,478,626,118"
     }
@@ -125,11 +125,11 @@
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.991"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0622%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0677%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.1128799999999999,
+        "pnl": 1.1320199999999998,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 23:08 UTC \u2014 [Pillar 4] Day 1 Final P&L: +$37.67 Expected After Settlement\n\n**Task:** Verify 23:00 cron report, calculate actual P&L with settlement timing.\n\n**Finding:** PM balance shows $921.75 but expected $960.12 after all 5 wins settle.\n- Gap: $38.37 \u2014 consistent with 20h payouts still in transit\n- PM settlement can take hours for recently-resolved markets\n- **Actual Day 1 P&L: +$37.67** ($922.45 \u2192 ~$960.12)\n\n**Daily P&L cron: \u2705 WORKING** \u2014 fired at 23:00, generated report automatically.\nAppended evening session analysis, settlement status, and learnings to report.\n\n**Combined capital (after settlement):** ~$960 (PM) + $365 (HL) + $37 (HL new) = **~$1,362**\n\nThis puts us **above Phase 2 target** ($30.91/day avg W13) with a $37.67 single-day result \u2014 approaching Phase 3 territory on trading days.\n\n## 2026-03-30 22:42 UTC \u2014 [Pillar 3] Indicator Logging Bug: Deep Trace + Debug Deploy\n\n**Task:** Fix indicator logging bug \u2014 outcomes JSONL has zero indicator fields.\n\n**Investigation:**\n1. `_last_indicators` set at L556 in `should_trade()` \u2014 only on SUCCESS path\n2. `execute_trade()` reads it at L612 \u2014 should have fresh data\n3. `log_trade_outcome()` has two paths: `indicators` param \u2192 `_last_indicators` fallback\n4. Code flow is: `should_trade()` returns direction + sets `_last_indicators` \u2192 main loop calls `execute_trade()` \u2192 which reads `_last_indicators` \u2192 passes to `_check_outcome()` \u2192 which passes to `log_trade_outcome()`\n\n**Root cause still unclear.** Flow looks correct on p",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 23:38 UTC \u2014 [Pillar 1] Overnight Position Check: HL Stable, PM Settling\n\n**Task:** Check HL positions, funding rates, and PM settlement status before overnight.\n\n**HL Positions (23:38 UTC):**\n| Coin | Direction | Entry | uPnL | Funding/day |\n|------|-----------|-------|------|-------------|\n| BTC | LONG | $66,836 | -$0.23 | +$0.004 (collect) |\n| ETH | SHORT | $2,052.80 | +$1.50 | -$0.000 (pay) |\n| SOL | LONG | $82.60 | -$0.15 | +$0.002 (collect) |\n| **Net** | | | **+$1.12** | **+$0.006/day** |\n\nAll funding rates near zero (BTC -1.4% ann, ETH/SOL <0.1% ann). No arb opportunity. Net funding collection: negligible $0.006/day.\n\n**PM Settlement:** Still $921.75 \u2014 20h win payouts ($48.43) not yet credited. Expected final: ~$960.12. PM settlements can take several hours after market resolution.\n\n**BTC overnight:** $66,740, consolidating in $66,600-$66,900 range. If this holds through 11h, regime should clear to RANGE for tomorrow's session.\n\n## 2026-03-30 23:08 UTC \u2014 [Pillar 4] Day 1 Final P&L: +$37.67 Expected After Settlement\n\n**Task:** Verify 23:00 cron report, calculate actual P&L with settlement timing.\n\n**Finding:** PM balance shows $921.75 but expected $960.12 after all 5 wins settle.\n- Gap: $38.37 \u2014 consistent with 20h payouts still in transit\n- PM settlement can take hours for recently-resolved markets\n- **Actual Day 1 P&L: +$37.67** ($922.45 \u2192 ~$960.12)\n\n**Daily P&L cron: \u2705 WORKING** \u2014 fired at 23:00, generated report automatically.\nAppended evening session analysis, settl",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
