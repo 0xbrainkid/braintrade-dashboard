@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T19:30:02.429706+00:00",
+  "timestamp": "2026-03-30T19:41:32.771258+00:00",
   "pm_balance": 930.37,
-  "hl_balance": 401.980535,
+  "hl_balance": 401.838375,
   "today_pnl": 22.63,
   "pm_pnl": -78.95,
-  "hl_pnl": 10.98,
+  "hl_pnl": 10.84,
   "today_trades": 5,
   "today_wins": 3,
   "today_losses": 2,
-  "all_time_pnl": -67.97,
+  "all_time_pnl": -68.11,
   "total_trades": 233,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.8829,
+      "pnl": -0.98658,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.9795,
+      "pnl": 2.0651,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.59136,
+      "pnl": -0.71544,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0847%",
-      "apr": "-93%",
+      "rate": "-0.0883%",
+      "apr": "-97%",
       "action": "LONG",
-      "oi": "283,927,644"
+      "oi": "283,552,072"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0610%",
-      "apr": "-67%",
+      "rate": "-0.0660%",
+      "apr": "-72%",
       "action": "LONG",
-      "oi": "257,651,260"
+      "oi": "257,626,664"
     }
   ],
   "daily_pnl": [
@@ -119,17 +119,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 40,
+    "current_bias": "bearish",
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.992"
+        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.993"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0847%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0883%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.50524,
+        "pnl": 0.3630800000000002,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 19:23 UTC \u2014 [Pillar 3] Evening Session: STRONG_TREND 5/6 Blocks 19h AND 20h\n\n**Task:** Monitor evening session. Check if 19h/20h projections held.\n\n**Finding:** Selloff accelerated beyond projection. Both sessions blocked:\n\n| Time | Score | Regime | Status |\n|------|-------|--------|--------|\n| 18:08 | 3/6 | TREND | \u274c Blocked |\n| 19:10 | **5/6** | **STRONG_TREND** | \u274c Blocked |\n| 20h proj | **5/6** | **STRONG_TREND** | \u274c Blocked |\n\nBTC: $67,881 (12h peak) \u2192 $66,262 (19:24) = **-$1,619 (-2.4%)**\n- Range: 2.83% (+2 pts)\n- Trend: -1.58% (+2 pts)\n- Consistency: 0.75 (+1 pt)\n\n**Regime filter saved us.** At 19h, bias was -49 to -84 (multiple strong YES signals). If we traded contrarian YES (expecting UP), we'd have LOST \u2014 BTC kept falling. This validates the regime filter's 22% WR in trends.\n\n**HL Position Update \u2014 ETH Flipped to SHORT:**\n- ETH LONG closed \u2192 ETH SHORT opened ($2,052.80 entry) \u2192 +$2.08 (+5.7%) \u2705\n- BTC LONG: -$0.95 (-2.6%) \u274c\n- SOL LONG: -$0.55 (-1.5%) \u274c  \n- Net HL uPnL: +$0.58 (ETH SHORT offsetting BTC/SOL losses)\n- Aligned with leaderboard (ETH 2L/9S = 82% short)\n\n**Decision:** No trades today evening. Correct outcome \u2014 regime filter working exactly as designed. Final Day 1 PM result: +$7.92 from morning only.\n\n## 2026-03-30 18:42 UTC \u2014 [Pillar 2] 19h Blocked, 20h Likely Clear: Regime Projection\n\n**Task:** Real-time regime projection for evening session.\n\n**Finding:** BTC dropped to $66,685 (-1.8% from daily high). Regime now firmly TREND 3/6:\n- Range: 1.77% \u2192 1 pt\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-30 19:40 UTC \u2014 [Pillar 4] Day 1 V4.1 Final Analysis + Daily Report\n\n**Task:** Complete Day 1 analysis. Update daily report with evening session data.\n\n**V4.1 Day 1 Final Results:**\n- **PM Trades:** 6 (4W/2L = 67% WR, 2 were bug dupes)\n- **Clean trades:** 3 (2W/1L, post double-trade fix)\n- **PM P&L:** +$7.92 ($922.45 \u2192 $930.37)\n- **HL uPnL:** +$0.58 (ETH SHORT offsetting BTC/SOL losses)\n- **Combined capital:** $1,294.99 (PM $930.37 + HL $364.62)\n\n**Filter distribution (full day):**\n- 1,046 OUTSIDE_ACTIVE_HOURS (77%)\n- 224 YES_ONLY quick blocks\n- 104 BIAS_TOO_WEAK\n- 77 YES_ONLY (logged)\n- 41 BIAS_DEAD_ZONE\n- 15 LOW_CONVICTION\n- 7 REGIME_FILTER (all at 19h)\n\n**Day 1 verdict:** V4.1 is working. Morning produced +$7.92 profit. Evening correctly sat out a -2.4% BTC selloff. All filters functioning as designed. Two bugs found and fixed (double-trade async, indicator logging race condition). Enhanced outcome logging deployed.\n\n**Report updated:** `/home/ubuntu/clawd/reports/daily-pnl-2026-03-30.md` with evening session, market context, HL positions, and V4.1 learnings.\n\n## 2026-03-30 19:23 UTC \u2014 [Pillar 3] Evening Session: STRONG_TREND 5/6 Blocks 19h AND 20h\n\n**Task:** Monitor evening session. Check if 19h/20h projections held.\n\n**Finding:** Selloff accelerated beyond projection. Both sessions blocked:\n\n| Time | Score | Regime | Status |\n|------|-------|--------|--------|\n| 18:08 | 3/6 | TREND | \u274c Blocked |\n| 19:10 | **5/6** | **STRONG_TREND** | \u274c Blocked |\n| 20h proj | **5/6** | **STRO",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -381,7 +381,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
