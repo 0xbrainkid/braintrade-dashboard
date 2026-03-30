@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T01:30:01.564259+00:00",
+  "timestamp": "2026-03-30T01:39:32.891193+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 398.698657,
+  "hl_balance": 398.742497,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 7.7,
+  "hl_pnl": 7.74,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -79.17,
+  "all_time_pnl": -79.13,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.43416,
+      "pnl": -0.4374,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": -0.71148,
+      "pnl": -0.66836,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.16896,
+      "pnl": -0.165,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "SOPH",
-      "rate": "-0.0585%",
-      "apr": "-64%",
+      "rate": "-0.0580%",
+      "apr": "-63%",
       "action": "LONG",
-      "oi": "54,900,014"
-    },
-    {
-      "coin": "REZ",
-      "rate": "-0.0503%",
-      "apr": "-55%",
-      "action": "LONG",
-      "oi": "272,792,772"
+      "oi": "55,192,190"
     }
   ],
   "daily_pnl": [
@@ -119,21 +112,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "bullish",
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.973"
+        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.924"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SOPH at -0.0585%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SOPH at -0.0580%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -215,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -1.3146,
+        "pnl": -1.27076,
         "sharpe": 0.0
       },
       {
@@ -371,17 +364,17 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 01:08 UTC \u2014 Pillar 2: Monday Monitoring Plan\n\n**Task:** Write structured monitoring plan for 5 simultaneous changes going live Monday.\n\n**Created:** `strategies/monday-monitoring-plan.md` with:\n- Monitoring commands for each trading window (11h, 12h, 19h, 20h)\n- Rollback triggers (3 consecutive losses at |bias|>55, <50% WR after 10 trades in 55-70)\n- \"What good looks like\" (4-8 trades, 70%+ WR, copy boost fires \u22651x)\n- \"What bad looks like\" (0 trades, <50% WR, copy never fires)\n- End-of-day metrics to capture\n\n**Why this matters:** With 5 changes going live simultaneously, we need to attribute outcomes correctly. If Monday fails, we need to know WHICH change caused it, not just \"something broke.\"\n\n---\n\n## 2026-03-30 00:38 UTC \u2014 Pillar 1: Overnight Funding & Position Check\n\n**Task:** Check 00:00 UTC funding settlement and position status.\n\n**Funding rates (00:00 UTC settlement):**\n- BTC: -0.0006%/8h (shorts receive) \u2014 neutral\n- ETH: +0.0004%/8h (longs pay) \u2014 neutral  \n- SOL: -0.0019%/8h (shorts receive) \u2014 slightly favors our short\n\n**Net funding income:** +$0.007/day ($0.20/month) \u2014 confirms negligible, not worth holding for.\n\n**Position uPnL:** All 3 green. BTC SHORT +$1.75 (+1.7%), ETH LONG +$0.24 (+0.2%), SOL SHORT +$0.63 (+0.6%). Total uPnL +$2.62. Account ~$362.62.\n\n**Recommendation unchanged:** Close all 3, move $362 to PM. The $2.62 profit + $360 base earning $0.007/day in funding vs adding 39% to PM capital ($42.53/day \u00d7 0.39 = +$16.59/day estimated). Payoff ratio: 2,370:1 in favor of PM.\n\n---\n\n## 2026-03-30 00:08 UTC \u2014 Pillar 3: MEMORY.md Update\n\n**Task:** Update MEMORY.md with all Sunday deployments and findings.\n\n**Changes:**\n- Added V3.3 weekend disable to config section\n- Added copy boost threshold note (may need lowering)\n- Added 3 copy integrator bugs + fixes\n- Added \"Deployments Mar 29\" section listing all 6 changes\n- Updated W13 stats to final numbers ($216.35, 101 trades)\n- Added queued items: HL consolidation, copy threshold adjustment\n- Corrected total capital: $1,321.36\n\n**MEMORY.md is now current** for Monday operations. Any heartbeat can reference it for context.\n\n---\n\n## 2026-03-29 23:38 UTC \u2014 Pillar 2: Edge Development \u2014 Copy Boost Threshold Analysis\n\n**Task:** Assess impact of SELL-side fix on copy conviction boost threshold.\n\n**Finding:** The copy boost threshold (>=100 confidence) is now nearly unreachable:\n- Old code: 11 BUY-only signals \u2192 0/11 UP = 100% confidence (trivially achieved)\n- New code: 50 total signals \u2192 needs 50/50 same direction for 100% (impossible in practice)\n- Current session: 8 UP / 42 DOWN = 68% confidence \u2192 boost does NOT fire\n\n**Impact:** Today's WIN at 11:02 relied on copy boost (bullish@100 \u2192 conv 3\u21924). Without the boost, that trade wouldn't have fired (needed conv >= 3). The SELL-side fix may prevent similar winning trades from executing Monday.\n\n**Decision:** Do NOT lower threshold yet. Collect Monday data at new calibration. If we see conf 60-80% on trades that would have won, lo",
+  "worklog": "## 2026-03-30 01:38 UTC \u2014 Daily Intel for Monday March 30\n\n**Task:** Write daily-intel-2026-03-30.md (HEARTBEAT.md Step 1 \u2014 was missing).\n\n**Key findings:**\n- BTC at $66,582, recovering from $64,904 low (+0.93% last 4h)\n- 24h range 3.3% \u2014 wide enough for good trading\n- Volume expanding (272% of prior) \u2014 healthy market\n- Copy intel: 84% bearish consensus (42/50 signals)\n- Funding extremes: SOPH -63.4% APR, REZ -52.2% APR (short crowding)\n\n**Monday outlook:** BTC ranging $65-67k with expanding volume = ideal conditions for contrarian bot. If this holds to 11h UTC, expect strong bias signals.\n\n---\n\n## 2026-03-30 01:08 UTC \u2014 Pillar 2: Monday Monitoring Plan\n\n**Task:** Write structured monitoring plan for 5 simultaneous changes going live Monday.\n\n**Created:** `strategies/monday-monitoring-plan.md` with:\n- Monitoring commands for each trading window (11h, 12h, 19h, 20h)\n- Rollback triggers (3 consecutive losses at |bias|>55, <50% WR after 10 trades in 55-70)\n- \"What good looks like\" (4-8 trades, 70%+ WR, copy boost fires \u22651x)\n- \"What bad looks like\" (0 trades, <50% WR, copy never fires)\n- End-of-day metrics to capture\n\n**Why this matters:** With 5 changes going live simultaneously, we need to attribute outcomes correctly. If Monday fails, we need to know WHICH change caused it, not just \"something broke.\"\n\n---\n\n## 2026-03-30 00:38 UTC \u2014 Pillar 1: Overnight Funding & Position Check\n\n**Task:** Check 00:00 UTC funding settlement and position status.\n\n**Funding rates (00:00 UTC settlement):**\n- BTC: -0.0006%/8h (shorts receive) \u2014 neutral\n- ETH: +0.0004%/8h (longs pay) \u2014 neutral  \n- SOL: -0.0019%/8h (shorts receive) \u2014 slightly favors our short\n\n**Net funding income:** +$0.007/day ($0.20/month) \u2014 confirms negligible, not worth holding for.\n\n**Position uPnL:** All 3 green. BTC SHORT +$1.75 (+1.7%), ETH LONG +$0.24 (+0.2%), SOL SHORT +$0.63 (+0.6%). Total uPnL +$2.62. Account ~$362.62.\n\n**Recommendation unchanged:** Close all 3, move $362 to PM. The $2.62 profit + $360 base earning $0.007/day in funding vs adding 39% to PM capital ($42.53/day \u00d7 0.39 = +$16.59/day estimated). Payoff ratio: 2,370:1 in favor of PM.\n\n---\n\n## 2026-03-30 00:08 UTC \u2014 Pillar 3: MEMORY.md Update\n\n**Task:** Update MEMORY.md with all Sunday deployments and findings.\n\n**Changes:**\n- Added V3.3 weekend disable to config section\n- Added copy boost threshold note (may need lowering)\n- Added 3 copy integrator bugs + fixes\n- Added \"Deployments Mar 29\" section listing all 6 changes\n- Updated W13 stats to final numbers ($216.35, 101 trades)\n- Added queued items: HL consolidation, copy threshold adjustment\n- Corrected total capital: $1,321.36\n\n**MEMORY.md is now current** for Monday operations. Any heartbeat can reference it for context.\n\n---\n\n## 2026-03-29 23:38 UTC \u2014 Pillar 2: Edge Development \u2014 Copy Boost Threshold Analysis\n\n**Task:** Assess impact of SELL-side fix on copy conviction boost threshold.\n\n**Finding:** The copy boost threshold (>=100 confidence) is now nearly unreachable:\n- Old co",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 45,
+    "research_files": 46,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -391,7 +384,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
