@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-30T05:30:02.129761+00:00",
+  "timestamp": "2026-03-30T05:40:32.027991+00:00",
   "pm_balance": 922.45,
-  "hl_balance": 404.739358,
+  "hl_balance": 404.112108,
   "today_pnl": 0,
   "pm_pnl": -86.87,
-  "hl_pnl": 13.74,
+  "hl_pnl": 13.11,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -73.13,
+  "all_time_pnl": -73.76,
   "total_trades": 227,
   "days_active": 15,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.2798,
+      "pnl": 1.0854,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0539,
       "entry": 2020.0,
-      "pnl": 1.82182,
+      "pnl": 1.63317,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.62888,
+      "pnl": 1.38468,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,22 +45,29 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.2807%",
-      "apr": "-307%",
+      "rate": "-0.3309%",
+      "apr": "-362%",
       "action": "LONG",
-      "oi": "217,725,460"
+      "oi": "232,175,956"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0571%",
-      "apr": "-62%",
+      "rate": "-0.0590%",
+      "apr": "-65%",
       "action": "LONG",
-      "oi": "263,190,798"
+      "oi": "262,923,016"
+    },
+    {
+      "coin": "MOODENG",
+      "rate": "-0.0543%",
+      "apr": "-59%",
+      "action": "LONG",
+      "oi": "20,140,718"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0539%",
-      "apr": "-59%",
+      "rate": "-0.0527%",
+      "apr": "-58%",
       "action": "LONG",
       "oi": "2,355,082,098"
     }
@@ -126,21 +133,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 100,
+    "current_bias": "bearish",
+    "signal_confidence": 88,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.980"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.740"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.2807%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.3309%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "4 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -222,7 +229,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.7305,
+        "pnl": 4.10325,
         "sharpe": 0.0
       },
       {
@@ -378,7 +385,7 @@
     "sharpe": -0.23,
     "max_drawdown": 822.0
   },
-  "worklog": "## 2026-03-30 05:08 UTC \u2014 [Pillar 4] Fear & Greed Module Built + Bot Stability Confirmed\n\n**Task:** Wire F&G signal into bot confidence scoring (HEARTBEAT.md P4 task). Confirm bot stability after infra fix.\n\n**Finding:**\n1. **Built `src/fear_greed.py`** \u2014 production-ready module with:\n   - `get_fear_greed()` \u2192 fetches current F&G with 1h cache\n   - `fg_confidence_modifier(value)` \u2192 edge adjustment (-0.10 to +0.10)\n   - `fg_position_multiplier(value)` \u2192 size scaling (0.50x to 1.25x)\n   - Tested: F&G=8 \u2192 +0.10 edge boost, 1.25x position size\n\n2. **V4 integration plan written** (`patches/v4-fear-greed.patch.md`):\n   - 6 exact code insertion points in trading_bot.py\n   - Edge modifier: additive to Kelly edge calculation\n   - Size modifier: multiplicative on Kelly position size\n   - Refresh: hourly in main loop (API updates daily, cache handles it)\n\n3. **Bot stability CONFIRMED**: pm-bot has been alive 13+ minutes \u2014 survived :55, :00, and :05 watchdog ticks. Last watchdog kill was at 04:50 (pre-fix). The regime-detector --gate \u2192 STOP_TRADING \u2192 watchdog kill chain is broken.\n\n**My thinking:** At F&G=8, we're in historically rare Extreme Fear territory (10+ consecutive days below 15). Our W13 data shows the contrarian strategy thrives here (+$216, $42.53/day avg). The F&G module formalizes this: when fear is extreme, slightly boost edge calculation and position size. When greed is extreme, pull back. This is regime-aware sizing \u2014 not blind leverage.\n\n**Decision:** F&G module ready. Full V4 deployment package now contains 3 patches:\n1. \u2705 VWAP relaxation at 11h/12h (`patches/v4-vwap-relax.patch.md`)\n2. \u2705 F&G confidence modifier (`patches/v4-fear-greed.patch.md` + `src/fear_greed.py`)\n3. \u2705 Copy boost disabled (simple config change: `copy_conviction_boost = 0`)\n\n**Deploy target:** Monday ~10:00 UTC (1h before first active hour at 11h). All 3 changes together.\n\n**Next P4 heartbeat:** Backtest F&G correlation against full trade history (277 trades in trades.jsonl). Map F&G values to dates \u2192 match with daily WR \u2192 validate the modifier thresholds.\n\n## 2026-03-30 04:53 UTC \u2014 [Pillar 3 / INFRA] Root Cause Found: Watchdog + Regime Detector Killing PM Bot\n\n**Task:** Diagnose why PM bot screen dies every 5-10 minutes despite restarts.\n\n**Finding:** **The watchdog cron was killing the bot every 5 minutes.** Root cause chain:\n1. `regime-detector.py --gate` runs every 15 min via cron\n2. It creates `/home/ubuntu/clawd/polymarket-assistant/STOP_TRADING` when regime = TREND\n3. `bot-watchdog.sh` runs every 5 min, sees STOP_TRADING, kills pm-bot screen\n4. I restart bot \u2192 watchdog kills it again at next tick \u2192 I restart \u2192 killed again\n5. This loop has been happening since at least Mar 27 (watchdog log shows repeated STOP/restart cycles)\n\nThe bot already has INTERNAL regime filtering (REGIME_FILTER in should_trade()) that blocks trades during TREND without killing the process. The external STOP_TRADING flag is redundant and destructive \u2014 it kills logging, monitoring, and the ",
+  "worklog": "## 2026-03-30 05:38 UTC \u2014 [Pillar 1] Copy Signal Following Bot Farms \u2014 Confirmed Root Cause\n\n**Task:** Investigate WHY copy signal hurts WR. Analyze the top wallet database feeding the signal.\n\n**Finding:** **ALL 20 \"top\" wallets in the copy intelligence database are bot farm wallets with $0 earnings.**\n\n| Metric | Value |\n|--------|-------|\n| Wallets with exactly 30 trades | 11 |\n| Wallets with exactly 60 trades | 7 |\n| Wallets with exactly 90 trades | 2 |\n| Wallets with positive earnings | **0** |\n| Biggest loser | \"Warped-Cloak\": -$50,285 |\n\nPerfect multiples of 30 = coordinated bot farm (identified in Mar 29 bug fix but wallet list never refreshed). The copy intelligence pipeline is: bot farm wallets \u2192 copy-signals.json \u2192 live-signals.json \u2192 conviction boost in trading_bot.py \u2192 WORSE WR.\n\nCurrent live signal: 88% bearish confidence based on 47/50 down signals from these bot wallets. This is noise, not alpha.\n\n**Signal chain audit:**\n- `pm-copy-scanner.py` (30 min cron) \u2192 produces bot-farm-polluted wallet list\n- `copy_scanner_v2.py` (5 min cron) \u2192 order flow data (fresh but from bad wallets)\n- `copy-signal-integrator.py` (30 min cron) \u2192 combines into live-signals.json\n- `trading_bot.py` reads live-signals.json \u2192 +1 conviction boost when \"confident\"\n\n**My thinking:** The copy signal was designed to reverse-engineer profitable traders. Instead it found bot farms (high activity = high score, no profit tracking). The Mar 29 bug fixes (Up/Down matching, bot farm filter, SELL-side) were applied to the integrator but the upstream wallet scanner was never updated. We need to either:\n- (a) Rebuild the scanner with profit tracking + bot farm filter\n- (b) Disable the entire copy pipeline and rely on our 4 core indicators (77% WR without copy)\n\nOption (b) is correct for now. Our core indicators work. Copy is broken. Fix it later when we have a proper profit-tracking scanner.\n\n**Decision:**\n1. V4 will set `copy_conviction_boost = 0` (CONFIRMED \u2014 this is the #1 priority V4 change)\n2. Copy crons remain running (cheap, data may be useful for future analysis)\n3. Future: rebuild pm-wallet-scanner.py with outcome tracking (needs PM resolution API)\n\n**Next P1 heartbeat:** After V4 deploys with copy disabled, track WR of first 30 trades as baseline. If WR \u2265 65%, copy stays disabled permanently.\n\n## 2026-03-30 05:08 UTC \u2014 [Pillar 4] Fear & Greed Module Built + Bot Stability Confirmed\n\n**Task:** Wire F&G signal into bot confidence scoring (HEARTBEAT.md P4 task). Confirm bot stability after infra fix.\n\n**Finding:**\n1. **Built `src/fear_greed.py`** \u2014 production-ready module with:\n   - `get_fear_greed()` \u2192 fetches current F&G with 1h cache\n   - `fg_confidence_modifier(value)` \u2192 edge adjustment (-0.10 to +0.10)\n   - `fg_position_multiplier(value)` \u2192 size scaling (0.50x to 1.25x)\n   - Tested: F&G=8 \u2192 +0.10 edge boost, 1.25x position size\n\n2. **V4 integration plan written** (`patches/v4-fear-greed.patch.md`):\n   - 6 exact code insertion points in trading_bot.py\n   - Edge ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -388,7 +395,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -398,7 +405,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
