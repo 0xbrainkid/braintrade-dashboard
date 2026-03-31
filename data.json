@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T07:30:02.326330+00:00",
+  "timestamp": "2026-03-31T07:40:35.883518+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 400.795866,
+  "hl_balance": 400.864846,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 9.8,
+  "hl_pnl": 9.86,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -77.77,
+  "all_time_pnl": -77.71,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.69822,
+      "pnl": 0.74196,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": 0.0532,
+      "pnl": -0.10108,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.29436,
+      "pnl": 0.47388,
       "leverage": 3,
       "wallet": "old"
     }
@@ -105,12 +105,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 80,
+    "signal_confidence": 12,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 25 buys, 25 sells \u2014 avg price $0.993"
+        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.982"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.04578,
+        "pnl": 1.11476,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 07:08 UTC \u2014 [Pillar 4] Liq Detector Validated + Regime Shift to TREND + Pre-Session Intel\n\n**Task:** Review first 3 hours of liquidation detector data, build alpha dashboard, assess 11h trading outlook.\n\n**Liquidation Detector \u2014 First 3h Results:**\n- 38 snapshots collected (every 5 min, exactly as expected)\n- **2 real events detected:**\n  1. 04:30 UTC: ETH LONG_LIQ \u2014 price -0.40%, OI -$13.5M (standard)\n  2. 07:15 UTC: ETH LONG_LIQ **CASCADE** \u2014 price -0.31%, OI -$20.4M (major)\n- BTC had no liquidation events (OI changes within normal range)\n- BTC OI 5-min changes: mean -0.008%, max \u00b10.7% \u2192 thresholds correctly calibrated\n- Event rate: 5.3% of windows had liquidations \u2014 reasonable (not too noisy, not too quiet)\n- $33.9M total ETH long liquidations overnight \u2014 significant bearish pressure\n\n**Regime Shift Alert:**\n- Regime moved from MIXED (3/6, 04:09 UTC) \u2192 **TREND (4/6, 07:24 UTC)**\n- PM action changed from REDUCE_SIZE \u2192 **STOP**\n- Cause: 5 consecutive bearish hours (03-07h), BTC $68,370 \u2192 $67,104 (-1.85%)\n- ATR elevated at 1.59% (vs ~1.4% average)\n- If persists to 11h, bot's regime filter will correctly BLOCK all trades\n\n**BTC Overnight Price Action:**\n- 20h-01h: Rally $66,515 \u2192 $68,370 (+2.8%) \u2014 strong bullish move\n- 01h-07h: Pullback $68,370 \u2192 $67,104 (-1.85%) \u2014 gave back 66% of gains\n- Net 12h: +0.89% \u2014 still net bullish despite the pullback\n- Key levels: $67,000 support, $66,500 yesterday's low, $68,300 session high\n\n**Squeeze Detector finds 48 extreme funding coins:**\n- Top 3: DOOD (-2457% APR), USUAL (-489% APR), MOODENG (-437% APR)\n- All LONG side = market paying heavily to short these. Contrarian arb opportunity but too small OI for us.\n\n**11h Session Outlook:**\n- Scenario A (BTC bounces from $67K): Regime clears to MIXED by 11h \u2192 bot trades as normal\n- Scenario B (BTC breaks $66.8K): TREND persists \u2192 bot correctly blocked \u2192 no losses\n- Either way: regime filter handles it. No manual intervention needed.\n\n**My thinking:** The alpha pipeline is now comprehensive: regime detector + liquidation detector + squeeze detector + copy V2 OBI + old copy signal (garbage but present). Next step is wiring the liquidation signal into the bot's decision loop for V5c. The ETH cascade at 07:15 would have triggered a pm_adjustment = 0 (no BTC impact) which is correct \u2014 we only care about BTC liquidations for PM trades.\n\n**Decision:** Pipeline is running well. No changes needed. Focus for V5c: add `liq-signals.json` read to trading_bot.py, apply pm_adjustment to conviction scoring when BTC CASCADE detected.\n\n**Next P4:** After 11h trades fire, correlate liquidation events with PM trade outcomes to measure signal predictive value.\n\n---\n## 2026-03-31 05:38 UTC \u2014 [Pillar 3] V5a Backtest Complete \u2014 min_bias=45 Confirmed as Sweet Spot\n\n**Task:** Build V5a backtest \u2014 replay all V3+ trades through min_bias filters at different thresholds to find the optimal cu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 07:38 UTC \u2014 [Pillar 1] Copy Trading is DEAD on PM 5-min Markets \u2014 Kill the Pipeline\n\n**Task:** Build a V3 scanner targeting edge-price traders (0.45-0.55) on 5-min BTC markets to find real edge traders to copy.\n\n**Data:** Scanned 240 edge-price crypto trades from PM data API, covering 20 unique wallets.\n\n**Finding \u2014 There are ZERO human edge traders to copy:**\n- All 20 wallets at edge prices are part of **coordinated bot groups** (trade within same 5-second window)\n- Bot pattern #1: BUY DOWN at $0.35 (100% directional, 10-30 trades each)\n- Bot pattern #2: BUY UP/DOWN at $0.50 (market making)\n- Zero wallets passed the \"human trader\" filter (diverse prices, independent timing, >$50 volume)\n\n**Combined with 04:38 P1 finding (high-price traders):**\n- $0.95+ prices: 85% bot farms (SELL Up at $0.99) + 3 yield farmers collecting 0.1% riskless yield\n- $0.35-0.65 prices: 100% coordinated bots\n- **The entire PM 5-min BTC market is bots trading against bots**\n\n**Conclusion: Copy Intelligence (P1) as a strategy pillar is DEAD for 5-min markets.**\n\nThere are no profitable human traders to copy because humans don't trade 5-minute crypto markets on Polymarket. The market is dominated by automated market makers and coordinated bot farms. Our \"copy signal\" has always been noise, which explains why it rarely reached the conf\u2265100 threshold.\n\n**Strategic decisions:**\n1. **KILL old copy pipeline** in V5 \u2014 remove pm-copy-scanner.py + copy-signal-integrator.py cron jobs + live-signals.json dependency\n2. **RENAME copy_scanner_v2.py \u2192 orderbook-monitor.py** \u2014 the OBI data is genuinely useful as a raw indicator (it measures order book imbalance, not \"copy\" signal)\n3. **Remove copy_conf boost from conviction scoring** \u2014 V5 should not reference copy signals at all\n4. **Reallocate P1 pillar** \u2014 \"Copy Intelligence\" becomes \"Market Microstructure\" (OBI, order flow, liquidation data)\n5. **Future: investigate copy on daily/weekly PM markets** where humans actually participate\n\n**Impact on V5 roadmap:**\n- V5a: min_bias=45 (unchanged)\n- V5b: OBI-weighted conviction + remove copy boost + MACD inversion\n- V5c: Liquidation detector integration\n- Copy pipeline removal \u2192 less cron load, cleaner logs, simpler bot code\n\n**Next P1 (now \"Market Microstructure\"):** Analyze OBI accuracy as a standalone predictor \u2014 does the V2 OBI signal predict 5-min outcomes independently of the bot's real-time OBI calculation?\n\n---\n## 2026-03-31 07:08 UTC \u2014 [Pillar 4] Liq Detector Validated + Regime Shift to TREND + Pre-Session Intel\n\n**Task:** Review first 3 hours of liquidation detector data, build alpha dashboard, assess 11h trading outlook.\n\n**Liquidation Detector \u2014 First 3h Results:**\n- 38 snapshots collected (every 5 min, exactly as expected)\n- **2 real events detected:**\n  1. 04:30 UTC: ETH LONG_LIQ \u2014 price -0.40%, OI -$13.5M (standard)\n  2. 07:15 UTC: ETH LONG_LIQ **CASCADE** \u2014 price -0.31%, OI",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
