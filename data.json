@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T04:11:28.930185+00:00",
+  "timestamp": "2026-03-31T04:15:15.108937+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.399763,
+  "hl_balance": 402.33034299999997,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.4,
+  "hl_pnl": 11.33,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.17,
+  "all_time_pnl": -76.24,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.30248,
+      "pnl": 1.29114,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.29888,
+      "pnl": 1.2408,
       "leverage": 3,
       "wallet": "old"
     }
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.60136,
+        "pnl": 2.5319399999999996,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:08 UTC \u2014 [Pillar 3] V5 Strategy Optimization: min_bias Filter + HL Consolidation Math\n\n**Task:** Analyze all V3+ trade data (78 trades, Mar 25-30) to find the highest-EV parameter changes for V5, and quantify the HL\u2192PM consolidation case.\n\n**Finding \u2014 Bias Sweet Spot is CLEAR:**\n- |bias| 45-60: **70% WR** (44 trades) \u2014 our bread and butter\n- |bias| 30-45: **46% WR** (26 trades) \u2014 actively LOSING money\n- |bias| <30: 62% WR (8 trades) \u2014 too small to trust\n\nWithin V4.1 hours only, it's even sharper:\n- |bias| 45-60 + V4.1 hours: **85% WR** (20 trades, 17W/3L)\n- |bias| 45-60 + entry \u2265$0.50: **100% WR** (11W/0L) \u2190 undefeated\n- |bias| 30-45 + V4.1 hours: 67% WR (9 trades) \u2014 acceptable but weaker\n\n**Finding \u2014 V4.1 Hour Filter is Massive Edge:**\n- V4.1 hours [11,12,19,20]: **77.1% WR** (27W/8L)\n- Non-V4.1 hours: **48.8% WR** (21W/22L) \u2014 coin flip\n- Delta: **+28.3pp** from hour selection alone\n\n**Finding \u2014 HL Consolidation is a No-Brainer:**\n- PM generates ~3.26%/day on capital (V4.1 projected)\n- HL generates ~0.11%/day on capital (slow bleed with occasional gains)\n- PM is **30x more capital-efficient** than HL right now\n- Moving $365 HL \u2192 PM would add ~$13/day to projected revenue\n- Consolidated $1,327 \u2192 $43/day projected (vs $30/day current)\n- Monthly impact: +$290/month from consolidation alone\n\n**My Thinking:**\nThe data strongly argues for TWO V5 changes:\n1. **Raise min_bias to 45** \u2014 eliminates the 30-45 bucket that's losing money. Cuts trade count from ~5 to ~3/day in V4.1 hours but raises EV/trade from 0.23x to 0.40x. Net daily EV improves 1.2x.\n2. **Consolidate HL to PM** \u2014 the capital efficiency gap is enormous. HL positions are barely moving ($2.84 uPnL on $365 over days). Same capital in PM = $13/day more.\n\nThe **bias \u226545 + entry \u2265$0.50 + V4.1 hours** combo is 100% WR (11/11). Small sample but the pattern is clear: when the market confirms the contrarian signal (entry above 0.50 = market is pricing the other side), AND bias is strong enough (\u226545), we win every time.\n\nMax consecutive losses in V4.1 hours: 2. Current stop-loss of 2 losses/hour is perfect \u2014 we never hit 3.\n\n**Decision:**\n- V5 min_bias=45 goes into the patch queue. Will backtest the Mar 25 data with this filter to confirm projected improvement before deploying.\n- HL consolidation: recommend to Hani. Close BTC LONG + SOL LONG on HL old wallet, withdraw $365 + $37 from both wallets, deposit to PM proxy.\n- NOT deploying today \u2014 V4.1 needs 1 full week of stability (deployed Mar 30, review Mar 37).\n- Will write the V5 backtest script next P3 heartbeat.\n\n**Next P3:** Build v5-min-bias-backtest.py \u2014 replay all 78 V3+ trades through proposed V5 filters (min_bias=45) and compare projected P&L against actual.\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:11 UTC \u2014 [Pillar 4] Liquidation Detector + Indicator Bug Status\n\n**Task:** Build liquidation cascade detector (new alpha data source) and investigate the indicator logging bug.\n\n**Built: intelligence/liquidation-detector.py**\n- Tracks OI changes + price movement on BTC, ETH, SOL via HL API\n- Detects long/short liquidation events and cascades\n- Translates to PM signal: long cascade = bearish (block YES), short cascade = bullish (boost YES)\n- Saves to `intelligence/liq-signals.json` (consumed by bot) + `liq-history.jsonl` (analytics)\n- Added to cron: runs every 5 minutes\n- First run captured baseline; second run confirmed comparison logic works\n- Current market: BTC $67,591, no liquidation events, very flat funding (0.0003%)\n\n**Investigated: Indicator Logging Bug**\n- Root cause IDENTIFIED: The `\ud83d\udccb Indicators captured` debug line EXISTS in code (line 614) but has NOT been tested yet\n- Current bot instance started 22:43 UTC Mar 30 \u2014 zero trades since (off-hours all night)\n- The indicator dict IS populated at `_last_indicators` (line 556-563)\n- The dict IS passed to `_check_outcome` as `trade_indicators` (line 612)\n- `_check_outcome` passes it to `log_trade_outcome` which calls `outcome_entry.update(indicators)` (line 196-197)\n- **Theory:** The code path looks correct. The bug may have been in a PREVIOUS version (pre-22:43 restart). Need to wait for first V4.1 trade at 11h UTC to confirm.\n- If indicators still missing after 11h trade \u2192 the dict is empty at capture time (race condition between indicator calc and trade execution in async loop)\n\n**Market snapshot at 04:13 UTC:**\n- BTC: $67,591 | Funding: +0.0003% | OI: $1.82B\n- ETH: $2,065 | Funding: +0.0013% | OI: $1.18B  \n- SOL: $83.54 | Funding: +0.0008% | OI: $305M\n- Regime: MIXED (score 3/6), dominant UP, ATR 1.43%\n- Copy signal: bearish@80% (37/50 sells, 45/50 down tokens)\n- No extreme funding anywhere \u2014 very flat market\n\n**My thinking:** The liquidation detector fills a real gap. Our regime filter catches slow trends but MISSES sudden liquidation cascades that cause 1-3% moves in minutes. Those cascades are exactly when our contrarian YES strategy gets destroyed (we buy YES, then longs get liquidated and price dumps further). The detector will give us a real-time signal to BLOCK trades during cascades.\n\n**Decision:**\n- Liquidation detector is LIVE on cron. Will collect data this week.\n- V5 integration: wire `liq-signals.json` into bot's conviction scoring (pm_adjustment field)\n- Indicator bug: WAIT until 11h trade to confirm fixed. If still broken \u2192 add explicit debug print of dict contents at line 612.\n- Next P4 work: analyze first 24h of liquidation data for signal quality.\n\n**Next P4:** Review liquidation detector output quality after 24h of collection. Correlate detected events with PM trade outcomes.\n\n---\n## 2026-03-31 04:08 UTC \u2014 [Pillar 3] V5 Strategy Optimization: min_bias Filter + H",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
