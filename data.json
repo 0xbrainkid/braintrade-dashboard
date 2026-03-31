@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T01:00:01.647108+00:00",
+  "timestamp": "2026-03-31T01:11:31.322344+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 403.041568,
+  "hl_balance": 403.361688,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 12.04,
+  "hl_pnl": 12.36,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -75.53,
+  "all_time_pnl": -75.21,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.52974,
+      "pnl": 0.63666,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 0.91485,
+      "pnl": 0.76505,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,27 +37,12 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.10428,
+      "pnl": 0.46728,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [
-    {
-      "coin": "ALT",
-      "rate": "-0.0513%",
-      "apr": "-56%",
-      "action": "LONG",
-      "oi": "107,388,302"
-    },
-    {
-      "coin": "BLAST",
-      "rate": "-0.0507%",
-      "apr": "-56%",
-      "action": "LONG",
-      "oi": "2,479,332,416"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-17",
@@ -119,21 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 100,
+    "current_bias": "bullish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: ALT at -0.0513%/8h \u2014 shorts paying longs"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.999"
       }
     ],
     "evolution": [
@@ -215,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.54887,
+        "pnl": 1.86899,
         "sharpe": 0.0
       },
       {
@@ -371,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 00:38 UTC \u2014 [Pillar 3] Shadow Trade Tracker V2: Excluded Hours Data Collection\n\n**Task:** Build automated shadow trade tracker for V5 hour optimization.\n\n**Built:** `scripts/shadow-trade-tracker-v2.sh`\n- Runs every 5 min via cron (self-skips during active hours 11/12/19/20)\n- Simulates V4.1 filter logic: bias thresholds, YES-only, dead zone\n- For would-trade signals: spawns background outcome check 5 min later\n- Outputs JSONL to `logs/shadow-trades-v2.jsonl` with entry + outcome pairs\n- Tracks: hour, bias, BTC price, PM prices, trade decision, reason, outcome\n\n**Purpose:** Collect data on excluded hours (00-10, 13-18, 21-23 UTC) to:\n1. Confirm excluded hours stay unprofitable\n2. Detect if any excluded hour develops edge (\u2192 add to active hours)\n3. Provide backtest data for V5 hour optimization\n\n**Cron deployed:** `*/5 * * * * bash scripts/shadow-trade-tracker-v2.sh`\n\n**First entry:** 00:39 UTC \u2014 bias +70.4, YES_ONLY_FILTER. Correct.\n\n**After 1 week:** Analyze `shadow-trades-v2.jsonl` for excluded-hour WR. If any hour shows >55% WR on 20+ shadow trades, consider adding to V5.\n\n## 2026-03-31 00:08 UTC \u2014 [Pillar 2] PM Settlement Mystery: $38 Still Pending After 4 Hours\n\n**Task:** Investigate why PM balance hasn't reflected 20h wins.\n\n**Finding:** Balance stuck at $921.75 since 20:40. Expected ~$960.12 after 5W/2L Day 1.\n\n**Investigation:**\n- `get_positions()` returns empty \u2014 no active token holdings visible\n- No `redeem` / `claim` logic in bot code\n- No pending orders\n- PM doesn'",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 01:08 UTC \u2014 [Pillar 4] F&G Ticks Up + BTC Bounce to $67.2K\n\n**Task:** Check F&G trend, shadow tracker data, overnight market.\n\n**F&G Index:** 8\u219211 (+3). First uptick in 3 days. Still Extreme Fear. 7-day range 8-14, avg 11. Our V4.1 edge modifier (+0.05) active continuously for 7+ days. No change needed.\n\n**Shadow Tracker:** 8 entries in 25 min (cron working). 6 YES_ONLY_FILTER, 1 BIAS_TOO_WEAK, 1 WOULD_TRADE_YES (1h UTC, bias -26.8). Outcome pending. Data collection working correctly.\n\n**BTC Rally: $66,700 \u2192 $67,215 (+$500, +0.8%)**\n- Overnight bounce from daily low of $66,262\n- Now $379 above HL BTC LONG entry ($66,836) \u2192 position profitable\n- If this holds \u2192 11h regime likely RANGE (BTC needs to be ranging, not trending)\n- Good setup for tomorrow morning session\n\n**HL Position Impact:**\n- BTC LONG: now profitable (~+$1.30 at 3x on $109 notional)\n- ETH SHORT: still profitable (+$1.50 if ETH didn't move proportionally)\n- SOL LONG: likely improving with BTC correlation\n\n## 2026-03-31 00:38 UTC \u2014 [Pillar 3] Shadow Trade Tracker V2: Excluded Hours Data Collection\n\n**Task:** Build automated shadow trade tracker for V5 hour optimization.\n\n**Built:** `scripts/shadow-trade-tracker-v2.sh`\n- Runs every 5 min via cron (self-skips during active hours 11/12/19/20)\n- Simulates V4.1 filter logic: bias thresholds, YES-only, dead zone\n- For would-trade signals: spawns background outcome check 5 min later\n- Outputs JSONL to `logs/shadow-trades-v2.jsonl` with entry + outcome pairs\n- Tracks: ho",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -381,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -391,7 +368,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
