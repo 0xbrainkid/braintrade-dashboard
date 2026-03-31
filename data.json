@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T04:00:02.071987+00:00",
+  "timestamp": "2026-03-31T04:11:28.930185+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.431563,
+  "hl_balance": 402.399763,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.43,
+  "hl_pnl": 11.4,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.14,
+  "all_time_pnl": -76.17,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.36728,
+      "pnl": 1.30248,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.26588,
+      "pnl": 1.29888,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 20,
+    "current_bias": "bearish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.999"
+        "text": "Top traders: 13 buys, 37 sells \u2014 avg price $0.966"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.63316,
+        "pnl": 2.60136,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 03:38 UTC \u2014 [Pillar 2] P&L Forensics: Share Truncation + Missing 8th Trade\n\n**Task:** Investigate $38 gap between expected and actual Day 1 P&L.\n\n**Finding 1: 8 trades, not 7!** There was a TRIPLE-trade at 11:38-11:39 (before double-fix). The 3rd trade ($12.15 @ 0.490) has NO outcome logged \u2014 its outcome check may have been lost when bot was killed at 11:39.\n\n**Finding 2: Integer share truncation**\n`quantity = int(size_usd / max_price)` \u2014 shares truncated to integers.\n- $11.07 at $0.484 = 22.87 \u2192 **22 shares** (actual cost $10.65, not $11.07)\n- Each trade leaves $0.40-0.90 unspent but the log reports the intended size\n- Over 8 trades: ~$5.20 in phantom spend that never actually happened\n\n**Finding 3: Fill price is target, not actual**\n`entry_price = result.get('price', target_price)` \u2014 falls back to target price. The CLOB may fill at a WORSE price than logged.\n\n**Root cause of $38 gap: combination of**\n1. Integer truncation (~$5 less spent than logged)\n2. Unknown fill prices (could be worse than target)\n3. Missing 8th trade outcome (lost $12.15 if it lost)\n4. PM taker fees (~2% on $94 = ~$1.88)\n5. The 8th trade itself \u2014 not accounted in outcomes JSONL\n\n**V5 TODO:** Log actual shares purchased and actual fill price from CLOB response. Currently we're flying blind on execution quality.\n\n## 2026-03-31 03:12 UTC \u2014 [Pillar 1] PM Settlement Resolved: $921.75 IS Correct Balance\n\n**Task:** Investigate PM settlement. Check redeem cron.\n\n**Finding:** The auto-redeem cron (`redeem-cron.",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:08 UTC \u2014 [Pillar 3] V5 Strategy Optimization: min_bias Filter + HL Consolidation Math\n\n**Task:** Analyze all V3+ trade data (78 trades, Mar 25-30) to find the highest-EV parameter changes for V5, and quantify the HL\u2192PM consolidation case.\n\n**Finding \u2014 Bias Sweet Spot is CLEAR:**\n- |bias| 45-60: **70% WR** (44 trades) \u2014 our bread and butter\n- |bias| 30-45: **46% WR** (26 trades) \u2014 actively LOSING money\n- |bias| <30: 62% WR (8 trades) \u2014 too small to trust\n\nWithin V4.1 hours only, it's even sharper:\n- |bias| 45-60 + V4.1 hours: **85% WR** (20 trades, 17W/3L)\n- |bias| 45-60 + entry \u2265$0.50: **100% WR** (11W/0L) \u2190 undefeated\n- |bias| 30-45 + V4.1 hours: 67% WR (9 trades) \u2014 acceptable but weaker\n\n**Finding \u2014 V4.1 Hour Filter is Massive Edge:**\n- V4.1 hours [11,12,19,20]: **77.1% WR** (27W/8L)\n- Non-V4.1 hours: **48.8% WR** (21W/22L) \u2014 coin flip\n- Delta: **+28.3pp** from hour selection alone\n\n**Finding \u2014 HL Consolidation is a No-Brainer:**\n- PM generates ~3.26%/day on capital (V4.1 projected)\n- HL generates ~0.11%/day on capital (slow bleed with occasional gains)\n- PM is **30x more capital-efficient** than HL right now\n- Moving $365 HL \u2192 PM would add ~$13/day to projected revenue\n- Consolidated $1,327 \u2192 $43/day projected (vs $30/day current)\n- Monthly impact: +$290/month from consolidation alone\n\n**My Thinking:**\nThe data strongly argues for TWO V5 changes:\n1. **Raise min_bias to 45** \u2014 eliminates the 30-45 bucket that's losing money. Cuts trade count from ~5 to ~3/day in V4.1 hours but raises EV/trade from 0.23x to 0.40x. Net daily EV improves 1.2x.\n2. **Consolidate HL to PM** \u2014 the capital efficiency gap is enormous. HL positions are barely moving ($2.84 uPnL on $365 over days). Same capital in PM = $13/day more.\n\nThe **bias \u226545 + entry \u2265$0.50 + V4.1 hours** combo is 100% WR (11/11). Small sample but the pattern is clear: when the market confirms the contrarian signal (entry above 0.50 = market is pricing the other side), AND bias is strong enough (\u226545), we win every time.\n\nMax consecutive losses in V4.1 hours: 2. Current stop-loss of 2 losses/hour is perfect \u2014 we never hit 3.\n\n**Decision:**\n- V5 min_bias=45 goes into the patch queue. Will backtest the Mar 25 data with this filter to confirm projected improvement before deploying.\n- HL consolidation: recommend to Hani. Close BTC LONG + SOL LONG on HL old wallet, withdraw $365 + $37 from both wallets, deposit to PM proxy.\n- NOT deploying today \u2014 V4.1 needs 1 full week of stability (deployed Mar 30, review Mar 37).\n- Will write the V5 backtest script next P3 heartbeat.\n\n**Next P3:** Build v5-min-bias-backtest.py \u2014 replay all 78 V3+ trades through proposed V5 filters (min_bias=45) and compare projected P&L against actual.\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
