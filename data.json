@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T16:00:02.399914+00:00",
+  "timestamp": "2026-03-31T16:10:07.610156+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 393.742409,
+  "hl_balance": 394.134449,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 2.74,
+  "hl_pnl": 3.13,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -84.83,
+  "all_time_pnl": -84.44,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.2349,
+      "pnl": 0.15714,
       "leverage": 3,
       "wallet": "old"
     }
@@ -86,13 +86,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 20,
+    "current_bias": "bearish",
+    "signal_confidence": 44,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.972"
+        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.994"
       }
     ],
     "evolution": [
@@ -174,7 +174,7 @@
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": -0.2349,
+        "pnl": 0.15714,
         "sharpe": 0.0
       },
       {
@@ -330,7 +330,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 15:38 UTC \u2014 [Pillar 4] Liquidation Timeline: ETH\u2192BTC Contagion Confirmed + Whipsaw Pattern\n\n**Task:** Analyze 13h of liquidation detector data for signal patterns.\n\n**Data: 14 liquidation events across 3 coins (Mar 31 04:30-15:30 UTC):**\n- ETH: 9 events, ALL LONG_LIQ, $148.7M total \u2014 sustained bear pressure\n- BTC: 3 events, ALTERNATING (SHORT\u2192LONG\u2192SHORT), $62.3M \u2014 whipsaw\n- SOL: 2 events, SHORT_LIQ, $2M \u2014 relative strength (diverging from ETH)\n\n**Pattern 1 \u2014 ETH CASCADE \u2192 BTC CASCADE (2-4h lag):**\nETH cascade wave at 07:15-09:20 ($56.4M) \u2192 BTC first cascade at 13:50 (3.5h later). ETH is the LEADING indicator. When ETH has >2 liquidation events in 3h, expect BTC cascade within 2-4h.\n\n**Pattern 2 \u2014 BTC Alternating Cascade (whipsaw):**\nSHORT_LIQ (13:50) \u2192 LONG_LIQ (14:55) \u2192 SHORT_LIQ (15:15). Perfect alternation. BTC ping-pongs between liquidation levels. After each cascade, the OPPOSITE side gets liquidated next. This is a RANGE market signature.\n\n**Pattern 3 \u2014 Multi-Coin Divergence = Chop:**\nETH persistent LONG_LIQ + SOL SHORT_LIQ = diverging. When coins diverge on liquidation direction, BTC tends to chop in a range. This is EXACTLY what happened (BTC range $66,200-$67,500).\n\n**Pattern 4 \u2014 ETH Unidirectional Liq = Trend:**\nAll 9 ETH events are LONG_LIQ. When one coin has unidirectional liquidations (all same type), that coin is in a genuine trend. Our ETH SHORT was closed too early \u2014 should have held through the sustained long squeeze.\n\n**19h Window Forecast:**\n- Last BTC event: SHORT_LIQ at 15:15 \u2192 alternation predicts next = LONG_LIQ (DOWN)\n- BUT: liq detector shows NORMAL at 15:39 \u2014 whipsaw may be exhausting\n- If calm continues \u2192 regime may clear to RANGE \u2192 bot can trade at 19h\n- If alternation pattern continues \u2192 BTC drops before 19h \u2192 regime stays TREND\n\n**V5c Signal Design (documented):**\n1. ETH cascade wave (\u22652 in 3h) \u2192 set pm_adj=-0.5 for 4h\n2. BTC alternating cascade \u2192 fade last direction\n3. Coin divergence (ETH down + SOL up) \u2192 expect BTC chop \u2192 RANGE regime\n4. Single-coin persistent liq \u2192 trend continuation signal\n\n**Next P4:** Collect 1 more day of liq data. Validate alternation pattern holds (n=3 is too small). Track lag time between ETH cascades and BTC reaction.\n\n---\n## 2026-03-31 15:08 UTC \u2014 [Pillar 3] Hour Expansion Analysis: Current Hours Are Premium, Don't Dilute\n\n**Task:** Evaluate whether to expand active hours beyond [11, 12, 19, 20] for V5a.\n\n**Finding \u2014 Current hours with V5a filter (bias\u226545):**\n| Hour | Trades | WR | Note |\n|------|--------|----|------|\n| 11h | 7 | 71% | London open |\n| 12h | 10 | **90%** | London peak \u2014 BEST hour |\n| 19h | 6 | 83% | NY afternoon |\n| 20h | 6 | 83% | NY late |\n| **Portfolio** | **29** | **83%** | |\n\n**Expansion candidates (bias\u226545):**\n| Hour | Trades | WR | Verdict |\n|------|--------|----|---------|\n| 9h | 11 | 64% | Pre-London, inconsistent. 4 losses cluster on selloff days. |\n| 10h | ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 16:08 UTC \u2014 [Pillar 1] Daily Threshold Copy Trading \u2014 Case Study + V6 Design\n\n**Task:** Design a copy intelligence system for daily BTC threshold markets.\n\n**Case Study \u2014 Mar 31 \"$68K\" Market:**\n| Time | BTC Price | Est. YES Price | Event |\n|------|-----------|---------------|-------|\n| 00:00 | $67,500 | ~20% | overnight |\n| 09:20 | $66,200 | ~5% | ETH cascade drag-down |\n| 13:50 | $67,700 | ~35% | BTC short squeeze |\n| 16:00 | $66,900 | resolved NO | end of day |\n\n**Hypothetical trade:** Buy $50 YES at $0.05 during 09:20 dip \u2192 sell at $0.35 during 13:50 bounce = **$300 profit (600%)**. Risk: total loss if BTC never rallied.\n\n**Copy Intelligence Design for Daily Markets:**\n1. Scan daily threshold markets daily at 08:00 UTC\n2. Find markets where threshold is within 2-5% of current BTC price\n3. Monitor CLOB order flow for whale buys on YES at <15% price\n4. Whale YES accumulation during dip = contrarian signal = LONG BTC\n5. This is a HIGHER timeframe version of our 5-min OBI signal\n\n**V6 Integration:**\n- Daily market whale activity = macro confirmation for 5-min trades\n- When whales buy $68K YES at 5%, our 5-min contrarian YES strategy aligns\n- Use as +1 conviction boost (similar to copy_attention_boost in V5)\n- Only trigger when daily market is within 3% of BTC price\n\n**Markets resolved today (16:00 UTC):** All daily March 31 markets just closed. Need to find/build April daily markets for tomorrow.\n\n**Limitation:** Need CLOB trade data API access for daily markets to actually track whales. Current CLOB API works for 5-min tokens; untested for daily market tokens. Validate tomorrow.\n\n**Next P1:** At 08:00 Apr 1, scan for April 1 daily threshold markets. Test CLOB trade API on them. If whale data accessible, build prototype scanner.\n\n---\n## 2026-03-31 15:38 UTC \u2014 [Pillar 4] Liquidation Timeline: ETH\u2192BTC Contagion Confirmed + Whipsaw Pattern\n\n**Task:** Analyze 13h of liquidation detector data for signal patterns.\n\n**Data: 14 liquidation events across 3 coins (Mar 31 04:30-15:30 UTC):**\n- ETH: 9 events, ALL LONG_LIQ, $148.7M total \u2014 sustained bear pressure\n- BTC: 3 events, ALTERNATING (SHORT\u2192LONG\u2192SHORT), $62.3M \u2014 whipsaw\n- SOL: 2 events, SHORT_LIQ, $2M \u2014 relative strength (diverging from ETH)\n\n**Pattern 1 \u2014 ETH CASCADE \u2192 BTC CASCADE (2-4h lag):**\nETH cascade wave at 07:15-09:20 ($56.4M) \u2192 BTC first cascade at 13:50 (3.5h later). ETH is the LEADING indicator. When ETH has >2 liquidation events in 3h, expect BTC cascade within 2-4h.\n\n**Pattern 2 \u2014 BTC Alternating Cascade (whipsaw):**\nSHORT_LIQ (13:50) \u2192 LONG_LIQ (14:55) \u2192 SHORT_LIQ (15:15). Perfect alternation. BTC ping-pongs between liquidation levels. After each cascade, the OPPOSITE side gets liquidated next. This is a RANGE market signature.\n\n**Pattern 3 \u2014 Multi-Coin Divergence = Chop:**\nETH persistent LONG_LIQ + SOL SHORT_LIQ = diverging. When coins diverge on liquidation direction, BTC tends to",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +340,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
