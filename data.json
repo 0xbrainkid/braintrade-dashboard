@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T15:00:02.459183+00:00",
+  "timestamp": "2026-03-31T15:10:27.073892+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 393.540901,
+  "hl_balance": 394.138681,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 2.54,
+  "hl_pnl": 3.14,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -85.03,
+  "all_time_pnl": -84.43,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.43578,
+      "pnl": 0.162,
       "leverage": 3,
       "wallet": "old"
     }
@@ -87,12 +87,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 60,
+    "signal_confidence": 12,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 20 buys, 30 sells \u2014 avg price $0.991"
+        "text": "Top traders: 29 buys, 21 sells \u2014 avg price $0.760"
       }
     ],
     "evolution": [
@@ -174,7 +174,7 @@
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": -0.43578,
+        "pnl": 0.162,
         "sharpe": 0.0
       },
       {
@@ -330,7 +330,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 14:42 UTC \u2014 [Pillar 2] Triple-Logging Bug RESOLVED + V5a Readiness Check\n\n**Task:** Investigate async triple-logging bug and assess V5a deployment readiness.\n\n**Triple-Logging Bug \u2014 RESOLVED:**\n- Was NOT an async/code bug \u2014 it was orphan processes from zombie bash parents\n- After zombie parents killed (P4 work), watchdog cleaned orphans at 13:55\n- Log now shows single sequential counter: 300\u2192360\u2192420 (exactly 10min intervals)\n- Confirmed: ONE process, ONE loop, ONE counter. Bug closed.\n\n**V5a Deployment Readiness (target: Apr 6):**\n| Check | Status |\n|-------|--------|\n| min_bias=45 backtest | \u2705 78 trades, 59.0% WR vs 51.2% (+7.8pp) |\n| Patch ready | \u2705 `patches/v5a-min-bias-45.patch.md` |\n| Process stability | \u2705 Single process, clean watchdog |\n| Indicator logging | \u23f3 Need 1 trade with clean single-process |\n| 5 stable days | \u23f3 Need Apr 1-5 |\n\n**V5a impact projection:**\n- 52% fewer trades but each +7.8pp higher WR\n- Cuts the 51.2% WR \"coin flip\" trades (bias 25-45)\n- Keeps the 59.0% WR \"real signal\" trades (bias \u226545)\n- Volume drops from ~8/day to ~4/day but profit per trade increases\n\n**Today's single trade:** bias=-58.4 (KEEP under V5a), won=True. No indicators in JSONL (trade was from zombie process). Next trade at 19h will be the definitive indicator test.\n\n**Next P2:** After 19h trade, verify indicator logging works. If confirmed, all V5a blockers except time-based stability are cleared.\n\n---\n## 2026-03-31 14:16 UTC \u2014 [Pillar 1] Copy Intelligence: Daily Threshold Markets = Human Trading Opportunity\n\n**Task:** Investigate PM daily/weekly markets for human copy trading (5-min markets are 100% bots).\n\n**Finding \u2014 PM Market Structure:**\n- 165 active 5-min Up/Down markets (our current arena \u2014 100% bots)\n- 19 daily threshold markets (\"BTC above $X on Date\")\n- 51 monthly markets (\"BTC reach $X in Month\")\n- 0 explicitly labeled weekly markets\n\n**Daily Threshold Markets \u2014 Where Humans Trade:**\nBTC at ~$66,400. Active daily threshold prices:\n| Market | Price | Edge? |\n|--------|-------|-------|\n| >$60K | 99.95% | None |\n| >$64K | 99.85% | Thin |\n| >$66K | 98.25% | 1.75% NO value \u2014 close to BTC price |\n| >$68K | 19.9% | **HIGH EDGE** \u2014 real uncertainty |\n| >$70K | 0.25% | None |\n\nThe >$68K market is the actionable one: 20% YES at $66,400 BTC. A $1,600 rally (2.4%) would push this to 80%+ = 4x return. $30-70K liquidity = real money, fewer bots.\n\n**Copy Trading Viability:**\n- Daily markets have $300-600K volume with human participants\n- Key trades happen when BTC approaches threshold prices (triggers rapid repricing)\n- Large wallet buys on the >$68K market when BTC is rising = smart money signal\n- Could build a scanner: monitor order book on near-threshold markets, flag whale entries\n\n**HL Position Update:**\n- ETH SHORT closed (profit taken +$5.7)\n- BTC LONG 3x: +$1.37 uPnL (entry $66,836)\n- SOL LONG 3x: +$0.43 uPnL (entry $81.96)\n- Total HL: $360.29\n\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 15:08 UTC \u2014 [Pillar 3] Hour Expansion Analysis: Current Hours Are Premium, Don't Dilute\n\n**Task:** Evaluate whether to expand active hours beyond [11, 12, 19, 20] for V5a.\n\n**Finding \u2014 Current hours with V5a filter (bias\u226545):**\n| Hour | Trades | WR | Note |\n|------|--------|----|------|\n| 11h | 7 | 71% | London open |\n| 12h | 10 | **90%** | London peak \u2014 BEST hour |\n| 19h | 6 | 83% | NY afternoon |\n| 20h | 6 | 83% | NY late |\n| **Portfolio** | **29** | **83%** | |\n\n**Expansion candidates (bias\u226545):**\n| Hour | Trades | WR | Verdict |\n|------|--------|----|---------|\n| 9h | 11 | 64% | Pre-London, inconsistent. 4 losses cluster on selloff days. |\n| 10h | 5 | 60% | Low sample, marginally profitable. |\n| 13h | 3 | 67% | Too few trades to evaluate. |\n| 14h | 4 | **0%** | NY open = DEATH. Never trade here. |\n| 15h | 5 | 20% | NY midday = DEATH. Never trade here. |\n| 21h | 9 | 44% | Post-close noise. |\n\n**Decision: DO NOT EXPAND HOURS.**\n- Adding 9h+10h would drop portfolio WR from 83% \u2192 76% \n- 83% WR on fewer trades >> 76% WR on more trades\n- The current 4 hours are carefully selected premium windows\n- V5a changes ONLY min_bias parameter, NOT hours\n- Re-evaluate 9h at n\u226520 trades with V5a filter (currently n=11)\n\n**Key insight:** 14h and 15h are PERMANENTLY banned \u2014 NY open/midday has competing institutional flows that destroy our contrarian signal. 0% and 20% WR even with strong bias filter.\n\n**Data quality note:** All historical trades include zombie-process contamination (double trades, cross-process state leaks). Post-zombie-fix data (Mar 31 14:00+) is the first clean dataset. Need 2+ weeks of clean data before trusting expansion analysis.\n\n**Next P3:** Build a V5b simulation \u2014 run the OBI-weighted conviction model against all historical TRADE SIGNAL logs to project WR improvement.\n\n---\n## 2026-03-31 14:42 UTC \u2014 [Pillar 2] Triple-Logging Bug RESOLVED + V5a Readiness Check\n\n**Task:** Investigate async triple-logging bug and assess V5a deployment readiness.\n\n**Triple-Logging Bug \u2014 RESOLVED:**\n- Was NOT an async/code bug \u2014 it was orphan processes from zombie bash parents\n- After zombie parents killed (P4 work), watchdog cleaned orphans at 13:55\n- Log now shows single sequential counter: 300\u2192360\u2192420 (exactly 10min intervals)\n- Confirmed: ONE process, ONE loop, ONE counter. Bug closed.\n\n**V5a Deployment Readiness (target: Apr 6):**\n| Check | Status |\n|-------|--------|\n| min_bias=45 backtest | \u2705 78 trades, 59.0% WR vs 51.2% (+7.8pp) |\n| Patch ready | \u2705 `patches/v5a-min-bias-45.patch.md` |\n| Process stability | \u2705 Single process, clean watchdog |\n| Indicator logging | \u23f3 Need 1 trade with clean single-process |\n| 5 stable days | \u23f3 Need Apr 1-5 |\n\n**V5a impact projection:**\n- 52% fewer trades but each +7.8pp higher WR\n- Cuts the 51.2% WR \"coin flip\" trades (bias 25-45)\n- Keeps the 59.0% WR \"real signal\" trades (bias \u226545)\n- Volume drops from ~8/day to ~4/",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
