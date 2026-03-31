@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T03:30:02.903999+00:00",
+  "timestamp": "2026-03-31T03:40:31.877620+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.543998,
+  "hl_balance": 402.024698,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.54,
+  "hl_pnl": 11.02,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.03,
+  "all_time_pnl": -76.55,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.57788,
+      "pnl": 1.3041,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.1682,
+      "pnl": 0.92268,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 80,
+    "current_bias": "bullish",
+    "signal_confidence": 20,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.999"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.74608,
+        "pnl": 2.2267799999999998,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 03:12 UTC \u2014 [Pillar 1] PM Settlement Resolved: $921.75 IS Correct Balance\n\n**Task:** Investigate PM settlement. Check redeem cron.\n\n**Finding:** The auto-redeem cron (`redeem-cron.sh`) runs every 5 min and has processed hundreds of successful on-chain redemptions historically. Current run: \"0 redeemable positions\" = our 20h tokens ALREADY redeemed.\n\n**$921.75 IS the correct post-settlement balance.** The P&L gap ($38) was NOT pending settlement \u2014 it was incorrect fill price assumptions. Bot logs estimated fill prices, but actual CLOB execution may differ (partial fills, slippage, order matching).\n\n**Actual Day 1 P&L: -$0.70** ($922.45 \u2192 $921.75)\n- 7 trades, 5W/2L (71% WR) but effectively breakeven\n- The double-trade bug spent 2x on 2 pairs, eating margins on slim edge\n- With slippage, PM fees, and the double-trades, net P&L is flat\n\n**Implication:** The double-trade bug is a bigger problem than expected. It's not just a logging issue \u2014 it doubles our exposure and erases profit margins. The 30s timestamp guard fix is CRITICAL.\n\n## 2026-03-31 03:08 UTC \u2014 [Pillar 4] Fixed Copy Scanner Cron Logging\n\n**Task:** Fix copy_scanner_v2 cron not writing to log file.\n\n**Root cause:** Crontab defaulted to `/bin/sh` which doesn't support `source` command. The cron entry uses `source venv/bin/activate` \u2014 this silently fails in sh, so python3 runs without venv, likely fails on import, and produces no output.\n\n**Fix:** Added `SHELL=/bin/bash` to crontab header. Verified: log grew from 13\u219226 li",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 03:38 UTC \u2014 [Pillar 2] P&L Forensics: Share Truncation + Missing 8th Trade\n\n**Task:** Investigate $38 gap between expected and actual Day 1 P&L.\n\n**Finding 1: 8 trades, not 7!** There was a TRIPLE-trade at 11:38-11:39 (before double-fix). The 3rd trade ($12.15 @ 0.490) has NO outcome logged \u2014 its outcome check may have been lost when bot was killed at 11:39.\n\n**Finding 2: Integer share truncation**\n`quantity = int(size_usd / max_price)` \u2014 shares truncated to integers.\n- $11.07 at $0.484 = 22.87 \u2192 **22 shares** (actual cost $10.65, not $11.07)\n- Each trade leaves $0.40-0.90 unspent but the log reports the intended size\n- Over 8 trades: ~$5.20 in phantom spend that never actually happened\n\n**Finding 3: Fill price is target, not actual**\n`entry_price = result.get('price', target_price)` \u2014 falls back to target price. The CLOB may fill at a WORSE price than logged.\n\n**Root cause of $38 gap: combination of**\n1. Integer truncation (~$5 less spent than logged)\n2. Unknown fill prices (could be worse than target)\n3. Missing 8th trade outcome (lost $12.15 if it lost)\n4. PM taker fees (~2% on $94 = ~$1.88)\n5. The 8th trade itself \u2014 not accounted in outcomes JSONL\n\n**V5 TODO:** Log actual shares purchased and actual fill price from CLOB response. Currently we're flying blind on execution quality.\n\n## 2026-03-31 03:12 UTC \u2014 [Pillar 1] PM Settlement Resolved: $921.75 IS Correct Balance\n\n**Task:** Investigate PM settlement. Check redeem cron.\n\n**Finding:** The auto-redeem cron (`redeem-cron.",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
