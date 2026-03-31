@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T13:30:02.204931+00:00",
+  "timestamp": "2026-03-31T13:58:27.449324+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 397.213252,
+  "hl_balance": 397.100232,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 6.21,
+  "hl_pnl": 6.1,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -81.36,
+  "all_time_pnl": -81.47,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.05184,
+      "pnl": 0.5427,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": -0.43092,
+      "pnl": -1.13848,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 40,
+    "current_bias": "bearish",
+    "signal_confidence": 16,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.993"
+        "text": "Top traders: 33 buys, 17 sells \u2014 avg price $0.764"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": -0.48276,
+        "pnl": -0.59578,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 12:38 UTC \u2014 [Pillar 3] Process Management Fixed \u2014 Single Bot Instance Enforced\n\n**Task:** Fix the multi-process zombie bug found in P2 and prevent recurrence.\n\n**Problem:** Killing zombie PIDs created a cascade \u2014 watchdog saw \"pm-bot DEAD\", restarted, spawned more zombies. The `bash -c \"cd ... && source ... && python3 ...\"` screen command created orphan subprocesses.\n\n**Fixes applied:**\n1. **`scripts/start-pm-bot.sh`** \u2014 Clean startup script using `exec` to replace bash with python (no intermediate subshells). Kills any stale trading_bot processes before starting.\n2. **`scripts/bot-watchdog.sh`** \u2014 Zombie killer rewritten to use `pstree` to identify the legitimate screen-owned python PID. Kills only orphan processes.\n3. **All watchdog screen restarts** now use `start-pm-bot.sh` instead of inline `bash -c`.\n\n**Verification:** `pstree` shows clean tree: `screen \u2192 python3 (1 thread)`. No orphans.\n\n**Remaining issue:** Single python process still produces 3x loop cycle log entries (triple-logging). This is an ASYNC bug inside the code (likely 3 concurrent event loop tasks all running the main while-loop). NOT a process issue \u2014 all 3 share the same state, guards, and window_traded flag. Cosmetic for now; the `window_traded` flag prevents actual double trades within a single process.\n\n**Impact:** \n- Zero zombie processes going forward (watchdog prevents them)\n- Clean startup (exec replaces bash)\n- Indicator logging should now work (single process, consistent `_last_indicators`)\n- Next trade will be the definitive test\n\n**Next P3:** Investigate the async triple-logging bug. The `run()` method has only ONE while-loop, but asyncio is executing it 3 times per cycle. May be related to how `binance_feed`/`ob_poller`/`pm_feed` interact with the event loop.\n\n---\n## 2026-03-31 12:08 UTC \u2014 [Pillar 2] \ud83d\udc1b CRITICAL BUG FIXED: 3 Bot Processes Running Simultaneously\n\n**Task:** Audit the multi-loop bug causing double trades and broken indicator logging.\n\n**ROOT CAUSE FOUND AND FIXED:**\nThree separate `python3 trading_bot.py` processes were running simultaneously:\n- **PID 3837975** \u2014 zombie from Mar 30, running 577 minutes\n- **PID 3908044** \u2014 zombie from Mar 30, running 504 minutes  \n- **PID 4150498** \u2014 current instance from 10:10 today\n\nThe two zombie processes were left over from previous screen session restarts that didn't properly kill the old Python process. All three were:\n1. **Trading on the same PM account** \u2192 double/triple trades\n2. **Writing to the same log file** \u2192 interleaved log entries\n3. **Writing to the same JSONL** \u2192 race condition on indicator data\n4. **Using the same `_last_indicators`** \u2192 indicators from one process overwritten by another\n\n**This explains ALL previously \"mysterious\" bugs:**\n- \u274c Double-trade bug (Mar 30): 3 bots saw same signal \u2192 3 trades placed\n- \u274c Indicator logging empty: zombie processes had OLD code without indicator capture\n-",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 13:38 UTC \u2014 [Pillar 4] \ud83d\udc1b ZOMBIE ROOT CAUSE: Old bash Parents from Mar 30 Spawning Infinite Orphans\n\n**Task:** Find what keeps spawning 2 new trading_bot orphans every 5 minutes despite watchdog killing them.\n\n**ROOT CAUSE:**\nTwo zombie `bash` processes from Mar 30 were still alive as parents:\n- **PID 3837970** \u2014 `/bin/bash /home/ubuntu/clawd/scripts/start-pm-bot.sh` (Mar 30)\n- **PID 3908042** \u2014 `bash scripts/start-pm-bot.sh` (Mar 30)\n\nThese were OLD screen sessions that got killed (`screen -X quit`) but the bash child survived because the old start-pm-bot.sh didn't use `exec`. When screen died, bash got orphaned to init (PID 772). Every time their python child got killed, **bash restarted python** because the old script had no `exec` \u2014 it was running python as a subprocess that bash would wait for, and when it died, bash's loop or the script itself would re-execute.\n\n**Timeline of the bug:**\n1. Mar 30: Multiple screen restarts \u2192 bash processes orphaned\n2. Each bash process periodically respawned python \u2192 2 extra bots\n3. My zombie killer killed the python children \u2192 bash respawned them in seconds\n4. Infinite cycle: kill python \u2192 bash respawns \u2192 kill python \u2192 bash respawns\n\n**Fix:** `kill -9 3837970 3908042` \u2014 killed the zombie bash parents. Combined with:\n1. `start-pm-bot.sh` now uses `exec` (replaces bash with python \u2014 no parent to respawn)\n2. Watchdog rewritten to be cleaner and use `restart_pm_bot()` helper that kills ALL processes before starting fresh\n3. No more orphan parents possible with `exec`\n\n**Verification:** Only PID 4179862 (legit screen child) remains. No old bash parents.\n\n**This was the REAL bug all along.** Not asyncio, not duplicate event loops, not code issues. Old bash scripts from previous screen sessions, orphaned to init, infinitely respawning python children.\n\n**Next:** Confirm clean state persists through next 2 watchdog cycles (13:40, 13:45).\n\n---\n## 2026-03-31 12:38 UTC \u2014 [Pillar 3] Process Management Fixed \u2014 Single Bot Instance Enforced\n\n**Task:** Fix the multi-process zombie bug found in P2 and prevent recurrence.\n\n**Problem:** Killing zombie PIDs created a cascade \u2014 watchdog saw \"pm-bot DEAD\", restarted, spawned more zombies. The `bash -c \"cd ... && source ... && python3 ...\"` screen command created orphan subprocesses.\n\n**Fixes applied:**\n1. **`scripts/start-pm-bot.sh`** \u2014 Clean startup script using `exec` to replace bash with python (no intermediate subshells). Kills any stale trading_bot processes before starting.\n2. **`scripts/bot-watchdog.sh`** \u2014 Zombie killer rewritten to use `pstree` to identify the legitimate screen-owned python PID. Kills only orphan processes.\n3. **All watchdog screen restarts** now use `start-pm-bot.sh` instead of inline `bash -c`.\n\n**Verification:** `pstree` shows clean tree: `screen \u2192 python3 (1 thread)`. No orphans.\n\n**Remaining issue:** Single python process still produces 3x loop ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
