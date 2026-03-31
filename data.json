@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T02:30:02.386184+00:00",
+  "timestamp": "2026-03-31T02:43:41.055462+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 403.438382,
+  "hl_balance": 403.162802,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 12.44,
+  "hl_pnl": 12.16,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -75.13,
+  "all_time_pnl": -75.41,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.90512,
+      "pnl": 1.72854,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.73448,
+      "pnl": 1.63548,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,10 +36,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0674%",
-      "apr": "-74%",
+      "rate": "-0.0644%",
+      "apr": "-70%",
       "action": "LONG",
-      "oi": "283,400,630"
+      "oi": "283,323,662"
     }
   ],
   "daily_pnl": [
@@ -103,17 +103,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 36,
+    "current_bias": "bullish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 18 buys, 32 sells \u2014 avg price $0.864"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.914"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0674%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0644%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -199,7 +199,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.6395999999999997,
+        "pnl": 3.36402,
         "sharpe": 0.0
       },
       {
@@ -355,7 +355,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 02:08 UTC \u2014 [Pillar 2] Shadow Data Confirms: Overnight = 84% Positive Bias\n\n**Task:** Analyze accumulating shadow trade data from overnight rally.\n\n**Shadow Data (19 readings, 00:39-02:08 UTC):**\n- 84% positive bias (YES_ONLY_FILTER) \u2014 BTC rally = dominant bullish flow\n- Only 16% negative readings (3/19) \u2014 barely crossing -25 threshold\n- 2 would-trade signals: 1 WIN (+$154 BTC move), 1 pending\n- Average bias: +42.2 (strongly bullish)\n\n**Insight for V5 hour decisions:**\n- During a rally, overnight hours generate almost no YES signals\n- The few signals that fire have weak bias (-26.8, -31.3) \u2014 just above threshold\n- Validates 00-05h exclusion: 22% historical WR = the rare negative bias readings during trending overnight sessions are noise\n- Active hours (11/12/19/20) work because London/NY sessions create COMPETING flows \u2014 pullbacks within trends, not one-way flow\n\n**BTC:** $67,907 (pulled back from $68,237 peak). Rally cooling. Still above yesterday's $67,881 high.\n\n## 2026-03-31 01:38 UTC \u2014 [Pillar 1] BTC Surges to $68.2K: HL Profits, ETH SHORT Closed\n\n**Task:** Monitor overnight market shift. Check copy signal and HL positions.\n\n**BTC: $68,237 (+2.3% from $66,700 consolidation)**\n- Massive overnight rally: $66,262 (19h low) \u2192 $68,237 (01:38 next day) = +$1,975\n- Now above yesterday's high ($67,881)\n- HL BTC LONG: +$2.15 (entry $66,836, 3x on $109)\n- HL SOL LONG: +$1.95 (entry $82.60, SOL correlated)\n- **ETH SHORT closed** \u2014 someone closed it during rally (would have been los",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 02:42 UTC \u2014 [Pillar 3] W14 Day 1 Summary + Shadow Update\n\n**Task:** Write W14 Day 1 weekly review summary. Check shadow outcomes.\n\n**Shadow Trades Update:** 3 outcomes now: 2W/1L (67% WR)\n- 01:10 h=1: \u2705 BTC +$154\n- 02:05 h=2: \u2705 BTC +$2 (barely)\n- 02:35 h=2: \u274c BTC -$28\n\n67% in excluded hours during a rally \u2014 interesting but n=3. Momentum periods can briefly make any hour profitable. The real test is sustained WR over weeks.\n\n**W14 Day 1 Summary written:** `reports/weekly-review-2026-W14-day1.md`\nComplete Day 1 audit: 71% WR, 4 bugs fixed, regime filter validated, infrastructure deployed.\n\n**PM Balance:** Still $921.75 after 6.5h. May need manual investigation if not settled by 06:00.\n\n## 2026-03-31 02:08 UTC \u2014 [Pillar 2] Shadow Data Confirms: Overnight = 84% Positive Bias\n\n**Task:** Analyze accumulating shadow trade data from overnight rally.\n\n**Shadow Data (19 readings, 00:39-02:08 UTC):**\n- 84% positive bias (YES_ONLY_FILTER) \u2014 BTC rally = dominant bullish flow\n- Only 16% negative readings (3/19) \u2014 barely crossing -25 threshold\n- 2 would-trade signals: 1 WIN (+$154 BTC move), 1 pending\n- Average bias: +42.2 (strongly bullish)\n\n**Insight for V5 hour decisions:**\n- During a rally, overnight hours generate almost no YES signals\n- The few signals that fire have weak bias (-26.8, -31.3) \u2014 just above threshold\n- Validates 00-05h exclusion: 22% historical WR = the rare negative bias readings during trending overnight sessions are noise\n- Active hours (11/12/19/20) work because Lond",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -365,7 +365,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
