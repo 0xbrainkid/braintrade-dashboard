@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T08:00:02.226117+00:00",
+  "timestamp": "2026-03-31T08:09:55.565779+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 400.921843,
+  "hl_balance": 401.134583,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 9.92,
+  "hl_pnl": 10.13,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -77.65,
+  "all_time_pnl": -77.44,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.82458,
+      "pnl": 1.02384,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": -0.26068,
+      "pnl": -0.399,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.60588,
+      "pnl": 0.75768,
       "leverage": 3,
       "wallet": "old"
     }
@@ -104,13 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 12,
+    "current_bias": "neutral",
+    "signal_confidence": 0,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.982"
+        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.997"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.1697799999999998,
+        "pnl": 1.38252,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 07:38 UTC \u2014 [Pillar 1] Copy Trading is DEAD on PM 5-min Markets \u2014 Kill the Pipeline\n\n**Task:** Build a V3 scanner targeting edge-price traders (0.45-0.55) on 5-min BTC markets to find real edge traders to copy.\n\n**Data:** Scanned 240 edge-price crypto trades from PM data API, covering 20 unique wallets.\n\n**Finding \u2014 There are ZERO human edge traders to copy:**\n- All 20 wallets at edge prices are part of **coordinated bot groups** (trade within same 5-second window)\n- Bot pattern #1: BUY DOWN at $0.35 (100% directional, 10-30 trades each)\n- Bot pattern #2: BUY UP/DOWN at $0.50 (market making)\n- Zero wallets passed the \"human trader\" filter (diverse prices, independent timing, >$50 volume)\n\n**Combined with 04:38 P1 finding (high-price traders):**\n- $0.95+ prices: 85% bot farms (SELL Up at $0.99) + 3 yield farmers collecting 0.1% riskless yield\n- $0.35-0.65 prices: 100% coordinated bots\n- **The entire PM 5-min BTC market is bots trading against bots**\n\n**Conclusion: Copy Intelligence (P1) as a strategy pillar is DEAD for 5-min markets.**\n\nThere are no profitable human traders to copy because humans don't trade 5-minute crypto markets on Polymarket. The market is dominated by automated market makers and coordinated bot farms. Our \"copy signal\" has always been noise, which explains why it rarely reached the conf\u2265100 threshold.\n\n**Strategic decisions:**\n1. **KILL old copy pipeline** in V5 \u2014 remove pm-copy-scanner.py + copy-signal-integrator.py cron jobs + live-signals.json dependency\n2. **RENAME copy_scanner_v2.py \u2192 orderbook-monitor.py** \u2014 the OBI data is genuinely useful as a raw indicator (it measures order book imbalance, not \"copy\" signal)\n3. **Remove copy_conf boost from conviction scoring** \u2014 V5 should not reference copy signals at all\n4. **Reallocate P1 pillar** \u2014 \"Copy Intelligence\" becomes \"Market Microstructure\" (OBI, order flow, liquidation data)\n5. **Future: investigate copy on daily/weekly PM markets** where humans actually participate\n\n**Impact on V5 roadmap:**\n- V5a: min_bias=45 (unchanged)\n- V5b: OBI-weighted conviction + remove copy boost + MACD inversion\n- V5c: Liquidation detector integration\n- Copy pipeline removal \u2192 less cron load, cleaner logs, simpler bot code\n\n**Next P1 (now \"Market Microstructure\"):** Analyze OBI accuracy as a standalone predictor \u2014 does the V2 OBI signal predict 5-min outcomes independently of the bot's real-time OBI calculation?\n\n---\n## 2026-03-31 07:08 UTC \u2014 [Pillar 4] Liq Detector Validated + Regime Shift to TREND + Pre-Session Intel\n\n**Task:** Review first 3 hours of liquidation detector data, build alpha dashboard, assess 11h trading outlook.\n\n**Liquidation Detector \u2014 First 3h Results:**\n- 38 snapshots collected (every 5 min, exactly as expected)\n- **2 real events detected:**\n  1. 04:30 UTC: ETH LONG_LIQ \u2014 price -0.40%, OI -$13.5M (standard)\n  2. 07:15 UTC: ETH LONG_LIQ **CASCADE** \u2014 price -0.31%, OI",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 08:08 UTC \u2014 [Pillar 2] V5b Conviction Rewrite Spec + Regime Cleared for 11h\n\n**Task:** Write the concrete V5b conviction rewrite specification based on tonight's indicator analysis, and check 11h readiness.\n\n**Regime Update:** RANGE (1/6) at 08:08 UTC \u2014 cleared from TREND (4/6) at 07:24. BTC recovered $67,104 \u2192 $67,421 (+0.47%). Bot WILL trade at 11h if regime holds. \u2705\n\n**V5b Conviction Rewrite Spec written: `patches/v5b-conviction-rewrite.spec.md`**\n\nCore changes:\n- **OBI = 3 points** (de facto required \u2014 can't reach 3-point threshold without it)\n- **MACD INVERTED** \u2014 scores when opposed to bias (reversal = good for contrarian)\n- **VWAP removed** from scoring (log-only)\n- **Copy removed** entirely (100% bots, zero signal)\n- **No conv=4 cap** \u2014 replaced by conviction-based sizing (score 3=0.8x, 4=1.0x, 5=1.2x)\n\nPossible trade scores:\n| Score | Meaning | Size | Expected WR |\n|-------|---------|------|-------------|\n| 5 | OBI + CVD + MACD(inv) | 1.2x | ~100% (n=6) |\n| 4 | OBI + one other | 1.0x | ~85% (n=18) |\n| 3 | OBI alone | 0.8x | ~80% (est.) |\n| \u22642 | No OBI | NO TRADE | 52% (saved) |\n\n**Key design decision:** Making OBI de facto required (3 points) means the system naturally filters out coin-flip trades (OBI\u274c = 52% WR). The old system could reach 3/4 conviction with CVD+MACD+VWAP but without OBI \u2014 those trades were 50/50 noise.\n\n**V5 roadmap status:**\n- V5a patch: \u2705 WRITTEN (`patches/v5a-min-bias-45.patch.md`) \u2014 deploy Apr 6\n- V5b spec: \u2705 WRITTEN (`patches/v5b-conviction-rewrite.spec.md`) \u2014 deploy Apr 13\n- V5c: liquidation detector integration \u2014 spec after V5b deployed\n- Copy pipeline kill: bundle with V5b\n\n**11h Pre-Session Assessment:**\n- Regime: RANGE \u2705 (bot will trade)\n- BTC: $67,421 (recovered from overnight low, consolidating)\n- Liq detector: no active BTC events, 2 ETH events (non-impactful for PM)\n- Copy V2 OBI: neutral (conf 7%)\n- Indicator bug test: first V4.1 trade at 11h will confirm if indicator logging works\n- Forecast: moderate confidence in 11h window. BTC stabilizing after overnight volatility.\n\n**Next P2:** Post-11h trade analysis \u2014 check if indicator logging bug is fixed, validate OBI prediction, compare actual outcome vs V5b projected decision.\n\n---\n## 2026-03-31 07:38 UTC \u2014 [Pillar 1] Copy Trading is DEAD on PM 5-min Markets \u2014 Kill the Pipeline\n\n**Task:** Build a V3 scanner targeting edge-price traders (0.45-0.55) on 5-min BTC markets to find real edge traders to copy.\n\n**Data:** Scanned 240 edge-price crypto trades from PM data API, covering 20 unique wallets.\n\n**Finding \u2014 There are ZERO human edge traders to copy:**\n- All 20 wallets at edge prices are part of **coordinated bot groups** (trade within same 5-second window)\n- Bot pattern #1: BUY DOWN at $0.35 (100% directional, 10-30 trades each)\n- Bot pattern #2: BUY UP/DOWN at $0.50 (market making)\n- Zero wallets passed the \"human trader\" filter (diverse prices, indep",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "NEUTRAL consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
