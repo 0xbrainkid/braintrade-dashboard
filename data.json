@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T18:30:02.089103+00:00",
+  "timestamp": "2026-03-31T18:45:16.406150+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 395.225932,
+  "hl_balance": 395.287232,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 4.23,
+  "hl_pnl": 4.29,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -83.34,
+  "all_time_pnl": -83.28,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.45476,
+      "pnl": 1.54224,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": -0.07168,
+      "pnl": -0.14336,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": -0.039,
+      "pnl": 0.0065,
       "leverage": 3,
       "wallet": "old"
     }
@@ -104,13 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 4,
+    "current_bias": "bearish",
+    "signal_confidence": 16,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 26 buys, 24 sells \u2014 avg price $0.931"
+        "text": "Top traders: 34 buys, 16 sells \u2014 avg price $0.872"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.3440800000000002,
+        "pnl": 1.40538,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 18:08 UTC \u2014 [Pillar 1] Pre-19h Intel: Alternation Pattern BROKE, BTC Rally Organic\n\n**Task:** Pre-19h window intelligence gathering and regime forecast.\n\n**BTC CASCADE Alternation Pattern UPDATE:**\n```\n13:50 SHORT_LIQ \u2192 14:55 LONG_LIQ \u2192 15:15 SHORT_LIQ \u2192 16:45 SHORT_LIQ \u2192 17:15 SHORT_LIQ\n```\nThe alternation broke at 16:45 \u2014 three consecutive SHORT_LIQ cascades. This means the BTC rally is a sustained short squeeze, not a whipsaw. BTC: $66,200 \u2192 $67,777 (+2.4% in 9h).\n\n**New liq events (16:00-17:40):**\n- BTC: 2 CASCADE SHORT_LIQ ($31.7M) \u2014 shorts getting destroyed\n- SOL: 1 CASCADE SHORT_LIQ \u2192 1 CASCADE LONG_LIQ \u2192 1 LIQ LONG_LIQ ($15.6M) \u2014 SOL flipped\n\n**Funding rates (HL):** All balanced/slightly negative. The rally is organic spot buying, not leverage-driven. This makes it more sustainable but also means no funding arb opportunity.\n\n**19h Window Forecast:**\n- Regime: TREND 5/6 \u2192 **likely BLOCKED**\n- BTC at $67,777 still rallying \u2192 regime may worsen to STRONG_TREND\n- For bot to trade: need BTC pullback \u2192 lower regime \u2192 negative bias \u2192 YES setup\n- Probability of 19h trade: **~25%** (need regime drop from 5/6 to \u22643/6 in 52 min)\n\n**HL positions:** BTC +$1.38, ETH +$0.11, SOL -$0.05. Net +$1.44. All 3 LONGs benefiting from the rally.\n\n**Copy signal:** neutral@2% \u2014 no useful information.\n\n**Decision:** No pre-emptive action. Monitor regime at 19:00 sharp. If still TREND/STRONG_TREND, bot correctly blocks. The regime filter has saved us $50+ today by avoiding trades during this volatile trending day.\n\n**Next P1:** Post-19h analysis \u2014 did the bot trade? If yes, check indicator logging. If no, document the regime filter save.\n\n---\n## 2026-03-31 17:38 UTC \u2014 [Pillar 4] MEMORY.md Major Update \u2014 All Mar 31 Findings Consolidated\n\n**Task:** Update MEMORY.md with all today's findings (was stale since 09:38 UTC).\n\n**Updated sections:**\n1. **Trading Accounts:** HL positions updated (3 LONGs at 91% margin), PM balance ~$927, consolidation planned\n2. **W14 Day 2:** Full day summary including zombie bug, single trade, liquidation events\n3. **V5b redesign:** Old conviction rewrite KILLED, new OBI sizing spec documented\n4. **HL consolidation:** Updated to 184x efficiency gap (was 16x \u2014 now including March total P&L data)\n5. **Critical Bug Fixed:** New section documenting zombie bash parent root cause\n6. **Liquidation Patterns:** New section with 4 tradeable patterns from 14 events\n7. **Infrastructure:** Updated start-pm-bot.sh and watchdog entries\n8. **Key Mar 31 Findings:** Updated with V5b kill, hour expansion analysis, daily market opportunity\n\n**Key corrections to stale memory:**\n- HL efficiency: was \"16x\" less efficient \u2192 now **184x** (based on March actuals, not estimates)\n- V5b: was \"OBI required\" \u2192 now \"OBI sizing modifier\"\n- MACD inversion: was \"87% WR\" \u2192 DROPPED (zombie-era data unreliable)\n- Hour expansion: was \"consider 9h/10h\" \u2192 DON'T (83% \u2192 76% diluti",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 18:42 UTC \u2014 [Pillar 2] V5a Patch Finalized + 19h Pre-Trade Analysis\n\n**Task:** Build the V5a patch for Apr 6 deploy + analyze 19h trade probability.\n\n**19h Trade Probability: LOW (~15%)**\n- Bias at 18:38-18:43: +12 to +84 (POSITIVE \u2014 BTC rallying)\n- YES-only strategy requires NEGATIVE bias\n- Even if regime clears from TREND 5/6 to RANGE, positive bias = NO YES trades\n- BTC at $67,749 \u2014 would need to pull back $600+ to generate negative bias\n- Shadow trade tracker will log what WOULD have traded\n\n**V5a Patch \u2014 COMPLETE:**\nTwo-line change to `trading_bot.py`:\n1. `self.bias_threshold = 45.0` (was 25.0)\n2. Remove dead zone filter at 35-45 (now redundant, threshold covers it)\n\nThe dead zone was already blocking 35-45. V5a simply extends that to 25-45 in a clean single setting.\n\n**Deploy checklist:**\n- \u2705 Patch written (`patches/v5a-min-bias-45.patch.md`)\n- \u2705 Zombie bug fixed, single process stable\n- \u23f3 5 stable days (Apr 1-5)\n- \u23f3 Indicator logging confirmed\n\n**Shadow trading analysis (18:30-18:45 UTC):**\n- Bias +66 to +84 = strong bullish PM signal\n- If we traded NO (which we don't): would have caught the BTC rally\n- But V3.2 prevents NO trades (40% WR) \u2014 CORRECT\n- The \"missed\" NO trades here are the ones we correctly skip\n\n**Next P2:** Post-19h analysis at 19:15 UTC \u2014 did bot trade? Check indicator logging.\n\n---\n## 2026-03-31 18:08 UTC \u2014 [Pillar 1] Pre-19h Intel: Alternation Pattern BROKE, BTC Rally Organic\n\n**Task:** Pre-19h window intelligence gathering and regime forecast.\n\n**BTC CASCADE Alternation Pattern UPDATE:**\n```\n13:50 SHORT_LIQ \u2192 14:55 LONG_LIQ \u2192 15:15 SHORT_LIQ \u2192 16:45 SHORT_LIQ \u2192 17:15 SHORT_LIQ\n```\nThe alternation broke at 16:45 \u2014 three consecutive SHORT_LIQ cascades. This means the BTC rally is a sustained short squeeze, not a whipsaw. BTC: $66,200 \u2192 $67,777 (+2.4% in 9h).\n\n**New liq events (16:00-17:40):**\n- BTC: 2 CASCADE SHORT_LIQ ($31.7M) \u2014 shorts getting destroyed\n- SOL: 1 CASCADE SHORT_LIQ \u2192 1 CASCADE LONG_LIQ \u2192 1 LIQ LONG_LIQ ($15.6M) \u2014 SOL flipped\n\n**Funding rates (HL):** All balanced/slightly negative. The rally is organic spot buying, not leverage-driven. This makes it more sustainable but also means no funding arb opportunity.\n\n**19h Window Forecast:**\n- Regime: TREND 5/6 \u2192 **likely BLOCKED**\n- BTC at $67,777 still rallying \u2192 regime may worsen to STRONG_TREND\n- For bot to trade: need BTC pullback \u2192 lower regime \u2192 negative bias \u2192 YES setup\n- Probability of 19h trade: **~25%** (need regime drop from 5/6 to \u22643/6 in 52 min)\n\n**HL positions:** BTC +$1.38, ETH +$0.11, SOL -$0.05. Net +$1.44. All 3 LONGs benefiting from the rally.\n\n**Copy signal:** neutral@2% \u2014 no useful information.\n\n**Decision:** No pre-emptive action. Monitor regime at 19:00 sharp. If still TREND/STRONG_TREND, bot correctly blocks. The regime filter has saved us $50+ today by avoiding trades during this volatile trending day.\n\n**Next P1:** Post-19h analysis \u2014",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
