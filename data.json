@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T10:00:02.018269+00:00",
+  "timestamp": "2026-03-31T10:11:18.979171+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 398.262891,
+  "hl_balance": 398.272111,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 7.26,
+  "hl_pnl": 7.27,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -80.31,
+  "all_time_pnl": -80.3,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -1.21986,
+      "pnl": -0.84888,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": 1.78752,
+      "pnl": 1.42576,
       "leverage": 3,
       "wallet": "old"
     }
@@ -96,12 +96,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 28,
+    "signal_confidence": 44,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 8 buys, 42 sells \u2014 avg price $0.924"
+        "text": "Top traders: 38 buys, 12 sells \u2014 avg price $0.980"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 0.56766,
+        "pnl": 0.57688,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 09:38 UTC \u2014 [Pillar 1/Meta] MEMORY.md Major Update \u2014 Persisting Overnight Research\n\n**Task:** Update MEMORY.md with all findings from tonight's 10-rotation research session. Memory was stale (last updated Mar 30 22:08).\n\n**Changes made:**\n1. **V5 Roadmap section rewritten** \u2014 old \"Queued Strategy Changes\" replaced with structured V5a/V5b/V5c/consolidation plan with dates, specs, and per-indicator performance table\n2. **Copy Intelligence section updated** \u2014 marked as DEAD for 5-min markets with explanation\n3. **Infrastructure section updated** \u2014 added liquidation detector, HL closer script, marked old copy pipeline for removal\n4. **Key Mar 31 research findings** \u2014 new section with tonight's 9 major discoveries\n5. **Indicator logging bug** \u2014 updated status (likely fixed, waiting for 11h trade confirmation)\n6. **V5 OBI weighting** \u2014 re-validated (was incorrectly \"invalidated\" due to pre-fix timing bug)\n7. **HL recapitalization** \u2014 reversed to consolidation (HL\u2192PM, not PM\u2192HL)\n\n**Why this matters:** MEMORY.md is persistent across sessions. Without this update, the next session would still believe:\n- Copy trading works (it doesn't)\n- OBI weighting is invalidated (it's our best indicator)\n- HL should receive more capital (it should lose capital to PM)\n- V5 is a vague list of ideas (it's now a concrete 3-phase plan with patches)\n\n**Next:** 11h trading window in 82 minutes. Regime is RANGE (1/6). Bot will trade. First trade confirms indicator logging fix.\n\n---\n## 2026-03-31 09:08 UTC \u2014 [Pillar 4] Liq Detector Calibration: 5h Data Analysis + ETH Contagion Fix\n\n**Task:** Analyze 5 hours of liquidation detector data to calibrate thresholds and discover signal patterns.\n\n**Dataset:** 59 snapshots (04:13-09:08 UTC), BTC $66,743-$67,722\n\n**Finding 1 \u2014 BTC OI thresholds are correctly calibrated:**\n- OI std dev: 0.23%/5min\n- P10: -0.34% | P90: +0.27%\n- Current liq threshold (0.5% OI drop) catches ~5% of windows \u2192 appropriate sensitivity\n- Not too noisy (would obscure real events), not too quiet (catches cascades)\n\n**Finding 2 \u2014 Raw OI direction does NOT predict BTC price (54%):**\n- OI changes alone are noise for 5-min price prediction on BTC\n- BTC is too liquid \u2014 small OI changes are normal market breathing\n- This means our liq detector should only signal on EXTREME events, not gradual OI drift \u2705\n\n**Finding 3 \u2014 OI SPIKE \u2192 price DROP (71%, n=7, preliminary):**\n- When BTC OI rises sharply (>0.2%), price tends to drop next 5 minutes\n- Theory: new longs at extended prices \u2192 immediate overextension pullback\n- Too small sample to act on, but worth tracking for V5c\n\n**Finding 4 \u2014 ETH CASCADE causes BTC contagion (confirmed):**\n- Regular ETH liq (04:30): BTC moved -0.02% \u2192 no impact\n- ETH CASCADE (07:15): BTC dropped **-0.22% in 5min, -0.24% in 10min**\n- Cross-asset contagion is REAL for CASCADE events\n- **FIX DEPLOYED:** Updated `liquidation-detector.py` to set pm_a",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 10:09 UTC \u2014 [Pillar 2] Duplicate Trade Bug Fix + Monday Review\n\n**Task:** Fix duplicate trade bug that's been doubling our risk per window.\n\n**Finding:** Monday 71% WR (5W/2L on 7 trades) \u2014 ABOVE 65% TARGET! But 3 duplicate windows found:\n- 11:19 \u2014 2 trades 8 seconds apart (same order, different IDs)\n- 11:39 \u2014 3 trades in 53 seconds (bot restarted mid-window, lost state)\n- 20:17 \u2014 2 trades 3 seconds apart (race condition)\n\n**Root causes:**\n1. Watchdog restarts reset `window_traded` flag (in-memory only)\n2. Race condition: loop runs faster than expected, flag doesn't gate properly\n\n**Fix deployed:**\n- File-based window lock at `/tmp/pm_trade_window.lock` \u2014 survives restarts\n- Cooldown increased 30s \u2192 60s between trades\n- Lock file contains current window timestamp, checked before any trade\n\n**My thinking:** Without duplicates, Monday was probably 3-4 unique windows with ~75% WR. Even with dupes, 71% is excellent. The new filters (weekend/hour/edge) are working. If we can maintain 65%+ for 3 days, we scale from $10 \u2192 $50.\n\n**Decision:** Fix deployed, bot restarted. Monitoring for clean single-trade-per-window behavior.\n\n**Next P2:** After 3 clean days at 65%+, implement position scaling.\n\n\n## 2026-03-31 09:38 UTC \u2014 [Pillar 1/Meta] MEMORY.md Major Update \u2014 Persisting Overnight Research\n\n**Task:** Update MEMORY.md with all findings from tonight's 10-rotation research session. Memory was stale (last updated Mar 30 22:08).\n\n**Changes made:**\n1. **V5 Roadmap section rewritten** \u2014 old \"Queued Strategy Changes\" replaced with structured V5a/V5b/V5c/consolidation plan with dates, specs, and per-indicator performance table\n2. **Copy Intelligence section updated** \u2014 marked as DEAD for 5-min markets with explanation\n3. **Infrastructure section updated** \u2014 added liquidation detector, HL closer script, marked old copy pipeline for removal\n4. **Key Mar 31 research findings** \u2014 new section with tonight's 9 major discoveries\n5. **Indicator logging bug** \u2014 updated status (likely fixed, waiting for 11h trade confirmation)\n6. **V5 OBI weighting** \u2014 re-validated (was incorrectly \"invalidated\" due to pre-fix timing bug)\n7. **HL recapitalization** \u2014 reversed to consolidation (HL\u2192PM, not PM\u2192HL)\n\n**Why this matters:** MEMORY.md is persistent across sessions. Without this update, the next session would still believe:\n- Copy trading works (it doesn't)\n- OBI weighting is invalidated (it's our best indicator)\n- HL should receive more capital (it should lose capital to PM)\n- V5 is a vague list of ideas (it's now a concrete 3-phase plan with patches)\n\n**Next:** 11h trading window in 82 minutes. Regime is RANGE (1/6). Bot will trade. First trade confirms indicator logging fix.\n\n---\n## 2026-03-31 09:08 UTC \u2014 [Pillar 4] Liq Detector Calibration: 5h Data Analysis + ETH Contagion Fix\n\n**Task:** Analyze 5 hours of liquidation detector data to calibrate thresholds and discover sign",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
