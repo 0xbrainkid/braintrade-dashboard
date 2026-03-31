@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T04:30:01.953407+00:00",
+  "timestamp": "2026-03-31T04:41:18.095234+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 401.890843,
+  "hl_balance": 401.936563,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 10.89,
+  "hl_pnl": 10.94,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.68,
+  "all_time_pnl": -76.63,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.16316,
+      "pnl": 1.15344,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.92928,
+      "pnl": 0.98472,
       "leverage": 3,
       "wallet": "old"
     }
@@ -96,12 +96,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 80,
+    "signal_confidence": 68,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 13 buys, 37 sells \u2014 avg price $0.966"
+        "text": "Top traders: 12 buys, 38 sells \u2014 avg price $0.988"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.09244,
+        "pnl": 2.13816,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:11 UTC \u2014 [Pillar 4] Liquidation Detector + Indicator Bug Status\n\n**Task:** Build liquidation cascade detector (new alpha data source) and investigate the indicator logging bug.\n\n**Built: intelligence/liquidation-detector.py**\n- Tracks OI changes + price movement on BTC, ETH, SOL via HL API\n- Detects long/short liquidation events and cascades\n- Translates to PM signal: long cascade = bearish (block YES), short cascade = bullish (boost YES)\n- Saves to `intelligence/liq-signals.json` (consumed by bot) + `liq-history.jsonl` (analytics)\n- Added to cron: runs every 5 minutes\n- First run captured baseline; second run confirmed comparison logic works\n- Current market: BTC $67,591, no liquidation events, very flat funding (0.0003%)\n\n**Investigated: Indicator Logging Bug**\n- Root cause IDENTIFIED: The `\ud83d\udccb Indicators captured` debug line EXISTS in code (line 614) but has NOT been tested yet\n- Current bot instance started 22:43 UTC Mar 30 \u2014 zero trades since (off-hours all night)\n- The indicator dict IS populated at `_last_indicators` (line 556-563)\n- The dict IS passed to `_check_outcome` as `trade_indicators` (line 612)\n- `_check_outcome` passes it to `log_trade_outcome` which calls `outcome_entry.update(indicators)` (line 196-197)\n- **Theory:** The code path looks correct. The bug may have been in a PREVIOUS version (pre-22:43 restart). Need to wait for first V4.1 trade at 11h UTC to confirm.\n- If indicators still missing after 11h trade \u2192 the dict is empty at capture time (race condition between indicator calc and trade execution in async loop)\n\n**Market snapshot at 04:13 UTC:**\n- BTC: $67,591 | Funding: +0.0003% | OI: $1.82B\n- ETH: $2,065 | Funding: +0.0013% | OI: $1.18B  \n- SOL: $83.54 | Funding: +0.0008% | OI: $305M\n- Regime: MIXED (score 3/6), dominant UP, ATR 1.43%\n- Copy signal: bearish@80% (37/50 sells, 45/50 down tokens)\n- No extreme funding anywhere \u2014 very flat market\n\n**My thinking:** The liquidation detector fills a real gap. Our regime filter catches slow trends but MISSES sudden liquidation cascades that cause 1-3% moves in minutes. Those cascades are exactly when our contrarian YES strategy gets destroyed (we buy YES, then longs get liquidated and price dumps further). The detector will give us a real-time signal to BLOCK trades during cascades.\n\n**Decision:**\n- Liquidation detector is LIVE on cron. Will collect data this week.\n- V5 integration: wire `liq-signals.json` into bot's conviction scoring (pm_adjustment field)\n- Indicator bug: WAIT until 11h trade to confirm fixed. If still broken \u2192 add explicit debug print of dict contents at line 612.\n- Next P4 work: analyze first 24h of liquidation data for signal quality.\n\n**Next P4:** Review liquidation detector output quality after 24h of collection. Correlate detected events with PM trade outcomes.\n\n---\n## 2026-03-31 04:08 UTC \u2014 [Pillar 3] V5 Strategy Optimization: min_bias Filter + H",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:38 UTC \u2014 [Pillar 1] Copy Intel Pipeline is Feeding Bot GARBAGE \u2014 Major Fix Needed\n\n**Task:** Analyze top trader data from the copy scanner and compare against our trade performance.\n\n**Finding \u2014 The entire copy signal pipeline is broken:**\n\n**Problem 1: pm-copy-scanner.py finds the WRONG traders**\n- 17/20 \"top wallets\" are coordinated bot farms (exactly 30 trades, 1 market, avg price $0.99, $0 spent, 0.2s gap between signals)\n- All 17 only do SELL Up at $0.99 \u2014 they're market making / redemption bots\n- Scoring formula `markets * 2 + avg_price * 10` rewards high-price traders (yield farmers always score highest)\n\n**Problem 2: The 3 \"real\" traders are yield farmers, not edge traders**\n- Evil-Pint ($143K spent): BUY No at $0.999 on \"BTC above $74K\" \u2014 collecting 0.1% yield (BTC at $67.6K, guaranteed win)\n- Sparkling-Prevalence ($66K spent): BUY Yes at $0.999 on \"BTC above $62K\" \u2014 same yield farming\n- Far-Flung-Abbey ($39 spent): $1 trades both ways \u2014 test wallet\n- ZERO of the top 20 wallets are trading the 5-min markets at edge prices (0.45-0.55)\n\n**Problem 3: Signal pipeline routing is disconnected**\n- `copy_scanner_v2.py` generates GOOD data (live OBI, smart money flow) \u2192 saves to `copy_signal.json`\n- But the bot reads `live-signals.json` from `copy-signal-integrator.py`\n- The integrator reads from the OLD `copy-signals.json` (the bot farm garbage)\n- **The V2 scanner's useful OBI data is being generated every 5 minutes and THROWN AWAY**\n\n**Current state of `live-signals.json` (what bot reads):**\n- bearish@68% based on 38/50 SELL signals \u2014 but 34 of those 38 are from bot farms\n- Real trader signals: only 4 bullish vs 8 bearish (small sample, mostly yield farming noise)\n- avg_signal_price: $0.988 \u2014 proves these are resolved-market redemptions, NOT live predictions\n\n**My thinking:** This explains why the copy signal has been inconsistent. Our V4.1 copy_attention_boost treats high-confidence copy signals as conviction boosters, but the underlying signal is noise. The attention theory (any high-conf = YES WR boost) may have been coincidence rather than causation.\n\nThe fix is straightforward:\n1. **Wire V2 OBI data into the bot** \u2014 it already generates exactly what we need (order book imbalance on live 5-min markets)\n2. **Kill the old pipeline** \u2014 pm-copy-scanner.py \u2192 copy-signal-integrator.py \u2192 live-signals.json is all noise\n3. **New scoring** for wallet-level copy: filter to entry prices 0.40-0.60, require outcome tracking, score by (WR - 0.50) \u00d7 sqrt(trades) \u00d7 avg_size\n\n**Decision:**\n- NOT fixing today \u2014 bot is in V4.1 stability week, any pipeline change = restart risk\n- V5 should include: bot reads `copy_signal.json` (V2 OBI) instead of `live-signals.json` (garbage)\n- The copy signal has conf < 100 most of the time, so it rarely affects trades (line 471: only boosts at conf \u2265 100)\n- Net impact of garbage signal: LOW (mostly ignored by bot), but",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
