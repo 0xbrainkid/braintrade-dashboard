@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T03:00:02.236095+00:00",
+  "timestamp": "2026-03-31T03:12:00.001731+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 403.098518,
+  "hl_balance": 403.151138,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 12.1,
+  "hl_pnl": 12.15,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -75.47,
+  "all_time_pnl": -75.42,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.7496,
+      "pnl": 1.77714,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.551,
+      "pnl": 1.57608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 100,
+    "current_bias": "bearish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.914"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.3006,
+        "pnl": 3.35322,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 02:42 UTC \u2014 [Pillar 3] W14 Day 1 Summary + Shadow Update\n\n**Task:** Write W14 Day 1 weekly review summary. Check shadow outcomes.\n\n**Shadow Trades Update:** 3 outcomes now: 2W/1L (67% WR)\n- 01:10 h=1: \u2705 BTC +$154\n- 02:05 h=2: \u2705 BTC +$2 (barely)\n- 02:35 h=2: \u274c BTC -$28\n\n67% in excluded hours during a rally \u2014 interesting but n=3. Momentum periods can briefly make any hour profitable. The real test is sustained WR over weeks.\n\n**W14 Day 1 Summary written:** `reports/weekly-review-2026-W14-day1.md`\nComplete Day 1 audit: 71% WR, 4 bugs fixed, regime filter validated, infrastructure deployed.\n\n**PM Balance:** Still $921.75 after 6.5h. May need manual investigation if not settled by 06:00.\n\n## 2026-03-31 02:08 UTC \u2014 [Pillar 2] Shadow Data Confirms: Overnight = 84% Positive Bias\n\n**Task:** Analyze accumulating shadow trade data from overnight rally.\n\n**Shadow Data (19 readings, 00:39-02:08 UTC):**\n- 84% positive bias (YES_ONLY_FILTER) \u2014 BTC rally = dominant bullish flow\n- Only 16% negative readings (3/19) \u2014 barely crossing -25 threshold\n- 2 would-trade signals: 1 WIN (+$154 BTC move), 1 pending\n- Average bias: +42.2 (strongly bullish)\n\n**Insight for V5 hour decisions:**\n- During a rally, overnight hours generate almost no YES signals\n- The few signals that fire have weak bias (-26.8, -31.3) \u2014 just above threshold\n- Validates 00-05h exclusion: 22% historical WR = the rare negative bias readings during trending overnight sessions are noise\n- Active hours (11/12/19/20) work because Lond",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 03:08 UTC \u2014 [Pillar 4] Fixed Copy Scanner Cron Logging\n\n**Task:** Fix copy_scanner_v2 cron not writing to log file.\n\n**Root cause:** Crontab defaulted to `/bin/sh` which doesn't support `source` command. The cron entry uses `source venv/bin/activate` \u2014 this silently fails in sh, so python3 runs without venv, likely fails on import, and produces no output.\n\n**Fix:** Added `SHELL=/bin/bash` to crontab header. Verified: log grew from 13\u219226 lines after next cron tick. \u2705\n\n**Impact:** Copy scanner signal file was only updating sporadically (when manually run). Now it updates every 5 min as designed. This means the bot's copy signal was often stale \u2014 the 213-min gap identified earlier was caused by this bug. With the fix, copy_signal.json will always be fresh.\n\n**Current signal:** neutral@2% (3 AM, low liquidity, balanced OB).\n\n## 2026-03-31 02:42 UTC \u2014 [Pillar 3] W14 Day 1 Summary + Shadow Update\n\n**Task:** Write W14 Day 1 weekly review summary. Check shadow outcomes.\n\n**Shadow Trades Update:** 3 outcomes now: 2W/1L (67% WR)\n- 01:10 h=1: \u2705 BTC +$154\n- 02:05 h=2: \u2705 BTC +$2 (barely)\n- 02:35 h=2: \u274c BTC -$28\n\n67% in excluded hours during a rally \u2014 interesting but n=3. Momentum periods can briefly make any hour profitable. The real test is sustained WR over weeks.\n\n**W14 Day 1 Summary written:** `reports/weekly-review-2026-W14-day1.md`\nComplete Day 1 audit: 71% WR, 4 bugs fixed, regime filter validated, infrastructure deployed.\n\n**PM Balance:** Still $921.75 after 6.5h. May need manual ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
