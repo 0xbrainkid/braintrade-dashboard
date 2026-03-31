@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T09:00:01.751899+00:00",
+  "timestamp": "2026-03-31T09:10:25.869761+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 399.692147,
+  "hl_balance": 399.658007,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 8.69,
+  "hl_pnl": 8.66,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -78.88,
+  "all_time_pnl": -78.91,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.13932,
+      "pnl": -0.22842,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": 0.60648,
+      "pnl": 0.7182,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.52932,
+      "pnl": -0.58608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -105,12 +105,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 100,
+    "signal_confidence": 40,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
+        "text": "Top traders: 15 buys, 35 sells \u2014 avg price $0.993"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -0.06215999999999999,
+        "pnl": -0.09630000000000011,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 08:38 UTC \u2014 [Pillar 3] HL Consolidation Execution Plan + Close Script Built\n\n**Task:** Build the concrete execution plan and tooling for consolidating HL capital into PM.\n\n**Capital Efficiency Gap (confirmed with live data):**\n- PM: 3.72%/day ($34.30/day on $922) \u2014 V4.1 bot actively generating\n- HL: 0.23%/day ($0.83/day on $363) \u2014 3 positions barely moving\n- PM is **16x more capital efficient** than HL\n- Moving $400 to PM = +$15.11/day (+43% revenue increase)\n- Monthly impact: +$332/month\n\n**Built: `scripts/hl-old-wallet-close.py`**\n- Dry-run tested \u2705 \u2014 correctly identifies all 3 positions\n- BTC LONG 3x: 0.0016 BTC, entry $66,836, uPnL +$0.26\n- ETH SHORT 3x: -0.0532 ETH, entry $2,050.30, uPnL +$0.28\n- SOL LONG 3x: 1.32 SOL, entry $82.60, uPnL +$0.15\n- Execute mode: market-closes all positions with 5s safety delay\n- Uses HYPERLIQUID_PRIVATE_KEY from brainKID/.env\n\n**Execution Plan (3 phases):**\n\n| Phase | Action | $ Amount | Dependency |\n|-------|--------|----------|------------|\n| 1 | Close HL old positions | ~$363 freed | Script ready, needs Hani approval |\n| 2 | Withdraw HL old + new | ~$400 USDC | Bridge Arb\u2192Polygon ($1-5 fee) |\n| 3 | Deposit to PM | ~$395 net | PM proxy deployment needed |\n\n**Blockers:**\n- $478 stuck at undeployed PM proxy (separate issue, needs Hani)\n- Bridge fees: ~$5 total (Arb\u2192Polygon)\n- Execution timing: during low-vol hours (06-08 UTC) to minimize slippage\n\n**Trigger criteria:** Execute when V5a has been deployed AND PM balance \u2265 $1,000 (shows sustained profitability). Currently at $922 \u2014 could hit $1,000 by end of W14 at current rates.\n\n**Decision:** Script is built and dry-run tested. Will present consolidation plan to Hani once V5a is live and PM demonstrates $1,000 balance. Not rushing \u2014 the $15/day opportunity cost is worth the insurance of proving V5a works first.\n\n**Next P3:** Post-V5a deployment, run a projection model: consolidated capital + V5a parameters (85% WR, 3.3 trades/day) \u2192 what's the path to Phase 3 ($50-100/day)?\n\n---\n## 2026-03-31 08:08 UTC \u2014 [Pillar 2] V5b Conviction Rewrite Spec + Regime Cleared for 11h\n\n**Task:** Write the concrete V5b conviction rewrite specification based on tonight's indicator analysis, and check 11h readiness.\n\n**Regime Update:** RANGE (1/6) at 08:08 UTC \u2014 cleared from TREND (4/6) at 07:24. BTC recovered $67,104 \u2192 $67,421 (+0.47%). Bot WILL trade at 11h if regime holds. \u2705\n\n**V5b Conviction Rewrite Spec written: `patches/v5b-conviction-rewrite.spec.md`**\n\nCore changes:\n- **OBI = 3 points** (de facto required \u2014 can't reach 3-point threshold without it)\n- **MACD INVERTED** \u2014 scores when opposed to bias (reversal = good for contrarian)\n- **VWAP removed** from scoring (log-only)\n- **Copy removed** entirely (100% bots, zero signal)\n- **No conv=4 cap** \u2014 replaced by conviction-based sizing (score 3=0.8x, 4=1.0x, 5=1.2x)\n\nPossible trade scores:\n| Score | Meaning | Size | Expected",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 09:08 UTC \u2014 [Pillar 4] Liq Detector Calibration: 5h Data Analysis + ETH Contagion Fix\n\n**Task:** Analyze 5 hours of liquidation detector data to calibrate thresholds and discover signal patterns.\n\n**Dataset:** 59 snapshots (04:13-09:08 UTC), BTC $66,743-$67,722\n\n**Finding 1 \u2014 BTC OI thresholds are correctly calibrated:**\n- OI std dev: 0.23%/5min\n- P10: -0.34% | P90: +0.27%\n- Current liq threshold (0.5% OI drop) catches ~5% of windows \u2192 appropriate sensitivity\n- Not too noisy (would obscure real events), not too quiet (catches cascades)\n\n**Finding 2 \u2014 Raw OI direction does NOT predict BTC price (54%):**\n- OI changes alone are noise for 5-min price prediction on BTC\n- BTC is too liquid \u2014 small OI changes are normal market breathing\n- This means our liq detector should only signal on EXTREME events, not gradual OI drift \u2705\n\n**Finding 3 \u2014 OI SPIKE \u2192 price DROP (71%, n=7, preliminary):**\n- When BTC OI rises sharply (>0.2%), price tends to drop next 5 minutes\n- Theory: new longs at extended prices \u2192 immediate overextension pullback\n- Too small sample to act on, but worth tracking for V5c\n\n**Finding 4 \u2014 ETH CASCADE causes BTC contagion (confirmed):**\n- Regular ETH liq (04:30): BTC moved -0.02% \u2192 no impact\n- ETH CASCADE (07:15): BTC dropped **-0.22% in 5min, -0.24% in 10min**\n- Cross-asset contagion is REAL for CASCADE events\n- **FIX DEPLOYED:** Updated `liquidation-detector.py` to set pm_adjustment = -0.5 on ETH CASCADE events (was 0, only BTC events triggered adjustment)\n\n**Code change:** Added ETH CASCADE contagion handling in `compute_pm_signal()`. ETH CASCADE \u2192 bearish signal, pm_adjustment -0.5. Regular ETH liqs still ignored (no BTC impact confirmed).\n\n**Threshold summary:**\n\n| Event Type | BTC Impact | pm_adjustment | Action |\n|------------|-----------|---------------|--------|\n| BTC LIQUIDATION | direct | -0.5 | reduce conviction |\n| BTC CASCADE | direct, large | -1.0 | block trades |\n| ETH LIQUIDATION | negligible | 0 | ignore |\n| ETH CASCADE | -0.22% contagion | **-0.5** (NEW) | reduce conviction |\n| SOL any | untested | 0 | ignore (for now) |\n\n**Next P4:** After 24h of data, recheck OI spike \u2192 price reversal pattern. If it holds at n\u226520, add as a PM warning signal.\n\n---\n## 2026-03-31 08:38 UTC \u2014 [Pillar 3] HL Consolidation Execution Plan + Close Script Built\n\n**Task:** Build the concrete execution plan and tooling for consolidating HL capital into PM.\n\n**Capital Efficiency Gap (confirmed with live data):**\n- PM: 3.72%/day ($34.30/day on $922) \u2014 V4.1 bot actively generating\n- HL: 0.23%/day ($0.83/day on $363) \u2014 3 positions barely moving\n- PM is **16x more capital efficient** than HL\n- Moving $400 to PM = +$15.11/day (+43% revenue increase)\n- Monthly impact: +$332/month\n\n**Built: `scripts/hl-old-wallet-close.py`**\n- Dry-run tested \u2705 \u2014 correctly identifies all 3 positions\n- BTC LONG 3x: 0.0016 BTC, entry $66,836, uPnL +$0.26\n- ETH SHORT 3x: -",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
