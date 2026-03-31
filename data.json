@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T05:30:02.269539+00:00",
+  "timestamp": "2026-03-31T05:40:03.697933+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 401.675155,
+  "hl_balance": 402.122515,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 10.68,
+  "hl_pnl": 11.12,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.89,
+  "all_time_pnl": -76.45,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.1988,
+      "pnl": 1.34784,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.67848,
+      "pnl": 0.9768,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,10 +36,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0883%",
-      "apr": "-97%",
+      "rate": "-0.0946%",
+      "apr": "-104%",
       "action": "LONG",
-      "oi": "280,183,116"
+      "oi": "278,529,582"
     }
   ],
   "daily_pnl": [
@@ -103,17 +103,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 100,
+    "current_bias": "bearish",
+    "signal_confidence": 24,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
+        "text": "Top traders: 22 buys, 28 sells \u2014 avg price $0.992"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0883%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0946%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -199,7 +199,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 1.87728,
+        "pnl": 2.32464,
         "sharpe": 0.0
       },
       {
@@ -355,7 +355,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 05:08 UTC \u2014 [Pillar 2] OBI is the Only Indicator That Matters \u2014 V5 Conviction Rewrite\n\n**Task:** Analyze per-indicator performance to find which indicators actually predict wins, and optimize entry parameters.\n\n**Data:** 140 matched trades (signal \u2192 outcome) from March, including all V4.1 era trades.\n\n**Finding 1 \u2014 OBI is the DOMINANT indicator:**\n| Condition | WR | n | Delta |\n|---|---|---|---|\n| OBI\u2705 (all hours) | 65% | 74 | +13pp vs OBI\u274c |\n| OBI\u274c (all hours) | 52% | 66 | coin flip |\n| OBI\u2705 + V4.1 hours | **88%** | 24 | +36pp vs OBI\u274c |\n| OBI\u274c + V4.1 hours | **52%** | 23 | breakeven |\n\nOBI alone accounts for almost ALL of the edge in V4.1 hours. When OBI confirms order flow aligns with our contrarian YES, we win 88% of the time. When it doesn't, we're flipping coins.\n\n**Finding 2 \u2014 MACD is an INVERSE indicator:**\n| MACD | WR | n |\n|---|---|---|\n| MACD \u274c (opposed) | **87%** | 15 |\n| MACD \u2705 (aligned) | 55% | 125 |\n\nMACD opposing our trade = we're buying a REVERSAL (momentum against us, but market turns). This makes perfect sense for a contrarian strategy: we WANT to enter when momentum indicators say \"wrong way\" because we're fading the move.\n\n**Finding 3 \u2014 CVD adds modest edge, VWAP is noise:**\n- CVD: +13pp when aligned (60% vs 47%)\n- VWAP: -3pp when aligned (58% vs 61%) \u2014 literally noise\n- Current system treats all 4 equally at 1 conviction point each. Wrong.\n\n**Finding 4 \u2014 Cross-tab reveals the golden combo:**\n- OBI\u2705 + MACD\u274c (V4.1 hours): **100% WR** (6W/0L)\n- OBI\u2705 + MACD\u2705 (V4.1 hours): 82% WR (14W/3L)  \n- OBI\u274c + MACD\u2705 (V4.1 hours): 50% WR (11W/11L) \u2014 ZERO edge\n- Conv 4/4: 67% WR (18 trades) vs Conv 3/4: 58% WR (120 trades)\n\n**My thinking:** The conviction system needs a total rewrite for V5. Currently we count 3/4 indicators aligned = trade, 4/4 = reduce. This is wrong because:\n1. OBI is worth ~3x any other indicator (+36pp edge)\n2. MACD should be INVERTED for contrarian YES (opposed MACD = good)\n3. VWAP adds zero edge\n4. CVD is modestly useful but secondary to OBI\n\n**V5 Conviction Proposal (weighted):**\n- OBI\u2705 = +3 points (mandatory for high conviction)\n- CVD\u2705 = +1 point\n- MACD\u274c = +1 point (INVERTED \u2014 opposed MACD is bullish for contrarian)\n- VWAP = 0 points (removed from scoring)\n- Threshold: 3+ points to trade (OBI alone = 3, enough with nothing else)\n- Max: 5 points (OBI\u2705 + CVD\u2705 + MACD\u274c) \u2192 full Kelly size\n\n**Deployment plan:**\n1. V5a (this week): min_bias=45 only (safe, data-backed)\n2. V5b (next week): OBI weighting + MACD inversion (needs more OBI\u2705 data)\n3. V5c: liquidation detector integration\n\n**Risk:** OBI\u2705 + V4.1 = 24 trades. Need 50+ for statistical confidence. Collecting more this week under V4.1 before rewriting conviction.\n\n**Next P2:** After V5a deployment, track OBI\u2705/\u274c split on every trade for one week to build the 50-trade dataset needed to greenlight V5b.\n\n---\n## 2026-03-31 04:38 UTC \u2014 [Pillar 1] Copy Intel Pipeline is Fee",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 05:38 UTC \u2014 [Pillar 3] V5a Backtest Complete \u2014 min_bias=45 Confirmed as Sweet Spot\n\n**Task:** Build V5a backtest \u2014 replay all V3+ trades through min_bias filters at different thresholds to find the optimal cutoff.\n\n**Backtest Results (78 V3+ trades, V4.1 hours, Mar 25-30):**\n\n| min_bias | WR | Trades/day | $/day ($11) | $/day ($16) | Sharpe |\n|----------|-----|-----------|-------------|-------------|--------|\n| 0 (current) | 77.1% | 5.8 | $34.80 | $50.40 | 1.56 |\n| 30 | 79.3% | 4.8 | $31.20 | $45.10 | 1.59 |\n| 40 | 78.3% | 3.8 | $23.80 | $34.50 | 1.34 |\n| **45** | **85.0%** | **3.3** | **$25.70** | **$37.20** | **1.79** |\n| 50 | 90.9% | 1.8 | $16.50 | $23.90 | 1.93 |\n| 55 | 100% | 0.5 | $5.50 | $8.00 | \u2014 |\n\n**Why 45 is the sweet spot:**\n1. WR jumps 8pp (77\u219285%) \u2014 enters high-confidence territory\n2. Sharpe is highest practical value (1.79) \u2014 min_bias=50 has higher Sharpe but too few trades\n3. The eliminated trades (bias 30-45) are 4W/5L = 44% WR \u2014 actively losing money\n4. At consolidated capital ($16/trade), $37/day still exceeds Phase 2 target\n5. Daily P&L only drops $9/day despite cutting 43% of trades \u2014 those trades were destroying edge\n\n**Why NOT 50:** 90.9% WR looks amazing but 1.8 trades/day = only $16.50/day. Below Phase 2 threshold at current capital. The extra 6pp WR doesn't compensate for losing half the remaining trades.\n\n**Patch written:** `patches/v5a-min-bias-45.patch.md` \u2014 ready for deployment Apr 6.\n\n**Combined V5 roadmap:**\n- V5a (Apr 6): min_bias=45 \u2192 +8pp WR, better Sharpe\n- V5b (Apr 13): OBI weighting + MACD inversion \u2192 targeting 88%+ WR (needs more data)\n- V5c (Apr 20): Liquidation detector + V2 copy signal integration\n- HL consolidation: when PM balance hits $1,000\n\n**Decision:** Backtest confirms min_bias=45. Patch ready. Deploy Apr 6 after V4.1 stability week. No early deployment \u2014 the $9/day cost of waiting = insurance against overfitting.\n\n**Next P3:** Design V5b conviction rewrite (OBI-weighted scoring). Need to build matching logic that aligns TRADE SIGNAL log entries to outcome JSONL entries for the OBI cross-tab backtest.\n\n---\n## 2026-03-31 05:08 UTC \u2014 [Pillar 2] OBI is the Only Indicator That Matters \u2014 V5 Conviction Rewrite\n\n**Task:** Analyze per-indicator performance to find which indicators actually predict wins, and optimize entry parameters.\n\n**Data:** 140 matched trades (signal \u2192 outcome) from March, including all V4.1 era trades.\n\n**Finding 1 \u2014 OBI is the DOMINANT indicator:**\n| Condition | WR | n | Delta |\n|---|---|---|---|\n| OBI\u2705 (all hours) | 65% | 74 | +13pp vs OBI\u274c |\n| OBI\u274c (all hours) | 52% | 66 | coin flip |\n| OBI\u2705 + V4.1 hours | **88%** | 24 | +36pp vs OBI\u274c |\n| OBI\u274c + V4.1 hours | **52%** | 23 | breakeven |\n\nOBI alone accounts for almost ALL of the edge in V4.1 hours. When OBI confirms order flow aligns with our contrarian YES, we win 88% of the time. When it doesn't, we're flipping coins.\n\n**Findin",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -365,7 +365,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
