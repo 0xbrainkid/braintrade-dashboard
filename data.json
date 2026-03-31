@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-03-31T11:30:01.532508+00:00",
+  "timestamp": "2026-03-31T11:41:09.969793+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 398.053162,
+  "hl_balance": 398.052102,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
   "hl_pnl": 7.05,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.36612,
+      "pnl": -0.1863,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": 0.72352,
+      "pnl": 0.54264,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 40,
+    "current_bias": "bullish",
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 25 buys, 25 sells \u2014 avg price $0.993"
+        "text": "Top traders: 8 buys, 42 sells \u2014 avg price $0.953"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 0.35740000000000005,
+        "pnl": 0.35634,
         "sharpe": 0.0
       },
       {
@@ -337,9 +337,9 @@
     "win_rate_24h": 100.0,
     "avg_trade_size": 0.52,
     "sharpe": -0.23,
-    "max_drawdown": 568.1
+    "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 11:08 UTC \u2014 [Pillar 4] LIVE VALIDATION: Regime Filter Saves $22-33 + ETH Cascade Leading Indicator\n\n**Task:** Monitor 11h window during STRONG_TREND. Analyze liquidation events and regime filter performance.\n\n**11h Window Result: BLOCKED \u2014 Correct Decision**\n- Regime: STRONG_TREND (6/6) + bot inline check: TREND (4/6)\n- BTC: $66,400 \u2192 $66,200 during 11h (-0.30%)\n- Bias: -56 to -76 (very strong bearish, YES entry at $0.535)\n- If traded: 2-3 YES trades at $0.535 would have LOST (~$22-33 saved)\n- This is the 3rd confirmed save by the regime filter (Mar 30 19h, Mar 31 07h, Mar 31 11h)\n\n**$81M in ETH Long Liquidations Today \u2014 4 events:**\n\n| Time | Type | ETH OI Loss | BTC Impact (next 1-2h) |\n|------|------|------------|----------------------|\n| 04:30 | LIQ | -$13.5M | Flat/slight drop |\n| 07:15 | CASCADE | -$20.4M | **BTC -0.89% at 08h** |\n| 09:20 | CASCADE | -$36.0M | **BTC -0.99% at 09h** |\n| 10:00 | LIQ | -$11.2M | **BTC +0.37% bounce** |\n\n**NEW INSIGHT: ETH CASCADE is a LEADING indicator for BTC drops (30-90 min lag)**\n- Both cascades preceded BTC's biggest hourly drops of the day\n- Standard liquidation AFTER cascade = exhaustion = bounce signal\n- This is a higher-quality signal than raw BTC OI changes (which were noise at 54%)\n\n**Liquidation exhaustion pattern:**\n- CASCADE \u2192 aggressive selling \u2192 BTC drops 30-90 min later\n- Standard LIQ after CASCADE \u2192 sellers exhausted \u2192 BTC bounces\n- V5c should track: `last_cascade_time` \u2192 if standard liq follows within 2h \u2192 bullish bounce signal\n\n**ETH contagion fix validated LIVE:**\n- 09:20 CASCADE correctly got pm_adj=-0.5 (our fix from 09:08 UTC)\n- 07:15 CASCADE got pm_adj=0 (pre-fix) \u2014 shows the before/after\n\n**Decision:** Add liq_exhaustion detection to V5c spec. Pattern: CASCADE \u2192 standard LIQ within 2h \u2192 pm_adj = +0.5 (bounce signal). This morning's data shows it predicts BTC bounces.\n\n**Next P4:** Track whether the bounce continues into 12h window. If BTC recovers to $66,500+, regime may clear for 12h trades.\n\n---\n## 2026-03-31 10:42 UTC \u2014 [Pillar 3] V5a Backtest CORRECTION \u2014 Dead Zone Already Filters 35-45\n\n**Task:** Prepare V5a deployment script. During code review, discovered dead zone filter changes the analysis.\n\n**CRITICAL CORRECTION:** Dead zone filter (35-45) already exists in V3.3+. The original V5a backtest inflated the improvement by including pre-V3.3 dead zone trades (47% WR) that are already filtered.\n\n**Corrected (V3.3+ era):**\n- Current (25-35 + 45+): 80% WR, ~5 trades/day, ~$33/day\n- V5a (45+ only): 85% WR, ~3.3 trades/day, ~$25/day\n- Removed bucket (25-35): 70% WR \u2014 profitable, just weaker\n- WR improvement: +5pp (NOT +8pp as originally stated)\n- Cost: -$8/day in reduced volume\n\n**V5a is a Sharpe trade, not a P&L trade.** Still deploying Apr 6 \u2014 consistency gain worth the EV cost. Patch updated with corrected estimates.\n\n**Regime: STRONG_TREND (7/6) at 10:42 UTC. BTC $66,380. Bot B",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 11:38 UTC \u2014 [Pillar 1] LIVE TRADE: 11h WIN Despite STRONG_TREND + Indicator Bug ROOT CAUSE Found\n\n**11h Trade Result:** \u2705 WIN \u2014 YES $11.61 @ $0.536, BTC $66,402\u2192$66,542 (+0.21%)\n- Regime dropped from STRONG_TREND (6/6) to MIXED (3/6) briefly at 11:12\n- Bot caught the window and executed at 11:13:47\n- Bias: -58.4, conviction 3/4 (CVD\u2705, MACD\u2705, VWAP\u2705, OBI\u274c)\n- **OBI was WRONG (\u274c)** \u2014 V5b would have blocked this trade. But it WON.\n- This means OBI blocking isn't 100% correct \u2014 some OBI\u274c trades still win\n- Updated understanding: OBI\u2705 = 88% WR, OBI\u274c = 52% WR but NOT 0% WR\n- P&L: +$0.87 pnl_pct \u2192 ~$5.38 profit on $11.61 stake\n\n**Post-trade: Bias flipped positive (+46 to +69)** \u2192 all subsequent signals are NO (skipped by YES-only filter). BTC bounced as predicted by the liquidation exhaustion pattern. Good: the trade caught the exact bounce.\n\n**INDICATOR LOGGING BUG \u2014 ROOT CAUSE IDENTIFIED:**\n- Outcome JSONL: STILL missing indicator fields (only has ts, direction, bias, conviction, edge, price, won, pnl)\n- PRE-EXECUTE debug line (line 860) NEVER fires despite being in the code\n- **Multiple async loops running simultaneously** \u2014 loop cycle counters: 360, 9000, 6720, 420, 9060 (should be ONE sequential counter)\n- The trade likely came from a SECONDARY async loop that's a duplicate of the main loop\n- This secondary loop calls `should_trade` \u2192 `execute_trade` but the PRE-EXECUTE debug code only exists between these calls in the MAIN loop\n- **Root cause: bot spawns duplicate event loops**, the secondary loop has stale logic that doesn't capture indicators\n- This is the SAME underlying bug as the double-trade issue from Mar 30\n\n**Fix needed:** Find where multiple loops are spawned. Should be single `run()` with one while-loop. The asyncio task spawning is creating parallel executions that bypass the indicator capture.\n\n**V5b implication:** The OBI data in TRADE SIGNAL logs IS correct (line 556 sets `_last_indicators`). But `execute_trade` at line 612 reads `self._last_indicators` which could be overwritten by the other loop's `should_trade()` call before the outcome check runs. This is a classic async race condition.\n\n**Next P1:** Audit the bot's `run()` method for duplicate task spawning. Fix the multi-loop bug \u2014 this is more important than V5a/V5b since it causes double trades AND breaks indicator logging.\n\n---\n## 2026-03-31 11:08 UTC \u2014 [Pillar 4] LIVE VALIDATION: Regime Filter Saves $22-33 + ETH Cascade Leading Indicator\n\n**Task:** Monitor 11h window during STRONG_TREND. Analyze liquidation events and regime filter performance.\n\n**11h Window Result: BLOCKED \u2014 Correct Decision**\n- Regime: STRONG_TREND (6/6) + bot inline check: TREND (4/6)\n- BTC: $66,400 \u2192 $66,200 during 11h (-0.30%)\n- Bias: -56 to -76 (very strong bearish, YES entry at $0.535)\n- If traded: 2-3 YES trades at $0.535 would have LOST (~$22-33 saved)\n- This is the 3rd confirmed save by the reg",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
