@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T21:00:01.956291+00:00",
+  "timestamp": "2026-03-31T21:09:58.990435+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 396.857275,
+  "hl_balance": 395.336835,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 5.86,
+  "hl_pnl": 4.34,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -81.71,
+  "all_time_pnl": -83.23,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 2.26152,
+      "pnl": 1.85328,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 0.22016,
+      "pnl": -0.31744,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,20 +37,12 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 0.4875,
+      "pnl": -0.0871,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [
-    {
-      "coin": "STABLE",
-      "rate": "-0.0772%",
-      "apr": "-85%",
-      "action": "LONG",
-      "oi": "135,535,846"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-18",
@@ -113,20 +105,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 64,
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 12 buys, 38 sells \u2014 avg price $0.954"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.0772%/8h \u2014 shorts paying longs"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.993"
       }
     ],
     "evolution": [
@@ -208,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.96918,
+        "pnl": 1.4487400000000001,
         "sharpe": 0.0
       },
       {
@@ -294,7 +278,7 @@
   "pillar3": {
     "completion": 65,
     "params_changed": 6,
-    "research_reports": 18,
+    "research_reports": 19,
     "heartbeats_today": 0,
     "changes": [
       {
@@ -364,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + deep indicator re-analysis on full dataset.\n\n**19h result:** No trades. Bias briefly negative (-50 to -58) but LOW_CONVICTION (2/4). OBI\u274c + VWAP\u274c blocking consistently. Regime settled to MIXED 3/6.\n\n**VWAP FINDING REVERSED (was -3pp \u2192 now +30pp):**\n\nFull dataset (n=250, zombie-contaminated but indicative):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 66% | 63% | +3pp |\n| CVD | 61% | **88%** | **-27pp (INVERTED!)** |\n| MACD | 65% | 63% | +2pp |\n| **VWAP** | **69%** | **39%** | **+30pp** |\n\nV4.1 active hours only (n=77, cleaner):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 85% | 71% | +14pp |\n| CVD | 74% | **94%** | **-20pp (INVERTED!)** |\n| MACD | 78% | 75% | +3pp |\n| **VWAP** | **79%** | **50%** | **+29pp** |\n\n**VWAP is the SECOND strongest indicator (+29-30pp delta). Do NOT remove.**\nThe overnight -3pp finding was from n=2 VWAP\u274c samples \u2014 pure noise.\n\n**CVD IS INVERTED in full dataset:**\nCVD\u274c (negative) = 88-94% WR (better than CVD\u2705!)\nThis means high negative CVD (strong selling pressure) = GREAT for contrarian YES\nThe current implementation CORRECTLY uses CVD< threshold as \u2705\nSo CVD scoring is fine \u2014 it's just that CVD\u274c trades are actually BETTER quality\n\n**V5b spec REVISION NEEDED:**\n- KEEP VWAP in scoring (was \"remove\")\n- Consider CVD weighting differently (CVD\u274c = better)\n- OBI delta is +14pp in clean hours, not +36pp as overnight found\n- MACD delta is essentially noise (2-3pp)\n\n**19h conviction pattern today:** OBI\u274c + VWAP\u274c = consistent across all 19h signals. Both are meaningful signals saying \"trend hasn't reversed yet.\" The bot correctly blocked.\n\n---\n## 2026-03-31 20:38 UTC \u2014 [Pillar 1] W14 Day 2 Preliminary EOD Report\n\n**Market:** BTC $66,200 \u2192 $68,066 (+2.8% rally). Strong up-day.\n\n**PM Bot:** 1 trade, 1 win, +$5.38. Balance $921.75. Filters blocked ~47 of 48 available windows \u2014 correct on a rally day. Selectivity: 2.1%.\n\n**HL Bot:** $358.97 (+$2.48 uPnL). BTC LONG +$2.00, ETH LONG +$0.30, SOL LONG +$0.18. All benefiting from the rally. Still at 91% margin \u2014 consolidation needed.\n\n**Combined capital:** $1,318 (PM $922 + HL $359 + HL-new $37)\n\n**Day's major accomplishments:**\n1. **ZOMBIE BUG ROOT CAUSE FIXED** \u2014 2 orphaned bash parents from Mar 30 killed. `start-pm-bot.sh` now uses `exec`. Watchdog rewritten. Single process stable 8+ hours.\n2. **V5b REDESIGNED** \u2014 original OBI-required gate killed by simulation. New: OBI as sizing modifier (OBI\u2705=1x, OBI\u274c=0.5x).\n3. **V5a PATCH FINALIZED** \u2014 2-line change, ready for Apr 6 deploy.\n4. **HOUR EXPANSION REJECTED** \u2014 current hours = 83% WR, expansion dilutes to 76%.\n5. **HL EFFICIENCY QUANTIFIED** \u2014 184x worse than PM. Consolidation is the single biggest revenue lever (+$13/day).\n6. **4 L",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + deep indicator re-analysis on full dataset.\n\n**19h result:** No trades. Bias briefly negative (-50 to -58) but LOW_CONVICTION (2/4). OBI\u274c + VWAP\u274c blocking consistently. Regime settled to MIXED 3/6.\n\n**VWAP FINDING REVERSED (was -3pp \u2192 now +30pp):**\n\nFull dataset (n=250, zombie-contaminated but indicative):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 66% | 63% | +3pp |\n| CVD | 61% | **88%** | **-27pp (INVERTED!)** |\n| MACD | 65% | 63% | +2pp |\n| **VWAP** | **69%** | **39%** | **+30pp** |\n\nV4.1 active hours only (n=77, cleaner):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 85% | 71% | +14pp |\n| CVD | 74% | **94%** | **-20pp (INVERTED!)** |\n| MACD | 78% | 75% | +3pp |\n| **VWAP** | **79%** | **50%** | **+29pp** |\n\n**VWAP is the SECOND strongest indicator (+29-30pp delta). Do NOT remove.**\nThe overnight -3pp finding was from n=2 VWAP\u274c samples \u2014 pure noise.\n\n**CVD IS INVERTED in full dataset:**\nCVD\u274c (negative) = 88-94% WR (better than CVD\u2705!)\nThis means high negative CVD (strong selling pressure) = GREAT for contrarian YES\nThe current implementation CORRECTLY uses CVD< threshold as \u2705\nSo CVD scoring is fine \u2014 it's just that CVD\u274c trades are actually BETTER quality\n\n**V5b spec REVISION NEEDED:**\n- KEEP VWAP in scoring (was \"remove\")\n- Consider CVD weighting differently (CVD\u274c = better)\n- OBI delta is +14pp in clean hours, not +36pp as overnight found\n- MACD delta is essentially noise (2-3pp)\n\n**19h conviction pattern today:** OBI\u274c + VWAP\u274c = consistent across all 19h signals. Both are meaningful signals saying \"trend hasn't reversed yet.\" The bot correctly blocked.\n\n---\n## 2026-03-31 21:08 UTC \u2014 [Pillar 2] W14 Day 2 Final Report Written + Day Stats\n\n**Task:** Write daily P&L report and summarize day's output.\n\n**Daily P&L report:** `reports/daily-pnl-2026-03-31.md` \u2705 WRITTEN\n- PM: +$5.38 (1W/0L, 100% WR, 2.1% selectivity)\n- HL: +$1.80 uPnL (3 LONGs benefiting from BTC rally)\n- Combined: $1,317.43\n\n**Day productivity:** 41 worklog entries across 21 hours (00:08-21:08 UTC)\n- 10+ pillar rotations per half-day\n- Research topics: zombie bug, V5a/V5b redesign, hour expansion, HL efficiency, liquidation patterns, daily market copy trading, filter cascade analysis, MEMORY consolidation\n\n**Key deliverables produced today:**\n| Deliverable | File |\n|-------------|------|\n| V5a patch (final) | `patches/v5a-min-bias-45.patch.md` |\n| V5b spec (revised) | `patches/v5b-obi-sizing.spec.md` |\n| Start script (exec) | `scripts/start-pm-bot.sh` |\n| Watchdog (rewritten) | `scripts/bot-watchdog.sh` |\n| Daily P&L report | `reports/daily-pnl-2026-03-31.md` |\n| MEMORY.md (updated) | `MEMORY.md` |\n\n**Tomorrow's checklist:**\n1. Indicator logging confirmation (first clean single-p",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -384,7 +368,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
