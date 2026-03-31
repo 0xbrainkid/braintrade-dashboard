@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T14:30:02.225799+00:00",
+  "timestamp": "2026-03-31T14:44:47.721133+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 397.697079,
+  "hl_balance": 395.919819,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 6.7,
+  "hl_pnl": 4.92,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -80.87,
+  "all_time_pnl": -82.65,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.39968,
+      "pnl": 0.57348,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.31,
       "entry": 81.956,
-      "pnl": 0.42182,
+      "pnl": -0.52924,
       "leverage": 3,
       "wallet": "old"
     }
@@ -96,12 +96,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 24,
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 31 buys, 19 sells \u2014 avg price $0.996"
+        "text": "Top traders: 20 buys, 30 sells \u2014 avg price $0.991"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 1.8215,
+        "pnl": 0.044239999999999946,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 14:16 UTC \u2014 [Pillar 1] Copy Intelligence: Daily Threshold Markets = Human Trading Opportunity\n\n**Task:** Investigate PM daily/weekly markets for human copy trading (5-min markets are 100% bots).\n\n**Finding \u2014 PM Market Structure:**\n- 165 active 5-min Up/Down markets (our current arena \u2014 100% bots)\n- 19 daily threshold markets (\"BTC above $X on Date\")\n- 51 monthly markets (\"BTC reach $X in Month\")\n- 0 explicitly labeled weekly markets\n\n**Daily Threshold Markets \u2014 Where Humans Trade:**\nBTC at ~$66,400. Active daily threshold prices:\n| Market | Price | Edge? |\n|--------|-------|-------|\n| >$60K | 99.95% | None |\n| >$64K | 99.85% | Thin |\n| >$66K | 98.25% | 1.75% NO value \u2014 close to BTC price |\n| >$68K | 19.9% | **HIGH EDGE** \u2014 real uncertainty |\n| >$70K | 0.25% | None |\n\nThe >$68K market is the actionable one: 20% YES at $66,400 BTC. A $1,600 rally (2.4%) would push this to 80%+ = 4x return. $30-70K liquidity = real money, fewer bots.\n\n**Copy Trading Viability:**\n- Daily markets have $300-600K volume with human participants\n- Key trades happen when BTC approaches threshold prices (triggers rapid repricing)\n- Large wallet buys on the >$68K market when BTC is rising = smart money signal\n- Could build a scanner: monitor order book on near-threshold markets, flag whale entries\n\n**HL Position Update:**\n- ETH SHORT closed (profit taken +$5.7)\n- BTC LONG 3x: +$1.37 uPnL (entry $66,836)\n- SOL LONG 3x: +$0.43 uPnL (entry $81.96)\n- Total HL: $360.29\n\n**Decision:** Daily threshold copy trading is a V6+ feature. Current V4.1/V5 roadmap is 5-min focused. File this as future research \u2014 the edge exists but requires a different scanner architecture (threshold proximity + whale detection vs OBI/CVD/MACD signals).\n\n**Next P1:** Build a prototype daily-market scanner that monitors the near-threshold markets and tracks whale wallet activity.\n\n---\n## 2026-03-31 13:38 UTC \u2014 [Pillar 4] \ud83d\udc1b ZOMBIE ROOT CAUSE: Old bash Parents from Mar 30 Spawning Infinite Orphans\n\n**Task:** Find what keeps spawning 2 new trading_bot orphans every 5 minutes despite watchdog killing them.\n\n**ROOT CAUSE:**\nTwo zombie `bash` processes from Mar 30 were still alive as parents:\n- **PID 3837970** \u2014 `/bin/bash /home/ubuntu/clawd/scripts/start-pm-bot.sh` (Mar 30)\n- **PID 3908042** \u2014 `bash scripts/start-pm-bot.sh` (Mar 30)\n\nThese were OLD screen sessions that got killed (`screen -X quit`) but the bash child survived because the old start-pm-bot.sh didn't use `exec`. When screen died, bash got orphaned to init (PID 772). Every time their python child got killed, **bash restarted python** because the old script had no `exec` \u2014 it was running python as a subprocess that bash would wait for, and when it died, bash's loop or the script itself would re-execute.\n\n**Timeline of the bug:**\n1. Mar 30: Multiple screen restarts \u2192 bash processes orphaned\n2. Each bash process periodically respawned python \u2192 2 ext",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 14:42 UTC \u2014 [Pillar 2] Triple-Logging Bug RESOLVED + V5a Readiness Check\n\n**Task:** Investigate async triple-logging bug and assess V5a deployment readiness.\n\n**Triple-Logging Bug \u2014 RESOLVED:**\n- Was NOT an async/code bug \u2014 it was orphan processes from zombie bash parents\n- After zombie parents killed (P4 work), watchdog cleaned orphans at 13:55\n- Log now shows single sequential counter: 300\u2192360\u2192420 (exactly 10min intervals)\n- Confirmed: ONE process, ONE loop, ONE counter. Bug closed.\n\n**V5a Deployment Readiness (target: Apr 6):**\n| Check | Status |\n|-------|--------|\n| min_bias=45 backtest | \u2705 78 trades, 59.0% WR vs 51.2% (+7.8pp) |\n| Patch ready | \u2705 `patches/v5a-min-bias-45.patch.md` |\n| Process stability | \u2705 Single process, clean watchdog |\n| Indicator logging | \u23f3 Need 1 trade with clean single-process |\n| 5 stable days | \u23f3 Need Apr 1-5 |\n\n**V5a impact projection:**\n- 52% fewer trades but each +7.8pp higher WR\n- Cuts the 51.2% WR \"coin flip\" trades (bias 25-45)\n- Keeps the 59.0% WR \"real signal\" trades (bias \u226545)\n- Volume drops from ~8/day to ~4/day but profit per trade increases\n\n**Today's single trade:** bias=-58.4 (KEEP under V5a), won=True. No indicators in JSONL (trade was from zombie process). Next trade at 19h will be the definitive indicator test.\n\n**Next P2:** After 19h trade, verify indicator logging works. If confirmed, all V5a blockers except time-based stability are cleared.\n\n---\n## 2026-03-31 14:16 UTC \u2014 [Pillar 1] Copy Intelligence: Daily Threshold Markets = Human Trading Opportunity\n\n**Task:** Investigate PM daily/weekly markets for human copy trading (5-min markets are 100% bots).\n\n**Finding \u2014 PM Market Structure:**\n- 165 active 5-min Up/Down markets (our current arena \u2014 100% bots)\n- 19 daily threshold markets (\"BTC above $X on Date\")\n- 51 monthly markets (\"BTC reach $X in Month\")\n- 0 explicitly labeled weekly markets\n\n**Daily Threshold Markets \u2014 Where Humans Trade:**\nBTC at ~$66,400. Active daily threshold prices:\n| Market | Price | Edge? |\n|--------|-------|-------|\n| >$60K | 99.95% | None |\n| >$64K | 99.85% | Thin |\n| >$66K | 98.25% | 1.75% NO value \u2014 close to BTC price |\n| >$68K | 19.9% | **HIGH EDGE** \u2014 real uncertainty |\n| >$70K | 0.25% | None |\n\nThe >$68K market is the actionable one: 20% YES at $66,400 BTC. A $1,600 rally (2.4%) would push this to 80%+ = 4x return. $30-70K liquidity = real money, fewer bots.\n\n**Copy Trading Viability:**\n- Daily markets have $300-600K volume with human participants\n- Key trades happen when BTC approaches threshold prices (triggers rapid repricing)\n- Large wallet buys on the >$68K market when BTC is rising = smart money signal\n- Could build a scanner: monitor order book on near-threshold markets, flag whale entries\n\n**HL Position Update:**\n- ETH SHORT closed (profit taken +$5.7)\n- BTC LONG 3x: +$1.37 uPnL (entry $66,836)\n- SOL LONG 3x: +$0.43 uPnL (entry $81.96)\n- Total HL: $360.29\n\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
