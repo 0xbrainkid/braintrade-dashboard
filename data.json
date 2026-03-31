@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T14:00:01.856194+00:00",
+  "timestamp": "2026-03-31T14:24:57.675709+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 397.125551,
+  "hl_balance": 397.507079,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 6.13,
+  "hl_pnl": 6.51,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -81.44,
+  "all_time_pnl": -81.06,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,29 +19,21 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.68364,
+      "pnl": 1.28304,
       "leverage": 3,
       "wallet": "old"
     },
     {
-      "coin": "ETH",
-      "side": "SHORT",
-      "size": 0.0532,
-      "entry": 2050.3,
-      "pnl": -1.25552,
+      "coin": "SOL",
+      "side": "LONG",
+      "size": 1.31,
+      "entry": 81.956,
+      "pnl": 0.34846,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [
-    {
-      "coin": "2Z",
-      "rate": "-0.0526%",
-      "apr": "-58%",
-      "action": "LONG",
-      "oi": "24,805,548"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-18",
@@ -103,21 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 16,
+    "current_bias": "bullish",
+    "signal_confidence": 24,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 33 buys, 17 sells \u2014 avg price $0.764"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: 2Z at -0.0526%/8h \u2014 shorts paying longs"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "Top traders: 31 buys, 19 sells \u2014 avg price $0.996"
       }
     ],
     "evolution": [
@@ -199,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": -0.5718799999999999,
+        "pnl": 1.6315,
         "sharpe": 0.0
       },
       {
@@ -355,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 13:38 UTC \u2014 [Pillar 4] \ud83d\udc1b ZOMBIE ROOT CAUSE: Old bash Parents from Mar 30 Spawning Infinite Orphans\n\n**Task:** Find what keeps spawning 2 new trading_bot orphans every 5 minutes despite watchdog killing them.\n\n**ROOT CAUSE:**\nTwo zombie `bash` processes from Mar 30 were still alive as parents:\n- **PID 3837970** \u2014 `/bin/bash /home/ubuntu/clawd/scripts/start-pm-bot.sh` (Mar 30)\n- **PID 3908042** \u2014 `bash scripts/start-pm-bot.sh` (Mar 30)\n\nThese were OLD screen sessions that got killed (`screen -X quit`) but the bash child survived because the old start-pm-bot.sh didn't use `exec`. When screen died, bash got orphaned to init (PID 772). Every time their python child got killed, **bash restarted python** because the old script had no `exec` \u2014 it was running python as a subprocess that bash would wait for, and when it died, bash's loop or the script itself would re-execute.\n\n**Timeline of the bug:**\n1. Mar 30: Multiple screen restarts \u2192 bash processes orphaned\n2. Each bash process periodically respawned python \u2192 2 extra bots\n3. My zombie killer killed the python children \u2192 bash respawned them in seconds\n4. Infinite cycle: kill python \u2192 bash respawns \u2192 kill python \u2192 bash respawns\n\n**Fix:** `kill -9 3837970 3908042` \u2014 killed the zombie bash parents. Combined with:\n1. `start-pm-bot.sh` now uses `exec` (replaces bash with python \u2014 no parent to respawn)\n2. Watchdog rewritten to be cleaner and use `restart_pm_bot()` helper that kills ALL processes before starting fresh\n3. No more orphan parents possible with `exec`\n\n**Verification:** Only PID 4179862 (legit screen child) remains. No old bash parents.\n\n**This was the REAL bug all along.** Not asyncio, not duplicate event loops, not code issues. Old bash scripts from previous screen sessions, orphaned to init, infinitely respawning python children.\n\n**Next:** Confirm clean state persists through next 2 watchdog cycles (13:40, 13:45).\n\n---\n## 2026-03-31 12:38 UTC \u2014 [Pillar 3] Process Management Fixed \u2014 Single Bot Instance Enforced\n\n**Task:** Fix the multi-process zombie bug found in P2 and prevent recurrence.\n\n**Problem:** Killing zombie PIDs created a cascade \u2014 watchdog saw \"pm-bot DEAD\", restarted, spawned more zombies. The `bash -c \"cd ... && source ... && python3 ...\"` screen command created orphan subprocesses.\n\n**Fixes applied:**\n1. **`scripts/start-pm-bot.sh`** \u2014 Clean startup script using `exec` to replace bash with python (no intermediate subshells). Kills any stale trading_bot processes before starting.\n2. **`scripts/bot-watchdog.sh`** \u2014 Zombie killer rewritten to use `pstree` to identify the legitimate screen-owned python PID. Kills only orphan processes.\n3. **All watchdog screen restarts** now use `start-pm-bot.sh` instead of inline `bash -c`.\n\n**Verification:** `pstree` shows clean tree: `screen \u2192 python3 (1 thread)`. No orphans.\n\n**Remaining issue:** Single python process still produces 3x loop ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 14:16 UTC \u2014 [Pillar 1] Copy Intelligence: Daily Threshold Markets = Human Trading Opportunity\n\n**Task:** Investigate PM daily/weekly markets for human copy trading (5-min markets are 100% bots).\n\n**Finding \u2014 PM Market Structure:**\n- 165 active 5-min Up/Down markets (our current arena \u2014 100% bots)\n- 19 daily threshold markets (\"BTC above $X on Date\")\n- 51 monthly markets (\"BTC reach $X in Month\")\n- 0 explicitly labeled weekly markets\n\n**Daily Threshold Markets \u2014 Where Humans Trade:**\nBTC at ~$66,400. Active daily threshold prices:\n| Market | Price | Edge? |\n|--------|-------|-------|\n| >$60K | 99.95% | None |\n| >$64K | 99.85% | Thin |\n| >$66K | 98.25% | 1.75% NO value \u2014 close to BTC price |\n| >$68K | 19.9% | **HIGH EDGE** \u2014 real uncertainty |\n| >$70K | 0.25% | None |\n\nThe >$68K market is the actionable one: 20% YES at $66,400 BTC. A $1,600 rally (2.4%) would push this to 80%+ = 4x return. $30-70K liquidity = real money, fewer bots.\n\n**Copy Trading Viability:**\n- Daily markets have $300-600K volume with human participants\n- Key trades happen when BTC approaches threshold prices (triggers rapid repricing)\n- Large wallet buys on the >$68K market when BTC is rising = smart money signal\n- Could build a scanner: monitor order book on near-threshold markets, flag whale entries\n\n**HL Position Update:**\n- ETH SHORT closed (profit taken +$5.7)\n- BTC LONG 3x: +$1.37 uPnL (entry $66,836)\n- SOL LONG 3x: +$0.43 uPnL (entry $81.96)\n- Total HL: $360.29\n\n**Decision:** Daily threshold copy trading is a V6+ feature. Current V4.1/V5 roadmap is 5-min focused. File this as future research \u2014 the edge exists but requires a different scanner architecture (threshold proximity + whale detection vs OBI/CVD/MACD signals).\n\n**Next P1:** Build a prototype daily-market scanner that monitors the near-threshold markets and tracks whale wallet activity.\n\n---\n## 2026-03-31 13:38 UTC \u2014 [Pillar 4] \ud83d\udc1b ZOMBIE ROOT CAUSE: Old bash Parents from Mar 30 Spawning Infinite Orphans\n\n**Task:** Find what keeps spawning 2 new trading_bot orphans every 5 minutes despite watchdog killing them.\n\n**ROOT CAUSE:**\nTwo zombie `bash` processes from Mar 30 were still alive as parents:\n- **PID 3837970** \u2014 `/bin/bash /home/ubuntu/clawd/scripts/start-pm-bot.sh` (Mar 30)\n- **PID 3908042** \u2014 `bash scripts/start-pm-bot.sh` (Mar 30)\n\nThese were OLD screen sessions that got killed (`screen -X quit`) but the bash child survived because the old start-pm-bot.sh didn't use `exec`. When screen died, bash got orphaned to init (PID 772). Every time their python child got killed, **bash restarted python** because the old script had no `exec` \u2014 it was running python as a subprocess that bash would wait for, and when it died, bash's loop or the script itself would re-execute.\n\n**Timeline of the bug:**\n1. Mar 30: Multiple screen restarts \u2192 bash processes orphaned\n2. Each bash process periodically respawned python \u2192 2 ext",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -365,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -375,7 +359,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
