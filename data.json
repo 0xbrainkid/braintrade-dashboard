@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T00:30:01.854159+00:00",
+  "timestamp": "2026-03-31T00:40:01.064387+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 402.507979,
+  "hl_balance": 402.691099,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 11.51,
+  "hl_pnl": 11.69,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.06,
+  "all_time_pnl": -75.88,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.0972,
+      "pnl": 0.081,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0535,
       "entry": 2052.8,
-      "pnl": 1.43915,
+      "pnl": 1.31075,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": -0.32472,
+      "pnl": -0.1914,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.1906%",
-      "apr": "-209%",
+      "rate": "-0.1680%",
+      "apr": "-184%",
       "action": "LONG",
-      "oi": "306,385,334"
+      "oi": "306,411,394"
     },
     {
       "coin": "YGG",
-      "rate": "-0.0672%",
-      "apr": "-74%",
+      "rate": "-0.0595%",
+      "apr": "-65%",
       "action": "LONG",
-      "oi": "11,208,722"
+      "oi": "11,034,486"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.1906%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.1680%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.0172299999999999,
+        "pnl": 1.20035,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 00:08 UTC \u2014 [Pillar 2] PM Settlement Mystery: $38 Still Pending After 4 Hours\n\n**Task:** Investigate why PM balance hasn't reflected 20h wins.\n\n**Finding:** Balance stuck at $921.75 since 20:40. Expected ~$960.12 after 5W/2L Day 1.\n\n**Investigation:**\n- `get_positions()` returns empty \u2014 no active token holdings visible\n- No `redeem` / `claim` logic in bot code\n- No pending orders\n- PM doesn't charge 47% fees \u2014 settlement must be pending\n\n**Hypothesis:** PM 5-min markets may batch-settle. The 20:15-20:20 window tokens won (BTC went from ~66,574 to ~66,607) but token redemption happens on a delayed schedule. The $38.37 gap exactly matches the expected 20h payouts minus costs.\n\n**Morning session trades settled immediately** \u2014 balance went from $922.45 to $930.37 within the 13:10 restart (3 hours after morning trades). The 20h trades are only 4 hours old \u2014 settlement may take 6-8 hours.\n\n**Action:** Monitor. If balance hasn't updated by 06:00 UTC tomorrow, investigate manual redemption. No impact on trading \u2014 Kelly sizing uses current balance regardless.\n\n**TODO for V5:** Add settlement monitoring \u2014 log balance delta after each expected settlement window, alert if settlement takes >6h.\n\n## 2026-03-30 23:38 UTC \u2014 [Pillar 1] Overnight Position Check: HL Stable, PM Settling\n\n**Task:** Check HL positions, funding rates, and PM settlement status before overnight.\n\n**HL Positions (23:38 UTC):**\n| Coin | Direction | Entry | uPnL | Funding/day |\n|------|-----------|-------|------|-------",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 00:38 UTC \u2014 [Pillar 3] Shadow Trade Tracker V2: Excluded Hours Data Collection\n\n**Task:** Build automated shadow trade tracker for V5 hour optimization.\n\n**Built:** `scripts/shadow-trade-tracker-v2.sh`\n- Runs every 5 min via cron (self-skips during active hours 11/12/19/20)\n- Simulates V4.1 filter logic: bias thresholds, YES-only, dead zone\n- For would-trade signals: spawns background outcome check 5 min later\n- Outputs JSONL to `logs/shadow-trades-v2.jsonl` with entry + outcome pairs\n- Tracks: hour, bias, BTC price, PM prices, trade decision, reason, outcome\n\n**Purpose:** Collect data on excluded hours (00-10, 13-18, 21-23 UTC) to:\n1. Confirm excluded hours stay unprofitable\n2. Detect if any excluded hour develops edge (\u2192 add to active hours)\n3. Provide backtest data for V5 hour optimization\n\n**Cron deployed:** `*/5 * * * * bash scripts/shadow-trade-tracker-v2.sh`\n\n**First entry:** 00:39 UTC \u2014 bias +70.4, YES_ONLY_FILTER. Correct.\n\n**After 1 week:** Analyze `shadow-trades-v2.jsonl` for excluded-hour WR. If any hour shows >55% WR on 20+ shadow trades, consider adding to V5.\n\n## 2026-03-31 00:08 UTC \u2014 [Pillar 2] PM Settlement Mystery: $38 Still Pending After 4 Hours\n\n**Task:** Investigate why PM balance hasn't reflected 20h wins.\n\n**Finding:** Balance stuck at $921.75 since 20:40. Expected ~$960.12 after 5W/2L Day 1.\n\n**Investigation:**\n- `get_positions()` returns empty \u2014 no active token holdings visible\n- No `redeem` / `claim` logic in bot code\n- No pending orders\n- PM doesn'",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
