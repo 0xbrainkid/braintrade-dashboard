@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T01:30:02.101366+00:00",
+  "timestamp": "2026-03-31T01:39:33.969138+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 404.087578,
+  "hl_balance": 403.731228,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 13.09,
+  "hl_pnl": 12.73,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -74.48,
+  "all_time_pnl": -74.84,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,16 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.539,
-      "leverage": 3,
-      "wallet": "old"
-    },
-    {
-      "coin": "ETH",
-      "side": "SHORT",
-      "size": 0.0535,
-      "entry": 2052.8,
-      "pnl": -0.5136,
+      "pnl": 2.07522,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 1.56948,
+      "pnl": 1.85592,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +36,10 @@
   "funding_opportunities": [
     {
       "coin": "DOOD",
-      "rate": "-0.0513%",
-      "apr": "-56%",
+      "rate": "-0.0549%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "292,414,608"
+      "oi": "289,594,086"
     }
   ],
   "daily_pnl": [
@@ -112,17 +103,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 80,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.999"
+        "text": "Top traders: 21 buys, 29 sells \u2014 avg price $0.961"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: DOOD at -0.0513%/8h \u2014 shorts paying longs"
+        "text": "Strongest: DOOD at -0.0549%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -206,9 +197,9 @@
       {
         "name": "HL Directional",
         "status": "DOWN",
-        "trades": 3,
+        "trades": 2,
         "win_rate": 0,
-        "pnl": 2.59488,
+        "pnl": 3.93114,
         "sharpe": 0.0
       },
       {
@@ -364,7 +355,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 01:08 UTC \u2014 [Pillar 4] F&G Ticks Up + BTC Bounce to $67.2K\n\n**Task:** Check F&G trend, shadow tracker data, overnight market.\n\n**F&G Index:** 8\u219211 (+3). First uptick in 3 days. Still Extreme Fear. 7-day range 8-14, avg 11. Our V4.1 edge modifier (+0.05) active continuously for 7+ days. No change needed.\n\n**Shadow Tracker:** 8 entries in 25 min (cron working). 6 YES_ONLY_FILTER, 1 BIAS_TOO_WEAK, 1 WOULD_TRADE_YES (1h UTC, bias -26.8). Outcome pending. Data collection working correctly.\n\n**BTC Rally: $66,700 \u2192 $67,215 (+$500, +0.8%)**\n- Overnight bounce from daily low of $66,262\n- Now $379 above HL BTC LONG entry ($66,836) \u2192 position profitable\n- If this holds \u2192 11h regime likely RANGE (BTC needs to be ranging, not trending)\n- Good setup for tomorrow morning session\n\n**HL Position Impact:**\n- BTC LONG: now profitable (~+$1.30 at 3x on $109 notional)\n- ETH SHORT: still profitable (+$1.50 if ETH didn't move proportionally)\n- SOL LONG: likely improving with BTC correlation\n\n## 2026-03-31 00:38 UTC \u2014 [Pillar 3] Shadow Trade Tracker V2: Excluded Hours Data Collection\n\n**Task:** Build automated shadow trade tracker for V5 hour optimization.\n\n**Built:** `scripts/shadow-trade-tracker-v2.sh`\n- Runs every 5 min via cron (self-skips during active hours 11/12/19/20)\n- Simulates V4.1 filter logic: bias thresholds, YES-only, dead zone\n- For would-trade signals: spawns background outcome check 5 min later\n- Outputs JSONL to `logs/shadow-trades-v2.jsonl` with entry + outcome pairs\n- Tracks: ho",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-30 19:25 UTC \u2014 [Pillar 4] F&G Correlation + Monday Trade Review\n\n**Task:** Correlate Fear & Greed with WR. Review first Monday with new filters.\n\n**Findings:**\n1. **F&G is useless as a signal right now** \u2014 ALL 161 trades happened during Extreme Fear (F&G 0-19). No data for other regimes. Can't correlate what doesn't vary.\n2. **Monday results: 3W/2L = 60% WR on 5 trades** (outcomes say 5, but logs show 6 executions). All YES bets at hour 11-12.\n3. **Duplicate trade bug is BACK** \u2014 two trades 7 seconds apart at 11:19 (same 5-min window), two more at 11:38-11:39. Per-window guard is broken.\n4. **Hour 19 completely blocked** \u2014 UP price at $0.540 > max_price $0.535. 46 price blocks today. Our second-best hour is being wasted.\n5. **V3.2 filter blocks NO trades at hour 11** \u2014 \"YES-only, NO=40% WR\". Forces us to wait for negative bias to buy YES.\n\n**My thinking:** Two competing problems:\n- max_price at $0.535 is too tight, blocking our best hours \u2192 should widen to $0.545\n- BUT higher price = higher break-even WR needed (54.5% at $0.545)\n- The duplicate trade bug is more urgent \u2014 it doubles our risk per window\n\n**Decision:** Fix duplicate bug first (P2 priority). Widen max_price to $0.545 with data backing needed. F&G not actionable until we trade in non-fear regime.\n\n**Next P4:** Build BTC volatility regime classifier (ATR-based). More useful differentiator than F&G.\n\n## 2026-03-31 01:38 UTC \u2014 [Pillar 1] BTC Surges to $68.2K: HL Profits, ETH SHORT Closed\n\n**Task:** Monitor overnight market shift. Check copy signal and HL positions.\n\n**BTC: $68,237 (+2.3% from $66,700 consolidation)**\n- Massive overnight rally: $66,262 (19h low) \u2192 $68,237 (01:38 next day) = +$1,975\n- Now above yesterday's high ($67,881)\n- HL BTC LONG: +$2.15 (entry $66,836, 3x on $109)\n- HL SOL LONG: +$1.95 (entry $82.60, SOL correlated)\n- **ETH SHORT closed** \u2014 someone closed it during rally (would have been losing)\n\n**Copy Signal: bearish@85% INTO a +2.3% BTC rally**\n- Smart money selling into strength (profit-taking)\n- Classic attention signal: high activity on the market regardless of direction\n- For 11h tomorrow: if BTC pulls back creating negative bias, copy-attention boost would fire\n\n**Shadow Tracker: first outcome \u2705**\n- 1h UTC: bias -26.8, BTC $67,109\u2192$67,263 = WIN\n- 1/1 shadow WR (meaningless sample, but data collection working)\n\n**Tomorrow 11h outlook:**\n- BTC at $68.2K \u2014 if it consolidates, RANGE regime likely\n- If it keeps rallying, could see TREND again (upward this time)\n- F&G still Extreme Fear (11) \u2192 V4.1 modifier active\n- PM balance: $921.75 (still waiting on $38 settlement)\n\n## 2026-03-31 01:08 UTC \u2014 [Pillar 4] F&G Ticks Up + BTC Bounce to $67.2K\n\n**Task:** Check F&G trend, shadow tracker data, overnight market.\n\n**F&G Index:** 8\u219211 (+3). First uptick in 3 days. Still Extreme Fear. 7-day range 8-14, avg 11. Our V4.1 edge modifier (+0.05) active continuously for 7+ days",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -374,7 +365,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
