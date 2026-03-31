@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T10:30:02.438623+00:00",
+  "timestamp": "2026-03-31T10:45:02.635282+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 398.242071,
+  "hl_balance": 398.201271,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 7.24,
+  "hl_pnl": 7.2,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -80.33,
+  "all_time_pnl": -80.37,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": -0.7938,
+      "pnl": -0.96228,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": 1.34064,
+      "pnl": 1.46832,
       "leverage": 3,
       "wallet": "old"
     }
@@ -96,12 +96,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 44,
+    "signal_confidence": 40,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 38 buys, 12 sells \u2014 avg price $0.980"
+        "text": "Top traders: 20 buys, 30 sells \u2014 avg price $0.954"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 0.5468400000000001,
+        "pnl": 0.50604,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 10:09 UTC \u2014 [Pillar 2] Duplicate Trade Bug Fix + Monday Review\n\n**Task:** Fix duplicate trade bug that's been doubling our risk per window.\n\n**Finding:** Monday 71% WR (5W/2L on 7 trades) \u2014 ABOVE 65% TARGET! But 3 duplicate windows found:\n- 11:19 \u2014 2 trades 8 seconds apart (same order, different IDs)\n- 11:39 \u2014 3 trades in 53 seconds (bot restarted mid-window, lost state)\n- 20:17 \u2014 2 trades 3 seconds apart (race condition)\n\n**Root causes:**\n1. Watchdog restarts reset `window_traded` flag (in-memory only)\n2. Race condition: loop runs faster than expected, flag doesn't gate properly\n\n**Fix deployed:**\n- File-based window lock at `/tmp/pm_trade_window.lock` \u2014 survives restarts\n- Cooldown increased 30s \u2192 60s between trades\n- Lock file contains current window timestamp, checked before any trade\n\n**My thinking:** Without duplicates, Monday was probably 3-4 unique windows with ~75% WR. Even with dupes, 71% is excellent. The new filters (weekend/hour/edge) are working. If we can maintain 65%+ for 3 days, we scale from $10 \u2192 $50.\n\n**Decision:** Fix deployed, bot restarted. Monitoring for clean single-trade-per-window behavior.\n\n**Next P2:** After 3 clean days at 65%+, implement position scaling.\n\n\n## 2026-03-31 09:38 UTC \u2014 [Pillar 1/Meta] MEMORY.md Major Update \u2014 Persisting Overnight Research\n\n**Task:** Update MEMORY.md with all findings from tonight's 10-rotation research session. Memory was stale (last updated Mar 30 22:08).\n\n**Changes made:**\n1. **V5 Roadmap section rewritten** \u2014 old \"Queued Strategy Changes\" replaced with structured V5a/V5b/V5c/consolidation plan with dates, specs, and per-indicator performance table\n2. **Copy Intelligence section updated** \u2014 marked as DEAD for 5-min markets with explanation\n3. **Infrastructure section updated** \u2014 added liquidation detector, HL closer script, marked old copy pipeline for removal\n4. **Key Mar 31 research findings** \u2014 new section with tonight's 9 major discoveries\n5. **Indicator logging bug** \u2014 updated status (likely fixed, waiting for 11h trade confirmation)\n6. **V5 OBI weighting** \u2014 re-validated (was incorrectly \"invalidated\" due to pre-fix timing bug)\n7. **HL recapitalization** \u2014 reversed to consolidation (HL\u2192PM, not PM\u2192HL)\n\n**Why this matters:** MEMORY.md is persistent across sessions. Without this update, the next session would still believe:\n- Copy trading works (it doesn't)\n- OBI weighting is invalidated (it's our best indicator)\n- HL should receive more capital (it should lose capital to PM)\n- V5 is a vague list of ideas (it's now a concrete 3-phase plan with patches)\n\n**Next:** 11h trading window in 82 minutes. Regime is RANGE (1/6). Bot will trade. First trade confirms indicator logging fix.\n\n---\n## 2026-03-31 09:08 UTC \u2014 [Pillar 4] Liq Detector Calibration: 5h Data Analysis + ETH Contagion Fix\n\n**Task:** Analyze 5 hours of liquidation detector data to calibrate thresholds and discover sign",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 10:42 UTC \u2014 [Pillar 3] V5a Backtest CORRECTION \u2014 Dead Zone Already Filters 35-45\n\n**Task:** Prepare V5a deployment script. During code review, discovered dead zone filter changes the analysis.\n\n**CRITICAL CORRECTION:** Dead zone filter (35-45) already exists in V3.3+. The original V5a backtest inflated the improvement by including pre-V3.3 dead zone trades (47% WR) that are already filtered.\n\n**Corrected (V3.3+ era):**\n- Current (25-35 + 45+): 80% WR, ~5 trades/day, ~$33/day\n- V5a (45+ only): 85% WR, ~3.3 trades/day, ~$25/day\n- Removed bucket (25-35): 70% WR \u2014 profitable, just weaker\n- WR improvement: +5pp (NOT +8pp as originally stated)\n- Cost: -$8/day in reduced volume\n\n**V5a is a Sharpe trade, not a P&L trade.** Still deploying Apr 6 \u2014 consistency gain worth the EV cost. Patch updated with corrected estimates.\n\n**Regime: STRONG_TREND (7/6) at 10:42 UTC. BTC $66,380. Bot BLOCKED at 11h. Correct.**\n\n---\n## 2026-03-31 10:09 UTC \u2014 [Pillar 2] Duplicate Trade Bug Fix + Monday Review\n\n**Task:** Fix duplicate trade bug that's been doubling our risk per window.\n\n**Finding:** Monday 71% WR (5W/2L on 7 trades) \u2014 ABOVE 65% TARGET! But 3 duplicate windows found:\n- 11:19 \u2014 2 trades 8 seconds apart (same order, different IDs)\n- 11:39 \u2014 3 trades in 53 seconds (bot restarted mid-window, lost state)\n- 20:17 \u2014 2 trades 3 seconds apart (race condition)\n\n**Root causes:**\n1. Watchdog restarts reset `window_traded` flag (in-memory only)\n2. Race condition: loop runs faster than expected, flag doesn't gate properly\n\n**Fix deployed:**\n- File-based window lock at `/tmp/pm_trade_window.lock` \u2014 survives restarts\n- Cooldown increased 30s \u2192 60s between trades\n- Lock file contains current window timestamp, checked before any trade\n\n**My thinking:** Without duplicates, Monday was probably 3-4 unique windows with ~75% WR. Even with dupes, 71% is excellent. The new filters (weekend/hour/edge) are working. If we can maintain 65%+ for 3 days, we scale from $10 \u2192 $50.\n\n**Decision:** Fix deployed, bot restarted. Monitoring for clean single-trade-per-window behavior.\n\n**Next P2:** After 3 clean days at 65%+, implement position scaling.\n\n\n## 2026-03-31 09:38 UTC \u2014 [Pillar 1/Meta] MEMORY.md Major Update \u2014 Persisting Overnight Research\n\n**Task:** Update MEMORY.md with all findings from tonight's 10-rotation research session. Memory was stale (last updated Mar 30 22:08).\n\n**Changes made:**\n1. **V5 Roadmap section rewritten** \u2014 old \"Queued Strategy Changes\" replaced with structured V5a/V5b/V5c/consolidation plan with dates, specs, and per-indicator performance table\n2. **Copy Intelligence section updated** \u2014 marked as DEAD for 5-min markets with explanation\n3. **Infrastructure section updated** \u2014 added liquidation detector, HL closer script, marked old copy pipeline for removal\n4. **Key Mar 31 research findings** \u2014 new section with tonight's 9 major discoveries\n5. **Indicator logging",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
