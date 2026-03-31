@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T18:00:03.195741+00:00",
+  "timestamp": "2026-03-31T18:18:49.781889+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 394.062532,
+  "hl_balance": 396.096392,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 3.06,
+  "hl_pnl": 5.1,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -84.51,
+  "all_time_pnl": -82.47,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.10322,
+      "pnl": 1.64106,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": -0.44544,
+      "pnl": 0.40448,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": -0.4771,
+      "pnl": 0.169,
       "leverage": 3,
       "wallet": "old"
     }
@@ -104,13 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 76,
+    "current_bias": "neutral",
+    "signal_confidence": 4,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 39 buys, 11 sells \u2014 avg price $0.956"
+        "text": "Top traders: 26 buys, 24 sells \u2014 avg price $0.931"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.18068000000000006,
+        "pnl": 2.21454,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 17:38 UTC \u2014 [Pillar 4] MEMORY.md Major Update \u2014 All Mar 31 Findings Consolidated\n\n**Task:** Update MEMORY.md with all today's findings (was stale since 09:38 UTC).\n\n**Updated sections:**\n1. **Trading Accounts:** HL positions updated (3 LONGs at 91% margin), PM balance ~$927, consolidation planned\n2. **W14 Day 2:** Full day summary including zombie bug, single trade, liquidation events\n3. **V5b redesign:** Old conviction rewrite KILLED, new OBI sizing spec documented\n4. **HL consolidation:** Updated to 184x efficiency gap (was 16x \u2014 now including March total P&L data)\n5. **Critical Bug Fixed:** New section documenting zombie bash parent root cause\n6. **Liquidation Patterns:** New section with 4 tradeable patterns from 14 events\n7. **Infrastructure:** Updated start-pm-bot.sh and watchdog entries\n8. **Key Mar 31 Findings:** Updated with V5b kill, hour expansion analysis, daily market opportunity\n\n**Key corrections to stale memory:**\n- HL efficiency: was \"16x\" less efficient \u2192 now **184x** (based on March actuals, not estimates)\n- V5b: was \"OBI required\" \u2192 now \"OBI sizing modifier\"\n- MACD inversion: was \"87% WR\" \u2192 DROPPED (zombie-era data unreliable)\n- Hour expansion: was \"consider 9h/10h\" \u2192 DON'T (83% \u2192 76% dilution)\n\n**Next P4:** Pre-19h regime check at 18:45 UTC. Monitor for RANGE clearance.\n\n---\n## 2026-03-31 17:08 UTC \u2014 [Pillar 3] HL Bot Assessment: 184x Less Efficient Than PM \u2014 Consolidation Urgent\n\n**Task:** Assess HL bot performance and evaluate consolidation timeline.\n\n**HL Bot March Performance:**\n- 37 positions opened, 13 closed (100% WR, all take profits at 3%)\n- Total P&L: **+$2.76 for the entire month** ($0.09/day)\n- Capital: $357, margin utilization: 91% (3 positions \u00d7 $108)\n- Problem: opens positions aggressively but rarely closes \u2192 accumulates risk\n\n**PM vs HL Capital Efficiency:**\n| Metric | PM Bot | HL Bot | Ratio |\n|--------|--------|--------|-------|\n| Capital | $922 | $357 | 2.6x |\n| Daily P&L | $42.53 | $0.09 | 473x |\n| Return/day | 4.6% | 0.025% | **184x** |\n| WR | 83% | 100% | \u2014 |\n\n**HL bot opened NEW positions at 16:41 today:**\n- ETH LONG $108 at $2,102.30 (BB breakout, 1.7x vol) \u2014 currently -$0.51\n- SOL LONG $108 at $82.77 (BB breakout, 3.4x vol) \u2014 currently -$0.46\n- BTC LONG $108 still open from earlier \u2014 +$1.40\n\n**Consolidation Math:**\nMove $300 HL \u2192 PM:\n- PM: $1,222 \u00d7 4.6%/day = $56/day (+$13.47/day increase)\n- HL: $57 (monitoring only)\n- Pays for itself immediately\n\n**DECISION: Close all HL positions within 48h, consolidate to PM.**\n- Need Hani approval (per MEMORY.md)\n- Set tight TP (+1%) / SL (-2%) on all 3 HL positions\n- Once closed, withdraw $300 USDC to PM via bridge\n- Keep $57 in HL for monitoring/research\n- HL bot switch to MONITOR_ONLY mode (signals but no execution)\n\n**Risk note:** The HL bot JUST opened ETH+SOL longs. Closing now = realized small loss (~$0.50). But holding = 91% margin utilization with 3x ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 18:08 UTC \u2014 [Pillar 1] Pre-19h Intel: Alternation Pattern BROKE, BTC Rally Organic\n\n**Task:** Pre-19h window intelligence gathering and regime forecast.\n\n**BTC CASCADE Alternation Pattern UPDATE:**\n```\n13:50 SHORT_LIQ \u2192 14:55 LONG_LIQ \u2192 15:15 SHORT_LIQ \u2192 16:45 SHORT_LIQ \u2192 17:15 SHORT_LIQ\n```\nThe alternation broke at 16:45 \u2014 three consecutive SHORT_LIQ cascades. This means the BTC rally is a sustained short squeeze, not a whipsaw. BTC: $66,200 \u2192 $67,777 (+2.4% in 9h).\n\n**New liq events (16:00-17:40):**\n- BTC: 2 CASCADE SHORT_LIQ ($31.7M) \u2014 shorts getting destroyed\n- SOL: 1 CASCADE SHORT_LIQ \u2192 1 CASCADE LONG_LIQ \u2192 1 LIQ LONG_LIQ ($15.6M) \u2014 SOL flipped\n\n**Funding rates (HL):** All balanced/slightly negative. The rally is organic spot buying, not leverage-driven. This makes it more sustainable but also means no funding arb opportunity.\n\n**19h Window Forecast:**\n- Regime: TREND 5/6 \u2192 **likely BLOCKED**\n- BTC at $67,777 still rallying \u2192 regime may worsen to STRONG_TREND\n- For bot to trade: need BTC pullback \u2192 lower regime \u2192 negative bias \u2192 YES setup\n- Probability of 19h trade: **~25%** (need regime drop from 5/6 to \u22643/6 in 52 min)\n\n**HL positions:** BTC +$1.38, ETH +$0.11, SOL -$0.05. Net +$1.44. All 3 LONGs benefiting from the rally.\n\n**Copy signal:** neutral@2% \u2014 no useful information.\n\n**Decision:** No pre-emptive action. Monitor regime at 19:00 sharp. If still TREND/STRONG_TREND, bot correctly blocks. The regime filter has saved us $50+ today by avoiding trades during this volatile trending day.\n\n**Next P1:** Post-19h analysis \u2014 did the bot trade? If yes, check indicator logging. If no, document the regime filter save.\n\n---\n## 2026-03-31 17:38 UTC \u2014 [Pillar 4] MEMORY.md Major Update \u2014 All Mar 31 Findings Consolidated\n\n**Task:** Update MEMORY.md with all today's findings (was stale since 09:38 UTC).\n\n**Updated sections:**\n1. **Trading Accounts:** HL positions updated (3 LONGs at 91% margin), PM balance ~$927, consolidation planned\n2. **W14 Day 2:** Full day summary including zombie bug, single trade, liquidation events\n3. **V5b redesign:** Old conviction rewrite KILLED, new OBI sizing spec documented\n4. **HL consolidation:** Updated to 184x efficiency gap (was 16x \u2014 now including March total P&L data)\n5. **Critical Bug Fixed:** New section documenting zombie bash parent root cause\n6. **Liquidation Patterns:** New section with 4 tradeable patterns from 14 events\n7. **Infrastructure:** Updated start-pm-bot.sh and watchdog entries\n8. **Key Mar 31 Findings:** Updated with V5b kill, hour expansion analysis, daily market opportunity\n\n**Key corrections to stale memory:**\n- HL efficiency: was \"16x\" less efficient \u2192 now **184x** (based on March actuals, not estimates)\n- V5b: was \"OBI required\" \u2192 now \"OBI sizing modifier\"\n- MACD inversion: was \"87% WR\" \u2192 DROPPED (zombie-era data unreliable)\n- Hour expansion: was \"consider 9h/10h\" \u2192 DON'T (83% \u2192 76% diluti",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "NEUTRAL consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
