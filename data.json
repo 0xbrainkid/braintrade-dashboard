@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T16:30:01.819973+00:00",
+  "timestamp": "2026-03-31T16:40:30.056235+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 394.345049,
+  "hl_balance": 395.364029,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 3.35,
+  "hl_pnl": 4.36,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -84.22,
+  "all_time_pnl": -83.21,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.36774,
+      "pnl": 1.38672,
       "leverage": 3,
       "wallet": "old"
     }
@@ -87,12 +87,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 44,
+    "signal_confidence": 60,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.994"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.990"
       }
     ],
     "evolution": [
@@ -174,7 +174,7 @@
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": 0.36774,
+        "pnl": 1.38672,
         "sharpe": 0.0
       },
       {
@@ -330,7 +330,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 16:08 UTC \u2014 [Pillar 1] Daily Threshold Copy Trading \u2014 Case Study + V6 Design\n\n**Task:** Design a copy intelligence system for daily BTC threshold markets.\n\n**Case Study \u2014 Mar 31 \"$68K\" Market:**\n| Time | BTC Price | Est. YES Price | Event |\n|------|-----------|---------------|-------|\n| 00:00 | $67,500 | ~20% | overnight |\n| 09:20 | $66,200 | ~5% | ETH cascade drag-down |\n| 13:50 | $67,700 | ~35% | BTC short squeeze |\n| 16:00 | $66,900 | resolved NO | end of day |\n\n**Hypothetical trade:** Buy $50 YES at $0.05 during 09:20 dip \u2192 sell at $0.35 during 13:50 bounce = **$300 profit (600%)**. Risk: total loss if BTC never rallied.\n\n**Copy Intelligence Design for Daily Markets:**\n1. Scan daily threshold markets daily at 08:00 UTC\n2. Find markets where threshold is within 2-5% of current BTC price\n3. Monitor CLOB order flow for whale buys on YES at <15% price\n4. Whale YES accumulation during dip = contrarian signal = LONG BTC\n5. This is a HIGHER timeframe version of our 5-min OBI signal\n\n**V6 Integration:**\n- Daily market whale activity = macro confirmation for 5-min trades\n- When whales buy $68K YES at 5%, our 5-min contrarian YES strategy aligns\n- Use as +1 conviction boost (similar to copy_attention_boost in V5)\n- Only trigger when daily market is within 3% of BTC price\n\n**Markets resolved today (16:00 UTC):** All daily March 31 markets just closed. Need to find/build April daily markets for tomorrow.\n\n**Limitation:** Need CLOB trade data API access for daily markets to actually track whales. Current CLOB API works for 5-min tokens; untested for daily market tokens. Validate tomorrow.\n\n**Next P1:** At 08:00 Apr 1, scan for April 1 daily threshold markets. Test CLOB trade API on them. If whale data accessible, build prototype scanner.\n\n---\n## 2026-03-31 15:38 UTC \u2014 [Pillar 4] Liquidation Timeline: ETH\u2192BTC Contagion Confirmed + Whipsaw Pattern\n\n**Task:** Analyze 13h of liquidation detector data for signal patterns.\n\n**Data: 14 liquidation events across 3 coins (Mar 31 04:30-15:30 UTC):**\n- ETH: 9 events, ALL LONG_LIQ, $148.7M total \u2014 sustained bear pressure\n- BTC: 3 events, ALTERNATING (SHORT\u2192LONG\u2192SHORT), $62.3M \u2014 whipsaw\n- SOL: 2 events, SHORT_LIQ, $2M \u2014 relative strength (diverging from ETH)\n\n**Pattern 1 \u2014 ETH CASCADE \u2192 BTC CASCADE (2-4h lag):**\nETH cascade wave at 07:15-09:20 ($56.4M) \u2192 BTC first cascade at 13:50 (3.5h later). ETH is the LEADING indicator. When ETH has >2 liquidation events in 3h, expect BTC cascade within 2-4h.\n\n**Pattern 2 \u2014 BTC Alternating Cascade (whipsaw):**\nSHORT_LIQ (13:50) \u2192 LONG_LIQ (14:55) \u2192 SHORT_LIQ (15:15). Perfect alternation. BTC ping-pongs between liquidation levels. After each cascade, the OPPOSITE side gets liquidated next. This is a RANGE market signature.\n\n**Pattern 3 \u2014 Multi-Coin Divergence = Chop:**\nETH persistent LONG_LIQ + SOL SHORT_LIQ = diverging. When coins diverge on liquidation direction, BTC tends to",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 16:38 UTC \u2014 [Pillar 2] V5b Simulation Kills Original Design \u2014 OBI as Sizer, Not Gate\n\n**Task:** Simulate V5b conviction rewrite against real TRADE SIGNAL data.\n\n**V5b ORIGINAL (OBI required, 3/5 threshold) \u2014 KILLED:**\nSimulated against 9 trades (Mar 30-31 with indicator data):\n| Metric | V4.1 | V5b-original |\n|--------|------|-------------|\n| Trades | 9 | 3 |\n| Win Rate | 78% | 100% |\n| Blocked | \u2014 | 6 trades (4W/2L) |\n| Net P&L | +$25 | +$15 |\n\nV5b-original blocks 4 WINNING trades to avoid 2 losses. **Net -$10 worse than V4.1.**\n\n**V5b REVISED \u2014 OBI as SIZING modifier:**\n- OBI\u2705 \u2192 full size (1.2% balance) \u2014 high confidence\n- OBI\u274c \u2192 half size (0.6% balance) \u2014 lower confidence, lower risk\n- Everything else unchanged from V4.1\n\n**Why this is better:**\n- OBI\u274c trades have 67% WR (4W/2L) \u2014 still PROFITABLE\n- V5b-original wastes this edge by blocking them entirely\n- V5b-revised captures the edge at half risk\n- Same ~$26 profit with 33% less capital at risk\n- Sharpe ratio improves (same return, lower variance)\n\n**MACD inversion: DROPPED from V5b.**\nAll 9 trades have aligned MACD (negative MACD, negative bias). No opposed MACD in sample. The \"87% WR for opposed MACD\" finding was from the larger historical dataset which is contaminated by zombie-process double trades. Need clean data to re-evaluate.\n\n**Updated V5b spec:**\n1. OBI\u2705 \u2192 position_multiplier = 1.0x\n2. OBI\u274c \u2192 position_multiplier = 0.5x\n3. No MACD inversion (deferred to V6)\n4. Deploy criteria: n\u226530 OBI-tracked trades with clean single-process data\n\n**Next P2:** Write updated V5b patch spec. Need indicator logging confirmed working first (19h trade).\n\n---\n## 2026-03-31 16:08 UTC \u2014 [Pillar 1] Daily Threshold Copy Trading \u2014 Case Study + V6 Design\n\n**Task:** Design a copy intelligence system for daily BTC threshold markets.\n\n**Case Study \u2014 Mar 31 \"$68K\" Market:**\n| Time | BTC Price | Est. YES Price | Event |\n|------|-----------|---------------|-------|\n| 00:00 | $67,500 | ~20% | overnight |\n| 09:20 | $66,200 | ~5% | ETH cascade drag-down |\n| 13:50 | $67,700 | ~35% | BTC short squeeze |\n| 16:00 | $66,900 | resolved NO | end of day |\n\n**Hypothetical trade:** Buy $50 YES at $0.05 during 09:20 dip \u2192 sell at $0.35 during 13:50 bounce = **$300 profit (600%)**. Risk: total loss if BTC never rallied.\n\n**Copy Intelligence Design for Daily Markets:**\n1. Scan daily threshold markets daily at 08:00 UTC\n2. Find markets where threshold is within 2-5% of current BTC price\n3. Monitor CLOB order flow for whale buys on YES at <15% price\n4. Whale YES accumulation during dip = contrarian signal = LONG BTC\n5. This is a HIGHER timeframe version of our 5-min OBI signal\n\n**V6 Integration:**\n- Daily market whale activity = macro confirmation for 5-min trades\n- When whales buy $68K YES at 5%, our 5-min contrarian YES strategy aligns\n- Use as +1 conviction boost (similar to copy_attention_boost in V5)\n- Only trigger when dai",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
