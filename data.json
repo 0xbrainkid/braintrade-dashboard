@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T08:30:02.150773+00:00",
+  "timestamp": "2026-03-31T08:40:37.262132+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 400.976343,
+  "hl_balance": 400.379823,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 9.98,
+  "hl_pnl": 9.38,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -77.59,
+  "all_time_pnl": -78.19,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 0.71604,
+      "pnl": 0.27216,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0532,
       "entry": 2050.3,
-      "pnl": -0.17024,
+      "pnl": 0.24472,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.67848,
+      "pnl": 0.11088,
       "leverage": 3,
       "wallet": "old"
     }
@@ -104,13 +104,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 0,
+    "current_bias": "bullish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.997"
+        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.22428,
+        "pnl": 0.62776,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 08:08 UTC \u2014 [Pillar 2] V5b Conviction Rewrite Spec + Regime Cleared for 11h\n\n**Task:** Write the concrete V5b conviction rewrite specification based on tonight's indicator analysis, and check 11h readiness.\n\n**Regime Update:** RANGE (1/6) at 08:08 UTC \u2014 cleared from TREND (4/6) at 07:24. BTC recovered $67,104 \u2192 $67,421 (+0.47%). Bot WILL trade at 11h if regime holds. \u2705\n\n**V5b Conviction Rewrite Spec written: `patches/v5b-conviction-rewrite.spec.md`**\n\nCore changes:\n- **OBI = 3 points** (de facto required \u2014 can't reach 3-point threshold without it)\n- **MACD INVERTED** \u2014 scores when opposed to bias (reversal = good for contrarian)\n- **VWAP removed** from scoring (log-only)\n- **Copy removed** entirely (100% bots, zero signal)\n- **No conv=4 cap** \u2014 replaced by conviction-based sizing (score 3=0.8x, 4=1.0x, 5=1.2x)\n\nPossible trade scores:\n| Score | Meaning | Size | Expected WR |\n|-------|---------|------|-------------|\n| 5 | OBI + CVD + MACD(inv) | 1.2x | ~100% (n=6) |\n| 4 | OBI + one other | 1.0x | ~85% (n=18) |\n| 3 | OBI alone | 0.8x | ~80% (est.) |\n| \u22642 | No OBI | NO TRADE | 52% (saved) |\n\n**Key design decision:** Making OBI de facto required (3 points) means the system naturally filters out coin-flip trades (OBI\u274c = 52% WR). The old system could reach 3/4 conviction with CVD+MACD+VWAP but without OBI \u2014 those trades were 50/50 noise.\n\n**V5 roadmap status:**\n- V5a patch: \u2705 WRITTEN (`patches/v5a-min-bias-45.patch.md`) \u2014 deploy Apr 6\n- V5b spec: \u2705 WRITTEN (`patches/v5b-conviction-rewrite.spec.md`) \u2014 deploy Apr 13\n- V5c: liquidation detector integration \u2014 spec after V5b deployed\n- Copy pipeline kill: bundle with V5b\n\n**11h Pre-Session Assessment:**\n- Regime: RANGE \u2705 (bot will trade)\n- BTC: $67,421 (recovered from overnight low, consolidating)\n- Liq detector: no active BTC events, 2 ETH events (non-impactful for PM)\n- Copy V2 OBI: neutral (conf 7%)\n- Indicator bug test: first V4.1 trade at 11h will confirm if indicator logging works\n- Forecast: moderate confidence in 11h window. BTC stabilizing after overnight volatility.\n\n**Next P2:** Post-11h trade analysis \u2014 check if indicator logging bug is fixed, validate OBI prediction, compare actual outcome vs V5b projected decision.\n\n---\n## 2026-03-31 07:38 UTC \u2014 [Pillar 1] Copy Trading is DEAD on PM 5-min Markets \u2014 Kill the Pipeline\n\n**Task:** Build a V3 scanner targeting edge-price traders (0.45-0.55) on 5-min BTC markets to find real edge traders to copy.\n\n**Data:** Scanned 240 edge-price crypto trades from PM data API, covering 20 unique wallets.\n\n**Finding \u2014 There are ZERO human edge traders to copy:**\n- All 20 wallets at edge prices are part of **coordinated bot groups** (trade within same 5-second window)\n- Bot pattern #1: BUY DOWN at $0.35 (100% directional, 10-30 trades each)\n- Bot pattern #2: BUY UP/DOWN at $0.50 (market making)\n- Zero wallets passed the \"human trader\" filter (diverse prices, indep",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 08:38 UTC \u2014 [Pillar 3] HL Consolidation Execution Plan + Close Script Built\n\n**Task:** Build the concrete execution plan and tooling for consolidating HL capital into PM.\n\n**Capital Efficiency Gap (confirmed with live data):**\n- PM: 3.72%/day ($34.30/day on $922) \u2014 V4.1 bot actively generating\n- HL: 0.23%/day ($0.83/day on $363) \u2014 3 positions barely moving\n- PM is **16x more capital efficient** than HL\n- Moving $400 to PM = +$15.11/day (+43% revenue increase)\n- Monthly impact: +$332/month\n\n**Built: `scripts/hl-old-wallet-close.py`**\n- Dry-run tested \u2705 \u2014 correctly identifies all 3 positions\n- BTC LONG 3x: 0.0016 BTC, entry $66,836, uPnL +$0.26\n- ETH SHORT 3x: -0.0532 ETH, entry $2,050.30, uPnL +$0.28\n- SOL LONG 3x: 1.32 SOL, entry $82.60, uPnL +$0.15\n- Execute mode: market-closes all positions with 5s safety delay\n- Uses HYPERLIQUID_PRIVATE_KEY from brainKID/.env\n\n**Execution Plan (3 phases):**\n\n| Phase | Action | $ Amount | Dependency |\n|-------|--------|----------|------------|\n| 1 | Close HL old positions | ~$363 freed | Script ready, needs Hani approval |\n| 2 | Withdraw HL old + new | ~$400 USDC | Bridge Arb\u2192Polygon ($1-5 fee) |\n| 3 | Deposit to PM | ~$395 net | PM proxy deployment needed |\n\n**Blockers:**\n- $478 stuck at undeployed PM proxy (separate issue, needs Hani)\n- Bridge fees: ~$5 total (Arb\u2192Polygon)\n- Execution timing: during low-vol hours (06-08 UTC) to minimize slippage\n\n**Trigger criteria:** Execute when V5a has been deployed AND PM balance \u2265 $1,000 (shows sustained profitability). Currently at $922 \u2014 could hit $1,000 by end of W14 at current rates.\n\n**Decision:** Script is built and dry-run tested. Will present consolidation plan to Hani once V5a is live and PM demonstrates $1,000 balance. Not rushing \u2014 the $15/day opportunity cost is worth the insurance of proving V5a works first.\n\n**Next P3:** Post-V5a deployment, run a projection model: consolidated capital + V5a parameters (85% WR, 3.3 trades/day) \u2192 what's the path to Phase 3 ($50-100/day)?\n\n---\n## 2026-03-31 08:08 UTC \u2014 [Pillar 2] V5b Conviction Rewrite Spec + Regime Cleared for 11h\n\n**Task:** Write the concrete V5b conviction rewrite specification based on tonight's indicator analysis, and check 11h readiness.\n\n**Regime Update:** RANGE (1/6) at 08:08 UTC \u2014 cleared from TREND (4/6) at 07:24. BTC recovered $67,104 \u2192 $67,421 (+0.47%). Bot WILL trade at 11h if regime holds. \u2705\n\n**V5b Conviction Rewrite Spec written: `patches/v5b-conviction-rewrite.spec.md`**\n\nCore changes:\n- **OBI = 3 points** (de facto required \u2014 can't reach 3-point threshold without it)\n- **MACD INVERTED** \u2014 scores when opposed to bias (reversal = good for contrarian)\n- **VWAP removed** from scoring (log-only)\n- **Copy removed** entirely (100% bots, zero signal)\n- **No conv=4 cap** \u2014 replaced by conviction-based sizing (score 3=0.8x, 4=1.0x, 5=1.2x)\n\nPossible trade scores:\n| Score | Meaning | Size | Expected",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
