@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T05:00:02.429620+00:00",
+  "timestamp": "2026-03-31T05:10:36.305244+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 401.817895,
+  "hl_balance": 401.418895,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 10.82,
+  "hl_pnl": 10.42,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -76.75,
+  "all_time_pnl": -77.15,
   "total_trades": 235,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.09998,
+      "pnl": 1.0125,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 1.32,
       "entry": 82.601,
-      "pnl": 0.92004,
+      "pnl": 0.60852,
       "leverage": 3,
       "wallet": "old"
     }
@@ -95,13 +95,13 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 68,
+    "current_bias": "bullish",
+    "signal_confidence": 100,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 12 buys, 38 sells \u2014 avg price $0.988"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
       }
     ],
     "evolution": [
@@ -183,7 +183,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.0200199999999997,
+        "pnl": 1.62102,
         "sharpe": 0.0
       },
       {
@@ -339,7 +339,7 @@
     "sharpe": -0.23,
     "max_drawdown": 568.1
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 04:38 UTC \u2014 [Pillar 1] Copy Intel Pipeline is Feeding Bot GARBAGE \u2014 Major Fix Needed\n\n**Task:** Analyze top trader data from the copy scanner and compare against our trade performance.\n\n**Finding \u2014 The entire copy signal pipeline is broken:**\n\n**Problem 1: pm-copy-scanner.py finds the WRONG traders**\n- 17/20 \"top wallets\" are coordinated bot farms (exactly 30 trades, 1 market, avg price $0.99, $0 spent, 0.2s gap between signals)\n- All 17 only do SELL Up at $0.99 \u2014 they're market making / redemption bots\n- Scoring formula `markets * 2 + avg_price * 10` rewards high-price traders (yield farmers always score highest)\n\n**Problem 2: The 3 \"real\" traders are yield farmers, not edge traders**\n- Evil-Pint ($143K spent): BUY No at $0.999 on \"BTC above $74K\" \u2014 collecting 0.1% yield (BTC at $67.6K, guaranteed win)\n- Sparkling-Prevalence ($66K spent): BUY Yes at $0.999 on \"BTC above $62K\" \u2014 same yield farming\n- Far-Flung-Abbey ($39 spent): $1 trades both ways \u2014 test wallet\n- ZERO of the top 20 wallets are trading the 5-min markets at edge prices (0.45-0.55)\n\n**Problem 3: Signal pipeline routing is disconnected**\n- `copy_scanner_v2.py` generates GOOD data (live OBI, smart money flow) \u2192 saves to `copy_signal.json`\n- But the bot reads `live-signals.json` from `copy-signal-integrator.py`\n- The integrator reads from the OLD `copy-signals.json` (the bot farm garbage)\n- **The V2 scanner's useful OBI data is being generated every 5 minutes and THROWN AWAY**\n\n**Current state of `live-signals.json` (what bot reads):**\n- bearish@68% based on 38/50 SELL signals \u2014 but 34 of those 38 are from bot farms\n- Real trader signals: only 4 bullish vs 8 bearish (small sample, mostly yield farming noise)\n- avg_signal_price: $0.988 \u2014 proves these are resolved-market redemptions, NOT live predictions\n\n**My thinking:** This explains why the copy signal has been inconsistent. Our V4.1 copy_attention_boost treats high-confidence copy signals as conviction boosters, but the underlying signal is noise. The attention theory (any high-conf = YES WR boost) may have been coincidence rather than causation.\n\nThe fix is straightforward:\n1. **Wire V2 OBI data into the bot** \u2014 it already generates exactly what we need (order book imbalance on live 5-min markets)\n2. **Kill the old pipeline** \u2014 pm-copy-scanner.py \u2192 copy-signal-integrator.py \u2192 live-signals.json is all noise\n3. **New scoring** for wallet-level copy: filter to entry prices 0.40-0.60, require outcome tracking, score by (WR - 0.50) \u00d7 sqrt(trades) \u00d7 avg_size\n\n**Decision:**\n- NOT fixing today \u2014 bot is in V4.1 stability week, any pipeline change = restart risk\n- V5 should include: bot reads `copy_signal.json` (V2 OBI) instead of `live-signals.json` (garbage)\n- The copy signal has conf < 100 most of the time, so it rarely affects trades (line 471: only boosts at conf \u2265 100)\n- Net impact of garbage signal: LOW (mostly ignored by bot), but",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 05:08 UTC \u2014 [Pillar 2] OBI is the Only Indicator That Matters \u2014 V5 Conviction Rewrite\n\n**Task:** Analyze per-indicator performance to find which indicators actually predict wins, and optimize entry parameters.\n\n**Data:** 140 matched trades (signal \u2192 outcome) from March, including all V4.1 era trades.\n\n**Finding 1 \u2014 OBI is the DOMINANT indicator:**\n| Condition | WR | n | Delta |\n|---|---|---|---|\n| OBI\u2705 (all hours) | 65% | 74 | +13pp vs OBI\u274c |\n| OBI\u274c (all hours) | 52% | 66 | coin flip |\n| OBI\u2705 + V4.1 hours | **88%** | 24 | +36pp vs OBI\u274c |\n| OBI\u274c + V4.1 hours | **52%** | 23 | breakeven |\n\nOBI alone accounts for almost ALL of the edge in V4.1 hours. When OBI confirms order flow aligns with our contrarian YES, we win 88% of the time. When it doesn't, we're flipping coins.\n\n**Finding 2 \u2014 MACD is an INVERSE indicator:**\n| MACD | WR | n |\n|---|---|---|\n| MACD \u274c (opposed) | **87%** | 15 |\n| MACD \u2705 (aligned) | 55% | 125 |\n\nMACD opposing our trade = we're buying a REVERSAL (momentum against us, but market turns). This makes perfect sense for a contrarian strategy: we WANT to enter when momentum indicators say \"wrong way\" because we're fading the move.\n\n**Finding 3 \u2014 CVD adds modest edge, VWAP is noise:**\n- CVD: +13pp when aligned (60% vs 47%)\n- VWAP: -3pp when aligned (58% vs 61%) \u2014 literally noise\n- Current system treats all 4 equally at 1 conviction point each. Wrong.\n\n**Finding 4 \u2014 Cross-tab reveals the golden combo:**\n- OBI\u2705 + MACD\u274c (V4.1 hours): **100% WR** (6W/0L)\n- OBI\u2705 + MACD\u2705 (V4.1 hours): 82% WR (14W/3L)  \n- OBI\u274c + MACD\u2705 (V4.1 hours): 50% WR (11W/11L) \u2014 ZERO edge\n- Conv 4/4: 67% WR (18 trades) vs Conv 3/4: 58% WR (120 trades)\n\n**My thinking:** The conviction system needs a total rewrite for V5. Currently we count 3/4 indicators aligned = trade, 4/4 = reduce. This is wrong because:\n1. OBI is worth ~3x any other indicator (+36pp edge)\n2. MACD should be INVERTED for contrarian YES (opposed MACD = good)\n3. VWAP adds zero edge\n4. CVD is modestly useful but secondary to OBI\n\n**V5 Conviction Proposal (weighted):**\n- OBI\u2705 = +3 points (mandatory for high conviction)\n- CVD\u2705 = +1 point\n- MACD\u274c = +1 point (INVERTED \u2014 opposed MACD is bullish for contrarian)\n- VWAP = 0 points (removed from scoring)\n- Threshold: 3+ points to trade (OBI alone = 3, enough with nothing else)\n- Max: 5 points (OBI\u2705 + CVD\u2705 + MACD\u274c) \u2192 full Kelly size\n\n**Deployment plan:**\n1. V5a (this week): min_bias=45 only (safe, data-backed)\n2. V5b (next week): OBI weighting + MACD inversion (needs more OBI\u2705 data)\n3. V5c: liquidation detector integration\n\n**Risk:** OBI\u2705 + V4.1 = 24 trades. Need 50+ for statistical confidence. Collecting more this week under V4.1 before rewriting conviction.\n\n**Next P2:** After V5a deployment, track OBI\u2705/\u274c split on every trade for one week to build the 50-trade dataset needed to greenlight V5b.\n\n---\n## 2026-03-31 04:38 UTC \u2014 [Pillar 1] Copy Intel Pipeline is Fee",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -349,7 +349,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
