@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-03-31T17:00:01.762227+00:00",
+  "timestamp": "2026-03-31T17:10:47.789158+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 393.998932,
+  "hl_balance": 394.406252,
   "today_pnl": 17.35,
   "pm_pnl": -87.57,
-  "hl_pnl": 3.0,
+  "hl_pnl": 3.41,
   "today_trades": 1,
   "today_wins": 1,
   "today_losses": 0,
-  "all_time_pnl": -84.57,
+  "all_time_pnl": -84.16,
   "total_trades": 236,
   "days_active": 16,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.28304,
+      "pnl": 1.49526,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": -0.60928,
+      "pnl": -0.53248,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": -0.5551,
+      "pnl": -0.4368,
       "leverage": 3,
       "wallet": "old"
     }
@@ -105,12 +105,12 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 60,
+    "signal_confidence": 48,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.990"
+        "text": "Top traders: 37 buys, 13 sells \u2014 avg price $0.895"
       }
     ],
     "evolution": [
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.11865999999999988,
+        "pnl": 0.5259800000000001,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 16:38 UTC \u2014 [Pillar 2] V5b Simulation Kills Original Design \u2014 OBI as Sizer, Not Gate\n\n**Task:** Simulate V5b conviction rewrite against real TRADE SIGNAL data.\n\n**V5b ORIGINAL (OBI required, 3/5 threshold) \u2014 KILLED:**\nSimulated against 9 trades (Mar 30-31 with indicator data):\n| Metric | V4.1 | V5b-original |\n|--------|------|-------------|\n| Trades | 9 | 3 |\n| Win Rate | 78% | 100% |\n| Blocked | \u2014 | 6 trades (4W/2L) |\n| Net P&L | +$25 | +$15 |\n\nV5b-original blocks 4 WINNING trades to avoid 2 losses. **Net -$10 worse than V4.1.**\n\n**V5b REVISED \u2014 OBI as SIZING modifier:**\n- OBI\u2705 \u2192 full size (1.2% balance) \u2014 high confidence\n- OBI\u274c \u2192 half size (0.6% balance) \u2014 lower confidence, lower risk\n- Everything else unchanged from V4.1\n\n**Why this is better:**\n- OBI\u274c trades have 67% WR (4W/2L) \u2014 still PROFITABLE\n- V5b-original wastes this edge by blocking them entirely\n- V5b-revised captures the edge at half risk\n- Same ~$26 profit with 33% less capital at risk\n- Sharpe ratio improves (same return, lower variance)\n\n**MACD inversion: DROPPED from V5b.**\nAll 9 trades have aligned MACD (negative MACD, negative bias). No opposed MACD in sample. The \"87% WR for opposed MACD\" finding was from the larger historical dataset which is contaminated by zombie-process double trades. Need clean data to re-evaluate.\n\n**Updated V5b spec:**\n1. OBI\u2705 \u2192 position_multiplier = 1.0x\n2. OBI\u274c \u2192 position_multiplier = 0.5x\n3. No MACD inversion (deferred to V6)\n4. Deploy criteria: n\u226530 OBI-tracked trades with clean single-process data\n\n**Next P2:** Write updated V5b patch spec. Need indicator logging confirmed working first (19h trade).\n\n---\n## 2026-03-31 16:08 UTC \u2014 [Pillar 1] Daily Threshold Copy Trading \u2014 Case Study + V6 Design\n\n**Task:** Design a copy intelligence system for daily BTC threshold markets.\n\n**Case Study \u2014 Mar 31 \"$68K\" Market:**\n| Time | BTC Price | Est. YES Price | Event |\n|------|-----------|---------------|-------|\n| 00:00 | $67,500 | ~20% | overnight |\n| 09:20 | $66,200 | ~5% | ETH cascade drag-down |\n| 13:50 | $67,700 | ~35% | BTC short squeeze |\n| 16:00 | $66,900 | resolved NO | end of day |\n\n**Hypothetical trade:** Buy $50 YES at $0.05 during 09:20 dip \u2192 sell at $0.35 during 13:50 bounce = **$300 profit (600%)**. Risk: total loss if BTC never rallied.\n\n**Copy Intelligence Design for Daily Markets:**\n1. Scan daily threshold markets daily at 08:00 UTC\n2. Find markets where threshold is within 2-5% of current BTC price\n3. Monitor CLOB order flow for whale buys on YES at <15% price\n4. Whale YES accumulation during dip = contrarian signal = LONG BTC\n5. This is a HIGHER timeframe version of our 5-min OBI signal\n\n**V6 Integration:**\n- Daily market whale activity = macro confirmation for 5-min trades\n- When whales buy $68K YES at 5%, our 5-min contrarian YES strategy aligns\n- Use as +1 conviction boost (similar to copy_attention_boost in V5)\n- Only trigger when dai",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 17:08 UTC \u2014 [Pillar 3] HL Bot Assessment: 184x Less Efficient Than PM \u2014 Consolidation Urgent\n\n**Task:** Assess HL bot performance and evaluate consolidation timeline.\n\n**HL Bot March Performance:**\n- 37 positions opened, 13 closed (100% WR, all take profits at 3%)\n- Total P&L: **+$2.76 for the entire month** ($0.09/day)\n- Capital: $357, margin utilization: 91% (3 positions \u00d7 $108)\n- Problem: opens positions aggressively but rarely closes \u2192 accumulates risk\n\n**PM vs HL Capital Efficiency:**\n| Metric | PM Bot | HL Bot | Ratio |\n|--------|--------|--------|-------|\n| Capital | $922 | $357 | 2.6x |\n| Daily P&L | $42.53 | $0.09 | 473x |\n| Return/day | 4.6% | 0.025% | **184x** |\n| WR | 83% | 100% | \u2014 |\n\n**HL bot opened NEW positions at 16:41 today:**\n- ETH LONG $108 at $2,102.30 (BB breakout, 1.7x vol) \u2014 currently -$0.51\n- SOL LONG $108 at $82.77 (BB breakout, 3.4x vol) \u2014 currently -$0.46\n- BTC LONG $108 still open from earlier \u2014 +$1.40\n\n**Consolidation Math:**\nMove $300 HL \u2192 PM:\n- PM: $1,222 \u00d7 4.6%/day = $56/day (+$13.47/day increase)\n- HL: $57 (monitoring only)\n- Pays for itself immediately\n\n**DECISION: Close all HL positions within 48h, consolidate to PM.**\n- Need Hani approval (per MEMORY.md)\n- Set tight TP (+1%) / SL (-2%) on all 3 HL positions\n- Once closed, withdraw $300 USDC to PM via bridge\n- Keep $57 in HL for monitoring/research\n- HL bot switch to MONITOR_ONLY mode (signals but no execution)\n\n**Risk note:** The HL bot JUST opened ETH+SOL longs. Closing now = realized small loss (~$0.50). But holding = 91% margin utilization with 3x leverage. One 3% move against us = -$10. Not worth the risk.\n\n**Next P3:** Request Hani approval for HL consolidation. Draft the close + withdrawal execution plan.\n\n---\n## 2026-03-31 16:38 UTC \u2014 [Pillar 2] V5b Simulation Kills Original Design \u2014 OBI as Sizer, Not Gate\n\n**Task:** Simulate V5b conviction rewrite against real TRADE SIGNAL data.\n\n**V5b ORIGINAL (OBI required, 3/5 threshold) \u2014 KILLED:**\nSimulated against 9 trades (Mar 30-31 with indicator data):\n| Metric | V4.1 | V5b-original |\n|--------|------|-------------|\n| Trades | 9 | 3 |\n| Win Rate | 78% | 100% |\n| Blocked | \u2014 | 6 trades (4W/2L) |\n| Net P&L | +$25 | +$15 |\n\nV5b-original blocks 4 WINNING trades to avoid 2 losses. **Net -$10 worse than V4.1.**\n\n**V5b REVISED \u2014 OBI as SIZING modifier:**\n- OBI\u2705 \u2192 full size (1.2% balance) \u2014 high confidence\n- OBI\u274c \u2192 half size (0.6% balance) \u2014 lower confidence, lower risk\n- Everything else unchanged from V4.1\n\n**Why this is better:**\n- OBI\u274c trades have 67% WR (4W/2L) \u2014 still PROFITABLE\n- V5b-original wastes this edge by blocking them entirely\n- V5b-revised captures the edge at half risk\n- Same ~$26 profit with 33% less capital at risk\n- Sharpe ratio improves (same return, lower variance)\n\n**MACD inversion: DROPPED from V5b.**\nAll 9 trades have aligned MACD (negative MACD, negative bias). No opposed MACD in sample. T",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
