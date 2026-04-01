@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-01T20:00:02.820511+00:00",
-  "pm_balance": 928.89,
-  "hl_balance": 400.497354,
-  "today_pnl": 108.49,
-  "pm_pnl": -80.43,
-  "hl_pnl": 9.5,
-  "today_trades": 12,
+  "timestamp": "2026-04-01T20:30:02.451667+00:00",
+  "pm_balance": 925.67,
+  "hl_balance": 400.309734,
+  "today_pnl": 68.49,
+  "pm_pnl": -83.65,
+  "hl_pnl": 9.31,
+  "today_trades": 14,
   "today_wins": 9,
-  "today_losses": 3,
-  "all_time_pnl": -70.93,
-  "total_trades": 249,
+  "today_losses": 5,
+  "all_time_pnl": -74.34,
+  "total_trades": 250,
   "days_active": 17,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -1.16229,
+      "pnl": -1.34991,
       "leverage": 3,
       "wallet": "old"
     }
@@ -27,10 +27,10 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.1635%",
-      "apr": "-179%",
+      "rate": "-0.1534%",
+      "apr": "-168%",
       "action": "LONG",
-      "oi": "101,155,666"
+      "oi": "100,408,648"
     }
   ],
   "daily_pnl": [
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-04-01",
-      "pnl": 108.49
+      "pnl": 68.49
     }
   ],
   "pillar1": {
@@ -104,7 +104,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.1635%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.1534%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -180,17 +180,17 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 249,
-        "win_rate": 56.2,
-        "pnl": -80.43000000000006,
-        "sharpe": 0.63
+        "trades": 250,
+        "win_rate": 55.6,
+        "pnl": -83.65000000000009,
+        "sharpe": -0.23
       },
       {
         "name": "HL Directional",
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": -1.16229,
+        "pnl": -1.34991,
         "sharpe": 0.0
       },
       {
@@ -211,12 +211,6 @@
       }
     ],
     "edge_history": [
-      {
-        "date": "03-30",
-        "change": "+2 trades at 100% WR",
-        "impact": "100% WR",
-        "impact_class": "cyan"
-      },
       {
         "date": "03-30",
         "change": "+1 trades at 100% WR",
@@ -270,6 +264,12 @@
         "change": "+2 trades at 100% WR",
         "impact": "100% WR",
         "impact_class": "cyan"
+      },
+      {
+        "date": "04-01",
+        "change": "\u26a0\ufe0f +2 trades at 0% WR (LOSING)",
+        "impact": "\ud83d\udd34 0%",
+        "impact_class": "red"
       }
     ]
   },
@@ -279,12 +279,6 @@
     "research_reports": 20,
     "heartbeats_today": 0,
     "changes": [
-      {
-        "date": "03-26",
-        "change": "Sharpe ratio degraded: -0.04 \u2192 -0.18",
-        "impact": "\ud83d\udd34 -0.18",
-        "impact_class": "red"
-      },
       {
         "date": "03-27",
         "change": "Daily P&L report generated",
@@ -338,12 +332,18 @@
         "change": "Daily P&L report generated",
         "impact": "+1 report",
         "impact_class": "cyan"
+      },
+      {
+        "date": "04-01",
+        "change": "Sharpe ratio degraded: 0.63 \u2192 -0.23",
+        "impact": "\ud83d\udd34 -0.23",
+        "impact_class": "red"
       }
     ],
-    "win_rate_7d": 56.2,
-    "win_rate_24h": 75.0,
+    "win_rate_7d": 55.6,
+    "win_rate_24h": 64.3,
     "avg_trade_size": 0.52,
-    "sharpe": 0.63,
+    "sharpe": -0.23,
     "max_drawdown": 351.2
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 19:41 UTC \u2014 [Pillar 2] Per-Indicator Analysis: OBI Corrected, CVD/MACD/VWAP All Aligned\n\n**Task:** Full per-indicator analysis with corrected OBI framing.\n\n**Finding (11 trades with indicator data):**\n\n| Indicator | Aligned WR | Opposed WR | Delta | Notes |\n|-----------|-----------|-----------|-------|-------|\n| OBI | 67% (2W/1L) | **75% (6W/2L)** | -8pp | Opposed = slightly better |\n| CVD | 70% (7W/3L) | 100% (1W/0L) | -30pp | All but 1 trade had negative CVD |\n| MACD | 73% (8W/3L) | n/a (0) | \u2014 | 100% MACD aligned today |\n| VWAP | 73% (8W/3L) | n/a (0) | \u2014 | 100% VWAP aligned today |\n\n**Corrected OBI finding:**\n- Earlier claim of \"80% WR opposed\" was cumulative with pre-fix data. Today alone: opposed=75%, aligned=67%.\n- The OBI-aligned LOSS (trade 10, OBI +0.73) confirms the pattern: strong positive OBI + negative bias = market is confused, not a clean contrarian setup.\n- OBI opposed (bearish orderbook) = sellers lining up \u2192 our YES bet catches the exhaustion bounce \u2192 75% WR.\n- V5b sizing (OBI ",
