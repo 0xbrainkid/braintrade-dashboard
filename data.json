@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T04:00:01.834786+00:00",
+  "timestamp": "2026-04-01T04:13:21.854975+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 396.793196,
+  "hl_balance": 396.281776,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 5.79,
+  "hl_pnl": 5.28,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -81.78,
+  "all_time_pnl": -82.29,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 2.10438,
+      "pnl": 1.8954,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": -0.01536,
+      "pnl": -0.128,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 0.8099,
+      "pnl": 0.6201,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.4173%",
-      "apr": "-457%",
+      "rate": "-0.4750%",
+      "apr": "-520%",
       "action": "LONG",
-      "oi": "53,470,274"
-    },
-    {
-      "coin": "MINA",
-      "rate": "-0.1572%",
-      "apr": "-172%",
-      "action": "LONG",
-      "oi": "8,267,106"
+      "oi": "55,284,072"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.1366%",
-      "apr": "-150%",
+      "rate": "-0.1968%",
+      "apr": "-215%",
       "action": "LONG",
-      "oi": "126,766,642"
+      "oi": "125,807,298"
+    },
+    {
+      "coin": "MINA",
+      "rate": "-0.1640%",
+      "apr": "-180%",
+      "action": "LONG",
+      "oi": "8,295,384"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.4173%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.4750%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.89892,
+        "pnl": 2.3875,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + deep indicator re-analysis on full dataset.\n\n**19h result:** No trades. Bias briefly negative (-50 to -58) but LOW_CONVICTION (2/4). OBI\u274c + VWAP\u274c blocking consistently. Regime settled to MIXED 3/6.\n\n**VWAP FINDING REVERSED (was -3pp \u2192 now +30pp):**\n\nFull dataset (n=250, zombie-contaminated but indicative):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 66% | 63% | +3pp |\n| CVD | 61% | **88%** | **-27pp (INVERTED!)** |\n| MACD | 65% | 63% | +2pp |\n| **VWAP** | **69%** | **39%** | **+30pp** |\n\nV4.1 active hours only (n=77, cleaner):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 85% | 71% | +14pp |\n| CVD | 74% | **94%** | **-20pp (INVERTED!)** |\n| MACD | 78% | 75% | +3pp |\n| **VWAP** | **79%** | **50%** | **+29pp** |\n\n**VWAP is the SECOND strongest indicator (+29-30pp delta). Do NOT remove.**\nThe overnight -3pp finding was from n=2 VWAP\u274c samples \u2014 pure noise.\n\n**CVD IS INVERTED in full dataset:**\nCVD\u274c (negative) = 88-94% WR (better than CVD\u2705!)\nThis means high negative CVD (strong selling pressure) = GREAT for contrarian YES\nThe current implementation CORRECTLY uses CVD< threshold as \u2705\nSo CVD scoring is fine \u2014 it's just that CVD\u274c trades are actually BETTER quality\n\n**V5b spec REVISION NEEDED:**\n- KEEP VWAP in scoring (was \"remove\")\n- Consider CVD weighting differently (CVD\u274c = better)\n- OBI delta is +14pp in clean hours, not +36pp as overnight found\n- MACD delta is essentially noise (2-3pp)\n\n**19h conviction pattern today:** OBI\u274c + VWAP\u274c = consistent across all 19h signals. Both are meaningful signals saying \"trend hasn't reversed yet.\" The bot correctly blocked.\n\n---\n## 2026-04-01 03:38 UTC \u2014 [Pillar 2] Cron Audit: Killed 2 Dead Copy Pipeline Entries\n\n**Task:** Audit and clean up cron jobs.\n\n**Disabled (DEAD \u2014 confirmed in Mar 31 copy analysis):**\n1. `pm-copy-scanner.py` (*/30) \u2014 PM 5-min markets are 100% bots, scanner produces garbage. Was generating 1.5M+ log.\n2. `copy-signal-integrator.py` (5,35 *) \u2014 Feeds garbage into `live-signals.json` which bot doesn't even read.\n\n**Impact:** 4 fewer process spawns per hour. ~50KB/day log savings. Zero trading impact.\n\n**Kept (7 essential):**\n- `bot-watchdog.sh` */5 \u2014 zombie detection + restart\n- `redeem-cron.sh` */5 \u2014 PM winnings collection\n- `copy_scanner_v2.py` */5 \u2014 OBI data (useful, read by V5c)\n- `liquidation-detector.py` */5 \u2014 data collection for V5c\n- `shadow-trade-tracker-v2.sh` */5 \u2014 hour expansion data\n- `regime-detector.py` */15 \u2014 regime classification\n- `update-dashboard.sh` */30 \u2014 dashboard\n\n**Review queue (6 scripts, lower priority):**\n- `pillar-tracker.py`, `squeeze-detector.py`, `alpha-signal-update.sh`, `daily-pnl-report.sh`, `morning-research.sh`, `funding-rate-tracker.py`\n- These aren't ha",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 04:08 UTC \u2014 [Pillar 3] V5a Deploy Prep: Shadow Validator Built + Overnight Market Analysis\n\n**Task:** Build real-time V5a validation tooling for active hours and analyze overnight setup for Apr 1 trading\n\n**Finding:**\n1. **V5a shadow validator deployed** \u2014 `scripts/v5a-shadow-validator.sh` now runs on cron */5 during active hours (11,12,19,20 UTC). Compares every 5-min window under V4.1 vs V5a filters. Logs to `logs/v5a-shadow-validation.jsonl`. Analysis script at `scripts/v5a-analysis.py`.\n2. **Shadow data from off-hours confirms V5a thesis:** 341 off-hour windows analyzed. Only 10/341 (2.9%) pass V5a's |bias|\u226545 filter \u2014 ALL 10 are bearish (bias -45 to -70), ALL blocked by YES-only. Off-hour bias distribution: 33% below |15|, 10% in 15-25, 9% in 25-35, 15% in 35-45 (dead zone). Only 32% above |45|. V5a eliminates the weak 68%.\n3. **Overnight market:** BTC $68,113 (+0.7% 24h). Funding rates deepening negative: -0.0019% \u2192 -0.0028% \u2192 -0.0034%. Shorts increasingly dominant = squeeze setup strengthening. Range $65,998-$68,589. Regime MIXED 3/6 (good for trading). Liquidation state NORMAL across BTC/ETH/SOL.\n4. **HL old wallet:** $359.06 value. BTC +$1.95, ETH -$0.08, SOL +$0.69 uPnL. Combined +$2.56. 91% margin still dangerous but positions slightly green.\n5. **PM bot stable** \u2014 running since Mar 31 12:55 UTC (15+ hours). Binance WS reconnects are normal (keepalive cycle, not errors).\n\n**My thinking:**\n- V5a shadow validator is the missing piece for data-driven deploy. Instead of just backtesting historical trades, we'll have live comparison data from Apr 1-5 active hours showing exactly which windows V5a would block vs pass.\n- Key metric to watch: `V5A_BLOCKS` count. These are |bias| 25-45 windows where V4.1 trades but V5a wouldn't. Historical WR for this range = 51% (coin flip). If real-time data confirms they lose, V5a is validated.\n- Negative funding deepening is bullish \u2014 3 consecutive periods of increasing shorts. If BTC holds $67,500+ through Asian session, expect squeeze move toward $69K during London open (11h). This would give strong negative bias signals = good YES-only trades.\n- Regime needs to stay MIXED or drop to RANGE by 11h. Currently MIXED 3/6, right on the edge.\n\n**Decision:**\n- V5a shadow validator LIVE on cron \u2014 no code changes needed, purely observational\n- Trading outlook for today: BULLISH (negative funding squeeze + MIXED regime likely \u2192 RANGE by 11h)\n- Estimated 2-4 trades if regime cooperates, $15-30 P&L target\n- HL positions: HOLD (all slightly green, waiting for Hani approval on consolidation)\n\n**Next:** P4 \u2014 After active hours, analyze first batch of V5a shadow data. Also check if indicator logging finally works on first Apr 1 trade (critical zombie-bug verification).\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
