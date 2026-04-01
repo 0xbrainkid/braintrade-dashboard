@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T03:30:02.281330+00:00",
+  "timestamp": "2026-04-01T03:39:44.406362+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 395.863674,
+  "hl_balance": 395.676794,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 4.86,
+  "hl_pnl": 4.68,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -82.71,
+  "all_time_pnl": -82.89,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 1.79334,
+      "pnl": 1.7334,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": -0.2304,
+      "pnl": -0.34304,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 0.4069,
+      "pnl": 0.3926,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,31 +45,31 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.3233%",
-      "apr": "-354%",
+      "rate": "-0.3249%",
+      "apr": "-356%",
       "action": "LONG",
-      "oi": "51,538,830"
+      "oi": "52,268,380"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.2070%",
-      "apr": "-227%",
+      "rate": "-0.1999%",
+      "apr": "-219%",
       "action": "LONG",
-      "oi": "127,275,596"
+      "oi": "126,757,904"
     },
     {
       "coin": "MINA",
-      "rate": "-0.1271%",
-      "apr": "-139%",
+      "rate": "-0.1338%",
+      "apr": "-147%",
       "action": "LONG",
-      "oi": "7,649,470"
+      "oi": "7,384,692"
     },
     {
       "coin": "PROVE",
-      "rate": "-0.0666%",
-      "apr": "-73%",
+      "rate": "-0.0646%",
+      "apr": "-71%",
       "action": "LONG",
-      "oi": "3,075,524"
+      "oi": "3,074,714"
     }
   ],
   "daily_pnl": [
@@ -134,16 +134,16 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 100,
+    "signal_confidence": 36,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.993"
+        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.963"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.3233%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.3249%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -229,7 +229,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.96984,
+        "pnl": 1.78296,
         "sharpe": 0.0
       },
       {
@@ -385,7 +385,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + deep indicator re-analysis on full dataset.\n\n**19h result:** No trades. Bias briefly negative (-50 to -58) but LOW_CONVICTION (2/4). OBI\u274c + VWAP\u274c blocking consistently. Regime settled to MIXED 3/6.\n\n**VWAP FINDING REVERSED (was -3pp \u2192 now +30pp):**\n\nFull dataset (n=250, zombie-contaminated but indicative):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 66% | 63% | +3pp |\n| CVD | 61% | **88%** | **-27pp (INVERTED!)** |\n| MACD | 65% | 63% | +2pp |\n| **VWAP** | **69%** | **39%** | **+30pp** |\n\nV4.1 active hours only (n=77, cleaner):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 85% | 71% | +14pp |\n| CVD | 74% | **94%** | **-20pp (INVERTED!)** |\n| MACD | 78% | 75% | +3pp |\n| **VWAP** | **79%** | **50%** | **+29pp** |\n\n**VWAP is the SECOND strongest indicator (+29-30pp delta). Do NOT remove.**\nThe overnight -3pp finding was from n=2 VWAP\u274c samples \u2014 pure noise.\n\n**CVD IS INVERTED in full dataset:**\nCVD\u274c (negative) = 88-94% WR (better than CVD\u2705!)\nThis means high negative CVD (strong selling pressure) = GREAT for contrarian YES\nThe current implementation CORRECTLY uses CVD< threshold as \u2705\nSo CVD scoring is fine \u2014 it's just that CVD\u274c trades are actually BETTER quality\n\n**V5b spec REVISION NEEDED:**\n- KEEP VWAP in scoring (was \"remove\")\n- Consider CVD weighting differently (CVD\u274c = better)\n- OBI delta is +14pp in clean hours, not +36pp as overnight found\n- MACD delta is essentially noise (2-3pp)\n\n**19h conviction pattern today:** OBI\u274c + VWAP\u274c = consistent across all 19h signals. Both are meaningful signals saying \"trend hasn't reversed yet.\" The bot correctly blocked.\n\n---\n## 2026-04-01 03:08 UTC \u2014 [Pillar 1] BTC Funding 6/6 Negative Overnight = Strong Squeeze Setup\n\n**Task:** HL funding rate analysis for overnight positioning intel.\n\n**BTC Funding Rate (Last 6 hours, all NEGATIVE):**\n| Time | Rate/h | Direction |\n|------|--------|-----------|\n| 22:00 Mar 31 | -0.00107% | Shorts pay |\n| 23:00 Mar 31 | -0.00158% | Shorts pay |\n| 00:00 Apr 1 | -0.00065% | Shorts pay |\n| 01:00 Apr 1 | -0.00099% | Shorts pay |\n| 02:00 Apr 1 | -0.00099% | Shorts pay |\n| 03:00 Apr 1 | -0.00076% | Shorts pay |\n\n**6/6 negative = SHORTS DOMINANT** while BTC holds $68K+. Classic short squeeze setup.\n\n**What this means for PM trading at 11h:**\n- Shorts under pressure \u2192 any positive catalyst triggers covering \u2192 BTC UP\n- BTC UP = our YES position wins\n- If PM shows negative bias at 11h (bearish sentiment) while funding is negative (shorts crowded) \u2192 STRONG contrarian YES signal\n- This is the exact condition where our strategy's edge is highest\n\n**For HL positions:**\n- BTC LONG 3x is earning funding + price appreciation \u2192 HOLD\n- ETH/SOL LONG paying small positive funding \u2192 acceptable c",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-03-31 19:38 UTC \u2014 [Pillar 4] VWAP Redeemed: +30pp Delta on n=250 \u2014 Remove Decision REVERSED\n\n**Task:** Analyze 19h conviction failures + deep indicator re-analysis on full dataset.\n\n**19h result:** No trades. Bias briefly negative (-50 to -58) but LOW_CONVICTION (2/4). OBI\u274c + VWAP\u274c blocking consistently. Regime settled to MIXED 3/6.\n\n**VWAP FINDING REVERSED (was -3pp \u2192 now +30pp):**\n\nFull dataset (n=250, zombie-contaminated but indicative):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 66% | 63% | +3pp |\n| CVD | 61% | **88%** | **-27pp (INVERTED!)** |\n| MACD | 65% | 63% | +2pp |\n| **VWAP** | **69%** | **39%** | **+30pp** |\n\nV4.1 active hours only (n=77, cleaner):\n| Indicator | \u2705 WR | \u274c WR | Delta |\n|-----------|-------|-------|-------|\n| OBI | 85% | 71% | +14pp |\n| CVD | 74% | **94%** | **-20pp (INVERTED!)** |\n| MACD | 78% | 75% | +3pp |\n| **VWAP** | **79%** | **50%** | **+29pp** |\n\n**VWAP is the SECOND strongest indicator (+29-30pp delta). Do NOT remove.**\nThe overnight -3pp finding was from n=2 VWAP\u274c samples \u2014 pure noise.\n\n**CVD IS INVERTED in full dataset:**\nCVD\u274c (negative) = 88-94% WR (better than CVD\u2705!)\nThis means high negative CVD (strong selling pressure) = GREAT for contrarian YES\nThe current implementation CORRECTLY uses CVD< threshold as \u2705\nSo CVD scoring is fine \u2014 it's just that CVD\u274c trades are actually BETTER quality\n\n**V5b spec REVISION NEEDED:**\n- KEEP VWAP in scoring (was \"remove\")\n- Consider CVD weighting differently (CVD\u274c = better)\n- OBI delta is +14pp in clean hours, not +36pp as overnight found\n- MACD delta is essentially noise (2-3pp)\n\n**19h conviction pattern today:** OBI\u274c + VWAP\u274c = consistent across all 19h signals. Both are meaningful signals saying \"trend hasn't reversed yet.\" The bot correctly blocked.\n\n---\n## 2026-04-01 03:38 UTC \u2014 [Pillar 2] Cron Audit: Killed 2 Dead Copy Pipeline Entries\n\n**Task:** Audit and clean up cron jobs.\n\n**Disabled (DEAD \u2014 confirmed in Mar 31 copy analysis):**\n1. `pm-copy-scanner.py` (*/30) \u2014 PM 5-min markets are 100% bots, scanner produces garbage. Was generating 1.5M+ log.\n2. `copy-signal-integrator.py` (5,35 *) \u2014 Feeds garbage into `live-signals.json` which bot doesn't even read.\n\n**Impact:** 4 fewer process spawns per hour. ~50KB/day log savings. Zero trading impact.\n\n**Kept (7 essential):**\n- `bot-watchdog.sh` */5 \u2014 zombie detection + restart\n- `redeem-cron.sh` */5 \u2014 PM winnings collection\n- `copy_scanner_v2.py` */5 \u2014 OBI data (useful, read by V5c)\n- `liquidation-detector.py` */5 \u2014 data collection for V5c\n- `shadow-trade-tracker-v2.sh` */5 \u2014 hour expansion data\n- `regime-detector.py` */15 \u2014 regime classification\n- `update-dashboard.sh` */30 \u2014 dashboard\n\n**Review queue (6 scripts, lower priority):**\n- `pillar-tracker.py`, `squeeze-detector.py`, `alpha-signal-update.sh`, `daily-pnl-report.sh`, `morning-research.sh`, `funding-rate-tracker.py`\n- These aren't ha",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
