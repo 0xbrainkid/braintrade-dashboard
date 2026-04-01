@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-01T19:30:02.525483+00:00",
+  "timestamp": "2026-04-01T19:41:26.081863+00:00",
   "pm_balance": 940.89,
-  "hl_balance": 400.692603,
-  "today_pnl": 70.84,
+  "hl_balance": 400.528833,
+  "today_pnl": 89.66,
   "pm_pnl": -68.43,
-  "hl_pnl": 9.69,
-  "today_trades": 10,
-  "today_wins": 7,
+  "hl_pnl": 9.53,
+  "today_trades": 11,
+  "today_wins": 8,
   "today_losses": 3,
-  "all_time_pnl": -58.74,
-  "total_trades": 246,
+  "all_time_pnl": -58.9,
+  "total_trades": 247,
   "days_active": 17,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.96672,
+      "pnl": -1.13049,
       "leverage": 3,
       "wallet": "old"
     }
@@ -27,10 +27,10 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.2541%",
-      "apr": "-278%",
+      "rate": "-0.2335%",
+      "apr": "-256%",
       "action": "LONG",
-      "oi": "99,880,626"
+      "oi": "100,766,726"
     }
   ],
   "daily_pnl": [
@@ -88,7 +88,7 @@
     },
     {
       "date": "2026-04-01",
-      "pnl": 70.84
+      "pnl": 89.66
     }
   ],
   "pillar1": {
@@ -104,7 +104,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.2541%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.2335%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -180,8 +180,8 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 246,
-        "win_rate": 55.7,
+        "trades": 247,
+        "win_rate": 56.0,
         "pnl": -68.43000000000006,
         "sharpe": 0.63
       },
@@ -190,7 +190,7 @@
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": -0.96672,
+        "pnl": -1.13049,
         "sharpe": 0.0
       },
       {
@@ -340,13 +340,13 @@
         "impact_class": "cyan"
       }
     ],
-    "win_rate_7d": 55.7,
-    "win_rate_24h": 70.0,
+    "win_rate_7d": 56.0,
+    "win_rate_24h": 72.7,
     "avg_trade_size": 0.52,
     "sharpe": 0.63,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 19:08 UTC \u2014 [Pillar 4] 19h Window LIVE: Regime Cleared (RANGE 2/6), Bias Positive\n\n**Task:** Monitor 19h window opening.\n\n**Finding:**\n1. **Regime CLEARED!** RANGE 2/6 (was TREND 3/6 at 18:53). Bearish candles rolled off as predicted. No regime blocks.\n2. **BTC recovered to $68,188** (from $67,970 low). Upward momentum.\n3. **Bias strongly positive** (+28 to +63) \u2014 YES_ONLY filter blocking. Market expects BTC to continue recovering.\n4. **One negative bias attempt at 19:02** (bias=-29.8) but only 2/4 conviction (CVD positive = buying pressure contradicts contrarian bet). Correctly rejected LOW_CONVICTION.\n5. **Pre-session prediction of TREND block was WRONG** \u2014 the regime cleared faster than expected. BTC bounced from $68K support.\n\n**My thinking:**\n- 19h historically is bias-driven (strong negative bias = real signal). With BTC recovering, bias is positive \u2014 opposite of what we need.\n- If BTC stalls at $68,200-68,400 and pulls back, bias could flip negative. But the recovery trend suggests limited",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 19:38 UTC \u2014 [Pillar 1] 19h Trades: V5a+V6 Tags Confirmed + OBI Reversal Finding\n\n**Task:** Monitor 19h trades and verify V5a+V6 tagging in production.\n\n**Finding:**\n1. **2 trades in 19h: 1W/1L.** Trade 10 LOSS, trade 11 WIN.\n2. **V5a+V6 tagging CONFIRMED WORKING in production:**\n   - Trade 10: v5a=PASS, v6=FIRST (gap=null), LOSS\n   - Trade 11: v5a=PASS, v6=PASS (gap=1519s), WIN\n   - Both tags populated correctly with all fields\n\n3. **OBI REVERSAL FINDING:**\n   - Trade 10 (LOSS): OBI **aligned** \u2705 (+0.73) \u2014 first-ever OBI-aligned trade. IT LOST.\n   - Trade 11 (WIN): OBI **opposed** \u274c (-0.90) \u2014 consistent with all previous wins.\n   - Updated OBI record: **Opposed: 8W/2L = 80% WR. Aligned: 0W/1L = 0% WR.**\n   - Sample tiny (n=1 aligned) but DIRECTIONALLY this confirms OBI opposition = GOOD signal.\n   - Hypothesis: when orderbook agrees with our contrarian bet (OBI aligned), the move is already priced in. When orderbook disagrees (OBI opposed), there's still room for mean reversion.\n\n4. **Today total",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
