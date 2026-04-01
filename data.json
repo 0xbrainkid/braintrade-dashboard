@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T18:00:02.194184+00:00",
+  "timestamp": "2026-04-01T18:09:31.844060+00:00",
   "pm_balance": 952.41,
-  "hl_balance": 401.226465,
+  "hl_balance": 400.261412,
   "today_pnl": 90.84,
   "pm_pnl": -56.91,
-  "hl_pnl": 10.23,
+  "hl_pnl": 9.26,
   "today_trades": 9,
   "today_wins": 7,
   "today_losses": 2,
-  "all_time_pnl": -46.68,
+  "all_time_pnl": -47.65,
   "total_trades": 245,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,16 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.99534,
-      "leverage": 3,
-      "wallet": "old"
-    },
-    {
-      "coin": "ETH",
-      "side": "LONG",
-      "size": 0.0509,
-      "entry": 2159.8,
-      "pnl": -1.21142,
+      "pnl": -1.39761,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,10 +27,10 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.1618%",
-      "apr": "-177%",
+      "rate": "-0.2095%",
+      "apr": "-229%",
       "action": "LONG",
-      "oi": "101,552,230"
+      "oi": "101,522,376"
     }
   ],
   "daily_pnl": [
@@ -113,7 +104,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.1618%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.2095%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -197,9 +188,9 @@
       {
         "name": "HL Directional",
         "status": "DOWN",
-        "trades": 2,
+        "trades": 1,
         "win_rate": 0,
-        "pnl": -2.20676,
+        "pnl": -1.39761,
         "sharpe": 0.0
       },
       {
@@ -355,7 +346,7 @@
     "sharpe": 0.63,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 17:38 UTC \u2014 [Pillar 1] 0x3bca CLOSED AGAIN + BTC Pullback to $68,466\n\n**Task:** Pre-19h whale check and market update.\n\n**Finding:**\n1. **0x3bca closed their re-short** \u2014 gone FLAT for the second time today. The $3.7M short lasted ~2h (15:38\u219217:38). BTC dropped from $69K to $68,466 during that period, so they likely exited profitably this time.\n2. **0xecb6 still accumulating:** $24M \u2192 $25.5M LONG, now -$11K uPnL (underwater on the pullback)\n3. **BTC: $68,466** \u2014 pulled back $500 from $69K resistance. This is GOOD for 19h trading \u2014 creates negative bias and dip-buying opportunities.\n4. **Bias strongly negative** (-58 to -75 for last 15 min) \u2014 exactly what our bot needs.\n\n**19h outlook UPGRADED:**\n- BTC pulled back from $69K \u2192 negative bias persistent\n- 0x3bca's short-close removes sell pressure \u2192 bounce potential\n- 0xecb6 still $25.5M LONG \u2192 buying support on dips\n- RANGE regime + negative bias + whale support = HIGH trade probability\n- **Expected: 3-5 trades, 75%+ WR**\n\n**Decision:** Monitor. Pre",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 18:08 UTC \u2014 [Pillar 2] 19h WARNING: Regime Flipped to TREND 3/6 \u2014 May Block Trades\n\n**Task:** Pre-session regime check for 19h window.\n\n**Finding:**\n1. **Bot inline regime: TREND 3/6 \u2014 WILL BLOCK TRADES** (bot threshold \u22653)\n   - This morning was RANGE 1/6. BTC's drop from $69K to $67,970 created a -1.32% 4h trend.\n   - Trend component: +2 (|trend| > 1.0%), Range: +1 (range > 1.0%), Consistency: 0 = score 3.\n   \n2. **For regime to clear, BTC needs to recover to ~$68,534** (+$564 from current $67,970). That's a significant bounce.\n\n3. **Alternatively, wait 2-3 hours** for the bearish 17h/18h candles to roll off the 8h lookback window. By 20h or 21h, the trend score may drop.\n\n4. **Hourly candle pattern:** [+, -, -, +, +, -, -, -] \u2014 3 consecutive down candles (16h, 17h, 18h). BTC dropped $900 in 3 hours.\n\n5. **Irony:** the negative bias we wanted for YES trades was caused by BTC falling, which ALSO triggered the regime filter. Regime filter is doing its job \u2014 our contrarian strategy shouldn't trade ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
