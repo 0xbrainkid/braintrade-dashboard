@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T04:30:02.155504+00:00",
+  "timestamp": "2026-04-01T04:41:46.339072+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 397.192616,
+  "hl_balance": 397.639636,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 6.19,
+  "hl_pnl": 6.64,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -81.38,
+  "all_time_pnl": -80.93,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 2.08332,
+      "pnl": 2.25018,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 0.36352,
+      "pnl": 0.40448,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 0.8515,
+      "pnl": 1.0907,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.5027%",
-      "apr": "-550%",
+      "rate": "-0.4921%",
+      "apr": "-539%",
       "action": "LONG",
-      "oi": "56,267,150"
+      "oi": "56,478,132"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.1908%",
-      "apr": "-209%",
+      "rate": "-0.1815%",
+      "apr": "-199%",
       "action": "LONG",
-      "oi": "125,605,466"
+      "oi": "124,843,678"
     },
     {
       "coin": "MINA",
-      "rate": "-0.1546%",
-      "apr": "-169%",
+      "rate": "-0.1554%",
+      "apr": "-170%",
       "action": "LONG",
-      "oi": "8,268,770"
+      "oi": "8,384,352"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.5027%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.4921%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.29834,
+        "pnl": 3.74536,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 04:13 UTC \u2014 [Pillar 4] Funding Rate Squeeze Signal: Built Detector + Funding-vs-WR Correlation\n\n**Task:** Build a BTC funding rate squeeze detector and correlate funding regimes with PM trading performance.\n\n**Finding:**\n1. **Funding squeeze detector LIVE** \u2014 `intelligence/funding-squeeze-detector.py` on cron */30. Scores SHORT_SQUEEZE/LONG_SQUEEZE probability 0-100 using: funding rate streak, deepening acceleration, L/S ratio trend.\n2. **Current score: 61/100 SHORT_SQUEEZE** \u2014 3-period negative streak (-0.0019% \u2192 -0.0028% \u2192 -0.0034%), deepening confirmed, L/S ratio declining 16.9% over 12h (1.898 \u2192 1.577). Textbook squeeze setup.\n3. **Funding vs PM WR (all data, n=164):** Long-funding days = 61% WR (n=106), Short-funding days = 43% WR (n=58). **18pp delta AGAINST our thesis!** But this is contaminated by pre-V3 garbage (bad hours, NO trades, 24h trading).\n4. **V3+ era (Mar 27+, n=17):** Too small to be conclusive. Short-funding: 6W/3L = 67% WR. Long-funding: 5W/2L = 71% WR. Nearly identical. Signal is noise at this sample size.\n5. **Key insight: funding regime \u2260 5-min PM edge.** Funding rates reflect 8h positioning. PM 5-min markets resolve in 5 minutes. The timescale mismatch means funding likely doesn't predict individual 5-min outcomes \u2014 it predicts daily BTC direction, which our contrarian bot already adapts to via bias signal.\n\n**My thinking:**\n- The pre-V3 correlation (SHORT=43%, LONG=61%) is likely explained by: short-funding days = BTC dropping = pre-V3 bot trading bad hours and NO direction = losing. It's not that funding predicts PM outcomes \u2014 it's that market conditions that cause negative funding also cause our old unfiltered bot to lose.\n- Post-V3, the signal washes out because our filters already handle regime. The V4.1 regime filter blocks TREND days, which is the real mechanism \u2014 not funding rate per se.\n- **Decision: DON'T wire funding into bot conviction yet.** The squeeze detector is useful as a dashboard/research signal, not as a trading filter. Keep accumulating V3+ data. Revisit at n\u226550 trades with funding correlation.\n- The squeeze detector output (`squeeze-funding.json`) is available for V6 consideration if data proves it matters.\n\n**Decision:**\n- Funding squeeze detector deployed as OBSERVATIONAL tool only\n- pm_adjustment field exists but set conservatively (+0.10 at 60+, +0.05 at 40+)\n- Will NOT integrate into V5a/V5b \u2014 needs minimum 50-trade V3+ sample first\n- Current 61/100 SHORT_SQUEEZE = bullish context for today's active hours (directional bias, not trade filter)\n\n**Next:** P1 \u2014 Copy Intelligence. Check if any human traders have appeared on PM daily/weekly markets (V6 opportunity from yesterday's finding).\n\n---\n## 2026-04-01 04:08 UTC \u2014 [Pillar 3] V5a Deploy Prep: Shadow Validator Built + Overnight Market Analysis\n\n**Task:** Build real-time V5a validation tooling for active hours and analyze overnight setup for",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 04:38 UTC \u2014 [Pillar 1] Copy Intel Pivot + CRITICAL BUG FIX: OBI NameError Killing Trades\n\n**Task:** Investigate PM daily/weekly threshold markets for human copy targets (V6 opportunity). Instead found and fixed a critical trade-blocking bug.\n\n**Finding:**\n1. **CRITICAL BUG FOUND & FIXED:** `NameError: name 'obi' is not defined` \u2014 crashing the bot during trade execution since Mar 30 12:43. The `obi`, `cvd`, `macd_h`, `vwap_val` variables were computed inside `check_conviction()` as local variables, but the indicator logging dict at line 557 in `should_trade()` tried to reference them directly. The bot crashed AFTER all filters passed, AFTER Kelly sizing, RIGHT BEFORE placing the order.\n   - **Impact:** 38 crashes logged. Every trade that passed all filters (bias, regime, conviction, edge, kelly) was KILLED at the last step. The Mar 31 11:15 trade that went through was likely during a window where the logging code wasn't reached (different code path).\n   - **Fix:** `check_conviction()` now stores indicators in `self._conviction_indicators`. The `_last_indicators` dict reads from there via `getattr(self, '_conviction_indicators', {})`.\n   - **Bot restarted** at 04:40 UTC, running clean. Syntax verified.\n\n2. **PM daily threshold market search \u2014 DEAD END:** Gamma API search is broken (returns same irrelevant results for every query). CLOB API only shows 4 ancient BTC markets (all at extreme prices like $17K, $1M). No active near-threshold daily/weekly BTC markets exist on PM right now. The V6 daily-market opportunity from yesterday's finding can't be tested \u2014 there are no markets to test on.\n\n3. **Copy Signal V2 (OBI monitor) is healthy:** Current net OBI = +0.058 (slightly bullish), confidence 11 (low). The orderbook data pipeline works \u2014 it's the indicator *logging* in the bot that was broken.\n\n**My thinking:**\n- This bug explains why we only got 1 trade on Mar 31 despite good conditions. The bot saw signals, passed all filters, then crashed on the indicator logging. The 11:15 trade might have succeeded because of a timing edge where the error was caught differently.\n- The 38 crash count means potentially 38 BLOCKED TRADES over Mar 30-31. Not all would have been real trades (many are retries of the same window), but several legitimate trades were killed.\n- This is WORSE than the zombie bug in some ways \u2014 the zombie caused duplicates, this one caused ZERO EXECUTION. It silently ate our trades.\n- V5a validation data from today will now be REAL \u2014 with the bug fixed, every trade that passes filters will actually execute and log indicators.\n\n**Decision:**\n- Bug FIXED and bot restarted. This is the #1 priority finding \u2014 supersedes copy intel research.\n- Today's active hours (11,12,19,20 UTC) will be the TRUE first test of V4.1 with working indicator logging\n- Daily markets for V6 copy intel: shelved until PM launches new BTC threshold markets\n- Need t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
