@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-01T12:00:03.047905+00:00",
-  "pm_balance": 934.19,
-  "hl_balance": 399.088508,
-  "today_pnl": 74.93,
-  "pm_pnl": -75.13,
-  "hl_pnl": 8.09,
-  "today_trades": 4,
-  "today_wins": 4,
+  "timestamp": "2026-04-01T12:09:52.458302+00:00",
+  "pm_balance": 933.95,
+  "hl_balance": 398.605108,
+  "today_pnl": 95.36,
+  "pm_pnl": -75.37,
+  "hl_pnl": 7.61,
+  "today_trades": 5,
+  "today_wins": 5,
   "today_losses": 0,
-  "all_time_pnl": -67.04,
-  "total_trades": 240,
+  "all_time_pnl": -67.76,
+  "total_trades": 242,
   "days_active": 17,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.27348,
+      "pnl": -0.57558,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 1.63328,
+      "pnl": 1.50528,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 0.7033,
+      "pnl": 0.65,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.3887%",
-      "apr": "-426%",
+      "rate": "-0.4103%",
+      "apr": "-449%",
       "action": "LONG",
-      "oi": "97,035,732"
+      "oi": "96,541,356"
     }
   ],
   "daily_pnl": [
@@ -106,7 +106,7 @@
     },
     {
       "date": "2026-04-01",
-      "pnl": 74.93
+      "pnl": 95.36
     }
   ],
   "pillar1": {
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.3887%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.4103%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -198,17 +198,17 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 240,
-        "win_rate": 56.0,
-        "pnl": -75.13,
-        "sharpe": -0.23
+        "trades": 242,
+        "win_rate": 56.2,
+        "pnl": -75.37,
+        "sharpe": 27.47
       },
       {
         "name": "HL Directional",
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.0631,
+        "pnl": 1.5796999999999999,
         "sharpe": 0.0
       },
       {
@@ -358,13 +358,13 @@
         "impact_class": "cyan"
       }
     ],
-    "win_rate_7d": 56.0,
+    "win_rate_7d": 56.2,
     "win_rate_24h": 100.0,
     "avg_trade_size": 0.52,
-    "sharpe": -0.23,
+    "sharpe": 27.47,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 11:40 UTC \u2014 [Pillar 1] Whale Position Update: Short FULLY CLOSED, Long QUADRUPLED\n\n**Task:** Track HL whale positioning changes during our live trading window.\n\n**Finding:**\n1. **0x3bca (was $7.6M SHORT) \u2192 POSITION FULLY CLOSED!**\n   - Was $7.6M SHORT at 06:43, halved to $3.1M by 08:38, now COMPLETELY CLOSED\n   - Full capitulation \u2014 the biggest BTC short on the leaderboard is GONE\n   - This removes a major sell-wall / resistance source\n\n2. **0xecb6 (biggest LONG) \u2192 QUADRUPLED: $5.6M \u2192 $17.9M**\n   - Was $5.6M at our first scan (06:43), $14.5M at 08:38, now $17.9M\n   - Currently -$23K uPnL (underwater on the increase, BTC pulled back from high)\n   - Most aggressive whale accumulation we've tracked \u2014 adding on every dip\n\n3. **PM bot: +$13.82 today (3W/0L)** \u2014 balance $921.75 \u2192 $935.57\n   - All 3 trades fired during negative bias windows when BTC dipped\n   - Whale buying on dips = our contrarian YES trades = same direction = ALIGNED\n\n4. **Copy intelligence correlation CONFIRMED:**\n   - Whales are BTC",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 12:08 UTC \u2014 [Pillar 2] V5a Validation Update: 78% vs 75% WR + Trade 6 Live\n\n**Task:** Analyze V5a impact on today's trades and update cumulative validation data.\n\n**Finding:**\n1. **6 trades today, 5 confirmed wins, 1 pending (trade 6 at 12:08).**\n   - Trade 4 (11:43): |bias|=31.5 \u2192 V5a would BLOCK \u2192 it WON\n   - Trade 5 (12:03): bias=-65.9, 4/4 conviction (CONV_TOO_HIGH triggered) \u2192 WON\n   - Trade 6 (12:08): bias=-65.9, entry $0.484 (best price today) \u2192 PENDING\n\n2. **V3+ cumulative V5a validation:**\n   - V5a PASS (|bias|\u226545): 14W/4L = **78% WR** (n=18)\n   - V5a BLOCK (|bias|<45): 3W/1L = **75% WR** (n=4)\n   - Delta: +3pp \u2014 V5a is directionally correct but sample tiny (n=4 for blocks)\n   - Today's blocked trade (trade 4 WIN) slightly closed the gap\n\n3. **V5a decision impact today:**\n   - V4.1: 5W/0L + 1 pending = $+18+ estimated P&L\n   - V5a: 4W/0L + 1 pending = $+15+ estimated (misses 1 winning trade)\n   - Missing trade 4 costs ~$5 today, but over time |bias|<45 = 75% WR vs 78% at \u226545\n\n4. **Indica",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
