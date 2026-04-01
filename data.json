@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T08:00:02.679194+00:00",
+  "timestamp": "2026-04-01T08:10:11.692765+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 399.474578,
+  "hl_balance": 398.879548,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 8.47,
+  "hl_pnl": 7.88,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -79.1,
+  "all_time_pnl": -79.69,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.32118,
+      "pnl": -0.49449,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 1.42336,
+      "pnl": 1.29024,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 1.3494,
+      "pnl": 1.0608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-1.1853%",
-      "apr": "-1298%",
+      "rate": "-1.0640%",
+      "apr": "-1165%",
       "action": "LONG",
-      "oi": "121,125,584"
+      "oi": "96,202,200"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0703%",
-      "apr": "-77%",
+      "rate": "-0.0790%",
+      "apr": "-87%",
       "action": "LONG",
-      "oi": "2,553,060,298"
+      "oi": "2,585,897,958"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -1.1853%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -1.0640%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.45158,
+        "pnl": 1.85655,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 07:38 UTC \u2014 [Pillar 3] V5a Deploy Checklist + Automated Readiness Checker\n\n**Task:** Build comprehensive V5a deploy validation framework with automated readiness tracking.\n\n**Finding:**\n1. **Deploy checklist created** at `patches/v5a-deploy-checklist.md` \u2014 5 prerequisites (all \u2705) + 5 validation criteria (0/5, data collection starts today).\n\n2. **Automated readiness checker** at `scripts/v5a-deploy-readiness.sh` \u2014 one command shows deploy status across all 5 validation criteria: stable days, indicator logging, shadow data volume, V5A_BLOCKS WR, and V4.1 weekly WR.\n\n3. **Current score: 0/5** \u2014 expected since OBI bug was just fixed at 04:40. All 5 criteria start collecting data from today's 11h active window.\n\n4. **Deploy decision matrix:**\n   - Score 4/5+ by Apr 4 \u2192 accelerate deploy to Apr 4\n   - Score 4/5+ by Apr 6 \u2192 deploy on schedule\n   - Score <4/5 by Apr 6 \u2192 delay to Apr 8\n   - Any WR <50% for 2 days \u2192 delay regardless\n\n5. **Key milestones today:**\n   - 11:00 UTC: First active window post-fix. V5a shadow validator starts collecting. Indicator logging gets tested.\n   - 13:00 UTC: First V5a analysis possible (`python3 scripts/v5a-analysis.py`)\n   - 23:00 UTC: Day 1 complete. Run readiness check.\n\n**My thinking:**\n- We've done 10 pillar rotations this session (04:08-07:38 UTC), producing:\n  - 2 new tools (funding squeeze detector, V5a shadow validator)\n  - 1 critical bug fix (OBI NameError)\n  - 1 enhanced tool (pre-session check)\n  - 3 new analysis scripts (v5a-analysis.py, v5a-deploy-readiness.sh, funding-squeeze-detector.py)\n  - Deep analysis across all 4 pillars (copy intel, price filters, volatility regime, bias buckets)\n- The session is research-saturated. Remaining off-hours (07:38-11:00) should focus on monitoring, not more analysis. Diminishing returns on research without new trading data.\n\n**Decision:**\n- Deploy framework complete. No more research changes until we have today's trading data.\n- Next meaningful work: 10:55 UTC pre-session check, then monitor 11h window for indicator logging confirmation.\n- Reduce heartbeat intensity for next 3 hours \u2014 bot is stable, tools are deployed, data collection is automated.\n\n**Next:** P4 \u2014 but substantive P4 work should wait for post-trading analysis. Next heartbeat can be lighter.\n\n---\n## 2026-04-01 07:08 UTC \u2014 [Pillar 2] Price Filter Analysis: max_price=0.535 vs 0.55\n\n**Task:** Investigate whether the max_price filter ($0.535) is too tight, blocking profitable trades.\n\n**Finding:**\n1. **Active-hour skip reasons (ranked):**\n   - BIAS_WEAK: 615 (biggest filter \u2014 working correctly)\n   - YES_ONLY: 175 | DEAD_ZONE: 171 | BIAS_STRONG: 134\n   - PRICE_TOO_LOW: 113 | REGIME_BLOCKED: 84\n   - LOW_CONVICTION: 77 | VWAP_BLOCK: 46\n   - **PRICE_TOO_HIGH: 17** (smallest active-hour filter)\n\n2. **Price range WR analysis (all data, n=164):**\n   | Range | WR | N | EV/$ |\n   |-------|-----|---|-------|\n   | 0.4",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 08:08 UTC \u2014 [Pillar 4] Apr 1 Session Forecast: Squeeze Exhaustion \u2192 RANGE by 11h\n\n**Task:** Analyze today's off-hour shadow data to forecast trading conditions for the 11h active window.\n\n**Finding:**\n1. **BTC squeeze played out fully:** $67,613 low (02:30) \u2192 $69,237 high (06:45) = +$1,624 (+2.4%). Now pulling back to $68,691. Classic squeeze-and-exhaust pattern.\n2. **Regime trajectory confirms:** STRONG_TREND 7/6 peaked at 06:45-07:15, dropped to TREND 5/6 by 07:25, then MIXED 3/6 by 08:00. Regime is CLEARING. At this rate \u2192 RANGE by 09:00-10:00.\n3. **Bias turning strongly negative:** 8h avg bias = -33.4 (67% negative). This is exactly what our YES-only bot needs \u2014 negative bias during a pullback from a squeeze high = prime contrarian setup.\n4. **V5a shadow during decline:** 5 v5a_pass entries at 07:20-08:00, all with negative bias (-46 to -68). These are the quality trades V5a would take.\n5. **Shadow data volume:** 118 entries today from off-hours. No entries yet from active hours (expected \u2014 starts at 11h).\n\n**Forecast for 11h window:**\n- **Scenario A (65% prob):** BTC consolidates $68,300-69,000. Regime RANGE/MIXED. 3-5 YES trades with strong negative bias. Expected P&L: +$20-40.\n- **Scenario B (25% prob):** BTC retests $69,237 or higher. TREND blocks most trades. 0-1 trades.\n- **Scenario C (10% prob):** BTC reverses below $68K. Bias flips positive, YES-only blocks. 0 trades.\n- Squeeze energy is spent (funding was -0.0034%, now priced in). Consolidation is the base case.\n\n**My thinking:**\n- The regime dropping from 7/6 \u2192 3/6 in 45 minutes is fast. With 3 hours until 11:00, RANGE is very likely.\n- Today should be the REAL first test of V4.1 with the OBI bug fixed. If we get 3-5 trades with indicator logging, we'll have more data than we've had in 2 days.\n- The squeeze thesis from this morning's funding analysis (P4 at 04:13) played out exactly as predicted. BTC was at $68,093 when I called it \u2014 peaked at $69,237 (+1.7% from that call).\n\n**Decision:**\n- No action needed \u2014 setup is evolving favorably\n- Will run pre-session check at 10:55 UTC\n- If regime is RANGE by 10:30, today will be a strong trading day\n\n**Next:** P1 \u2014 Copy Intelligence. But research is saturated for this cycle. Lighter heartbeats until trading data arrives.\n\n---\n## 2026-04-01 07:38 UTC \u2014 [Pillar 3] V5a Deploy Checklist + Automated Readiness Checker\n\n**Task:** Build comprehensive V5a deploy validation framework with automated readiness tracking.\n\n**Finding:**\n1. **Deploy checklist created** at `patches/v5a-deploy-checklist.md` \u2014 5 prerequisites (all \u2705) + 5 validation criteria (0/5, data collection starts today).\n\n2. **Automated readiness checker** at `scripts/v5a-deploy-readiness.sh` \u2014 one command shows deploy status across all 5 validation criteria: stable days, indicator logging, shadow data volume, V5A_BLOCKS WR, and V4.1 weekly WR.\n\n3. **Current score: 0/5** \u2014 expecte",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
