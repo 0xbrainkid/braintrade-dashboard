@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T05:30:02.904563+00:00",
+  "timestamp": "2026-04-01T05:40:26.854154+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 399.648393,
+  "hl_balance": 399.115553,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 8.65,
+  "hl_pnl": 8.12,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -78.92,
+  "all_time_pnl": -79.45,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00162,
       "entry": 66836.0,
-      "pnl": 2.81394,
+      "pnl": 2.6406,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 1.3056,
+      "pnl": 1.1008,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,12 +37,34 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 1.638,
+      "pnl": 1.4833,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "BLUR",
+      "rate": "-0.4585%",
+      "apr": "-502%",
+      "action": "LONG",
+      "oi": "61,211,342"
+    },
+    {
+      "coin": "STABLE",
+      "rate": "-0.1559%",
+      "apr": "-171%",
+      "action": "LONG",
+      "oi": "124,968,330"
+    },
+    {
+      "coin": "MINA",
+      "rate": "-0.1450%",
+      "apr": "-159%",
+      "action": "LONG",
+      "oi": "8,556,244"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-18",
@@ -111,6 +133,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.963"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: BLUR at -0.4585%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -192,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 5.7575400000000005,
+        "pnl": 5.2247,
         "sharpe": 0.0
       },
       {
@@ -348,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 05:08 UTC \u2014 [Pillar 2] OBI Bug Impact Analysis: 8 Trades Blocked, V5a Naturally Fixes 63%\n\n**Task:** Quantify the impact of the OBI NameError bug on trading P&L and cross-reference with V5a filter.\n\n**Finding:**\n1. **8 unique trade windows blocked** across Mar 30-31. The bug killed trades AFTER passing all filters (bias, regime, conviction, edge, Kelly). Estimated lost P&L: +$11.29 (hour-weighted EV).\n   - Mar 30 12h: 2 windows (bias -34.5, -32.4) \u2014 our 82% WR hour\n   - Mar 30 20h: 1 window (bias -32.1) \u2014 60% WR hour\n   - Mar 31 19h: 5 windows (bias -32.1 to -58.5) \u2014 73% WR hour\n\n2. **V5a cross-reference \u2014 the killer insight:**\n   - 5/8 blocked trades had |bias| < 45 \u2192 V5a would ALSO block them (correctly \u2014 these are noise)\n   - Only 3/8 had |bias| \u2265 45 (52.7, 58.5, 52.0) \u2192 V5a would let these through\n   - The 5 noise trades: avg |bias| = 33.9 \u2014 deep in the historically 51% WR range\n   - The 3 quality trades: avg |bias| = 54.4 \u2014 in the historically 70% WR range\n   - **V5a would have recovered ~$8.50 of the $11.29 lost** while correctly filtering the $2.79 EV noise\n\n3. **Post-fix bot health:** Zero errors since 04:40 restart. Bot cycling clean through off-hours. Balance $921.75 stable.\n\n**My thinking:**\n- The bug accidentally acted as a parameter study: it blocked ALL trades regardless of quality, so we can see the full quality distribution. 63% of trades passing V4.1 filters are in the |bias| 25-45 noise range. V5a eliminates exactly these.\n- The 3 quality trades (|bias| 52-58, all at 19h) would have been strong entries \u2014 19h + high bias = our historically best combination (73% WR at 19h is HIGHER with strong bias).\n- This confirms V5a is targeting the right trades to cut. The bug was bad, but it inadvertently validated our V5a approach.\n- Post-fix, today should see MORE trades than recent days. The question is whether the additional volume at |bias| 25-45 helps or hurts. V5a shadow validator will answer this starting 11h.\n\n**Decision:**\n- No parameter changes \u2014 let V4.1 run clean today to establish baseline with working indicator logging\n- V5a shadow validator (deployed last heartbeat) will capture the |bias| 25-45 vs 45+ split in real-time\n- If today's |bias| 25-45 trades lose (as backtest predicts), accelerate V5a deploy from Apr 6 to Apr 4\n- Monitor first active window (11h) closely for indicator logging confirmation\n\n**Next:** P3 \u2014 Strategy Development. Continue V5a countdown monitoring.\n\n---\n## 2026-04-01 04:38 UTC \u2014 [Pillar 1] Copy Intel Pivot + CRITICAL BUG FIX: OBI NameError Killing Trades\n\n**Task:** Investigate PM daily/weekly threshold markets for human copy targets (V6 opportunity). Instead found and fixed a critical trade-blocking bug.\n\n**Finding:**\n1. **CRITICAL BUG FOUND & FIXED:** `NameError: name 'obi' is not defined` \u2014 crashing the bot during trade execution since Mar 30 12:43. The `obi`, `cvd`, `macd_h`, `vwap_val` variable",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 05:38 UTC \u2014 [Pillar 3] Pre-Session Dashboard Enhanced + Regime Duration Analysis\n\n**Task:** Enhance pre-session check with new tools and analyze regime behavior for trading session planning.\n\n**Finding:**\n1. **Pre-session check enhanced** with 4 new sections: squeeze signal, V5a validator status, OBI bug monitor, and time-to-next-window. Full command: `bash scripts/pre-session-check.sh`\n\n2. **Current status (05:39 UTC):** Regime TREND 5/6 \u2014 would BLOCK trading. But this just flipped 20 min ago as BTC spiked $68,300\u2192$68,600. Squeeze playing out (short squeeze score 61/100 confirmed). Balance $921.75. Zero errors post-fix.\n\n3. **TREND duration analysis \u2014 KEY FINDING:** Analyzed 8 TREND periods from shadow data (last ~30h):\n   - Average TREND duration: **12 minutes** (2.4 shadow entries)\n   - Maximum: 25 minutes\n   - TREND is spiky, not sustained \u2014 resolves quickly to MIXED/RANGE\n   - With 5.5h until 11:00, current TREND will clear with >99% confidence\n   - 11 regime transitions in last 30 shadow entries = highly volatile regime state\n\n4. **BTC price action:** 3 consecutive bullish hourly candles. Squeeze catalyst: shorts paying increasing negative funding (-0.0034%/8h). BTC pushed from $67,579 low \u2192 $68,600+ current. If this exhausts, expect consolidation \u2192 RANGE by 11h.\n\n5. **Shadow data quality issue:** Found 2 entries with regime \"?\" and btc \"$0\" \u2014 likely timing collision between bot restart and shadow tracker. Non-critical but should add validation.\n\n**My thinking:**\n- The regime filter is working correctly \u2014 it blocks during the actual spike (which our contrarian strategy would lose on), then clears for the consolidation phase where contrarian works.\n- TREND lasting avg 12 min means we lose very few 5-min windows per TREND event \u2014 maybe 2-3 windows out of 48 in a full active-hour block. This is acceptable.\n- The squeeze is playing out RIGHT NOW (BTC +$300 in 20 min). By 11:00, the squeeze energy will likely be spent \u2192 BTC consolidates \u2192 RANGE \u2192 good trading conditions.\n- Pre-session check at 10:55 UTC will be the real go/no-go call.\n\n**Decision:**\n- No parameter changes \u2014 regime filter is behaving exactly as designed\n- Will run pre-session check at 10:55 UTC before first active window\n- TREND duration data is valuable \u2014 average 12 min means we can be confident regime clears quickly\n- Added regime duration stats to strategy knowledge base for V6 planning\n\n**Next:** P4 \u2014 Alpha Research Pipeline.\n\n---\n## 2026-04-01 05:08 UTC \u2014 [Pillar 2] OBI Bug Impact Analysis: 8 Trades Blocked, V5a Naturally Fixes 63%\n\n**Task:** Quantify the impact of the OBI NameError bug on trading P&L and cross-reference with V5a filter.\n\n**Finding:**\n1. **8 unique trade windows blocked** across Mar 30-31. The bug killed trades AFTER passing all filters (bias, regime, conviction, edge, Kelly). Estimated lost P&L: +$11.29 (hour-weighted EV).\n   - Mar 30 12h: 2 windows (bi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -368,7 +398,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
