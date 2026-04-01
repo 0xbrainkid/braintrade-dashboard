@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T06:30:02.863833+00:00",
+  "timestamp": "2026-04-01T06:45:39.800355+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 401.19837,
+  "hl_balance": 402.45437,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 10.2,
+  "hl_pnl": 11.45,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -77.37,
+  "all_time_pnl": -76.12,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.03498,
+      "pnl": 0.47064,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 2.08384,
+      "pnl": 2.56512,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 2.1203,
+      "pnl": 2.3894,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.5790%",
-      "apr": "-634%",
+      "rate": "-0.5560%",
+      "apr": "-609%",
       "action": "LONG",
-      "oi": "65,339,158"
+      "oi": "69,557,814"
     },
     {
       "coin": "MINA",
-      "rate": "-0.1109%",
-      "apr": "-121%",
+      "rate": "-0.1016%",
+      "apr": "-111%",
       "action": "LONG",
-      "oi": "7,716,488"
+      "oi": "7,878,716"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0685%",
-      "apr": "-75%",
+      "rate": "-0.0711%",
+      "apr": "-78%",
       "action": "LONG",
-      "oi": "121,730,574"
+      "oi": "121,739,082"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.5790%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.5560%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.16916,
+        "pnl": 5.42516,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 06:08 UTC \u2014 [Pillar 4] Volatility Regime Classification + V3+ Performance Deep Dive\n\n**Task:** Build BTC volatility regime classifier and cross-reference with PM performance. Validate V5a thesis with V3+ era data.\n\n**Finding:**\n1. **Volatility vs PM WR (all data, n=164):**\n   - LOW vol (<1% 4h range): 42% WR (n=31) \u2014 LOSING\n   - NORMAL vol (1-2%): 57% WR (n=115) \u2014 profitable\n   - HIGH vol (>2%): 61% WR (n=18) \u2014 best but rare\n   - **V3+ era FIX:** LOW vol jumps to 67% WR (n=9). V3 filters eliminated the bad low-vol trades.\n\n2. **V3+ bias analysis (n=17, Mar 27+):**\n   - |bias| 55-65: **100% WR** (4W/0L) \u2014 strongest signal bucket\n   - |bias| 45-55: 60% WR (6W/4L) \u2014 decent\n   - |bias| 25-35: 67% WR (2W/1L) \u2014 sample too small to judge\n   - |bias| < 45 combined: 67% (2W/1L, n=3)\n   - |bias| \u2265 45 combined: 71% (10W/4L, n=14)\n   - V5a direction confirmed but small sample \u2014 need more data before accelerating deploy\n\n3. **V3+ hour performance:**\n   - Hour 12: 100% WR (1W/0L) \u2014 tiny sample\n   - Hour 19: 100% WR (2W/0L) \u2014 best\n   - Hour 20: 100% WR (3W/0L) \u2014 surprisingly strong\n   - Hour 11: 67% WR (4W/2L) \u2014 weakest active hour\n   - Hour 9 (excluded): 40% WR (2W/3L) \u2014 correctly excluded\n\n4. **Current BTC vol regime: NORMAL** (z-score +0.33). 24h avg 4h range = 1.69%. Standard parameters apply.\n\n5. **Edge analysis:** Winning trades avg edge 0.240 vs losing 0.230 \u2014 NO DIFFERENCE. Edge size doesn't predict outcome. Conviction and bias magnitude matter more.\n\n**My thinking:**\n- The edge finding is important: we've been capping edge at 0.25, but edge size doesn't predict wins. What predicts wins is BIAS MAGNITUDE (70%+ at |bias|\u226545) and HOUR QUALITY (12/19/20 all at 100% in V3+).\n- Hour 11 at 67% is still profitable but it's our weakest active hour. Could consider V6: if 11h stays at 67% while 12/19/20 stay at 80%+, maybe reduce 11h sizing (not remove \u2014 67% is still good).\n- V5a thesis directionally confirmed (71% vs 67%) but n=3 for sub-45 is too small. The OBI bug was blocking most of our sub-45 trades, so we'll get real data today now that it's fixed.\n- Volatility regime as a signal: current setup already handles this via the regime detector (TREND/RANGE). Adding explicit volatility gating would be redundant and over-optimized for this sample.\n\n**Decision:**\n- NO new volatility filter \u2014 regime detector already handles it\n- V5a stays on Apr 6 timeline \u2014 V3+ sample too small to accelerate\n- Track 11h vs 12/19/20h split in coming days \u2014 potential V6 hour reweighting\n- Edge capping (0.25 cap) validated \u2014 edge doesn't predict outcome, so cap prevents overconfidence\n\n**Next:** P1 \u2014 Copy Intelligence.\n\n---\n## 2026-04-01 05:38 UTC \u2014 [Pillar 3] Pre-Session Dashboard Enhanced + Regime Duration Analysis\n\n**Task:** Enhance pre-session check with new tools and analyze regime behavior for trading session planning.\n\n**Finding:**\n1. **Pre-session check enhanced** with 4 ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 06:43 UTC \u2014 [Pillar 1] HL Leaderboard Copy Intel: BTC Whale LONG, ETH SHORT Squeeze Setup\n\n**Task:** Run copy-intel-tracker.py and analyze HL leaderboard positioning for actionable signals.\n\n**Finding:**\n1. **BTC: LONG-biased by notional (2:1 ratio)**\n   - 6 longs ($16.5M) vs 3 shorts ($7.8M) among top 20 traders\n   - Biggest single trader: anon-0xfc66 LONG $8.2M BTC\n   - Second biggest: anon-0x3bca SHORT $7.6M \u2014 key trader to monitor\n   - The \"all-short portfolios\" are small accounts (delta-neutral farming, not directional)\n\n2. **ETH: 80% SHORT by count** \u2014 the real crowded trade\n   - 2L / 8S among top 20\n   - Combined with negative ETH funding = ETH SHORT SQUEEZE candidate\n   - This is potentially more interesting than BTC for squeeze plays (V6 opportunity)\n\n3. **SOL: Mixed** (4L / 5S, 56% short) \u2014 no clear consensus\n\n4. **Our positioning alignment:**\n   - PM bot buys BTC YES (bullish) when bias is negative \u2192 ALIGNS with whale LONG consensus\n   - HL old wallet: BTC/ETH/SOL LONG \u2192 BTC aligns, ETH/SOL are against majority\n   - Smart money LONG + retail shorts (negative funding) = textbook squeeze. Active since ~03:00 UTC (BTC $67,600 \u2192 $68,600+)\n\n5. **Key trader to watch: anon-0x3bca** (SHORT $7.6M BTC)\n   - If they close/flip, it's a capitulation signal \u2192 BTC likely pumps further\n   - Saved prev state for next scan comparison\n\n**My thinking:**\n- The surface-level view (\"leaderboard is all short\") is WRONG when weighted by notional. The actual whale money is BTC LONG. The small all-short portfolios are delta-neutral strategies collecting funding \u2014 they're not directional bears.\n- This validates our PM YES strategy: we're aligned with smart money direction. When retail shorts (negative funding) get squeezed, BTC moves up, our YES bets win.\n- ETH short squeeze is a V6 opportunity \u2014 if PM launches ETH 5-min markets, or we build an HL ETH-specific strategy.\n- The copy-intel-tracker now saves prev state for change detection. Next run will show who flipped.\n\n**Decision:**\n- BTC YES strategy CONFIRMED by whale positioning \u2014 no change needed\n- Monitor anon-0x3bca (SHORT $7.6M) for flip signal\n- ETH squeeze logged as V6 opportunity\n- Copy intel tracker saves diffs now \u2014 next scan will detect position changes\n\n**Next:** P2 \u2014 Smart Entry.\n\n---\n## 2026-04-01 06:08 UTC \u2014 [Pillar 4] Volatility Regime Classification + V3+ Performance Deep Dive\n\n**Task:** Build BTC volatility regime classifier and cross-reference with PM performance. Validate V5a thesis with V3+ era data.\n\n**Finding:**\n1. **Volatility vs PM WR (all data, n=164):**\n   - LOW vol (<1% 4h range): 42% WR (n=31) \u2014 LOSING\n   - NORMAL vol (1-2%): 57% WR (n=115) \u2014 profitable\n   - HIGH vol (>2%): 61% WR (n=18) \u2014 best but rare\n   - **V3+ era FIX:** LOW vol jumps to 67% WR (n=9). V3 filters eliminated the bad low-vol trades.\n\n2. **V3+ bias analysis (n=17, Mar 27+):**\n   - |bias| 55-65: **100% WR** (4W/0",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
