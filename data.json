@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T09:00:01.717991+00:00",
+  "timestamp": "2026-04-01T09:10:38.195985+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 399.333369,
+  "hl_balance": 398.758239,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 8.33,
+  "hl_pnl": 7.76,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -79.24,
+  "all_time_pnl": -79.81,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.40227,
+      "pnl": -0.6201,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 1.69472,
+      "pnl": 1.51552,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 1.0192,
+      "pnl": 0.8411,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.3922%",
-      "apr": "-429%",
+      "rate": "-0.5761%",
+      "apr": "-631%",
       "action": "LONG",
-      "oi": "87,765,852"
+      "oi": "97,587,068"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0555%",
-      "apr": "-61%",
+      "rate": "-0.0644%",
+      "apr": "-71%",
       "action": "LONG",
-      "oi": "124,358,714"
+      "oi": "124,359,868"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.3922%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.5761%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.31165,
+        "pnl": 1.73652,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 08:38 UTC \u2014 [Pillar 1] WHALE ALERT: Leaderboard Positions Shifting Massively During Squeeze\n\n**Task:** Re-scan HL leaderboard key traders to detect position changes during the BTC squeeze.\n\n**Finding:**\n1. **3 POSITION FLIPS in 2 hours:**\n   - ABC: LONG $53K \u2192 SHORT $131K (flipped bearish)\n   - anon-0x57dd: SHORT $277K \u2192 LONG $924K (short capitulation \u2192 went long)\n   - beatmaker1: LONG $2.4M \u2192 SHORT $848K (profit-take, went bearish)\n\n2. **2 MASSIVE SIZE CHANGES:**\n   - anon-0xecb6: LONG $5.6M \u2192 **$14.5M (+159%)** \u2014 TRIPLED their BTC long! Strongest bullish signal.\n   - anon-0x3bca: SHORT $7.6M \u2192 $3.1M (-59%) \u2014 halved short, -$2,791 uPnL, partial capitulation.\n\n3. **NET LONG ratio: 2.1:1 \u2192 5.75:1** \u2014 whale consensus shifted MASSIVELY bullish in 2 hours.\n   - Combined longs: ~$23M (was $16.5M)\n   - Combined shorts: ~$4M (was $7.8M)\n   - anon-0xfc66 ($8.5M LONG, +$107K uPnL) held steady through \u2014 conviction trade.\n\n4. **Key risk signal:** beatmaker1 flipped to SHORT $848K. Could be profit-taking or knows something. Size is small relative to the $23M long wall.\n\n**My thinking:**\n- The squeeze didn't just squeeze shorts \u2014 it convinced whales to ADD to longs. anon-0xecb6 tripling from $5.6M to $14.5M during a squeeze is STRONG conviction.\n- Short capitulation (0x3bca halving, 0x57dd flipping) means the selling pressure that caused negative funding is evaporating. Funding rates should normalize, removing the squeeze catalyst but leaving bullish positioning.\n- For our PM YES strategy: if BTC consolidates $68.5-69K with $23M in whale longs supporting, every dip will be bought. Negative bias dips at 11h/12h should resolve YES at high WR.\n- This is the most actionable copy intel finding since we started tracking \u2014 real-time position flow data during a market event.\n\n**Decision:**\n- HIGH CONFIDENCE for today's 11h session \u2014 whale positioning strongly supports YES trades\n- Will re-scan at 10:55 (pre-session) to check if any whales exit before our window\n- Save this data as a case study for copy intel methodology \u2014 it actually works on HL (unlike PM 5-min)\n- Future: automate position-change alerts via cron (P1 backlog item)\n\n**Next:** P2 \u2014 Smart Entry.\n\n---\n## 2026-04-01 08:08 UTC \u2014 [Pillar 4] Apr 1 Session Forecast: Squeeze Exhaustion \u2192 RANGE by 11h\n\n**Task:** Analyze today's off-hour shadow data to forecast trading conditions for the 11h active window.\n\n**Finding:**\n1. **BTC squeeze played out fully:** $67,613 low (02:30) \u2192 $69,237 high (06:45) = +$1,624 (+2.4%). Now pulling back to $68,691. Classic squeeze-and-exhaust pattern.\n2. **Regime trajectory confirms:** STRONG_TREND 7/6 peaked at 06:45-07:15, dropped to TREND 5/6 by 07:25, then MIXED 3/6 by 08:00. Regime is CLEARING. At this rate \u2192 RANGE by 09:00-10:00.\n3. **Bias turning strongly negative:** 8h avg bias = -33.4 (67% negative). This is exactly what our YES-only bot needs \u2014 negative bias during a ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 08:38 UTC \u2014 [Pillar 1] WHALE ALERT: Leaderboard Positions Shifting Massively During Squeeze\n\n**Task:** Re-scan HL leaderboard key traders to detect position changes during the BTC squeeze.\n\n**Finding:**\n1. **3 POSITION FLIPS in 2 hours:**\n   - ABC: LONG $53K \u2192 SHORT $131K (flipped bearish)\n   - anon-0x57dd: SHORT $277K \u2192 LONG $924K (short capitulation \u2192 went long)\n   - beatmaker1: LONG $2.4M \u2192 SHORT $848K (profit-take, went bearish)\n\n2. **2 MASSIVE SIZE CHANGES:**\n   - anon-0xecb6: LONG $5.6M \u2192 **$14.5M (+159%)** \u2014 TRIPLED their BTC long! Strongest bullish signal.\n   - anon-0x3bca: SHORT $7.6M \u2192 $3.1M (-59%) \u2014 halved short, -$2,791 uPnL, partial capitulation.\n\n3. **NET LONG ratio: 2.1:1 \u2192 5.75:1** \u2014 whale consensus shifted MASSIVELY bullish in 2 hours.\n   - Combined longs: ~$23M (was $16.5M)\n   - Combined shorts: ~$4M (was $7.8M)\n   - anon-0xfc66 ($8.5M LONG, +$107K uPnL) held steady through \u2014 conviction trade.\n\n4. **Key risk signal:** beatmaker1 flipped to SHORT $848K. Could be profit-taking or ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
