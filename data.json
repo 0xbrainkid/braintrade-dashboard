@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-01T08:30:02.409519+00:00",
+  "timestamp": "2026-04-01T08:40:00.422428+00:00",
   "pm_balance": 921.75,
-  "hl_balance": 399.719848,
+  "hl_balance": 400.204838,
   "today_pnl": 0,
   "pm_pnl": -87.57,
-  "hl_pnl": 8.72,
+  "hl_pnl": 9.2,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -78.85,
+  "all_time_pnl": -78.37,
   "total_trades": 236,
   "days_active": 17,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00159,
       "entry": 68856.0,
-      "pnl": -0.22101,
+      "pnl": -0.08268,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0512,
       "entry": 2102.3,
-      "pnl": 1.70496,
+      "pnl": 1.89952,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.3,
       "entry": 82.77,
-      "pnl": 1.2129,
+      "pnl": 1.365,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,24 +45,24 @@
   "funding_opportunities": [
     {
       "coin": "BLUR",
-      "rate": "-0.9596%",
-      "apr": "-1051%",
+      "rate": "-0.9205%",
+      "apr": "-1008%",
       "action": "LONG",
-      "oi": "96,671,244"
+      "oi": "97,141,736"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.1398%",
-      "apr": "-153%",
+      "rate": "-0.1571%",
+      "apr": "-172%",
       "action": "LONG",
-      "oi": "2,620,375,958"
+      "oi": "2,606,926,610"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0558%",
-      "apr": "-61%",
+      "rate": "-0.0596%",
+      "apr": "-65%",
       "action": "LONG",
-      "oi": "124,760,120"
+      "oi": "124,610,398"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BLUR at -0.9596%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BLUR at -0.9205%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 2.69685,
+        "pnl": 3.1818400000000002,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": -0.23,
     "max_drawdown": 402.4
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 08:08 UTC \u2014 [Pillar 4] Apr 1 Session Forecast: Squeeze Exhaustion \u2192 RANGE by 11h\n\n**Task:** Analyze today's off-hour shadow data to forecast trading conditions for the 11h active window.\n\n**Finding:**\n1. **BTC squeeze played out fully:** $67,613 low (02:30) \u2192 $69,237 high (06:45) = +$1,624 (+2.4%). Now pulling back to $68,691. Classic squeeze-and-exhaust pattern.\n2. **Regime trajectory confirms:** STRONG_TREND 7/6 peaked at 06:45-07:15, dropped to TREND 5/6 by 07:25, then MIXED 3/6 by 08:00. Regime is CLEARING. At this rate \u2192 RANGE by 09:00-10:00.\n3. **Bias turning strongly negative:** 8h avg bias = -33.4 (67% negative). This is exactly what our YES-only bot needs \u2014 negative bias during a pullback from a squeeze high = prime contrarian setup.\n4. **V5a shadow during decline:** 5 v5a_pass entries at 07:20-08:00, all with negative bias (-46 to -68). These are the quality trades V5a would take.\n5. **Shadow data volume:** 118 entries today from off-hours. No entries yet from active hours (expected \u2014 starts at 11h).\n\n**Forecast for 11h window:**\n- **Scenario A (65% prob):** BTC consolidates $68,300-69,000. Regime RANGE/MIXED. 3-5 YES trades with strong negative bias. Expected P&L: +$20-40.\n- **Scenario B (25% prob):** BTC retests $69,237 or higher. TREND blocks most trades. 0-1 trades.\n- **Scenario C (10% prob):** BTC reverses below $68K. Bias flips positive, YES-only blocks. 0 trades.\n- Squeeze energy is spent (funding was -0.0034%, now priced in). Consolidation is the base case.\n\n**My thinking:**\n- The regime dropping from 7/6 \u2192 3/6 in 45 minutes is fast. With 3 hours until 11:00, RANGE is very likely.\n- Today should be the REAL first test of V4.1 with the OBI bug fixed. If we get 3-5 trades with indicator logging, we'll have more data than we've had in 2 days.\n- The squeeze thesis from this morning's funding analysis (P4 at 04:13) played out exactly as predicted. BTC was at $68,093 when I called it \u2014 peaked at $69,237 (+1.7% from that call).\n\n**Decision:**\n- No action needed \u2014 setup is evolving favorably\n- Will run pre-session check at 10:55 UTC\n- If regime is RANGE by 10:30, today will be a strong trading day\n\n**Next:** P1 \u2014 Copy Intelligence. But research is saturated for this cycle. Lighter heartbeats until trading data arrives.\n\n---\n## 2026-04-01 07:38 UTC \u2014 [Pillar 3] V5a Deploy Checklist + Automated Readiness Checker\n\n**Task:** Build comprehensive V5a deploy validation framework with automated readiness tracking.\n\n**Finding:**\n1. **Deploy checklist created** at `patches/v5a-deploy-checklist.md` \u2014 5 prerequisites (all \u2705) + 5 validation criteria (0/5, data collection starts today).\n\n2. **Automated readiness checker** at `scripts/v5a-deploy-readiness.sh` \u2014 one command shows deploy status across all 5 validation criteria: stable days, indicator logging, shadow data volume, V5A_BLOCKS WR, and V4.1 weekly WR.\n\n3. **Current score: 0/5** \u2014 expecte",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 08:38 UTC \u2014 [Pillar 1] WHALE ALERT: Leaderboard Positions Shifting Massively During Squeeze\n\n**Task:** Re-scan HL leaderboard key traders to detect position changes during the BTC squeeze.\n\n**Finding:**\n1. **3 POSITION FLIPS in 2 hours:**\n   - ABC: LONG $53K \u2192 SHORT $131K (flipped bearish)\n   - anon-0x57dd: SHORT $277K \u2192 LONG $924K (short capitulation \u2192 went long)\n   - beatmaker1: LONG $2.4M \u2192 SHORT $848K (profit-take, went bearish)\n\n2. **2 MASSIVE SIZE CHANGES:**\n   - anon-0xecb6: LONG $5.6M \u2192 **$14.5M (+159%)** \u2014 TRIPLED their BTC long! Strongest bullish signal.\n   - anon-0x3bca: SHORT $7.6M \u2192 $3.1M (-59%) \u2014 halved short, -$2,791 uPnL, partial capitulation.\n\n3. **NET LONG ratio: 2.1:1 \u2192 5.75:1** \u2014 whale consensus shifted MASSIVELY bullish in 2 hours.\n   - Combined longs: ~$23M (was $16.5M)\n   - Combined shorts: ~$4M (was $7.8M)\n   - anon-0xfc66 ($8.5M LONG, +$107K uPnL) held steady through \u2014 conviction trade.\n\n4. **Key risk signal:** beatmaker1 flipped to SHORT $848K. Could be profit-taking or knows something. Size is small relative to the $23M long wall.\n\n**My thinking:**\n- The squeeze didn't just squeeze shorts \u2014 it convinced whales to ADD to longs. anon-0xecb6 tripling from $5.6M to $14.5M during a squeeze is STRONG conviction.\n- Short capitulation (0x3bca halving, 0x57dd flipping) means the selling pressure that caused negative funding is evaporating. Funding rates should normalize, removing the squeeze catalyst but leaving bullish positioning.\n- For our PM YES strategy: if BTC consolidates $68.5-69K with $23M in whale longs supporting, every dip will be bought. Negative bias dips at 11h/12h should resolve YES at high WR.\n- This is the most actionable copy intel finding since we started tracking \u2014 real-time position flow data during a market event.\n\n**Decision:**\n- HIGH CONFIDENCE for today's 11h session \u2014 whale positioning strongly supports YES trades\n- Will re-scan at 10:55 (pre-session) to check if any whales exit before our window\n- Save this data as a case study for copy intel methodology \u2014 it actually works on HL (unlike PM 5-min)\n- Future: automate position-change alerts via cron (P1 backlog item)\n\n**Next:** P2 \u2014 Smart Entry.\n\n---\n## 2026-04-01 08:08 UTC \u2014 [Pillar 4] Apr 1 Session Forecast: Squeeze Exhaustion \u2192 RANGE by 11h\n\n**Task:** Analyze today's off-hour shadow data to forecast trading conditions for the 11h active window.\n\n**Finding:**\n1. **BTC squeeze played out fully:** $67,613 low (02:30) \u2192 $69,237 high (06:45) = +$1,624 (+2.4%). Now pulling back to $68,691. Classic squeeze-and-exhaust pattern.\n2. **Regime trajectory confirms:** STRONG_TREND 7/6 peaked at 06:45-07:15, dropped to TREND 5/6 by 07:25, then MIXED 3/6 by 08:00. Regime is CLEARING. At this rate \u2192 RANGE by 09:00-10:00.\n3. **Bias turning strongly negative:** 8h avg bias = -33.4 (67% negative). This is exactly what our YES-only bot needs \u2014 negative bias during a ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
