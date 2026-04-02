@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T09:00:02.905172+00:00",
+  "timestamp": "2026-04-02T09:27:38.996175+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 405.114342,
+  "hl_balance": 404.766262,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 14.11,
+  "hl_pnl": 13.77,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -69.54,
+  "all_time_pnl": -69.88,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 2.2784,
+      "pnl": 2.1792,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.6796,
+      "pnl": 1.43072,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,17 +36,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.4420%",
-      "apr": "-484%",
+      "rate": "-0.4110%",
+      "apr": "-450%",
       "action": "LONG",
-      "oi": "128,171,168"
+      "oi": "135,173,286"
     },
     {
       "coin": "HEMI",
-      "rate": "-0.2159%",
-      "apr": "-236%",
+      "rate": "-0.2199%",
+      "apr": "-241%",
       "action": "LONG",
-      "oi": "239,306,192"
+      "oi": "238,686,856"
+    },
+    {
+      "coin": "BLUR",
+      "rate": "-0.0681%",
+      "apr": "-75%",
+      "action": "LONG",
+      "oi": "96,988,928"
     }
   ],
   "daily_pnl": [
@@ -120,11 +127,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.4420%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.4110%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -206,7 +213,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.958,
+        "pnl": 3.60992,
         "sharpe": 0.0
       },
       {
@@ -362,7 +369,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 08:41 UTC \u2014 [Pillar 1] Copy Intel: PM OBI Flipped Bearish + Intra-Hour Bias Patterns\n\n**Task:** P1 copy intelligence \u2014 analyze PM order flow shift, intra-hour bias evolution, tradeable window density\n\n**Finding \u2014 PM OBI Flipped BEARISH (Favorable for 11h):**\n- 06:44 UTC: UP OBI +0.15 (bullish), confidence 27%\n- 08:42 UTC: UP OBI **-0.316** (bearish), confidence 63%\n- Massive shift: 84 asks vs 15 bids on UP token. Sellers dominating.\n- For our contrarian YES strategy, negative OBI = 70-83% WR (from P1 earlier today)\n- **Pre-session OBI bearish \u2192 11h likely to see negative OBI at trade time \u2192 HIGH quality setup**\n\n**Finding \u2014 Tradeable Window Density (Apr 1 shadow data):**\n| Hour | V4.1 tradeable | V5a tradeable | Notes |\n|------|---------------|---------------|-------|\n| 11h | 17% (2/12) | 8% (1/12) | Strong signals concentrated in first half |\n| 12h | 33% (4/12) | 25% (3/12) | Signals build in second half |\n| 19h | 42% (5/12) | 8% (1/12) | Most V4.1 windows but weak |bias| |\n| 20h | 25% (3/12) | 17% (2/12) | Moderate |\n\nV5a will cut 19h trades dramatically (42% \u2192 8%). This is GOOD \u2014 19h had 50% WR on Apr 1 evening.\n12h is the volume hour under V5a (25% windows tradeable). 11h is the precision hour (few but strong).\n\n**Finding \u2014 Intra-Hour Bias Evolution:**\n- 11h: bias STRONGER in first 30 min (avg|bias|=53.8) \u2192 fades in second half (46.5)\n- 12h: bias BUILDS through the hour (34.7 \u2192 39.2, strong_neg 17% \u2192 33%)\n- Implication: 11h trades cluster in first 15 min. 12h trades cluster in last 15 min.\n- V6 cooldown (600s) is well-suited: blocks follow-ups within each cluster\n\n**Finding \u2014 Gamma API Stale:**\n- PM Gamma API returns 2020-era markets. Needs different query params for current crypto markets.\n- Not useful for discovering new tradeable markets. Our 5-min BTC market discovery works through direct CLOB.\n\n**My thinking:** Pre-session signals are aligning for a good 11h session. Regime RANGE 2/6, PM OBI bearish, funding negative, F&G 12. If OBI stays negative through 11h, expect 2-3 high-conviction trades with 70%+ WR. The key risk: BTC could break down below $66K between now and 11h, flipping regime back to TREND.\n\n**Decision:** No action needed. All indicators favor the 11h session. Continue monitoring.\n\n**Next:** P2 \u2014 smart entry refinement\n\n---\n## 2026-04-02 08:11 UTC \u2014 [Pillar 4] Pre-Session Alpha: Regime Flipped to RANGE + Infra Fixes\n\n**Task:** P4 alpha research \u2014 pre-session regime check, funding analysis, infrastructure audit\n\n**Finding \u2014 REGIME FLIPPED: TREND DOWN 4/6 \u2192 RANGE 2/6:**\n- 06:10 UTC: TREND DOWN 4/6, pm_action=STOP, BTC $66,531\n- 08:11 UTC: RANGE 2/6, pm_action=TRADE, BTC $66,752\n- BTC consolidated $66.2-66.9K for 4+ hours \u2192 volatility dropped \u2192 detector classified RANGE\n- This matches Scenario B from my 06:17 prediction (45% probability \u2192 materialized)\n- Pre-session check now shows: **\ud83d\udfe2 TRADE PROBABILITY: HIGH**\n\n**Finding ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 09:11 UTC \u2014 [Pillar 2] V5a Combined Deploy Patch (Ready for Apr 6)\n\n**Task:** P2 smart entry \u2014 build the V5a combined deploy patch with both bias and price filter changes\n\n**Output:** `patches/v5a-combined-deploy.md` \u2705 WRITTEN\n- 3 edits, 1 file, complete deploy + rollback commands\n- Edit 1: min_price $0.48 \u2192 $0.50 (entry <$0.50 = 60% WR vs $0.50+ = 75% WR)\n- Edit 2: bias_threshold 25 \u2192 45 (|bias|<45 = 51% WR vs |bias|\u226545 = 70% WR)\n- Edit 3: Remove dead zone filter (redundant under new threshold)\n- Includes pre-deploy checklist, deploy commands, validation criteria, rollback procedure\n\n**V5a Deploy Criteria Status (4/5 needed):**\n1. \u23f3 5 stable days post-fix: Day 2/5 (Apr 1 = day 1, bug #3 fixed same day)\n2. \u2705 Indicator logging works: 14 trades with full OBI/CVD/MACD/VWAP on Apr 1\n3. \u2705 V5a shadow data \u226530: 48 windows collected (target 30)\n4. \u23f3 V5A_BLOCKS <55% WR: only 2 blocks so far (11:45 WIN, 19:25 no trade) \u2014 need more data\n5. \u23f3 V4.1 WR \u226555% this week: 64% on Apr 1 (14 trades) \u2705 if holds\n\n**Regime at 09:11:** RANGE 2/6, BTC $66,459. Still green for 11h. BTC dipped slightly from $66,752 to $66,459 \u2014 watch for TREND flip if it drops below $66K.\n\n**Decision:** Patch ready. Deploy Apr 6 morning before 11h session. 4 more trading days of data collection (Apr 2-5).\n\n**Next:** P3 \u2014 strategy development\n\n---\n## 2026-04-02 08:41 UTC \u2014 [Pillar 1] Copy Intel: PM OBI Flipped Bearish + Intra-Hour Bias Patterns\n\n**Task:** P1 copy intelligence \u2014 analyze PM order flow shift, intra-hour bias evolution, tradeable window density\n\n**Finding \u2014 PM OBI Flipped BEARISH (Favorable for 11h):**\n- 06:44 UTC: UP OBI +0.15 (bullish), confidence 27%\n- 08:42 UTC: UP OBI **-0.316** (bearish), confidence 63%\n- Massive shift: 84 asks vs 15 bids on UP token. Sellers dominating.\n- For our contrarian YES strategy, negative OBI = 70-83% WR (from P1 earlier today)\n- **Pre-session OBI bearish \u2192 11h likely to see negative OBI at trade time \u2192 HIGH quality setup**\n\n**Finding \u2014 Tradeable Window Density (Apr 1 shadow data):**\n| Hour | V4.1 tradeable | V5a tradeable | Notes |\n|------|---------------|---------------|-------|\n| 11h | 17% (2/12) | 8% (1/12) | Strong signals concentrated in first half |\n| 12h | 33% (4/12) | 25% (3/12) | Signals build in second half |\n| 19h | 42% (5/12) | 8% (1/12) | Most V4.1 windows but weak |bias| |\n| 20h | 25% (3/12) | 17% (2/12) | Moderate |\n\nV5a will cut 19h trades dramatically (42% \u2192 8%). This is GOOD \u2014 19h had 50% WR on Apr 1 evening.\n12h is the volume hour under V5a (25% windows tradeable). 11h is the precision hour (few but strong).\n\n**Finding \u2014 Intra-Hour Bias Evolution:**\n- 11h: bias STRONGER in first 30 min (avg|bias|=53.8) \u2192 fades in second half (46.5)\n- 12h: bias BUILDS through the hour (34.7 \u2192 39.2, strong_neg 17% \u2192 33%)\n- Implication: 11h trades cluster in first 15 min. 12h trades cluster in last 15 min.\n- V6 cooldown (600s) is well-suited: ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -382,7 +389,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
