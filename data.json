@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T07:00:01.823096+00:00",
+  "timestamp": "2026-04-02T07:14:17.387172+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 404.724074,
+  "hl_balance": 404.940234,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 13.72,
+  "hl_pnl": 13.94,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -69.93,
+  "all_time_pnl": -69.71,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 1.88,
+      "pnl": 2.0336,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.68232,
+      "pnl": 1.74488,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,24 +36,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.1577%",
-      "apr": "-173%",
+      "rate": "-0.2037%",
+      "apr": "-223%",
       "action": "LONG",
-      "oi": "126,107,320"
-    },
-    {
-      "coin": "HEMI",
-      "rate": "-0.0738%",
-      "apr": "-81%",
-      "action": "LONG",
-      "oi": "236,359,060"
+      "oi": "123,344,596"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0551%",
-      "apr": "-60%",
+      "rate": "-0.0754%",
+      "apr": "-83%",
       "action": "LONG",
-      "oi": "96,096,330"
+      "oi": "97,517,828"
+    },
+    {
+      "coin": "HEMI",
+      "rate": "-0.0710%",
+      "apr": "-78%",
+      "action": "LONG",
+      "oi": "236,272,764"
     }
   ],
   "daily_pnl": [
@@ -127,7 +127,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.1577%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2037%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -213,7 +213,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.5623199999999997,
+        "pnl": 3.77848,
         "sharpe": 0.0
       },
       {
@@ -369,7 +369,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 06:42 UTC \u2014 [Pillar 1] Copy Intel: HL Order Book + OBI Performance Deep Dive\n\n**Task:** P1 copy intelligence \u2014 analyze HL whale order book positioning post-selloff, validate OBI signal on cumulative data\n\n**Finding \u2014 HL Order Book is Balanced (Not Bearish):**\n- Initial snapshot showed massive -0.876 OBI. At higher resolution ($1 levels): Bids=69.6 BTC vs Asks=49.2 BTC \u2192 actually BID-heavy.\n- Major support wall: 16.35 BTC ($1.09M) at $66,508. Support at $66,512-$66,513 (11.8 BTC).\n- Sell pressure distributed evenly across $66,523-$66,542 \u2014 no single mega wall, just steady selling.\n- **Conclusion:** Book aggregation level dramatically changes OBI reading. Need to use consistent depth for signals.\n\n**Finding \u2014 PM Copy Scanner Agrees (Bullish):**\n- UP OBI +0.15, DN OBI -0.13 \u2192 bullish lean (more buying UP, selling DN)\n- Smart money signal: +0.16 (bullish). Confidence: 27% (low).\n- Both HL and PM books currently bullish \u2192 aligned \u2192 suggests bounce from selloff.\n- BUT: pre-session signals 5 hours before trading have LOW predictive value for 5-min outcomes.\n\n**Finding \u2014 OBI Magnitude is CRITICAL (n=14 V3+ trades):**\n- Strong OBI <-0.5: **83% WR** (5W/1L) \u2014 bearish OB = contrarian gold\n- Mild OBI -0.5 to 0: 50% WR (2W/2L) \u2014 no edge\n- Mild OBI 0 to 0.5: 100% WR (2W/0L) \u2014 small sample\n- Strong OBI >0.5: **0% WR** (0W/2L) \u2014 bullish OB = contrarian DEATH\n- The two 0% WR trades (19:15 OBI +0.726, 20:00 OBI +0.931) were BOTH evening losses.\n\n**Finding \u2014 20h is Structurally Weak:**\n- Only 25% of 20h windows have |bias|\u226545 (vs 50% for 11h)\n- Average |bias| at 20h: 27.6 (vs 50.2 for 11h) \u2014 signal is systematically weaker\n- This means fewer V5a-eligible trades AND weaker conviction on the ones that pass\n- V6 consideration: REMOVE 20h from active hours? Need 1 more week of data.\n\n**My thinking:** OBI magnitude is emerging as the single best predictor we have. Strong negative OBI (bearish OB) + contrarian YES = 83% WR is remarkable. V5b OBI sizing (full at OBI\u2705, half at OBI\u274c) is the right framework, but we might want to consider an OBI GATE instead: BLOCK trades when OBI > +0.5 (strong bullish = 0% WR). This is only 2 trades so far \u2014 need n\u226510 to validate. Track aggressively.\n\n**Decision:** \n1. Add OBI>0.5 gate to V5b spec as OPTIONAL upgrade (activate when n\u226510 OBI>0.5 trades)\n2. Track 20h removal for V6 (need W14 full week data)\n3. Order book aggregation: use top-20 $1-level depth for consistent OBI readings\n\n**Next:** P2 \u2014 Smart entry parameter review with Apr 1 evening failures.\n\n---\n## 2026-04-02 06:17 UTC \u2014 [Pillar 4] BTC -2.8% Overnight Drop: Regime & Alpha Analysis for Apr 2\n\n**Task:** P4 alpha research \u2014 analyze BTC selloff, regime projection, funding/liquidation signals for today's session\n\n**Finding \u2014 Overnight Selloff:**\n- BTC: $69,310 \u2192 $66,217 low (-4.5%), now $66,775. 24h vol $1.4B.\n- Sharp dump 00-04h UTC (Asia session). Consolidating $66.2-66.8K",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 07:11 UTC \u2014 [Pillar 2] Smart Entry: Price Filter & Evening Loss Autopsy\n\n**Task:** P2 smart entry \u2014 dissect Apr 1 evening failures, analyze entry price filter, find parameter improvements\n\n**Finding \u2014 Morning vs Evening: OBI is THE Differentiator:**\n- Morning wins (n=7): avg OBI=-0.370 (bearish orderbook)\n- Evening losses (n=3): avg OBI=+0.476 (bullish orderbook)\n- Delta: 0.846 OBI spread. This is not random \u2014 bullish OB kills our contrarian strategy.\n- BTC was flat during evening (-0.03%) so it wasn't a trending market. The OBI was the signal.\n\n**Finding \u2014 Entry Price Tiers (V3+ hours, n=71):**\n| Price Range | Trades | WR | EV/trade | $/trade ($12) |\n|-------------|--------|-----|----------|---------------|\n| <$0.50 | 20 | 60% | +0.224 | +$2.69 |\n| $0.50-0.52 | 31 | 71% | +0.392 | +$4.71 |\n| $0.52-0.535 | 7 | 86% | +0.632 | +$7.58 |\n| >$0.535 | 13 | 85% | +0.574 | +$6.89 |\n\nHigher entry price = dramatically better EV (+75% more per trade at $0.50-0.52 vs <$0.50). The current min_price=$0.48 allows the weakest tier.\n\n**Finding \u2014 Edge Monotonically Predicts WR:**\n- Edge 0.15-0.20: 46% WR (LOSER)\n- Edge 0.22-0.24: 59% WR\n- Edge 0.25 (max): 68% WR\n- Edge is capped at 0.25, so max-edge trades have both high bias + favorable price. A min_edge filter could work but overlaps with min_bias (V5a).\n\n**Finding \u2014 Conviction 4/4 = 40% WR (Worse Than 3/4!):**\n- All 10 conv-4 trades were from Mar 20 (pre-V3), in bad hours (15h, 18h, 22h).\n- In V3+ hours, 4/4 conviction has NEVER occurred.\n- Not actionable \u2014 zombie-era contamination. Ignore this metric.\n\n**My thinking:** Raising min_price from $0.48 \u2192 $0.50 is low-risk, data-backed. Eliminates 28% of trades (the weakest 60% WR tier) and raises average EV by ~50%. This is simpler than V5a and could be deployed IMMEDIATELY. However, the $0.48 min was set based on earlier analysis and Apr 1 only had 2 trades in that range (1W/1L). I want 1 more week of shadow data before changing.\n\n**Decision:**\n1. Queue min_price=$0.50 for V5a deploy (Apr 6) \u2014 bundle with min_bias=45\n2. Add max_price=$0.55 widening to V6 spec for validation\n3. OBI gate (block when OBI>0.5) confirmed by evening autopsy \u2014 add to V5b spec\n4. No immediate parameter changes \u2014 let V4.1 run clean for W14 validation\n\n**Next:** P3 \u2014 V6 cooldown spec finalization\n\n---\n## 2026-04-02 06:42 UTC \u2014 [Pillar 1] Copy Intel: HL Order Book + OBI Performance Deep Dive\n\n**Task:** P1 copy intelligence \u2014 analyze HL whale order book positioning post-selloff, validate OBI signal on cumulative data\n\n**Finding \u2014 HL Order Book is Balanced (Not Bearish):**\n- Initial snapshot showed massive -0.876 OBI. At higher resolution ($1 levels): Bids=69.6 BTC vs Asks=49.2 BTC \u2192 actually BID-heavy.\n- Major support wall: 16.35 BTC ($1.09M) at $66,508. Support at $66,512-$66,513 (11.8 BTC).\n- Sell pressure distributed evenly across $66,523-$66,542 \u2014 no single mega wall, just steady sell",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
