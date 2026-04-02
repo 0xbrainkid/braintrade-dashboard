@@ -1,17 +1,17 @@
 {
-  "timestamp": "2026-04-02T06:00:02.848333+00:00",
+  "timestamp": "2026-04-02T06:17:41.480186+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 404.695953,
+  "hl_balance": 404.508833,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 13.7,
+  "hl_pnl": 13.51,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -69.95,
+  "all_time_pnl": -70.14,
   "total_trades": 250,
   "days_active": 18,
-  "pm_bot_running": true,
+  "pm_bot_running": false,
   "hl_bot_running": false,
   "hl_positions": [
     {
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 2.0128,
+      "pnl": 1.8352,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.51912,
+      "pnl": 1.5096,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,17 +36,17 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.1932%",
-      "apr": "-212%",
+      "rate": "-0.1672%",
+      "apr": "-183%",
       "action": "LONG",
-      "oi": "126,330,054"
+      "oi": "126,636,568"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0549%",
-      "apr": "-60%",
+      "rate": "-0.0892%",
+      "apr": "-98%",
       "action": "LONG",
-      "oi": "96,018,396"
+      "oi": "95,882,672"
     }
   ],
   "daily_pnl": [
@@ -120,7 +120,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.1932%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.1672%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -195,7 +195,7 @@
     "strategies": [
       {
         "name": "PM Smart Entry",
-        "status": "LIVE",
+        "status": "DOWN",
         "trades": 250,
         "win_rate": 55.6,
         "pnl": -83.65000000000009,
@@ -206,7 +206,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.53192,
+        "pnl": 3.3448,
         "sharpe": 0.0
       },
       {
@@ -362,7 +362,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thinking:**\n- This is likely the biggest single parameter improvement available after V5a. Score 3 markets are actually CALMER than score 2 (RANGE) \u2014 our contrarian strategy should work even better there.\n- The mismatch happened because the bot's inline regime was written Mar 26 with a conservative threshold, but the external detector was tuned later with more data.\n- NOT fixing this now \u2014 we're in V5a validation period. One change at a time.\n- Queue as V5c candidate: \"Regime threshold \u22653 \u2192 \u22654\" (alongside OBI sizing).\n\n**Decision:**\n- **DO NOT CHANGE NOW** \u2014 V5a validation must complete cleanly\n- Logged as V5c candidate with full data backing\n- Today's trading will still use \u22653 threshold \u2014 if score stays at 3-4 during 11h, regime may actually block some good trades\n- After V5a deploys (Apr 6), this becomes the next priority change\n\n**Next:** P3 \u2014 Strategy Development.\n\n---\n## 2026-04-01 19:41 UTC \u2014 [Pillar 2] Per-Indicator Analysis: OBI Corrected, CVD/MACD/VWAP All Aligned\n\n**Task:** Full per-indicator analysis with corrected OBI framing.\n\n**Finding (11 trades with indicator data):**\n\n| Indicator | Aligned WR | Opposed WR | Delta | Notes |\n|-----------|-----------|-----------|-------|-------|\n| OBI | 67% (2W/1L) | **75% (6W/2L)** | -8pp | Opposed = slightly better |\n| CVD | 70% (7W/3L) | 100% (1W/0L) | -30pp | All but 1 trade had negative CVD |\n| MACD | 73% (8W/3L) | n/a (0) | \u2014 | 100% MACD aligned today |\n| VWAP | 73% (8W/3L) | n/a (0) | \u2014 | 100% VWAP aligned today |\n\n**Corrected OBI finding:**\n- Earlier claim of \"80% WR opposed\" was cumulative with pre-fix data. Today alone: opposed=75%, aligned=67%.\n- The OBI-aligned LOSS (trade 10, OBI +0.73) confirms the pattern: strong positive OBI + negative bias = market is confused, not a clean contrarian setup.\n- OBI opposed (bearish orderbook) = sellers lining up \u2192 our YES bet catches the exhaustion bounce \u2192 75% WR.\n- V5b sizing (OBI ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 06:10 UTC \u2014 [Pillar 3] Bug #3 Fix + Apr 1 Full-Day Strategy Analysis\n\n**Task:** P3 strategy development \u2014 analyze Apr 1 full-day results (14 trades), evaluate V5a/V6 shadow, fix crash bug\n\n**Finding \u2014 CRITICAL BUG #3:** `NameError: name 'current_hour' is not defined` in `run()` method line 817. The LOSS_BREAKER code referenced `current_hour` which was only defined inside `should_trade()`, not in `run()`. Triggered at 20:05 Apr 1 after 2 consecutive losses activated the breaker. **Bot crash-looped for 10 hours** (20:05 \u2192 06:14 Apr 2). No trades missed \u2014 crash was outside active hours. But bot couldn't refresh prices/state.\n\n**Fix:** Added `current_hour = datetime.now(timezone.utc).hour` before loss breaker check in `run()`. Bot restarted 06:14 Apr 2, PID 440296. Zero errors since.\n\n**Finding \u2014 Apr 1 Full-Day Results:**\n- 14 trades, 9W/5L = 64% WR\n- Morning (11-12h): 7W/2L = 78% \u2705 (+$30.66)\n- Evening (19-20h): 2W/3L = 40% \u274c (wiped morning gains)\n- Day P&L: -$26.74 (balance $952.41 \u2192 $925.67)\n\n**V5a Shadow:** Blocked 3 trades (2W/1L) \u2014 hurt on this day. V5a remaining: 7W/4L = 64%. Single-day doesn't override 140-trade backtest.\n\n**V6 Cooldown Shadow (600s gap):** Blocked 5 trades (2W/3L) \u2014 remaining 7W/2L = **78% WR**. Best filter tested. Saves 3 losses, costs 2 winners.\n\n**OBI:** Negative OBI = 70% WR (10 trades), Positive OBI = 50% WR (4 trades). Both big evening losses had positive OBI.\n\n**Evening Session Degradation:** 40% WR on Apr 1. 20h = weakest hour (60% WR cumulative). Morning makes money, evening gives it back.\n\n**Current State:** PM $925.67 | HL $367.58 (BTC/SOL SHORT, +$3.81 uPnL) | BTC $66,531 (-2.5%) | Regime TREND DOWN 4/6 | F&G 12\n\n**Decision:** Bug fixed \u2705. V5a stays Apr 6. V6 cooldown = PRIORITY spec this week. Monitor 20h \u2014 remove if W14 <55% WR.\n\n**Next:** P4 \u2014 analyze regime/liquidation implications of BTC -2.5% drop for today's session.\n\n---\n## 2026-04-01 09:08 UTC \u2014 [Pillar 2] REGIME THRESHOLD MISMATCH: Bot Blocks Score 3 But It's the Calmest Market\n\n**Task:** Verify regime filter threshold in bot vs external detector \u2014 noticed discrepancy at 08:53.\n\n**Finding:**\n1. **Bot inline filter blocks at score \u22653** (line 443-445: `'TREND' if _score >= 3`)\n   **External detector blocks at score \u22654** (regime-detector.py line 70: `elif score >= 4: regime = \"TREND\"`)\n   These are DIFFERENT \u2014 shadow data shows \"MIXED 3/6\" but bot would call it TREND and BLOCK.\n\n2. **Score 3 has the LOWEST 5-min volatility of any regime:**\n   - Score 2: 11.0bp avg (n=8)\n   - Score 3: **7.8bp avg** (n=40) \u2190 CALMEST\n   - Score 4: 9.0bp avg (n=18)\n   - Score 6+: 12.6bp avg (n=12) \u2190 highest\n\n3. **26 active-hour windows blocked at score=3** \u2014 31% of all regime blocks. These are calm, tradeable conditions we're incorrectly labeling as TREND.\n\n4. **Impact estimate:** 26 windows \u00d7 ~55% WR \u00d7 ~$5 avg trade = ~$35-50 in lost P&L over the tracking period.\n\n**My thi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
