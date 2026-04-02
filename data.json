@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T08:00:02.535597+00:00",
+  "timestamp": "2026-04-02T08:14:36.941938+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 403.678573,
+  "hl_balance": 404.157293,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 12.68,
+  "hl_pnl": 13.16,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -70.97,
+  "all_time_pnl": -70.49,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 1.5104,
+      "pnl": 1.7824,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.00912,
+      "pnl": 1.21584,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,24 +36,24 @@
   "funding_opportunities": [
     {
       "coin": "HEMI",
-      "rate": "-0.1580%",
-      "apr": "-173%",
+      "rate": "-0.2171%",
+      "apr": "-238%",
       "action": "LONG",
-      "oi": "228,381,484"
+      "oi": "236,746,708"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.1527%",
-      "apr": "-167%",
+      "rate": "-0.2053%",
+      "apr": "-225%",
       "action": "LONG",
-      "oi": "119,730,904"
+      "oi": "119,597,088"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0834%",
-      "apr": "-91%",
+      "rate": "-0.1002%",
+      "apr": "-110%",
       "action": "LONG",
-      "oi": "97,374,786"
+      "oi": "96,941,596"
     }
   ],
   "daily_pnl": [
@@ -127,7 +127,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: HEMI at -0.1580%/8h \u2014 shorts paying longs"
+        "text": "Strongest: HEMI at -0.2171%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -213,7 +213,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 2.51952,
+        "pnl": 2.99824,
         "sharpe": 0.0
       },
       {
@@ -369,7 +369,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 07:41 UTC \u2014 [Pillar 3] V6 Cooldown Spec: 600s Gap Filter\n\n**Task:** P3 strategy development \u2014 backtest cooldown thresholds, write V6 spec, finalize deploy plan\n\n**Finding \u2014 600s is the Optimal Cooldown (V3+ hours, n=71):**\n| Cooldown | Kept | Kept WR | Blocked | Blocked WR | Delta |\n|----------|------|---------|---------|------------|-------|\n| 180s (3m) | 68 | 72% | 3 | 67% | +5pp |\n| 300s (5m) | 57 | 70% | 14 | **79%** | -9pp \u26a0\ufe0f |\n| 420s (7m) | 50 | 72% | 21 | 71% | +1pp |\n| **600s (10m)** | **47** | **77%** | **24** | **62%** | **+15pp** \u2705 |\n| 900s (15m) | 41 | 73% | 30 | 70% | +3pp |\n\n- **300s (5m) BLOCKS WINNERS** \u2014 blocked trades have 79% WR! Too aggressive at short intervals.\n- **600s is the sweet spot** \u2014 biggest WR delta (+15pp), blocked trades are genuinely weaker.\n- **900s over-filters** \u2014 starts blocking good trades again (70% blocked WR).\n\n**Finding \u2014 Why 600s Works (Gap Bucket Analysis):**\n| Gap Range | Blocked Trades | WR |\n|-----------|---------------|-----|\n| 0-180s | 3 | 67% |\n| 180-300s | 7 | 71% |\n| **300-420s** | **8** | **50%** \u2190 the problem bucket |\n| 420-600s | 6 | 67% |\n\nThe 300-420s range (5-7 min after last trade) produces coin-flip trades. These are stale signals from the same market move. 600s cooldown catches ALL of these plus the weak 420-600s bucket.\n\n**Finding \u2014 Daily Impact:**\n- High-volume days cut 34-47% of trades (Mar 25: 17\u21929, Apr 1: 14\u219210)\n- Low-volume days barely affected (Mar 31: 1\u21921, Mar 29: 1\u21921)\n- Cooldown self-adjusts: in selective markets, no impact. In noisy markets, maximum filtering.\n\n**Spec Written:** `patches/v6-cooldown-filter.spec.md` \u2705\n- Implementation: 8 lines of code in `run()` method\n- Shadow mode: already partially via v6_cooldown_tag in outcomes\n- Deploy: Apr 13 (after V5a validation week)\n- Rollback: remove cooldown check, restart\n\n**V5a checklist updated:** Added min_price $0.48\u2192$0.50 change to deploy step 3b.\n\n**My thinking:** V6 cooldown is the highest-impact upgrade remaining after V5a. It's mechanically simple (timer), doesn't require new data sources, and has the largest WR improvement in backtest (+15pp). Combined with V5a (min_bias=45), the pipeline becomes: hour filter \u2192 regime filter \u2192 price filter \u2192 bias filter \u2192 cooldown \u2192 conviction \u2192 trade. Each layer cuts the weakest signals.\n\n**Decision:** V6 spec COMPLETE. Deploy Apr 13. V5a + V6 combined estimate: 80-85% WR with 3-4 trades/day \u2192 $35-45 daily.\n\n**Next:** P4 \u2014 alpha research. Pre-session regime check for today's 11h window.\n\n---\n## 2026-04-02 07:11 UTC \u2014 [Pillar 2] Smart Entry: Price Filter & Evening Loss Autopsy\n\n**Task:** P2 smart entry \u2014 dissect Apr 1 evening failures, analyze entry price filter, find parameter improvements\n\n**Finding \u2014 Morning vs Evening: OBI is THE Differentiator:**\n- Morning wins (n=7): avg OBI=-0.370 (bearish orderbook)\n- Evening losses (n=3): avg OBI=+0.476 (bullish orderbook)\n- Delta: 0.846 OB",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 08:11 UTC \u2014 [Pillar 4] Pre-Session Alpha: Regime Flipped to RANGE + Infra Fixes\n\n**Task:** P4 alpha research \u2014 pre-session regime check, funding analysis, infrastructure audit\n\n**Finding \u2014 REGIME FLIPPED: TREND DOWN 4/6 \u2192 RANGE 2/6:**\n- 06:10 UTC: TREND DOWN 4/6, pm_action=STOP, BTC $66,531\n- 08:11 UTC: RANGE 2/6, pm_action=TRADE, BTC $66,752\n- BTC consolidated $66.2-66.9K for 4+ hours \u2192 volatility dropped \u2192 detector classified RANGE\n- This matches Scenario B from my 06:17 prediction (45% probability \u2192 materialized)\n- Pre-session check now shows: **\ud83d\udfe2 TRADE PROBABILITY: HIGH**\n\n**Finding \u2014 Funding Deepened (Shorts Building):**\n- BTC funding: -0.0023%/8h (was -0.0009% at 06:10 \u2014 2.5x more negative)\n- Premium: -0.066% (bearish)\n- Shorts are accumulating during consolidation \u2192 squeeze setup if BTC bounces past $67K\n- For PM: negative funding = bearish lean = more negative bias windows = more YES trade opportunities\n\n**Finding \u2014 Pre-Session Check Bug FIXED:**\n- `regime-state.json` didn't exist \u2192 script defaulted to score=5 \u2192 always showed \"LOW PROBABILITY\"\n- Fix: regime detector cron now writes `tee intelligence/regime-state.json`\n- Pre-session check correctly reads RANGE 2/6 \u2192 HIGH probability\n\n**CRITICAL \u2014 Crontab WIPED During Fix (Rebuilt):**\n- Bad `sed` command cleared all cron entries. Caught immediately.\n- Rebuilt from MEMORY.md references: 10 entries (regime */15, liq */5, OBI */5, copy */30, squeeze */15, funding */30, v5a shadow */5 active hours, watchdog */5, dashboard */30)\n- All entries verified against MEMORY.md infrastructure list\n- Lesson: NEVER use `sed` on crontab. Always `crontab -l > backup` then edit the file safely.\n\n**11h Session Forecast:**\n- Regime: RANGE 2/6 (HIGH probability of trading)\n- BTC: $66,752 consolidating in $66.2-66.9K range\n- F&G: 12 (Extreme Fear) \u2192 +0.05 edge mod, 1.05x size\n- Funding: negative \u2192 sellers dominant \u2192 expect negative bias \u2192 YES trade opportunities\n- Liquidations: NORMAL across BTC/ETH/SOL \u2192 no cascade risk\n- Expected: 3-5 trades at 11-12h, 65-75% WR, $15-25 P&L if patterns hold\n\n**Decision:** Everything green for 11h session. No intervention needed. Bot will self-manage.\n\n**Next:** P1 \u2014 copy intel (rotation continues)\n\n---\n## 2026-04-02 07:41 UTC \u2014 [Pillar 3] V6 Cooldown Spec: 600s Gap Filter\n\n**Task:** P3 strategy development \u2014 backtest cooldown thresholds, write V6 spec, finalize deploy plan\n\n**Finding \u2014 600s is the Optimal Cooldown (V3+ hours, n=71):**\n| Cooldown | Kept | Kept WR | Blocked | Blocked WR | Delta |\n|----------|------|---------|---------|------------|-------|\n| 180s (3m) | 68 | 72% | 3 | 67% | +5pp |\n| 300s (5m) | 57 | 70% | 14 | **79%** | -9pp \u26a0\ufe0f |\n| 420s (7m) | 50 | 72% | 21 | 71% | +1pp |\n| **600s (10m)** | **47** | **77%** | **24** | **62%** | **+15pp** \u2705 |\n| 900s (15m) | 41 | 73% | 30 | 70% | +3pp |\n\n- **300s (5m) BLOCKS WINNERS** \u2014 blocked trades have 79% WR! Too aggressiv",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
