@@ -375,8 +375,8 @@ async function loadData() {
         ${(p3.changes || []).map(c => `
           <div class="evolution-item">
             <span class="evo-date">${c.date}</span>
-            <span class="evo-text"><strong>${c.param}:</strong> ${c.old} → ${c.new}</span>
-            <span class="evo-impact ${c.impact_class || ''}">${c.reason || ''}</span>
+            <span class="evo-text">${c.change || ''}</span>
+            <span class="evo-impact ${c.impact_class || ''}">${c.impact || ''}</span>
           </div>
         `).join('') || '<div class="card-sub">No changes yet</div>'}
       </div>
