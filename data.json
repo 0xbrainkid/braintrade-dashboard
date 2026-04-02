@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T12:30:02.454510+00:00",
+  "timestamp": "2026-04-02T12:43:02.283065+00:00",
   "pm_balance": 900.91,
-  "hl_balance": 406.864634,
+  "hl_balance": 407.045184,
   "today_pnl": 53.02,
   "pm_pnl": -108.41,
-  "hl_pnl": 15.86,
+  "hl_pnl": 16.05,
   "today_trades": 7,
   "today_wins": 5,
   "today_losses": 2,
-  "all_time_pnl": -92.55,
+  "all_time_pnl": -92.36,
   "total_trades": 257,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 2.7376,
+      "pnl": 2.6816,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0543,
       "entry": 2035.2,
-      "pnl": 0.27693,
+      "pnl": 0.3258,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 2.75128,
+      "pnl": 2.93896,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,31 +45,31 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.4745%",
-      "apr": "-520%",
+      "rate": "-0.4894%",
+      "apr": "-536%",
       "action": "LONG",
-      "oi": "153,254,924"
+      "oi": "153,445,656"
     },
     {
       "coin": "HEMI",
-      "rate": "-0.1107%",
-      "apr": "-121%",
+      "rate": "-0.1196%",
+      "apr": "-131%",
       "action": "LONG",
-      "oi": "233,341,366"
+      "oi": "233,381,382"
     },
     {
       "coin": "0G",
-      "rate": "-0.0828%",
-      "apr": "-91%",
+      "rate": "-0.0796%",
+      "apr": "-87%",
       "action": "LONG",
-      "oi": "1,200,314"
+      "oi": "1,200,334"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0559%",
-      "apr": "-61%",
+      "rate": "-0.0596%",
+      "apr": "-65%",
       "action": "LONG",
-      "oi": "95,023,938"
+      "oi": "95,139,732"
     }
   ],
   "daily_pnl": [
@@ -143,7 +143,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.4745%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.4894%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -229,7 +229,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 5.76581,
+        "pnl": 5.946359999999999,
         "sharpe": 0.0
       },
       {
@@ -385,7 +385,7 @@
     "sharpe": 0.43,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 12:11 UTC \u2014 [Pillar 3] Apr 2 Morning Session: 4W/2L, OBI Contradicts, V6 Inverted\n\n**Task:** P3 strategy \u2014 analyze 11h session results, V6 shadow, OBI pattern update\n\n**Apr 2 Morning (11h): 6 trades, 4W/2L = 67% WR**\n- All V5a PASS (all |bias|\u226545). BTC ranging $66.2-66.5K. F&G 12.\n- CLOB balance: $902.80. Trade math = -$2.75. $20 gap = likely unredeemed PM positions.\n- 1 FAILED order at 11:04 (CLOB 500 error, no capital lost).\n\n**OBI ALL POSITIVE TODAY \u2014 Contradicts Yesterday:**\n- Yesterday OBI>0 = 0% WR (n=2). Today OBI>0 = 67% WR (n=6). The 0% was n=2 noise.\n- OBI gate idea KILLED. OBI sign alone is NOT reliable for gating. V5b stays sizing-only.\n\n**V6 Cooldown INVERTED Today:**\n- V6 PASS: 2 trades, 50% WR. V6 BLOCK: 4 trades, 75% WR. V6 would HURT today.\n- Single-day inversions expected. 71-trade backtest still +15pp. Stay on track.\n\n**Bot Restarted at 09:40 (Watchdog):**\n- My `bash -c` screen died again. Watchdog restarted via proper `start-pm-bot.sh`. No trades missed.\n- ALWAYS use: `screen -dmS pm-bot bash scripts/start-pm-bot.sh`\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-02 09:11 UTC \u2014 [Pillar 2] V5a Combined Deploy Patch (Ready for Apr 6)\n\n**Task:** P2 smart entry \u2014 build the V5a combined deploy patch with both bias and price filter changes\n\n**Output:** `patches/v5a-combined-deploy.md` \u2705 WRITTEN\n- 3 edits, 1 file, complete deploy + rollback commands\n- Edit 1: min_price $0.48 \u2192 $0.50 (entry <$0.50 = 60% WR vs $0.50+ = 75% WR)\n- Edit 2: bias_threshold 25 \u2192 45 (|bias|<45 = 51% WR vs |bias|\u226545 = 70% WR)\n- Edit 3: Remove dead zone filter (redundant under new threshold)\n- Includes pre-deploy checklist, deploy commands, validation criteria, rollback procedure\n\n**V5a Deploy Criteria Status (4/5 needed):**\n1. \u23f3 5 stable days post-fix: Day 2/5 (Apr 1 = day 1, bug #3 fixed same day)\n2. \u2705 Indicator logging works: 14 trades with full OBI/CVD/MACD/VWAP on Apr 1\n3. \u2705 V5a shadow data \u226530: 48 windows collected (target 30)\n4. \u23f3 V5A_BLOCKS <55% WR: only 2 blocks so far (11:45 WIN, 19:25 no trade) \u2014 need more data\n5. \u23f3 V4.1 WR \u226555% this week: 64% on Apr 1 (14 trades) \u2705 if holds\n\n**Regime at 09:11:** RANGE 2/6, BTC $66,459. Still green for 11h. BTC dipped slightly from $66,752 to $66,459 \u2014 watch for TREND flip if it drops below $66K.\n\n**Decision:** Patch ready. Deploy Apr 6 morning before 11h session. 4 more trading days of data collection (Apr 2-5).\n\n**Next:** P3 \u2014 strategy development\n\n---\n## 2026-04-02 08:41 UTC \u2014 [Pillar 1] Copy Intel: PM OBI Flipped Bearish + Intra-Hour Bias Patterns\n\n**Task:** P1 copy intelligence \u2014 analyze PM order flow shift, intra-hour bias evolution, tradeable window density\n\n**Finding \u2014 PM OBI Flipped BEARISH (Favorable for 11h):**\n- 06:44 UTC: UP OBI +0.15 (bullish), confidence 27%\n- 08:42 UTC: UP OBI **-0.316** (bearish), confidence 63%\n- Massive shift: 84 asks vs 15 bids on UP token. Sellers dominating.\n- For our contrari",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 12:41 UTC \u2014 [Pillar 4] Full Morning Session: 7 trades, 5W/2L = 71% WR\n\n**Task:** P4 alpha research \u2014 analyze full 11-12h session, explain why YES wins in falling BTC, forecast 19h\n\n**Apr 2 Session Update: 7 trades (was 6 at last check), 5W/2L = 71% WR**\n- 11h: 6 trades (4W/2L = 67%)\n- 12h: 1 trade (1W/0L = 100%) \u2014 biggest move of session (BTC $65,964\u2192$66,134 = +$170)\n- All 7 trades V5a PASS. V5a shadow: 69 windows collected (target 30 \u2705).\n- CLOB balance: $902.80 (likely +$20 unredeemed)\n\n**KEY INSIGHT: Contrarian YES Wins in Falling Markets (RANGE Regime)**\n- BTC fell $66,380\u2192$65,964 during session (-0.6%)\n- But 5-min candles MEAN-REVERT within each window\n- Crowd bets NO (BTC will drop) \u2192 negative bias \u2192 our contrarian buys YES\n- 5/7 micro-bounces happened even as macro trend was down\n- Losses were small moves (-$40 BTC). Wins caught the rebounds.\n- **This is WHY RANGE regime filter is critical** \u2014 mean-reversion only works in RANGE, not TREND.\n\n**19h Session Forecast:**\n- BTC $66,208, still drifting lower. Regime: RANGE 2/6.\n- If BTC ranges $65.8-66.5K by 19h \u2192 RANGE \u2192 expect 2-3 trades\n- If breaks below $65.5K \u2192 TREND \u2192 bot sits out (regime filter saves us)\n- Risk: US market open 13:30 UTC could accelerate sell-off\n- Funding negative = squeeze potential on any bounce\n\n**Next:** P1 copy intel\n\n---\n## 2026-04-02 12:11 UTC \u2014 [Pillar 3] Apr 2 Morning Session: 4W/2L, OBI Contradicts, V6 Inverted\n\n**Task:** P3 strategy \u2014 analyze 11h session results, V6 shadow, OBI pattern update\n\n**Apr 2 Morning (11h): 6 trades, 4W/2L = 67% WR**\n- All V5a PASS (all |bias|\u226545). BTC ranging $66.2-66.5K. F&G 12.\n- CLOB balance: $902.80. Trade math = -$2.75. $20 gap = likely unredeemed PM positions.\n- 1 FAILED order at 11:04 (CLOB 500 error, no capital lost).\n\n**OBI ALL POSITIVE TODAY \u2014 Contradicts Yesterday:**\n- Yesterday OBI>0 = 0% WR (n=2). Today OBI>0 = 67% WR (n=6). The 0% was n=2 noise.\n- OBI gate idea KILLED. OBI sign alone is NOT reliable for gating. V5b stays sizing-only.\n\n**V6 Cooldown INVERTED Today:**\n- V6 PASS: 2 trades, 50% WR. V6 BLOCK: 4 trades, 75% WR. V6 would HURT today.\n- Single-day inversions expected. 71-trade backtest still +15pp. Stay on track.\n\n**Bot Restarted at 09:40 (Watchdog):**\n- My `bash -c` screen died again. Watchdog restarted via proper `start-pm-bot.sh`. No trades missed.\n- ALWAYS use: `screen -dmS pm-bot bash scripts/start-pm-bot.sh`\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-02 09:11 UTC \u2014 [Pillar 2] V5a Combined Deploy Patch (Ready for Apr 6)\n\n**Task:** P2 smart entry \u2014 build the V5a combined deploy patch with both bias and price filter changes\n\n**Output:** `patches/v5a-combined-deploy.md` \u2705 WRITTEN\n- 3 edits, 1 file, complete deploy + rollback commands\n- Edit 1: min_price $0.48 \u2192 $0.50 (entry <$0.50 = 60% WR vs $0.50+ = 75% WR)\n- Edit 2: bias_threshold 25 \u2192 45 (|bias|<45 = 51% WR vs |bias|\u226545 = 70% WR)\n- Edit 3: Remove dead z",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
