@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-02T11:30:02.443258+00:00",
-  "pm_balance": 919.95,
-  "hl_balance": 405.449933,
-  "today_pnl": -1.17,
-  "pm_pnl": -89.37,
-  "hl_pnl": 14.45,
-  "today_trades": 2,
-  "today_wins": 1,
-  "today_losses": 1,
-  "all_time_pnl": -74.92,
-  "total_trades": 252,
+  "timestamp": "2026-04-02T12:00:02.318658+00:00",
+  "pm_balance": 902.8,
+  "hl_balance": 406.634284,
+  "today_pnl": 16.87,
+  "pm_pnl": -106.52,
+  "hl_pnl": 15.63,
+  "today_trades": 5,
+  "today_wins": 3,
+  "today_losses": 2,
+  "all_time_pnl": -90.89,
+  "total_trades": 256,
   "days_active": 18,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 2.2512,
+      "pnl": 2.624,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0543,
       "entry": 2035.2,
-      "pnl": -0.07059,
+      "pnl": 0.1629,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 2.16784,
+      "pnl": 2.74856,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,31 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.6795%",
-      "apr": "-744%",
+      "rate": "-0.2175%",
+      "apr": "-238%",
       "action": "LONG",
-      "oi": "166,613,226"
-    },
-    {
-      "coin": "HEMI",
-      "rate": "-0.2079%",
-      "apr": "-228%",
-      "action": "LONG",
-      "oi": "235,391,608"
+      "oi": "152,979,686"
     },
     {
       "coin": "0G",
-      "rate": "-0.1474%",
-      "apr": "-161%",
+      "rate": "-0.0813%",
+      "apr": "-89%",
       "action": "LONG",
-      "oi": "1,237,412"
-    },
-    {
-      "coin": "BLUR",
-      "rate": "-0.0506%",
-      "apr": "-55%",
-      "action": "LONG",
-      "oi": "95,820,184"
+      "oi": "1,203,968"
     }
   ],
   "daily_pnl": [
@@ -127,27 +113,27 @@
     },
     {
       "date": "2026-04-02",
-      "pnl": -1.17
+      "pnl": 16.87
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 72,
+    "signal_confidence": 84,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.869"
+        "text": "Top traders: 49 buys, 1 sells \u2014 avg price $0.902"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.6795%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2175%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "4 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -219,17 +205,17 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 252,
-        "win_rate": 55.6,
-        "pnl": -89.37,
-        "sharpe": -0.23
+        "trades": 256,
+        "win_rate": 55.7,
+        "pnl": -106.5200000000001,
+        "sharpe": 0.18
       },
       {
         "name": "HL Directional",
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 4.34845,
+        "pnl": 5.53546,
         "sharpe": 0.0
       },
       {
@@ -379,11 +365,11 @@
         "impact_class": "red"
       }
     ],
-    "win_rate_7d": 55.6,
-    "win_rate_24h": 50.0,
+    "win_rate_7d": 55.7,
+    "win_rate_24h": 60.0,
     "avg_trade_size": 0.52,
-    "sharpe": -0.23,
-    "max_drawdown": 351.2
+    "sharpe": 0.18,
+    "max_drawdown": 330.2
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 09:11 UTC \u2014 [Pillar 2] V5a Combined Deploy Patch (Ready for Apr 6)\n\n**Task:** P2 smart entry \u2014 build the V5a combined deploy patch with both bias and price filter changes\n\n**Output:** `patches/v5a-combined-deploy.md` \u2705 WRITTEN\n- 3 edits, 1 file, complete deploy + rollback commands\n- Edit 1: min_price $0.48 \u2192 $0.50 (entry <$0.50 = 60% WR vs $0.50+ = 75% WR)\n- Edit 2: bias_threshold 25 \u2192 45 (|bias|<45 = 51% WR vs |bias|\u226545 = 70% WR)\n- Edit 3: Remove dead zone filter (redundant under new threshold)\n- Includes pre-deploy checklist, deploy commands, validation criteria, rollback procedure\n\n**V5a Deploy Criteria Status (4/5 needed):**\n1. \u23f3 5 stable days post-fix: Day 2/5 (Apr 1 = day 1, bug #3 fixed same day)\n2. \u2705 Indicator logging works: 14 trades with full OBI/CVD/MACD/VWAP on Apr 1\n3. \u2705 V5a shadow data \u226530: 48 windows collected (target 30)\n4. \u23f3 V5A_BLOCKS <55% WR: only 2 blocks so far (11:45 WIN, 19:25 no trade) \u2014 need more data\n5. \u23f3 V4.1 WR \u226555% this week: 64% on Apr 1 (14 trades) \u2705 if holds\n\n**Regime at 09:11:** RANGE 2/6, BTC $66,459. Still green for 11h. BTC dipped slightly from $66,752 to $66,459 \u2014 watch for TREND flip if it drops below $66K.\n\n**Decision:** Patch ready. Deploy Apr 6 morning before 11h session. 4 more trading days of data collection (Apr 2-5).\n\n**Next:** P3 \u2014 strategy development\n\n---\n## 2026-04-02 08:41 UTC \u2014 [Pillar 1] Copy Intel: PM OBI Flipped Bearish + Intra-Hour Bias Patterns\n\n**Task:** P1 copy intelligence \u2014 analyze PM order flow shift, intra-hour bias evolution, tradeable window density\n\n**Finding \u2014 PM OBI Flipped BEARISH (Favorable for 11h):**\n- 06:44 UTC: UP OBI +0.15 (bullish), confidence 27%\n- 08:42 UTC: UP OBI **-0.316** (bearish), confidence 63%\n- Massive shift: 84 asks vs 15 bids on UP token. Sellers dominating.\n- For our contrarian YES strategy, negative OBI = 70-83% WR (from P1 earlier today)\n- **Pre-session OBI bearish \u2192 11h likely to see negative OBI at trade time \u2192 HIGH quality setup**\n\n**Finding \u2014 Tradeable Window Density (Apr 1 shadow data):**\n| Hour | V4.1 tradeable | V5a tradeable | Notes |\n|------|---------------|---------------|-------|\n| 11h | 17% (2/12) | 8% (1/12) | Strong signals concentrated in first half |\n| 12h | 33% (4/12) | 25% (3/12) | Signals build in second half |\n| 19h | 42% (5/12) | 8% (1/12) | Most V4.1 windows but weak |bias| |\n| 20h | 25% (3/12) | 17% (2/12) | Moderate |\n\nV5a will cut 19h trades dramatically (42% \u2192 8%). This is GOOD \u2014 19h had 50% WR on Apr 1 evening.\n12h is the volume hour under V5a (25% windows tradeable). 11h is the precision hour (few but strong).\n\n**Finding \u2014 Intra-Hour Bias Evolution:**\n- 11h: bias STRONGER in first 30 min (avg|bias|=53.8) \u2192 fades in second half (46.5)\n- 12h: bias BUILDS through the hour (34.7 \u2192 39.2, strong_neg 17% \u2192 33%)\n- Implication: 11h trades cluster in first 15 min. 12h trades cluster in last 15 min.\n- V6 cooldown (600s) is well-suited: ",
   "pillar4": {
@@ -405,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "4 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
