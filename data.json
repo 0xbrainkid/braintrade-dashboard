@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T08:30:02.352412+00:00",
+  "timestamp": "2026-04-02T08:43:18.688783+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 404.521453,
+  "hl_balance": 404.931133,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 13.52,
+  "hl_pnl": 13.93,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -70.13,
+  "all_time_pnl": -69.72,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 1.9072,
+      "pnl": 2.136,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.4552,
+      "pnl": 1.63608,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,24 +36,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.3312%",
-      "apr": "-363%",
+      "rate": "-0.3995%",
+      "apr": "-437%",
       "action": "LONG",
-      "oi": "122,129,542"
+      "oi": "121,865,366"
     },
     {
       "coin": "HEMI",
-      "rate": "-0.1969%",
-      "apr": "-216%",
+      "rate": "-0.1642%",
+      "apr": "-180%",
       "action": "LONG",
-      "oi": "234,891,856"
+      "oi": "234,826,696"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0915%",
-      "apr": "-100%",
+      "rate": "-0.0841%",
+      "apr": "-92%",
       "action": "LONG",
-      "oi": "96,800,580"
+      "oi": "96,774,720"
     }
   ],
   "daily_pnl": [
@@ -123,7 +123,7 @@
     "insights": [
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.3312%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.3995%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -209,7 +209,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.3624,
+        "pnl": 3.77208,
         "sharpe": 0.0
       },
       {
@@ -365,7 +365,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 08:11 UTC \u2014 [Pillar 4] Pre-Session Alpha: Regime Flipped to RANGE + Infra Fixes\n\n**Task:** P4 alpha research \u2014 pre-session regime check, funding analysis, infrastructure audit\n\n**Finding \u2014 REGIME FLIPPED: TREND DOWN 4/6 \u2192 RANGE 2/6:**\n- 06:10 UTC: TREND DOWN 4/6, pm_action=STOP, BTC $66,531\n- 08:11 UTC: RANGE 2/6, pm_action=TRADE, BTC $66,752\n- BTC consolidated $66.2-66.9K for 4+ hours \u2192 volatility dropped \u2192 detector classified RANGE\n- This matches Scenario B from my 06:17 prediction (45% probability \u2192 materialized)\n- Pre-session check now shows: **\ud83d\udfe2 TRADE PROBABILITY: HIGH**\n\n**Finding \u2014 Funding Deepened (Shorts Building):**\n- BTC funding: -0.0023%/8h (was -0.0009% at 06:10 \u2014 2.5x more negative)\n- Premium: -0.066% (bearish)\n- Shorts are accumulating during consolidation \u2192 squeeze setup if BTC bounces past $67K\n- For PM: negative funding = bearish lean = more negative bias windows = more YES trade opportunities\n\n**Finding \u2014 Pre-Session Check Bug FIXED:**\n- `regime-state.json` didn't exist \u2192 script defaulted to score=5 \u2192 always showed \"LOW PROBABILITY\"\n- Fix: regime detector cron now writes `tee intelligence/regime-state.json`\n- Pre-session check correctly reads RANGE 2/6 \u2192 HIGH probability\n\n**CRITICAL \u2014 Crontab WIPED During Fix (Rebuilt):**\n- Bad `sed` command cleared all cron entries. Caught immediately.\n- Rebuilt from MEMORY.md references: 10 entries (regime */15, liq */5, OBI */5, copy */30, squeeze */15, funding */30, v5a shadow */5 active hours, watchdog */5, dashboard */30)\n- All entries verified against MEMORY.md infrastructure list\n- Lesson: NEVER use `sed` on crontab. Always `crontab -l > backup` then edit the file safely.\n\n**11h Session Forecast:**\n- Regime: RANGE 2/6 (HIGH probability of trading)\n- BTC: $66,752 consolidating in $66.2-66.9K range\n- F&G: 12 (Extreme Fear) \u2192 +0.05 edge mod, 1.05x size\n- Funding: negative \u2192 sellers dominant \u2192 expect negative bias \u2192 YES trade opportunities\n- Liquidations: NORMAL across BTC/ETH/SOL \u2192 no cascade risk\n- Expected: 3-5 trades at 11-12h, 65-75% WR, $15-25 P&L if patterns hold\n\n**Decision:** Everything green for 11h session. No intervention needed. Bot will self-manage.\n\n**Next:** P1 \u2014 copy intel (rotation continues)\n\n---\n## 2026-04-02 07:41 UTC \u2014 [Pillar 3] V6 Cooldown Spec: 600s Gap Filter\n\n**Task:** P3 strategy development \u2014 backtest cooldown thresholds, write V6 spec, finalize deploy plan\n\n**Finding \u2014 600s is the Optimal Cooldown (V3+ hours, n=71):**\n| Cooldown | Kept | Kept WR | Blocked | Blocked WR | Delta |\n|----------|------|---------|---------|------------|-------|\n| 180s (3m) | 68 | 72% | 3 | 67% | +5pp |\n| 300s (5m) | 57 | 70% | 14 | **79%** | -9pp \u26a0\ufe0f |\n| 420s (7m) | 50 | 72% | 21 | 71% | +1pp |\n| **600s (10m)** | **47** | **77%** | **24** | **62%** | **+15pp** \u2705 |\n| 900s (15m) | 41 | 73% | 30 | 70% | +3pp |\n\n- **300s (5m) BLOCKS WINNERS** \u2014 blocked trades have 79% WR! Too aggressiv",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 08:41 UTC \u2014 [Pillar 1] Copy Intel: PM OBI Flipped Bearish + Intra-Hour Bias Patterns\n\n**Task:** P1 copy intelligence \u2014 analyze PM order flow shift, intra-hour bias evolution, tradeable window density\n\n**Finding \u2014 PM OBI Flipped BEARISH (Favorable for 11h):**\n- 06:44 UTC: UP OBI +0.15 (bullish), confidence 27%\n- 08:42 UTC: UP OBI **-0.316** (bearish), confidence 63%\n- Massive shift: 84 asks vs 15 bids on UP token. Sellers dominating.\n- For our contrarian YES strategy, negative OBI = 70-83% WR (from P1 earlier today)\n- **Pre-session OBI bearish \u2192 11h likely to see negative OBI at trade time \u2192 HIGH quality setup**\n\n**Finding \u2014 Tradeable Window Density (Apr 1 shadow data):**\n| Hour | V4.1 tradeable | V5a tradeable | Notes |\n|------|---------------|---------------|-------|\n| 11h | 17% (2/12) | 8% (1/12) | Strong signals concentrated in first half |\n| 12h | 33% (4/12) | 25% (3/12) | Signals build in second half |\n| 19h | 42% (5/12) | 8% (1/12) | Most V4.1 windows but weak |bias| |\n| 20h | 25% (3/12) | 17% (2/12) | Moderate |\n\nV5a will cut 19h trades dramatically (42% \u2192 8%). This is GOOD \u2014 19h had 50% WR on Apr 1 evening.\n12h is the volume hour under V5a (25% windows tradeable). 11h is the precision hour (few but strong).\n\n**Finding \u2014 Intra-Hour Bias Evolution:**\n- 11h: bias STRONGER in first 30 min (avg|bias|=53.8) \u2192 fades in second half (46.5)\n- 12h: bias BUILDS through the hour (34.7 \u2192 39.2, strong_neg 17% \u2192 33%)\n- Implication: 11h trades cluster in first 15 min. 12h trades cluster in last 15 min.\n- V6 cooldown (600s) is well-suited: blocks follow-ups within each cluster\n\n**Finding \u2014 Gamma API Stale:**\n- PM Gamma API returns 2020-era markets. Needs different query params for current crypto markets.\n- Not useful for discovering new tradeable markets. Our 5-min BTC market discovery works through direct CLOB.\n\n**My thinking:** Pre-session signals are aligning for a good 11h session. Regime RANGE 2/6, PM OBI bearish, funding negative, F&G 12. If OBI stays negative through 11h, expect 2-3 high-conviction trades with 70%+ WR. The key risk: BTC could break down below $66K between now and 11h, flipping regime back to TREND.\n\n**Decision:** No action needed. All indicators favor the 11h session. Continue monitoring.\n\n**Next:** P2 \u2014 smart entry refinement\n\n---\n## 2026-04-02 08:11 UTC \u2014 [Pillar 4] Pre-Session Alpha: Regime Flipped to RANGE + Infra Fixes\n\n**Task:** P4 alpha research \u2014 pre-session regime check, funding analysis, infrastructure audit\n\n**Finding \u2014 REGIME FLIPPED: TREND DOWN 4/6 \u2192 RANGE 2/6:**\n- 06:10 UTC: TREND DOWN 4/6, pm_action=STOP, BTC $66,531\n- 08:11 UTC: RANGE 2/6, pm_action=TRADE, BTC $66,752\n- BTC consolidated $66.2-66.9K for 4+ hours \u2192 volatility dropped \u2192 detector classified RANGE\n- This matches Scenario B from my 06:17 prediction (45% probability \u2192 materialized)\n- Pre-session check now shows: **\ud83d\udfe2 TRADE PROBABILITY: HIGH**\n\n**Finding ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
