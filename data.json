@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T07:30:01.537304+00:00",
+  "timestamp": "2026-04-02T07:43:44.334586+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 404.475514,
+  "hl_balance": 404.01095399999997,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 13.48,
+  "hl_pnl": 13.01,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -70.17,
+  "all_time_pnl": -70.64,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 1.8912,
+      "pnl": 1.632,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.42256,
+      "pnl": 1.2172,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,17 +36,17 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.1997%",
-      "apr": "-219%",
+      "rate": "-0.1937%",
+      "apr": "-212%",
       "action": "LONG",
-      "oi": "122,935,064"
+      "oi": "121,995,320"
     },
     {
       "coin": "BLUR",
-      "rate": "-0.0851%",
-      "apr": "-93%",
+      "rate": "-0.0930%",
+      "apr": "-102%",
       "action": "LONG",
-      "oi": "96,922,474"
+      "oi": "96,955,888"
     }
   ],
   "daily_pnl": [
@@ -120,7 +120,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.1997%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.1937%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -206,7 +206,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.3137600000000003,
+        "pnl": 2.8491999999999997,
         "sharpe": 0.0
       },
       {
@@ -362,7 +362,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 07:11 UTC \u2014 [Pillar 2] Smart Entry: Price Filter & Evening Loss Autopsy\n\n**Task:** P2 smart entry \u2014 dissect Apr 1 evening failures, analyze entry price filter, find parameter improvements\n\n**Finding \u2014 Morning vs Evening: OBI is THE Differentiator:**\n- Morning wins (n=7): avg OBI=-0.370 (bearish orderbook)\n- Evening losses (n=3): avg OBI=+0.476 (bullish orderbook)\n- Delta: 0.846 OBI spread. This is not random \u2014 bullish OB kills our contrarian strategy.\n- BTC was flat during evening (-0.03%) so it wasn't a trending market. The OBI was the signal.\n\n**Finding \u2014 Entry Price Tiers (V3+ hours, n=71):**\n| Price Range | Trades | WR | EV/trade | $/trade ($12) |\n|-------------|--------|-----|----------|---------------|\n| <$0.50 | 20 | 60% | +0.224 | +$2.69 |\n| $0.50-0.52 | 31 | 71% | +0.392 | +$4.71 |\n| $0.52-0.535 | 7 | 86% | +0.632 | +$7.58 |\n| >$0.535 | 13 | 85% | +0.574 | +$6.89 |\n\nHigher entry price = dramatically better EV (+75% more per trade at $0.50-0.52 vs <$0.50). The current min_price=$0.48 allows the weakest tier.\n\n**Finding \u2014 Edge Monotonically Predicts WR:**\n- Edge 0.15-0.20: 46% WR (LOSER)\n- Edge 0.22-0.24: 59% WR\n- Edge 0.25 (max): 68% WR\n- Edge is capped at 0.25, so max-edge trades have both high bias + favorable price. A min_edge filter could work but overlaps with min_bias (V5a).\n\n**Finding \u2014 Conviction 4/4 = 40% WR (Worse Than 3/4!):**\n- All 10 conv-4 trades were from Mar 20 (pre-V3), in bad hours (15h, 18h, 22h).\n- In V3+ hours, 4/4 conviction has NEVER occurred.\n- Not actionable \u2014 zombie-era contamination. Ignore this metric.\n\n**My thinking:** Raising min_price from $0.48 \u2192 $0.50 is low-risk, data-backed. Eliminates 28% of trades (the weakest 60% WR tier) and raises average EV by ~50%. This is simpler than V5a and could be deployed IMMEDIATELY. However, the $0.48 min was set based on earlier analysis and Apr 1 only had 2 trades in that range (1W/1L). I want 1 more week of shadow data before changing.\n\n**Decision:**\n1. Queue min_price=$0.50 for V5a deploy (Apr 6) \u2014 bundle with min_bias=45\n2. Add max_price=$0.55 widening to V6 spec for validation\n3. OBI gate (block when OBI>0.5) confirmed by evening autopsy \u2014 add to V5b spec\n4. No immediate parameter changes \u2014 let V4.1 run clean for W14 validation\n\n**Next:** P3 \u2014 V6 cooldown spec finalization\n\n---\n## 2026-04-02 06:42 UTC \u2014 [Pillar 1] Copy Intel: HL Order Book + OBI Performance Deep Dive\n\n**Task:** P1 copy intelligence \u2014 analyze HL whale order book positioning post-selloff, validate OBI signal on cumulative data\n\n**Finding \u2014 HL Order Book is Balanced (Not Bearish):**\n- Initial snapshot showed massive -0.876 OBI. At higher resolution ($1 levels): Bids=69.6 BTC vs Asks=49.2 BTC \u2192 actually BID-heavy.\n- Major support wall: 16.35 BTC ($1.09M) at $66,508. Support at $66,512-$66,513 (11.8 BTC).\n- Sell pressure distributed evenly across $66,523-$66,542 \u2014 no single mega wall, just steady sell",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 07:41 UTC \u2014 [Pillar 3] V6 Cooldown Spec: 600s Gap Filter\n\n**Task:** P3 strategy development \u2014 backtest cooldown thresholds, write V6 spec, finalize deploy plan\n\n**Finding \u2014 600s is the Optimal Cooldown (V3+ hours, n=71):**\n| Cooldown | Kept | Kept WR | Blocked | Blocked WR | Delta |\n|----------|------|---------|---------|------------|-------|\n| 180s (3m) | 68 | 72% | 3 | 67% | +5pp |\n| 300s (5m) | 57 | 70% | 14 | **79%** | -9pp \u26a0\ufe0f |\n| 420s (7m) | 50 | 72% | 21 | 71% | +1pp |\n| **600s (10m)** | **47** | **77%** | **24** | **62%** | **+15pp** \u2705 |\n| 900s (15m) | 41 | 73% | 30 | 70% | +3pp |\n\n- **300s (5m) BLOCKS WINNERS** \u2014 blocked trades have 79% WR! Too aggressive at short intervals.\n- **600s is the sweet spot** \u2014 biggest WR delta (+15pp), blocked trades are genuinely weaker.\n- **900s over-filters** \u2014 starts blocking good trades again (70% blocked WR).\n\n**Finding \u2014 Why 600s Works (Gap Bucket Analysis):**\n| Gap Range | Blocked Trades | WR |\n|-----------|---------------|-----|\n| 0-180s | 3 | 67% |\n| 180-300s | 7 | 71% |\n| **300-420s** | **8** | **50%** \u2190 the problem bucket |\n| 420-600s | 6 | 67% |\n\nThe 300-420s range (5-7 min after last trade) produces coin-flip trades. These are stale signals from the same market move. 600s cooldown catches ALL of these plus the weak 420-600s bucket.\n\n**Finding \u2014 Daily Impact:**\n- High-volume days cut 34-47% of trades (Mar 25: 17\u21929, Apr 1: 14\u219210)\n- Low-volume days barely affected (Mar 31: 1\u21921, Mar 29: 1\u21921)\n- Cooldown self-adjusts: in selective markets, no impact. In noisy markets, maximum filtering.\n\n**Spec Written:** `patches/v6-cooldown-filter.spec.md` \u2705\n- Implementation: 8 lines of code in `run()` method\n- Shadow mode: already partially via v6_cooldown_tag in outcomes\n- Deploy: Apr 13 (after V5a validation week)\n- Rollback: remove cooldown check, restart\n\n**V5a checklist updated:** Added min_price $0.48\u2192$0.50 change to deploy step 3b.\n\n**My thinking:** V6 cooldown is the highest-impact upgrade remaining after V5a. It's mechanically simple (timer), doesn't require new data sources, and has the largest WR improvement in backtest (+15pp). Combined with V5a (min_bias=45), the pipeline becomes: hour filter \u2192 regime filter \u2192 price filter \u2192 bias filter \u2192 cooldown \u2192 conviction \u2192 trade. Each layer cuts the weakest signals.\n\n**Decision:** V6 spec COMPLETE. Deploy Apr 13. V5a + V6 combined estimate: 80-85% WR with 3-4 trades/day \u2192 $35-45 daily.\n\n**Next:** P4 \u2014 alpha research. Pre-session regime check for today's 11h window.\n\n---\n## 2026-04-02 07:11 UTC \u2014 [Pillar 2] Smart Entry: Price Filter & Evening Loss Autopsy\n\n**Task:** P2 smart entry \u2014 dissect Apr 1 evening failures, analyze entry price filter, find parameter improvements\n\n**Finding \u2014 Morning vs Evening: OBI is THE Differentiator:**\n- Morning wins (n=7): avg OBI=-0.370 (bearish orderbook)\n- Evening losses (n=3): avg OBI=+0.476 (bullish orderbook)\n- Delta: 0.846 OB",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
