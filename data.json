@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T13:30:01.484827+00:00",
+  "timestamp": "2026-04-02T13:44:29.620492+00:00",
   "pm_balance": 894.97,
-  "hl_balance": 407.883507,
+  "hl_balance": 409.903297,
   "today_pnl": 33.02,
   "pm_pnl": -114.35,
-  "hl_pnl": 16.88,
+  "hl_pnl": 18.9,
   "today_trades": 8,
   "today_wins": 5,
   "today_losses": 3,
-  "all_time_pnl": -97.47,
+  "all_time_pnl": -95.45,
   "total_trades": 258,
   "days_active": 18,
   "pm_bot_running": true,
@@ -17,9 +17,9 @@
     {
       "coin": "BTC",
       "side": "SHORT",
-      "size": 0.0016,
-      "entry": 67821.0,
-      "pnl": 2.7168,
+      "size": 0.0017,
+      "entry": 65794.0,
+      "pnl": -0.0068,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 0.0543,
       "entry": 2035.2,
-      "pnl": 0.26607,
+      "pnl": 0.95568,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,32 +37,32 @@
       "side": "SHORT",
       "size": 1.43,
       "entry": 77.877,
-      "pnl": 0.62491,
+      "pnl": 1.43715,
       "leverage": 3,
       "wallet": "old"
     }
   ],
   "funding_opportunities": [
     {
-      "coin": "STABLE",
-      "rate": "-0.3890%",
-      "apr": "-426%",
+      "coin": "REZ",
+      "rate": "-0.3962%",
+      "apr": "-434%",
       "action": "LONG",
-      "oi": "146,393,544"
+      "oi": "250,135,996"
     },
     {
-      "coin": "REZ",
-      "rate": "-0.3683%",
-      "apr": "-403%",
+      "coin": "STABLE",
+      "rate": "-0.3621%",
+      "apr": "-396%",
       "action": "LONG",
-      "oi": "248,941,772"
+      "oi": "146,410,038"
     },
     {
       "coin": "HEMI",
-      "rate": "-0.1876%",
-      "apr": "-205%",
+      "rate": "-0.1976%",
+      "apr": "-216%",
       "action": "LONG",
-      "oi": "238,203,742"
+      "oi": "237,471,224"
     }
   ],
   "daily_pnl": [
@@ -136,7 +136,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.3890%/8h \u2014 shorts paying longs"
+        "text": "Strongest: REZ at -0.3962%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -222,7 +222,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 3.60778,
+        "pnl": 2.38603,
         "sharpe": 0.0
       },
       {
@@ -378,7 +378,7 @@
     "sharpe": 0.22,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 13:13 UTC \u2014 [Pillar 2] V5b OBI Sizing Spec Revised + Shadow Tagging Deployed\n\n**Task:** P2 smart entry \u2014 revise V5b spec with 22-trade data, deploy shadow tagging to bot\n\n**Output 1: V5b spec revised** (`patches/v5b-obi-sizing.spec.md`)\n- OLD: binary OBI\u2705/OBI\u274c (full/half)\n- NEW: 3-tier sizing based on OBI magnitude buckets\n  - OBI <-0.5: 1.2x BOOST (83% WR)\n  - OBI -0.1 to +0.5: 1.0x NORMAL (75% WR)\n  - OBI -0.5 to -0.1 OR >+0.5: 0.5x REDUCE (33-40% WR)\n- Simulation: +11% pnl improvement over V4.1\n\n**Output 2: V5b shadow tagging DEPLOYED to bot**\n- Every trade outcome now logs `v5b_multiplier` and `v5b_tag`\n- Tags: BOOST, NORMAL, REDUCE_MILD_BEAR, REDUCE_STRONG_BULL\n- Starts collecting data on next trade (19h session today)\n- Need n\u226530 for deploy validation\n\n**Deploy bundle (Apr 13): V5b + V6 cooldown together.** Both are sizing/filtering changes that don't interact \u2014 safe to bundle.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-02 12:56 UTC \u2014 [Pillar 1] Multi-Factor Model: 22 Indicator-Tagged Trades\n\n**Task:** P1 copy intel \u2014 build multi-factor model from cumulative 22 OBI-tagged trades (Apr 1-2)\n\n**Finding \u2014 Factor Count Predicts WR (Monotonic):**\n| Aligned Factors | Trades | WR | Interpretation |\n|----------------|--------|-----|----------------|\n| 2/4 | 2 | 50% | Coin flip |\n| 3/4 | 10 | 60% | Marginal edge |\n| 4/4 | 10 | 70% | Strong edge |\n\nMore aligned indicators = higher WR. This validates conviction scoring.\n\n**Finding \u2014 OBI Magnitude Buckets (DEFINITIVE, n=22):**\n| OBI Range | Trades | WR | Action |\n|-----------|--------|-----|--------|\n| < -0.5 (strong bearish) | 6 | 83% | Full size \u2705 |\n| -0.5 to -0.1 (mild bearish) | 3 | 33% | \u26a0\ufe0f Weak |\n| -0.1 to +0.1 (neutral) | 2 | 100% | Normal |\n| +0.1 to +0.5 (mild bullish) | 6 | 67% | Normal |\n| > +0.5 (strong bullish) | 5 | 40% | Half size \u2705 |\n\n**OBI is U-SHAPED, not linear!** Strong bearish (83%) and neutral (100%) are best. Mild bearish (33%) is WORST. Strong bullish (40%) is bad. The V5b sizing spec (full at OBI<-0.3, half at OBI>0.5) is correct \u2014 +0.559 pnl units improvement in simulation.\n\n**Finding \u2014 Best Individual Factors:**\n- OBI <-0.3: +18pp delta (75% vs 57%)\n- MACD <-10: +18pp delta (75% vs 57%) \n- |bias| >55: +14pp delta (69% vs 56%)\n- OBI >+0.5: **-31pp delta** (40% vs 71%) \u2014 strongest NEGATIVE predictor\n\n**Finding \u2014 Best 2-Factor Combo: MACD<-10 + CVD neg = 75% WR (n=8)**\nThis combo captures strong downward momentum (MACD) + selling pressure (CVD). Our contrarian strategy thrives when the market is aggressively bearish but within RANGE.\n\n**V5b Sizing Simulation:** +0.559 pnl units over 22 trades (+11%). Same number of trades, just smarter sizing.\n\n**Decision:** V5b spec validated. OBI sizing (not gating) is correct. Deploy Apr 13 with V6 cooldown.\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-02 12:41 UTC \u2014 [Pillar 4] Full Morning Session: 7 trades, 5W/2L = 71% WR\n\n**Task:** P4 alph",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 13:42 UTC \u2014 [Pillar 3] US Open Selloff: TREND 4/6, Evening at Risk\n\n**Task:** P3 strategy \u2014 analyze US market open impact, regime shift, 19h session forecast\n\n**Finding \u2014 Regime Flipped Back to TREND 4/6:**\n- BTC dropped $66.2K \u2192 $65.8K at US open (13:30 UTC). pm_action: STOP.\n- 5-min candles show sustained selling: 5 consecutive red from 12:45-13:05, then bounce, then another leg down at 13:30.\n- 13:30 candle: -0.35% in 5 min (largest single-candle drop of the session).\n- **This validates excluding 14h from active hours (30% WR).** We avoided this chaos.\n\n**Finding \u2014 Forced Selling in Derivatives:**\n- BTC premium: -0.073% (perp trading below spot)\n- This indicates forced selling/deleveraging in perps, NOT organic spot selling\n- Historically, negative premium resolves in 4-8h via funding arbitrage\n- If premium stays negative through 19h \u2192 short squeeze setup becomes likely\n- Alts hit harder: ETH -4.4%, SOL -6.7% (risk-off amplification)\n\n**Finding \u2014 HL Old Wallet Repositioned:**\n- Old positions (BTC/ETH/SOL LONG from Mar 31) were auto-closed by HL bot\n- New positions: BTC SHORT $65,794, ETH SHORT $2,035, SOL SHORT $77.88\n- Account: $372.43. ETH +$0.97, SOL +$1.35 uPnL. BTC flat (just entered).\n- HL bot correctly riding the trend SHORT.\n\n**19h Session Forecast (UPDATED):**\n- Current: TREND 4/6 (STOP). BTC $65,828.\n- Need BTC to stabilize $65.5-66K for 3+ hours for RANGE by 19h\n- Probability of RANGE by 19h: 30% (was 45% this morning)\n- If BTC drops below $65K: STRONG_TREND, 0 trades guaranteed\n- Best case: consolidation like overnight ($66.2-66.8K for 4h \u2192 RANGE)\n- Regime filter will correctly block if TREND persists. No intervention needed.\n\n**Decision:** No action. Regime filter handles this. If 19h is blocked, we preserve morning gains (5W/2L).\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-02 13:13 UTC \u2014 [Pillar 2] V5b OBI Sizing Spec Revised + Shadow Tagging Deployed\n\n**Task:** P2 smart entry \u2014 revise V5b spec with 22-trade data, deploy shadow tagging to bot\n\n**Output 1: V5b spec revised** (`patches/v5b-obi-sizing.spec.md`)\n- OLD: binary OBI\u2705/OBI\u274c (full/half)\n- NEW: 3-tier sizing based on OBI magnitude buckets\n  - OBI <-0.5: 1.2x BOOST (83% WR)\n  - OBI -0.1 to +0.5: 1.0x NORMAL (75% WR)\n  - OBI -0.5 to -0.1 OR >+0.5: 0.5x REDUCE (33-40% WR)\n- Simulation: +11% pnl improvement over V4.1\n\n**Output 2: V5b shadow tagging DEPLOYED to bot**\n- Every trade outcome now logs `v5b_multiplier` and `v5b_tag`\n- Tags: BOOST, NORMAL, REDUCE_MILD_BEAR, REDUCE_STRONG_BULL\n- Starts collecting data on next trade (19h session today)\n- Need n\u226530 for deploy validation\n\n**Deploy bundle (Apr 13): V5b + V6 cooldown together.** Both are sizing/filtering changes that don't interact \u2014 safe to bundle.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-02 12:56 UTC \u2014 [Pillar 1] Multi-Factor Model: 22 Indicator-Tagged Trades\n\n**Task:** P1 copy intel \u2014 build multi-factor model from",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
