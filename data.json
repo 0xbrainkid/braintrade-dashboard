@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-02T06:30:02.146577+00:00",
+  "timestamp": "2026-04-02T06:45:15.199096+00:00",
   "pm_balance": 925.67,
-  "hl_balance": 404.530673,
+  "hl_balance": 405.113633,
   "today_pnl": 0,
   "pm_pnl": -83.65,
-  "hl_pnl": 13.53,
+  "hl_pnl": 14.11,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -70.12,
+  "all_time_pnl": -69.54,
   "total_trades": 250,
   "days_active": 18,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "SHORT",
       "size": 0.0016,
       "entry": 67821.0,
-      "pnl": 1.9536,
+      "pnl": 2.0864,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "SHORT",
       "size": 1.36,
       "entry": 80.314,
-      "pnl": 1.41304,
+      "pnl": 1.8632,
       "leverage": 3,
       "wallet": "old"
     }
@@ -36,24 +36,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.1684%",
+      "rate": "-0.1679%",
       "apr": "-184%",
       "action": "LONG",
-      "oi": "126,603,442"
-    },
-    {
-      "coin": "BLUR",
-      "rate": "-0.0813%",
-      "apr": "-89%",
-      "action": "LONG",
-      "oi": "95,859,250"
+      "oi": "126,613,998"
     },
     {
       "coin": "HEMI",
-      "rate": "-0.0598%",
-      "apr": "-65%",
+      "rate": "-0.0940%",
+      "apr": "-103%",
       "action": "LONG",
-      "oi": "232,575,028"
+      "oi": "234,694,750"
+    },
+    {
+      "coin": "BLUR",
+      "rate": "-0.0801%",
+      "apr": "-88%",
+      "action": "LONG",
+      "oi": "95,948,178"
     }
   ],
   "daily_pnl": [
@@ -127,7 +127,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.1684%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.1679%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -213,7 +213,7 @@
         "status": "DOWN",
         "trades": 2,
         "win_rate": 0,
-        "pnl": 3.3666400000000003,
+        "pnl": 3.9495999999999998,
         "sharpe": 0.0
       },
       {
@@ -369,7 +369,7 @@
     "sharpe": -0.23,
     "max_drawdown": 351.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 06:17 UTC \u2014 [Pillar 4] BTC -2.8% Overnight Drop: Regime & Alpha Analysis for Apr 2\n\n**Task:** P4 alpha research \u2014 analyze BTC selloff, regime projection, funding/liquidation signals for today's session\n\n**Finding \u2014 Overnight Selloff:**\n- BTC: $69,310 \u2192 $66,217 low (-4.5%), now $66,775. 24h vol $1.4B.\n- Sharp dump 00-04h UTC (Asia session). Consolidating $66.2-66.8K for 2+ hours.\n- ETH -4.01%, SOL -5.91% \u2014 alts hit harder (typical risk-off).\n\n**Finding \u2014 Funding All Negative (Short Dominance):**\n- BTC: -0.0009%/8h, ETH: -0.0010%, SOL: -0.0013%, AVAX: -0.0021%\n- Shorts paying longs across all majors. Premium negative everywhere.\n- OI dropping (BTC -0.2%) = DELEVERAGING, not new shorts opening. This is healthy.\n- Squeeze detector: LONG_SQUEEZE score 34 (below threshold). L/S ratio rising +36%.\n\n**Finding \u2014 Whale Positions:**\n- 0x3bca (short whale from Mar 31): FULLY CLOSED. Zero position, zero account.\n- 0xecb6 (long whale): Also closed out. Both whales exited during selloff.\n- Whale capitulation = near-term bottom signal? When both sides exit, volatility drops.\n\n**Finding \u2014 Regime Projection for 11h UTC:**\n- Current: TREND DOWN 4/6 (pm_action: STOP)\n- Need BTC +1.0% to $67,500 for potential RANGE regime by 11h\n- Scenario A (35%): Bounce \u2192 RANGE \u2192 3-5 trades, $15-25 P&L\n- Scenario B (45%): Consolidation \u2192 MIXED \u2192 1-3 trades\n- Scenario C (20%): Continuation below $66K \u2192 bot blocked entirely\n- 4h candle 04:00 = +0.35% (first green 4h in 12h) \u2014 early bounce signal\n\n**Finding \u2014 F&G Extreme Fear (12):**\n- Our F&G mod: +0.05 edge, 1.05x size at F&G \u2264 15\n- Historical: F&G 8-12 days had mixed results (47-58% WR)\n- F&G doesn't predict 5-min PM outcomes (confirmed Mar 31) but extreme fear = wider BTC ranges = more PM edge opportunity\n\n**My thinking:** The selloff is a healthy deleveraging, not a cascade. Both mega-whales closed = positioning is cleaner now. Negative funding + 2h consolidation = bounce setup. But we need RANGE regime to trade. If BTC holds $66K and drifts up to $67K+ by 10h, we should see 3-4 good windows. The contrarian strategy loves post-selloff bounces \u2014 sellers are exhausted, bias goes negative, we buy YES.\n\n**Decision:** No manual intervention needed. Regime filter and hour selection will handle this. If TREND persists at 11h, bot correctly stays out. Pre-session check at 10:45 will confirm.\n\n**Next:** P1 \u2014 Copy intelligence. Check HL leaderboard for traders who caught the selloff (shorting from $69K).\n\n---\n## 2026-04-02 06:10 UTC \u2014 [Pillar 3] Bug #3 Fix + Apr 1 Full-Day Strategy Analysis\n\n**Task:** P3 strategy development \u2014 analyze Apr 1 full-day results (14 trades), evaluate V5a/V6 shadow, fix crash bug\n\n**Finding \u2014 CRITICAL BUG #3:** `NameError: name 'current_hour' is not defined` in `run()` method line 817. The LOSS_BREAKER code referenced `current_hour` which was only defined inside `should_trade()`, not in `run()`. Triggered at",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 06:42 UTC \u2014 [Pillar 1] Copy Intel: HL Order Book + OBI Performance Deep Dive\n\n**Task:** P1 copy intelligence \u2014 analyze HL whale order book positioning post-selloff, validate OBI signal on cumulative data\n\n**Finding \u2014 HL Order Book is Balanced (Not Bearish):**\n- Initial snapshot showed massive -0.876 OBI. At higher resolution ($1 levels): Bids=69.6 BTC vs Asks=49.2 BTC \u2192 actually BID-heavy.\n- Major support wall: 16.35 BTC ($1.09M) at $66,508. Support at $66,512-$66,513 (11.8 BTC).\n- Sell pressure distributed evenly across $66,523-$66,542 \u2014 no single mega wall, just steady selling.\n- **Conclusion:** Book aggregation level dramatically changes OBI reading. Need to use consistent depth for signals.\n\n**Finding \u2014 PM Copy Scanner Agrees (Bullish):**\n- UP OBI +0.15, DN OBI -0.13 \u2192 bullish lean (more buying UP, selling DN)\n- Smart money signal: +0.16 (bullish). Confidence: 27% (low).\n- Both HL and PM books currently bullish \u2192 aligned \u2192 suggests bounce from selloff.\n- BUT: pre-session signals 5 hours before trading have LOW predictive value for 5-min outcomes.\n\n**Finding \u2014 OBI Magnitude is CRITICAL (n=14 V3+ trades):**\n- Strong OBI <-0.5: **83% WR** (5W/1L) \u2014 bearish OB = contrarian gold\n- Mild OBI -0.5 to 0: 50% WR (2W/2L) \u2014 no edge\n- Mild OBI 0 to 0.5: 100% WR (2W/0L) \u2014 small sample\n- Strong OBI >0.5: **0% WR** (0W/2L) \u2014 bullish OB = contrarian DEATH\n- The two 0% WR trades (19:15 OBI +0.726, 20:00 OBI +0.931) were BOTH evening losses.\n\n**Finding \u2014 20h is Structurally Weak:**\n- Only 25% of 20h windows have |bias|\u226545 (vs 50% for 11h)\n- Average |bias| at 20h: 27.6 (vs 50.2 for 11h) \u2014 signal is systematically weaker\n- This means fewer V5a-eligible trades AND weaker conviction on the ones that pass\n- V6 consideration: REMOVE 20h from active hours? Need 1 more week of data.\n\n**My thinking:** OBI magnitude is emerging as the single best predictor we have. Strong negative OBI (bearish OB) + contrarian YES = 83% WR is remarkable. V5b OBI sizing (full at OBI\u2705, half at OBI\u274c) is the right framework, but we might want to consider an OBI GATE instead: BLOCK trades when OBI > +0.5 (strong bullish = 0% WR). This is only 2 trades so far \u2014 need n\u226510 to validate. Track aggressively.\n\n**Decision:** \n1. Add OBI>0.5 gate to V5b spec as OPTIONAL upgrade (activate when n\u226510 OBI>0.5 trades)\n2. Track 20h removal for V6 (need W14 full week data)\n3. Order book aggregation: use top-20 $1-level depth for consistent OBI readings\n\n**Next:** P2 \u2014 Smart entry parameter review with Apr 1 evening failures.\n\n---\n## 2026-04-02 06:17 UTC \u2014 [Pillar 4] BTC -2.8% Overnight Drop: Regime & Alpha Analysis for Apr 2\n\n**Task:** P4 alpha research \u2014 analyze BTC selloff, regime projection, funding/liquidation signals for today's session\n\n**Finding \u2014 Overnight Selloff:**\n- BTC: $69,310 \u2192 $66,217 low (-4.5%), now $66,775. 24h vol $1.4B.\n- Sharp dump 00-04h UTC (Asia session). Consolidating $66.2-66.8K",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
