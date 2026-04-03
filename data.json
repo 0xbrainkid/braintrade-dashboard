@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-03T12:30:01.413404+00:00",
-  "pm_balance": 893.13,
-  "hl_balance": 403.568194,
-  "today_pnl": 20.43,
-  "pm_pnl": -116.19,
-  "hl_pnl": 12.57,
-  "today_trades": 1,
-  "today_wins": 1,
-  "today_losses": 0,
-  "all_time_pnl": -103.62,
-  "total_trades": 259,
+  "timestamp": "2026-04-03T13:00:02.151534+00:00",
+  "pm_balance": 871.7,
+  "hl_balance": 400.799481,
+  "today_pnl": 58.08,
+  "pm_pnl": -137.62,
+  "hl_pnl": 9.8,
+  "today_trades": 5,
+  "today_wins": 4,
+  "today_losses": 1,
+  "all_time_pnl": -127.82,
+  "total_trades": 263,
   "days_active": 19,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.53628,
+      "pnl": -0.10496,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": 0.1219,
+      "pnl": -0.795,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.88458,
+      "pnl": -0.32568,
       "leverage": 3,
       "wallet": "old"
     }
@@ -98,19 +98,19 @@
     },
     {
       "date": "2026-04-03",
-      "pnl": 20.43
+      "pnl": 58.08
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 68,
+    "current_bias": "bearish",
+    "signal_confidence": 36,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 42 buys, 8 sells \u2014 avg price $0.963"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.588"
       }
     ],
     "evolution": [
@@ -182,17 +182,17 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 259,
-        "win_rate": 56.1,
-        "pnl": -116.19000000000005,
-        "sharpe": 0.22
+        "trades": 263,
+        "win_rate": 56.5,
+        "pnl": -137.62,
+        "sharpe": 0.73
       },
       {
         "name": "HL Directional",
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.54276,
+        "pnl": -1.22564,
         "sharpe": 0.0
       },
       {
@@ -342,11 +342,11 @@
         "impact_class": "red"
       }
     ],
-    "win_rate_7d": 56.1,
-    "win_rate_24h": 100.0,
+    "win_rate_7d": 56.5,
+    "win_rate_24h": 80.0,
     "avg_trade_size": 0.52,
-    "sharpe": 0.22,
-    "max_drawdown": 330.2
+    "sharpe": 0.73,
+    "max_drawdown": 48.8
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:36 UTC \u2014 [Pillar 3] Why Today's Session is Dry + Selectivity = Profit\n\n**Task:** P3 strategy \u2014 analyze why 11h has zero trades, validate selectivity thesis\n\n**Why No Trades (11:00-11:36):**\n- BTC grinding UP: $66,843 \u2192 $66,985 (+0.2%) in 30 min\n- Bias 71% positive (25/35 readings). Crowd betting YES (correct!).\n- Our contrarian can only buy YES when bias is NEGATIVE (crowd betting NO).\n- In a steady grind-up, there's no contrarian opportunity. This is CORRECT behavior.\n- 5 readings had strong negative bias (<-25) but in windows 1-2 only. Not strong enough.\n\n**Finding \u2014 Selectivity = Profit (ALL-TIME DATA):**\n| Day Type | Trades | WR | Interpretation |\n|----------|--------|-----|----------------|\n| Low (\u22645/day) | 10 | **70%** | Selective = profitable |\n| High (>5/day) | 176 | 55% | More trades = worse quality |\n\n+15pp WR difference! Low-trade days are our BEST days. This validates:\n- V5a (min_bias=45) \u2192 fewer trades, higher quality\n- V6 cooldown (600s gap) \u2192 fewer trades, higher quality  \n- Today being dry = GOOD. Zero trades > bad trades.\n\n**Strategic insight:** A 0-trade day at RANGE 1/6 means the market is trending (even slightly). Our edge exists ONLY in chop/mean-reversion. When BTC grinds directionally, sitting out is optimal. The 12h window may differ if BTC reverses.\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:** P2 smart entry \u2014 analyze historical impact of daily loss limit bug\n\n**Finding \u2014 Apr 2 evening was loss-limit-blocked, NOT regime-blocked:**\n- My earlier report (13:42 UTC) said \"evening blocked by TREND 4/6\"\n- WRONG. Regime was MIXED 3/6 at 19h (tradeable!). Actual block was DAILY_LOSS_LIMIT.\n- Evidence: `No trade: DAILY_LOSS_LIMIT: Down $31 today (limit $25)` at 19:02-19:04\n\n**Finding \u2014 No actual missed trades on Apr 2 evening:**\n- ALL 19-20h windows had POSITIVE bias (YES_ONLY_FILTER would block anyway)\n- Zero negative bias windows in the entire Apr 2 evening session\n- So the bug didn't cost us money on Apr 2, just by luck\n\n**Finding \u2014 Bug only triggers on multi-day bot runs:**\n- Pre-Apr 1: bot restarted frequently (zombies, watchdog) \u2192 _start_balance reset often\n- Apr 2: bot ran from 09:40 through Apr 3 \u2192 28h without restart \u2192 stale _start_balance\n- With the fix, _start_balance resets at midnight automatically\n\n**Live session (11h) status:** Bias flipping -12 to +40. Ultra-flat market. No trades yet. PM prices $0.495/0.505 (tight). Waiting for stronger negative bias.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL",
   "pillar4": {
@@ -358,7 +358,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
