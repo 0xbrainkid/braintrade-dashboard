@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T19:56:11.729482+00:00",
+  "timestamp": "2026-04-03T19:57:43.084966+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 402.349854,
+  "hl_balance": 402.338714,
   "today_pnl": 58.08,
   "pm_pnl": -137.62,
-  "hl_pnl": 11.35,
+  "hl_pnl": 11.34,
   "today_trades": 5,
   "today_wins": 4,
   "today_losses": 1,
-  "all_time_pnl": -126.27,
+  "all_time_pnl": -126.28,
   "total_trades": 263,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.12136,
+      "pnl": 0.1148,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.6731,
+      "pnl": -0.6625,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.88182,
+      "pnl": 0.86664,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "TURBO",
-      "rate": "-0.0538%",
-      "apr": "-59%",
+      "rate": "-0.0530%",
+      "apr": "-58%",
       "action": "LONG",
-      "oi": "493,314,630"
+      "oi": "493,350,324"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TURBO at -0.0538%/8h \u2014 shorts paying longs"
+        "text": "Strongest: TURBO at -0.0530%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.33008000000000004,
+        "pnl": 0.31894,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:36 UTC \u2014 [Pillar 3] Why Today's Session is Dry + Selectivity = Profit\n\n**Task:** P3 strategy \u2014 analyze why 11h has zero trades, validate selectivity thesis\n\n**Why No Trades (11:00-11:36):**\n- BTC grinding UP: $66,843 \u2192 $66,985 (+0.2%) in 30 min\n- Bias 71% positive (25/35 readings). Crowd betting YES (correct!).\n- Our contrarian can only buy YES when bias is NEGATIVE (crowd betting NO).\n- In a steady grind-up, there's no contrarian opportunity. This is CORRECT behavior.\n- 5 readings had strong negative bias (<-25) but in windows 1-2 only. Not strong enough.\n\n**Finding \u2014 Selectivity = Profit (ALL-TIME DATA):**\n| Day Type | Trades | WR | Interpretation |\n|----------|--------|-----|----------------|\n| Low (\u22645/day) | 10 | **70%** | Selective = profitable |\n| High (>5/day) | 176 | 55% | More trades = worse quality |\n\n+15pp WR difference! Low-trade days are our BEST days. This validates:\n- V5a (min_bias=45) \u2192 fewer trades, higher quality\n- V6 cooldown (600s gap) \u2192 fewer trades, higher quality  \n- Today being dry = GOOD. Zero trades > bad trades.\n\n**Strategic insight:** A 0-trade day at RANGE 1/6 means the market is trending (even slightly). Our edge exists ONLY in chop/mean-reversion. When BTC grinds directionally, sitting out is optimal. The 12h window may differ if BTC reverses.\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:** P2 smart entry \u2014 analyze historical impact of daily loss limit bug\n\n**Finding \u2014 Apr 2 evening was loss-limit-blocked, NOT regime-blocked:**\n- My earlier report (13:42 UTC) said \"evening blocked by TREND 4/6\"\n- WRONG. Regime was MIXED 3/6 at 19h (tradeable!). Actual block was DAILY_LOSS_LIMIT.\n- Evidence: `No trade: DAILY_LOSS_LIMIT: Down $31 today (limit $25)` at 19:02-19:04\n\n**Finding \u2014 No actual missed trades on Apr 2 evening:**\n- ALL 19-20h windows had POSITIVE bias (YES_ONLY_FILTER would block anyway)\n- Zero negative bias windows in the entire Apr 2 evening session\n- So the bug didn't cost us money on Apr 2, just by luck\n\n**Finding \u2014 Bug only triggers on multi-day bot runs:**\n- Pre-Apr 1: bot restarted frequently (zombies, watchdog) \u2192 _start_balance reset often\n- Apr 2: bot ran from 09:40 through Apr 3 \u2192 28h without restart \u2192 stale _start_balance\n- With the fix, _start_balance resets at midnight automatically\n\n**Live session (11h) status:** Bias flipping -12 to +40. Ultra-flat market. No trades yet. PM prices $0.495/0.505 (tight). Waiting for stronger negative bias.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 19:56 UTC \u2014 [Pillar 4] Apr 3 Mid-Day: 5 trades, 4W/1L = 80% WR + V5b Tagging Live\n\n**Task:** P4 alpha \u2014 catch-up analysis for Apr 3 (backlog since 11:36)\n\n**Apr 3 Trading: 5 trades at 12h, 4W/1L = 80% WR**\n- 11h: 0 trades (BTC grinding up, bias positive, no contrarian opportunity)\n- 12h: 5 trades! BTC reversed slightly, bias went negative, bot fired.\n- 19h: 0 trades so far (bias positive again, BTC $66.8K trending up)\n- Balance: $894.97 \u2192 $871.70 (-$23). Trade math = +$10 net. ~$33 in unredeemed positions.\n\n**V5b TAGGING IS LIVE \u2014 First Validated Data:**\n| Trade | Bias | OBI | V5b Tag | Result |\n|-------|------|-----|---------|--------|\n| 12:12 | -29.2 | +0.32 | NORMAL | \u2705 WIN |\n| 12:37 | -69.8 | -0.49 | REDUCE_MILD_BEAR | \u2705 WIN |\n| 12:42 | -53.4 | +0.17 | NORMAL | \u2705 WIN |\n| 12:48 | -34.6 | **+1.00** | **REDUCE_STRONG_BULL** | \u274c LOSS |\n| 12:52 | -60.5 | +0.02 | NORMAL | \u2705 WIN |\n\n**The ONLY loss had OBI +0.998 (strongest bullish reading ever) \u2192 V5b tags it REDUCE.** V5b sizing would have halved this loss (-$5.88 instead of -$11.76).\n\n**V5a would block trade #1 (bias=-29.2) and trade #4 (bias=-34.6):**\n- Trade #1 was a WIN \u2192 V5a costs $5.88\n- Trade #4 was a LOSS \u2192 V5a saves $11.76\n- Net V5a impact today: +$5.88 saved\n\n**Regime: RANGE 0/6 all day (best possible).** But BTC trending up = bias positive at 11h and 19h. Only 12h had negative bias (BTC reversed briefly). Market structure favoring bulls today.\n\n**Next:** P1 copy intel\n\n---\n## 2026-04-03 11:36 UTC \u2014 [Pillar 3] Why Today's Session is Dry + Selectivity = Profit\n\n**Task:** P3 strategy \u2014 analyze why 11h has zero trades, validate selectivity thesis\n\n**Why No Trades (11:00-11:36):**\n- BTC grinding UP: $66,843 \u2192 $66,985 (+0.2%) in 30 min\n- Bias 71% positive (25/35 readings). Crowd betting YES (correct!).\n- Our contrarian can only buy YES when bias is NEGATIVE (crowd betting NO).\n- In a steady grind-up, there's no contrarian opportunity. This is CORRECT behavior.\n- 5 readings had strong negative bias (<-25) but in windows 1-2 only. Not strong enough.\n\n**Finding \u2014 Selectivity = Profit (ALL-TIME DATA):**\n| Day Type | Trades | WR | Interpretation |\n|----------|--------|-----|----------------|\n| Low (\u22645/day) | 10 | **70%** | Selective = profitable |\n| High (>5/day) | 176 | 55% | More trades = worse quality |\n\n+15pp WR difference! Low-trade days are our BEST days. This validates:\n- V5a (min_bias=45) \u2192 fewer trades, higher quality\n- V6 cooldown (600s gap) \u2192 fewer trades, higher quality  \n- Today being dry = GOOD. Zero trades > bad trades.\n\n**Strategic insight:** A 0-trade day at RANGE 1/6 means the market is trending (even slightly). Our edge exists ONLY in chop/mean-reversion. When BTC grinds directionally, sitting out is optimal. The 12h window may differ if BTC reverses.\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:**",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
