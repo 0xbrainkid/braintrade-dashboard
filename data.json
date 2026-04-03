@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T20:32:25.897125+00:00",
+  "timestamp": "2026-04-03T20:46:00.718177+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 402.392706,
+  "hl_balance": 402.455886,
   "today_pnl": 58.08,
   "pm_pnl": -137.62,
-  "hl_pnl": 11.39,
+  "hl_pnl": 11.46,
   "today_trades": 5,
   "today_wins": 4,
   "today_losses": 1,
-  "all_time_pnl": -126.23,
+  "all_time_pnl": -126.16,
   "total_trades": 263,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.12628,
+      "pnl": 0.14104,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.6837,
+      "pnl": -0.6201,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.9315,
+      "pnl": 0.91632,
       "leverage": 3,
       "wallet": "old"
     }
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.37408,
+        "pnl": 0.43726000000000004,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 20:23 UTC \u2014 [Pillar 3] Apr 3 EOD: 80% WR + W14 Tally + V5a On Track\n\n**Task:** P3 strategy \u2014 end-of-day analysis, W14 tally, V5a deploy countdown\n\n**Apr 3 FINAL: 5 trades, 4W/1L = 80% WR (best day this week)**\n- 11h: 0 trades (BTC trending up, bias positive)\n- 12h: 5 trades, 4W/1L = 80%. V5b tags working.\n- 19-20h: 0 trades (bias positive all evening)\n- PM Balance: $871.70. Daily report generated.\n\n**W14 Running Tally (3 days):**\n| Day | Trades | WR |\n|-----|--------|-----|\n| Apr 1 | 14 | 64% |\n| Apr 2 | 8 | 62% |\n| Apr 3 | 5 | **80%** |\n| **Total** | **27** | **67%** |\n\nW14 trending UP in WR as trade count drops (selectivity thesis confirmed).\n\n**V5a Deploy: 4/5 criteria met. Apr 6 ON TRACK.**\n- V5a BLOCK trades: 6 total, 50% WR (3W/3L) \u2192 confirmed noise\n- V5a PASS trades: 21 total, 71% WR \u2192 strong\n\n**V5b First Day Results (5 trades):**\n- NORMAL: 3 trades, 100% WR \u2705\n- REDUCE_MILD_BEAR: 1 trade, 100% WR (this bucket is n=1, need more)\n- REDUCE_STRONG_BULL: 1 trade, 0% WR \u2192 **V5b correctly flags the loser**\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 19:56 UTC \u2014 [Pillar 4] Apr 3 Mid-Day: 5 trades, 4W/1L = 80% WR + V5b Tagging Live\n\n**Task:** P4 alpha \u2014 catch-up analysis for Apr 3 (backlog since 11:36)\n\n**Apr 3 Trading: 5 trades at 12h, 4W/1L = 80% WR**\n- 11h: 0 trades (BTC grinding up, bias positive, no contrarian opportunity)\n- 12h: 5 trades! BTC reversed slightly, bias went negative, bot fired.\n- 19h: 0 trades so far (bias positive again, BTC $66.8K trending up)\n- Balance: $894.97 \u2192 $871.70 (-$23). Trade math = +$10 net. ~$33 in unredeemed positions.\n\n**V5b TAGGING IS LIVE \u2014 First Validated Data:**\n| Trade | Bias | OBI | V5b Tag | Result |\n|-------|------|-----|---------|--------|\n| 12:12 | -29.2 | +0.32 | NORMAL | \u2705 WIN |\n| 12:37 | -69.8 | -0.49 | REDUCE_MILD_BEAR | \u2705 WIN |\n| 12:42 | -53.4 | +0.17 | NORMAL | \u2705 WIN |\n| 12:48 | -34.6 | **+1.00** | **REDUCE_STRONG_BULL** | \u274c LOSS |\n| 12:52 | -60.5 | +0.02 | NORMAL | \u2705 WIN |\n\n**The ONLY loss had OBI +0.998 (strongest bullish reading ever) \u2192 V5b tags it REDUCE.** V5b sizing would have halved this loss (-$5.88 instead of -$11.76).\n\n**V5a would block trade #1 (bias=-29.2) and trade #4 (bias=-34.6):**\n- Trade #1 was a WIN \u2192 V5a costs $5.88\n- Trade #4 was a LOSS \u2192 V5a saves $11.76\n- Net V5a impact today: +$5.88 saved\n\n**Regime: RANGE 0/6 all day (best possible).** But BTC trending up = bias positive at 11h and 19h. Only 12h had negative bias (BTC reversed briefly). Market structure favoring bulls today.\n\n**Next:** P1 copy intel\n\n---\n## 2026-04-03 11:36 UTC \u2014 [Pillar 3] Why Today's Session is Dry + Selectivity = Profit\n\n**Task:** P3 strategy \u2014 analyze why 11h has zero trades, validate selectivity thesis\n\n**Why No Trades (11:00-11:36):**\n- BTC grinding UP: $66,843 \u2192 $66,985 (+0.2%) in 30 min\n- Bias 71% positive (25/35 readings). Crowd betting YES (correct!).\n- Our contrarian can only buy YES when ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 20:43 UTC \u2014 [Pillar 1] PM Balance Mystery: $57 in Unredeemed Positions\n\n**Task:** P1 copy intel \u2014 investigate growing PM balance discrepancy\n\n**Finding \u2014 $57.42 discrepancy TODAY, $80+ cumulative:**\n- Apr 3 trade math: +$34.15 P&L (4W/1L at ~$11.76/trade)\n- Expected balance: $929.12 | Actual CLOB: $871.70 | Gap: **$57.42**\n- W14 cumulative: balance dropped $952 \u2192 $871 (-$81) despite positive trade math\n\n**Root Cause: Bot never redeems winning PM positions.**\n- PM 5-min markets use CTF (Conditional Token Framework)\n- You buy YES shares \u2192 market resolves \u2192 winning shares are ERC-1155 tokens on Polygon\n- To convert back to USDC, shares must be \"merged\" or \"redeemed\" via smart contract\n- CLOB balance only shows free USDC, NOT unredeemed winning shares\n- The py_clob_client has NO merge/redeem methods\n- Bot has NO redemption code\n\n**Impact:** ~$57-80 of our capital is locked in unredeemed positions. This is NOT lost money \u2014 it's in our wallet as tokens, just needs to be converted back to USDC.\n\n**Fix Options:**\n1. **Manual:** Connect wallet to polymarket.com, positions page auto-redeems\n2. **Script:** Build on-chain redemption via CTF exchange contract (needs dev work)\n3. **Periodic:** Add a cron job that calls the exchange contract to merge resolved positions\n\n**Urgency: MEDIUM.** Money isn't lost, just locked. But it reduces trading capital (bot trades 1.2% of CLOB balance = smaller positions).\n\n**Action needed from Hani:** Connect PM wallet to polymarket.com to trigger bulk redemption. This should release ~$60-80 back to USDC balance.\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 20:23 UTC \u2014 [Pillar 3] Apr 3 EOD: 80% WR + W14 Tally + V5a On Track\n\n**Task:** P3 strategy \u2014 end-of-day analysis, W14 tally, V5a deploy countdown\n\n**Apr 3 FINAL: 5 trades, 4W/1L = 80% WR (best day this week)**\n- 11h: 0 trades (BTC trending up, bias positive)\n- 12h: 5 trades, 4W/1L = 80%. V5b tags working.\n- 19-20h: 0 trades (bias positive all evening)\n- PM Balance: $871.70. Daily report generated.\n\n**W14 Running Tally (3 days):**\n| Day | Trades | WR |\n|-----|--------|-----|\n| Apr 1 | 14 | 64% |\n| Apr 2 | 8 | 62% |\n| Apr 3 | 5 | **80%** |\n| **Total** | **27** | **67%** |\n\nW14 trending UP in WR as trade count drops (selectivity thesis confirmed).\n\n**V5a Deploy: 4/5 criteria met. Apr 6 ON TRACK.**\n- V5a BLOCK trades: 6 total, 50% WR (3W/3L) \u2192 confirmed noise\n- V5a PASS trades: 21 total, 71% WR \u2192 strong\n\n**V5b First Day Results (5 trades):**\n- NORMAL: 3 trades, 100% WR \u2705\n- REDUCE_MILD_BEAR: 1 trade, 100% WR (this bucket is n=1, need more)\n- REDUCE_STRONG_BULL: 1 trade, 0% WR \u2192 **V5b correctly flags the loser**\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 19:56 UTC \u2014 [Pillar 4] Apr 3 Mid-Day: 5 trades, 4W/1L = 80% WR + V5b Tagging Live\n\n**Task:** P4 alpha \u2014 catch-up analysis for Apr 3 (backlog since 11:36)\n\n**Apr 3 Trading: 5 trades at 12h, 4W/1L = 80% WR**\n- 11h: 0 trades",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
