@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T10:30:01.365652+00:00",
+  "timestamp": "2026-04-03T10:43:49.204210+00:00",
   "pm_balance": 894.97,
-  "hl_balance": 401.850344,
+  "hl_balance": 401.926244,
   "today_pnl": 0,
   "pm_pnl": -114.35,
-  "hl_pnl": 10.85,
+  "hl_pnl": 10.93,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -103.5,
+  "all_time_pnl": -103.42,
   "total_trades": 258,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": -0.05412,
+      "pnl": 0.00328,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.4982,
+      "pnl": -0.4452,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.37536,
+      "pnl": 0.34086,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "REZ",
-      "rate": "-0.0614%",
-      "apr": "-67%",
+      "rate": "-0.0569%",
+      "apr": "-62%",
       "action": "LONG",
-      "oi": "202,584,910"
+      "oi": "202,611,460"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: REZ at -0.0614%/8h \u2014 shorts paying longs"
+        "text": "Strongest: REZ at -0.0569%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -0.17695999999999995,
+        "pnl": -0.10105999999999998,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": 0.22,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 10:09 UTC \u2014 [Pillar 3] Daily P&L Report Automation + Apr 2 Backfill\n\n**Task:** P3 strategy dev \u2014 build automated daily P&L report generator, backfill Apr 2\n\n**Output: `scripts/generate-daily-report.py`** \u2705\n- Reads confidence_outcomes.jsonl for trade data\n- Extracts PM balance from trading.log, HL balance from API\n- Generates hour breakdown, V5a shadow analysis, full trade table\n- Writes to `reports/daily-pnl-YYYY-MM-DD.md`\n- Usage: `python3 scripts/generate-daily-report.py [date]` (defaults to yesterday)\n\n**Apr 2 report backfilled:** `reports/daily-pnl-2026-04-02.md` generated.\n\n**Cron added:** `0 23 * * *` runs report daily at 23:00 UTC (after all trading sessions).\n\nThis automates the HEARTBEAT.md evening mandate: \"Write daily P&L report to ~/clawd/reports/\"\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 09:54 UTC \u2014 [Pillar 2] V5a Deploy Readiness: 4/5 Criteria Met\n\n**Task:** P2 smart entry \u2014 V5a deploy criteria check, MEMORY.md update\n\n**V5a Deploy Criteria: 4/5 MET \u2705**\n1. \u23f3 5 stable days: Day 3/5 (need Apr 3-5 clean)\n2. \u2705 Indicator logging: 22 trades with full OBI/CVD/MACD/VWAP\n3. \u2705 V5a shadow \u226530: 96 windows (3.2x target)\n4. \u2705 V5A_BLOCKS <55% WR: 50% (4 trades, 2W/2L)\n5. \u2705 V4.1 WR \u226555%: 64% (22 trades W14)\n\nWe can deploy Apr 6 as planned if Apr 3-5 have no crashes/bugs.\n\n**W14 Cumulative: 22 trades, 14W/8L = 64% WR**\n- V5a PASS (|bias|\u226545): 18 trades, 67% WR\n- V5a BLOCK (|bias|<45): 4 trades, 50% WR \u2192 V5a saves these\n- V5a would improve WR from 64% \u2192 67% while cutting 18% of trades\n\n**MEMORY.md updated** (was stale from Apr 1 09:38). Added W14 days 1-4, Apr 3 setup, V5a status.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 09:27 UTC \u2014 [Pillar 1] Pre-Session Check: RANGE 1/6, All Systems Green\n\n**Task:** P1 copy intel + pre-session infrastructure check\n\n**Pre-Session Status (09:27 UTC, 1.5h to 11h):**\n- Regime: RANGE 1/6 (best possible) | BTC $66,774 | ATR 1.19%\n- Bot: PID 480555, single process, screen alive\n- PM Balance: $894.97 | V5a shadow: 96 windows (3x target)\n- Liqs: NORMAL across BTC/ETH/SOL\n- Squeeze: SHORT_SQUEEZE 36/100 (3-period negative funding streak)\n- Trade probability: HIGH\n\n**Overnight BTC: Recovered $65.8K \u2192 $66.8K (+1.5%)**\n- Forced selling from US open resolved. Premium normalized.\n- HL old wallet flipped LONG (BTC $66,759, ETH $2,064, SOL $79.55). Account: $364.64.\n- Combined: PM $895 + HL $365 = $1,260.\n\n**V5b tagging note:** My code edit from Apr 2 13:13 (v5b shadow tags) hasn't been picked up \u2014 bot hasn't restarted since. Tags will appear after next restart (V5a deploy Apr 6 or watchdog restart).\n\n**Decision:** All systems go for Apr 3 morning session. Expect 4-6 trades, 65-75% WR.\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 09:25 UTC \u2014 [Pillar 4] V5a Validation Data + Apr 2 Post-Mortem + Apr 3 Setup\n\n**Task:** P4 alpha research \u2014 cumulative V5a/V6 shadow validation, Apr 2 performance analysis, Apr 3 session pr",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 10:42 UTC \u2014 [Pillar 4] Final Pre-Session Intel: OBI Bullish But Irrelevant\n\n**Task:** P4 alpha \u2014 final pre-session check, PM OBI analysis, session prediction\n\n**PM OBI: +0.704 (strong bullish, 100% confidence)**\n- 96 bids vs 3 asks on UP token. Heavily skewed.\n- From multi-factor model: OBI>+0.5 at trade time = 40% WR (worst bucket).\n- BUT: pre-session OBI \u2260 trade-time OBI. OBI shifts every few seconds.\n- Apr 1 first-trade OBI: -0.927. Apr 2 first-trade OBI: +0.791. No correlation with pre-session.\n\n**BTC microstructure:** Consolidating tight $66.7-66.8K. 5m candles all <0.1% moves. Low ATR.\n\n**Funding:** -0.0006%/8h. Premium: -0.045%. Mildly bearish lean.\n\n**Session prediction:** 3-5 trades in first 20 min of 11h. Low ATR = prices near $0.50 = smaller reward per trade. Regime RANGE 1/6 = best conditions.\n\n**Risk:** Tight range could mean prices hover at exactly $0.50 (minimum edge). If entry prices are <$0.50, some trades may get blocked by price filter.\n\n**Next:** P1 copy intel (post-session)\n\n---\n## 2026-04-03 10:09 UTC \u2014 [Pillar 3] Daily P&L Report Automation + Apr 2 Backfill\n\n**Task:** P3 strategy dev \u2014 build automated daily P&L report generator, backfill Apr 2\n\n**Output: `scripts/generate-daily-report.py`** \u2705\n- Reads confidence_outcomes.jsonl for trade data\n- Extracts PM balance from trading.log, HL balance from API\n- Generates hour breakdown, V5a shadow analysis, full trade table\n- Writes to `reports/daily-pnl-YYYY-MM-DD.md`\n- Usage: `python3 scripts/generate-daily-report.py [date]` (defaults to yesterday)\n\n**Apr 2 report backfilled:** `reports/daily-pnl-2026-04-02.md` generated.\n\n**Cron added:** `0 23 * * *` runs report daily at 23:00 UTC (after all trading sessions).\n\nThis automates the HEARTBEAT.md evening mandate: \"Write daily P&L report to ~/clawd/reports/\"\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 09:54 UTC \u2014 [Pillar 2] V5a Deploy Readiness: 4/5 Criteria Met\n\n**Task:** P2 smart entry \u2014 V5a deploy criteria check, MEMORY.md update\n\n**V5a Deploy Criteria: 4/5 MET \u2705**\n1. \u23f3 5 stable days: Day 3/5 (need Apr 3-5 clean)\n2. \u2705 Indicator logging: 22 trades with full OBI/CVD/MACD/VWAP\n3. \u2705 V5a shadow \u226530: 96 windows (3.2x target)\n4. \u2705 V5A_BLOCKS <55% WR: 50% (4 trades, 2W/2L)\n5. \u2705 V4.1 WR \u226555%: 64% (22 trades W14)\n\nWe can deploy Apr 6 as planned if Apr 3-5 have no crashes/bugs.\n\n**W14 Cumulative: 22 trades, 14W/8L = 64% WR**\n- V5a PASS (|bias|\u226545): 18 trades, 67% WR\n- V5a BLOCK (|bias|<45): 4 trades, 50% WR \u2192 V5a saves these\n- V5a would improve WR from 64% \u2192 67% while cutting 18% of trades\n\n**MEMORY.md updated** (was stale from Apr 1 09:38). Added W14 days 1-4, Apr 3 setup, V5a status.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 09:27 UTC \u2014 [Pillar 1] Pre-Session Check: RANGE 1/6, All Systems Green\n\n**Task:** P1 copy intel + pre-session infrastructure check\n\n**Pre-Session Status (09:27 UTC, 1.5h to 11h):**\n- Regime: RANGE 1/6 (best p",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
