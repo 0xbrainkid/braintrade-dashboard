@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T11:30:01.479237+00:00",
+  "timestamp": "2026-04-03T11:37:14.369769+00:00",
   "pm_balance": 894.97,
-  "hl_balance": 402.701096,
+  "hl_balance": 402.875976,
   "today_pnl": 0,
   "pm_pnl": -114.35,
-  "hl_pnl": 11.7,
+  "hl_pnl": 11.88,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -102.65,
+  "all_time_pnl": -102.47,
   "total_trades": 258,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.23944,
+      "pnl": 0.30832,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.2279,
+      "pnl": -0.1219,
       "leverage": 3,
       "wallet": "old"
     },
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "PURR",
-      "rate": "+0.0775%",
-      "apr": "+85%",
+      "rate": "+0.0788%",
+      "apr": "+86%",
       "action": "SHORT",
-      "oi": "53,918,658"
+      "oi": "54,014,174"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0659%",
+      "rate": "-0.0662%",
       "apr": "-72%",
       "action": "LONG",
-      "oi": "204,634,030"
+      "oi": "205,150,430"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: PURR at 0.0775%/8h \u2014 longs paying shorts"
+        "text": "Strongest: PURR at 0.0788%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.67394,
+        "pnl": 0.84882,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": 0.22,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:** P2 smart entry \u2014 analyze historical impact of daily loss limit bug\n\n**Finding \u2014 Apr 2 evening was loss-limit-blocked, NOT regime-blocked:**\n- My earlier report (13:42 UTC) said \"evening blocked by TREND 4/6\"\n- WRONG. Regime was MIXED 3/6 at 19h (tradeable!). Actual block was DAILY_LOSS_LIMIT.\n- Evidence: `No trade: DAILY_LOSS_LIMIT: Down $31 today (limit $25)` at 19:02-19:04\n\n**Finding \u2014 No actual missed trades on Apr 2 evening:**\n- ALL 19-20h windows had POSITIVE bias (YES_ONLY_FILTER would block anyway)\n- Zero negative bias windows in the entire Apr 2 evening session\n- So the bug didn't cost us money on Apr 2, just by luck\n\n**Finding \u2014 Bug only triggers on multi-day bot runs:**\n- Pre-Apr 1: bot restarted frequently (zombies, watchdog) \u2192 _start_balance reset often\n- Apr 2: bot ran from 09:40 through Apr 3 \u2192 28h without restart \u2192 stale _start_balance\n- With the fix, _start_balance resets at midnight automatically\n\n**Live session (11h) status:** Bias flipping -12 to +40. Ultra-flat market. No trades yet. PM prices $0.495/0.505 (tight). Waiting for stronger negative bias.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL TRADES BLOCKED** on a perfectly good RANGE 1/6 day with 0 actual losses\n- Root cause: `_start_balance` set once at bot startup, never resets at calendar day boundary\n\n**Fix:** Added midnight reset logic in `refresh_balance()`:\n```python\nelif datetime.now(timezone.utc).date() > self._start_balance_date:\n    self._start_balance = balance\n    self._start_balance_date = datetime.now(timezone.utc).date()\n```\n\n**Bot restarted 11:08.** New _start_balance=$894.97. Daily loss tracking correct.\n- PID 1175436. Single process confirmed.\n- F&G: 9 (Extreme Fear). PM prices normal ($0.495/$0.505).\n- Bias currently weak (-12.2). Waiting for stronger signal.\n\n**Impact:** Without this fix, bot would have been blocked ALL DAY. At RANGE 1/6 conditions, that's potentially 4-6 missed trades worth $20-40 P&L.\n\n**V5b tagging now active** (code was edited Apr 2, picked up on this restart).\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 10:42 UTC \u2014 [Pillar 4] Final Pre-Session Intel: OBI Bullish But Irrelevant\n\n**Task:** P4 alpha \u2014 final pre-session check, PM OBI analysis, session prediction\n\n**PM OBI: +0.704 (strong bullish, 100% confidence)**\n- 96 bids vs 3 asks on UP token. Heavily skewed.\n- From multi-factor model: OBI>+0.5 at trade time = 40% WR (worst bucket).\n- BUT: pre-session OBI \u2260 trade-time OBI. OBI shifts every few seconds.\n- Apr 1 first-t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:36 UTC \u2014 [Pillar 3] Why Today's Session is Dry + Selectivity = Profit\n\n**Task:** P3 strategy \u2014 analyze why 11h has zero trades, validate selectivity thesis\n\n**Why No Trades (11:00-11:36):**\n- BTC grinding UP: $66,843 \u2192 $66,985 (+0.2%) in 30 min\n- Bias 71% positive (25/35 readings). Crowd betting YES (correct!).\n- Our contrarian can only buy YES when bias is NEGATIVE (crowd betting NO).\n- In a steady grind-up, there's no contrarian opportunity. This is CORRECT behavior.\n- 5 readings had strong negative bias (<-25) but in windows 1-2 only. Not strong enough.\n\n**Finding \u2014 Selectivity = Profit (ALL-TIME DATA):**\n| Day Type | Trades | WR | Interpretation |\n|----------|--------|-----|----------------|\n| Low (\u22645/day) | 10 | **70%** | Selective = profitable |\n| High (>5/day) | 176 | 55% | More trades = worse quality |\n\n+15pp WR difference! Low-trade days are our BEST days. This validates:\n- V5a (min_bias=45) \u2192 fewer trades, higher quality\n- V6 cooldown (600s gap) \u2192 fewer trades, higher quality  \n- Today being dry = GOOD. Zero trades > bad trades.\n\n**Strategic insight:** A 0-trade day at RANGE 1/6 means the market is trending (even slightly). Our edge exists ONLY in chop/mean-reversion. When BTC grinds directionally, sitting out is optimal. The 12h window may differ if BTC reverses.\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:** P2 smart entry \u2014 analyze historical impact of daily loss limit bug\n\n**Finding \u2014 Apr 2 evening was loss-limit-blocked, NOT regime-blocked:**\n- My earlier report (13:42 UTC) said \"evening blocked by TREND 4/6\"\n- WRONG. Regime was MIXED 3/6 at 19h (tradeable!). Actual block was DAILY_LOSS_LIMIT.\n- Evidence: `No trade: DAILY_LOSS_LIMIT: Down $31 today (limit $25)` at 19:02-19:04\n\n**Finding \u2014 No actual missed trades on Apr 2 evening:**\n- ALL 19-20h windows had POSITIVE bias (YES_ONLY_FILTER would block anyway)\n- Zero negative bias windows in the entire Apr 2 evening session\n- So the bug didn't cost us money on Apr 2, just by luck\n\n**Finding \u2014 Bug only triggers on multi-day bot runs:**\n- Pre-Apr 1: bot restarted frequently (zombies, watchdog) \u2192 _start_balance reset often\n- Apr 2: bot ran from 09:40 through Apr 3 \u2192 28h without restart \u2192 stale _start_balance\n- With the fix, _start_balance resets at midnight automatically\n\n**Live session (11h) status:** Bias flipping -12 to +40. Ultra-flat market. No trades yet. PM prices $0.495/0.505 (tight). Waiting for stronger negative bias.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
