@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T09:24:05.140064+00:00",
+  "timestamp": "2026-04-03T09:25:41.843628+00:00",
   "pm_balance": 894.97,
-  "hl_balance": 401.982848,
+  "hl_balance": 401.857888,
   "today_pnl": 0,
   "pm_pnl": -114.35,
-  "hl_pnl": 10.98,
+  "hl_pnl": 10.86,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -103.37,
+  "all_time_pnl": -103.49,
   "total_trades": 258,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": -0.01968,
+      "pnl": -0.04428,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.3498,
+      "pnl": -0.3922,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.32568,
+      "pnl": 0.26772,
       "leverage": 3,
       "wallet": "old"
     }
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": -0.04379999999999998,
+        "pnl": -0.16875999999999997,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": 0.22,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-02 13:42 UTC \u2014 [Pillar 3] US Open Selloff: TREND 4/6, Evening at Risk\n\n**Task:** P3 strategy \u2014 analyze US market open impact, regime shift, 19h session forecast\n\n**Finding \u2014 Regime Flipped Back to TREND 4/6:**\n- BTC dropped $66.2K \u2192 $65.8K at US open (13:30 UTC). pm_action: STOP.\n- 5-min candles show sustained selling: 5 consecutive red from 12:45-13:05, then bounce, then another leg down at 13:30.\n- 13:30 candle: -0.35% in 5 min (largest single-candle drop of the session).\n- **This validates excluding 14h from active hours (30% WR).** We avoided this chaos.\n\n**Finding \u2014 Forced Selling in Derivatives:**\n- BTC premium: -0.073% (perp trading below spot)\n- This indicates forced selling/deleveraging in perps, NOT organic spot selling\n- Historically, negative premium resolves in 4-8h via funding arbitrage\n- If premium stays negative through 19h \u2192 short squeeze setup becomes likely\n- Alts hit harder: ETH -4.4%, SOL -6.7% (risk-off amplification)\n\n**Finding \u2014 HL Old Wallet Repositioned:**\n- Old positions (BTC/ETH/SOL LONG from Mar 31) were auto-closed by HL bot\n- New positions: BTC SHORT $65,794, ETH SHORT $2,035, SOL SHORT $77.88\n- Account: $372.43. ETH +$0.97, SOL +$1.35 uPnL. BTC flat (just entered).\n- HL bot correctly riding the trend SHORT.\n\n**19h Session Forecast (UPDATED):**\n- Current: TREND 4/6 (STOP). BTC $65,828.\n- Need BTC to stabilize $65.5-66K for 3+ hours for RANGE by 19h\n- Probability of RANGE by 19h: 30% (was 45% this morning)\n- If BTC drops below $65K: STRONG_TREND, 0 trades guaranteed\n- Best case: consolidation like overnight ($66.2-66.8K for 4h \u2192 RANGE)\n- Regime filter will correctly block if TREND persists. No intervention needed.\n\n**Decision:** No action. Regime filter handles this. If 19h is blocked, we preserve morning gains (5W/2L).\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-02 13:13 UTC \u2014 [Pillar 2] V5b OBI Sizing Spec Revised + Shadow Tagging Deployed\n\n**Task:** P2 smart entry \u2014 revise V5b spec with 22-trade data, deploy shadow tagging to bot\n\n**Output 1: V5b spec revised** (`patches/v5b-obi-sizing.spec.md`)\n- OLD: binary OBI\u2705/OBI\u274c (full/half)\n- NEW: 3-tier sizing based on OBI magnitude buckets\n  - OBI <-0.5: 1.2x BOOST (83% WR)\n  - OBI -0.1 to +0.5: 1.0x NORMAL (75% WR)\n  - OBI -0.5 to -0.1 OR >+0.5: 0.5x REDUCE (33-40% WR)\n- Simulation: +11% pnl improvement over V4.1\n\n**Output 2: V5b shadow tagging DEPLOYED to bot**\n- Every trade outcome now logs `v5b_multiplier` and `v5b_tag`\n- Tags: BOOST, NORMAL, REDUCE_MILD_BEAR, REDUCE_STRONG_BULL\n- Starts collecting data on next trade (19h session today)\n- Need n\u226530 for deploy validation\n\n**Deploy bundle (Apr 13): V5b + V6 cooldown together.** Both are sizing/filtering changes that don't interact \u2014 safe to bundle.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-02 12:56 UTC \u2014 [Pillar 1] Multi-Factor Model: 22 Indicator-Tagged Trades\n\n**Task:** P1 copy intel \u2014 build multi-factor model from",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 09:25 UTC \u2014 [Pillar 4] V5a Validation Data + Apr 2 Post-Mortem + Apr 3 Setup\n\n**Task:** P4 alpha research \u2014 cumulative V5a/V6 shadow validation, Apr 2 performance analysis, Apr 3 session prep\n\n**Finding 1 \u2014 V5a CONFIRMED working (13 tagged trades):**\n- V5a PASS: 7W/4L = 63.6% WR (profitable)\n- V5a BLOCK: 0W/2L = 0% WR (BOTH blocked trades lost)\n- V5a is a **perfect loss filter** so far. Both |bias|<45 trades it flagged were losers.\n- Cumulative savings: ~$24 (2 avoided losses \u00d7 ~$12/trade)\n- Still only n=13 \u2014 need n\u226530 for deploy decision (Apr 6 target)\n\n**Finding 2 \u2014 V6 cooldown inconclusive at n=13:**\n- V6 PASS: 4W/3L = 57.1% WR\n- V6 BLOCK: 3W/3L = 50.0% WR\n- Only +7pp delta vs Apr 1's +18pp. More data needed.\n- Hypothesis: cooldown helps in low-vol RANGE but not in trending sessions\n\n**Finding 3 \u2014 Apr 2 post-mortem (8 trades, 5W/3L = 62.5% WR):**\n- Morning session (11-12h): 7 trades. Strong start but overtrade at 12:55 (bias=-31.6, V5a=BLOCK) was a loss\n- Evening session (19-20h): 1 trade only. Regime TREND 4/6 blocked most windows\n- Net P&L: ~-$27 (PM balance $952\u2192$895). Despite 62.5% WR, losses hit max_position while wins averaged 0.92 pnl_pct\n- V5a would have saved the 12:55 loss (-$12) \u2192 net ~-$15 instead\n\n**Finding 4 \u2014 PM balance trend is concerning:**\n- Apr 1 peak: $952 \u2192 Apr 3 current: $895 (-$57 in 2 days)\n- 3 of last 6 losses had bias < 45 \u2192 V5a deployment becoming urgent\n- But still within W13's daily variance ($\u00b130). Not panic territory yet.\n\n**Finding 5 \u2014 Apr 3 setup (BULLISH):**\n- Regime: RANGE 1/6 (lowest score in days) \u2014 excellent for contrarian\n- BTC: $66,855 consolidating tight ($66.2-67K range overnight)\n- ATR: 1.15% (moderate \u2014 not too volatile, not dead)\n- 11h session in ~1.5 hours. Expect 3-5 trades.\n- Forecast: $20-40 P&L if RANGE holds through morning session\n\n**Decision:** Stay course. V5a deploy on Apr 6 unchanged. Today's data critical for n=30 target.\n\n**Next:** P1 (copy intelligence) \u2014 analyze HL leaderboard shifts during BTC $83K\u2192$67K drawdown\n\n## 2026-04-02 13:42 UTC \u2014 [Pillar 3] US Open Selloff: TREND 4/6, Evening at Risk\n\n**Task:** P3 strategy \u2014 analyze US market open impact, regime shift, 19h session forecast\n\n**Finding \u2014 Regime Flipped Back to TREND 4/6:**\n- BTC dropped $66.2K \u2192 $65.8K at US open (13:30 UTC). pm_action: STOP.\n- 5-min candles show sustained selling: 5 consecutive red from 12:45-13:05, then bounce, then another leg down at 13:30.\n- 13:30 candle: -0.35% in 5 min (largest single-candle drop of the session).\n- **This validates excluding 14h from active hours (30% WR).** We avoided this chaos.\n\n**Finding \u2014 Forced Selling in Derivatives:**\n- BTC premium: -0.073% (perp trading below spot)\n- This indicates forced selling/deleveraging in perps, NOT organic spot selling\n- Historically, negative premium resolves in 4-8h via funding arbitrage\n- If premium stays negative through 19h \u2192 short squeeze setu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
