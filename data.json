@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T11:11:20.221470+00:00",
+  "timestamp": "2026-04-03T11:12:43.112077+00:00",
   "pm_balance": 894.97,
-  "hl_balance": 402.595576,
+  "hl_balance": 402.461336,
   "today_pnl": 0,
   "pm_pnl": -114.35,
-  "hl_pnl": 11.6,
+  "hl_pnl": 11.46,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -102.75,
+  "all_time_pnl": -102.89,
   "total_trades": 258,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.123,
+      "pnl": 0.09348,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.2915,
+      "pnl": -0.3286,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.73692,
+      "pnl": 0.6693,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,15 +45,15 @@
   "funding_opportunities": [
     {
       "coin": "PURR",
-      "rate": "+0.0673%",
-      "apr": "+74%",
+      "rate": "+0.0699%",
+      "apr": "+77%",
       "action": "SHORT",
-      "oi": "53,709,500"
+      "oi": "53,724,948"
     },
     {
       "coin": "REZ",
-      "rate": "-0.0557%",
-      "apr": "-61%",
+      "rate": "-0.0570%",
+      "apr": "-62%",
       "action": "LONG",
       "oi": "203,476,138"
     }
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: PURR at 0.0673%/8h \u2014 longs paying shorts"
+        "text": "Strongest: PURR at 0.0699%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.56842,
+        "pnl": 0.43418,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": 0.22,
     "max_drawdown": 330.2
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL TRADES BLOCKED** on a perfectly good RANGE 1/6 day with 0 actual losses\n- Root cause: `_start_balance` set once at bot startup, never resets at calendar day boundary\n\n**Fix:** Added midnight reset logic in `refresh_balance()`:\n```python\nelif datetime.now(timezone.utc).date() > self._start_balance_date:\n    self._start_balance = balance\n    self._start_balance_date = datetime.now(timezone.utc).date()\n```\n\n**Bot restarted 11:08.** New _start_balance=$894.97. Daily loss tracking correct.\n- PID 1175436. Single process confirmed.\n- F&G: 9 (Extreme Fear). PM prices normal ($0.495/$0.505).\n- Bias currently weak (-12.2). Waiting for stronger signal.\n\n**Impact:** Without this fix, bot would have been blocked ALL DAY. At RANGE 1/6 conditions, that's potentially 4-6 missed trades worth $20-40 P&L.\n\n**V5b tagging now active** (code was edited Apr 2, picked up on this restart).\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 10:42 UTC \u2014 [Pillar 4] Final Pre-Session Intel: OBI Bullish But Irrelevant\n\n**Task:** P4 alpha \u2014 final pre-session check, PM OBI analysis, session prediction\n\n**PM OBI: +0.704 (strong bullish, 100% confidence)**\n- 96 bids vs 3 asks on UP token. Heavily skewed.\n- From multi-factor model: OBI>+0.5 at trade time = 40% WR (worst bucket).\n- BUT: pre-session OBI \u2260 trade-time OBI. OBI shifts every few seconds.\n- Apr 1 first-trade OBI: -0.927. Apr 2 first-trade OBI: +0.791. No correlation with pre-session.\n\n**BTC microstructure:** Consolidating tight $66.7-66.8K. 5m candles all <0.1% moves. Low ATR.\n\n**Funding:** -0.0006%/8h. Premium: -0.045%. Mildly bearish lean.\n\n**Session prediction:** 3-5 trades in first 20 min of 11h. Low ATR = prices near $0.50 = smaller reward per trade. Regime RANGE 1/6 = best conditions.\n\n**Risk:** Tight range could mean prices hover at exactly $0.50 (minimum edge). If entry prices are <$0.50, some trades may get blocked by price filter.\n\n**Next:** P1 copy intel (post-session)\n\n---\n## 2026-04-03 10:09 UTC \u2014 [Pillar 3] Daily P&L Report Automation + Apr 2 Backfill\n\n**Task:** P3 strategy dev \u2014 build automated daily P&L report generator, backfill Apr 2\n\n**Output: `scripts/generate-daily-report.py`** \u2705\n- Reads confidence_outcomes.jsonl for trade data\n- Extracts PM balance from trading.log, HL balance from API\n- Generates hour breakdown, V5a shadow analysis, full trade table\n- Writes to `reports/daily-pnl-YYYY-MM-DD.md`\n- Usage: `python3 scripts/generate-daily-report.py [date]` (defaults to yesterday)\n\n**Apr 2 report backfilled:** `reports/daily-pnl-2026-04-02.md` generated.\n\n**Cron added:** `0 2",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 11:11 UTC \u2014 [Pillar 2] Bug #4 Impact Analysis: Apr 2 Evening Recheck\n\n**Task:** P2 smart entry \u2014 analyze historical impact of daily loss limit bug\n\n**Finding \u2014 Apr 2 evening was loss-limit-blocked, NOT regime-blocked:**\n- My earlier report (13:42 UTC) said \"evening blocked by TREND 4/6\"\n- WRONG. Regime was MIXED 3/6 at 19h (tradeable!). Actual block was DAILY_LOSS_LIMIT.\n- Evidence: `No trade: DAILY_LOSS_LIMIT: Down $31 today (limit $25)` at 19:02-19:04\n\n**Finding \u2014 No actual missed trades on Apr 2 evening:**\n- ALL 19-20h windows had POSITIVE bias (YES_ONLY_FILTER would block anyway)\n- Zero negative bias windows in the entire Apr 2 evening session\n- So the bug didn't cost us money on Apr 2, just by luck\n\n**Finding \u2014 Bug only triggers on multi-day bot runs:**\n- Pre-Apr 1: bot restarted frequently (zombies, watchdog) \u2192 _start_balance reset often\n- Apr 2: bot ran from 09:40 through Apr 3 \u2192 28h without restart \u2192 stale _start_balance\n- With the fix, _start_balance resets at midnight automatically\n\n**Live session (11h) status:** Bias flipping -12 to +40. Ultra-flat market. No trades yet. PM prices $0.495/0.505 (tight). Waiting for stronger negative bias.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 11:06 UTC \u2014 [Pillar 1] BUG #4 Fixed: Daily Loss Limit Never Resets\n\n**Task:** P1 \u2014 live session monitoring revealed CRITICAL bug blocking all trades\n\n**BUG #4: DAILY_LOSS_LIMIT never resets at midnight**\n- Bot started Apr 2 09:40 with _start_balance=$925.67\n- Apr 3 balance=$894.97 \u2192 bot thinks it's -$30.70 \"today\" > $25 limit\n- **ALL TRADES BLOCKED** on a perfectly good RANGE 1/6 day with 0 actual losses\n- Root cause: `_start_balance` set once at bot startup, never resets at calendar day boundary\n\n**Fix:** Added midnight reset logic in `refresh_balance()`:\n```python\nelif datetime.now(timezone.utc).date() > self._start_balance_date:\n    self._start_balance = balance\n    self._start_balance_date = datetime.now(timezone.utc).date()\n```\n\n**Bot restarted 11:08.** New _start_balance=$894.97. Daily loss tracking correct.\n- PID 1175436. Single process confirmed.\n- F&G: 9 (Extreme Fear). PM prices normal ($0.495/$0.505).\n- Bias currently weak (-12.2). Waiting for stronger signal.\n\n**Impact:** Without this fix, bot would have been blocked ALL DAY. At RANGE 1/6 conditions, that's potentially 4-6 missed trades worth $20-40 P&L.\n\n**V5b tagging now active** (code was edited Apr 2, picked up on this restart).\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 10:42 UTC \u2014 [Pillar 4] Final Pre-Session Intel: OBI Bullish But Irrelevant\n\n**Task:** P4 alpha \u2014 final pre-session check, PM OBI analysis, session prediction\n\n**PM OBI: +0.704 (strong bullish, 100% confidence)**\n- 96 bids vs 3 asks on UP token. Heavily skewed.\n- From multi-factor model: OBI>+0.5 at trade time = 40% WR (worst bucket).\n- BUT: pre-session OBI \u2260 trade-time OBI. OBI shifts every few seconds.\n- Apr 1 first-t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
