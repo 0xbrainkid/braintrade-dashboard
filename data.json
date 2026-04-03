@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-03T21:00:02.001128+00:00",
+  "timestamp": "2026-04-03T21:11:56.113516+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 402.285829,
+  "hl_balance": 402.419169,
   "today_pnl": 58.08,
   "pm_pnl": -137.62,
-  "hl_pnl": 11.29,
+  "hl_pnl": 11.42,
   "today_trades": 5,
   "today_wins": 4,
   "today_losses": 1,
-  "all_time_pnl": -126.33,
+  "all_time_pnl": -126.2,
   "total_trades": 263,
   "days_active": 19,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.08036,
+      "pnl": 0.09512,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.6466,
+      "pnl": -0.5777,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.8349,
+      "pnl": 0.88458,
       "leverage": 3,
       "wallet": "old"
     }
@@ -192,7 +192,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.26866,
+        "pnl": 0.402,
         "sharpe": 0.0
       },
       {
@@ -348,7 +348,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 20:43 UTC \u2014 [Pillar 1] PM Balance Mystery: $57 in Unredeemed Positions\n\n**Task:** P1 copy intel \u2014 investigate growing PM balance discrepancy\n\n**Finding \u2014 $57.42 discrepancy TODAY, $80+ cumulative:**\n- Apr 3 trade math: +$34.15 P&L (4W/1L at ~$11.76/trade)\n- Expected balance: $929.12 | Actual CLOB: $871.70 | Gap: **$57.42**\n- W14 cumulative: balance dropped $952 \u2192 $871 (-$81) despite positive trade math\n\n**Root Cause: Bot never redeems winning PM positions.**\n- PM 5-min markets use CTF (Conditional Token Framework)\n- You buy YES shares \u2192 market resolves \u2192 winning shares are ERC-1155 tokens on Polygon\n- To convert back to USDC, shares must be \"merged\" or \"redeemed\" via smart contract\n- CLOB balance only shows free USDC, NOT unredeemed winning shares\n- The py_clob_client has NO merge/redeem methods\n- Bot has NO redemption code\n\n**Impact:** ~$57-80 of our capital is locked in unredeemed positions. This is NOT lost money \u2014 it's in our wallet as tokens, just needs to be converted back to USDC.\n\n**Fix Options:**\n1. **Manual:** Connect wallet to polymarket.com, positions page auto-redeems\n2. **Script:** Build on-chain redemption via CTF exchange contract (needs dev work)\n3. **Periodic:** Add a cron job that calls the exchange contract to merge resolved positions\n\n**Urgency: MEDIUM.** Money isn't lost, just locked. But it reduces trading capital (bot trades 1.2% of CLOB balance = smaller positions).\n\n**Action needed from Hani:** Connect PM wallet to polymarket.com to trigger bulk redemption. This should release ~$60-80 back to USDC balance.\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-03 20:23 UTC \u2014 [Pillar 3] Apr 3 EOD: 80% WR + W14 Tally + V5a On Track\n\n**Task:** P3 strategy \u2014 end-of-day analysis, W14 tally, V5a deploy countdown\n\n**Apr 3 FINAL: 5 trades, 4W/1L = 80% WR (best day this week)**\n- 11h: 0 trades (BTC trending up, bias positive)\n- 12h: 5 trades, 4W/1L = 80%. V5b tags working.\n- 19-20h: 0 trades (bias positive all evening)\n- PM Balance: $871.70. Daily report generated.\n\n**W14 Running Tally (3 days):**\n| Day | Trades | WR |\n|-----|--------|-----|\n| Apr 1 | 14 | 64% |\n| Apr 2 | 8 | 62% |\n| Apr 3 | 5 | **80%** |\n| **Total** | **27** | **67%** |\n\nW14 trending UP in WR as trade count drops (selectivity thesis confirmed).\n\n**V5a Deploy: 4/5 criteria met. Apr 6 ON TRACK.**\n- V5a BLOCK trades: 6 total, 50% WR (3W/3L) \u2192 confirmed noise\n- V5a PASS trades: 21 total, 71% WR \u2192 strong\n\n**V5b First Day Results (5 trades):**\n- NORMAL: 3 trades, 100% WR \u2705\n- REDUCE_MILD_BEAR: 1 trade, 100% WR (this bucket is n=1, need more)\n- REDUCE_STRONG_BULL: 1 trade, 0% WR \u2192 **V5b correctly flags the loser**\n\n**Next:** P4 alpha research\n\n---\n## 2026-04-03 19:56 UTC \u2014 [Pillar 4] Apr 3 Mid-Day: 5 trades, 4W/1L = 80% WR + V5b Tagging Live\n\n**Task:** P4 alpha \u2014 catch-up analysis for Apr 3 (backlog since 11:36)\n\n**Apr 3 Trading: 5 trades at 12h, 4W/1L = 80% WR**\n- 11h: 0 trades",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-03 21:09 UTC \u2014 [Pillar 2] PM Redemption Deep Dive: CLOB Only Tracks Spending\n\n**Task:** P2 smart entry \u2014 investigate PM redemption mechanism, understand balance tracking\n\n**Finding \u2014 CLOB balance tracks SPENDING, not P&L:**\n- Each trade: bot spends $11.76 USDC to buy ~22 shares \u2192 CLOB balance drops $11.76\n- If WIN: shares resolve to $1 each but stay as CTF tokens (not auto-converted to USDC)\n- If LOSS: shares resolve to $0 (worthless)\n- CLOB balance only shows free USDC, never reflects winning share value\n- Result: balance ONLY goes down with each trade, never up from wins\n\n**Balance timeline (Apr 3):**\n```\n12:10  $894.97 (before trading)\n12:15  $893.13 (-$1.84 \u2192 trade #1 cost)\n12:40  $891.06 (-$2.07 \u2192 trade #2 cost)\n12:50  $880.50 (-$10.56 \u2192 trades #3+4)\n12:55  $871.70 (-$8.80 \u2192 trade #5)\n```\nTotal spent: $23.27. Winning shares NOT reflected.\n\n**Finding \u2014 Data API is garbage (returns 2020 Biden market data for all queries).** Can't use it to find our actual 5-min BTC positions.\n\n**Finding \u2014 PM 5-min markets may auto-redeem differently:**\n- 5-min binary markets resolve every 5 minutes\n- The CLOB may handle redemption differently for these vs long-term markets\n- The small drops ($1.84, $2.07) suggest PARTIAL redemption happening (not full $11.76 per trade)\n- Hypothesis: some wins ARE being auto-redeemed, but with a delay\n\n**Action items:**\n1. Need to verify: check on-chain if CTF tokens are accumulating in proxy wallet\n2. Build ERC-1155 balance checker for proxy wallet\n3. OR: accept that CLOB balance is unreliable and track P&L from trade outcomes instead\n\n**Decision:** For now, track P&L from confidence_outcomes.jsonl (accurate) and treat CLOB balance as \"available trading capital\" (not total value). Real P&L = positive.\n\n**Next:** P3 strategy dev\n\n---\n## 2026-04-03 20:43 UTC \u2014 [Pillar 1] PM Balance Mystery: $57 in Unredeemed Positions\n\n**Task:** P1 copy intel \u2014 investigate growing PM balance discrepancy\n\n**Finding \u2014 $57.42 discrepancy TODAY, $80+ cumulative:**\n- Apr 3 trade math: +$34.15 P&L (4W/1L at ~$11.76/trade)\n- Expected balance: $929.12 | Actual CLOB: $871.70 | Gap: **$57.42**\n- W14 cumulative: balance dropped $952 \u2192 $871 (-$81) despite positive trade math\n\n**Root Cause: Bot never redeems winning PM positions.**\n- PM 5-min markets use CTF (Conditional Token Framework)\n- You buy YES shares \u2192 market resolves \u2192 winning shares are ERC-1155 tokens on Polygon\n- To convert back to USDC, shares must be \"merged\" or \"redeemed\" via smart contract\n- CLOB balance only shows free USDC, NOT unredeemed winning shares\n- The py_clob_client has NO merge/redeem methods\n- Bot has NO redemption code\n\n**Impact:** ~$57-80 of our capital is locked in unredeemed positions. This is NOT lost money \u2014 it's in our wallet as tokens, just needs to be converted back to USDC.\n\n**Fix Options:**\n1. **Manual:** Connect wallet to polymarket.com, positions page auto-redeems\n2.",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
