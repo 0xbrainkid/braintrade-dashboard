@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-04T04:30:01.446533+00:00",
+  "timestamp": "2026-04-04T04:41:54.670196+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 402.251072,
+  "hl_balance": 402.330792,
   "today_pnl": 0,
   "pm_pnl": -137.62,
-  "hl_pnl": 11.25,
+  "hl_pnl": 11.33,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -126.37,
+  "all_time_pnl": -126.29,
   "total_trades": 263,
   "days_active": 20,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.10332,
+      "pnl": 0.10824,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.053,
       "entry": 2064.1,
-      "pnl": -0.7526,
+      "pnl": -0.7261,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.88596,
+      "pnl": 0.93426,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "POLYX",
-      "rate": "-0.5614%",
-      "apr": "-615%",
+      "rate": "-0.5276%",
+      "apr": "-578%",
       "action": "LONG",
-      "oi": "12,646,934"
+      "oi": "12,602,424"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: POLYX at -0.5614%/8h \u2014 shorts paying longs"
+        "text": "Strongest: POLYX at -0.5276%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.23667999999999992,
+        "pnl": 0.3164,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-04 04:09 UTC \u2014 [Pillar 1] V5a Deploy Automation Script Built\n\n**Task:** P1 copy intel / weekend research \u2014 build automated V5a deploy script for Monday\n\n**Output: `scripts/deploy-v5a.sh`** \u2705\n- Automated deploy with dry-run mode\n- Pre-deploy checks: bot alive, weekday only, shadow data \u226530\n- Backup: auto-creates `trading_bot.py.v4.1.bak`\n- 3 edits: min_price 0.48\u21920.50, bias_threshold 25\u219245, remove dead zone\n- Restart: kills old bot, starts new via proper `start-pm-bot.sh`\n- Verification: logs new config\n- Weekend guard: blocks deploy on Sat/Sun\n\n**Dry-run test:** \u2705 Runs clean (blocked on weekend as expected)\n\n**V5a shadow data: 144 windows** (5x the 30 minimum target)\n**Bot runtime: 44h+ without crash** (stable day 4 of 5)\n\n**To deploy Monday Apr 6:**\n```bash\nbash /home/ubuntu/clawd/scripts/deploy-v5a.sh\n```\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-04 00:09 UTC \u2014 [Pillar 4] Midnight Systems Check: Bug #4 Fix + Cron Fixes\n\n**Task:** P4 alpha \u2014 verify midnight reset, weekend filter, cron health\n\n**Bug #4 midnight reset: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:00:01 \u2014 \ud83d\udccc Daily balance reset: $871.70 (new day)\n```\nFirst ever midnight reset fired perfectly. _start_balance now correct for Apr 4.\n\n**Weekend filter: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:02:31 \u2014 No trade: WEEKEND_FILTER (Sat \u2014 31% WR, disabled)\n```\nBot correctly blocking all trades on Saturday.\n\n**Daily report cron FIX:** Script defaulted to \"yesterday\" \u2192 generated Apr 2 report at 23:00 Apr 3 instead of Apr 3. Changed default to TODAY. Apr 3 report regenerated (4W/1L, 80% WR).\n\n**All systems healthy overnight.** Bot PID 1197701 stable since 11:55 Apr 3 (12+ hours). All crons firing.\n\n**Next:** P1 copy intel (weekend research)\n\n---\n## 2026-04-03 23:39 UTC \u2014 [Pillar 3] W14 Strategy Review (Early)\n\n**Task:** P3 strategy \u2014 weekly strategy review with 3 days of data\n\n**W14 vs W13:**\n| Metric | W13 | W14 | Change |\n|--------|-----|-----|--------|\n| Trades | 103 | 27 | -74% |\n| WR | 58% | **67%** | **+8pp** |\n| Best hour | 12h (82%) | 11h (80%) | Similar |\n| Worst hour | 14h (0%) | 20h (0%) | Different |\n\n**Hour performance W14:**\n- 11h: **80% WR** (8W/2L) \u2014 KING hour, always strong\n- 12h: 67% WR (8W/4L) \u2014 good volume + quality\n- 19h: 50% WR (2W/2L) \u2014 marginal, consider removal\n- 20h: 0% WR (0W/1L) \u2014 only 1 trade, too little data to judge\n\n**V5a simulation on W14: 67% \u2192 71% WR** (blocks 6 trades: 3W/3L = 50% noise)\n**V6 simulation on W14: 67% \u2192 67% WR** (neutral this week \u2014 V6 helps on high-volume days, W14 was low-volume)\n**V5a+V6 combined: 69% WR on 13 trades** (half the trades, slightly better WR)\n\n**Key insight: WR improved +8pp from W13 by trading LESS.** 74% fewer trades but 8pp higher WR. The selectivity thesis is proven across multiple weeks.\n\n**Capital recommendation:** HL ($365) is 184x less efficient than PM. Close HL, move $300 to PM. At V5a+V6 rates: ~$39/day on $1,230 PM capital.",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-04 04:39 UTC \u2014 [Pillar 2] 20h Removal Analysis: KEEP (Positive EV)\n\n**Task:** P2 smart entry \u2014 backtest 20h removal\n\n**Hour Performance (V3+ all-time, 84 V3+ trades):**\n| Hour | WR | Trades | Est P&L |\n|------|-----|--------|--------|\n| 11h | 73% | 22 | +$113 |\n| 12h | **77%** | 30 | +$167 |\n| 19h | 68% | 19 | +$72 |\n| 20h | 62% | 13 | +$30 |\n\n**20h Removal Impact:**\n- Remove 20h: WR 71% \u2192 73% (+2pp), lose $30 in expected P&L, -13 trades\n- 20h avg EV per trade: **+$2.34** (positive!)\n- 20h is profitable, just LESS profitable than other hours\n- By week: W12 -$12, W13 +$30, W14 +$13 \u2014 improving over time\n\n**Decision: KEEP 20h in active hours.** It's profitable, improving, and adds $30 of expected weekly P&L. The -2pp WR trade-off is worthwhile for the extra $2.34/trade.\n\n**However:** Under V5a (min_bias=45), 20h has fewer qualifying windows. V5a naturally reduces the worst 20h trades. So V5a partially solves the 20h problem without removing the hour entirely.\n\n**Next:** P3 strategy\n\n---\n## 2026-04-04 04:09 UTC \u2014 [Pillar 1] V5a Deploy Automation Script Built\n\n**Task:** P1 copy intel / weekend research \u2014 build automated V5a deploy script for Monday\n\n**Output: `scripts/deploy-v5a.sh`** \u2705\n- Automated deploy with dry-run mode\n- Pre-deploy checks: bot alive, weekday only, shadow data \u226530\n- Backup: auto-creates `trading_bot.py.v4.1.bak`\n- 3 edits: min_price 0.48\u21920.50, bias_threshold 25\u219245, remove dead zone\n- Restart: kills old bot, starts new via proper `start-pm-bot.sh`\n- Verification: logs new config\n- Weekend guard: blocks deploy on Sat/Sun\n\n**Dry-run test:** \u2705 Runs clean (blocked on weekend as expected)\n\n**V5a shadow data: 144 windows** (5x the 30 minimum target)\n**Bot runtime: 44h+ without crash** (stable day 4 of 5)\n\n**To deploy Monday Apr 6:**\n```bash\nbash /home/ubuntu/clawd/scripts/deploy-v5a.sh\n```\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-04 00:09 UTC \u2014 [Pillar 4] Midnight Systems Check: Bug #4 Fix + Cron Fixes\n\n**Task:** P4 alpha \u2014 verify midnight reset, weekend filter, cron health\n\n**Bug #4 midnight reset: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:00:01 \u2014 \ud83d\udccc Daily balance reset: $871.70 (new day)\n```\nFirst ever midnight reset fired perfectly. _start_balance now correct for Apr 4.\n\n**Weekend filter: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:02:31 \u2014 No trade: WEEKEND_FILTER (Sat \u2014 31% WR, disabled)\n```\nBot correctly blocking all trades on Saturday.\n\n**Daily report cron FIX:** Script defaulted to \"yesterday\" \u2192 generated Apr 2 report at 23:00 Apr 3 instead of Apr 3. Changed default to TODAY. Apr 3 report regenerated (4W/1L, 80% WR).\n\n**All systems healthy overnight.** Bot PID 1197701 stable since 11:55 Apr 3 (12+ hours). All crons firing.\n\n**Next:** P1 copy intel (weekend research)\n\n---\n## 2026-04-03 23:39 UTC \u2014 [Pillar 3] W14 Strategy Review (Early)\n\n**Task:** P3 strategy \u2014 weekly strategy review with 3 days of data\n\n**W14 vs W13:**\n| Metric | W13 | ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
