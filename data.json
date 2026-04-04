@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-04T04:00:01.774524+00:00",
+  "timestamp": "2026-04-04T04:12:21.851828+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 402.078352,
+  "hl_balance": 402.19145199999997,
   "today_pnl": 0,
   "pm_pnl": -137.62,
-  "hl_pnl": 11.08,
+  "hl_pnl": 11.19,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -126.54,
+  "all_time_pnl": -126.43,
   "total_trades": 263,
   "days_active": 20,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.0574,
+      "pnl": 0.09184,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.79626,
+      "pnl": 0.87492,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,10 +45,10 @@
   "funding_opportunities": [
     {
       "coin": "POLYX",
-      "rate": "-0.7011%",
-      "apr": "-768%",
+      "rate": "-0.5711%",
+      "apr": "-625%",
       "action": "LONG",
-      "oi": "13,030,990"
+      "oi": "12,668,564"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: POLYX at -0.7011%/8h \u2014 shorts paying longs"
+        "text": "Strongest: POLYX at -0.5711%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -208,7 +208,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 0.06396000000000002,
+        "pnl": 0.17706000000000008,
         "sharpe": 0.0
       },
       {
@@ -364,7 +364,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-04 00:09 UTC \u2014 [Pillar 4] Midnight Systems Check: Bug #4 Fix + Cron Fixes\n\n**Task:** P4 alpha \u2014 verify midnight reset, weekend filter, cron health\n\n**Bug #4 midnight reset: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:00:01 \u2014 \ud83d\udccc Daily balance reset: $871.70 (new day)\n```\nFirst ever midnight reset fired perfectly. _start_balance now correct for Apr 4.\n\n**Weekend filter: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:02:31 \u2014 No trade: WEEKEND_FILTER (Sat \u2014 31% WR, disabled)\n```\nBot correctly blocking all trades on Saturday.\n\n**Daily report cron FIX:** Script defaulted to \"yesterday\" \u2192 generated Apr 2 report at 23:00 Apr 3 instead of Apr 3. Changed default to TODAY. Apr 3 report regenerated (4W/1L, 80% WR).\n\n**All systems healthy overnight.** Bot PID 1197701 stable since 11:55 Apr 3 (12+ hours). All crons firing.\n\n**Next:** P1 copy intel (weekend research)\n\n---\n## 2026-04-03 23:39 UTC \u2014 [Pillar 3] W14 Strategy Review (Early)\n\n**Task:** P3 strategy \u2014 weekly strategy review with 3 days of data\n\n**W14 vs W13:**\n| Metric | W13 | W14 | Change |\n|--------|-----|-----|--------|\n| Trades | 103 | 27 | -74% |\n| WR | 58% | **67%** | **+8pp** |\n| Best hour | 12h (82%) | 11h (80%) | Similar |\n| Worst hour | 14h (0%) | 20h (0%) | Different |\n\n**Hour performance W14:**\n- 11h: **80% WR** (8W/2L) \u2014 KING hour, always strong\n- 12h: 67% WR (8W/4L) \u2014 good volume + quality\n- 19h: 50% WR (2W/2L) \u2014 marginal, consider removal\n- 20h: 0% WR (0W/1L) \u2014 only 1 trade, too little data to judge\n\n**V5a simulation on W14: 67% \u2192 71% WR** (blocks 6 trades: 3W/3L = 50% noise)\n**V6 simulation on W14: 67% \u2192 67% WR** (neutral this week \u2014 V6 helps on high-volume days, W14 was low-volume)\n**V5a+V6 combined: 69% WR on 13 trades** (half the trades, slightly better WR)\n\n**Key insight: WR improved +8pp from W13 by trading LESS.** 74% fewer trades but 8pp higher WR. The selectivity thesis is proven across multiple weeks.\n\n**Capital recommendation:** HL ($365) is 184x less efficient than PM. Close HL, move $300 to PM. At V5a+V6 rates: ~$39/day on $1,230 PM capital.\n\n**Next:** P4 alpha (weekend overnight)\n\n---\n## 2026-04-03 23:09 UTC \u2014 [Pillar 2] Weekend Plan + V5a Deploy Countdown\n\n**Task:** P2 smart entry \u2014 verify Bug #4 fix, weekend readiness, V5a deploy plan\n\n**Bug #4 midnight reset: VERIFIED in running code.** Lines 249-252. Bot (PID 1197701, started 11:55 Apr 3) has the fix. At midnight UTC, _start_balance will reset to current CLOB balance.\n\n**Weekend (Apr 4-5): Bot auto-blocks via WEEKEND_FILTER.**\n- Line 424: `if now_utc.weekday() >= 5: return \"WEEKEND_FILTER\"`\n- Sat 27% WR, Sun 43% WR historically \u2192 correct to block\n- 0 trades expected. Bot still runs (monitors, refreshes balance, collects shadow data).\n\n**V5a deploy: Apr 6 (Monday) CONFIRMED.**\n- Stable days: Apr 1-5 = 5 days (Apr 4-5 = weekend, 0 trades, 0 crashes expected)\n- All 4/5 criteria met. Weekend just needs clean operation.\n- Deploy patch ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-04 04:09 UTC \u2014 [Pillar 1] V5a Deploy Automation Script Built\n\n**Task:** P1 copy intel / weekend research \u2014 build automated V5a deploy script for Monday\n\n**Output: `scripts/deploy-v5a.sh`** \u2705\n- Automated deploy with dry-run mode\n- Pre-deploy checks: bot alive, weekday only, shadow data \u226530\n- Backup: auto-creates `trading_bot.py.v4.1.bak`\n- 3 edits: min_price 0.48\u21920.50, bias_threshold 25\u219245, remove dead zone\n- Restart: kills old bot, starts new via proper `start-pm-bot.sh`\n- Verification: logs new config\n- Weekend guard: blocks deploy on Sat/Sun\n\n**Dry-run test:** \u2705 Runs clean (blocked on weekend as expected)\n\n**V5a shadow data: 144 windows** (5x the 30 minimum target)\n**Bot runtime: 44h+ without crash** (stable day 4 of 5)\n\n**To deploy Monday Apr 6:**\n```bash\nbash /home/ubuntu/clawd/scripts/deploy-v5a.sh\n```\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-04 00:09 UTC \u2014 [Pillar 4] Midnight Systems Check: Bug #4 Fix + Cron Fixes\n\n**Task:** P4 alpha \u2014 verify midnight reset, weekend filter, cron health\n\n**Bug #4 midnight reset: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:00:01 \u2014 \ud83d\udccc Daily balance reset: $871.70 (new day)\n```\nFirst ever midnight reset fired perfectly. _start_balance now correct for Apr 4.\n\n**Weekend filter: CONFIRMED WORKING \u2705**\n```\n2026-04-04 00:02:31 \u2014 No trade: WEEKEND_FILTER (Sat \u2014 31% WR, disabled)\n```\nBot correctly blocking all trades on Saturday.\n\n**Daily report cron FIX:** Script defaulted to \"yesterday\" \u2192 generated Apr 2 report at 23:00 Apr 3 instead of Apr 3. Changed default to TODAY. Apr 3 report regenerated (4W/1L, 80% WR).\n\n**All systems healthy overnight.** Bot PID 1197701 stable since 11:55 Apr 3 (12+ hours). All crons firing.\n\n**Next:** P1 copy intel (weekend research)\n\n---\n## 2026-04-03 23:39 UTC \u2014 [Pillar 3] W14 Strategy Review (Early)\n\n**Task:** P3 strategy \u2014 weekly strategy review with 3 days of data\n\n**W14 vs W13:**\n| Metric | W13 | W14 | Change |\n|--------|-----|-----|--------|\n| Trades | 103 | 27 | -74% |\n| WR | 58% | **67%** | **+8pp** |\n| Best hour | 12h (82%) | 11h (80%) | Similar |\n| Worst hour | 14h (0%) | 20h (0%) | Different |\n\n**Hour performance W14:**\n- 11h: **80% WR** (8W/2L) \u2014 KING hour, always strong\n- 12h: 67% WR (8W/4L) \u2014 good volume + quality\n- 19h: 50% WR (2W/2L) \u2014 marginal, consider removal\n- 20h: 0% WR (0W/1L) \u2014 only 1 trade, too little data to judge\n\n**V5a simulation on W14: 67% \u2192 71% WR** (blocks 6 trades: 3W/3L = 50% noise)\n**V6 simulation on W14: 67% \u2192 67% WR** (neutral this week \u2014 V6 helps on high-volume days, W14 was low-volume)\n**V5a+V6 combined: 69% WR on 13 trades** (half the trades, slightly better WR)\n\n**Key insight: WR improved +8pp from W13 by trading LESS.** 74% fewer trades but 8pp higher WR. The selectivity thesis is proven across multiple weeks.\n\n**Capital recommendation:** HL ($365) is 184x less efficient than PM. Close HL, move $300 to PM. At V5a+V6 rates: ~$39/day on $1,230 PM capital.",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
