@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-05T22:00:01.801222+00:00",
+  "timestamp": "2026-04-05T22:13:09.676883+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 400.032745,
+  "hl_balance": 399.359905,
   "today_pnl": 0,
   "pm_pnl": -137.62,
-  "hl_pnl": 9.03,
+  "hl_pnl": 8.36,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -128.59,
+  "all_time_pnl": -129.26,
   "total_trades": 263,
   "days_active": 21,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 1.24804,
+      "pnl": 1.2054,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0529,
       "entry": 2059.2,
-      "pnl": -0.01058,
+      "pnl": -0.27508,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,12 +37,27 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.19182,
+      "pnl": -0.17388,
       "leverage": 3,
       "wallet": "old"
     }
   ],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "2Z",
+      "rate": "-0.0803%",
+      "apr": "-88%",
+      "action": "LONG",
+      "oi": "19,203,914"
+    },
+    {
+      "coin": "REZ",
+      "rate": "-0.0578%",
+      "apr": "-63%",
+      "action": "LONG",
+      "oi": "227,160,048"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-21",
@@ -111,6 +126,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.989"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: 2Z at -0.0803%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -192,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.42928,
+        "pnl": 0.75644,
         "sharpe": 0.0
       },
       {
@@ -348,7 +371,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-05 18:09 UTC \u2014 [P3: Strategy Development] OBI Filter Design \u2014 High-Conviction Trade Selector\n\n**Task:** Analyze April trade data to design a new OBI-based filter that cuts losing trades while preserving winners.\n\n**Finding:** Massive edge differential by Order Book Imbalance (OBI) in April data (27 trades):\n\n| OBI Bucket | Trades | Win Rate | Pattern |\n|---|---|---|---|\n| OBI < -0.5 (strong sell pressure) | 6 | **83%** | Our contrarian YES bets crush when book is stacked against us |\n| OBI [-0.2, +0.2] (neutral) | 7 | **86%** | Balanced books = clean signal, high conviction |\n| OBI [+0.2, +0.5) (mild buy pressure) | 4 | 75% | Still decent |\n| OBI \u2265 +0.5 (strong buy pressure) | 6 | **33%** | Disaster zone \u2014 book agrees with us but we still lose |\n\nKey insight: When OBI > +0.5 (strong buy-side pressure), our YES trades are only **33% WR**. These are the \"crowded trade\" \u2014 everyone's buying YES, the book is stacked bullish, and the market has already moved. Our contrarian edge evaporates.\n\nCombined filter simulation (|bias|\u226550 AND OBI<0.5):\n- **17 trades, 76% WR, cumulative pnl_pct = +8.19** (better than unfiltered +7.98)\n- Blocked 10 trades at **50% WR** \u2014 cutting coin flips\n\nV5A filter validation: PASS=71% WR (14 trades), BLOCK=25% WR (4 trades) \u2014 V5A is working perfectly, confirming bias threshold of 45+ matters.\n\n**My thinking:** The OBI signal reveals something elegant: our contrarian strategy works best when the order book DISAGREES with our direction or is neutral. When the book agrees with us (OBI > +0.5), we're not contrarian anymore \u2014 we're following the crowd into an already-priced-in move. The 33% WR at high positive OBI is catastrophic and consistent.\n\nThis is a V7 candidate filter. Conservative approach: soft-block OBI > 0.5 first (log but don't trade), collect 2 weeks of data, then hard-block if pattern holds.\n\n**Decision:** \n1. **NOT deploying yet** \u2014 it's Sunday, weekend filter is active, and we want Monday weekday data first\n2. Design V7 spec: `if obi > 0.5: skip trade (tag: OBI_CROWDED)` \n3. This would have saved 4 losses in April (worth ~$40-50 in avoided losses)\n4. Will draft V7 code and backtest against March data next P3 heartbeat\n5. Sample size still small (27 trades) \u2014 need 50+ before hard deployment\n\n**Current Status:**\n- PM balance: **$871.70** (weekend, no trades \u2014 V3.3 weekend filter active)\n- HL balance: **$37.39** (frozen, per recapitalization plan)\n- April WR: **66.7%** (18W/9L) \u2014 above breakeven but below 73% target\n- Both bots alive and running\n\n**V7 OBI Filter Draft Spec:**\n```\n# In should_trade(), after bias filters, before regime filter:\nobi_val = self._last_indicators.get('obi', 0) or 0\nif obi_val > 0.5:\n    return None, 0, f\"OBI_CROWDED (obi={obi_val:+.3f}, >0.5 = 33% WR)\"\n```\n\n**Next (P3):** \n- Backtest V7 OBI filter against ALL historical trades (not just April)\n- Draft V7 code change in trading_bot.py\n- Prep",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-05 22:09 UTC \u2014 [P1: Copy Intelligence] Two-Tier PM Wallet Strategy Analysis\n\n**Task:** Analyze top PM wallet behavior from copy-signals.json + shadow validation data to understand what profitable traders are actually doing vs what our bot does.\n\n**Finding:** Discovered two distinct strategy tiers among top PM wallets:\n\n**Tier 1 \u2014 Resolution Snipers (0.990+ avg price):**\n- Square-Botany ($946 spent, 0.990 avg = 1.0% edge per trade)\n- 0xecee67... ($592 spent, 0.999 avg = 0.1% edge)\n- 0x70237b... ($226 spent, 0.990 avg = 1.0% edge)\n- These wallets buy near-certain outcomes right before resolution. Tiny edge, high volume, near-zero risk.\n\n**Tier 2 \u2014 Directional Bettors (0.670 avg price):**\n- Weak-Thermometer ($14,649 spent, 0.675 avg = 32.5% edge per trade) \u2014 BY FAR the biggest whale\n- Young-Wrong, Few-Kid, Rough-Chance-Porpoise ($102-$146 each, 0.670 avg)\n- These wallets take actual directional bets with meaningful edge. Weak-Thermometer is spending $488/trade avg.\n\n**Shadow Validation Data (176 signals today):**\n- 45% blocked by YES_ONLY_FILTER (our bot only takes YES-side)\n- 38% blocked by BIAS_BELOW_45 (low confidence)\n- Only 15% pass v5a filters (27/176)\n- Regime: 64% RANGE, 27% UNKNOWN, 7% MIXED, 2% TREND\n- BTC ranging $66,699-$67,690 \u2014 classic Sunday chop\n\n**HL Leaderboard:** All tracked addresses flat (no positions). Sunday night = institutional rest. This is useful signal for Monday \u2014 when whales reload after weekend flat period, their first moves Monday morning indicate conviction.\n\n**My thinking:** Our bot correctly sat out today \u2014 RANGE regime with low bias signals. The YES_ONLY_FILTER blocking 45% is by design but worth revisiting: Tier 1 snipers profit on BOTH sides near resolution. However, our strategy aligns more with Tier 2 (directional), where we need strong bias signals. Weak-Thermometer is the one to study deeper \u2014 $14.6K spent with 32.5% avg edge suggests they have a real directional model.\n\n**Decision:** \n1. Keep current filters active \u2014 sitting out Sunday RANGE is correct\n2. Weak-Thermometer needs dedicated tracking \u2014 they're spending 15x more than anyone else with genuine directional edge\n3. Monday AM: watch for HL whale reload as breakout signal\n\n**Next P1 task:** Deep-dive Weak-Thermometer's trade history \u2014 what markets, what timing, what their win rate looks like. If they're consistently buying at 0.675 and resolving at 1.0, that's a 48% return per trade. Build a copy signal specifically for this wallet.\n\n---\n## 2026-04-05 18:09 UTC \u2014 [P3: Strategy Development] OBI Filter Design \u2014 High-Conviction Trade Selector\n\n**Task:** Analyze April trade data to design a new OBI-based filter that cuts losing trades while preserving winners.\n\n**Finding:** Massive edge differential by Order Book Imbalance (OBI) in April data (27 trades):\n\n| OBI Bucket | Trades | Win Rate | Pattern |\n|---|---|---|---|\n| OBI < -0.5 (strong sell pressure) ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -368,7 +391,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
