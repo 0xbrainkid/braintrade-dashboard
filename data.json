@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-04-05T18:00:03.020549+00:00",
+  "timestamp": "2026-04-05T18:12:22.523904+00:00",
   "pm_balance": 871.7,
-  "hl_balance": 400.050885,
+  "hl_balance": 399.66515499999997,
   "today_pnl": 0,
   "pm_pnl": -137.62,
-  "hl_pnl": 9.05,
+  "hl_pnl": 8.67,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -128.57,
+  "all_time_pnl": -128.95,
   "total_trades": 263,
   "days_active": 21,
   "pm_bot_running": true,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.00164,
       "entry": 66759.0,
-      "pnl": 0.943,
+      "pnl": 0.84132,
       "leverage": 3,
       "wallet": "old"
     },
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.0529,
       "entry": 2059.2,
-      "pnl": 0.11638,
+      "pnl": -0.01587,
       "leverage": 3,
       "wallet": "old"
     },
@@ -37,7 +37,7 @@
       "side": "LONG",
       "size": 1.38,
       "entry": 79.551,
-      "pnl": 0.39882,
+      "pnl": 0.24702,
       "leverage": 3,
       "wallet": "old"
     }
@@ -45,17 +45,17 @@
   "funding_opportunities": [
     {
       "coin": "REZ",
-      "rate": "-0.1156%",
-      "apr": "-127%",
+      "rate": "-0.1299%",
+      "apr": "-142%",
       "action": "LONG",
-      "oi": "225,702,862"
+      "oi": "226,587,444"
     },
     {
       "coin": "2Z",
-      "rate": "-0.0908%",
-      "apr": "-99%",
+      "rate": "-0.1074%",
+      "apr": "-118%",
       "action": "LONG",
-      "oi": "19,954,180"
+      "oi": "20,035,850"
     }
   ],
   "daily_pnl": [
@@ -129,7 +129,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: REZ at -0.1156%/8h \u2014 shorts paying longs"
+        "text": "Strongest: REZ at -0.1299%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -215,7 +215,7 @@
         "status": "DOWN",
         "trades": 3,
         "win_rate": 0,
-        "pnl": 1.4582,
+        "pnl": 1.07247,
         "sharpe": 0.0
       },
       {
@@ -371,7 +371,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-05 16:50 UTC \u2014 [INCIDENT] Heartbeat Cron Timeout \u2014 36 hours of missed work\n\n**What happened:** Heartbeat cron (every 4h) has been timing out since Apr 4 02:09 UTC. 13 consecutive failures. Timeout was set to 120s \u2014 too short for pillar work.\n\n**Fix:** Increased timeout to 300s. Next run in ~1h.\n\n**What was missed:** Apr 4 and Apr 5 had zero worklog entries. Apr 4 also had ZERO PM trades (weekday). Apr 5 = weekend (V3.3 disabled, correct).\n\n**Apr 4 zero trades \u2014 why?** Need to check trading.log for Apr 4 active hours (11-12h, 19-20h). Likely: bias too weak or regime TREND blocked all windows.\n\n**W14 Running Total (Apr 1-5):**\n- 27 trades, 18W/9L = 67% WR\n- Apr 1: 14T, 64% | Apr 2: 8T, 62% | Apr 3: 5T, 80% | Apr 4-5: 0T\n- PM balance: $871.70 (flat since Apr 3)\n- Trend: trade count declining (14\u21928\u21925\u21920). Selectivity increasing but need to verify it's not over-filtering.\n\n**V5a deploy:** Still planned for Apr 6 (tomorrow). n=18 tagged trades.\n\n---\n## 2026-04-04 04:39 UTC \u2014 [Pillar 2] 20h Removal Analysis: KEEP (Positive EV)\n\n**Task:** P2 smart entry \u2014 backtest 20h removal\n\n**Hour Performance (V3+ all-time, 84 V3+ trades):**\n| Hour | WR | Trades | Est P&L |\n|------|-----|--------|--------|\n| 11h | 73% | 22 | +$113 |\n| 12h | **77%** | 30 | +$167 |\n| 19h | 68% | 19 | +$72 |\n| 20h | 62% | 13 | +$30 |\n\n**20h Removal Impact:**\n- Remove 20h: WR 71% \u2192 73% (+2pp), lose $30 in expected P&L, -13 trades\n- 20h avg EV per trade: **+$2.34** (positive!)\n- 20h is profitable, just LESS profitable than other hours\n- By week: W12 -$12, W13 +$30, W14 +$13 \u2014 improving over time\n\n**Decision: KEEP 20h in active hours.** It's profitable, improving, and adds $30 of expected weekly P&L. The -2pp WR trade-off is worthwhile for the extra $2.34/trade.\n\n**However:** Under V5a (min_bias=45), 20h has fewer qualifying windows. V5a naturally reduces the worst 20h trades. So V5a partially solves the 20h problem without removing the hour entirely.\n\n**Next:** P3 strategy\n\n---\n## 2026-04-04 04:09 UTC \u2014 [Pillar 1] V5a Deploy Automation Script Built\n\n**Task:** P1 copy intel / weekend research \u2014 build automated V5a deploy script for Monday\n\n**Output: `scripts/deploy-v5a.sh`** \u2705\n- Automated deploy with dry-run mode\n- Pre-deploy checks: bot alive, weekday only, shadow data \u226530\n- Backup: auto-creates `trading_bot.py.v4.1.bak`\n- 3 edits: min_price 0.48\u21920.50, bias_threshold 25\u219245, remove dead zone\n- Restart: kills old bot, starts new via proper `start-pm-bot.sh`\n- Verification: logs new config\n- Weekend guard: blocks deploy on Sat/Sun\n\n**Dry-run test:** \u2705 Runs clean (blocked on weekend as expected)\n\n**V5a shadow data: 144 windows** (5x the 30 minimum target)\n**Bot runtime: 44h+ without crash** (stable day 4 of 5)\n\n**To deploy Monday Apr 6:**\n```bash\nbash /home/ubuntu/clawd/scripts/deploy-v5a.sh\n```\n\n**Next:** P2 smart entry\n\n---\n## 2026-04-04 00:09 UTC \u2014 [Pillar 4] Midnight Systems Check: Bug #4 ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-05 18:09 UTC \u2014 [P3: Strategy Development] OBI Filter Design \u2014 High-Conviction Trade Selector\n\n**Task:** Analyze April trade data to design a new OBI-based filter that cuts losing trades while preserving winners.\n\n**Finding:** Massive edge differential by Order Book Imbalance (OBI) in April data (27 trades):\n\n| OBI Bucket | Trades | Win Rate | Pattern |\n|---|---|---|---|\n| OBI < -0.5 (strong sell pressure) | 6 | **83%** | Our contrarian YES bets crush when book is stacked against us |\n| OBI [-0.2, +0.2] (neutral) | 7 | **86%** | Balanced books = clean signal, high conviction |\n| OBI [+0.2, +0.5) (mild buy pressure) | 4 | 75% | Still decent |\n| OBI \u2265 +0.5 (strong buy pressure) | 6 | **33%** | Disaster zone \u2014 book agrees with us but we still lose |\n\nKey insight: When OBI > +0.5 (strong buy-side pressure), our YES trades are only **33% WR**. These are the \"crowded trade\" \u2014 everyone's buying YES, the book is stacked bullish, and the market has already moved. Our contrarian edge evaporates.\n\nCombined filter simulation (|bias|\u226550 AND OBI<0.5):\n- **17 trades, 76% WR, cumulative pnl_pct = +8.19** (better than unfiltered +7.98)\n- Blocked 10 trades at **50% WR** \u2014 cutting coin flips\n\nV5A filter validation: PASS=71% WR (14 trades), BLOCK=25% WR (4 trades) \u2014 V5A is working perfectly, confirming bias threshold of 45+ matters.\n\n**My thinking:** The OBI signal reveals something elegant: our contrarian strategy works best when the order book DISAGREES with our direction or is neutral. When the book agrees with us (OBI > +0.5), we're not contrarian anymore \u2014 we're following the crowd into an already-priced-in move. The 33% WR at high positive OBI is catastrophic and consistent.\n\nThis is a V7 candidate filter. Conservative approach: soft-block OBI > 0.5 first (log but don't trade), collect 2 weeks of data, then hard-block if pattern holds.\n\n**Decision:** \n1. **NOT deploying yet** \u2014 it's Sunday, weekend filter is active, and we want Monday weekday data first\n2. Design V7 spec: `if obi > 0.5: skip trade (tag: OBI_CROWDED)` \n3. This would have saved 4 losses in April (worth ~$40-50 in avoided losses)\n4. Will draft V7 code and backtest against March data next P3 heartbeat\n5. Sample size still small (27 trades) \u2014 need 50+ before hard deployment\n\n**Current Status:**\n- PM balance: **$871.70** (weekend, no trades \u2014 V3.3 weekend filter active)\n- HL balance: **$37.39** (frozen, per recapitalization plan)\n- April WR: **66.7%** (18W/9L) \u2014 above breakeven but below 73% target\n- Both bots alive and running\n\n**V7 OBI Filter Draft Spec:**\n```\n# In should_trade(), after bias filters, before regime filter:\nobi_val = self._last_indicators.get('obi', 0) or 0\nif obi_val > 0.5:\n    return None, 0, f\"OBI_CROWDED (obi={obi_val:+.3f}, >0.5 = 33% WR)\"\n```\n\n**Next (P3):** \n- Backtest V7 OBI filter against ALL historical trades (not just April)\n- Draft V7 code change in trading_bot.py\n- Prep",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
