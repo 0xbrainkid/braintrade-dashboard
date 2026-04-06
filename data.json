@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-06T02:00:02.309163+00:00",
+  "timestamp": "2026-04-06T02:12:58.245424+00:00",
   "pm_balance": 871.7,
   "hl_balance": 408.251809,
   "today_pnl": 0,
@@ -16,18 +16,32 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ALT",
-      "rate": "-0.1352%",
-      "apr": "-148%",
+      "coin": "FTT",
+      "rate": "-0.1386%",
+      "apr": "-152%",
       "action": "LONG",
-      "oi": "110,187,960"
+      "oi": "976,451"
     },
     {
-      "coin": "REZ",
-      "rate": "-0.0538%",
-      "apr": "-59%",
+      "coin": "ALT",
+      "rate": "-0.1277%",
+      "apr": "-140%",
       "action": "LONG",
-      "oi": "225,173,328"
+      "oi": "110,969,466"
+    },
+    {
+      "coin": "ZETA",
+      "rate": "-0.0662%",
+      "apr": "-72%",
+      "action": "LONG",
+      "oi": "14,776,930"
+    },
+    {
+      "coin": "MOODENG",
+      "rate": "-0.0556%",
+      "apr": "-61%",
+      "action": "LONG",
+      "oi": "19,121,350"
     }
   ],
   "daily_pnl": [
@@ -101,11 +115,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ALT at -0.1352%/8h \u2014 shorts paying longs"
+        "text": "Strongest: FTT at -0.1386%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "4 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +357,7 @@
     "sharpe": 0.73,
     "max_drawdown": 48.8
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-05 22:09 UTC \u2014 [P1: Copy Intelligence] Two-Tier PM Wallet Strategy Analysis\n\n**Task:** Analyze top PM wallet behavior from copy-signals.json + shadow validation data to understand what profitable traders are actually doing vs what our bot does.\n\n**Finding:** Discovered two distinct strategy tiers among top PM wallets:\n\n**Tier 1 \u2014 Resolution Snipers (0.990+ avg price):**\n- Square-Botany ($946 spent, 0.990 avg = 1.0% edge per trade)\n- 0xecee67... ($592 spent, 0.999 avg = 0.1% edge)\n- 0x70237b... ($226 spent, 0.990 avg = 1.0% edge)\n- These wallets buy near-certain outcomes right before resolution. Tiny edge, high volume, near-zero risk.\n\n**Tier 2 \u2014 Directional Bettors (0.670 avg price):**\n- Weak-Thermometer ($14,649 spent, 0.675 avg = 32.5% edge per trade) \u2014 BY FAR the biggest whale\n- Young-Wrong, Few-Kid, Rough-Chance-Porpoise ($102-$146 each, 0.670 avg)\n- These wallets take actual directional bets with meaningful edge. Weak-Thermometer is spending $488/trade avg.\n\n**Shadow Validation Data (176 signals today):**\n- 45% blocked by YES_ONLY_FILTER (our bot only takes YES-side)\n- 38% blocked by BIAS_BELOW_45 (low confidence)\n- Only 15% pass v5a filters (27/176)\n- Regime: 64% RANGE, 27% UNKNOWN, 7% MIXED, 2% TREND\n- BTC ranging $66,699-$67,690 \u2014 classic Sunday chop\n\n**HL Leaderboard:** All tracked addresses flat (no positions). Sunday night = institutional rest. This is useful signal for Monday \u2014 when whales reload after weekend flat period, their first moves Monday morning indicate conviction.\n\n**My thinking:** Our bot correctly sat out today \u2014 RANGE regime with low bias signals. The YES_ONLY_FILTER blocking 45% is by design but worth revisiting: Tier 1 snipers profit on BOTH sides near resolution. However, our strategy aligns more with Tier 2 (directional), where we need strong bias signals. Weak-Thermometer is the one to study deeper \u2014 $14.6K spent with 32.5% avg edge suggests they have a real directional model.\n\n**Decision:** \n1. Keep current filters active \u2014 sitting out Sunday RANGE is correct\n2. Weak-Thermometer needs dedicated tracking \u2014 they're spending 15x more than anyone else with genuine directional edge\n3. Monday AM: watch for HL whale reload as breakout signal\n\n**Next P1 task:** Deep-dive Weak-Thermometer's trade history \u2014 what markets, what timing, what their win rate looks like. If they're consistently buying at 0.675 and resolving at 1.0, that's a 48% return per trade. Build a copy signal specifically for this wallet.\n\n---\n## 2026-04-05 18:09 UTC \u2014 [P3: Strategy Development] OBI Filter Design \u2014 High-Conviction Trade Selector\n\n**Task:** Analyze April trade data to design a new OBI-based filter that cuts losing trades while preserving winners.\n\n**Finding:** Massive edge differential by Order Book Imbalance (OBI) in April data (27 trades):\n\n| OBI Bucket | Trades | Win Rate | Pattern |\n|---|---|---|---|\n| OBI < -0.5 (strong sell pressure) ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-06 02:09 UTC \u2014 [P2: Smart Entry] 191-Trade Deep Analysis: Three Filter Upgrades Identified\n\n**Task:** Quantitative analysis of all 191 logged trades in confidence_outcomes.jsonl to find actionable parameter improvements for the PM smart entry bot.\n\n**Finding:** Three high-signal edges discovered from the data:\n\n1. **Bias score sweet spot is 45-65, NOT 25-70 (current range)**\n   - |bias| 25-35: 53.8% WR (39 trades) \u2014 barely above coin flip\n   - |bias| 35-45: 48.8% WR (41 trades) \u2014 LOSING after fees\n   - |bias| 45-55: 58.3% WR (72 trades) \u2014 solid\n   - |bias| 55-65: 83.3% WR (18 trades) \u2014 **MONSTER edge**\n   - |bias| 65-70: 42.9% WR (7 trades) \u2014 overcrowded, reversal trap\n   - Current thresholds: bias_threshold=25, max_bias=70. This lets in 80 trades (42%) that are at or below breakeven.\n\n2. **OBI > 0.5 is a kill zone: 33.3% WR vs 75% when OBI \u2264 0.5**\n   - OBI [-1.0, -0.5): 83.3% WR (6 trades)\n   - OBI [-0.5, 0.0): 60.0% WR (5 trades)\n   - OBI [0.0, 0.5): 80.0% WR (10 trades)\n   - OBI [0.5, 1.0): 33.3% WR (6 trades) \u2014 **strong buy-side imbalance = trap**\n   - Sample is small (27 trades with OBI data) but signal is extreme.\n\n3. **v5a BLOCK tag = 25% WR but trades STILL EXECUTE**\n   - v5a_tag is logged at line 201-202 of trading_bot.py but never used as an actual filter\n   - v5a=PASS: 71.4% WR (14 trades) vs v5a=BLOCK: 25.0% WR (4 trades)\n   - The v5a check (`abs(bias_score) >= 45`) aligns with finding #1 above\n\n4. **Entry price 0.54-0.56 is a dead zone: 40% WR**\n   - Sweet spot is 0.50-0.54 (61.4-61.5% WR)\n   - Current max_price=0.535 already handles this well\n\n5. **Last 30 trades: 70% WR** \u2014 recent performance trending up, bot parameters are improving\n\n6. **Hour analysis (with enriched data, n=27):** Hour 11 = 80% (10 trades), Hour 12 = 66.7% (12 trades). Hours 19-20 underperforming (50%/0% but tiny samples).\n\n**My thinking:** The single biggest leak is low-bias trades (|bias| < 45). These represent ~42% of all trades and collectively lose money. The v5a tag already identifies this but was never wired as a filter \u2014 it's just a log annotation. The OBI > 0.5 filter would catch another subset of losers. These two filters together would have blocked ~45 of the 83 losses while keeping most of the 108 wins.\n\n**Decision:** Three changes to implement (in priority order):\n1. **Raise bias_threshold from 25 \u2192 45** \u2014 this is the single most impactful change. Cuts 80 low-WR trades, keeps the 97 high-WR trades. Expected WR jumps from 56.5% \u2192 ~63%.\n2. **Add OBI > 0.5 as a hard block** \u2014 small sample but the signal is extreme (33% WR). Worth implementing as a filter with logging.\n3. **Lower max_bias from 70 \u2192 65** \u2014 the 65-70 bucket is 42.9% WR. Extreme bias = reversal territory.\n\nNOT implementing yet (waiting for more data):\n- v5a as hard filter (it's equivalent to bias_threshold=45, so change #1 covers this)\n- Hour 19/20 removal (sample too small at 5 trades)\n\n*",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +377,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
