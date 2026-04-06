@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-06T12:30:02.714759+00:00",
-  "pm_balance": 854.9,
-  "hl_balance": 404.460606,
-  "today_pnl": 15.42,
-  "pm_pnl": -154.42,
-  "hl_pnl": 13.46,
-  "today_trades": 3,
-  "today_wins": 2,
+  "timestamp": "2026-04-06T13:00:02.385049+00:00",
+  "pm_balance": 846.55,
+  "hl_balance": 404.187342,
+  "today_pnl": 50.9,
+  "pm_pnl": -162.77,
+  "hl_pnl": 13.19,
+  "today_trades": 5,
+  "today_wins": 4,
   "today_losses": 1,
-  "all_time_pnl": -140.96,
-  "total_trades": 266,
+  "all_time_pnl": -149.58,
+  "total_trades": 268,
   "days_active": 22,
   "pm_bot_running": true,
   "hl_bot_running": false,
@@ -19,7 +19,7 @@
       "side": "LONG",
       "size": 0.0513,
       "entry": 2150.2,
-      "pnl": -0.13338,
+      "pnl": -0.40527,
       "leverage": 3,
       "wallet": "old"
     }
@@ -27,17 +27,17 @@
   "funding_opportunities": [
     {
       "coin": "SUPER",
-      "rate": "-0.2072%",
-      "apr": "-227%",
+      "rate": "-0.4724%",
+      "apr": "-517%",
       "action": "LONG",
-      "oi": "3,897,636"
+      "oi": "4,738,542"
     },
     {
-      "coin": "FTT",
-      "rate": "-0.0685%",
-      "apr": "-75%",
+      "coin": "AVNT",
+      "rate": "-0.0989%",
+      "apr": "-108%",
       "action": "LONG",
-      "oi": "971,456"
+      "oi": "6,638,392"
     }
   ],
   "daily_pnl": [
@@ -95,23 +95,23 @@
     },
     {
       "date": "2026-04-06",
-      "pnl": 15.42
+      "pnl": 50.9
     }
   ],
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 60,
+    "signal_confidence": 52,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.883"
+        "text": "Top traders: 38 buys, 12 sells \u2014 avg price $0.734"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SUPER at -0.2072%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SUPER at -0.4724%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -187,17 +187,17 @@
       {
         "name": "PM Smart Entry",
         "status": "LIVE",
-        "trades": 266,
-        "win_rate": 56.7,
-        "pnl": -154.42000000000007,
-        "sharpe": 0.55
+        "trades": 268,
+        "win_rate": 57.1,
+        "pnl": -162.7700000000001,
+        "sharpe": 0.7
       },
       {
         "name": "HL Directional",
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": -0.13338,
+        "pnl": -0.40527,
         "sharpe": 0.0
       },
       {
@@ -347,11 +347,11 @@
         "impact_class": "red"
       }
     ],
-    "win_rate_7d": 56.7,
-    "win_rate_24h": 66.7,
+    "win_rate_7d": 57.1,
+    "win_rate_24h": 80.0,
     "avg_trade_size": 0.52,
-    "sharpe": 0.55,
-    "max_drawdown": 48.8
+    "sharpe": 0.7,
+    "max_drawdown": 9.5
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-06 02:09 UTC \u2014 [P2: Smart Entry] 191-Trade Deep Analysis: Three Filter Upgrades Identified\n\n**Task:** Quantitative analysis of all 191 logged trades in confidence_outcomes.jsonl to find actionable parameter improvements for the PM smart entry bot.\n\n**Finding:** Three high-signal edges discovered from the data:\n\n1. **Bias score sweet spot is 45-65, NOT 25-70 (current range)**\n   - |bias| 25-35: 53.8% WR (39 trades) \u2014 barely above coin flip\n   - |bias| 35-45: 48.8% WR (41 trades) \u2014 LOSING after fees\n   - |bias| 45-55: 58.3% WR (72 trades) \u2014 solid\n   - |bias| 55-65: 83.3% WR (18 trades) \u2014 **MONSTER edge**\n   - |bias| 65-70: 42.9% WR (7 trades) \u2014 overcrowded, reversal trap\n   - Current thresholds: bias_threshold=25, max_bias=70. This lets in 80 trades (42%) that are at or below breakeven.\n\n2. **OBI > 0.5 is a kill zone: 33.3% WR vs 75% when OBI \u2264 0.5**\n   - OBI [-1.0, -0.5): 83.3% WR (6 trades)\n   - OBI [-0.5, 0.0): 60.0% WR (5 trades)\n   - OBI [0.0, 0.5): 80.0% WR (10 trades)\n   - OBI [0.5, 1.0): 33.3% WR (6 trades) \u2014 **strong buy-side imbalance = trap**\n   - Sample is small (27 trades with OBI data) but signal is extreme.\n\n3. **v5a BLOCK tag = 25% WR but trades STILL EXECUTE**\n   - v5a_tag is logged at line 201-202 of trading_bot.py but never used as an actual filter\n   - v5a=PASS: 71.4% WR (14 trades) vs v5a=BLOCK: 25.0% WR (4 trades)\n   - The v5a check (`abs(bias_score) >= 45`) aligns with finding #1 above\n\n4. **Entry price 0.54-0.56 is a dead zone: 40% WR**\n   - Sweet spot is 0.50-0.54 (61.4-61.5% WR)\n   - Current max_price=0.535 already handles this well\n\n5. **Last 30 trades: 70% WR** \u2014 recent performance trending up, bot parameters are improving\n\n6. **Hour analysis (with enriched data, n=27):** Hour 11 = 80% (10 trades), Hour 12 = 66.7% (12 trades). Hours 19-20 underperforming (50%/0% but tiny samples).\n\n**My thinking:** The single biggest leak is low-bias trades (|bias| < 45). These represent ~42% of all trades and collectively lose money. The v5a tag already identifies this but was never wired as a filter \u2014 it's just a log annotation. The OBI > 0.5 filter would catch another subset of losers. These two filters together would have blocked ~45 of the 83 losses while keeping most of the 108 wins.\n\n**Decision:** Three changes to implement (in priority order):\n1. **Raise bias_threshold from 25 \u2192 45** \u2014 this is the single most impactful change. Cuts 80 low-WR trades, keeps the 97 high-WR trades. Expected WR jumps from 56.5% \u2192 ~63%.\n2. **Add OBI > 0.5 as a hard block** \u2014 small sample but the signal is extreme (33% WR). Worth implementing as a filter with logging.\n3. **Lower max_bias from 70 \u2192 65** \u2014 the 65-70 bucket is 42.9% WR. Extreme bias = reversal territory.\n\nNOT implementing yet (waiting for more data):\n- v5a as hard filter (it's equivalent to bias_threshold=45, so change #1 covers this)\n- Hour 19/20 removal (sample too small at 5 trades)\n\n*",
   "pillar4": {
