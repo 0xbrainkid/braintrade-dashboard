@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-14T03:00:02.866635+00:00",
+  "timestamp": "2026-04-14T03:30:02.794990+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,22 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0631%",
+      "apr": "+69%",
+      "action": "SHORT",
+      "oi": "71,133,275"
+    },
+    {
+      "coin": "STABLE",
+      "rate": "-0.0541%",
+      "apr": "-59%",
+      "action": "LONG",
+      "oi": "111,460,406"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -76,13 +91,21 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 60,
+    "current_bias": "neutral",
+    "signal_confidence": 8,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 48 buys, 2 sells \u2014 avg price $0.637"
+        "text": "Top traders: 36 buys, 14 sells \u2014 avg price $0.945"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0631%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -330,7 +353,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "NEUTRAL consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -340,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
