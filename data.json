@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T17:46:23.400080+00:00",
+  "timestamp": "2026-04-21T17:59:27.741184+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0647%",
-      "apr": "+71%",
+      "rate": "+0.0545%",
+      "apr": "+60%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0647%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0545%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 17:47 UTC \u2014 [P4: Alpha Research] Fear & Greed Signal Fails as a Live Selector\n\n**Task:** Test whether Fear & Greed adds actionable edge to the current enriched PM trade dataset, and check whether it can help select better Polymarket entries right now.\n**Finding:**\n- Both bots are alive and PM is flat. Current market scans at 17 UTC show no actionable trade because the bot is outside active hours and observed bias remains below the live `45` threshold.\n- I tested all enriched YES trades with `fg_value` in `confidence_outcomes.jsonl`. The result is blunt: **all 37 enriched trades occurred in Extreme Fear (`fg_value <= 15`)**, with overall WR **62.2% (23/37)**.\n- Because the entire enriched sample sits inside the same F&G bucket, Fear & Greed currently provides **zero discrimination** across trades. It tells us the macro regime has been fear-heavy, but it does **not** separate winners from losers inside the live sample.\n- The real separation still comes from microstructure features, not F&G: `NORMAL` V5b tag is **85.7% WR (6/7)**, `REDUCE_MILD_BEAR` is **33.3% WR (1/3)**, and hour quality remains highly uneven (`11h 72.7%`, `12h 70.6%`, `19h 28.6%`).\n- I also checked a simple divergence proxy using BTC vs VWAP during fear. That also failed to become useful because **36 of 37** fear-tagged trades were below VWAP, so it still does not create a meaningful decision boundary.\n\n**My thinking:**\nThis is actually a good research result, even if it's not the sexy one. F&G looked promising as a macro overlay, but right now it is saturated. When one signal is pinned in the same state for the whole sample, wiring it into confidence scoring is just narrative inflation. The better move is to spend P4 effort on a feature that changes trade to trade, like liquidation bursts, VWAP distance magnitude, or short-term regime acceleration. The alpha is in what moves, not in what stays stuck at Extreme Fear for days.\n\n**Decision:**\n- **Do not wire Fear & Greed into live PM confidence scoring yet.** It is not discriminative enough in the current dataset.\n- Treat F&G as a dashboard/regime context signal only, not as an execution signal.\n- Promote a stronger P4 follow-up: build a **distance-from-VWAP / liquidation burst** feature that changes intra-session and can actually rank entries.\n\n**Next:** Backtest a new P4 feature using enriched trades plus regime/liquidation state: compare WR for entries taken during high liquidation-burst windows and for entries with larger BTC-to-VWAP dislocation. If either beats the current baseline by >5 percentage points, wire that into confidence scoring before reconsidering F&G.\n\n---\n## 2026-04-21 17:43 UTC \u2014 [P3: Strategy Development] 19h Session Edge Decay Review\n\n**Task:** Review live PM bot state, recent enriched outcomes, and current session behavior to decide whether the evening window still deserves capital or needs tightening.\n*",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 18:00 UTC \u2014 [P1: Copy Intelligence] Cross-Market Split: HL Leaders Bullish, PM Copy Wallets Still Chopping Micro Downside\n\n**Task:** Pull fresh external copy-intel from the HL leaderboard and PM wallet scanners, then compare what top traders are doing against our PM execution context.\n**Finding:**\n- Both bots are alive and PM remains flat. Live PM scan at 17:58 UTC still shows no trade because bias is stuck well under threshold while outside active hours.\n- Fresh HL leaderboard copy intel flipped meaningfully versus the earlier bearish snapshots in our log. Current consensus is **BTC 6L/3S bullish, ETH 6L/0S bullish, SOL 4L/5S bearish**.\n- The biggest leaderboard wallets are now materially risk-on in majors: `anon-0xecb6` holds **ETH LONG $13.2M + BTC LONG $13.2M**, `anon-0xfc66` flipped into **ETH LONG + PAXG LONG**, and `beatmaker1@proton.me` is back to **BTC LONG + ETH LONG + HYPE LONG**. That is a clear change from the Apr 5 snapshot where BTC/ETH consensus was bearish.\n- PM wallet scans tell a different story. The active crypto Up/Down wallets are mostly firing on ultra-short 5-minute contracts, and the recent top-wallet feed shows repeated **BUY Down around $0.68-$0.69** on 1:45PM-2:00PM style markets, alongside a few opportunistic `BUY Up` prints from `Late-Grammar` around **$0.33-$0.43**.\n- That means the best PM copy wallets are not expressing the same swing view as HL leaderboard traders. They are harvesting local microstructure and often buying expensive downside for tiny windows, not building durable directional exposure.\n\n**My thinking:**\nThis is the exact kind of split that matters. HL leaders are giving us the broader directional map, and right now that map leans bullish BTC/ETH. PM copy wallets are still useful, but only as execution texture, not as regime truth. If I blindly copy PM wallet flow, I risk inheriting short-horizon noise that conflicts with the stronger cross-market signal. The right hierarchy is: **use HL consensus for macro directional bias, use PM copy flow only to avoid bad entry zones or identify crowded short-term fades**.\n\n**Decision:**\n- Promote a new copy-intel rule: **treat HL leaderboard major-coin consensus as the higher-order directional prior** for PM research, especially when BTC and ETH align bullish like they do now.\n- Do **not** use PM copy-wallet downside buying as a directional veto. Those wallets are trading 5-minute chop, not necessarily forecasting the next meaningful BTC leg.\n- For the next PM strategy pass, I want to test whether morning YES trades perform better when HL BTC consensus is net-long than when consensus is mixed or short.\n\n**Next:** Build a simple join between `leaderboard-state.json` snapshots and PM outcomes: compare PM WR on days when HL BTC consensus is net bullish vs bearish. If the uplift is real, wire HL consensus in as a regime prior rather than a direct entry trigger",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
