@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T19:44:52.954098+00:00",
+  "timestamp": "2026-04-21T19:59:17.921804+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0755%",
-      "apr": "+83%",
+      "rate": "+0.0828%",
+      "apr": "+91%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0755%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0828%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 19:46 UTC \u2014 [P3: Strategy Development] 19h Churn Confirms the Real Edge Is Doing Nothing\n\n**Task:** Use the now-complete live 19h tape to test whether the evening strategy candidate still holds up after a full session of real observations, not just an early-window sample.\n**Finding:**\n- Both bots are alive and the PM bot is behaving correctly in the live 19h window.\n- The full 19h session so far has produced **44 `BIAS_TOO_WEAK` rejections**, **0 executed trades**, and a maximum observed absolute bias of only **41.5**. Average rejected bias is just **19.25**.\n- Market structure is dead-flat. Across the rejected 19h windows, average prices were **Y 0.5027 / N 0.4973**, with ranges only **0.495-0.505** on each side. This is literal 50/50 churn, not an edge market.\n- Historical evening outcomes still support selectivity. Even in the enriched Apr 1+ sample, evening trades at threshold are fragile: `th=45` gives only **37.5% WR**, `th=50` gives **42.9% WR**, and `th=55` gives **40.0% WR** before layering in the V5b quality filter. The real lift came from **combining** tighter thresholding with weak-tag blocking, not from bias alone.\n- PM copy flow is now actively unhelpful. Recent top-wallet signals are **30 Up / 0 Down** with average entry price **0.8619** on tiny micro contracts. That is not alpha, it is crowding at terrible prices.\n\n**My thinking:**\nThis is the strongest live confirmation yet that the evening strategy problem is not \u201cwe need to catch more trades,\u201d it is \u201cwe need to avoid boredom trades in coin-flip microstructure.\u201d Tonight the bot\u2019s edge is the refusal to participate. The copy crowd piling into 0.86+ Up tickets while our model sees 0.495-0.505 equilibrium is exactly the kind of setup where restraint is profitable. I\u2019m glad we caught this in real time because it sharpens the strategy thesis: the evening filter is not merely defensive, it is the strategy.\n\n**Decision:**\n- Keep the leading evening candidate unchanged: **19h/20h should require stronger bias and block weak V5b tags.**\n- Add one more strategic conclusion: when live 19h prices stay pinned near **0.50/0.50** and bias never clears **45**, the correct response is a full stand-down, not adaptive loosening.\n- No live code edits this heartbeat. The next implementation pass should explicitly preserve this \u201cdo nothing in churn\u201d behavior.\n\n**Next:** Convert the current evening research into a deploy-ready patch/spec that bundles: session-specific thresholding, weak-tag blocking, and explicit preservation of no-trade behavior in 0.495-0.505 churn regimes.\n\n---\n## 2026-04-21 19:17 UTC \u2014 [P2: Smart Entry] Live 19h Stand-Down Validates Evening Tightening\n\n**Task:** Use the live 19h session to verify whether the evening-tightening ideas would actually change behavior tonight, or whether the bot is already correctly standing down.\n**Finding:**\n- Both bots are alive and the PM bot i",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 19:59 UTC \u2014 [P4: Alpha Research] Churn Regime Identified as a Negative Alpha Signal\n\n**Task:** Turn the evening \u201cdo nothing\u201d thesis into a measurable alpha-pipeline feature by testing whether near-50/50 pricing really marks a negative-expectancy regime.\n**Finding:**\n- Both bots are alive and the PM bot continues to stand down correctly in the live 19h session.\n- The historical enriched dataset now gives a usable churn signal proxy: trades entered in the **tight 0.495-0.505 band** are clearly worse than everything else.\n  - **0.495-0.505:** 4 trades, **25% WR**, total `pnl = -2.019`\n  - **0.505-0.515:** 2 trades, **100% WR**, `pnl = +1.922`\n  - **> 0.515:** 28 trades, **64.3% WR**, `pnl = +6.521`\n  - **< 0.495:** 3 trades, **66.7% WR**, `pnl = +1.043`\n- By hour, the churn band is especially bad in the evening: **19h churn-band trades are 0% WR (0/2)** in the enriched sample.\n- Live validation is strong. In the current 19h session, **50 of 57** rejected setups occurred in that same true-churn structure where both sides sat inside **0.495-0.505**. The remaining 7 were only mildly off-center at **0.515/0.485**, still not strong enough to clear bias thresholds.\n- PM copy flow remains a contrary warning rather than alpha: latest top-wallet feed is **30 Up / 0 Down** at average price **0.8619**, which is exactly the kind of crowding that should make us more selective, not less.\n\n**My thinking:**\nThis is the first new P4 signal today that actually has teeth. Unlike Fear & Greed, which was saturated, and liquidation history, which lacked coverage, the churn feature shows both historical separation and live relevance. Near-50/50 prices are not \u201cneutral opportunity,\u201d they are a negative-alpha zone where the market is saying there is no edge and the crowd is still trying to force one. That makes churn itself a useful feature, especially for evening sessions where overtrading is the main risk.\n\n**Decision:**\n- Promote **churn regime** as a real alpha-pipeline candidate for PM confidence scoring.\n- Working definition: if both YES and NO are sitting in the **0.495-0.505 band**, treat that as a hard no-trade regime unless another independently validated feature overrides it.\n- This should complement, not replace, the evening bias and V5b filters.\n\n**Next:** Convert this into a deployable spec or patch candidate: add an explicit churn filter to the evening session logic, then backtest whether combining `churn block + evening bias >= 55 + weak-tag block` further improves expectancy over the current leading candidate.\n\n---\n## 2026-04-21 19:46 UTC \u2014 [P3: Strategy Development] 19h Churn Confirms the Real Edge Is Doing Nothing\n\n**Task:** Use the now-complete live 19h tape to test whether the evening strategy candidate still holds up after a full session of real observations, not just an early-window sample.\n**Finding:**\n- Both bots are alive and the PM bot is beh",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
