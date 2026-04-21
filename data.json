@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T20:30:01.710759+00:00",
+  "timestamp": "2026-04-21T20:45:03.627380+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0634%",
-      "apr": "+69%",
+      "rate": "+0.0669%",
+      "apr": "+73%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0634%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0669%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 20:16 UTC \u2014 [P1: Copy Intelligence] HL Consensus Flips Bearish While PM Copy Flow Stays Overpriced and Noisy\n\n**Task:** Pull a fresh copy-intel read after the 19h session matured, then compare late-session HL leader positioning against top PM wallet behavior to see which crowd is actually informative.\n**Finding:**\n- Both bots are alive and PM remains flat. The bot is still correctly standing down because the market has not produced a valid setup.\n- Fresh HL leaderboard intel has now **shifted materially** from the earlier bullish stance. Current consensus is **BTC 4L/5S bearish, ETH 3L/3S neutral, SOL 3L/6S bearish**.\n- The shift is visible in major wallets: `anon-0xf5d8` flipped back to **BTC SHORT + SOL SHORT + HYPE SHORT**, `anon-0xff4c` flipped **BTC LONG\u2192SHORT**, and the aggregate SOL posture is now clearly net short. `anon-0xecb6` remains the main bullish holdout with huge BTC and ETH longs, but overall leader consensus has cooled sharply.\n- PM top-wallet flow is still not useful as direct directional guidance. The latest 50 signals average **0.9579** entry price, with **20 Up / 26 Down**, meaning top wallets are trading tiny windows at near-fully-priced contracts on both sides.\n- The finished PM copy scan is even worse on price quality: top \u201cprofitable\u201d wallets are clustering around **0.94 to 0.999** average prices, and recent prints include things like:\n  - `Creative-Parcel` **SELL Up @ 0.999**\n  - `Minty-Bicycle` **BUY Up @ 0.940**\n  - `Shameful-Arena` **BUY No @ 0.999**\n- That is microstructure harvesting and expiry pinning, not transferable alpha for our PM strategy.\n\n**My thinking:**\nThis is exactly why P1 matters. The copy crowd is not one thing. HL leaders are giving us a real state change, from bullish majors earlier to bearish BTC/SOL now. PM copy wallets are just fighting over crumbs in nearly resolved contracts. If I copied PM flow literally, I would inherit terrible prices. If I ignore HL flow, I miss the actual directional shift. So the hierarchy stays the same, but tonight it matters more: **HL consensus changed, PM copy flow did not become smarter.**\n\n**Decision:**\n- Update copy-intel stance: treat the current macro prior as **BTC/SOL cautious-to-bearish**, not bullish.\n- Keep rejecting PM copy-wallet flow as direct entry guidance whenever prices are already above ~0.90 or otherwise near resolution.\n- This does not justify a live PM trade by itself, but it does weaken any temptation to chase upside in the next session.\n\n**Next:** Compare PM bot performance on days where HL BTC consensus flips intraday. If regime-flip days correlate with weaker PM evening edge, use that as another reason to tighten or disable evening participation during consensus transitions.\n\n---\n## 2026-04-21 19:59 UTC \u2014 [P4: Alpha Research] Churn Regime Identified as a Negative Alpha Signal\n\n**Task:** Turn the evening \u201cdo nothing\u201d thesis into a measu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 20:46 UTC \u2014 [P2: Smart Entry] 20h Session Fails the Keep-Test\n\n**Task:** Re-evaluate whether 20h still deserves to be an active PM trading hour using the enriched Apr 1+ dataset plus tonight\u2019s live 20h tape.\n**Finding:**\n- Both bots are alive and the PM bot remains flat through 20h, which is correct given the tape.\n- The enriched dataset now argues against keeping 20h in the active set:\n  - **11/12/19/20:** 37 trades, **62.2% WR**, `pnl = 7.466`\n  - **11/12/19:** 35 trades, **62.9% WR**, `pnl = 7.525`\n  - **11/12/20:** 30 trades, **70.0% WR**, `pnl = 10.583`\n  - **11/12 only:** 28 trades, **71.4% WR**, `pnl = 10.642`\n- That means the weakest contributor in the current enriched sample is **not just 19h, it is the entire evening block, with 20h adding almost no edge and slightly degrading results versus removing it.**\n- The live 20h session tonight is a complete stand-down regime:\n  - **45 `BIAS_TOO_WEAK` rejections**\n  - max observed bias **41.5**\n  - average rejected bias **19.34**\n  - **45/45 rejections** occurred in the churn structure, with both sides pinned inside **0.495-0.505**.\n- Actual enriched 20h trade history is tiny and unimpressive:\n  - `2026-04-01 20:05` LOSS at bias **-65.8**, entry **0.5253**, cooldown `BLOCK`\n  - `2026-04-06 20:05` WIN at bias **-54.9**, entry **0.5151**, tag `NORMAL`, cooldown `PASS`\n- So 20h currently has only **one win and one loss**, and tonight\u2019s live market offers zero evidence that it deserves capital.\n\n**My thinking:**\nI\u2019m more confident now that we should stop treating 20h as sacred just because it once belonged in the winning hour set. The market changed. The current data says mornings carry the bot, while late-session participation adds noise and churn. If I remove 20h, I simplify execution and improve the quality bar without touching the healthy 11h/12h engine. That is exactly the kind of smart-entry tightening we want.\n\n**Decision:**\n- Promote a stronger smart-entry candidate: **remove 20h from active hours**, or at minimum disable it until fresh evidence says it regained edge.\n- Current recommended hour hierarchy is now:\n  1. **11h, 12h** = core edge\n  2. **19h** = only with tight bias + weak-tag blocking\n  3. **20h** = remove or hard-disable for now\n- No live code edit this heartbeat, but this is now a serious deploy candidate, not just exploratory analysis.\n\n**Next:** Backtest the combined best-known setup: active hours `[11,12,19]`, evening `|bias| >= 55`, block weak evening V5b tags, and churn filter. If that beats the broader configuration, write it up as the next live deploy spec.\n\n---\n## 2026-04-21 20:16 UTC \u2014 [P1: Copy Intelligence] HL Consensus Flips Bearish While PM Copy Flow Stays Overpriced and Noisy\n\n**Task:** Pull a fresh copy-intel read after the 19h session matured, then compare late-session HL leader positioning against top PM wallet behavior to see which crowd is actually info",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
