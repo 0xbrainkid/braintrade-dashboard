@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T17:30:01.424760+00:00",
+  "timestamp": "2026-04-21T17:45:03.733839+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0674%",
-      "apr": "+74%",
+      "rate": "+0.0666%",
+      "apr": "+73%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0674%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0666%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-06 18:09 UTC \u2014 [P4: Alpha Research] FGI-Price Divergence Analysis: Extreme Fear at $69.5K = Contrarian Signal\n\n**Task:** Analyze the Fear & Greed Index vs BTC price divergence as a potential alpha signal, cross-reference with our squeeze detector, regime classifier, and PM copy-trader behavior.\n\n**Finding:**\n- **FGI has been Extreme Fear (8-13) for 7 straight days** while BTC recovered from $66K to $69.5K \u2014 a textbook bullish divergence. Crowd is terrified but price is climbing.\n- **Squeeze detector: 100/100 LONG_SQUEEZE for 50 consecutive readings.** Funding rate positive (0.0004-0.0055%), 10-period positive streak, L/S ratio 1.026 and declining. This means longs are crowded but the squeeze hasn't fully resolved \u2014 shorts are slowly covering.\n- **Regime classifier: BTC spent most of today in RANGE (score 1-2)** with brief TREND spikes to $70,123 at 16:45 UTC. The 4h trend flipped negative after 17:00, suggesting the $70K push failed to sustain. Currently MIXED at $69,539.\n- **PM copy-traders are bullish short-term:** 23 BUY_Up signals vs 0 sells on the 1:45-2:00PM 5-min market. Top wallets trading at $0.96-0.99 avg prices \u2014 high-conviction plays. But these are 5-min micro-markets, not directional bets.\n- **PM action distribution:** 57% TRADE, 25% STOP, 18% REDUCE_SIZE \u2014 bot is mostly active but getting frequent STOP signals during trend breakouts (correctly avoiding chasing).\n\n**My thinking:**\nThe FGI-price divergence is the most interesting alpha signal I've found today. When fear is this extreme (sub-15) but price is recovering, historically that's a strong buy zone. The problem: our squeeze detector has been screaming LONG_SQUEEZE at 100/100 for hours, meaning longs are packed in. So we have conflicting signals:\n- Macro: FGI says buy the fear (bullish)\n- Micro: Squeeze says longs are crowded (bearish short-term)\n- Resolution: This is likely a \"pain trade up\" setup \u2014 enough fear to keep retail out, but longs that will get squeezed on any dip below $69K, which then gets bought aggressively because the macro setup is bullish.\n\nFor PM: The regime classifier giving TRADE action 57% of the time in RANGE regime means our bot is getting plenty of opportunities. The key improvement would be to weight FGI into the bias score \u2014 when FGI < 15 AND price is above 7D low, increase bullish bias by +0.05.\n\n**Decision:**\n1. **New alpha signal identified:** FGI < 15 + price > 7D midpoint = contrarian bullish bias. Will wire this into bot confidence scoring in next P4 rotation.\n2. **Squeeze + FGI combo signal:** When squeeze is maxed (100/100) AND FGI is extreme fear, expect violent moves in EITHER direction \u2014 should reduce position size on 5-min markets and increase on directional markets.\n3. **Not changing parameters yet** \u2014 need to backtest the FGI overlay against our trade history first.\n\n**Next (P4):** Backtest FGI < 15 as a bullish bias modifier against ou",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 17:43 UTC \u2014 [P3: Strategy Development] 19h Session Edge Decay Review\n\n**Task:** Review live PM bot state, recent enriched outcomes, and current session behavior to decide whether the evening window still deserves capital or needs tightening.\n**Finding:**\n- Both bots are alive in screen (`pm-bot`, `hl-bot`), so infra is stable.\n- PM bot is currently flat and correctly refusing trades at 17 UTC because active hours remain `[11, 12, 19, 20]`. Market prices are oscillating around 0.505 to 0.545 with sub-threshold bias, so no immediate actionable Polymarket entry exists right now.\n- Recent enriched outcomes since Apr 1 show a sharp hour split: **11h = 72.7% WR (8/11), 12h = 70.6% WR (12/17), 19h = 28.6% WR (2/7), 20h = 50% WR (1/2)**.\n- The weak cluster is concentrated in the evening session, especially 19h. Apr 6 produced back-to-back 19h losses, and Apr 7 added another 19h loss. That means V5a did not fix the evening leak by itself.\n- V5b shadow tags also separate risk well: `NORMAL` is **85.7% WR (6/7)**, `REDUCE_MILD_BEAR` is **33.3% WR (1/3)**, and `BOOST` is **0% WR (0/2)** in the enriched sample. Evening losses are sitting inside the weak-tag bucket, which supports smaller size or blocking in that regime.\n- V6 cooldown shadow remains directionally useful but not enough alone. The larger issue is session quality decay at 19h, not just back-to-back timing.\n\n**My thinking:**\nThe strategy is no longer one clean four-hour edge. Morning still works. Evening has decayed into low-quality flow, likely because the microstructure around US hours now creates fast repricing and weaker fade setups. If I keep treating 19h the same as 11h and 12h, I\u2019m allocating capital to the worst-performing slice of the day. That\u2019s dead weight. The strongest immediate adaptation is not a full shutdown of evenings yet, but a **conditional 19h throttle** tied to the V5b sizing signal. If 19h is already weak and `REDUCE_MILD_BEAR` is the worst tag in the sample, then letting full-size 19h trades through is unnecessary risk.\n\n**Decision:**\n- Keep the bot live and keep current hours for now, but the next strategy change should be **19h risk compression**, not more broad parameter drift.\n- Specifically, I\u2019m promoting a new P3 candidate: **block or half-size 19h trades when V5b tag is `REDUCE_MILD_BEAR` or `BOOST`**. That targets the exact losing cluster without sacrificing the still-healthy 11h/12h edge.\n- No live code change this heartbeat because I want the next P2/P3 pass to backtest this conditional hour+tag rule before deployment.\n\n**Next:** Backtest a conditional evening rule on the full enriched dataset: compare baseline vs (a) remove 19h entirely, (b) keep 19h but block `REDUCE_MILD_BEAR`, (c) keep 19h but halve all 19h size. Deploy the best capital-efficiency variant if it improves net expectancy without gutting trade count.\n\n---\n## 2026-04-06 18:09 UTC \u2014 [P4: Alpha",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
