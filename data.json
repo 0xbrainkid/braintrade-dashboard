@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T22:30:02.541123+00:00",
+  "timestamp": "2026-04-21T22:36:09.526455+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0763%",
-      "apr": "+83%",
+      "rate": "+0.0753%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0763%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0753%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:30 UTC \u2014 [P4: Alpha Research] Copy-Crowding Divergence Confirmed by Post-Session Tape\n\n**Task:** Re-test the copy-crowding divergence idea against the fully post-session market to see whether it holds beyond a single noisy snapshot.\n**Finding:**\n- Both bots are alive and PM remains flat after active hours, with no missed execution.\n- The post-session tape is pure midpoint churn: **87 out of 87** logged 21h/22h outside-active-hour windows sat in the midpoint structure, with both YES and NO inside the `0.495-0.505` zone.\n- Meanwhile, top PM wallet behavior remained aggressively crowded and overpriced. The latest 50 copy signals show:\n  - average price **0.9763**\n  - **47 Up / 2 Down**\n  - **43 sells**\n  - **50/50** signals at `>= 0.75`\n- The actual prints are classic expiry-harvesting noise, not transferable alpha: repeated `SELL Up @ 0.99+`, plus scattered `BUY Up` around `0.79-0.83` on short-horizon contracts.\n- This is exactly the divergence we care about:\n  - **Local market state:** dead-flat midpoint churn, no edge\n  - **Copy-wallet state:** frantic trading at rich prices near expiry\n- That means the copy-crowding feature is surviving contact with more data. It is not just a one-snapshot curiosity.\n\n**My thinking:**\nThis is the confirmation I wanted. The real informational value of PM copy wallets is not \u201cfollow them,\u201d it is \u201cnotice when they are doing something that looks impossible to justify from local market structure.\u201d When the book says 50/50 and the crowd is still paying 0.98 to play micro contracts, that is a clean sign of noise, expiry games, or crowding. For our bot, that should tighten filters, not create FOMO.\n\n**Decision:**\n- Upgrade **copy-crowding divergence** from tentative idea to a serious P4 feature candidate.\n- Working rule is getting clearer: if local PM prices stay midpoint/churn while recent top-wallet copy flow is one-sided and rich (for example, `avg_price >= 0.75`), treat that as a **negative-alpha environment** for discretionary participation.\n- Keep it as a risk-off or confidence-reduction layer, not a direct trade trigger.\n\n**Next:** Add lightweight logging or state capture so each PM decision loop stores local copy-crowding metrics (`avg copy price`, directional skew, sell ratio). Then backtest whether those regimes correlate with lower PM trade quality and should actively reduce or block participation.\n\n---\n## 2026-04-21 22:16 UTC \u2014 [P3: Strategy Development] V7 Evening Prune Deploy Spec Written\n\n**Task:** Convert the best-performing strategy configuration from today\u2019s research into a concrete deploy artifact instead of leaving it as scattered findings.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours. No live execution is being missed.\n- I wrote a formal deploy spec at `/home/ubuntu/clawd/patches/v7-evening-prune.spec.md`.\n- The spec captures the strongest combined configuratio",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:31 UTC \u2014 [P1: Copy Intelligence] PM Crowd Cluster Is Repeating Identical Micro-Expiry Prints\n\n**Task:** Go beyond the broad copy-crowding read and inspect whether a specific PM wallet cluster is repeatedly trading the same micro-expiry structures in a way that should be treated as non-informational.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The latest PM copy stream is highly clustered, not diverse. It is dominated by repeated identical prints on a tiny set of micro-expiry contracts.\n- Strong examples from the latest recent-signal set:\n  - **30 prints** on `Bitcoin Up or Down - April 21, 6:25PM-6:30PM ET`, all **`BUY Up @ 0.67`**\n  - **10 prints** on `Bitcoin Up or Down - April 21, 6:20PM-6:25PM ET`, all **`SELL Up @ 0.999`**\n  - **5 prints** on `Bitcoin Up or Down - April 21, 6PM ET`, all **`BUY Down @ 0.83`**\n  - **5 prints** on `Bitcoin Up or Down - April 21, 6:15PM-6:30PM ET`, all **`BUY Down @ 0.997`**\n- Individual wallets are also highly one-note:\n  - `Adorable-Paranoia`: **5x SELL Up @ 0.999** on one market, **$1,165** total\n  - `Late-Grammar`: **5x BUY Up @ 0.67** on one market, **$486** total\n  - multiple other wallets repeated the exact same `BUY Up @ 0.67` behavior on the same contract\n- This does not look like independent directional discovery. It looks like clustered expiry-gaming, copy chains, or synchronized crowd behavior around a few late-stage contracts.\n\n**My thinking:**\nThis sharpens the PM copy conclusion. The problem is not merely that PM copy traders are often crowded. The deeper issue is that the recent top-wallet stream can collapse into **identical replicated prints** on one or two contracts. That makes the flow structurally low-information for our directional bot. If ten wallets are all doing the same thing at the same price on the same micro-expiry market, that is closer to crowd mechanics than edge.\n\n**Decision:**\n- Treat repeated identical PM copy clusters as **anti-signal / ignore-signal** behavior, not followable directional intelligence.\n- This strengthens the case for using PM copy flow only as a crowding-risk overlay, while keeping HL leaderboard state as the better macro directional prior.\n\n**Next:** Add a lightweight cluster metric to the copy pipeline, for example: dominant-title share, dominant `(side, outcome, price)` share, and repeated-wallet concentration. Then test whether high-cluster regimes correlate with worse PM signal quality and should suppress bot confidence.\n\n---\n## 2026-04-21 22:30 UTC \u2014 [P4: Alpha Research] Copy-Crowding Divergence Confirmed by Post-Session Tape\n\n**Task:** Re-test the copy-crowding divergence idea against the fully post-session market to see whether it holds beyond a single noisy snapshot.\n**Finding:**\n- Both bots are alive and PM remains flat after active hours, with no missed execution.\n- The post-session tape is pure midpoint ch",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
