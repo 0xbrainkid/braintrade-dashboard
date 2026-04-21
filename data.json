@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T23:30:02.425766+00:00",
+  "timestamp": "2026-04-21T23:45:12.979429+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0812%",
-      "apr": "+89%",
+      "rate": "+0.0700%",
+      "apr": "+77%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0812%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0700%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 23:15 UTC \u2014 [P4: Alpha Research] Copy-Cluster Regime Persists Into 23h, Not Just 22h Noise\n\n**Task:** Test whether the new copy-cluster regime is just a late-evening 22h artifact or whether it persists into subsequent post-session tape, which would make it a more credible general churn marker.\n**Finding:**\n- Both bots are alive and PM remains correctly flat.\n- The 23h local PM tape stayed structurally dead:\n  - **14/14** logged 23h windows remained in midpoint churn\n  - only **2** windows even reached `|bias| >= 40`\n  - **0** windows reached `|bias| >= 45`\n  - max observed bias was **40.5**\n- Meanwhile, the latest PM copy scan stayed highly clustered and overpriced:\n  - **50 recent signals**\n  - dominant-title share = **0.74**\n  - dominant-triple share = **0.38**\n  - average price = **0.968**\n- The dominant title alone accounted for **37 of 50** recent prints on `Bitcoin Up or Down - April 21, 6:45PM-7:00PM ET`.\n- So the copy-cluster signature did not fade with time. It actually intensified on the title dimension while the local market remained completely non-actionable.\n\n**My thinking:**\nThis matters. If clustered PM copy flow had quickly dissipated once the 22h noise passed, I would treat it as a narrow artifact. But it persisted into 23h while the local book stayed pinned at 50/50. That makes it more plausible that clustered-copy is a general marker of bad PM microstructure, not just one messy snapshot. It still needs active-hour validation, but the regime itself looks real.\n\n**Decision:**\n- Increase confidence in the **copy-cluster regime** as a real negative-alpha state marker.\n- Keep treating it as a secondary protective signal, not a standalone entry engine.\n- Preserve the current research direction: wire the metrics first, validate during active sessions later.\n\n**Next:** Compare next available active-session copy scans against real decision windows to see whether clustered-copy ever appears during tradable hours, or whether it is mostly a post-session phenomenon that should only modulate after-hours inference.\n\n---\n## 2026-04-21 22:59 UTC \u2014 [P3: Strategy Development] V7b Copy-Cluster Guard Spec Written\n\n**Task:** Turn the new PM copy-cluster findings into a deployable strategy artifact so the next coding pass can implement the guardrail directly instead of reconstructing it from notes.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- I wrote a new secondary strategy spec at `/home/ubuntu/clawd/patches/v7b-copy-cluster-guard.spec.md`.\n- The spec defines a measurable clustered-copy regime using:\n  - `dominant_title_share >= 0.40` or\n  - `dominant_triple_share >= 0.40`\n- It explicitly frames the feature as a **risk-off guardrail**, not a directional trigger.\n- It also defines a conservative rollout path: first expose metrics and shadow-log the flag, then consider conviction reduction or churn-blo",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 23:45 UTC \u2014 [P1: Copy Intelligence] Late PM Structure Shift Drew More Bullish Copy Crowding, Not Cleaner Alpha\n\n**Task:** Check whether the first meaningful late-session PM structure shift, from `0.505/0.495` to `0.485/0.515`, was accompanied by more informative copy flow or just a new wave of crowding.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The live tape finally showed a real structural change late in 23h:\n  - prices moved from the long-running `Y0.505 / N0.495` state to `Y0.485 / N0.515`\n  - bias also jumped materially, with prints at **51.9**, **49.2**, **47.8**, then later **50.8**, **51.0**, and **69.5**\n- So the market did briefly become more directional, even though it stayed outside active hours.\n- PM copy flow responded, but not in a way that makes it look more trustworthy:\n  - latest recent signals: **44 bullish vs 6 bearish**\n  - average price still rich at **0.845**\n  - top title concentration remained high:\n    - `Bitcoin Up or Down - April 21, 7:30PM-7:45PM ET` = **24** signals\n    - `Bitcoin Up or Down - April 21, 7PM ET` = **19** signals\n  - dominant repeated prints were still clustered:\n    - **19x `BUY Up @ 0.94`**\n    - **9x `BUY Up @ 0.81`**\n    - **6x `BUY Up @ 0.83`**\n    - **6x `BUY Up @ 0.82`**\n- So copy flow did rotate with the move, but it rotated into **bullish crowding**, not into a cleaner, more distributed information signal.\n\n**My thinking:**\nThis is an important nuance. I do not want to say PM copy flow is always useless. It clearly reacts to changing structure. But when it reacts, it still tends to do so by piling into a small set of rich bullish prints rather than expressing broad, independent discovery. That means the flow is reactive and can confirm crowd appetite, but it still does not look like a primary directional oracle.\n\n**Decision:**\n- Upgrade the PM copy read from \u201cignore entirely\u201d to a more precise framing:\n  - it is a **crowd-reaction monitor**, not a directional leader\n  - when local PM structure shifts, copy flow may amplify the move, but usually in crowded form\n- Keep HL state as the better macro prior, and keep PM copy flow in the role of crowding/risk texture.\n\n**Next:** On the next active trading window, compare PM copy-cluster metrics at the exact decision timestamps against live bias and price moves to see whether clustered-copy ever helps distinguish a valid breakout from a crowd chase.\n\n---\n## 2026-04-21 23:15 UTC \u2014 [P4: Alpha Research] Copy-Cluster Regime Persists Into 23h, Not Just 22h Noise\n\n**Task:** Test whether the new copy-cluster regime is just a late-evening 22h artifact or whether it persists into subsequent post-session tape, which would make it a more credible general churn marker.\n**Finding:**\n- Both bots are alive and PM remains correctly flat.\n- The 23h local PM tape stayed structurally dead:\n  - **14/14** logged 23h windows remained in m",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
