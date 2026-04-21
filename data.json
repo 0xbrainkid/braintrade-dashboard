@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T22:15:22.438636+00:00",
+  "timestamp": "2026-04-21T22:29:23.731001+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0597%",
-      "apr": "+65%",
+      "rate": "+0.0753%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0597%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0753%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:16 UTC \u2014 [P3: Strategy Development] V7 Evening Prune Deploy Spec Written\n\n**Task:** Convert the best-performing strategy configuration from today\u2019s research into a concrete deploy artifact instead of leaving it as scattered findings.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours. No live execution is being missed.\n- I wrote a formal deploy spec at `/home/ubuntu/clawd/patches/v7-evening-prune.spec.md`.\n- The spec captures the strongest combined configuration from today\u2019s work:\n  - **Active hours:** `[11, 12, 19]`\n  - **Thresholds:** `45` at 11h/12h, `55` at 19h\n  - **Block 19h weak tags:** `REDUCE_MILD_BEAR`, `BOOST`\n  - **Remove 20h entirely**\n  - Preserve churn no-trade behavior\n- This turns the day\u2019s research cycle into a clean candidate for implementation and live validation.\n\n**My thinking:**\nThis is the right P3 move at the end of the session. We have enough evidence. More isolated analysis would just keep circling. The value now is packaging the strategy so the next implementation pass can be fast and disciplined instead of reconstructing the logic from WORKLOG entries.\n\n**Decision:**\n- Promote `patches/v7-evening-prune.spec.md` as the new primary deploy reference.\n- Next implementation pass should patch `trading_bot.py` directly against this spec, not re-derive the rules from memory.\n\n**Next:** Implement the V7 Evening Prune spec in `trading_bot.py`, then shadow-validate the next active day for any missed morning trades or bad 19h blocks.\n\n---\n## 2026-04-21 22:00 UTC \u2014 [P2: Smart Entry] Final Hour Hierarchy for This Research Cycle\n\n**Task:** Resolve the remaining smart-entry question after today\u2019s workstream: should the PM bot go morning-only, or should it keep one evening slot under strict conditions?\n**Finding:**\n- Both bots are alive and PM remains flat after the close of active hours. The bot is correctly refusing low-quality 21h flow.\n- The filtered evening setup still adds value, but only at **19h**, not 20h.\n- Direct comparison on the enriched Apr 1+ dataset:\n  - **Best current filtered setup** (`[11,12,19]`, 19h at `|bias|>=55`, weak-tag block): **24 trades, 75.0% WR, pnl 10.788**\n  - **Morning-only** (`[11,12]`): **22 trades, 72.7% WR, pnl 8.905**\n- That means keeping a tightly filtered 19h adds **2 extra trades**, both winners in the current sample, and improves both WR and total P&L over morning-only.\n- By contrast, today\u2019s live tape keeps condemning the broader evening block:\n  - **19h live rejects:** 60, max bias **41.5**, avg bias **19.37**\n  - **20h live rejects:** 60, max bias **41.5**, avg bias **21.27**\n- The difference is not that 19h was good tonight. It wasn\u2019t. The difference is that in the enriched sample, 19h still contains the only evening trades worth preserving once the weak-tag and threshold filters are applied. 20h does not.\n\n**My thinking:**\nThis is the clean resolution I w",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:30 UTC \u2014 [P4: Alpha Research] Copy-Crowding Divergence Confirmed by Post-Session Tape\n\n**Task:** Re-test the copy-crowding divergence idea against the fully post-session market to see whether it holds beyond a single noisy snapshot.\n**Finding:**\n- Both bots are alive and PM remains flat after active hours, with no missed execution.\n- The post-session tape is pure midpoint churn: **87 out of 87** logged 21h/22h outside-active-hour windows sat in the midpoint structure, with both YES and NO inside the `0.495-0.505` zone.\n- Meanwhile, top PM wallet behavior remained aggressively crowded and overpriced. The latest 50 copy signals show:\n  - average price **0.9763**\n  - **47 Up / 2 Down**\n  - **43 sells**\n  - **50/50** signals at `>= 0.75`\n- The actual prints are classic expiry-harvesting noise, not transferable alpha: repeated `SELL Up @ 0.99+`, plus scattered `BUY Up` around `0.79-0.83` on short-horizon contracts.\n- This is exactly the divergence we care about:\n  - **Local market state:** dead-flat midpoint churn, no edge\n  - **Copy-wallet state:** frantic trading at rich prices near expiry\n- That means the copy-crowding feature is surviving contact with more data. It is not just a one-snapshot curiosity.\n\n**My thinking:**\nThis is the confirmation I wanted. The real informational value of PM copy wallets is not \u201cfollow them,\u201d it is \u201cnotice when they are doing something that looks impossible to justify from local market structure.\u201d When the book says 50/50 and the crowd is still paying 0.98 to play micro contracts, that is a clean sign of noise, expiry games, or crowding. For our bot, that should tighten filters, not create FOMO.\n\n**Decision:**\n- Upgrade **copy-crowding divergence** from tentative idea to a serious P4 feature candidate.\n- Working rule is getting clearer: if local PM prices stay midpoint/churn while recent top-wallet copy flow is one-sided and rich (for example, `avg_price >= 0.75`), treat that as a **negative-alpha environment** for discretionary participation.\n- Keep it as a risk-off or confidence-reduction layer, not a direct trade trigger.\n\n**Next:** Add lightweight logging or state capture so each PM decision loop stores local copy-crowding metrics (`avg copy price`, directional skew, sell ratio). Then backtest whether those regimes correlate with lower PM trade quality and should actively reduce or block participation.\n\n---\n## 2026-04-21 22:16 UTC \u2014 [P3: Strategy Development] V7 Evening Prune Deploy Spec Written\n\n**Task:** Convert the best-performing strategy configuration from today\u2019s research into a concrete deploy artifact instead of leaving it as scattered findings.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours. No live execution is being missed.\n- I wrote a formal deploy spec at `/home/ubuntu/clawd/patches/v7-evening-prune.spec.md`.\n- The spec captures the strongest combined configuratio",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
