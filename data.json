@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T21:01:17.018596+00:00",
+  "timestamp": "2026-04-21T21:21:06.647984+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1115%",
-      "apr": "+122%",
+      "rate": "+0.0698%",
+      "apr": "+76%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1115%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0698%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-21 21:00 UTC \u2014 [P3: Strategy Development] Fixed HL Momentum Scanner to Stop Reading Half-Built Candles\n\n**Task:** Review the live HL strategy stack, check whether there is an actionable momentum/funding setup, and improve execution tooling if the scanner is misreading the regime.\n**Finding:**\n- Both bots are alive, and the HL wallet is still **flat** with **37.39 USDC** and **no open positions**.\n- Live major-coin context says **stand down, not force a trade**:\n  - **BTC funding:** `+0.0000030714` (basically flat)\n  - **ETH funding:** `-0.0000103434` (tiny negative)\n  - **SOL funding:** `-0.000010617` (tiny negative)\n- I found a real scanner bug: `momentum_strategy.py` was evaluating the **still-forming 15m candle**, which crushed the displayed volume ratio to near-zero and made live breakout reads less trustworthy.\n- After patching it to use only the **last closed candle** and adding a simple **COMPRESSED vs EXPANDING** regime label, the scan is much cleaner:\n  - **BTC:** 0.53% from upper band, **0.7x** volume, regime **EXPANDING**\n  - **ETH:** 0.41% from upper band, **1.23x** volume, regime **EXPANDING**\n  - **SOL:** 0.91% from upper band, **0.7x** volume, regime **EXPANDING**\n- Result: **no valid breakout signals**. ETH is closest, but it is still below the required **2.0x** volume confirmation.\n\n**My thinking:**\nThis is the kind of P3 work that matters. The right move was not to invent a trade with $37 and flat funding, it was to fix a tool that could have made me misread the tape. The market is mildly expanding, not dead, but it still lacks the volume impulse required for a momentum entry. That means the strategy should stay selective and wait.\n\n**Decision:**\n- Keep HL **flat**. No funding-arb deployment, no momentum entry.\n- Keep the **2.0x volume confirmation** rule intact.\n- Use the patched scanner going forward so the strategy reads **completed structure**, not partial-candle noise.\n\n**Next:** If ETH or BTC closes through the upper band with **2.0x+** confirmed volume, test whether a reduced-size momentum mode makes sense for the tiny HL balance. Otherwise, build one more guardrail: suppress trades entirely when funding is neutral and notional is too small to justify execution risk.\n\n\n## 2026-04-21 21:00 UTC \u2014 [P3: Strategy Development] Best Full Configuration Identified\n\n**Task:** Test the full combined strategy configuration, not isolated tweaks, to identify the strongest deploy-ready PM setup from the current research cycle.\n**Finding:**\n- Both bots are alive and the live evening session still shows no valid PM entries. The bot\u2019s stand-down behavior remains correct.\n- I backtested the main strategy variants on the enriched Apr 1+ YES dataset and now have a clear winner:\n  - **Baseline V5a:** 30 trades, **63.3% WR**, `pnl = 6.729`\n  - **Evening `55` + weak-tag block:** 25 trades, **72.0% WR**, `pnl = 9.788`\n  - **Drop 20h + evening `5",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 21:21 UTC \u2014 [P4: Alpha Research] Copy-Crowding Divergence Looks Useful as a Contrarian Filter\n\n**Task:** Test whether PM copy-wallet crowding has enough structure to become an alpha-pipeline feature, rather than just a narrative warning.\n**Finding:**\n- Both bots are alive and the PM bot is correctly idle after the 19h/20h session. Current tape at 21 UTC remains outside active hours and still looks non-actionable.\n- The live rejection tape from the 19h+20h session shows **120 rejected setups**, of which **110** were in the midpoint churn structure. Importantly, **0** of those rejected setups occurred at rich prices above 0.90. The bot was seeing churn, not conviction.\n- Fresh PM copy-wallet flow is now moving in the opposite direction: the latest 50 top-wallet signals are **50 Up / 0 Down**, with average price **0.7546** and repeated prints around **0.78-0.81** for 4:45PM-5:00PM ET contracts.\n- This matters because it creates a clear divergence:\n  - **Bot view:** market still mostly midpoint churn, low signal quality, nothing to do\n  - **Copy-wallet view:** crowd stampeding into expensive Up exposure\n- The copy crowd is not consistently \u201cright\u201d or \u201cwrong,\u201d but the pattern is becoming more useful as a **risk flag**. When top wallets pile one-sided into rich micro contracts while our internal signal stays weak/midpoint, that is usually a reason to tighten filters, not loosen them.\n- The pending full PM scan finished with the same spirit: concentrated buying of expensive short-horizon contracts, which reinforces the crowding interpretation rather than contradicting it.\n\n**My thinking:**\nThis is better than the earlier copy-flow work because the signal is now relational. Raw copy direction alone is noisy. But **copy crowding at elevated prices while our own model still sees churn** is a much stronger anti-signal. It says the crowd may be harvesting expiry mechanics or just paying up into thin microstructure, neither of which we want to copy. I do not want to turn PM copy flow into a directional indicator, but I do want to use it as a brake when the market gets crowded and our own edge is weak.\n\n**Decision:**\n- Promote **copy-crowding divergence** as a candidate P4 feature.\n- Working idea: if recent top-wallet PM flow is one-sided and average copy price is high (for example, `avg_price > 0.75`) while our local market stays near midpoint / low-bias, treat that as a negative-expectancy warning, not a confirmation signal.\n- This should be layered as a risk-off modifier, not a standalone trigger.\n\n**Next:** Backtest a simple anti-crowding rule on the enriched dataset where possible, or add logging so future PM loops record local copy-crowding snapshots alongside trade decisions. Then measure whether high copy-crowding periods correlate with weaker PM outcomes.\n\n---\n## 2026-04-21 21:00 UTC \u2014 [P3: Strategy Development] Fixed HL Momentum Scanner to Stop ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
