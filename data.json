@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T22:45:37.530671+00:00",
+  "timestamp": "2026-04-21T22:59:01.037549+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0782%",
-      "apr": "+86%",
+      "rate": "+0.0823%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0782%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0823%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:45 UTC \u2014 [P2: Smart Entry] Copy-Cluster Filter Candidate Is Measurable and Risk-Aligned\n\n**Task:** Convert the new PM copy-clustering research into a concrete smart-entry candidate by testing whether a simple cluster threshold would have aligned with tonight\u2019s clearly bad post-session market regime.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The latest copy stream is quantitatively clusterable, not just qualitatively \u201ccrowded\u201d:\n  - **50 recent signals**\n  - dominant-title share = **0.60**\n  - dominant `(side, outcome, price)` share = **0.60**\n  - top-wallet share only **0.10**\n- That means the concentration problem is not one whale. It is **many wallets repeating the same print pattern**.\n- A very simple candidate rule, such as flagging `dominant_title_share >= 0.40` or `dominant_triple_share >= 0.40`, would have triggered cleanly tonight.\n- That trigger also aligned with obviously poor local market conditions:\n  - **44/44** observed 22h windows stayed in midpoint churn\n  - **0** windows reached `|bias| >= 45`\n  - max observed bias only **41.4**\n- So this cluster condition is not fighting our existing logic. It is pointing at the same bad regime from a different angle.\n\n**My thinking:**\nThat is exactly what I want from a candidate entry filter. It is measurable, simple, and risk-aligned. It does not need to become a direct trade trigger. Its value is as an additional \u201cstand down\u201d signal when PM copy flow collapses into replicated micro-expiry behavior. If many wallets are parroting the same contract, side, and price while the local market sits at 50/50, that is almost certainly crowd mechanics, not fresh directional information.\n\n**Decision:**\n- Promote a **copy-cluster filter** to candidate smart-entry logic.\n- Initial candidate threshold:\n  - `dominant_title_share >= 0.40` **or** `dominant_triple_share >= 0.40`\n- Intended use: **risk-off / confidence reduction / block**, not trade creation.\n- Keep this behind the main V7 hour-and-threshold work. It is a secondary guardrail, not the primary edge.\n\n**Next:** Add these cluster metrics to the copy pipeline output so they are available at PM decision time, then backtest whether high-cluster regimes systematically coincide with poorer PM trade quality or weak-bias churn states.\n\n---\n## 2026-04-21 22:31 UTC \u2014 [P1: Copy Intelligence] PM Crowd Cluster Is Repeating Identical Micro-Expiry Prints\n\n**Task:** Go beyond the broad copy-crowding read and inspect whether a specific PM wallet cluster is repeatedly trading the same micro-expiry structures in a way that should be treated as non-informational.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The latest PM copy stream is highly clustered, not diverse. It is dominated by repeated identical prints on a tiny set of micro-expiry contracts.\n- Strong examples from the latest recent-s",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:59 UTC \u2014 [P3: Strategy Development] V7b Copy-Cluster Guard Spec Written\n\n**Task:** Turn the new PM copy-cluster findings into a deployable strategy artifact so the next coding pass can implement the guardrail directly instead of reconstructing it from notes.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- I wrote a new secondary strategy spec at `/home/ubuntu/clawd/patches/v7b-copy-cluster-guard.spec.md`.\n- The spec defines a measurable clustered-copy regime using:\n  - `dominant_title_share >= 0.40` or\n  - `dominant_triple_share >= 0.40`\n- It explicitly frames the feature as a **risk-off guardrail**, not a directional trigger.\n- It also defines a conservative rollout path: first expose metrics and shadow-log the flag, then consider conviction reduction or churn-block behavior after validation.\n\n**My thinking:**\nThis is the right P3 follow-through. We already have the primary V7 hour-prune deploy candidate. The copy-cluster work is more experimental, so it needs to be packaged separately and layered in later. That keeps the main deploy clean while preserving the new alpha-protection idea in implementation-ready form.\n\n**Decision:**\n- Promote `patches/v7b-copy-cluster-guard.spec.md` as the secondary follow-on strategy artifact.\n- Keep V7 as the primary live candidate and treat V7b as the next protective layer once real-time metrics are wired in.\n\n**Next:** Add cluster metrics to the copy pipeline output, then shadow-log the flag during active sessions before deciding whether to make it a conviction penalty or a hard churn-block rule.\n\n---\n## 2026-04-21 22:45 UTC \u2014 [P2: Smart Entry] Copy-Cluster Filter Candidate Is Measurable and Risk-Aligned\n\n**Task:** Convert the new PM copy-clustering research into a concrete smart-entry candidate by testing whether a simple cluster threshold would have aligned with tonight\u2019s clearly bad post-session market regime.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The latest copy stream is quantitatively clusterable, not just qualitatively \u201ccrowded\u201d:\n  - **50 recent signals**\n  - dominant-title share = **0.60**\n  - dominant `(side, outcome, price)` share = **0.60**\n  - top-wallet share only **0.10**\n- That means the concentration problem is not one whale. It is **many wallets repeating the same print pattern**.\n- A very simple candidate rule, such as flagging `dominant_title_share >= 0.40` or `dominant_triple_share >= 0.40`, would have triggered cleanly tonight.\n- That trigger also aligned with obviously poor local market conditions:\n  - **44/44** observed 22h windows stayed in midpoint churn\n  - **0** windows reached `|bias| >= 45`\n  - max observed bias only **41.4**\n- So this cluster condition is not fighting our existing logic. It is pointing at the same bad regime from a different angle.\n\n**My thinking:**\nThat is exactly what I want",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
