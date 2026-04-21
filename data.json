@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T18:00:50.020814+00:00",
+  "timestamp": "2026-04-21T18:15:52.594853+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0670%",
+      "apr": "+73%",
+      "action": "SHORT",
+      "oi": "69,728,406"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 44 buys, 6 sells \u2014 avg price $0.576"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0670%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 18:01 UTC \u2014 [P2: Smart Entry] Evening Bias Threshold Tightening Backtest\n\n**Task:** Backtest a specific smart-entry tweak on the enriched post-Apr-1 dataset: keep the current morning threshold intact, but require stronger bias in the weaker evening session to reduce low-quality trades.\n**Finding:**\n- Both bots are alive and PM remains flat at 18 UTC. Live PM bias is still well below the trading threshold, so there is no immediate execution decision to make right now.\n- I tested 37 enriched YES trades from Apr 1 onward. Morning still carries the strategy: **11h = 72.7% WR (8/11)** and **12h = 70.6% WR (12/17)**, while the evening remains the leak: **19h = 28.6% WR (2/7)** and **20h = 50% WR (1/2)**.\n- Raising the evening bias requirement improves expectancy without hurting the morning edge because the morning rule stays unchanged:\n  - **Baseline V5a (45 everywhere):** 30 trades, **63.3% WR**, total `pnl_pct_sum = 6.729`\n  - **Evening 50 / Morning 45:** 29 trades, **65.5% WR**, `pnl_pct_sum = 7.729`\n  - **Evening 55 / Morning 45:** 27 trades, **66.7% WR**, `pnl_pct_sum = 7.788`\n  - **Evening 60 / Morning 45:** 25 trades, **68.0% WR**, `pnl_pct_sum = 7.847`\n- The stricter we get, the higher the backtested expectancy, but trade count falls. The best balance looks like **55 in the evening** because it meaningfully improves WR and expected P&L without chopping too much activity.\n- The actual evening losers confirm the story. The leak cluster includes `19h` losses at bias `-46.8`, `-53.2`, `-56.1`, and `-62.2`, so threshold alone is not enough, but it does remove the weakest evening setups while preserving stronger morning participation.\n\n**My thinking:**\nThis is a good P2 result because it's surgical. I do not want broad threshold drift that accidentally kills the healthy morning edge. Session-specific filtering is cleaner. The evening window is structurally worse, so it deserves a higher bar. The data says the current one-size-fits-all threshold is too generous after US-hours microstructure changes. If I tighten evening entries but leave 11h and 12h alone, I improve selectivity where it matters most.\n\n**Decision:**\n- Promote **session-specific bias thresholds** as the next smart-entry candidate.\n- Recommended next deploy candidate: **keep 11h/12h at 45, raise 19h/20h to 55**.\n- Not deploying in this heartbeat because I want one more pass that combines this with V5b tag quality, especially since some evening losers still pass even at high bias.\n\n**Next:** Backtest a combined rule for the evening session: `bias >= 55` plus either block `REDUCE_MILD_BEAR`/`BOOST` or half-size them. If combined expectancy beats the pure threshold tweak, promote that as the next live parameter change.\n\n---\n## 2026-04-21 18:00 UTC \u2014 [P1: Copy Intelligence] Cross-Market Split: HL Leaders Bullish, PM Copy Wallets Still Chopping Micro Downside\n\n**Task:** Pull fresh extern",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 18:16 UTC \u2014 [P3: Strategy Development] Combined Evening Filter Beats Threshold-Only\n\n**Task:** Test the next strategy-development candidate for the PM bot: combine the stronger evening bias threshold with V5b quality control, instead of treating those as separate ideas.\n**Finding:**\n- Both bots are alive and PM remains flat. The bot is correctly ignoring 18 UTC because it is outside active hours, and live bias remains well below entry threshold.\n- I backtested three evening-strategy variants on the enriched Apr 1+ YES dataset:\n  - **Baseline V5a:** 30 trades, **63.3% WR**, `pnl = 6.729`\n  - **Evening threshold 55 only:** 27 trades, **66.7% WR**, `pnl = 7.788`\n  - **Evening threshold 55 + block weak V5b tags (`REDUCE_MILD_BEAR`, `BOOST`)**: 25 trades, **72.0% WR**, `pnl = 9.788`\n- I also tested a softer version where weak evening tags are half-sized instead of blocked. That still improved results, but less: **effective n = 26.0**, weighted WR **69.2%**, weighted P&L **8.788**.\n- The detail makes sense. The ugly evening cluster is concentrated in exactly the weak-tag bucket:\n  - `2026-04-06 19:05` bias `-62.2`, **LOSS**, `REDUCE_MILD_BEAR`\n  - `2026-04-06 19:10` bias `-56.1`, **LOSS**, `REDUCE_MILD_BEAR`\n  - `2026-04-07 19:35` bias `-53.2`, **LOSS**, `BOOST`\n- That means evening bias tightening helps, but **the real unlock is combining session-specific selectivity with V5b quality gating**.\n\n**My thinking:**\nThis is the first strategy variant that feels like a real upgrade instead of a partial bandage. Threshold-only improves the evening leak, but not enough. V5b already knows which evening setups are structurally sketchy. When I combine those two layers, the bot stops paying tuition on the exact trades that have been hurting us. I like the block version more than half-size because the sample says these are not just lower-conviction trades, they are active drag.\n\n**Decision:**\n- Promote a new leading P3 candidate for live deployment: **keep mornings unchanged, require `|bias| >= 55` at 19h/20h, and block evening trades tagged `REDUCE_MILD_BEAR` or `BOOST`.**\n- This now beats both baseline V5a and the threshold-only tweak on the backtest we have.\n- I am not editing live code in this heartbeat because I want one clean implementation pass, not rushed patching during research.\n\n**Next:** Implement this as a named candidate patch in `trading_bot.py` or a deploy note, with hour-specific threshold logic and evening V5b blocking. Then shadow-validate it against the next active session before full live rollout.\n\n---\n## 2026-04-21 18:01 UTC \u2014 [P2: Smart Entry] Evening Bias Threshold Tightening Backtest\n\n**Task:** Backtest a specific smart-entry tweak on the enriched post-Apr-1 dataset: keep the current morning threshold intact, but require stronger bias in the weaker evening session to reduce low-quality trades.\n**Finding:**\n- Both bots are alive and PM",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
