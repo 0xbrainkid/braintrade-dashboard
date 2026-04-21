@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T10:30:02.206969+00:00",
+  "timestamp": "2026-04-21T17:00:02.059448+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,11 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0807%",
-      "apr": "+88%",
+      "coin": "PURR",
+      "rate": "+0.0531%",
+      "apr": "+58%",
       "action": "SHORT",
-      "oi": "69,728,406"
+      "oi": "50,525,430"
+    },
+    {
+      "coin": "USTC",
+      "rate": "-0.0507%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "48,472,098"
     }
   ],
   "daily_pnl": [
@@ -90,11 +97,11 @@
     "insights": [
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0807%/8h \u2014 longs paying shorts"
+        "text": "Strongest: PURR at 0.0531%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -330,7 +337,7 @@
     "win_rate_24h": 0,
     "avg_trade_size": 0.52,
     "sharpe": 0.7,
-    "max_drawdown": 7.9
+    "max_drawdown": 0
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-06 18:09 UTC \u2014 [P4: Alpha Research] FGI-Price Divergence Analysis: Extreme Fear at $69.5K = Contrarian Signal\n\n**Task:** Analyze the Fear & Greed Index vs BTC price divergence as a potential alpha signal, cross-reference with our squeeze detector, regime classifier, and PM copy-trader behavior.\n\n**Finding:**\n- **FGI has been Extreme Fear (8-13) for 7 straight days** while BTC recovered from $66K to $69.5K \u2014 a textbook bullish divergence. Crowd is terrified but price is climbing.\n- **Squeeze detector: 100/100 LONG_SQUEEZE for 50 consecutive readings.** Funding rate positive (0.0004-0.0055%), 10-period positive streak, L/S ratio 1.026 and declining. This means longs are crowded but the squeeze hasn't fully resolved \u2014 shorts are slowly covering.\n- **Regime classifier: BTC spent most of today in RANGE (score 1-2)** with brief TREND spikes to $70,123 at 16:45 UTC. The 4h trend flipped negative after 17:00, suggesting the $70K push failed to sustain. Currently MIXED at $69,539.\n- **PM copy-traders are bullish short-term:** 23 BUY_Up signals vs 0 sells on the 1:45-2:00PM 5-min market. Top wallets trading at $0.96-0.99 avg prices \u2014 high-conviction plays. But these are 5-min micro-markets, not directional bets.\n- **PM action distribution:** 57% TRADE, 25% STOP, 18% REDUCE_SIZE \u2014 bot is mostly active but getting frequent STOP signals during trend breakouts (correctly avoiding chasing).\n\n**My thinking:**\nThe FGI-price divergence is the most interesting alpha signal I've found today. When fear is this extreme (sub-15) but price is recovering, historically that's a strong buy zone. The problem: our squeeze detector has been screaming LONG_SQUEEZE at 100/100 for hours, meaning longs are packed in. So we have conflicting signals:\n- Macro: FGI says buy the fear (bullish)\n- Micro: Squeeze says longs are crowded (bearish short-term)\n- Resolution: This is likely a \"pain trade up\" setup \u2014 enough fear to keep retail out, but longs that will get squeezed on any dip below $69K, which then gets bought aggressively because the macro setup is bullish.\n\nFor PM: The regime classifier giving TRADE action 57% of the time in RANGE regime means our bot is getting plenty of opportunities. The key improvement would be to weight FGI into the bias score \u2014 when FGI < 15 AND price is above 7D low, increase bullish bias by +0.05.\n\n**Decision:**\n1. **New alpha signal identified:** FGI < 15 + price > 7D midpoint = contrarian bullish bias. Will wire this into bot confidence scoring in next P4 rotation.\n2. **Squeeze + FGI combo signal:** When squeeze is maxed (100/100) AND FGI is extreme fear, expect violent moves in EITHER direction \u2014 should reduce position size on 5-min markets and increase on directional markets.\n3. **Not changing parameters yet** \u2014 need to backtest the FGI overlay against our trade history first.\n\n**Next (P4):** Backtest FGI < 15 as a bullish bias modifier against ou",
   "pillar4": {
@@ -352,7 +359,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
