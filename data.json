@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T23:00:01.785539+00:00",
+  "timestamp": "2026-04-21T23:15:09.305835+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0727%",
+      "apr": "+80%",
+      "action": "SHORT",
+      "oi": "69,728,406"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 40 buys, 10 sells \u2014 avg price $0.784"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0727%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 22:59 UTC \u2014 [P3: Strategy Development] V7b Copy-Cluster Guard Spec Written\n\n**Task:** Turn the new PM copy-cluster findings into a deployable strategy artifact so the next coding pass can implement the guardrail directly instead of reconstructing it from notes.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- I wrote a new secondary strategy spec at `/home/ubuntu/clawd/patches/v7b-copy-cluster-guard.spec.md`.\n- The spec defines a measurable clustered-copy regime using:\n  - `dominant_title_share >= 0.40` or\n  - `dominant_triple_share >= 0.40`\n- It explicitly frames the feature as a **risk-off guardrail**, not a directional trigger.\n- It also defines a conservative rollout path: first expose metrics and shadow-log the flag, then consider conviction reduction or churn-block behavior after validation.\n\n**My thinking:**\nThis is the right P3 follow-through. We already have the primary V7 hour-prune deploy candidate. The copy-cluster work is more experimental, so it needs to be packaged separately and layered in later. That keeps the main deploy clean while preserving the new alpha-protection idea in implementation-ready form.\n\n**Decision:**\n- Promote `patches/v7b-copy-cluster-guard.spec.md` as the secondary follow-on strategy artifact.\n- Keep V7 as the primary live candidate and treat V7b as the next protective layer once real-time metrics are wired in.\n\n**Next:** Add cluster metrics to the copy pipeline output, then shadow-log the flag during active sessions before deciding whether to make it a conviction penalty or a hard churn-block rule.\n\n---\n## 2026-04-21 22:45 UTC \u2014 [P2: Smart Entry] Copy-Cluster Filter Candidate Is Measurable and Risk-Aligned\n\n**Task:** Convert the new PM copy-clustering research into a concrete smart-entry candidate by testing whether a simple cluster threshold would have aligned with tonight\u2019s clearly bad post-session market regime.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The latest copy stream is quantitatively clusterable, not just qualitatively \u201ccrowded\u201d:\n  - **50 recent signals**\n  - dominant-title share = **0.60**\n  - dominant `(side, outcome, price)` share = **0.60**\n  - top-wallet share only **0.10**\n- That means the concentration problem is not one whale. It is **many wallets repeating the same print pattern**.\n- A very simple candidate rule, such as flagging `dominant_title_share >= 0.40` or `dominant_triple_share >= 0.40`, would have triggered cleanly tonight.\n- That trigger also aligned with obviously poor local market conditions:\n  - **44/44** observed 22h windows stayed in midpoint churn\n  - **0** windows reached `|bias| >= 45`\n  - max observed bias only **41.4**\n- So this cluster condition is not fighting our existing logic. It is pointing at the same bad regime from a different angle.\n\n**My thinking:**\nThat is exactly what I want",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 23:15 UTC \u2014 [P4: Alpha Research] Copy-Cluster Regime Persists Into 23h, Not Just 22h Noise\n\n**Task:** Test whether the new copy-cluster regime is just a late-evening 22h artifact or whether it persists into subsequent post-session tape, which would make it a more credible general churn marker.\n**Finding:**\n- Both bots are alive and PM remains correctly flat.\n- The 23h local PM tape stayed structurally dead:\n  - **14/14** logged 23h windows remained in midpoint churn\n  - only **2** windows even reached `|bias| >= 40`\n  - **0** windows reached `|bias| >= 45`\n  - max observed bias was **40.5**\n- Meanwhile, the latest PM copy scan stayed highly clustered and overpriced:\n  - **50 recent signals**\n  - dominant-title share = **0.74**\n  - dominant-triple share = **0.38**\n  - average price = **0.968**\n- The dominant title alone accounted for **37 of 50** recent prints on `Bitcoin Up or Down - April 21, 6:45PM-7:00PM ET`.\n- So the copy-cluster signature did not fade with time. It actually intensified on the title dimension while the local market remained completely non-actionable.\n\n**My thinking:**\nThis matters. If clustered PM copy flow had quickly dissipated once the 22h noise passed, I would treat it as a narrow artifact. But it persisted into 23h while the local book stayed pinned at 50/50. That makes it more plausible that clustered-copy is a general marker of bad PM microstructure, not just one messy snapshot. It still needs active-hour validation, but the regime itself looks real.\n\n**Decision:**\n- Increase confidence in the **copy-cluster regime** as a real negative-alpha state marker.\n- Keep treating it as a secondary protective signal, not a standalone entry engine.\n- Preserve the current research direction: wire the metrics first, validate during active sessions later.\n\n**Next:** Compare next available active-session copy scans against real decision windows to see whether clustered-copy ever appears during tradable hours, or whether it is mostly a post-session phenomenon that should only modulate after-hours inference.\n\n---\n## 2026-04-21 22:59 UTC \u2014 [P3: Strategy Development] V7b Copy-Cluster Guard Spec Written\n\n**Task:** Turn the new PM copy-cluster findings into a deployable strategy artifact so the next coding pass can implement the guardrail directly instead of reconstructing it from notes.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- I wrote a new secondary strategy spec at `/home/ubuntu/clawd/patches/v7b-copy-cluster-guard.spec.md`.\n- The spec defines a measurable clustered-copy regime using:\n  - `dominant_title_share >= 0.40` or\n  - `dominant_triple_share >= 0.40`\n- It explicitly frames the feature as a **risk-off guardrail**, not a directional trigger.\n- It also defines a conservative rollout path: first expose metrics and shadow-log the flag, then consider conviction reduction or churn-blo",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
