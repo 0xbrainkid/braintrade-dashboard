@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T18:30:02.716970+00:00",
+  "timestamp": "2026-04-21T18:46:13.118513+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0755%",
-      "apr": "+83%",
+      "rate": "+0.0524%",
+      "apr": "+57%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0755%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0524%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 18:30 UTC \u2014 [P4: Alpha Research] Liquidation Signal Coverage Is Too Sparse for Live PM Scoring\n\n**Task:** Test whether the liquidation detector can already serve as a useful alpha input for PM trade selection by joining liquidation history to enriched PM outcomes.\n**Finding:**\n- Both bots are alive and PM remains flat. Live market state at 18 UTC still offers no actionable trade, with bias stuck below threshold and outside active hours.\n- I validated the actual liquidation history format first. `liq-history.jsonl` is populated and recent entries do carry usable fields like `alerts`, `pm_adj`, `liq_type`, and `is_cascade`.\n- After fixing my initial field mismatch and doing a nearest-backward join, only **2 of 37** enriched Apr 1+ PM trades matched a liquidation snapshot within the prior hour. That is nowhere near enough coverage to support live confidence scoring.\n- The two matched examples are directionally interesting but statistically useless:\n  - `2026-04-01 12:45` matched a **SOL short liquidation** snapshot and the PM trade **won**.\n  - `2026-04-07 19:35` matched a **SOL long-liquidation cascade** snapshot and the PM trade **lost**.\n- Because the overlap is only **5.4% of trades**, any apparent signal quality here would be fake precision. The real bottleneck is not liquidation usefulness, it is **timestamp/data alignment between the liq pipeline and PM trade windows**.\n\n**My thinking:**\nThis is still good P4 progress because it tells me where the alpha pipeline is broken. A signal cannot help the bot if it only exists near a tiny fraction of entries. The detector is producing events, but the event cadence is too sparse and too asset-agnostic for direct PM integration in its current form. Before I ask whether liquidations improve WR, I need a denser feature stream, probably snapshotting the detector state every PM loop or at least every minute, not just when notable events happen.\n\n**Decision:**\n- **Do not wire liquidation history into PM confidence scoring yet.** Coverage is far too low.\n- Reframe the next P4 task from \u201cbacktest liquidation alpha\u201d to **\u201cincrease liquidation-state sampling density and align it with PM decision timestamps.\u201d**\n- Treat the current liquidation detector as qualitative regime context only, similar to how F&G is currently contextual rather than executable.\n\n**Next:** Build or patch the liquidation pipeline to emit a regular state snapshot with `pm_adj`, BTC-specific liq type, and cascade flags every minute, even when no major alert fires. Then rerun the join against PM outcomes. If coverage rises above 70%, re-test whether `pm_adj` or BTC cascade state improves WR.\n\n---\n## 2026-04-21 18:16 UTC \u2014 [P3: Strategy Development] Combined Evening Filter Beats Threshold-Only\n\n**Task:** Test the next strategy-development candidate for the PM bot: combine the stronger evening bias threshold with V5b quality control, inste",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-21 18:47 UTC \u2014 [P1: Copy Intelligence] Don\u2019t Chase PM Copy Flow Into Overpriced 19h Microstructure\n\n**Task:** Pull fresh HL leaderboard and PM copy-wallet data right before the 19h session, then decide whether top-trader flow offers actionable direction or just noise.\n**Finding:**\n- Both bots are alive and PM remains flat. The live market has stayed below threshold throughout 18 UTC, so there has been no missed PM entry.\n- Fresh HL leaderboard copy intel is still constructive on majors: **BTC 6L/3S bullish, ETH 4L/2S bullish, SOL 5L/4S bullish**. The largest wallets remain broadly risk-on in BTC and ETH, with `anon-0xecb6` still holding massive **BTC LONG + ETH LONG** exposure.\n- PM copy-wallet flow is much noisier and heavily concentrated in short-horizon Up/Down contracts. In the 50 most recent signals from top PM wallets, the mix is nearly balanced but expensive: **25 BUY Down, 22 BUY Up, 3 SELL Down**, with **average entry price 0.6758** and prints as high as **0.99**.\n- The recent PM tape shows exactly the kind of flow we do **not** want to imitate blindly before our 19h session:\n  - `Formal-Plumber` **SELL Down @ 0.99**\n  - `Active-Chart` **BUY Down @ 0.83**\n  - `Late-Grammar` **BUY Up @ 0.62** and later **BUY Up @ 0.286**\n  - Mixed buying of both Up and Down in adjacent micro-windows.\n- Translation: PM copy wallets are actively scalping microstructure and often paying high prices for tiny windows, while HL leaders still point to a broader bullish major-coin backdrop.\n\n**My thinking:**\nThis is a strong copy-intel filter. The PM top-wallet feed is useful as a warning sign for crowding and price distortion, not as a directional oracle. When copy flow is split and average price is already ~0.68 with some trades at 0.95-0.99, the edge is usually gone. The better hierarchy remains: use HL consensus for macro bias, then refuse to chase PM copy wallets when they are paying nosebleed prices on tiny windows. That matters heading into 19h because our bot\u2019s YES entries should come from genuine edge, not from copying already-priced microstructure.\n\n**Decision:**\n- Keep treating **HL major-coin consensus as the higher-order directional prior**.\n- Add a practical copy-intel caution for PM execution: **when top PM wallet flow is mixed and average copy price is above ~0.65, treat it as crowded microstructure, not alpha.**\n- I am not changing live code yet, but this should inform the next smart-entry pass, especially around evening overpricing.\n\n**Next:** Backtest whether PM trades entered when copy-wallet average price is above 0.65 underperform lower-priced windows. If yes, promote a new anti-crowding filter for evening sessions.\n\n---\n## 2026-04-21 18:30 UTC \u2014 [P4: Alpha Research] Liquidation Signal Coverage Is Too Sparse for Live PM Scoring\n\n**Task:** Test whether the liquidation detector can already serve as a useful alpha input for PM trade selection",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
