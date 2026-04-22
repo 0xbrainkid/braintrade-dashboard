@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T00:18:48.361117+00:00",
+  "timestamp": "2026-04-22T00:29:03.837889+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0917%",
-      "apr": "+100%",
+      "rate": "+0.0901%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0917%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0901%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 00:19 UTC \u2014 [P2: Smart Entry] Midnight Produced Strong Tape, but It Is Still an Evidence Gap, Not a Deploy Signal\n\n**Task:** Test whether tonight\u2019s unusually strong 00h tape is evidence that midnight should re-enter consideration, or whether it is just revealing a gap in our historical sample.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- Midnight tape was materially different from the usual dead post-session churn:\n  - **16** observed 00h windows\n  - **12** reached `|bias| >= 45`\n  - **12** reached `|bias| >= 55`\n  - max observed bias = **70.0**\n  - **9/16** windows held the off-midpoint state `Y0.485 / N0.515`\n- This is the cleanest off-hours directional tape seen tonight.\n- But the historical outcomes dataset gives **no direct YES-trade sample at hour 00**:\n  - `hour0_n = 0`\n- So the current state is awkward but important:\n  - live tape says 00h can become structurally strong\n  - outcome history does **not** provide a tested 00h YES sample to validate that structure\n\n**My thinking:**\nThis is exactly the kind of thing that can cause bad strategy drift if handled sloppily. I do **not** want to re-open 00h just because one midnight session looked good. But I also do not want to keep repeating \u201c00h is dead\u201d as if we have airtight proof, because right now the stronger statement is that 00h is **under-observed in the live-quality sample**. Tonight showed that midnight can print strong, off-midpoint, high-bias conditions. That makes it a monitoring candidate, not a deploy candidate.\n\n**Decision:**\n- Do **not** add 00h to active hours.\n- Upgrade 00h from \u201cdiscarded\u201d to \u201cwatchlist / evidence-gap hour.\u201d\n- If future midnight sessions repeatedly show the same off-midpoint + high-bias structure, 00h deserves a dedicated shadow-validation track.\n\n**Next:** Start a lightweight midnight watchlist note: collect the next few 00h sessions for bias persistence, off-midpoint duration, and whether copy flow is still just crowd chase. Only revisit hour expansion if the pattern repeats across multiple nights.\n\n---\n## 2026-04-21 23:45 UTC \u2014 [P1: Copy Intelligence] Late PM Structure Shift Drew More Bullish Copy Crowding, Not Cleaner Alpha\n\n**Task:** Check whether the first meaningful late-session PM structure shift, from `0.505/0.495` to `0.485/0.515`, was accompanied by more informative copy flow or just a new wave of crowding.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The live tape finally showed a real structural change late in 23h:\n  - prices moved from the long-running `Y0.505 / N0.495` state to `Y0.485 / N0.515`\n  - bias also jumped materially, with prints at **51.9**, **49.2**, **47.8**, then later **50.8**, **51.0**, and **69.5**\n- So the market did briefly become more directional, even though it stayed outside active hours.\n- PM copy flow responded, but not in a way that makes it lo",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 00:29 UTC \u2014 [P3: Strategy Development] V7c Midnight Watchlist Spec Written\n\n**Task:** Convert the new midnight evidence into a disciplined implementation path so 00h does not stay an abstract debate or turn into an impulsive live expansion.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- I wrote a shadow-only spec at `/home/ubuntu/clawd/patches/v7c-midnight-watchlist.spec.md`.\n- The spec keeps 00h excluded from live trading but formalizes what needs to be observed before reconsideration.\n- It defines the exact fields to track on future midnight sessions:\n  - high-bias frequency\n  - off-midpoint duration\n  - copy-flow clustering\n  - persistence vs quick reversion\n- It also sets a staged path: logging first, then shadow validation, then reassessment only if multiple nights confirm real structure.\n\n**My thinking:**\nThis is the right P3 move. Midnight did enough tonight to earn attention, but not enough to earn live capital. Packaging it as a watchlist spec prevents sloppy hour expansion while still preserving the signal we uncovered. That is how we stay adaptive without getting baited by one interesting tape.\n\n**Decision:**\n- Promote `patches/v7c-midnight-watchlist.spec.md` as the official framework for evaluating 00h.\n- Keep live active hours unchanged.\n- Treat midnight as a shadow-validation candidate only.\n\n**Next:** On future 00h sessions, log the watchlist fields from the spec and look for repeatability across multiple nights before reconsidering any active-hour change.\n\n---\n## 2026-04-22 00:19 UTC \u2014 [P2: Smart Entry] Midnight Produced Strong Tape, but It Is Still an Evidence Gap, Not a Deploy Signal\n\n**Task:** Test whether tonight\u2019s unusually strong 00h tape is evidence that midnight should re-enter consideration, or whether it is just revealing a gap in our historical sample.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- Midnight tape was materially different from the usual dead post-session churn:\n  - **16** observed 00h windows\n  - **12** reached `|bias| >= 45`\n  - **12** reached `|bias| >= 55`\n  - max observed bias = **70.0**\n  - **9/16** windows held the off-midpoint state `Y0.485 / N0.515`\n- This is the cleanest off-hours directional tape seen tonight.\n- But the historical outcomes dataset gives **no direct YES-trade sample at hour 00**:\n  - `hour0_n = 0`\n- So the current state is awkward but important:\n  - live tape says 00h can become structurally strong\n  - outcome history does **not** provide a tested 00h YES sample to validate that structure\n\n**My thinking:**\nThis is exactly the kind of thing that can cause bad strategy drift if handled sloppily. I do **not** want to re-open 00h just because one midnight session looked good. But I also do not want to keep repeating \u201c00h is dead\u201d as if we have airtight proof, because right now the stronger statement is tha",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
