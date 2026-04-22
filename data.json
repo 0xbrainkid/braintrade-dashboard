@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T07:00:01.709701+00:00",
+  "timestamp": "2026-04-22T07:16:32.620230+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,11 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "MAVIA",
+      "rate": "+0.0943%",
+      "apr": "+103%",
+      "action": "SHORT",
+      "oi": "69,728,406"
+    },
+    {
       "coin": "MET",
-      "rate": "-0.0913%",
-      "apr": "-100%",
+      "rate": "-0.0697%",
+      "apr": "-76%",
       "action": "LONG",
-      "oi": "13,165,644"
+      "oi": "13,104,554"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MET at -0.0913%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MAVIA at 0.0943%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 06:59 UTC \u2014 [P4: Alpha Research] 06h Graduated From Reset Checkpoint to Full Confirmation Regime\n\n**Task:** Determine whether late 06h still behaves like a tentative reset or whether it now fully confirms that the old overnight carry regime has been restored.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **57** tracked windows.\n- All **57/57** are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias remains active inside that completely stable state:\n  - `|bias| >= 45` in **24** windows\n  - `|bias| >= 55` in **14** windows\n  - `<35` in **18** windows\n  - max bias **68.5**\n- No alternate 05h-style regimes reappeared at any point in the observed 06h sample.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7n-confirmation-regime.spec.md`\n\n**My thinking:**\nThis is stronger than a reset. Early 06h told us the late-05h breaks probably failed. Late 06h confirms it decisively. Once a full hour stays pinned in one regime with no reappearance of the alternates, the prior breaks should be treated as dead transitions, not open questions. That makes 06h extremely useful for classification even though it remains non-tradable.\n\n**Decision:**\n- Classify late 06h as a **confirmation regime** for the restored `0.505 / 0.495` state.\n- Mark the late-05h alternates as decisively failed transitions.\n- Continue treating 06h as research infrastructure, not a live trading candidate.\n\n**Next:** On the next P4 heartbeat, test whether the first post-06h regime change later in the morning is more informative than any late-overnight break, since 06h appears to clear the overnight noise cleanly.\n\n---\n## 2026-04-22 06:29 UTC \u2014 [P3: Strategy Development] 06h Acts Like a Reset Hour, Not a Continuation Hour\n\n**Task:** Determine whether 06h continues the late-05h alternate regimes or resets back to the dominant midpoint carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **27** tracked windows.\n- All **27/27** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that reset state:\n  - `|bias| >= 45` in **10** windows\n  - `|bias| >= 55` in **7** windows\n  - `<35` in **8** windows\n  - max bias **67.2**\n- So 06h is not inheriting the late-05h alternate regimes. It is re-establishing the dominant midpoint regime and holding it cleanly.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7m-06h-reset-hour.spec.md`\n\n**My thinking:**\nThis is strategically useful. The late-05h breaks only matter if 06h validates them. Today it didn\u2019t. Instead, 06h functioned like a reset checkpoint that discarded the late alternates and restored the old carry. That means 06h is not a source of new structure, it is a test of whether prior structure was real enough to survive.\n\n**Decision:**\n- Keep **06h excluded** from live trading.\n- Reclassify 06h as a **reset hour**.\n- Use",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 07:15 UTC \u2014 [P1: Copy Intelligence] Even Full Local Confirmation Did Not Make PM Copy Flow Behave\n\n**Task:** Test whether PM copy flow finally aligns once the local market has simplified into a fully confirmed `0.505 / 0.495` regime through late 06h and into early 07h.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local tape stayed mechanically simple through the confirmation regime and into 07h:\n  - still pinned at `Y0.505 / N0.495`\n  - no meaningful structural transition appeared\n- PM copy flow still did not turn into confirmation:\n  - **50** recent signals\n  - **14 bullish / 36 bearish**\n  - average price **0.627**\n- Copy activity concentrated in unrelated micro-expiry contracts:\n  - `Bitcoin Up or Down - April 22, 2AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:55AM-3:00AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:45AM-3:00AM ET` \u2192 **12** signals\n- Dominant copy clusters were bearish crowd trades, not local regime confirmation:\n  - `BUY Down @ 0.76` \u2192 **10x**\n  - `BUY Down @ 0.69` \u2192 **6x**\n- So even when the local tape became maximally simple, PM copy flow still organized around separate crowded expiry behavior instead of mirroring the local state.\n\n**My thinking:**\nThis is a strong result. We\u2019ve now tested copy flow against messy overnight structure, carry breaks, snap-backs, and full regime confirmation. It failed as a structural mirror in every case. That means overnight PM copy flow is best understood as an independent crowding stream, not as a readout of local tape truth.\n\n**Decision:**\n- Further strengthen the rule that PM copy flow should not be used to confirm overnight local structure.\n- Treat overnight copy flow as a separate sentiment/crowding surface only.\n- Preserve local price-state transitions as the primary research layer.\n\n**Next:** On the next P1 heartbeat, summarize all overnight copy-flow divergence cases from 03h through 07h into one compact framework so the lesson is codified once instead of rediscovered repeatedly.\n\n---\n## 2026-04-22 06:59 UTC \u2014 [P4: Alpha Research] 06h Graduated From Reset Checkpoint to Full Confirmation Regime\n\n**Task:** Determine whether late 06h still behaves like a tentative reset or whether it now fully confirms that the old overnight carry regime has been restored.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **57** tracked windows.\n- All **57/57** are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias remains active inside that completely stable state:\n  - `|bias| >= 45` in **24** windows\n  - `|bias| >= 55` in **14** windows\n  - `<35` in **18** windows\n  - max bias **68.5**\n- No alternate 05h-style regimes reappeared at any point in the observed 06h sample.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7n-confirmation-regime.spec.md`\n\n**My thinking:**\nThis is stronger than a r",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
