@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T20:21:44.147462+00:00",
+  "timestamp": "2026-04-22T20:29:12.465149+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1438%",
-      "apr": "-157%",
+      "rate": "-0.1517%",
+      "apr": "-166%",
       "action": "LONG",
-      "oi": "207,890,594"
+      "oi": "203,505,630"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1083%",
+      "rate": "+0.1090%",
       "apr": "+119%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0643%",
-      "apr": "-70%",
+      "rate": "-0.0694%",
+      "apr": "-76%",
       "action": "LONG",
       "oi": "1,217,514"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1438%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1517%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:21 UTC \u2014 [P2: Smart Entry] Reset Copy Suppression State Inside `read_copy_signals()` So Reasons Cannot Leak Across Loops\n\n**Task:** Decide where the new `self.copy_suppression_reason` should be reset, so suppression diagnostics do not persist accidentally across later bot iterations.\n**Finding:**\n- Both bots are alive.\n- The copy state currently lives close to the reader itself:\n  - `self.live_signals_file`\n  - `self.copy_signal_stale_secs`\n  - `read_copy_signals()`\n- That makes the reset location straightforward.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9l-copy-suppression-reason-reset.spec.md`\n\n**My thinking:**\nThis should not be handled in some outer loop because then the correctness of copy diagnostics would depend on broader control flow. The clean rule is local: each call to `read_copy_signals()` begins with no suppression reason, and only the current read may set one.\n\n**Decision:**\n- At the start of every `read_copy_signals()` call:\n  - set `self.copy_suppression_reason = None`\n- Only populate it when the current signal is suppressed.\n- Do not rely on outer loop resets.\n\n**Next:** On the next P2 heartbeat, draft the smallest actual code patch to initialize `self.copy_suppression_reason` in `__init__` and reset it in `read_copy_signals()` before any early return path.\n\n---\n## 2026-04-22 19:58 UTC \u2014 [P1: Copy Intelligence] Use a Stored Suppression Reason So the Conviction Branch Can Show Frozen Copy State Cleanly\n\n**Task:** Draft the exact branch-level patch that makes copy suppression visible inside the conviction diagnostics without forcing interface changes throughout the bot.\n**Finding:**\n- Both bots are alive.\n- The current conviction branch already has the right structure:\n  - explicit `\u2705` state\n  - explicit `\u26a0\ufe0f` state\n  - explicit low-confidence state\n  - final fallback `\u2014`\n- That means the cleanest patch is not a new return signature. It is a stored suppression reason that the branch can render.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9k-branch-level-copy-audit-patch.spec.md`\n\n**My thinking:**\nThis is the minimal elegant change. If `read_copy_signals()` starts returning more complex tuples, the patch spreads everywhere. If it instead stores `self.copy_suppression_reason`, the consumer branch stays simple and the rest of the bot remains untouched.\n\n**Decision:**\n- In `read_copy_signals()`, keep the same return shape but set `self.copy_suppression_reason` to:\n  - `unstable`\n  - `stale`\n  - `insufficient_sample`\n  - or `None`\n- In the conviction branch, replace the final plain `\u2014` fallback with suppression-aware detail strings:\n  - `\ud83e\uddca unstable`\n  - `\ud83d\udd52 stale`\n  - `\ud83d\udcc9 insufficient_sample`\n  - otherwise `\u2014`\n\n**Next:** On the next P1 heartbeat, decide whether `self.copy_suppression_reason` should be reset at the start of each loop or each `read_copy_signals()` call to avoid stale su",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:28 UTC \u2014 [P3: Strategy Development] Draft the Smallest Actual `trading_bot.py` Code Change for Defensive Copy Suppression\n\n**Task:** Move from patch-plan language to the smallest concrete code draft for `trading_bot.py`, specifically the exact additions in `__init__` and `read_copy_signals()`.\n**Finding:**\n- Both bots are alive.\n- The relevant code block is compact enough that the defensive patch stays very small:\n  - one new instance attribute in `__init__`\n  - one reset line at the top of `read_copy_signals()`\n  - a few new suppression checks after timestamp staleness\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9m-minimal-read-copy-signals-code-draft.spec.md`\n\n**My thinking:**\nThis is exactly the kind of live change I trust. It is additive, local, and interface-preserving. The bot either keeps behaving as before or suppresses bad copy input more safely. There is no hidden complexity here.\n\n**Decision:**\n- Minimal code draft in `trading_bot.py`:\n  - add `self.copy_suppression_reason = None` in `__init__`\n  - reset it at the start of `read_copy_signals()`\n  - suppress on:\n    - `data_quality in {\"stale\", \"unstable\", \"insufficient_sample\"}`\n    - `copy_quality.copy_sample_unstable == true`\n- Preserve return shape and legacy behavior when new fields are absent.\n\n**Next:** On the next P3 heartbeat, draft the tiny companion change in the conviction branch that maps `self.copy_suppression_reason` into `details[\"COPY\"]` without touching the rest of the logic.\n\n---\n## 2026-04-22 20:21 UTC \u2014 [P2: Smart Entry] Reset Copy Suppression State Inside `read_copy_signals()` So Reasons Cannot Leak Across Loops\n\n**Task:** Decide where the new `self.copy_suppression_reason` should be reset, so suppression diagnostics do not persist accidentally across later bot iterations.\n**Finding:**\n- Both bots are alive.\n- The copy state currently lives close to the reader itself:\n  - `self.live_signals_file`\n  - `self.copy_signal_stale_secs`\n  - `read_copy_signals()`\n- That makes the reset location straightforward.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9l-copy-suppression-reason-reset.spec.md`\n\n**My thinking:**\nThis should not be handled in some outer loop because then the correctness of copy diagnostics would depend on broader control flow. The clean rule is local: each call to `read_copy_signals()` begins with no suppression reason, and only the current read may set one.\n\n**Decision:**\n- At the start of every `read_copy_signals()` call:\n  - set `self.copy_suppression_reason = None`\n- Only populate it when the current signal is suppressed.\n- Do not rely on outer loop resets.\n\n**Next:** On the next P2 heartbeat, draft the smallest actual code patch to initialize `self.copy_suppression_reason` in `__init__` and reset it in `read_copy_signals()` before any early return path.\n\n---\n## 2026-04-22 19:58 UTC \u2014 [P1: Copy Intell",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
