@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T11:44:50.368074+00:00",
+  "timestamp": "2026-04-22T11:59:07.182793+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1067%",
-      "apr": "+117%",
+      "rate": "+0.1036%",
+      "apr": "+113%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1067%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1036%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 11:44 UTC \u2014 [P2: Smart Entry] This 11h Session Is a Full Directional Inversion Day, Not Just a Bad Entry Patch\n\n**Task:** Determine whether today\u2019s weak 11h behavior is an entry-quality problem or a deeper hour-level regime where the whole session is structurally wrong-sided for the YES-only strategy.\n**Finding:**\n- Both bots are alive and PM is in active hour **11h**.\n- The hour has moved through two unusable phases for YES-only:\n  1. early inversion to `Y0.515 / N0.485`, then snap-back to `Y0.505 / N0.495`\n  2. later deeper slide to `Y0.475 / N0.525`\n- Across both phases, bias remained persistently **positive**, causing repeated NO-side skips rather than YES opportunities.\n- Recent live log pattern:\n  - many `YES_ONLY_FILTER` skips at **+45 to +70** bias\n  - repeated `NO_TRADE_SKIPPED` entries on the NO side\n  - no valid YES-side setup emerged from the deeper `0.475 / 0.525` move either\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8d-11h-directional-inversion-day.spec.md`\n\n**My thinking:**\nThis is the key distinction. If the hour were merely noisy, a smarter filter might rescue it. But that is not what happened. The session stayed persistently on the wrong side for the deployed YES-only logic, and later price movement actually deepened the wrong-side structure. That makes this an hour-level directional inversion day, not a missed-entry problem.\n\n**Decision:**\n- Classify Apr 22 11h as a **directional inversion day**.\n- Do **not** try to salvage this session with entry tweaks.\n- Treat repeated NO-side dominance across multiple refresh cycles as evidence the hour is structurally unavailable for YES-only participation.\n\n**Next:** On the next P2 heartbeat, quantify how many NO-side skips or positive-bias refreshes should trigger an explicit inversion-day flag early enough to stop over-analyzing a dead session.\n\n---\n## 2026-04-22 11:15 UTC \u2014 [P1: Copy Intelligence] Even Live-Hour Bearish Alignment Does Not Rescue Copy Flow When Crowding Stays Extreme\n\n**Task:** Check whether live-hour copy flow becomes useful when it leans the same way the bot is repeatedly skipping, or whether extreme crowding still makes it unusable.\n**Finding:**\n- Both bots are alive and PM is now in active hour **11h**.\n- The live tape briefly inverted to `Y0.515 / N0.485`, then snapped back to `Y0.505 / N0.495`.\n- The bot kept skipping because the edge was either **NO-side** or **below threshold**.\n- Recent PM copy flow did skew bearish:\n  - **50** signals\n  - **10 bullish / 40 bearish**\n  - average price **0.960**\n- But the sample remained extremely crowded:\n  - `Will Bitcoin dip to $60,000 in April?` \u2192 **20**\n  - `Bitcoin Up or Down - April 22, 6:45AM-7:00AM ET` \u2192 **20**\n  - top two triples = **40 / 50 = 0.80**\n- Dominant repeated clusters:\n  - `SELL No @ 0.988` \u2192 **20**\n  - `BUY Down @ 0.92` \u2192 **20**\n- Wrote new research artifact: `/home/ubuntu/clawd/patch",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 11:59 UTC \u2014 [P3: Strategy Development] Price Recovered in 11h, but Direction Never Did, So This Needs an Inversion State Machine\n\n**Task:** Decide whether the evolving 11h session is just a price-state recovery chain or whether the whole session stays directionally inverted even as price moves back toward normal levels.\n**Finding:**\n- Both bots are alive and PM remains in active hour **11h**.\n- The session has now completed a three-stage price-state path:\n  - wrong-side base: `0.505 / 0.495`\n  - deeper inversion: `0.475 / 0.525`\n  - partial reclaim: `0.495 / 0.505`\n  - full price return: `0.505 / 0.495`\n- But the directional layer **never** recovered.\n- Across the whole chain, bias stayed persistently positive and the bot kept logging:\n  - `NO_TRADE_SKIPPED`\n  - `YES_ONLY_FILTER`\n  - repeated NO-side dominance\n- So price recovered, but the session remained NO-dominant for YES-only logic from start to finish.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8e-inversion-state-machine.spec.md`\n\n**My thinking:**\nThis is the missing distinction. Watching only the price states would make the hour look like it healed itself. But from the strategy\u2019s point of view it never healed, because directional availability never came back. That means the system needs two layers: price state and directional state. Otherwise we will keep mistaking cosmetic recovery for actual tradability.\n\n**Decision:**\n- Model sessions like Apr 22 11h with an **inversion state machine**.\n- Track price-state recovery and directional recovery separately.\n- Do not treat an hour as restored just because PM prices moved back toward `0.505 / 0.495`.\n\n**Next:** On the next P3 heartbeat, define a simple early-stop rule for inversion sessions that remain in directional state `D1` across enough refresh cycles even after price-state reclaim begins.\n\n---\n## 2026-04-22 11:44 UTC \u2014 [P2: Smart Entry] This 11h Session Is a Full Directional Inversion Day, Not Just a Bad Entry Patch\n\n**Task:** Determine whether today\u2019s weak 11h behavior is an entry-quality problem or a deeper hour-level regime where the whole session is structurally wrong-sided for the YES-only strategy.\n**Finding:**\n- Both bots are alive and PM is in active hour **11h**.\n- The hour has moved through two unusable phases for YES-only:\n  1. early inversion to `Y0.515 / N0.485`, then snap-back to `Y0.505 / N0.495`\n  2. later deeper slide to `Y0.475 / N0.525`\n- Across both phases, bias remained persistently **positive**, causing repeated NO-side skips rather than YES opportunities.\n- Recent live log pattern:\n  - many `YES_ONLY_FILTER` skips at **+45 to +70** bias\n  - repeated `NO_TRADE_SKIPPED` entries on the NO side\n  - no valid YES-side setup emerged from the deeper `0.475 / 0.525` move either\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8d-11h-directional-inversion-day.spec.md`\n\n**My thinking:**\nThis is",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
