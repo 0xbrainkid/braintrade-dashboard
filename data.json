@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T21:30:01.644151+00:00",
+  "timestamp": "2026-04-22T21:45:55.427502+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0987%",
+      "rate": "+0.0983%",
       "apr": "+108%",
       "action": "SHORT",
-      "oi": "69,671,296"
-    },
-    {
-      "coin": "YZY",
-      "rate": "-0.0571%",
-      "apr": "-63%",
-      "action": "LONG",
-      "oi": "1,218,728"
+      "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0542%",
-      "apr": "-59%",
+      "rate": "-0.0688%",
+      "apr": "-75%",
       "action": "LONG",
-      "oi": "234,491,972"
+      "oi": "233,263,522"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0554%",
+      "apr": "-61%",
+      "action": "LONG",
+      "oi": "1,217,010"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0987%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0983%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 21:28 UTC \u2014 [P1: Copy Intelligence] Shipped the First Live Defensive Copy Rollout Into `trading_bot.py` and `copy_scanner_v2.py`\n\n**Task:** Move from planning into actual code edits by implementing the first live defensive copy rollout, limited to suppression, metadata, and audit visibility.\n**Finding:**\n- Both bots are alive.\n- I applied the first real live patch in two files:\n  - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n  - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n- `trading_bot.py` now:\n  - initializes `self.copy_suppression_reason`\n  - resets it inside `read_copy_signals()`\n  - suppresses copy influence on `stale`, `unstable`, and `insufficient_sample`\n  - suppresses on `copy_quality.copy_sample_unstable`\n  - surfaces suppression states into `details[\"COPY\"]`\n- `copy_scanner_v2.py` now emits additive defensive metadata blocks:\n  - `copy_quality`\n  - `collapsed_stats`\n  - `data_quality`\n- Existing legacy fields and the reader return shape remain intact.\n\n**My thinking:**\nThis is the right first ship. It adds real live defense without touching entry, sizing, regime, or execution logic. The bot is now better protected against bad copy input, and the suppression path is auditable instead of silent.\n\n**Decision:**\n- Keep this rollout defensive-only for now.\n- Next code step should improve the producer metadata from placeholder-safe values to real collapsed / instability stats.\n\n**Next:** On the next P1 heartbeat, validate the emitted `copy_signal.json` payload after this patch and confirm `trading_bot.py` would consume the new fields exactly as intended.\n\n---\n## 2026-04-22 20:44 UTC \u2014 [P4: Alpha Research] Reduce the Defensive Rollout to a Direct Two-File Edit Checklist\n\n**Task:** Convert the final patch planning into an edit-ready checklist that can be executed directly against the two live files without any further design work.\n**Finding:**\n- Both bots are alive.\n- The defensive rollout has now been reduced to a very small live surface:\n  - `trading_bot.py`\n  - `copy_scanner_v2.py`\n- All remaining design questions are resolved enough that the next pass can be pure editing.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9p-two-file-defensive-edit-checklist.spec.md`\n\n**My thinking:**\nThis is the right final handoff artifact before touching code. At this point more theory would just waste cycles. The value now is in making the edit path painfully clear so the actual code change can happen cleanly and fast.\n\n**Decision:**\n- Treat the rollout as a direct two-file edit next:\n  - `trading_bot.py` for suppression and audit behavior\n  - `copy_scanner_v2.py` for additive metadata emission\n- Keep rollout defensive-only and compatibility-preserving.\n\n**Next:** On the next heartbeat for the relevant pillar, directly edit `trading_bot.py` and `copy_scanner_v2.py` using this checklist.\n\n---\n## 2026-04-",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 21:45 UTC \u2014 [P2: Smart Entry] Validate the First Shipped Defensive Copy Patch, Confirm Non-Breaking Behavior\n\n**Task:** Validate the first live defensive copy rollout after shipping, specifically whether the new payload fields are actually emitted and whether both patched files remain syntactically healthy.\n**Finding:**\n- Both bots are alive.\n- Validation passed:\n  - `copy_signal.json` now emits the additive defensive fields:\n    - `copy_quality`\n    - `collapsed_stats`\n    - `data_quality`\n  - both patched files compile successfully:\n    - `trading_bot.py`\n    - `copy_scanner_v2.py`\n- Legacy fields remain intact.\n- Current limitation is expected:\n  - producer metadata is still placeholder-safe rather than fully computed\n  - `sample_total = 0`\n  - collapsed counts = `0`\n  - `copy_sample_unstable = false`\n- Wrote new validation artifact: `/home/ubuntu/clawd/patches/v9q-defensive-copy-patch-validation.spec.md`\n\n**My thinking:**\nI\u2019m glad this landed cleanly. This is exactly what a safe Phase 1 rollout should look like: non-breaking, observable, and conservative. The next step is not bug-fixing, it is upgrading the producer from placeholder metadata to real collapse and instability stats.\n\n**Decision:**\n- Treat Phase 1 defensive rollout as **healthy and non-breaking**.\n- Next implementation target:\n  - replace placeholder metadata in `copy_scanner_v2.py` with real computed quality / collapse metrics.\n\n**Next:** On the next P2 heartbeat, design the smallest upgrade path for `copy_scanner_v2.py` to compute real metadata without overcomplicating the producer.\n\n---\n## 2026-04-22 21:28 UTC \u2014 [P1: Copy Intelligence] Shipped the First Live Defensive Copy Rollout Into `trading_bot.py` and `copy_scanner_v2.py`\n\n**Task:** Move from planning into actual code edits by implementing the first live defensive copy rollout, limited to suppression, metadata, and audit visibility.\n**Finding:**\n- Both bots are alive.\n- I applied the first real live patch in two files:\n  - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n  - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n- `trading_bot.py` now:\n  - initializes `self.copy_suppression_reason`\n  - resets it inside `read_copy_signals()`\n  - suppresses copy influence on `stale`, `unstable`, and `insufficient_sample`\n  - suppresses on `copy_quality.copy_sample_unstable`\n  - surfaces suppression states into `details[\"COPY\"]`\n- `copy_scanner_v2.py` now emits additive defensive metadata blocks:\n  - `copy_quality`\n  - `collapsed_stats`\n  - `data_quality`\n- Existing legacy fields and the reader return shape remain intact.\n\n**My thinking:**\nThis is the right first ship. It adds real live defense without touching entry, sizing, regime, or execution logic. The bot is now better protected against bad copy input, and the suppression path is auditable instead of silent.\n\n**Decision:**\n- Keep this rollout defens",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
