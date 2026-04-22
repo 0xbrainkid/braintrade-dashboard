@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T10:00:02.186007+00:00",
+  "timestamp": "2026-04-22T10:16:18.932988+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0824%",
+      "apr": "+90%",
+      "action": "SHORT",
+      "oi": "69,686,419"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 43 buys, 7 sells \u2014 avg price $0.864"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0824%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:59 UTC \u2014 [P4: Alpha Research] The Deepest State, `0.485 / 0.515`, Was the Climax Before Recovery\n\n**Task:** Use the now-complete 09h transition chain to identify whether one state acted as the excursion climax before the market recovered back to the base regime.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h transition chain completed a full excursion-and-recovery sequence:\n  - `0.505 / 0.495`\n  - `0.490 / 0.510`\n  - `0.505 / 0.495`\n  - `0.495 / 0.505`\n  - `0.485 / 0.515`\n  - `0.495 / 0.505`\n  - `0.505 / 0.495`\n- The deepest state reached was:\n  - **`0.485 / 0.515`**\n- That deepest state did **not** extend further.\n- Instead, the market reclaimed adjacent states in order:\n  - first back to `0.495 / 0.505`\n  - then back to `0.505 / 0.495`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7x-climax-state-recovery.spec.md`\n\n**My thinking:**\nThis gives the state-machine work a clearer alpha shape. The deepest adjacent state appears to function like a climax or exhaustion point. Once the market failed to push beyond `0.485 / 0.515`, the important information became the orderly reclaim of higher adjacent states. That sequence is much more informative than any single snapshot.\n\n**Decision:**\n- Treat the deepest state in a traversal as a potential **climax state**.\n- Use stepwise reclaim from that state as evidence the sequence has shifted from escalation into recovery.\n- Prioritize full transition-chain interpretation over isolated state labels.\n\n**Next:** On the next P4 heartbeat, convert the 09h chain into a compact timestamped transition map so climax depth, dwell time, and reclaim order can be compared across future episodes.\n\n---\n## 2026-04-22 09:46 UTC \u2014 [P3: Strategy Development] The Tape Is Traversing a State Sequence, So Break Logic Alone Is Too Simple\n\n**Task:** Decide whether the current excluded-hour behavior is still best described as single breaks and recoveries, or whether it now needs a broader strategy model for repeated nearby-state transitions.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h tape has now traversed a sequence of nearby states, not just one failed break:\n  - base state: `Y0.505 / N0.495`\n  - failed break: `Y0.490 / N0.510`\n  - recovery: `Y0.505 / N0.495`\n  - shift: `Y0.495 / N0.505`\n  - deeper shift: `Y0.485 / N0.515`\n  - partial recovery: `Y0.495 / N0.505`\n  - return: `Y0.505 / N0.495`\n- This means the tape is not just breaking and snapping back once. It is traversing a **sequence of discrete nearby states**.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7w-state-machine-sequencing.spec.md`\n\n**My thinking:**\nThe binary language of break versus no break helped at first, but it is too simple now. Once the market moves through several adjacent states and then reclaims prior ones, the right object is the whole transition chai",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 10:16 UTC \u2014 [P1: Copy Intelligence] The Bullish Flip Sample Was Extreme Crowd-Latching, So the Thresholds Need a Ladder\n\n**Task:** Quantify concentration in the earlier bullish flip copy sample so the anti-signal thresholds for copy crowding can be tightened beyond the old `0.40` warning line.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The earlier bullish flip sample was not just concentrated, it was **extreme**:\n  - **50** total signals\n  - **45** signals in one title\n  - dominant title share = **0.90**\n- The repeated trade clusters were also highly concentrated:\n  - top triple = **20 / 50 = 0.40**\n  - top two triples = **40 / 50 = 0.80**\n- This sits far above the existing crowding warning rule of `0.40`.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7y-copy-crowding-thresholds.spec.md`\n\n**My thinking:**\nThe old `0.40` threshold is still useful as an early warning, but it does not distinguish moderate crowding from the kind of total pile-in we saw here. When ninety percent of the sample sits in one title and eighty percent sits in the top two repeated clusters, that is not just noisy, it is a full crowd-latching event. The model needs an escalation ladder, not a single line.\n\n**Decision:**\n- Keep `0.40` as the **warn / risk-off** threshold.\n- Add a stronger ladder:\n  - **strong anti-signal** at `dominant_title_share >= 0.60` or `top_two_triple_share >= 0.60`\n  - **extreme crowd-latching** at `dominant_title_share >= 0.80` or `top_two_triple_share >= 0.80`\n- Treat extreme crowd-latching as near-automatic ignore / anti-signal behavior.\n\n**Next:** On the next P1 heartbeat, run the same concentration scoring on the bearish flip sample so the ladder is calibrated on both polarity extremes, not just the bullish case.\n\n---\n## 2026-04-22 09:59 UTC \u2014 [P4: Alpha Research] The Deepest State, `0.485 / 0.515`, Was the Climax Before Recovery\n\n**Task:** Use the now-complete 09h transition chain to identify whether one state acted as the excursion climax before the market recovered back to the base regime.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h transition chain completed a full excursion-and-recovery sequence:\n  - `0.505 / 0.495`\n  - `0.490 / 0.510`\n  - `0.505 / 0.495`\n  - `0.495 / 0.505`\n  - `0.485 / 0.515`\n  - `0.495 / 0.505`\n  - `0.505 / 0.495`\n- The deepest state reached was:\n  - **`0.485 / 0.515`**\n- That deepest state did **not** extend further.\n- Instead, the market reclaimed adjacent states in order:\n  - first back to `0.495 / 0.505`\n  - then back to `0.505 / 0.495`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7x-climax-state-recovery.spec.md`\n\n**My thinking:**\nThis gives the state-machine work a clearer alpha shape. The deepest adjacent state appears to function like a climax or exhaustion point. Once the market failed to push beyond `0.485 / 0.515",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
