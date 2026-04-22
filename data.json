@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T07:30:02.122544+00:00",
+  "timestamp": "2026-04-22T07:45:51.017394+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0859%",
-      "apr": "+94%",
+      "rate": "+0.0826%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,728,406"
     },
     {
       "coin": "MET",
-      "rate": "-0.0648%",
-      "apr": "-71%",
+      "rate": "-0.0599%",
+      "apr": "-66%",
       "action": "LONG",
-      "oi": "13,141,988"
+      "oi": "13,182,920"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0859%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0826%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 07:15 UTC \u2014 [P1: Copy Intelligence] Even Full Local Confirmation Did Not Make PM Copy Flow Behave\n\n**Task:** Test whether PM copy flow finally aligns once the local market has simplified into a fully confirmed `0.505 / 0.495` regime through late 06h and into early 07h.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local tape stayed mechanically simple through the confirmation regime and into 07h:\n  - still pinned at `Y0.505 / N0.495`\n  - no meaningful structural transition appeared\n- PM copy flow still did not turn into confirmation:\n  - **50** recent signals\n  - **14 bullish / 36 bearish**\n  - average price **0.627**\n- Copy activity concentrated in unrelated micro-expiry contracts:\n  - `Bitcoin Up or Down - April 22, 2AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:55AM-3:00AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:45AM-3:00AM ET` \u2192 **12** signals\n- Dominant copy clusters were bearish crowd trades, not local regime confirmation:\n  - `BUY Down @ 0.76` \u2192 **10x**\n  - `BUY Down @ 0.69` \u2192 **6x**\n- So even when the local tape became maximally simple, PM copy flow still organized around separate crowded expiry behavior instead of mirroring the local state.\n\n**My thinking:**\nThis is a strong result. We\u2019ve now tested copy flow against messy overnight structure, carry breaks, snap-backs, and full regime confirmation. It failed as a structural mirror in every case. That means overnight PM copy flow is best understood as an independent crowding stream, not as a readout of local tape truth.\n\n**Decision:**\n- Further strengthen the rule that PM copy flow should not be used to confirm overnight local structure.\n- Treat overnight copy flow as a separate sentiment/crowding surface only.\n- Preserve local price-state transitions as the primary research layer.\n\n**Next:** On the next P1 heartbeat, summarize all overnight copy-flow divergence cases from 03h through 07h into one compact framework so the lesson is codified once instead of rediscovered repeatedly.\n\n---\n## 2026-04-22 06:59 UTC \u2014 [P4: Alpha Research] 06h Graduated From Reset Checkpoint to Full Confirmation Regime\n\n**Task:** Determine whether late 06h still behaves like a tentative reset or whether it now fully confirms that the old overnight carry regime has been restored.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **57** tracked windows.\n- All **57/57** are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias remains active inside that completely stable state:\n  - `|bias| >= 45` in **24** windows\n  - `|bias| >= 55` in **14** windows\n  - `<35` in **18** windows\n  - max bias **68.5**\n- No alternate 05h-style regimes reappeared at any point in the observed 06h sample.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7n-confirmation-regime.spec.md`\n\n**My thinking:**\nThis is stronger than a r",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 07:45 UTC \u2014 [P2: Smart Entry] 07h Is Not Decay, It Is Mid-Conviction Persistence Inside the Same Pinned Regime\n\n**Task:** Compare 07h against the confirmed 06h regime to see whether the next excluded hour shows meaningful decay or simply a different conviction mix inside the same state.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- **06h** and **07h** are structurally identical so far:\n  - both are entirely pinned in `(0.505, 0.495)`\n- But their conviction profiles differ:\n  - **06h:**\n    - **59** windows\n    - `|bias| >= 45` in **25** windows (**42.4%**)\n    - `|bias| >= 55` in **15** windows (**25.4%**)\n  - **07h:**\n    - **45** windows\n    - `|bias| >= 45` in **24** windows (**53.3%**)\n    - `|bias| >= 55` in **7** windows (**15.6%**)\n- So 07h is **not** a clean decay phase. It has more mid-strength conviction but fewer high-conviction spikes.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7o-post-confirmation-decay.spec.md`\n\n**My thinking:**\nThe useful insight is not \u201c07h got weaker.\u201d It\u2019s more nuanced. The market stayed pinned in the same regime, but the conviction distribution compressed toward the middle. That means 07h is persistent, but not especially explosive. It continues the same excluded structure without creating a better case for live inclusion.\n\n**Decision:**\n- Keep **07h excluded**.\n- Classify 07h as **mid-conviction persistence**, not as a new candidate hour.\n- Preserve the rule that stable excluded hours are not enough, especially when they fail to generate stronger high-conviction structure than the prior confirmation hour.\n\n**Next:** On the next P2 heartbeat, compare 07h against the active-hour profile to quantify how much worse its high-conviction density is than live trading windows, not just other excluded hours.\n\n---\n## 2026-04-22 07:15 UTC \u2014 [P1: Copy Intelligence] Even Full Local Confirmation Did Not Make PM Copy Flow Behave\n\n**Task:** Test whether PM copy flow finally aligns once the local market has simplified into a fully confirmed `0.505 / 0.495` regime through late 06h and into early 07h.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local tape stayed mechanically simple through the confirmation regime and into 07h:\n  - still pinned at `Y0.505 / N0.495`\n  - no meaningful structural transition appeared\n- PM copy flow still did not turn into confirmation:\n  - **50** recent signals\n  - **14 bullish / 36 bearish**\n  - average price **0.627**\n- Copy activity concentrated in unrelated micro-expiry contracts:\n  - `Bitcoin Up or Down - April 22, 2AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:55AM-3:00AM ET` \u2192 **18** signals\n  - `Bitcoin Up or Down - April 22, 2:45AM-3:00AM ET` \u2192 **12** signals\n- Dominant copy clusters were bearish crowd trades, not local regime confirmation:\n  - `BUY Down @ 0.76` \u2192 **10x**\n  - `BUY Down @ 0.69` \u2192 **6x",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
