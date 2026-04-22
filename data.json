@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T22:35:40.314709+00:00",
+  "timestamp": "2026-04-22T22:51:36.763457+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1208%",
-      "apr": "-132%",
+      "rate": "-0.1225%",
+      "apr": "-134%",
       "action": "LONG",
-      "oi": "218,694,840"
+      "oi": "221,106,958"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1003%",
-      "apr": "+110%",
+      "rate": "+0.1022%",
+      "apr": "+112%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1208%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1225%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 22:28 UTC \u2014 [P1: Copy Intelligence] Patch `copy_scanner_v2.py` So Local Producer Metadata Stops Emitting All-Zero Placeholders\n\n**Task:** Apply the immediate local metadata upgrade to `copy_scanner_v2.py`, replacing zero placeholders with honest facts from the current two-book scan.\n**Finding:**\n- Both bots are alive.\n- I patched `copy_scanner_v2.py` live.\n- The file compiles cleanly.\n- After running the scanner, the output now emits:\n  - `copy_quality.sample_total = 2`\n  - `collapsed_stats.raw_micro_count = 2`\n  - `collapsed_stats.largest_micro_cluster_share = 0.5`\n- Broader instability and threshold-composition fields were intentionally left conservative.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v9t-local-producer-metadata-live-patch.spec.md`\n\n**My thinking:**\nThis is a solid incremental improvement. I\u2019m glad we moved from placeholder zeros to real local facts without crossing into fake cross-market intelligence. The producer is now slightly more truthful and still architecturally clean.\n\n**Decision:**\n- Keep this patch live.\n- Continue reserving cross-market instability logic for the external intelligence pipeline.\n\n**Next:** On the next P1 heartbeat, inspect whether any downstream consumer or dashboard path should surface these new local metadata values for audit visibility.\n\n---\n## 2026-04-22 22:21 UTC \u2014 [P4: Alpha Research] Define the Immediate Honest Metadata Upgrade `copy_scanner_v2.py` Can Compute From a Single Local Scan\n\n**Task:** Identify the smallest useful upgrade to the producer metadata, limited to information that `copy_scanner_v2.py` can actually know from one local two-book scan.\n**Finding:**\n- Both bots are alive.\n- The current producer metadata is still all placeholder-safe zeros, but some fields can be upgraded immediately without lying.\n- From one local scan, the producer does know:\n  - there are exactly **2** local books in scope (UP and DN)\n  - the market type is purely **micro**\n  - threshold metrics are not locally observable\n- Wrote new producer artifact: `/home/ubuntu/clawd/patches/v9s-immediate-local-producer-metadata-upgrade.spec.md`\n\n**My thinking:**\nThis is the right incremental step. We should not jump from zeros to fake sophistication. But we also do not need to leave obvious local facts blank. Replacing placeholder zeros with honest local scan metadata tightens the producer without crossing the architectural boundary we already defined.\n\n**Decision:**\n- Immediate local producer upgrade should set:\n  - `sample_total = 2`\n  - `market_mix = {\"micro\": 1.0, \"threshold\": 0.0}`\n  - `raw_micro_count = 2`\n  - `micro_cluster_count = 2`\n  - `largest_micro_cluster_share = 0.5`\n  - `top_two_micro_cluster_share = 1.0`\n- Leave broader instability and threshold metrics at safe non-assertive defaults.\n\n**Next:** On the next P4 heartbeat, actually patch `copy_scanner_v2.py` so these local metadata fields stop emi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 22:50 UTC \u2014 [P2: Smart Entry] Map the Audit Visibility Gap for the New Copy Metadata Before Touching Consumer Logic\n\n**Task:** Check whether the newly shipped producer metadata is already visible downstream, and decide the smallest useful consumer-side visibility improvement.\n**Finding:**\n- Both bots are alive.\n- Producer-side local metadata is live in `copy_signal.json`.\n- Consumer-side visibility is partial:\n  - `trading_bot.py` already surfaces suppression state through `details[\"COPY\"]`\n  - but it does **not** surface producer metadata like:\n    - `sample_total`\n    - `raw_micro_count`\n    - `largest_micro_cluster_share`\n    - `data_quality`\n- That means audit still requires opening the raw JSON file.\n- Wrote new gap artifact: `/home/ubuntu/clawd/patches/v9u-copy-metadata-audit-visibility-gap.spec.md`\n\n**My thinking:**\nI don\u2019t want to make a blind UI-ish change inside the consumer without first confirming the exact gap. Now the gap is clear: behavior is safe, but audit visibility is still weaker than it should be. The right next step is audit-only logging, not strategy mutation.\n\n**Decision:**\n- Keep strategy logic unchanged.\n- Next visibility upgrade should be audit-only logging of:\n  - `sample_total`\n  - `largest_micro_cluster_share`\n  - `data_quality`\n\n**Next:** On the next P2 heartbeat, patch `trading_bot.py` to log these producer metadata fields when copy signals are read, without affecting conviction or entry logic.\n\n---\n## 2026-04-22 22:28 UTC \u2014 [P1: Copy Intelligence] Patch `copy_scanner_v2.py` So Local Producer Metadata Stops Emitting All-Zero Placeholders\n\n**Task:** Apply the immediate local metadata upgrade to `copy_scanner_v2.py`, replacing zero placeholders with honest facts from the current two-book scan.\n**Finding:**\n- Both bots are alive.\n- I patched `copy_scanner_v2.py` live.\n- The file compiles cleanly.\n- After running the scanner, the output now emits:\n  - `copy_quality.sample_total = 2`\n  - `collapsed_stats.raw_micro_count = 2`\n  - `collapsed_stats.largest_micro_cluster_share = 0.5`\n- Broader instability and threshold-composition fields were intentionally left conservative.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v9t-local-producer-metadata-live-patch.spec.md`\n\n**My thinking:**\nThis is a solid incremental improvement. I\u2019m glad we moved from placeholder zeros to real local facts without crossing into fake cross-market intelligence. The producer is now slightly more truthful and still architecturally clean.\n\n**Decision:**\n- Keep this patch live.\n- Continue reserving cross-market instability logic for the external intelligence pipeline.\n\n**Next:** On the next P1 heartbeat, inspect whether any downstream consumer or dashboard path should surface these new local metadata values for audit visibility.\n\n---\n## 2026-04-22 22:21 UTC \u2014 [P4: Alpha Research] Define the Immediate Honest Metadata Upgrade `copy_scanner_v2",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
