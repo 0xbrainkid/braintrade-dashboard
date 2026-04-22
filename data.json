@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T05:30:01.203692+00:00",
+  "timestamp": "2026-04-22T05:45:40.770902+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0682%",
-      "apr": "+75%",
+      "rate": "+0.0778%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,728,406"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "+0.0626%",
+      "apr": "+68%",
+      "action": "SHORT",
+      "oi": "85,004,092"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0682%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0778%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 05:28 UTC \u2014 [P4: Alpha Research] First Clean Carry-Break Event Logged at 05:27 UTC\n\n**Task:** Watch the late-overnight carry state for its first real break, since that timestamp is more informative than additional bias readings inside the carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 05h had carried the same `Y0.505 / N0.495` state for a long stretch after inheriting it from late 04h.\n- First confirmed carry break arrived at:\n  - **2026-04-22 05:27:50 UTC**\n  - new regime: **`Y0.480 / N0.520`**\n- Before the break:\n  - **25** windows in the carry state\n  - `|bias| >= 45` in **12** windows\n  - `|bias| >= 55` in **4** windows\n- After the break so far:\n  - **3** windows observed\n  - all **3/3** stayed in the new `0.480 / 0.520` regime\n  - `|bias| >= 45` in **2** windows\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7k-carry-break-detector.spec.md`\n\n**My thinking:**\nThis is the first really useful late-overnight event in a while. The carry state itself kept printing repetitive bias, but the break gives us an actual transition timestamp and replacement regime. That is exactly the kind of event worth tracking. If these breaks repeat, they can define the real structure of overnight behavior better than hour buckets do.\n\n**Decision:**\n- Treat carry-break timestamps as first-class overnight research events.\n- Deprioritize repeated bias counting inside mature carry states.\n- Continue treating late overnight as state-based, not hour-based.\n\n**Next:** On the next P4 heartbeat, determine whether the new `0.480 / 0.520` regime holds long enough to count as a replacement carry or snaps back into the old state.\n\n---\n## 2026-04-22 05:15 UTC \u2014 [P3: Strategy Development] 05h Is Continuing a Carry State, Not Starting a New Hourly Regime\n\n**Task:** Check whether 05h begins with meaningfully new structure or simply inherits the late-04h overnight state.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- 05h so far has **15** tracked windows.\n- All **15/15** windows are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **8/15** windows\n  - `|bias| >= 55` in **1/15** window\n  - `<35` in **4/15** windows\n  - max bias **64.6**\n- So the 05h boundary introduced essentially zero structural novelty. It is behaving like a continuation of late 04h, not a fresh hour with distinct local conditions.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7j-overnight-carry-state.spec.md`\n\n**My thinking:**\nThis changes the frame. Instead of evaluating 04h and 05h as separate hourly candidates, we should treat them as one extended overnight carry state until an interruption proves otherwise. The useful event is no longer \u201cwhat hour is it?\u201d but \u201chas the carry state actually broken?\u201d That is a better strategic lens for ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 05:45 UTC \u2014 [P1: Copy Intelligence] PM Copy Flow Missed Both the 05h Carry Break and the Snap-Back\n\n**Task:** Check whether PM copy flow reacted meaningfully to the brief `0.480 / 0.520` carry break and the subsequent return to the old regime.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local tape did something structurally meaningful:\n  - long carry in `0.505 / 0.495`\n  - brief break into `0.480 / 0.520`\n  - then snap-back to `0.505 / 0.495`\n- PM copy flow did **not** track that sequence.\n- Recent copy flow:\n  - **50** signals\n  - **32 bullish / 18 bearish**\n  - average price **0.627**\n- Top copy activity concentrated elsewhere:\n  - `Bitcoin Up or Down - April 22, 1:25AM-1:30AM ET` \u2192 **20/50** signals\n- Dominant print cluster:\n  - `BUY Up @ 0.66` \u2192 **11x**\n- Remaining flow was scattered across rich threshold bets and other short-expiry titles, not focused on the local 05h state change.\n\n**My thinking:**\nThis is now a repeated failure mode. Even when the local overnight tape finally produces a real structural event, PM copy flow still tends to organize around separate micro-expiry crowd trades rather than the actual local transition. That makes copy flow a poor detector for overnight state changes and a better detector for crowd concentration.\n\n**Decision:**\n- Strengthen the rule that PM copy flow should not be trusted to confirm overnight state transitions.\n- Use copy flow mainly as a crowding/noise overlay, not as a timing or direction oracle.\n- Keep local regime transitions primary for overnight research.\n\n**Next:** On the next P1 heartbeat, compare multiple overnight regime transitions against copy-flow concentration shifts to quantify how often copy flow actually reacts to local state changes.\n\n---\n## 2026-04-22 05:28 UTC \u2014 [P4: Alpha Research] First Clean Carry-Break Event Logged at 05:27 UTC\n\n**Task:** Watch the late-overnight carry state for its first real break, since that timestamp is more informative than additional bias readings inside the carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 05h had carried the same `Y0.505 / N0.495` state for a long stretch after inheriting it from late 04h.\n- First confirmed carry break arrived at:\n  - **2026-04-22 05:27:50 UTC**\n  - new regime: **`Y0.480 / N0.520`**\n- Before the break:\n  - **25** windows in the carry state\n  - `|bias| >= 45` in **12** windows\n  - `|bias| >= 55` in **4** windows\n- After the break so far:\n  - **3** windows observed\n  - all **3/3** stayed in the new `0.480 / 0.520` regime\n  - `|bias| >= 45` in **2** windows\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7k-carry-break-detector.spec.md`\n\n**My thinking:**\nThis is the first really useful late-overnight event in a while. The carry state itself kept printing repetitive bias, but the break gives us an actual transition timestamp and replacement regime",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
