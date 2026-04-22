@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T12:30:02.290009+00:00",
+  "timestamp": "2026-04-22T12:35:47.890070+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0889%",
-      "apr": "+97%",
+      "rate": "+0.0901%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0889%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0901%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:29 UTC \u2014 [P1: Copy Intelligence] Copy Flow Still Cannot Distinguish Wrong-Side Session Types, It Just Crowd-Piles Bearishly\n\n**Task:** Test whether PM copy flow reacts differently to the 11h inversion-state-machine session versus the 12h trend-aligned wrong-side session, or whether it just piles into bearish crowd trades either way.\n**Finding:**\n- Both bots are alive and PM remains in active hour **12h**.\n- The local session taxonomy is now richer:\n  - **11h** = inversion-state-machine\n  - **12h** = trend-aligned wrong-side session\n- But copy flow still did not differentiate between them.\n- Latest copy sample:\n  - **50** signals\n  - **47 bearish / 3 bullish**\n  - average price **0.757**\n- Nearly all flow concentrated in two adjacent micro-expiry titles:\n  - `Bitcoin Up or Down - April 22, 7:50AM-7:55AM ET` \u2192 **24**\n  - `Bitcoin Up or Down - April 22, 7:55AM-8:00AM ET` \u2192 **23**\n- top two titles = **47 / 50 = 0.94**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8g-copy-does-not-distinguish-wrong-side-taxons.spec.md`\n\n**My thinking:**\nThis is actually a clean negative result. We now have two different wrong-side session types locally, but copy flow still reduced everything to the same crowd behavior: bearish micro-expiry piling. That means copy flow is not helping classify structure at all. It sees \"bearish enough\" and dogpiles the nearest short-dated contracts.\n\n**Decision:**\n- Keep session taxonomy local-tape-first.\n- Do **not** use copy flow to distinguish between wrong-side failure classes.\n- Treat copy flow as a crowding overlay only, not a session classifier.\n\n**Next:** On the next P1 heartbeat, score whether any recent copy sample has shown enough title dispersion to qualify as potentially informational, or whether every meaningful sample is still trapped in crowd-latching mode.\n\n---\n## 2026-04-22 12:14 UTC \u2014 [P4: Alpha Research] 12h Is a Trend-Aligned Wrong-Side Session, Not an Inversion Sequence\n\n**Task:** Determine whether today\u2019s 12h weakness is the same kind of failure as 11h, or whether it is a cleaner wrong-sided session driven by stable price plus regime alignment.\n**Finding:**\n- Both bots are alive and PM is in active hour **12h**.\n- 12h has remained price-stable at:\n  - `Y0.505 / N0.495`\n- But directional availability stayed wrong-sided:\n  - repeated `NO_TRADE_SKIPPED`\n  - repeated `YES_ONLY_FILTER`\n  - bias persistently positive\n- Unlike 11h, this session did **not** need a price-state excursion to reveal the problem.\n- Then the regime layer started confirming the same story:\n  - `REGIME_FILTER: TREND (score 3/6, dir:88%, range:0.5-0.6%, trend:+0.5%)`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8f-trend-aligned-wrong-side-session.spec.md`\n\n**My thinking:**\nThis is cleaner than 11h. In 11h, price moved through several states while direction stayed wrong-sided, so we needed an inversion state mac",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:30 UTC \u2014 [P2: Smart Entry] Add an Early Stop Rule for Trend-Aligned Wrong-Side Sessions\n\n**Task:** Turn the 12h finding into a concrete parameter rule, specifically whether a stable wrong-side session with regime confirmation should stop the bot from repeatedly searching for rescue entries.\n**Finding:**\n- Both bots are alive.\n- 12h already showed the cleanest wrong-side pattern of the day:\n  - price pinned at `0.505 / 0.495`\n  - repeated positive-bias skips under YES-only\n  - later regime confirmation with `TREND`\n- That means the session did not fail because of noisy transitions. It failed because the whole environment stayed stably unavailable.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8h-trend-aligned-wrong-side-stop-rule.spec.md`\n\n**My thinking:**\nThis is exactly where the bot should stop trying to be clever. Once stable price, wrong-side direction, and regime confirmation all line up, there is no edge in continuing to scan every cycle for a miracle entry. That is not selectivity, it is search waste.\n\n**Decision:**\n- Add a **trend-aligned wrong-side stop rule**.\n- If pinned-normal price persists while direction stays wrong-sided across enough consecutive refreshes, and regime confirms with `TREND` or stronger, abandon the session early.\n- Require both a directional reset and regime softening before reconsidering entry.\n\n**Next:** On the next P2 heartbeat, define the minimum consecutive wrong-side refresh count for this stop rule, so it can be tested against Apr 22 12h and prior false-rescue sessions.\n\n---\n## 2026-04-22 12:29 UTC \u2014 [P1: Copy Intelligence] Copy Flow Still Cannot Distinguish Wrong-Side Session Types, It Just Crowd-Piles Bearishly\n\n**Task:** Test whether PM copy flow reacts differently to the 11h inversion-state-machine session versus the 12h trend-aligned wrong-side session, or whether it just piles into bearish crowd trades either way.\n**Finding:**\n- Both bots are alive and PM remains in active hour **12h**.\n- The local session taxonomy is now richer:\n  - **11h** = inversion-state-machine\n  - **12h** = trend-aligned wrong-side session\n- But copy flow still did not differentiate between them.\n- Latest copy sample:\n  - **50** signals\n  - **47 bearish / 3 bullish**\n  - average price **0.757**\n- Nearly all flow concentrated in two adjacent micro-expiry titles:\n  - `Bitcoin Up or Down - April 22, 7:50AM-7:55AM ET` \u2192 **24**\n  - `Bitcoin Up or Down - April 22, 7:55AM-8:00AM ET` \u2192 **23**\n- top two titles = **47 / 50 = 0.94**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8g-copy-does-not-distinguish-wrong-side-taxons.spec.md`\n\n**My thinking:**\nThis is actually a clean negative result. We now have two different wrong-side session types locally, but copy flow still reduced everything to the same crowd behavior: bearish micro-expiry piling. That means copy flow is not helping classify structure at a",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
