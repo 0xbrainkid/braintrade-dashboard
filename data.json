@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T06:14:52.939998+00:00",
+  "timestamp": "2026-04-22T06:29:19.248470+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.1073%",
-      "apr": "+118%",
+      "coin": "CHIP",
+      "rate": "+0.0897%",
+      "apr": "+98%",
       "action": "SHORT",
-      "oi": "69,728,406"
+      "oi": "104,168,930"
     },
     {
-      "coin": "CHIP",
-      "rate": "+0.0889%",
-      "apr": "+97%",
+      "coin": "MAVIA",
+      "rate": "+0.0619%",
+      "apr": "+68%",
       "action": "SHORT",
-      "oi": "94,155,608"
+      "oi": "69,728,406"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1073%/8h \u2014 longs paying shorts"
+        "text": "Strongest: CHIP at 0.0897%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 06:14 UTC \u2014 [P2: Smart Entry] Overnight Breaks Need a Durability Gate, Not Just Detection\n\n**Task:** Compare the late-05h break regimes against the opening behavior of 06h to decide whether overnight break detection alone is enough to matter.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **05h** now contains three regimes:\n  - `(0.505, 0.495)` \u2192 **50** windows\n  - `(0.480, 0.520)` \u2192 **5** windows\n  - `(0.485, 0.515)` \u2192 **5** windows\n  - `|bias| >= 45` in **29** windows, `|bias| >= 55` in **12**\n- **06h** so far reopened with zero ambiguity:\n  - `(0.505, 0.495)` \u2192 **14/14** windows\n  - `|bias| >= 45` in **4** windows, `|bias| >= 55` in **2**\n- So the late-05h break existed, but it did **not** survive the next boundary. The market returned immediately to the old carry state.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7l-break-durability-gate.spec.md`\n\n**My thinking:**\nBreak detection was a good first step, but it is not enough. Some breaks are just failed transitions. The strategic question is whether a new regime has enough durability to matter after it appears. If it cannot hold through the next cluster or next hour boundary, it belongs in the \"interesting but non-actionable\" bucket.\n\n**Decision:**\n- Add a **durability gate** to overnight break analysis.\n- Classify the late-05h break as **non-durable** because 06h reopened directly in the old `0.505 / 0.495` carry.\n- Keep using state transitions for research, but rank them by whether they persist.\n\n**Next:** On the next P2 heartbeat, review all observed overnight breaks and classify each as durable vs non-durable to see whether any excluded hour ever produces a break worth promoting.\n\n---\n## 2026-04-22 05:45 UTC \u2014 [P1: Copy Intelligence] PM Copy Flow Missed Both the 05h Carry Break and the Snap-Back\n\n**Task:** Check whether PM copy flow reacted meaningfully to the brief `0.480 / 0.520` carry break and the subsequent return to the old regime.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local tape did something structurally meaningful:\n  - long carry in `0.505 / 0.495`\n  - brief break into `0.480 / 0.520`\n  - then snap-back to `0.505 / 0.495`\n- PM copy flow did **not** track that sequence.\n- Recent copy flow:\n  - **50** signals\n  - **32 bullish / 18 bearish**\n  - average price **0.627**\n- Top copy activity concentrated elsewhere:\n  - `Bitcoin Up or Down - April 22, 1:25AM-1:30AM ET` \u2192 **20/50** signals\n- Dominant print cluster:\n  - `BUY Up @ 0.66` \u2192 **11x**\n- Remaining flow was scattered across rich threshold bets and other short-expiry titles, not focused on the local 05h state change.\n\n**My thinking:**\nThis is now a repeated failure mode. Even when the local overnight tape finally produces a real structural event, PM copy flow still tends to organize around separate micro-expiry crowd trades rather than the ac",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 06:29 UTC \u2014 [P3: Strategy Development] 06h Acts Like a Reset Hour, Not a Continuation Hour\n\n**Task:** Determine whether 06h continues the late-05h alternate regimes or resets back to the dominant midpoint carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **27** tracked windows.\n- All **27/27** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that reset state:\n  - `|bias| >= 45` in **10** windows\n  - `|bias| >= 55` in **7** windows\n  - `<35` in **8** windows\n  - max bias **67.2**\n- So 06h is not inheriting the late-05h alternate regimes. It is re-establishing the dominant midpoint regime and holding it cleanly.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7m-06h-reset-hour.spec.md`\n\n**My thinking:**\nThis is strategically useful. The late-05h breaks only matter if 06h validates them. Today it didn\u2019t. Instead, 06h functioned like a reset checkpoint that discarded the late alternates and restored the old carry. That means 06h is not a source of new structure, it is a test of whether prior structure was real enough to survive.\n\n**Decision:**\n- Keep **06h excluded** from live trading.\n- Reclassify 06h as a **reset hour**.\n- Use 06h as the confirmation checkpoint for whether late-overnight breaks are durable or failed.\n\n**Next:** On the next P3 heartbeat, compare several overnight sessions to see whether 06h consistently behaves as a reset hour or if today was an outlier.\n\n---\n## 2026-04-22 06:14 UTC \u2014 [P2: Smart Entry] Overnight Breaks Need a Durability Gate, Not Just Detection\n\n**Task:** Compare the late-05h break regimes against the opening behavior of 06h to decide whether overnight break detection alone is enough to matter.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **05h** now contains three regimes:\n  - `(0.505, 0.495)` \u2192 **50** windows\n  - `(0.480, 0.520)` \u2192 **5** windows\n  - `(0.485, 0.515)` \u2192 **5** windows\n  - `|bias| >= 45` in **29** windows, `|bias| >= 55` in **12**\n- **06h** so far reopened with zero ambiguity:\n  - `(0.505, 0.495)` \u2192 **14/14** windows\n  - `|bias| >= 45` in **4** windows, `|bias| >= 55` in **2**\n- So the late-05h break existed, but it did **not** survive the next boundary. The market returned immediately to the old carry state.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7l-break-durability-gate.spec.md`\n\n**My thinking:**\nBreak detection was a good first step, but it is not enough. Some breaks are just failed transitions. The strategic question is whether a new regime has enough durability to matter after it appears. If it cannot hold through the next cluster or next hour boundary, it belongs in the \"interesting but non-actionable\" bucket.\n\n**Decision:**\n- Add a **durability gate** to overnight break analysis.\n- Classify the late-05h break as **non-durable** because 06h reop",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
