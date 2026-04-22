@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T09:02:24.396836+00:00",
+  "timestamp": "2026-04-22T09:18:44.436656+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,11 +16,11 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0923%",
-      "apr": "+101%",
-      "action": "SHORT",
-      "oi": "69,722,406"
+      "coin": "AVNT",
+      "rate": "-0.0545%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "6,534,218"
     }
   ],
   "daily_pnl": [
@@ -94,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0923%/8h \u2014 longs paying shorts"
+        "text": "Strongest: AVNT at -0.0545%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:59 UTC \u2014 [P3: Strategy Development] Use HL Range Re-Arm to Unlock the First Real Post-Pinned Setup\n\n**Task:** Turn the long `0.505 / 0.495` pinned-episode research into a concrete execution rule for when PM should re-arm instead of staying sidelined through another excluded-hour rollover.\n**Finding:**\n- Both bots are alive in screen.\n- HL regime sequence cleanly shifted across the morning:\n  - **07:00-07:45 UTC:** `TREND` with `pm_action=STOP`\n  - **08:00-08:45 UTC:** `MIXED` with `pm_action=REDUCE_SIZE`\n  - **09:00 UTC:** `RANGE` with `score=1` and `pm_action=TRADE`\n- That HL transition landed exactly after the PM side had already spent multiple hours pinned in `(0.505, 0.495)` and after 08h conviction had aged into a noisier mix instead of producing a clean break.\n- Fresh 09:00 copy flow was still crowded and not trustworthy on its own, with **48 buys / 2 sells** and average signal price around **0.703**, so the useful transition came from regime structure, not copy confirmation.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7t-range-rearm-after-pinned-episode.spec.md`\n\n**My thinking:**\nThe mistake would be to treat the 09h clock change as the unlock. The better trigger is the external regime shift. PM stayed pinned for hours, copy flow stayed noisy, and only when HL moved all the way from `STOP` to `REDUCE_SIZE` to `TRADE` did we get evidence that the market had actually loosened. That gives us a real strategy bridge between overnight PM structure and broader market state.\n\n**Decision:**\n- Add a **range re-arm** rule to strategy design: a long pinned PM episode stays risk-off until HL prints `RANGE`, `score <= 1`, and `pm_action=TRADE`.\n- Do **not** auto-enter on the unlock itself. It only arms the first fresh PM candidate, which still has to pass PM bias and price filters.\n- Keep ignoring copy flow as a release signal during pinned episodes.\n\n**Next:** On the next P3 heartbeat, backtest whether first eligible PM setups after an HL `RANGE/TRADE` unlock beat setups taken earlier during the same pinned episode.\n\n---\n\n## 2026-04-22 08:58 UTC \u2014 [P2: Smart Entry] Late Pinned Episodes Age Into Noisier Conviction, Not Clean Decay\n\n**Task:** Compare 08h against 07h inside the same long pinned episode to see whether later excluded hours become more tradable, stay stable, or decay in a useful way.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Both hours stayed structurally identical:\n  - **07h:** **60/60** windows in `(0.505, 0.495)`\n  - **08h:** **49/49** windows in `(0.505, 0.495)`\n- But the conviction mix changed:\n  - **07h**\n    - `|bias| >= 45`: **32** (**53.3%**)\n    - `|bias| >= 55`: **9** (**15.0%**)\n    - `<35`: **16** (**26.7%**)\n    - max bias: **69.8**\n  - **08h**\n    - `|bias| >= 45`: **20** (**40.8%**)\n    - `|bias| >= 55`: **10** (**20.4%**)\n    - `<35`: **19** (**38.8%**)\n    - max bias: *",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:18 UTC \u2014 [P4: Alpha Research] The First 09h Break Failed and Reverted, So It Was Probe Noise Not Transition\n\n**Task:** Check whether the first structural move away from the long `0.505 / 0.495` pinned episode becomes a true transition or quickly fails.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The long pinned episode finally broke in early 09h:\n  - **09:10-09:14 UTC** logged `Y0.490 / N0.510`\n- But the move did **not** persist.\n- By **09:15 UTC** the market had already reverted to:\n  - `Y0.505 / N0.495`\n- Subsequent logs through the current sample stayed back in the original pinned state.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7t-failed-break-reversion.spec.md`\n\n**My thinking:**\nThis is the distinction we needed. Not every break from a long pinned episode is meaningful. This one was visible and clean, but it failed fast. That makes it much more useful as a **failed break / probe rejection** than as evidence of a real regime transition. The key lesson is that we need persistence and reversion-resistance tests before upgrading a break into structural alpha.\n\n**Decision:**\n- Classify the 09:10-09:14 move to `0.490 / 0.510` as a **failed break reversion**.\n- Do **not** treat it as a durable transition.\n- Add break-persistence and reversion-resistance tests to future break analysis.\n\n**Next:** On the next P4 heartbeat, quantify how many consecutive alternate-state windows are needed before a break stops looking like noise and starts looking durable.\n\n---\n## 2026-04-22 08:59 UTC \u2014 [P3: Strategy Development] Use HL Range Re-Arm to Unlock the First Real Post-Pinned Setup\n\n**Task:** Turn the long `0.505 / 0.495` pinned-episode research into a concrete execution rule for when PM should re-arm instead of staying sidelined through another excluded-hour rollover.\n**Finding:**\n- Both bots are alive in screen.\n- HL regime sequence cleanly shifted across the morning:\n  - **07:00-07:45 UTC:** `TREND` with `pm_action=STOP`\n  - **08:00-08:45 UTC:** `MIXED` with `pm_action=REDUCE_SIZE`\n  - **09:00 UTC:** `RANGE` with `score=1` and `pm_action=TRADE`\n- That HL transition landed exactly after the PM side had already spent multiple hours pinned in `(0.505, 0.495)` and after 08h conviction had aged into a noisier mix instead of producing a clean break.\n- Fresh 09:00 copy flow was still crowded and not trustworthy on its own, with **48 buys / 2 sells** and average signal price around **0.703**, so the useful transition came from regime structure, not copy confirmation.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7t-range-rearm-after-pinned-episode.spec.md`\n\n**My thinking:**\nThe mistake would be to treat the 09h clock change as the unlock. The better trigger is the external regime shift. PM stayed pinned for hours, copy flow stayed noisy, and only when HL moved all the way from `STOP` to `REDUCE_SI",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
