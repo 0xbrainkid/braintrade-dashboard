@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T01:00:14.863530+00:00",
+  "timestamp": "2026-04-22T01:14:46.387388+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MET",
-      "rate": "-0.5050%",
-      "apr": "-553%",
+      "rate": "-0.1238%",
+      "apr": "-136%",
       "action": "LONG",
-      "oi": "19,076,620"
+      "oi": "16,966,906"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1114%",
-      "apr": "+122%",
+      "rate": "+0.0822%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,728,406"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0691%",
-      "apr": "+76%",
-      "action": "SHORT",
-      "oi": "244,094,846"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MET at -0.5050%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MET at -0.1238%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-22 00:59 UTC \u2014 [P1: Copy Intelligence] Leaderboard Turned Broadly Risk-On, but PM-style Crowd Chasing Still Looks Dangerous\n\n**Task:** Run the copy-intel tracker, compare the fresh HL leaderboard state against the prior saved state, and isolate whether top traders are rotating into a clean directional consensus or just chasing crowded perp moves.\n**Finding:**\n- Both bots are alive: `pm-bot` and `hl-bot` screens are present.\n- Fresh tracker run at 00:59 UTC shifted the top-20 consensus to **BTC 5L/4S, ETH 5L/2S, SOL 4L/5S**.\n- Versus the prior saved state, the meaningful change was not just a mild BTC tilt. It was a **broad risk-on rotation out of prior defensive / mixed positioning**:\n  - `anon-0xfc66` flipped from **BTC long / ETH short / PAXG short** to **BTC short / ETH long / PAXG long**, while keeping a massive **HYPE short**.\n  - `anon-0x57dd` rotated hard from **ETH long, HYPE long, SOL short** into **ETH short, HYPE short, SOL long** with many alt flips, which reads more like active dispersion trading than passive trend following.\n  - `ABC` kept the structural shorts that matter most, specifically **HYPE short $1.09M**, **SOL short $777k**, **MON short $107k**, even after trimming and reducing prior BTC/ETH exposure.\n  - `anon-0xecb6` stayed **BTC long $5.40M** but simultaneously held **SOL short $4.34M** and **DOGE short $3.63M**, so even the biggest book is not expressing simple beta-long agreement.\n- The cleanest shared crowd signal remained outside BTC/ETH: repeated **large HYPE shorts** across multiple top accounts (`ABC`, `anon-0xdf9e`, `anon-0x57dd`, `anon-0xfc66`, `beatmaker1`).\n- Extreme funding confirmed crowding pockets instead of a market-wide one-way tape: **MAVIA +99% APR** (crowd long), **SUPER -31% APR** and **JTO -25% APR** (crowd short).\n\n**My thinking:** The leaderboard is not giving us a copy-trade instruction like \u201cjust buy everything.\u201d It is showing a more useful pattern: top traders are selectively turning risk-on in majors while still leaning hard into relative-value and crowded-short expressions elsewhere. That means our edge is not blindly following consensus. It is watching where consensus becomes unusually concentrated, especially when several strong books converge on the same perp like HYPE.\n\n**Decision:**\n- Do **not** treat the BTC/ETH bullish tilt as a direct copy signal for our stack.\n- Upgrade **HYPE short concentration** to an active copy-intel watch item, because that is the most repeated high-notional cross-trader positioning on the board right now.\n- Keep using leaderboard consensus as regime context, while treating multi-account single-asset concentration as the sharper signal.\n\n**Next:** On the next P1 heartbeat, quantify concentration more systematically: count how many top traders share the same side in HYPE, SOL, and BTC, and rank assets by repeated high-notional alignment instead of simple long/",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 01:15 UTC \u2014 [P2: Smart Entry] Midnight Watchlist Should Stay Narrow, 01h Does Not Earn Promotion\n\n**Task:** Check whether the overnight strength meaningfully carries past midnight, or whether the evidence supports keeping the watchlist tightly scoped to 00h only.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The post-midnight quality gap is real:\n  - **00h:** `59` observed windows, `31` with `|bias| >= 45`, `25` with `|bias| >= 55`, max bias `70.0`\n  - **01h:** `14` observed windows, `7` with `|bias| >= 45`, only `2` with `|bias| >= 55`, max bias `70.1`\n- Regime structure also weakened after midnight:\n  - **00h regimes:** `(0.505,0.495)` x40, `(0.485,0.515)` x14, `(0.515,0.485)` x5\n  - **01h regimes:** `(0.505,0.495)` x9, `(0.485,0.515)` x5\n- So 01h still shows some life, but the strength is clearly thinner and less varied than 00h.\n- Historical outcomes remain blank for both hours:\n  - outcomes rows at hours `0/1`: **0**\n- That means there is still no direct validated trade sample for either hour, but the live-quality evidence is much stronger for **00h** than for **01h**.\n\n**My thinking:**\nThis is the kind of narrowing I wanted. Once an excluded hour starts showing life, the temptation is to let the boundary creep wider and wider. The current tape says not to do that. Midnight has enough unusual structure to justify a watchlist. 01h does not. It looks more like a decaying tail of the midnight regime than a separate edge candidate.\n\n**Decision:**\n- Keep the watchlist scoped specifically to **00h**.\n- Do **not** expand the watchlist to 01h.\n- Treat 01h as post-midnight decay unless future nights prove otherwise.\n\n**Next:** If another strong midnight session appears, compare the first 30 minutes of 00h vs the first 30 minutes of 01h directly to quantify decay rate and confirm whether midnight really is the only overnight hour worth shadowing.\n\n---\n## 2026-04-22 00:59 UTC \u2014 [P1: Copy Intelligence] Leaderboard Turned Broadly Risk-On, but PM-style Crowd Chasing Still Looks Dangerous\n\n**Task:** Run the copy-intel tracker, compare the fresh HL leaderboard state against the prior saved state, and isolate whether top traders are rotating into a clean directional consensus or just chasing crowded perp moves.\n**Finding:**\n- Both bots are alive: `pm-bot` and `hl-bot` screens are present.\n- Fresh tracker run at 00:59 UTC shifted the top-20 consensus to **BTC 5L/4S, ETH 5L/2S, SOL 4L/5S**.\n- Versus the prior saved state, the meaningful change was not just a mild BTC tilt. It was a **broad risk-on rotation out of prior defensive / mixed positioning**:\n  - `anon-0xfc66` flipped from **BTC long / ETH short / PAXG short** to **BTC short / ETH long / PAXG long**, while keeping a massive **HYPE short**.\n  - `anon-0x57dd` rotated hard from **ETH long, HYPE long, SOL short** into **ETH short, HYPE short, SOL long** with many alt ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
