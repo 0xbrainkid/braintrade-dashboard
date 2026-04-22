@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T17:00:02.513518+00:00",
+  "timestamp": "2026-04-22T17:00:51.362247+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0997%",
-      "apr": "+109%",
+      "rate": "+0.0970%",
+      "apr": "+106%",
       "action": "SHORT",
       "oi": "69,671,296"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0694%",
+      "apr": "-76%",
+      "action": "LONG",
+      "oi": "1,175,566"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0997%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0970%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 16:58 UTC \u2014 [P4: Alpha Research] Add a Clear Rule So Copy Instability Needs Real Improvement Before It Resets\n\n**Task:** Define how `copy_sample_unstable` should clear once it has been triggered, so the system does not thrash between frozen and unfrozen states on every scanner refresh.\n**Finding:**\n- Both bots are alive.\n- Current window still fully satisfies the instability condition:\n  - micro share = **0.54**\n  - threshold share = **0.46**\n  - threshold duplicate share = **0.826**\n- So the next missing piece is not trigger logic, but reset logic.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8y-copy-instability-clear-rule.spec.md`\n\n**My thinking:**\nThis needs hysteresis. If the system clears instability the first moment one metric softens, it will just oscillate. That is exactly how bad regime detectors become useless. We need multiple stable windows and a real drop in duplicate pressure or a clear composition simplification before we trust the sample again.\n\n**Decision:**\n- Once `copy_sample_unstable` is set, only clear it after **2 consecutive stable windows** where:\n  1. the instability trigger no longer fires, and\n  2. threshold duplicate share is **< 0.50** or one market type falls below **0.20** share\n- Current window stays frozen and does **not** qualify for clearing.\n\n**Next:** On the next P4 heartbeat, define the window cadence, specifically whether these stable windows should be consecutive scanner snapshots or spaced time windows, so the clear rule is operationally precise.\n\n---\n## 2026-04-22 16:44 UTC \u2014 [P3: Strategy Development] Make the Copy-Sample Instability Trigger Numeric\n\n**Task:** Turn the copy-inference freeze idea into an explicit trigger, using the current mixed sample as the calibration case.\n**Finding:**\n- Both bots are alive.\n- Current recent window has:\n  - **50** total signals\n  - micro share = **0.54**\n  - threshold share = **0.46**\n  - threshold duplicate share = **0.826**\n- That means the feed is not cleanly micro-only or threshold-only. It is mixed, but the threshold half is heavily duplicate-inflated.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8x-copy-sample-instability-thresholds.spec.md`\n\n**My thinking:**\nThis is exactly the kind of tape that causes interpretive mistakes. If we only look at market-type mix, it looks balanced. If we only look at duplicates, we miss the composition context. The freeze trigger needs both. Mixed feed plus heavy duplication means the sample is unstable enough that copy conclusions should stop.\n\n**Decision:**\n- Set `copy_sample_unstable = true` when either:\n  1. both micro and threshold shares are **>= 0.30** and threshold duplicate share is **>= 0.70**, or\n  2. market-type composition shifts by **>= 0.40** between consecutive checks\n- Current window satisfies Condition 1, so copy inference stays frozen.\n\n**Next:** On the next P3 heartbeat, defin",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 16:59 UTC \u2014 [P1: Copy Intelligence] Prove Micro \"Absence\" With Unique Events, Not Raw Scanner Rows\n\n**Task:** Test whether the earlier zero-micro reading reflected genuine crowd absence or a scanner-window artifact caused by duplicate fills dominating the top copy-signal slice.\n**Finding:**\n- Both bots are alive.\n- Ran `copy-intel-tracker.py`: HL leaderboard consensus is now **BTC 9L/1S, ETH 6L/2S, SOL 6L/3S**, so top HL traders are broadly risk-on, not defensive.\n- Current PM copy feed at `intelligence/copy-signals.json` is **not** truly micro-empty:\n  - **50** raw signal rows total\n  - **27 micro** rows, but only **6 unique micro trade events** across **3 titles** and **5 wallets**\n  - **23 threshold** rows, but only **5 unique threshold trade events** across **4 titles** and **5 wallets**\n  - duplicate rows beyond unique events: **21 micro**, **18 threshold**\n- So the earlier `N = 0` micro read is not strong enough to call real crowd absence. The scanner can swing between fake emptiness and fake crowding depending on which duplicate bursts make the slice.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8z-copy-signal-uniqueness-gate.spec.md`\n\n**My thinking:**\nRaw row count is the wrong unit here. Copy intelligence should care about unique participation, not how many times one burst gets repeated in the feed. If we do not normalize that, we will keep hallucinating regime shifts from sampling noise.\n\n**Decision:**\n- Do **not** treat zero raw micro rows as meaningful unless unique-event count is also zero.\n- Add a uniqueness gate before any copy-regime inference:\n  - dedupe by wallet, title, side, outcome, rounded price, rounded size, timestamp bucket\n  - label categories as duplicate-inflated when raw rows / unique events exceeds **3.0**\n- Operationally, the correct current state is **micro present but thin**, not micro absent.\n\n**Next:** On the next P1 heartbeat, compare this uniqueness-normalized PM copy state against the live bot's recent entries to see whether our fills align with thin-but-present crowd behavior or are fading it well.\n\n---\n\n## 2026-04-22 16:58 UTC \u2014 [P4: Alpha Research] Add a Clear Rule So Copy Instability Needs Real Improvement Before It Resets\n\n**Task:** Define how `copy_sample_unstable` should clear once it has been triggered, so the system does not thrash between frozen and unfrozen states on every scanner refresh.\n**Finding:**\n- Both bots are alive.\n- Current window still fully satisfies the instability condition:\n  - micro share = **0.54**\n  - threshold share = **0.46**\n  - threshold duplicate share = **0.826**\n- So the next missing piece is not trigger logic, but reset logic.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8y-copy-instability-clear-rule.spec.md`\n\n**My thinking:**\nThis needs hysteresis. If the system clears instability the first moment one metric softens, it will just oscil",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
