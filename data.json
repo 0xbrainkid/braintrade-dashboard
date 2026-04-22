@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T04:20:27.758454+00:00",
+  "timestamp": "2026-04-22T04:29:11.179551+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0818%",
-      "apr": "+90%",
+      "rate": "+0.0813%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,728,406"
     },
     {
       "coin": "CHIP",
-      "rate": "+0.0712%",
-      "apr": "+78%",
+      "rate": "+0.0574%",
+      "apr": "+63%",
       "action": "SHORT",
-      "oi": "61,741,328"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0570%",
-      "apr": "+62%",
-      "action": "SHORT",
-      "oi": "242,196,936"
+      "oi": "62,481,522"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0818%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0813%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 3 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:14 UTC \u2014 [P2: Smart Entry] Overnight Hours Need a Dominance Gate, Not Just a Bias Gate\n\n**Task:** Compare mature 03h structure against early 04h transition data to decide what kind of filter would be needed before any excluded overnight hour could ever be reconsidered.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **03h** now has enough sample to look genuinely structured:\n  - **60** tracked windows\n  - dominant regime `(0.505, 0.495)` = **40/60 = 66.7%**\n  - `|bias| >= 45` in **33/60 = 55.0%**\n  - `|bias| >= 55` in **12/60 = 20.0%**\n  - low-bias windows `<35` = **11/60**\n- **04h** is smaller but not dead:\n  - **19** tracked windows\n  - dominant regime `(0.505, 0.495)` = **14/19 = 73.7%**\n  - secondary regime `(0.485, 0.515)` = **5/19**\n  - `|bias| >= 45` in **9/19 = 47.4%**\n  - `|bias| >= 55` in **6/19 = 31.6%**\n  - low-bias windows `<35` = **5/19**\n- So the overnight problem is not simply \u201cno bias\u201d or \u201cbad price.\u201d It is that some hours can look deceptively strong before there is enough evidence that the structure is repeatable.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7f-overnight-dominance-gate.spec.md`\n\n**My thinking:**\nWe needed a smarter standard than \u201cdid this hour print some 55+ bias?\u201d because overnight hours can flash high conviction without being dependable. The right next gate is intersectional: strong bias frequency plus dominant local pricing plus no rich-price contamination. That keeps us from promoting random overnight bursts into live-candidate status.\n\n**Decision:**\n- Do **not** expand into 04h.\n- Treat 03h as the stronger overnight watch candidate than 04h, but still only as research.\n- Adopt a new research gate for excluded overnight hours:\n  1. at least **50%** of windows with `|bias| >= 45`\n  2. at least **20%** of windows with `|bias| >= 55`\n  3. at least **55%** dominant regime share\n  4. fewer than **15%** of windows outside live price band\n\n**Next:** On the next P2 heartbeat, test this dominance gate against 00h, 01h, 02h, 03h, and 04h together to rank which excluded hours are merely active versus structurally promotable.\n\n---\n## 2026-04-22 03:45 UTC \u2014 [P1: Copy Intelligence] 03h Local Structure Clarified, Copy Flow Still Mixed Across Rich Markets\n\n**Task:** Re-check PM copy behavior after more 03h tape accumulated, to see whether copy flow converges when local market structure becomes clearer.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The local 03h tape now looks clearer than it did at first glance:\n  - **44** tracked windows\n  - regime counts:\n    - `(0.505, 0.495)` \u2192 **25**\n    - `(0.495, 0.505)` \u2192 **9**\n    - `(0.465, 0.535)` \u2192 **5**\n    - `(0.485, 0.515)` \u2192 **5**\n  - **26** windows with `|bias| >= 45`\n  - **10** windows with `|bias| >= 55`\n  - max bias **69.2**\n- So 03h is not just random churn. It has a dominant regime plu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:29 UTC \u2014 [P3: Strategy Development] 04h Looks Like a Reversion Watch Hour, Not a New Trade Hour\n\n**Task:** Determine whether 04h is evolving into a distinct overnight state or simply reverting back to the same dominant midpoint regime after a brief interruption.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 04h now has **27** tracked windows.\n- Regime split:\n  - `(0.505, 0.495)` \u2192 **22/27**\n  - `(0.485, 0.515)` \u2192 **5/27**\n- Bias quality is still real:\n  - `|bias| >= 45` in **13/27** windows\n  - `|bias| >= 55` in **8/27** windows\n  - low-bias `<35` in **7/27** windows\n  - max bias **65.5**\n- The important structural behavior is sequence, not just counts:\n  - first phase = dominant `0.505/0.495`\n  - middle interruption = brief `0.485/0.515`\n  - later phase = reversion back to `0.505/0.495`, where it stayed\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7g-04h-reversion-watch.spec.md`\n\n**My thinking:**\nThis makes 04h more interpretable. It is not behaving like a fully independent hour with its own stable market identity. It is behaving more like a late-overnight reversion zone where temporary state changes appear, then fail, and the tape snaps back to the main midpoint regime. That is useful research, but it is not a reason to add 04h to the live schedule.\n\n**Decision:**\n- Keep **04h excluded** from live trading.\n- Reclassify 04h as a **reversion watch hour**.\n- Future analysis should track whether secondary regimes at 04h persist or consistently collapse back into the dominant midpoint state.\n\n**Next:** On the next P3 heartbeat, compare 03h and 04h sequencing directly, not just their regime counts, to see whether 04h is reliably a \u201cfailed deviation then snap-back\u201d pattern.\n\n---\n## 2026-04-22 04:14 UTC \u2014 [P2: Smart Entry] Overnight Hours Need a Dominance Gate, Not Just a Bias Gate\n\n**Task:** Compare mature 03h structure against early 04h transition data to decide what kind of filter would be needed before any excluded overnight hour could ever be reconsidered.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **03h** now has enough sample to look genuinely structured:\n  - **60** tracked windows\n  - dominant regime `(0.505, 0.495)` = **40/60 = 66.7%**\n  - `|bias| >= 45` in **33/60 = 55.0%**\n  - `|bias| >= 55` in **12/60 = 20.0%**\n  - low-bias windows `<35` = **11/60**\n- **04h** is smaller but not dead:\n  - **19** tracked windows\n  - dominant regime `(0.505, 0.495)` = **14/19 = 73.7%**\n  - secondary regime `(0.485, 0.515)` = **5/19**\n  - `|bias| >= 45` in **9/19 = 47.4%**\n  - `|bias| >= 55` in **6/19 = 31.6%**\n  - low-bias windows `<35` = **5/19**\n- So the overnight problem is not simply \u201cno bias\u201d or \u201cbad price.\u201d It is that some hours can look deceptively strong before there is enough evidence that the structure is repeatable.\n- Wrote new research artifact: `/hom",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
