@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T04:00:01.454643+00:00",
+  "timestamp": "2026-04-22T04:20:27.758454+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1146%",
-      "apr": "+125%",
+      "rate": "+0.0818%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,728,406"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "+0.0712%",
+      "apr": "+78%",
+      "action": "SHORT",
+      "oi": "61,741,328"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0570%",
+      "apr": "+62%",
+      "action": "SHORT",
+      "oi": "242,196,936"
     }
   ],
   "daily_pnl": [
@@ -94,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1146%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0818%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 3 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 03:45 UTC \u2014 [P1: Copy Intelligence] 03h Local Structure Clarified, Copy Flow Still Mixed Across Rich Markets\n\n**Task:** Re-check PM copy behavior after more 03h tape accumulated, to see whether copy flow converges when local market structure becomes clearer.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The local 03h tape now looks clearer than it did at first glance:\n  - **44** tracked windows\n  - regime counts:\n    - `(0.505, 0.495)` \u2192 **25**\n    - `(0.495, 0.505)` \u2192 **9**\n    - `(0.465, 0.535)` \u2192 **5**\n    - `(0.485, 0.515)` \u2192 **5**\n  - **26** windows with `|bias| >= 45`\n  - **10** windows with `|bias| >= 55`\n  - max bias **69.2**\n- So 03h is not just random churn. It has a dominant regime plus smaller secondary states.\n- PM copy flow still does not cleanly align with that clarification:\n  - recent signals: **32 bullish / 18 bearish**\n  - average price **0.916**\n  - top titles mix micro-expiry PM contracts with threshold markets\n  - dominant prints remain conflicted and rich:\n    - `SELL Up @ 0.99` (9x)\n    - `BUY No @ 0.929` (9x)\n    - `BUY Up @ 0.83` (8x)\n- That is not a coherent response to local structure. It is a mixture of crowd behaviors on multiple rich contracts.\n\n**My thinking:**\nThis reinforces the pattern we\u2019ve been uncovering all night. Local PM structure can become more legible even in dead hours. PM copy flow often does not follow that improvement. It stays entangled with expiry games, threshold punts, and crowded rich pricing. That means copy flow can tell us a lot about trader behavior, but very little about whether the underlying local market structure is actually getting cleaner.\n\n**Decision:**\n- Strengthen the working model: PM copy flow is **behavioral texture**, not structural confirmation.\n- When local PM tape clarifies, do not expect copy flow to clarify with it.\n- Keep local price regime + bias as the primary lens for overnight research.\n\n**Next:** If another late session shows the same divergence, compare whether copy-flow clarity ever improves during the next active-day windows. If it never does, that\u2019s strong evidence it should remain permanently secondary.\n\n---\n## 2026-04-22 03:15 UTC \u2014 [P4: Alpha Research] 03h Stayed Structurally Active While Copy Flow Collapsed Into Pure Expiry Noise\n\n**Task:** Determine whether the emerging 03h tape is still structurally interesting and whether PM copy flow becomes more or less informative as the overnight session ages.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 03h is still structurally active, not dead:\n  - **15** tracked windows so far\n  - price regimes split evenly across three states:\n    - `(0.495, 0.505)` \u2192 **5**\n    - `(0.505, 0.495)` \u2192 **5**\n    - `(0.465, 0.535)` \u2192 **5**\n  - **8** windows reached `|bias| >= 45`\n  - **5** reached `|bias| >= 55`\n  - max bias = **69.2**\n  - regime flips observed: **2**\n- So 03h",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:14 UTC \u2014 [P2: Smart Entry] Overnight Hours Need a Dominance Gate, Not Just a Bias Gate\n\n**Task:** Compare mature 03h structure against early 04h transition data to decide what kind of filter would be needed before any excluded overnight hour could ever be reconsidered.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **03h** now has enough sample to look genuinely structured:\n  - **60** tracked windows\n  - dominant regime `(0.505, 0.495)` = **40/60 = 66.7%**\n  - `|bias| >= 45` in **33/60 = 55.0%**\n  - `|bias| >= 55` in **12/60 = 20.0%**\n  - low-bias windows `<35` = **11/60**\n- **04h** is smaller but not dead:\n  - **19** tracked windows\n  - dominant regime `(0.505, 0.495)` = **14/19 = 73.7%**\n  - secondary regime `(0.485, 0.515)` = **5/19**\n  - `|bias| >= 45` in **9/19 = 47.4%**\n  - `|bias| >= 55` in **6/19 = 31.6%**\n  - low-bias windows `<35` = **5/19**\n- So the overnight problem is not simply \u201cno bias\u201d or \u201cbad price.\u201d It is that some hours can look deceptively strong before there is enough evidence that the structure is repeatable.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7f-overnight-dominance-gate.spec.md`\n\n**My thinking:**\nWe needed a smarter standard than \u201cdid this hour print some 55+ bias?\u201d because overnight hours can flash high conviction without being dependable. The right next gate is intersectional: strong bias frequency plus dominant local pricing plus no rich-price contamination. That keeps us from promoting random overnight bursts into live-candidate status.\n\n**Decision:**\n- Do **not** expand into 04h.\n- Treat 03h as the stronger overnight watch candidate than 04h, but still only as research.\n- Adopt a new research gate for excluded overnight hours:\n  1. at least **50%** of windows with `|bias| >= 45`\n  2. at least **20%** of windows with `|bias| >= 55`\n  3. at least **55%** dominant regime share\n  4. fewer than **15%** of windows outside live price band\n\n**Next:** On the next P2 heartbeat, test this dominance gate against 00h, 01h, 02h, 03h, and 04h together to rank which excluded hours are merely active versus structurally promotable.\n\n---\n## 2026-04-22 03:45 UTC \u2014 [P1: Copy Intelligence] 03h Local Structure Clarified, Copy Flow Still Mixed Across Rich Markets\n\n**Task:** Re-check PM copy behavior after more 03h tape accumulated, to see whether copy flow converges when local market structure becomes clearer.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The local 03h tape now looks clearer than it did at first glance:\n  - **44** tracked windows\n  - regime counts:\n    - `(0.505, 0.495)` \u2192 **25**\n    - `(0.495, 0.505)` \u2192 **9**\n    - `(0.465, 0.535)` \u2192 **5**\n    - `(0.485, 0.515)` \u2192 **5**\n  - **26** windows with `|bias| >= 45`\n  - **10** windows with `|bias| >= 55`\n  - max bias **69.2**\n- So 03h is not just random churn. It has a dominant regime plu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
