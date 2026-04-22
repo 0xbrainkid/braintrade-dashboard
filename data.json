@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T12:35:47.890070+00:00",
+  "timestamp": "2026-04-22T12:45:43.117137+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0901%",
-      "apr": "+99%",
+      "rate": "+0.0913%",
+      "apr": "+100%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0901%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0913%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:30 UTC \u2014 [P2: Smart Entry] Add an Early Stop Rule for Trend-Aligned Wrong-Side Sessions\n\n**Task:** Turn the 12h finding into a concrete parameter rule, specifically whether a stable wrong-side session with regime confirmation should stop the bot from repeatedly searching for rescue entries.\n**Finding:**\n- Both bots are alive.\n- 12h already showed the cleanest wrong-side pattern of the day:\n  - price pinned at `0.505 / 0.495`\n  - repeated positive-bias skips under YES-only\n  - later regime confirmation with `TREND`\n- That means the session did not fail because of noisy transitions. It failed because the whole environment stayed stably unavailable.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8h-trend-aligned-wrong-side-stop-rule.spec.md`\n\n**My thinking:**\nThis is exactly where the bot should stop trying to be clever. Once stable price, wrong-side direction, and regime confirmation all line up, there is no edge in continuing to scan every cycle for a miracle entry. That is not selectivity, it is search waste.\n\n**Decision:**\n- Add a **trend-aligned wrong-side stop rule**.\n- If pinned-normal price persists while direction stays wrong-sided across enough consecutive refreshes, and regime confirms with `TREND` or stronger, abandon the session early.\n- Require both a directional reset and regime softening before reconsidering entry.\n\n**Next:** On the next P2 heartbeat, define the minimum consecutive wrong-side refresh count for this stop rule, so it can be tested against Apr 22 12h and prior false-rescue sessions.\n\n---\n## 2026-04-22 12:29 UTC \u2014 [P1: Copy Intelligence] Copy Flow Still Cannot Distinguish Wrong-Side Session Types, It Just Crowd-Piles Bearishly\n\n**Task:** Test whether PM copy flow reacts differently to the 11h inversion-state-machine session versus the 12h trend-aligned wrong-side session, or whether it just piles into bearish crowd trades either way.\n**Finding:**\n- Both bots are alive and PM remains in active hour **12h**.\n- The local session taxonomy is now richer:\n  - **11h** = inversion-state-machine\n  - **12h** = trend-aligned wrong-side session\n- But copy flow still did not differentiate between them.\n- Latest copy sample:\n  - **50** signals\n  - **47 bearish / 3 bullish**\n  - average price **0.757**\n- Nearly all flow concentrated in two adjacent micro-expiry titles:\n  - `Bitcoin Up or Down - April 22, 7:50AM-7:55AM ET` \u2192 **24**\n  - `Bitcoin Up or Down - April 22, 7:55AM-8:00AM ET` \u2192 **23**\n- top two titles = **47 / 50 = 0.94**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8g-copy-does-not-distinguish-wrong-side-taxons.spec.md`\n\n**My thinking:**\nThis is actually a clean negative result. We now have two different wrong-side session types locally, but copy flow still reduced everything to the same crowd behavior: bearish micro-expiry piling. That means copy flow is not helping classify structure at a",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:45 UTC \u2014 [P3: Strategy Development] Build a Two-Branch Classifier for Wrong-Side Sessions\n\n**Task:** Turn today\u2019s 11h and 12h observations into a concrete strategy classifier so the bot can distinguish between different wrong-side session structures instead of treating them as one generic failure.\n**Finding:**\n- Both bots are alive.\n- We now have two clean wrong-side case studies from the same day:\n  - **11h** = wrong-sided direction plus a full price excursion and reclaim chain\n  - **12h** = wrong-sided direction while price stayed pinned near `0.505 / 0.495`, then regime confirmed `TREND`\n- That is enough to define a two-branch classifier:\n  1. **inversion-state-machine**\n  2. **trend-aligned wrong-side**\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8i-wrong-side-session-classifier.spec.md`\n\n**My thinking:**\nThis matters because the right response is different. If price is traveling through alternate states, we need transition and recovery logic. If price is pinned and the regime confirms the wrong side, we need to stop searching fast. Same symptom, different treatment.\n\n**Decision:**\n- Add a two-branch wrong-side session classifier.\n- Use price excursion first to route toward **inversion-state-machine**.\n- Use pinned price plus regime confirmation to route toward **trend-aligned wrong-side**.\n\n**Next:** On the next P3 heartbeat, convert this classifier into a compact decision tree with explicit thresholds for what counts as a meaningful price excursion versus a pinned base state.\n\n---\n## 2026-04-22 12:30 UTC \u2014 [P2: Smart Entry] Add an Early Stop Rule for Trend-Aligned Wrong-Side Sessions\n\n**Task:** Turn the 12h finding into a concrete parameter rule, specifically whether a stable wrong-side session with regime confirmation should stop the bot from repeatedly searching for rescue entries.\n**Finding:**\n- Both bots are alive.\n- 12h already showed the cleanest wrong-side pattern of the day:\n  - price pinned at `0.505 / 0.495`\n  - repeated positive-bias skips under YES-only\n  - later regime confirmation with `TREND`\n- That means the session did not fail because of noisy transitions. It failed because the whole environment stayed stably unavailable.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8h-trend-aligned-wrong-side-stop-rule.spec.md`\n\n**My thinking:**\nThis is exactly where the bot should stop trying to be clever. Once stable price, wrong-side direction, and regime confirmation all line up, there is no edge in continuing to scan every cycle for a miracle entry. That is not selectivity, it is search waste.\n\n**Decision:**\n- Add a **trend-aligned wrong-side stop rule**.\n- If pinned-normal price persists while direction stays wrong-sided across enough consecutive refreshes, and regime confirms with `TREND` or stronger, abandon the session early.\n- Require both a directional reset and regime softening before re",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
