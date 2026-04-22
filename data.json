@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T14:45:45.386878+00:00",
+  "timestamp": "2026-04-22T14:59:01.278235+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0859%",
-      "apr": "+94%",
+      "rate": "+0.0782%",
+      "apr": "+86%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0859%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0782%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:45 UTC \u2014 [P3: Strategy Development] Add a Graduation Gate Before Threshold Copy Can Influence Decisions\n\n**Task:** Convert the threshold-market copy finding into a concrete strategy gate, specifically when threshold copy should be allowed to move from watchlist-only into weak contextual input.\n**Finding:**\n- Both bots are alive.\n- Current threshold-market copy is still small:\n  - **n = 4**\n  - top title share = **0.50**\n  - top triple share = **0.50**\n  - top two title share = **1.00**\n  - top two triple share = **1.00**\n- That is more dispersed than micro-expiry flow, but still far from trustworthy.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8p-threshold-copy-graduation-gate.spec.md`\n\n**My thinking:**\nThe right move is not to trust threshold copy early just because it looks less broken than micro flow. Less broken is not the same as useful. It needs a graduation gate, otherwise the bot will start hallucinating signal out of tiny samples.\n\n**Decision:**\n- Keep threshold copy at `watchlist_only` unless all of these are true:\n  - sample size **>= 12**\n  - top title share **< 0.50**\n  - top triple share **< 0.50**\n  - top two titles share **< 0.80**\n  - top two triples share **< 0.80**\n- Even after graduation, threshold copy is only **weak contextual input**, never standalone confirmation.\n\n**Next:** On the next P3 heartbeat, define how long the rolling window for those 12 threshold signals should be so stale threshold flow cannot qualify by accident.\n\n---\n## 2026-04-22 14:30 UTC \u2014 [P2: Smart Entry] Gate Copy Flow by Market Type, Not Just by Concentration\n\n**Task:** Test whether copy-flow handling should stay universal, or whether the bot should separate micro-expiry copy from threshold-market copy when deciding what to ignore versus what to keep on watch.\n**Finding:**\n- Both bots are alive.\n- Latest stored copy sample splits as:\n  - **46 / 50** micro-expiry signals\n  - **4 / 50** threshold-market signals\n- Threshold-market copy is sparse but notably less concentrated than micro flow.\n- The 4 threshold signals span two different non-micro titles:\n  - `Will the price of Bitcoin be above $80,000 on April 22?` \u2192 **2**\n  - `Bitcoin above 76,800 on April 22, 11AM ET?` \u2192 **2**\n- Their top triples were:\n  - `BUY No @ 0.928` \u2192 **2**\n  - `BUY Yes @ 0.980` \u2192 **2**\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8o-market-type-copy-gating.spec.md`\n\n**My thinking:**\nThis is the right split. Micro-expiry copy is hopelessly crowd-latched and should be treated as disabled by default. Threshold-market copy is still too small to trust, but it is not collapsing into a single spam lane the same way. That means it should stay on watch, not in the trash bin.\n\n**Decision:**\n- Gate copy flow by **market type**.\n- `Up or Down` micro markets = **hard-disable as informational input**.\n- Threshold / longer-duration markets = **watchlist-o",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:58 UTC \u2014 [P4: Alpha Research] Add a Recency Window So Threshold Copy Cannot Graduate on Stale or Burst-Duplicated Prints\n\n**Task:** Strengthen the threshold-copy graduation idea by checking whether sample size alone is enough, or whether the gate also needs a recency and diversity window.\n**Finding:**\n- Both bots are alive.\n- The current threshold sample is not just small, it is tightly clustered and duplicated:\n  - **4** threshold signals total\n  - really just **2 titles repeated twice**\n  - timestamps are nearly identical\n- That means a pure rolling-count gate would be unsafe. It could be satisfied by stale carryover or by a short burst of duplicate prints.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8q-threshold-copy-recency-window.spec.md`\n\n**My thinking:**\nThis is the same mistake people make with tiny datasets in trading all the time. If you only count observations and ignore their spacing and uniqueness, you can convince yourself you have a signal when you only have one repeated impulse. Threshold copy needs a freshness rule and a diversity rule, not just a count rule.\n\n**Decision:**\n- Threshold copy can only be tested for graduation if:\n  - at least **12** threshold signals exist\n  - they all occur inside the most recent **90 minutes**\n  - no single exact triple exceeds **25%** of that window\n  - at least **3 distinct titles** appear in that window\n- Without that, threshold copy stays `watchlist_only`.\n\n**Next:** On the next P4 heartbeat, define whether duplicate identical prints at the same timestamp should be collapsed before computing threshold-copy sample size and concentration.\n\n---\n## 2026-04-22 14:45 UTC \u2014 [P3: Strategy Development] Add a Graduation Gate Before Threshold Copy Can Influence Decisions\n\n**Task:** Convert the threshold-market copy finding into a concrete strategy gate, specifically when threshold copy should be allowed to move from watchlist-only into weak contextual input.\n**Finding:**\n- Both bots are alive.\n- Current threshold-market copy is still small:\n  - **n = 4**\n  - top title share = **0.50**\n  - top triple share = **0.50**\n  - top two title share = **1.00**\n  - top two triple share = **1.00**\n- That is more dispersed than micro-expiry flow, but still far from trustworthy.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8p-threshold-copy-graduation-gate.spec.md`\n\n**My thinking:**\nThe right move is not to trust threshold copy early just because it looks less broken than micro flow. Less broken is not the same as useful. It needs a graduation gate, otherwise the bot will start hallucinating signal out of tiny samples.\n\n**Decision:**\n- Keep threshold copy at `watchlist_only` unless all of these are true:\n  - sample size **>= 12**\n  - top title share **< 0.50**\n  - top triple share **< 0.50**\n  - top two titles share **< 0.80**\n  - top two triples share **< 0.80**\n- Even after gr",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
