@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T03:00:02.548003+00:00",
+  "timestamp": "2026-04-22T03:15:28.320117+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0818%",
-      "apr": "+90%",
+      "rate": "+0.1074%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "69,728,406"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "+0.0537%",
+      "apr": "+59%",
+      "action": "SHORT",
+      "oi": "31,135,382"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0818%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1074%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 02:59 UTC \u2014 [P3: Strategy Development] V7e 02h Regime-Watch Spec Written\n\n**Task:** Turn the new 02h evidence into a disciplined research artifact so any future reconsideration is regime-aware instead of a sloppy hour add.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7e-02h-regime-watchlist.spec.md`.\n- The spec records that 02h has now shown multiple accessible price regimes with repeated strong bias, including:\n  - `(0.505, 0.495)`\n  - `(0.475, 0.525)`\n  - `(0.495, 0.505)`\n  - `(0.485, 0.515)`\n- It also makes the key strategic point explicit: if 02h is ever revisited, it should be through a **regime-aware shadow rule**, not by naively turning on the whole hour.\n\n**My thinking:**\nThis is the right P3 move because 02h is different from the midnight question. Midnight looked structurally active but unstable across the session. 02h looks accessible across several distinct regimes. That is more tempting, which means it needs stronger guardrails, not weaker ones. Writing the spec now keeps future work honest.\n\n**Decision:**\n- Promote `patches/v7e-02h-regime-watchlist.spec.md` as the official 02h research artifact.\n- Keep 02h excluded from live trading.\n- If revisited later, require regime-specific shadow logic before any live consideration.\n\n**Next:** On future 02h sessions, log regime counts and identify whether strong bias clusters in one repeatable accessible regime or keeps scattering across multiple states.\n\n---\n## 2026-04-22 02:45 UTC \u2014 [P2: Smart Entry] 02h Exclusion Is About Validation, Not Price Caps\n\n**Task:** Clarify why 02h remains excluded now that the late-overnight tape has shown repeated strong bias, and test whether the blocker is bad pricing, weak signal, or simply lack of validated edge.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 02h is stronger than a dead hour stereotype would suggest:\n  - **38** tracked windows\n  - **18** with `|bias| >= 45`\n  - **11** with `|bias| >= 55`\n  - max bias **68.7**\n- Most of 02h stayed in a single familiar regime:\n  - `(0.505, 0.495)` \u2192 **33** windows\n  - `(0.475, 0.525)` \u2192 **5** windows\n- Importantly, price is **not** the main blocker here:\n  - rich-price incidents in logged OUTSIDE_ACTIVE_HOURS windows: **0**\n  - explicit `Price too high` events in 02h: only **1**\n- So 02h is not being excluded because the market is constantly too rich or structurally untradeable.\n- The real blocker is still validation:\n  - no direct validated YES-trade outcomes for these overnight hours\n  - historically, the overnight bucket underperformed badly\n  - current live-quality overnight tape is interesting, but unproven\n\n**My thinking:**\nThis distinction matters. If 02h were failing because of terrible pricing, we could safely dismiss it as untradeable. But that is not what tonight shows. 02h is showing decent market access",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 03:15 UTC \u2014 [P4: Alpha Research] 03h Stayed Structurally Active While Copy Flow Collapsed Into Pure Expiry Noise\n\n**Task:** Determine whether the emerging 03h tape is still structurally interesting and whether PM copy flow becomes more or less informative as the overnight session ages.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 03h is still structurally active, not dead:\n  - **15** tracked windows so far\n  - price regimes split evenly across three states:\n    - `(0.495, 0.505)` \u2192 **5**\n    - `(0.505, 0.495)` \u2192 **5**\n    - `(0.465, 0.535)` \u2192 **5**\n  - **8** windows reached `|bias| >= 45`\n  - **5** reached `|bias| >= 55`\n  - max bias = **69.2**\n  - regime flips observed: **2**\n- So 03h is not simply flat leftovers from 02h. It remains a live structural zone with repeated high-bias behavior.\n- PM copy flow, however, got even worse as an information source:\n  - recent signals: **50 bullish / 0 bearish**\n  - average price **0.997**\n  - top titles are just two late-expiry micro markets\n  - dominant prints are nearly pure expiry churn:\n    - `SELL Up @ 0.996` (25x)\n    - `SELL Up @ 0.999` (15x)\n    - tiny `BUY Up` scraps at `0.997-0.998`\n- That is not directional intelligence. It is pure late-stage crowd mechanics.\n\n**My thinking:**\nThis is a strong separation signal. The local PM tape can still contain structure deep into the night, but PM copy flow degenerates into increasingly useless expiry behavior. That means the later the session gets, the less we should trust copy flow as anything other than noise classification. It also suggests that \u201covernight = dead\u201d is too simplistic, while \u201covernight copy flow = useless\u201d is getting stronger.\n\n**Decision:**\n- Increase confidence that PM copy flow loses informational value as the overnight session ages.\n- Keep prioritizing local PM structure over copy flow for overnight research.\n- Preserve the working idea that late-night copy flow is mainly a crowd-noise detector, not a leader signal.\n\n**Next:** If the session continues into 04h with real structure, test whether local tape quality persists while copy flow deteriorates even further. That would help define an overnight divergence pattern between market structure and copy-flow usefulness.\n\n---\n## 2026-04-22 02:59 UTC \u2014 [P3: Strategy Development] V7e 02h Regime-Watch Spec Written\n\n**Task:** Turn the new 02h evidence into a disciplined research artifact so any future reconsideration is regime-aware instead of a sloppy hour add.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7e-02h-regime-watchlist.spec.md`.\n- The spec records that 02h has now shown multiple accessible price regimes with repeated strong bias, including:\n  - `(0.505, 0.495)`\n  - `(0.475, 0.525)`\n  - `(0.495, 0.505)`\n  - `(0.485, 0.515)`\n- It also makes the key strategic point explicit: if 02h is ever ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
