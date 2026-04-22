@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T08:34:26.509190+00:00",
+  "timestamp": "2026-04-22T08:59:00.780974+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0748%",
-      "apr": "+82%",
+      "rate": "+0.0728%",
+      "apr": "+80%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0748%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0728%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:28 UTC \u2014 [P1: Copy Intelligence] Long Pinned Episodes Still Do Not Make Copy Flow Useful\n\n**Task:** Test whether PM copy flow finally converges once the local market has stayed pinned in `0.505 / 0.495` for multiple excluded hours.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local market structure remains a long pinned episode centered on `(0.505, 0.495)`.\n- Recent PM copy flow still diverges sharply from that calm local state:\n  - **50** recent signals\n  - **7 bullish / 43 bearish**\n  - average price **0.635**\n- Copy flow remained concentrated in a few 3AM ET micro-expiry markets:\n  - `Bitcoin Up or Down - April 22, 3AM ET` \u2192 **14**\n  - `Bitcoin Up or Down - April 22, 3:55AM-4:00AM ET` \u2192 **13**\n  - `Bitcoin Up or Down - April 22, 3:45AM-4:00AM ET` \u2192 **9**\n- Top repeated trade clusters were still one-sided Down buys:\n  - `BUY Down @ 0.26` \u2192 **10**\n  - `BUY Down @ 0.77` \u2192 **6**\n  - `BUY Down @ 0.50` \u2192 **4**\n  - `BUY Down @ 0.51` \u2192 **4**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7r-copy-divergence-in-pinned-episodes.spec.md`\n\n**My thinking:**\nThis is stronger than the earlier overnight result. The local market got simpler, not noisier, and copy flow still failed to align. That means copy flow is not just weak in messy transitions, it also stays unhelpful during prolonged stable states. The persistent bearish clustering in unrelated expiring side markets makes it look even more like crowd noise than before.\n\n**Decision:**\n- Keep copy flow classified as **noise / crowding texture**, not confirmation.\n- Strengthen the rule that long pinned episodes do **not** rehabilitate PM copy signals.\n- Treat repeated one-sided copy clusters during pinned episodes as additional anti-signal evidence.\n\n**Next:** On the next P1 heartbeat, quantify title concentration and dominant-cluster share inside the current copy sample to tighten the crowding thresholds for risk-off handling.\n\n---\n## 2026-04-22 08:15 UTC \u2014 [P4: Alpha Research] The `0.505 / 0.495` State Is Now a Long Pinned Episode, Not Just an Overnight Artifact\n\n**Task:** Check whether 08h finally introduces a new structure or whether the same pinned midpoint regime is still persisting into another excluded hour.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 08h so far has **14** tracked windows.\n- All **14/14** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **5** windows\n  - `|bias| >= 55` in **2** windows\n  - `<35` in **4** windows\n  - max bias **58.9**\n- Observed 08h sample window:\n  - first logged: **08:02:59 UTC**\n  - latest logged: **08:14:31 UTC**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7q-long-pinned-episode.spec.md`\n\n**My thinking:**\nThis settles the framing. The `0.505 / 0.495` regime is no longer just an overnight carry or a conf",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:58 UTC \u2014 [P2: Smart Entry] Late Pinned Episodes Age Into Noisier Conviction, Not Clean Decay\n\n**Task:** Compare 08h against 07h inside the same long pinned episode to see whether later excluded hours become more tradable, stay stable, or decay in a useful way.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Both hours stayed structurally identical:\n  - **07h:** **60/60** windows in `(0.505, 0.495)`\n  - **08h:** **49/49** windows in `(0.505, 0.495)`\n- But the conviction mix changed:\n  - **07h**\n    - `|bias| >= 45`: **32** (**53.3%**)\n    - `|bias| >= 55`: **9** (**15.0%**)\n    - `<35`: **16** (**26.7%**)\n    - max bias: **69.8**\n  - **08h**\n    - `|bias| >= 45`: **20** (**40.8%**)\n    - `|bias| >= 55`: **10** (**20.4%**)\n    - `<35`: **19** (**38.8%**)\n    - max bias: **68.5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7s-pinned-episode-aging.spec.md`\n\n**My thinking:**\nThis is not a clean \u201clater hours simply weaken\u201d result. 08h stayed perfectly pinned, lost a meaningful chunk of mid-to-high conviction density at `45+`, and picked up more low-conviction drift under `35`, but it still produced slightly more `55+` spikes than 07h. So the right model is not smooth decay. It is **aging with noisier conviction distribution** inside the same unchanged structure.\n\n**Decision:**\n- Keep **08h excluded**.\n- Treat later stages of pinned episodes as **noisier and less reliably tradable**, even when the structural regime stays unchanged.\n- Preserve the rule that persistent excluded structure does not become a live candidate just because it lasts longer.\n\n**Next:** On the next P2 heartbeat, compare the full pinned-episode conviction profile against live-hour distributions to quantify how far these long excluded episodes still sit from deployable active-hour quality.\n\n---\n## 2026-04-22 08:28 UTC \u2014 [P1: Copy Intelligence] Long Pinned Episodes Still Do Not Make Copy Flow Useful\n\n**Task:** Test whether PM copy flow finally converges once the local market has stayed pinned in `0.505 / 0.495` for multiple excluded hours.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local market structure remains a long pinned episode centered on `(0.505, 0.495)`.\n- Recent PM copy flow still diverges sharply from that calm local state:\n  - **50** recent signals\n  - **7 bullish / 43 bearish**\n  - average price **0.635**\n- Copy flow remained concentrated in a few 3AM ET micro-expiry markets:\n  - `Bitcoin Up or Down - April 22, 3AM ET` \u2192 **14**\n  - `Bitcoin Up or Down - April 22, 3:55AM-4:00AM ET` \u2192 **13**\n  - `Bitcoin Up or Down - April 22, 3:45AM-4:00AM ET` \u2192 **9**\n- Top repeated trade clusters were still one-sided Down buys:\n  - `BUY Down @ 0.26` \u2192 **10**\n  - `BUY Down @ 0.77` \u2192 **6**\n  - `BUY Down @ 0.50` \u2192 **4**\n  - `BUY Down @ 0.51` \u2192 **4**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7r-co",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
