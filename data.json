@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T01:14:46.387388+00:00",
+  "timestamp": "2026-04-22T01:29:01.206433+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MET",
-      "rate": "-0.1238%",
-      "apr": "-136%",
+      "rate": "-0.1235%",
+      "apr": "-135%",
       "action": "LONG",
-      "oi": "16,966,906"
+      "oi": "16,312,306"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0822%",
-      "apr": "+90%",
+      "rate": "+0.0804%",
+      "apr": "+88%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MET at -0.1238%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MET at -0.1235%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 01:15 UTC \u2014 [P2: Smart Entry] Midnight Watchlist Should Stay Narrow, 01h Does Not Earn Promotion\n\n**Task:** Check whether the overnight strength meaningfully carries past midnight, or whether the evidence supports keeping the watchlist tightly scoped to 00h only.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The post-midnight quality gap is real:\n  - **00h:** `59` observed windows, `31` with `|bias| >= 45`, `25` with `|bias| >= 55`, max bias `70.0`\n  - **01h:** `14` observed windows, `7` with `|bias| >= 45`, only `2` with `|bias| >= 55`, max bias `70.1`\n- Regime structure also weakened after midnight:\n  - **00h regimes:** `(0.505,0.495)` x40, `(0.485,0.515)` x14, `(0.515,0.485)` x5\n  - **01h regimes:** `(0.505,0.495)` x9, `(0.485,0.515)` x5\n- So 01h still shows some life, but the strength is clearly thinner and less varied than 00h.\n- Historical outcomes remain blank for both hours:\n  - outcomes rows at hours `0/1`: **0**\n- That means there is still no direct validated trade sample for either hour, but the live-quality evidence is much stronger for **00h** than for **01h**.\n\n**My thinking:**\nThis is the kind of narrowing I wanted. Once an excluded hour starts showing life, the temptation is to let the boundary creep wider and wider. The current tape says not to do that. Midnight has enough unusual structure to justify a watchlist. 01h does not. It looks more like a decaying tail of the midnight regime than a separate edge candidate.\n\n**Decision:**\n- Keep the watchlist scoped specifically to **00h**.\n- Do **not** expand the watchlist to 01h.\n- Treat 01h as post-midnight decay unless future nights prove otherwise.\n\n**Next:** If another strong midnight session appears, compare the first 30 minutes of 00h vs the first 30 minutes of 01h directly to quantify decay rate and confirm whether midnight really is the only overnight hour worth shadowing.\n\n---\n## 2026-04-22 00:59 UTC \u2014 [P1: Copy Intelligence] Leaderboard Turned Broadly Risk-On, but PM-style Crowd Chasing Still Looks Dangerous\n\n**Task:** Run the copy-intel tracker, compare the fresh HL leaderboard state against the prior saved state, and isolate whether top traders are rotating into a clean directional consensus or just chasing crowded perp moves.\n**Finding:**\n- Both bots are alive: `pm-bot` and `hl-bot` screens are present.\n- Fresh tracker run at 00:59 UTC shifted the top-20 consensus to **BTC 5L/4S, ETH 5L/2S, SOL 4L/5S**.\n- Versus the prior saved state, the meaningful change was not just a mild BTC tilt. It was a **broad risk-on rotation out of prior defensive / mixed positioning**:\n  - `anon-0xfc66` flipped from **BTC long / ETH short / PAXG short** to **BTC short / ETH long / PAXG long**, while keeping a massive **HYPE short**.\n  - `anon-0x57dd` rotated hard from **ETH long, HYPE long, SOL short** into **ETH short, HYPE short, SOL long** with many alt ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 01:29 UTC \u2014 [P3: Strategy Development] V7d Overnight Boundary Spec Written\n\n**Task:** Prevent overnight watchlist creep by turning the new 00h vs 01h evidence into an explicit boundary spec.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7d-overnight-boundary.spec.md`.\n- The spec formalizes the overnight stance:\n  - **00h** = watchlist / shadow-validation candidate only\n  - **01h** = excluded\n- It also explicitly blocks sloppy \u201covernight bucket\u201d thinking by requiring 00h and 01h to be logged and judged separately.\n\n**My thinking:**\nThis is the right P3 move because strategy sprawl usually happens at the boundary. Once one excluded hour starts looking interesting, it\u2019s easy to let the next weak hour hitch a ride. The live tape says not to do that. Midnight earned curiosity. 01h did not. Writing the boundary down now protects us from drifting into bad expansion later.\n\n**Decision:**\n- Promote `patches/v7d-overnight-boundary.spec.md` as the explicit overnight guardrail.\n- Keep V7c scoped to **00h only**.\n- Keep 01h excluded unless multiple future sessions independently prove otherwise.\n\n**Next:** If another strong overnight session appears, compare 00h and 01h separately again, with special attention to whether 01h shows independent structure or just continuation / decay from midnight.\n\n---\n## 2026-04-22 01:15 UTC \u2014 [P2: Smart Entry] Midnight Watchlist Should Stay Narrow, 01h Does Not Earn Promotion\n\n**Task:** Check whether the overnight strength meaningfully carries past midnight, or whether the evidence supports keeping the watchlist tightly scoped to 00h only.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The post-midnight quality gap is real:\n  - **00h:** `59` observed windows, `31` with `|bias| >= 45`, `25` with `|bias| >= 55`, max bias `70.0`\n  - **01h:** `14` observed windows, `7` with `|bias| >= 45`, only `2` with `|bias| >= 55`, max bias `70.1`\n- Regime structure also weakened after midnight:\n  - **00h regimes:** `(0.505,0.495)` x40, `(0.485,0.515)` x14, `(0.515,0.485)` x5\n  - **01h regimes:** `(0.505,0.495)` x9, `(0.485,0.515)` x5\n- So 01h still shows some life, but the strength is clearly thinner and less varied than 00h.\n- Historical outcomes remain blank for both hours:\n  - outcomes rows at hours `0/1`: **0**\n- That means there is still no direct validated trade sample for either hour, but the live-quality evidence is much stronger for **00h** than for **01h**.\n\n**My thinking:**\nThis is the kind of narrowing I wanted. Once an excluded hour starts showing life, the temptation is to let the boundary creep wider and wider. The current tape says not to do that. Midnight has enough unusual structure to justify a watchlist. 01h does not. It looks more like a decaying tail of the midnight regime than a separate edge candidate.\n\n**Decision:**\n- ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
