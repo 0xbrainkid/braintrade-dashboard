@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T18:00:01.329970+00:00",
+  "timestamp": "2026-04-22T18:21:39.593045+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0623%",
-      "apr": "+68%",
+      "rate": "+0.0839%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,671,296"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0531%",
+      "apr": "+58%",
+      "action": "SHORT",
+      "oi": "240,217,524"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0623%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0839%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 17:58 UTC \u2014 [P1: Copy Intelligence] Roll Out Copy Logic Live Only for Defense, Keep Positive Interpretation in Shadow Mode\n\n**Task:** Decide which parts of the copy-quality framework are safe enough to wire into the live bot first, versus which parts should remain observational.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still pure micro:\n  - **50** total signals\n  - market mix = **100% micro**\n- Across the full copy-quality thread, the most reliable outputs have all been defensive:\n  - duplicate inflation detection\n  - micro cluster collapse\n  - instability detection\n  - freeze logic\n- The least reliable outputs are still the positive ones:\n  - using threshold copy as weak context\n  - using cluster severity to shape live decisions\n  - automatically clearing back into active copy influence\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v9c-copy-framework-live-vs-shadow-rollout.spec.md`\n\n**My thinking:**\nThis is the right rollout asymmetry. We are good at detecting when copy flow is contaminated. We are not yet good at extracting trustworthy positive signal from it. So the first live deployment should only strip out bad influence, not add new influence.\n\n**Decision:**\n- **Live now:**\n  - duplicate / near-duplicate collapse\n  - micro-expiry cluster collapse\n  - `copy_sample_unstable` trigger\n  - freeze behavior that blocks copy-based upgrades/downgrades\n- **Shadow only for now:**\n  - threshold-copy graduation into weak context\n  - micro cluster severity affecting entries\n  - any automatic re-enabling of copy influence after freeze clears\n\n**Next:** On the next P1 heartbeat, identify the smallest code change set needed to wire only the defensive copy rules into the live bot without touching execution logic beyond copy gating.\n\n---\n## 2026-04-22 17:44 UTC \u2014 [P4: Alpha Research] Package Copy Instability into a Full Freeze State Machine\n\n**Task:** Synthesize the copy-sample instability work into one operational control flow, so the system is no longer a pile of separate trigger and clear rules.\n**Finding:**\n- Both bots are alive.\n- Current recent window remains compositionally clean but still just represents one stable-window candidate shape:\n  - **50** total signals\n  - market mix = **100% micro**\n- The important result is that the freeze framework is now complete enough to formalize as a state machine.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v9b-copy-inference-freeze-state-machine.spec.md`\n\n**My thinking:**\nThis is the right stopping point for the copy-quality thread. We now have all the pieces: what triggers instability, how inference behaves while frozen, what qualifies as a stable window, and how instability clears conservatively. Putting that into one state machine makes it implementable instead of just theoretically correct.\n\n**Decision:**\n- Use a 3-state control flow:\n  1. `normal`\n  2. `co",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:21 UTC \u2014 [P2: Smart Entry] Scope the Smallest Safe Live Code Change for Defensive Copy Handling\n\n**Task:** Translate the live-vs-shadow rollout decision into the smallest code change set that can safely go into the live bot without disturbing execution logic.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still cleanly micro-only:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means the rollout question is no longer conceptual. It is about implementation scope.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v9d-minimal-defensive-copy-live-change-set.spec.md`\n\n**My thinking:**\nThe safest live move is tiny and asymmetric. Sanitize copy input, compute instability, and gate off copy influence when the feed is bad. That gives us the protective value immediately without risking any accidental change to entries or sizing.\n\n**Decision:**\n- Minimal live change set:\n  1. duplicate / near-duplicate collapse\n  2. micro-expiry cluster collapse\n  3. compute `copy_sample_unstable`\n  4. freeze-gate any existing copy-based adjustment path when unstable\n  5. log freeze state and collapsed sample stats\n- Explicitly do **not** touch:\n  - entry logic\n  - sizing logic\n  - regime logic\n  - execution flow\n  - any positive copy interpretation\n\n**Next:** On the next P2 heartbeat, identify the exact file/function touch points in the bot code where this minimal defensive change set should be inserted.\n\n---\n## 2026-04-22 17:58 UTC \u2014 [P1: Copy Intelligence] Roll Out Copy Logic Live Only for Defense, Keep Positive Interpretation in Shadow Mode\n\n**Task:** Decide which parts of the copy-quality framework are safe enough to wire into the live bot first, versus which parts should remain observational.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still pure micro:\n  - **50** total signals\n  - market mix = **100% micro**\n- Across the full copy-quality thread, the most reliable outputs have all been defensive:\n  - duplicate inflation detection\n  - micro cluster collapse\n  - instability detection\n  - freeze logic\n- The least reliable outputs are still the positive ones:\n  - using threshold copy as weak context\n  - using cluster severity to shape live decisions\n  - automatically clearing back into active copy influence\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v9c-copy-framework-live-vs-shadow-rollout.spec.md`\n\n**My thinking:**\nThis is the right rollout asymmetry. We are good at detecting when copy flow is contaminated. We are not yet good at extracting trustworthy positive signal from it. So the first live deployment should only strip out bad influence, not add new influence.\n\n**Decision:**\n- **Live now:**\n  - duplicate / near-duplicate collapse\n  - micro-expiry cluster collapse\n  - `copy_sample_unstable` trigger\n  - freeze behavior that blocks copy-based upgrades/downgrades\n- **Shadow only for now:",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
