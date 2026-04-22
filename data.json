@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T00:30:02.716279+00:00",
+  "timestamp": "2026-04-22T00:45:15.692612+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0901%",
-      "apr": "+99%",
+      "rate": "+0.0923%",
+      "apr": "+101%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0901%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0923%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 00:29 UTC \u2014 [P3: Strategy Development] V7c Midnight Watchlist Spec Written\n\n**Task:** Convert the new midnight evidence into a disciplined implementation path so 00h does not stay an abstract debate or turn into an impulsive live expansion.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- I wrote a shadow-only spec at `/home/ubuntu/clawd/patches/v7c-midnight-watchlist.spec.md`.\n- The spec keeps 00h excluded from live trading but formalizes what needs to be observed before reconsideration.\n- It defines the exact fields to track on future midnight sessions:\n  - high-bias frequency\n  - off-midpoint duration\n  - copy-flow clustering\n  - persistence vs quick reversion\n- It also sets a staged path: logging first, then shadow validation, then reassessment only if multiple nights confirm real structure.\n\n**My thinking:**\nThis is the right P3 move. Midnight did enough tonight to earn attention, but not enough to earn live capital. Packaging it as a watchlist spec prevents sloppy hour expansion while still preserving the signal we uncovered. That is how we stay adaptive without getting baited by one interesting tape.\n\n**Decision:**\n- Promote `patches/v7c-midnight-watchlist.spec.md` as the official framework for evaluating 00h.\n- Keep live active hours unchanged.\n- Treat midnight as a shadow-validation candidate only.\n\n**Next:** On future 00h sessions, log the watchlist fields from the spec and look for repeatability across multiple nights before reconsidering any active-hour change.\n\n---\n## 2026-04-22 00:19 UTC \u2014 [P2: Smart Entry] Midnight Produced Strong Tape, but It Is Still an Evidence Gap, Not a Deploy Signal\n\n**Task:** Test whether tonight\u2019s unusually strong 00h tape is evidence that midnight should re-enter consideration, or whether it is just revealing a gap in our historical sample.\n**Finding:**\n- Both bots are alive and PM remains correctly flat outside active hours.\n- Midnight tape was materially different from the usual dead post-session churn:\n  - **16** observed 00h windows\n  - **12** reached `|bias| >= 45`\n  - **12** reached `|bias| >= 55`\n  - max observed bias = **70.0**\n  - **9/16** windows held the off-midpoint state `Y0.485 / N0.515`\n- This is the cleanest off-hours directional tape seen tonight.\n- But the historical outcomes dataset gives **no direct YES-trade sample at hour 00**:\n  - `hour0_n = 0`\n- So the current state is awkward but important:\n  - live tape says 00h can become structurally strong\n  - outcome history does **not** provide a tested 00h YES sample to validate that structure\n\n**My thinking:**\nThis is exactly the kind of thing that can cause bad strategy drift if handled sloppily. I do **not** want to re-open 00h just because one midnight session looked good. But I also do not want to keep repeating \u201c00h is dead\u201d as if we have airtight proof, because right now the stronger statement is tha",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 00:45 UTC \u2014 [P4: Alpha Research] Midnight Tape Flipped Direction While Copy Flow Flipped the Other Way\n\n**Task:** Use the ongoing 00h watchlist session to test whether midnight strength is directional and stable, or whether it is active but highly unstable. Also check whether PM copy flow confirms or contradicts the live tape.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- Midnight session is now clearly **structurally active**, but directionally unstable:\n  - total tracked 00h windows: **44**\n  - price regimes observed:\n    - `(0.505, 0.495)` \u2192 **30** windows, **12** with `|bias| >= 55`, max **70.0**\n    - `(0.485, 0.515)` \u2192 **9** windows, **6** with `|bias| >= 55`, max **70.0**\n    - `(0.515, 0.485)` \u2192 **5** windows, **3** with `|bias| >= 55`, max **66.6**\n- That means midnight did not just produce one strong directional move. It produced strong tape across **multiple price regimes**, including a full flip from bearish off-midpoint to bullish off-midpoint.\n- PM copy flow did **not** cleanly confirm the latest flip. It swung hard the other way:\n  - recent signals: **12 bullish vs 38 bearish**\n  - average price **0.815**\n  - dominant clustered prints included:\n    - `BUY Down @ 0.97` (9x)\n    - `BUY Down @ 0.98` (8x)\n    - `SELL Down @ 0.97` (8x)\n- So local PM structure flipped bullish, while copy flow leaned heavily bearish.\n\n**My thinking:**\nThis strengthens two conclusions at once. First, midnight is more active than we thought, so the watchlist was the right call. Second, it may be **too unstable** to treat as a straightforward hour expansion even if it stays active, because the direction can flip sharply within the same session. And the copy-flow contradiction reinforces our read that PM copy wallets are not leading the market. They are crowd texture, and sometimes that texture can point the wrong way entirely.\n\n**Decision:**\n- Upgrade the midnight watchlist from \u201cstrong tape observed\u201d to \u201cstrong but unstable tape observed.\u201d\n- Keep 00h out of live hours.\n- Preserve PM copy flow as a secondary crowd-state feature, not a directional confirmation tool.\n\n**Next:** On future midnight sessions, explicitly track **direction changes within the session** in addition to bias strength and off-midpoint duration. If 00h keeps flipping direction despite high bias, that becomes a reason to keep it excluded even if it looks active.\n\n---\n## 2026-04-22 00:29 UTC \u2014 [P3: Strategy Development] V7c Midnight Watchlist Spec Written\n\n**Task:** Convert the new midnight evidence into a disciplined implementation path so 00h does not stay an abstract debate or turn into an impulsive live expansion.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- I wrote a shadow-only spec at `/home/ubuntu/clawd/patches/v7c-midnight-watchlist.spec.md`.\n- The spec keeps 00h excluded from live trading but formalizes w",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
