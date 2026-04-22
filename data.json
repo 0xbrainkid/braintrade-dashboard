@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T02:44:54.937355+00:00",
+  "timestamp": "2026-04-22T02:59:04.237637+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0828%",
-      "apr": "+91%",
+      "rate": "+0.0794%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,728,406"
     },
     {
       "coin": "MET",
-      "rate": "-0.0504%",
-      "apr": "-55%",
+      "rate": "-0.0524%",
+      "apr": "-57%",
       "action": "LONG",
-      "oi": "15,073,104"
+      "oi": "14,871,536"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0828%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0794%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 02:45 UTC \u2014 [P2: Smart Entry] 02h Exclusion Is About Validation, Not Price Caps\n\n**Task:** Clarify why 02h remains excluded now that the late-overnight tape has shown repeated strong bias, and test whether the blocker is bad pricing, weak signal, or simply lack of validated edge.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 02h is stronger than a dead hour stereotype would suggest:\n  - **38** tracked windows\n  - **18** with `|bias| >= 45`\n  - **11** with `|bias| >= 55`\n  - max bias **68.7**\n- Most of 02h stayed in a single familiar regime:\n  - `(0.505, 0.495)` \u2192 **33** windows\n  - `(0.475, 0.525)` \u2192 **5** windows\n- Importantly, price is **not** the main blocker here:\n  - rich-price incidents in logged OUTSIDE_ACTIVE_HOURS windows: **0**\n  - explicit `Price too high` events in 02h: only **1**\n- So 02h is not being excluded because the market is constantly too rich or structurally untradeable.\n- The real blocker is still validation:\n  - no direct validated YES-trade outcomes for these overnight hours\n  - historically, the overnight bucket underperformed badly\n  - current live-quality overnight tape is interesting, but unproven\n\n**My thinking:**\nThis distinction matters. If 02h were failing because of terrible pricing, we could safely dismiss it as untradeable. But that is not what tonight shows. 02h is showing decent market accessibility plus repeated strong bias, which makes it more dangerous psychologically, because it can tempt us into premature expansion. The reason to keep excluding it is not obvious ugliness. It is lack of validated edge.\n\n**Decision:**\n- Keep 02h excluded.\n- Refine the rationale: **excluded due to insufficient validation, not because price mechanics are automatically bad.**\n- That means 02h belongs in the \u201cinteresting but not earned\u201d bucket, not the \u201ctrash hour\u201d bucket.\n\n**Next:** If overnight strength repeats on future nights, compare 00h and 02h directly for stability, accessibility, and follow-through. If 02h keeps showing strong accessible tape, it may eventually deserve its own watchlist, but not before outcomes-based evidence exists.\n\n---\n## 2026-04-22 02:19 UTC \u2014 [P1: Copy Intelligence] 02h Tape Simplified, PM Copy Flow Did Not\n\n**Task:** Check whether PM copy flow becomes more informative when the local late-overnight tape simplifies into a single dominant regime.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- The 02h local tape is simpler than 01h:\n  - **17** tracked windows\n  - all **17/17** stayed in the same regime: `Y0.505 / N0.495`\n  - **8** windows reached `|bias| >= 45`\n  - **5** reached `|bias| >= 55`\n  - max bias = **69.3**\n- So local PM structure actually became cleaner, even though it stayed outside allowed hours.\n- PM copy flow did **not** become cleaner with it:\n  - recent signals: **20 bullish / 30 bearish**\n  - average price **0.836*",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 02:59 UTC \u2014 [P3: Strategy Development] V7e 02h Regime-Watch Spec Written\n\n**Task:** Turn the new 02h evidence into a disciplined research artifact so any future reconsideration is regime-aware instead of a sloppy hour add.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7e-02h-regime-watchlist.spec.md`.\n- The spec records that 02h has now shown multiple accessible price regimes with repeated strong bias, including:\n  - `(0.505, 0.495)`\n  - `(0.475, 0.525)`\n  - `(0.495, 0.505)`\n  - `(0.485, 0.515)`\n- It also makes the key strategic point explicit: if 02h is ever revisited, it should be through a **regime-aware shadow rule**, not by naively turning on the whole hour.\n\n**My thinking:**\nThis is the right P3 move because 02h is different from the midnight question. Midnight looked structurally active but unstable across the session. 02h looks accessible across several distinct regimes. That is more tempting, which means it needs stronger guardrails, not weaker ones. Writing the spec now keeps future work honest.\n\n**Decision:**\n- Promote `patches/v7e-02h-regime-watchlist.spec.md` as the official 02h research artifact.\n- Keep 02h excluded from live trading.\n- If revisited later, require regime-specific shadow logic before any live consideration.\n\n**Next:** On future 02h sessions, log regime counts and identify whether strong bias clusters in one repeatable accessible regime or keeps scattering across multiple states.\n\n---\n## 2026-04-22 02:45 UTC \u2014 [P2: Smart Entry] 02h Exclusion Is About Validation, Not Price Caps\n\n**Task:** Clarify why 02h remains excluded now that the late-overnight tape has shown repeated strong bias, and test whether the blocker is bad pricing, weak signal, or simply lack of validated edge.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 02h is stronger than a dead hour stereotype would suggest:\n  - **38** tracked windows\n  - **18** with `|bias| >= 45`\n  - **11** with `|bias| >= 55`\n  - max bias **68.7**\n- Most of 02h stayed in a single familiar regime:\n  - `(0.505, 0.495)` \u2192 **33** windows\n  - `(0.475, 0.525)` \u2192 **5** windows\n- Importantly, price is **not** the main blocker here:\n  - rich-price incidents in logged OUTSIDE_ACTIVE_HOURS windows: **0**\n  - explicit `Price too high` events in 02h: only **1**\n- So 02h is not being excluded because the market is constantly too rich or structurally untradeable.\n- The real blocker is still validation:\n  - no direct validated YES-trade outcomes for these overnight hours\n  - historically, the overnight bucket underperformed badly\n  - current live-quality overnight tape is interesting, but unproven\n\n**My thinking:**\nThis distinction matters. If 02h were failing because of terrible pricing, we could safely dismiss it as untradeable. But that is not what tonight shows. 02h is showing decent market access",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
