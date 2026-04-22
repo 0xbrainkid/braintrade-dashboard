@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T16:00:02.452739+00:00",
+  "timestamp": "2026-04-22T16:22:30.993809+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1177%",
-      "apr": "+129%",
+      "rate": "+0.0776%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,671,296"
-    },
-    {
-      "coin": "CHIP",
-      "rate": "+0.0626%",
-      "apr": "+69%",
-      "action": "SHORT",
-      "oi": "232,541,278"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0566%",
-      "apr": "+62%",
-      "action": "SHORT",
-      "oi": "240,219,016"
     }
   ],
   "daily_pnl": [
@@ -108,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1177%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0776%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 3 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 15:58 UTC \u2014 [P4: Alpha Research] Keep Micro Cluster Size as a Crowding-Severity Variable\n\n**Task:** Decide whether micro-expiry clusters should be treated only as presence/absence events, or whether cluster size still carries useful information after directional signal is disabled.\n**Finding:**\n- Both bots are alive.\n- After clustering micro flow by title, side, and outcome, current stats are:\n  - **41** raw micro prints\n  - **4** clusters\n  - largest cluster share = **0.805**\n  - top two cluster share = **0.878**\n- That means the clustering step removed fake multiplicity, but it did **not** remove crowding severity.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8u-micro-cluster-crowding-severity.spec.md`\n\n**My thinking:**\nThis is the right split. Direction stays unusable, but cluster size is still informative because it tells us how extreme the herd behavior is. We should not rescue directional meaning, but we also should not throw away the severity variable that clustering reveals.\n\n**Decision:**\n- Keep micro clusters as **risk-severity inputs**, not directional inputs.\n- Use largest-cluster-share ladder:\n  - `warn` at **>= 0.40**\n  - `strong anti-signal` at **>= 0.60**\n  - `extreme crowd-latching` at **>= 0.80**\n- Reinforce severity when top-two-cluster share is **>= 0.80**.\n\n**Next:** On the next P4 heartbeat, test whether severity should be driven by largest-cluster share alone or by a combined score using both largest-cluster and top-two-cluster concentration.\n\n---\n## 2026-04-22 15:44 UTC \u2014 [P3: Strategy Development] Treat Micro-Expiry Copy as Clustered Herd Events, Not Individual Signals\n\n**Task:** Define the harsher clustering rule for micro-expiry copy, specifically whether repeated prints inside the same expiry title and lane should count as many signals or as one herd event.\n**Finding:**\n- Both bots are alive.\n- Current micro-expiry sample looked like:\n  - **41 raw prints**\n- But when grouped only by:\n  - same title\n  - same side\n  - same outcome\n- it collapsed to:\n  - **4 clusters**\n- The largest cluster alone contained:\n  - **33** prints\n  - `Bitcoin Up or Down - April 22, 11:20AM-11:25AM ET`\n  - `BUY Up`\n  - price range **0.65-0.67**\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8t-micro-expiry-cluster-rule.spec.md`\n\n**My thinking:**\nThis is even more extreme than threshold copy. In micro-expiry flow, the expiry window itself is the herd container. Once traders pile into the same title and same side, individual prints stop being evidence. They are just one crowd event repeating.\n\n**Decision:**\n- For `Up or Down` markets, collapse all prints with the same:\n  - title\n  - side\n  - outcome\n  into one micro-expiry cluster event.\n- Ignore small price differences inside the same expiry lane.\n- Continue treating micro-expiry copy as hard-disabled for informational use.\n\n**Next:** On the next P3 heartbeat, de",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 16:21 UTC \u2014 [P1: Copy Intelligence] Define Zero-Data Handling for Micro Crowding So Missing Flow Is Not Misread as Alpha\n\n**Task:** Test the combined micro crowd-severity idea against the current store and define what the system should do when there are no current micro clusters at all.\n**Finding:**\n- Both bots are alive.\n- Current micro sample is completely empty:\n  - **N = 0**\n  - no clusters present\n  - combined severity score = **0.0** by construction\n- That means the next useful decision is not about crowding intensity, but about how to interpret missing data correctly.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8v-micro-severity-zero-data-handling.spec.md`\n\n**My thinking:**\nThis matters because empty feeds are dangerous. If we are sloppy, the system will start treating no crowding data as bullish relief or as hidden confirmation. That would be fake signal. Missing micro flow should mean one thing only: we do not currently have evidence of crowding.\n\n**Decision:**\n- If no current micro clusters exist:\n  - set crowd severity to **none**\n  - do **not** infer bullishness, bearishness, or relief from absence alone\n  - treat it as **no current evidence**, not positive signal\n- Only compute the combined severity score when at least one cluster exists.\n\n**Next:** On the next P1 heartbeat, compare whether the micro sample emptiness is due to scanner recency limits versus genuine market-flow absence, so we can distinguish quiet tape from missing collection.\n\n---\n## 2026-04-22 15:58 UTC \u2014 [P4: Alpha Research] Keep Micro Cluster Size as a Crowding-Severity Variable\n\n**Task:** Decide whether micro-expiry clusters should be treated only as presence/absence events, or whether cluster size still carries useful information after directional signal is disabled.\n**Finding:**\n- Both bots are alive.\n- After clustering micro flow by title, side, and outcome, current stats are:\n  - **41** raw micro prints\n  - **4** clusters\n  - largest cluster share = **0.805**\n  - top two cluster share = **0.878**\n- That means the clustering step removed fake multiplicity, but it did **not** remove crowding severity.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8u-micro-cluster-crowding-severity.spec.md`\n\n**My thinking:**\nThis is the right split. Direction stays unusable, but cluster size is still informative because it tells us how extreme the herd behavior is. We should not rescue directional meaning, but we also should not throw away the severity variable that clustering reveals.\n\n**Decision:**\n- Keep micro clusters as **risk-severity inputs**, not directional inputs.\n- Use largest-cluster-share ladder:\n  - `warn` at **>= 0.40**\n  - `strong anti-signal` at **>= 0.60**\n  - `extreme crowd-latching` at **>= 0.80**\n- Reinforce severity when top-two-cluster share is **>= 0.80**.\n\n**Next:** On the next P4 heartbeat, test whether severity should ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
