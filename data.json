@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T14:00:01.936660+00:00",
+  "timestamp": "2026-04-22T14:29:28.228509+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1293%",
-      "apr": "+142%",
+      "rate": "+0.0917%",
+      "apr": "+100%",
       "action": "SHORT",
       "oi": "69,671,296"
-    },
-    {
-      "coin": "YZY",
-      "rate": "-0.0506%",
-      "apr": "-55%",
-      "action": "LONG",
-      "oi": "1,178,430"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1293%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0917%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 13:58 UTC \u2014 [P4: Alpha Research] Define Numeric Boundaries Between Pinned, Transitional, and Excursion States\n\n**Task:** Tighten the wrong-side classifier by making the Step 2 split numeric, specifically what counts as pinned-normal versus a transitional neighbor versus a true excursion.\n**Finding:**\n- Both bots are alive.\n- The tape now supports three clear price-state buckets:\n  - **Pinned-normal:** `0.505 / 0.495`\n  - **Transitional neighbor:** `0.495 / 0.505`\n  - **True excursion:** `0.485 / 0.515` and `0.475 / 0.525`\n- Evidence from today:\n  - **12h** stayed almost entirely pinned at `0.505 / 0.495` and fits the trend-aligned wrong-side path.\n  - **11h** reached `0.475 / 0.525`, then reclaimed through `0.495 / 0.505`, so it remains the inversion-state-machine case.\n  - **13h off-hours** kept printing `0.495 / 0.505`, `0.485 / 0.515`, and `0.475 / 0.525`, reinforcing that these are real structural states, not random noise.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8m-pinned-vs-excursion-thresholds.spec.md`\n\n**My thinking:**\nThis was the missing numeric line. Without it, the decision tree still had judgment calls hidden inside Step 2. Now it does not. `0.495 / 0.505` is the bridge state, but `0.485 / 0.515` or deeper is the point where the tape has clearly left pinned-normal behavior.\n\n**Decision:**\n- Use:\n  - `0.505 / 0.495` as pinned-normal\n  - `0.495 / 0.505` as transitional neighbor\n  - `0.485 / 0.515` or deeper as true excursion\n- Keep any sequence that reaches true excursion on the inversion-state-machine path until direction also recovers.\n\n**Next:** On the next P4 heartbeat, define whether `0.495 / 0.505` should inherit the pinned path or excursion path by default when it appears first without deeper follow-through.\n\n---\n## 2026-04-22 13:44 UTC \u2014 [P3: Strategy Development] Turn Wrong-Side Logic into an Explicit Decision Tree\n\n**Task:** Convert the evolving wrong-side framework into a simple decision tree the bot can actually follow, using today\u2019s 11h and 12h traces as the reference cases.\n**Finding:**\n- Both bots are alive.\n- The log now gives enough clarity to separate the two paths operationally:\n  - **12h** stayed pinned at `0.505 / 0.495`, accumulated repeated wrong-side skips, then got `TREND` confirmation.\n  - **11h** left the base state materially, moving through `0.475 / 0.525` and `0.495 / 0.505` before reclaiming.\n- That lets the classifier become a concrete decision tree:\n  1. wrong-sided direction?\n  2. pinned base state or meaningful excursion?\n  3. pinned path = persistence count then regime confirmation\n  4. excursion path = inversion-state-machine tracking\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8l-wrong-side-decision-tree.spec.md`\n\n**My thinking:**\nThis is better than accumulating disconnected rules. A decision tree forces order. First direction, then structure, then persisten",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:28 UTC \u2014 [P1: Copy Intelligence] Copy Dispersion Still Never Clears, Micro-Expiry Flow Is Fully Crowd-Latched\n\n**Task:** Test whether any recent PM copy sample has become dispersed enough to be potentially informational, or whether micro-expiry flow remains trapped in crowd-latching mode.\n**Finding:**\n- Both bots are alive.\n- Latest stored copy sample is not merely crowded, it is maximally concentrated:\n  - **50 / 50** signals in one title\n  - `Bitcoin Up or Down - April 22, 10:20AM-10:25AM ET` \u2192 **100%** of titles\n- Triple concentration is also extreme:\n  - top triple share = **0.80**\n  - top two triples share = **0.90**\n- Exact top triples:\n  - `BUY Up @ 0.990` \u2192 **40**\n  - `BUY Up @ 0.985` \u2192 **5**\n  - `BUY Up @ 0.989` \u2192 **5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8n-copy-dispersion-never-clears-micro-expiry-crowding.spec.md`\n\n**My thinking:**\nThis is the strongest negative result yet. We were asking whether copy flow ever gets dispersed enough to matter. Right now the answer is no, and not barely no. The whole sample collapsed into a single title and almost a single trade template. That is not market intelligence, it is herd automation.\n\n**Decision:**\n- Treat micro-expiry copy flow as **crowd-latched by default**.\n- Assume it remains unusable unless title concentration falls materially below current thresholds.\n- Keep concentration-first logic as primary and do not wait for directional nuances to rescue copy flow quality.\n\n**Next:** On the next P1 heartbeat, compare whether non-micro markets like 4-hour or daily threshold contracts show materially lower title concentration, to test if usable copy quality only exists outside micro-expiry markets.\n\n---\n## 2026-04-22 13:58 UTC \u2014 [P4: Alpha Research] Define Numeric Boundaries Between Pinned, Transitional, and Excursion States\n\n**Task:** Tighten the wrong-side classifier by making the Step 2 split numeric, specifically what counts as pinned-normal versus a transitional neighbor versus a true excursion.\n**Finding:**\n- Both bots are alive.\n- The tape now supports three clear price-state buckets:\n  - **Pinned-normal:** `0.505 / 0.495`\n  - **Transitional neighbor:** `0.495 / 0.505`\n  - **True excursion:** `0.485 / 0.515` and `0.475 / 0.525`\n- Evidence from today:\n  - **12h** stayed almost entirely pinned at `0.505 / 0.495` and fits the trend-aligned wrong-side path.\n  - **11h** reached `0.475 / 0.525`, then reclaimed through `0.495 / 0.505`, so it remains the inversion-state-machine case.\n  - **13h off-hours** kept printing `0.495 / 0.505`, `0.485 / 0.515`, and `0.475 / 0.525`, reinforcing that these are real structural states, not random noise.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8m-pinned-vs-excursion-thresholds.spec.md`\n\n**My thinking:**\nThis was the missing numeric line. Without it, the decision tree still had judgment calls hidden inside Step 2",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
