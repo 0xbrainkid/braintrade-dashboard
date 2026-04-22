@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T12:00:02.003443+00:00",
+  "timestamp": "2026-04-22T12:15:09.942081+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0699%",
-      "apr": "+77%",
+      "rate": "+0.0838%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0699%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0838%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 11:59 UTC \u2014 [P3: Strategy Development] Price Recovered in 11h, but Direction Never Did, So This Needs an Inversion State Machine\n\n**Task:** Decide whether the evolving 11h session is just a price-state recovery chain or whether the whole session stays directionally inverted even as price moves back toward normal levels.\n**Finding:**\n- Both bots are alive and PM remains in active hour **11h**.\n- The session has now completed a three-stage price-state path:\n  - wrong-side base: `0.505 / 0.495`\n  - deeper inversion: `0.475 / 0.525`\n  - partial reclaim: `0.495 / 0.505`\n  - full price return: `0.505 / 0.495`\n- But the directional layer **never** recovered.\n- Across the whole chain, bias stayed persistently positive and the bot kept logging:\n  - `NO_TRADE_SKIPPED`\n  - `YES_ONLY_FILTER`\n  - repeated NO-side dominance\n- So price recovered, but the session remained NO-dominant for YES-only logic from start to finish.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8e-inversion-state-machine.spec.md`\n\n**My thinking:**\nThis is the missing distinction. Watching only the price states would make the hour look like it healed itself. But from the strategy\u2019s point of view it never healed, because directional availability never came back. That means the system needs two layers: price state and directional state. Otherwise we will keep mistaking cosmetic recovery for actual tradability.\n\n**Decision:**\n- Model sessions like Apr 22 11h with an **inversion state machine**.\n- Track price-state recovery and directional recovery separately.\n- Do not treat an hour as restored just because PM prices moved back toward `0.505 / 0.495`.\n\n**Next:** On the next P3 heartbeat, define a simple early-stop rule for inversion sessions that remain in directional state `D1` across enough refresh cycles even after price-state reclaim begins.\n\n---\n## 2026-04-22 11:44 UTC \u2014 [P2: Smart Entry] This 11h Session Is a Full Directional Inversion Day, Not Just a Bad Entry Patch\n\n**Task:** Determine whether today\u2019s weak 11h behavior is an entry-quality problem or a deeper hour-level regime where the whole session is structurally wrong-sided for the YES-only strategy.\n**Finding:**\n- Both bots are alive and PM is in active hour **11h**.\n- The hour has moved through two unusable phases for YES-only:\n  1. early inversion to `Y0.515 / N0.485`, then snap-back to `Y0.505 / N0.495`\n  2. later deeper slide to `Y0.475 / N0.525`\n- Across both phases, bias remained persistently **positive**, causing repeated NO-side skips rather than YES opportunities.\n- Recent live log pattern:\n  - many `YES_ONLY_FILTER` skips at **+45 to +70** bias\n  - repeated `NO_TRADE_SKIPPED` entries on the NO side\n  - no valid YES-side setup emerged from the deeper `0.475 / 0.525` move either\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8d-11h-directional-inversion-day.spec.md`\n\n**My thinking:**\nThis is",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:14 UTC \u2014 [P4: Alpha Research] 12h Is a Trend-Aligned Wrong-Side Session, Not an Inversion Sequence\n\n**Task:** Determine whether today\u2019s 12h weakness is the same kind of failure as 11h, or whether it is a cleaner wrong-sided session driven by stable price plus regime alignment.\n**Finding:**\n- Both bots are alive and PM is in active hour **12h**.\n- 12h has remained price-stable at:\n  - `Y0.505 / N0.495`\n- But directional availability stayed wrong-sided:\n  - repeated `NO_TRADE_SKIPPED`\n  - repeated `YES_ONLY_FILTER`\n  - bias persistently positive\n- Unlike 11h, this session did **not** need a price-state excursion to reveal the problem.\n- Then the regime layer started confirming the same story:\n  - `REGIME_FILTER: TREND (score 3/6, dir:88%, range:0.5-0.6%, trend:+0.5%)`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8f-trend-aligned-wrong-side-session.spec.md`\n\n**My thinking:**\nThis is cleaner than 11h. In 11h, price moved through several states while direction stayed wrong-sided, so we needed an inversion state machine. In 12h, price never had to move. The session was simply pinned in a stable state while both bias and later regime leaned the wrong way. That makes it a different failure mode, and actually easier to identify early.\n\n**Decision:**\n- Add **trend-aligned wrong-side session** as a distinct failure class.\n- Separate it from inversion-sequence sessions.\n- When price is stable but both bias and regime lean the wrong way, stop looking for rescue entries faster.\n\n**Next:** On the next P4 heartbeat, compare Apr 22 11h and 12h as two different wrong-side taxons, inversion-state-machine versus trend-aligned wrong-side, and define an early classifier between them.\n\n---\n## 2026-04-22 11:59 UTC \u2014 [P3: Strategy Development] Price Recovered in 11h, but Direction Never Did, So This Needs an Inversion State Machine\n\n**Task:** Decide whether the evolving 11h session is just a price-state recovery chain or whether the whole session stays directionally inverted even as price moves back toward normal levels.\n**Finding:**\n- Both bots are alive and PM remains in active hour **11h**.\n- The session has now completed a three-stage price-state path:\n  - wrong-side base: `0.505 / 0.495`\n  - deeper inversion: `0.475 / 0.525`\n  - partial reclaim: `0.495 / 0.505`\n  - full price return: `0.505 / 0.495`\n- But the directional layer **never** recovered.\n- Across the whole chain, bias stayed persistently positive and the bot kept logging:\n  - `NO_TRADE_SKIPPED`\n  - `YES_ONLY_FILTER`\n  - repeated NO-side dominance\n- So price recovered, but the session remained NO-dominant for YES-only logic from start to finish.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8e-inversion-state-machine.spec.md`\n\n**My thinking:**\nThis is the missing distinction. Watching only the price states would make the hour look like it healed itself. But from the stra",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
