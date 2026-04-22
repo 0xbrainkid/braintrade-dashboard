@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T10:30:02.647657+00:00",
+  "timestamp": "2026-04-22T10:44:58.078029+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0885%",
-      "apr": "+97%",
+      "rate": "+0.0903%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0885%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0903%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 10:29 UTC \u2014 [P2: Smart Entry] Extreme Copy Crowding Is Polarity-Agnostic, So the Ladder Should Ignore Sentiment Sign\n\n**Task:** Use both the earlier bearish pile and the later bullish pile to test whether copy-crowding severity should depend on direction or only on concentration.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The earlier bearish sample was already extreme:\n  - **43 bearish / 7 bullish**\n  - top three titles = **41 / 50 = 0.82**\n- The later bullish sample was also extreme:\n  - **45 bullish / 5 bearish**\n  - dominant title = **45 / 50 = 0.90**\n  - top two triples = **40 / 50 = 0.80**\n- The common feature is not direction. It is **concentration**.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7z-polarity-agnostic-crowding.spec.md`\n\n**My thinking:**\nThis removes a subtle source of confusion. If both bearish and bullish copy piles become useless at similar concentration levels, then the model should not care whether the crowd is leaning Up or Down. What matters is whether the crowd has collapsed into a few repeated titles and clusters. Once that happens, the information quality is bad either way.\n\n**Decision:**\n- Make the copy-crowding ladder **polarity-agnostic**.\n- Evaluate copy-flow crowding primarily on concentration metrics, not sentiment sign.\n- Use bullish/bearish skew only as descriptive context after crowding severity is already determined.\n\n**Next:** On the next P2 heartbeat, score the current live copy sample with the full crowding ladder to see whether it remains in ordinary warning mode or has re-entered strong/extreme crowd-latching.\n\n---\n## 2026-04-22 10:16 UTC \u2014 [P1: Copy Intelligence] The Bullish Flip Sample Was Extreme Crowd-Latching, So the Thresholds Need a Ladder\n\n**Task:** Quantify concentration in the earlier bullish flip copy sample so the anti-signal thresholds for copy crowding can be tightened beyond the old `0.40` warning line.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The earlier bullish flip sample was not just concentrated, it was **extreme**:\n  - **50** total signals\n  - **45** signals in one title\n  - dominant title share = **0.90**\n- The repeated trade clusters were also highly concentrated:\n  - top triple = **20 / 50 = 0.40**\n  - top two triples = **40 / 50 = 0.80**\n- This sits far above the existing crowding warning rule of `0.40`.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7y-copy-crowding-thresholds.spec.md`\n\n**My thinking:**\nThe old `0.40` threshold is still useful as an early warning, but it does not distinguish moderate crowding from the kind of total pile-in we saw here. When ninety percent of the sample sits in one title and eighty percent sits in the top two repeated clusters, that is not just noisy, it is a full crowd-latching event. The model needs an escalation ladder, not a single line.\n\n**Decisi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 10:44 UTC \u2014 [P3: Strategy Development] 10h Is a Clean Persistent Jump, Not Another Noisy State Sequence\n\n**Task:** Decide whether the new 10h move away from `0.505 / 0.495` is behaving like the earlier 09h multi-state traversal or whether it is a different, cleaner structure.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 10h spent a long stretch pinned at:\n  - `Y0.505 / N0.495`\n- At **10:40 UTC** the tape jumped directly to:\n  - `Y0.485 / N0.515`\n- Unlike the 09h sequence, there was **no intermediate `0.495 / 0.505` wobble** before this move.\n- The new state persisted through refresh and subsequent logs:\n  - 10:40 \u2192 `0.485 / 0.515`\n  - 10:41 \u2192 `0.485 / 0.515`\n  - 10:42 \u2192 `0.485 / 0.515`\n  - 10:43 \u2192 `0.485 / 0.515`\n  - 10:44 \u2192 `0.485 / 0.515`\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8a-clean-state-jump.spec.md`\n\n**My thinking:**\nThis matters because it separates two different structural behaviors. 09h was a sequence, with the market traversing multiple adjacent states and then recovering. 10h is cleaner. It jumped directly from the base state to a deeper one and held it. That kind of move deserves its own category because it may be more informative than a noisy chain.\n\n**Decision:**\n- Add a distinct **clean persistent jump** category.\n- Separate clean jumps from multi-state sequencing behavior in future strategy work.\n- Treat direct deep-state holds as structurally stronger than noisy adjacent-state traversals, pending more samples.\n\n**Next:** On the next P3 heartbeat, measure how long `0.485 / 0.515` survives and whether the first recovery, if it comes, is direct back to base or stepwise through `0.495 / 0.505`.\n\n---\n## 2026-04-22 10:29 UTC \u2014 [P2: Smart Entry] Extreme Copy Crowding Is Polarity-Agnostic, So the Ladder Should Ignore Sentiment Sign\n\n**Task:** Use both the earlier bearish pile and the later bullish pile to test whether copy-crowding severity should depend on direction or only on concentration.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The earlier bearish sample was already extreme:\n  - **43 bearish / 7 bullish**\n  - top three titles = **41 / 50 = 0.82**\n- The later bullish sample was also extreme:\n  - **45 bullish / 5 bearish**\n  - dominant title = **45 / 50 = 0.90**\n  - top two triples = **40 / 50 = 0.80**\n- The common feature is not direction. It is **concentration**.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7z-polarity-agnostic-crowding.spec.md`\n\n**My thinking:**\nThis removes a subtle source of confusion. If both bearish and bullish copy piles become useless at similar concentration levels, then the model should not care whether the crowd is leaning Up or Down. What matters is whether the crowd has collapsed into a few repeated titles and clusters. Once that happens, the information quality is bad either way.\n\n**Decision:**\n- Make ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
