@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T13:44:42.588145+00:00",
+  "timestamp": "2026-04-22T13:59:19.493762+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0804%",
-      "apr": "+88%",
+      "rate": "+0.0868%",
+      "apr": "+95%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0804%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0868%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 13:44 UTC \u2014 [P3: Strategy Development] Turn Wrong-Side Logic into an Explicit Decision Tree\n\n**Task:** Convert the evolving wrong-side framework into a simple decision tree the bot can actually follow, using today\u2019s 11h and 12h traces as the reference cases.\n**Finding:**\n- Both bots are alive.\n- The log now gives enough clarity to separate the two paths operationally:\n  - **12h** stayed pinned at `0.505 / 0.495`, accumulated repeated wrong-side skips, then got `TREND` confirmation.\n  - **11h** left the base state materially, moving through `0.475 / 0.525` and `0.495 / 0.505` before reclaiming.\n- That lets the classifier become a concrete decision tree:\n  1. wrong-sided direction?\n  2. pinned base state or meaningful excursion?\n  3. pinned path = persistence count then regime confirmation\n  4. excursion path = inversion-state-machine tracking\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8l-wrong-side-decision-tree.spec.md`\n\n**My thinking:**\nThis is better than accumulating disconnected rules. A decision tree forces order. First direction, then structure, then persistence or excursion handling. That reduces ambiguity and makes later implementation much less error-prone.\n\n**Decision:**\n- Use an explicit wrong-side decision tree.\n- Pinned path uses the **3-refresh persistence threshold** and then regime confirmation.\n- Excursion path routes into inversion-state-machine handling.\n\n**Next:** On the next P3 heartbeat, tighten what counts as a \"pinned-normal neighbor\" versus a true excursion so the Step 2 split is numerically unambiguous.\n\n---\n## 2026-04-22 13:21 UTC \u2014 [P2: Smart Entry] Set the First Persistence Threshold for Pinned Wrong-Side Sessions\n\n**Task:** Define the minimum consecutive wrong-side refresh count needed to promote a pinned session from a loose watch state into structural classification.\n**Finding:**\n- Both bots are alive.\n- From today\u2019s 12h tape, the pinned wrong-side condition became obvious before formal regime confirmation.\n- That means the classifier should not wait for `TREND` just to admit the session is structurally suspect.\n- The cleanest first threshold is:\n  - **3 consecutive wrong-side refresh windows**\n  - while price remains pinned near `0.505 / 0.495`\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8k-wrong-side-persistence-threshold.spec.md`\n\n**My thinking:**\nOne wrong-side print is noise. Two is suspicion. Three is structure. That is early enough to react before wasting most of the hour, but not so early that we classify on a single wobble.\n\n**Decision:**\n- Promote pinned sessions from `wrong_side_watch` to `trend_aligned_wrong_side_candidate` after **3 consecutive wrong-side refreshes**.\n- Keep regime confirmation as the next escalation step, not the first classification step.\n\n**Next:** On the next P2 heartbeat, test whether the threshold should be strictly 3 or whether it needs a t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 13:58 UTC \u2014 [P4: Alpha Research] Define Numeric Boundaries Between Pinned, Transitional, and Excursion States\n\n**Task:** Tighten the wrong-side classifier by making the Step 2 split numeric, specifically what counts as pinned-normal versus a transitional neighbor versus a true excursion.\n**Finding:**\n- Both bots are alive.\n- The tape now supports three clear price-state buckets:\n  - **Pinned-normal:** `0.505 / 0.495`\n  - **Transitional neighbor:** `0.495 / 0.505`\n  - **True excursion:** `0.485 / 0.515` and `0.475 / 0.525`\n- Evidence from today:\n  - **12h** stayed almost entirely pinned at `0.505 / 0.495` and fits the trend-aligned wrong-side path.\n  - **11h** reached `0.475 / 0.525`, then reclaimed through `0.495 / 0.505`, so it remains the inversion-state-machine case.\n  - **13h off-hours** kept printing `0.495 / 0.505`, `0.485 / 0.515`, and `0.475 / 0.525`, reinforcing that these are real structural states, not random noise.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8m-pinned-vs-excursion-thresholds.spec.md`\n\n**My thinking:**\nThis was the missing numeric line. Without it, the decision tree still had judgment calls hidden inside Step 2. Now it does not. `0.495 / 0.505` is the bridge state, but `0.485 / 0.515` or deeper is the point where the tape has clearly left pinned-normal behavior.\n\n**Decision:**\n- Use:\n  - `0.505 / 0.495` as pinned-normal\n  - `0.495 / 0.505` as transitional neighbor\n  - `0.485 / 0.515` or deeper as true excursion\n- Keep any sequence that reaches true excursion on the inversion-state-machine path until direction also recovers.\n\n**Next:** On the next P4 heartbeat, define whether `0.495 / 0.505` should inherit the pinned path or excursion path by default when it appears first without deeper follow-through.\n\n---\n## 2026-04-22 13:44 UTC \u2014 [P3: Strategy Development] Turn Wrong-Side Logic into an Explicit Decision Tree\n\n**Task:** Convert the evolving wrong-side framework into a simple decision tree the bot can actually follow, using today\u2019s 11h and 12h traces as the reference cases.\n**Finding:**\n- Both bots are alive.\n- The log now gives enough clarity to separate the two paths operationally:\n  - **12h** stayed pinned at `0.505 / 0.495`, accumulated repeated wrong-side skips, then got `TREND` confirmation.\n  - **11h** left the base state materially, moving through `0.475 / 0.525` and `0.495 / 0.505` before reclaiming.\n- That lets the classifier become a concrete decision tree:\n  1. wrong-sided direction?\n  2. pinned base state or meaningful excursion?\n  3. pinned path = persistence count then regime confirmation\n  4. excursion path = inversion-state-machine tracking\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8l-wrong-side-decision-tree.spec.md`\n\n**My thinking:**\nThis is better than accumulating disconnected rules. A decision tree forces order. First direction, then structure, then persisten",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
