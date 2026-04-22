@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T18:21:39.593045+00:00",
+  "timestamp": "2026-04-22T18:29:24.897301+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0839%",
-      "apr": "+92%",
+      "rate": "+0.0888%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0531%",
-      "apr": "+58%",
+      "rate": "+0.0573%",
+      "apr": "+63%",
       "action": "SHORT",
       "oi": "240,217,524"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0839%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0888%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:21 UTC \u2014 [P2: Smart Entry] Scope the Smallest Safe Live Code Change for Defensive Copy Handling\n\n**Task:** Translate the live-vs-shadow rollout decision into the smallest code change set that can safely go into the live bot without disturbing execution logic.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still cleanly micro-only:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means the rollout question is no longer conceptual. It is about implementation scope.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v9d-minimal-defensive-copy-live-change-set.spec.md`\n\n**My thinking:**\nThe safest live move is tiny and asymmetric. Sanitize copy input, compute instability, and gate off copy influence when the feed is bad. That gives us the protective value immediately without risking any accidental change to entries or sizing.\n\n**Decision:**\n- Minimal live change set:\n  1. duplicate / near-duplicate collapse\n  2. micro-expiry cluster collapse\n  3. compute `copy_sample_unstable`\n  4. freeze-gate any existing copy-based adjustment path when unstable\n  5. log freeze state and collapsed sample stats\n- Explicitly do **not** touch:\n  - entry logic\n  - sizing logic\n  - regime logic\n  - execution flow\n  - any positive copy interpretation\n\n**Next:** On the next P2 heartbeat, identify the exact file/function touch points in the bot code where this minimal defensive change set should be inserted.\n\n---\n## 2026-04-22 17:58 UTC \u2014 [P1: Copy Intelligence] Roll Out Copy Logic Live Only for Defense, Keep Positive Interpretation in Shadow Mode\n\n**Task:** Decide which parts of the copy-quality framework are safe enough to wire into the live bot first, versus which parts should remain observational.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still pure micro:\n  - **50** total signals\n  - market mix = **100% micro**\n- Across the full copy-quality thread, the most reliable outputs have all been defensive:\n  - duplicate inflation detection\n  - micro cluster collapse\n  - instability detection\n  - freeze logic\n- The least reliable outputs are still the positive ones:\n  - using threshold copy as weak context\n  - using cluster severity to shape live decisions\n  - automatically clearing back into active copy influence\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v9c-copy-framework-live-vs-shadow-rollout.spec.md`\n\n**My thinking:**\nThis is the right rollout asymmetry. We are good at detecting when copy flow is contaminated. We are not yet good at extracting trustworthy positive signal from it. So the first live deployment should only strip out bad influence, not add new influence.\n\n**Decision:**\n- **Live now:**\n  - duplicate / near-duplicate collapse\n  - micro-expiry cluster collapse\n  - `copy_sample_unstable` trigger\n  - freeze behavior that blocks copy-based upgrades/downgrades\n- **Shadow only for now:",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:28 UTC \u2014 [P3: Strategy Development] Identify the Exact Bot Touchpoints for the Minimal Defensive Copy Rollout\n\n**Task:** Move from abstract rollout planning to exact code touchpoints, specifically where the defensive copy rules would be inserted in the live bot stack.\n**Finding:**\n- Both bots are alive.\n- The relevant bot code touchpoints are now clear:\n  - upstream feed producer:\n    - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n      - writes `copy_signal.json` around line **163**\n  - live consumer:\n    - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n      - copy integration block declared around lines **95-98**\n      - `read_copy_signals()` at lines **102+**\n      - copy-adjustment path at lines **513-525**\n- That means the minimal defensive rollout can stay tightly scoped:\n  - preprocess / collapse logic near the scanner output path\n  - instability calculation at read stage\n  - freeze gate around the copy-adjustment branch only\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9e-defensive-copy-touchpoints.spec.md`\n\n**My thinking:**\nThis is exactly the scope I wanted. We do not need to touch the core execution engine. The existing architecture already has a clean seam: the scanner produces copy data, and the trading bot consumes it through a narrow adjustment path. That is the ideal place for a defensive-only rollout.\n\n**Decision:**\n- Target only:\n  - `copy_scanner_v2.py` for collapse-aware upstream output\n  - `trading_bot.py` for `read_copy_signals()` stability checks and a freeze gate around copy influence\n- Leave everything below the copy-adjustment branch unchanged.\n\n**Next:** On the next P3 heartbeat, inspect the exact `trading_bot.py` code blocks around `read_copy_signals()` and the copy-adjustment branch so the defensive patch can be specified line-for-line.\n\n---\n## 2026-04-22 18:21 UTC \u2014 [P2: Smart Entry] Scope the Smallest Safe Live Code Change for Defensive Copy Handling\n\n**Task:** Translate the live-vs-shadow rollout decision into the smallest code change set that can safely go into the live bot without disturbing execution logic.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still cleanly micro-only:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means the rollout question is no longer conceptual. It is about implementation scope.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v9d-minimal-defensive-copy-live-change-set.spec.md`\n\n**My thinking:**\nThe safest live move is tiny and asymmetric. Sanitize copy input, compute instability, and gate off copy influence when the feed is bad. That gives us the protective value immediately without risking any accidental change to entries or sizing.\n\n**Decision:**\n- Minimal live change set:\n  1. duplicate / near-duplicate collapse\n  2. micro-expiry cluster collapse\n  3. compute `copy_sample_unstable",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
