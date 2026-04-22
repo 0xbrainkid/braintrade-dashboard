@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T08:30:02.692754+00:00",
+  "timestamp": "2026-04-22T08:34:26.509190+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0711%",
-      "apr": "+78%",
+      "rate": "+0.0748%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,728,406"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0507%",
-      "apr": "+55%",
-      "action": "SHORT",
-      "oi": "240,443,578"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0711%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0748%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:15 UTC \u2014 [P4: Alpha Research] The `0.505 / 0.495` State Is Now a Long Pinned Episode, Not Just an Overnight Artifact\n\n**Task:** Check whether 08h finally introduces a new structure or whether the same pinned midpoint regime is still persisting into another excluded hour.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 08h so far has **14** tracked windows.\n- All **14/14** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **5** windows\n  - `|bias| >= 55` in **2** windows\n  - `<35` in **4** windows\n  - max bias **58.9**\n- Observed 08h sample window:\n  - first logged: **08:02:59 UTC**\n  - latest logged: **08:14:31 UTC**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7q-long-pinned-episode.spec.md`\n\n**My thinking:**\nThis settles the framing. The `0.505 / 0.495` regime is no longer just an overnight carry or a confirmation hour. It is a long pinned episode spanning multiple excluded hours. Once a state survives this long without breaking, new hour labels contribute very little. The next meaningful information is the first break from the episode, not another re-confirmation that the same state still exists.\n\n**Decision:**\n- Treat the current `0.505 / 0.495` regime as a **long pinned episode**.\n- De-emphasize hour-by-hour interpretation inside this episode.\n- Make the **first true structural break** the primary alpha-research target going forward.\n\n**Next:** On the next P4 heartbeat, measure the full duration of the long pinned episode from its first uninterrupted dominance point and define what kind of break would count as real versus noise.\n\n---\n## 2026-04-22 07:59 UTC \u2014 [P3: Strategy Development] The Pinned-State Episode Matters More Than the Hour Labels Now\n\n**Task:** Check whether the repeated `0.505 / 0.495` structure is still best understood hour by hour, or whether it has become one long pinned-state episode that makes hour buckets less meaningful.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- **07h** is now completely pinned:\n  - **59/59** windows in `(0.505, 0.495)`\n  - `|bias| >= 45` in **32** windows\n  - `|bias| >= 55` in **9** windows\n  - `<35` in **16** windows\n  - max bias **69.8**\n- 08h has not accumulated enough logged windows yet to draw a new boundary conclusion cleanly.\n- That said, the strategic lesson is already clear: once the market enters a deeply pinned midpoint episode, the hour buckets themselves explain less than the state persistence does.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7p-pinned-state-carryover.spec.md`\n\n**My thinking:**\nWe\u2019ve pushed the hour-based framing about as far as it goes. 06h confirmed the reset, 07h stayed fully pinned, and the market still has not produced a meaningful new structure. At that point, the key object is the pinned episode ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:28 UTC \u2014 [P1: Copy Intelligence] Long Pinned Episodes Still Do Not Make Copy Flow Useful\n\n**Task:** Test whether PM copy flow finally converges once the local market has stayed pinned in `0.505 / 0.495` for multiple excluded hours.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local market structure remains a long pinned episode centered on `(0.505, 0.495)`.\n- Recent PM copy flow still diverges sharply from that calm local state:\n  - **50** recent signals\n  - **7 bullish / 43 bearish**\n  - average price **0.635**\n- Copy flow remained concentrated in a few 3AM ET micro-expiry markets:\n  - `Bitcoin Up or Down - April 22, 3AM ET` \u2192 **14**\n  - `Bitcoin Up or Down - April 22, 3:55AM-4:00AM ET` \u2192 **13**\n  - `Bitcoin Up or Down - April 22, 3:45AM-4:00AM ET` \u2192 **9**\n- Top repeated trade clusters were still one-sided Down buys:\n  - `BUY Down @ 0.26` \u2192 **10**\n  - `BUY Down @ 0.77` \u2192 **6**\n  - `BUY Down @ 0.50` \u2192 **4**\n  - `BUY Down @ 0.51` \u2192 **4**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7r-copy-divergence-in-pinned-episodes.spec.md`\n\n**My thinking:**\nThis is stronger than the earlier overnight result. The local market got simpler, not noisier, and copy flow still failed to align. That means copy flow is not just weak in messy transitions, it also stays unhelpful during prolonged stable states. The persistent bearish clustering in unrelated expiring side markets makes it look even more like crowd noise than before.\n\n**Decision:**\n- Keep copy flow classified as **noise / crowding texture**, not confirmation.\n- Strengthen the rule that long pinned episodes do **not** rehabilitate PM copy signals.\n- Treat repeated one-sided copy clusters during pinned episodes as additional anti-signal evidence.\n\n**Next:** On the next P1 heartbeat, quantify title concentration and dominant-cluster share inside the current copy sample to tighten the crowding thresholds for risk-off handling.\n\n---\n## 2026-04-22 08:15 UTC \u2014 [P4: Alpha Research] The `0.505 / 0.495` State Is Now a Long Pinned Episode, Not Just an Overnight Artifact\n\n**Task:** Check whether 08h finally introduces a new structure or whether the same pinned midpoint regime is still persisting into another excluded hour.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 08h so far has **14** tracked windows.\n- All **14/14** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **5** windows\n  - `|bias| >= 55` in **2** windows\n  - `<35` in **4** windows\n  - max bias **58.9**\n- Observed 08h sample window:\n  - first logged: **08:02:59 UTC**\n  - latest logged: **08:14:31 UTC**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7q-long-pinned-episode.spec.md`\n\n**My thinking:**\nThis settles the framing. The `0.505 / 0.495` regime is no longer just an overnight carry or a conf",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
