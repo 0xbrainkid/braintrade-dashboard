@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T15:00:02.191041+00:00",
+  "timestamp": "2026-04-22T15:22:19.082344+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0994%",
-      "apr": "+109%",
+      "rate": "+0.1019%",
+      "apr": "+112%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0994%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1019%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:58 UTC \u2014 [P4: Alpha Research] Add a Recency Window So Threshold Copy Cannot Graduate on Stale or Burst-Duplicated Prints\n\n**Task:** Strengthen the threshold-copy graduation idea by checking whether sample size alone is enough, or whether the gate also needs a recency and diversity window.\n**Finding:**\n- Both bots are alive.\n- The current threshold sample is not just small, it is tightly clustered and duplicated:\n  - **4** threshold signals total\n  - really just **2 titles repeated twice**\n  - timestamps are nearly identical\n- That means a pure rolling-count gate would be unsafe. It could be satisfied by stale carryover or by a short burst of duplicate prints.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8q-threshold-copy-recency-window.spec.md`\n\n**My thinking:**\nThis is the same mistake people make with tiny datasets in trading all the time. If you only count observations and ignore their spacing and uniqueness, you can convince yourself you have a signal when you only have one repeated impulse. Threshold copy needs a freshness rule and a diversity rule, not just a count rule.\n\n**Decision:**\n- Threshold copy can only be tested for graduation if:\n  - at least **12** threshold signals exist\n  - they all occur inside the most recent **90 minutes**\n  - no single exact triple exceeds **25%** of that window\n  - at least **3 distinct titles** appear in that window\n- Without that, threshold copy stays `watchlist_only`.\n\n**Next:** On the next P4 heartbeat, define whether duplicate identical prints at the same timestamp should be collapsed before computing threshold-copy sample size and concentration.\n\n---\n## 2026-04-22 14:45 UTC \u2014 [P3: Strategy Development] Add a Graduation Gate Before Threshold Copy Can Influence Decisions\n\n**Task:** Convert the threshold-market copy finding into a concrete strategy gate, specifically when threshold copy should be allowed to move from watchlist-only into weak contextual input.\n**Finding:**\n- Both bots are alive.\n- Current threshold-market copy is still small:\n  - **n = 4**\n  - top title share = **0.50**\n  - top triple share = **0.50**\n  - top two title share = **1.00**\n  - top two triple share = **1.00**\n- That is more dispersed than micro-expiry flow, but still far from trustworthy.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8p-threshold-copy-graduation-gate.spec.md`\n\n**My thinking:**\nThe right move is not to trust threshold copy early just because it looks less broken than micro flow. Less broken is not the same as useful. It needs a graduation gate, otherwise the bot will start hallucinating signal out of tiny samples.\n\n**Decision:**\n- Keep threshold copy at `watchlist_only` unless all of these are true:\n  - sample size **>= 12**\n  - top title share **< 0.50**\n  - top triple share **< 0.50**\n  - top two titles share **< 0.80**\n  - top two triples share **< 0.80**\n- Even after gr",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 15:21 UTC \u2014 [P1: Copy Intelligence] Duplicate Collapse Shows Threshold Copy Is Still Just Burst Inflation\n\n**Task:** Check whether threshold-market copy still has any usable structure after collapsing exact duplicate prints, or whether the apparent sample size is mostly fake.\n**Finding:**\n- Both bots are alive.\n- Raw threshold-copy count looked better than before:\n  - **14** threshold prints\n- But after collapsing exact duplicates by timestamp, title, side, outcome, and price, it fell to:\n  - **3 unique signals**\n- Those 3 uniques were all the same title:\n  - `Will the price of Bitcoin be above $80,000 on April 22?`\n- And all the same directional lane:\n  - `SELL No`\n  - prices `0.960` and `0.963`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8r-duplicate-collapse-destroys-threshold-copy-signal.spec.md`\n\n**My thinking:**\nThis is actually brutal, and useful. Threshold copy looked less broken than micro flow only because duplicates were inflating the count. Once you collapse them, the entire sample shrinks into one title and one lane. So the problem is not just small sample size, it is fake sample size.\n\n**Decision:**\n- Collapse exact duplicates **before** computing any threshold-copy sample size or concentration metric.\n- Treat current threshold copy as fully non-informational.\n- Do not allow raw print count to influence confidence.\n\n**Next:** On the next P1 heartbeat, test whether near-duplicate prints with tiny price changes like `0.960` vs `0.963` should also be merged into one cluster before evaluating threshold-copy diversity.\n\n---\n## 2026-04-22 14:58 UTC \u2014 [P4: Alpha Research] Add a Recency Window So Threshold Copy Cannot Graduate on Stale or Burst-Duplicated Prints\n\n**Task:** Strengthen the threshold-copy graduation idea by checking whether sample size alone is enough, or whether the gate also needs a recency and diversity window.\n**Finding:**\n- Both bots are alive.\n- The current threshold sample is not just small, it is tightly clustered and duplicated:\n  - **4** threshold signals total\n  - really just **2 titles repeated twice**\n  - timestamps are nearly identical\n- That means a pure rolling-count gate would be unsafe. It could be satisfied by stale carryover or by a short burst of duplicate prints.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8q-threshold-copy-recency-window.spec.md`\n\n**My thinking:**\nThis is the same mistake people make with tiny datasets in trading all the time. If you only count observations and ignore their spacing and uniqueness, you can convince yourself you have a signal when you only have one repeated impulse. Threshold copy needs a freshness rule and a diversity rule, not just a count rule.\n\n**Decision:**\n- Threshold copy can only be tested for graduation if:\n  - at least **12** threshold signals exist\n  - they all occur inside the most recent **90 minutes**\n  - no single exact t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
