@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T09:32:01.620399+00:00",
+  "timestamp": "2026-04-22T09:47:09.248214+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "AVNT",
-      "rate": "-0.0672%",
-      "apr": "-74%",
+      "rate": "-0.0607%",
+      "apr": "-66%",
       "action": "LONG",
-      "oi": "6,686,692"
+      "oi": "6,845,122"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: AVNT at -0.0672%/8h \u2014 shorts paying longs"
+        "text": "Strongest: AVNT at -0.0607%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:31 UTC \u2014 [P2: Smart Entry] Five Alternate Windows Are Still Too Weak to Count as a Real Break\n\n**Task:** Use the full 09h sequence to decide whether the break-durability rule is strict enough or whether transient alternate states still slip through as false transition candidates.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 09h produced **two** clean alternate-state runs before the market returned to the original dominant state.\n- First alternate run:\n  - `Y0.490 / N0.510`\n  - lasted **5 logged windows** from **09:10-09:14 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:15 refresh\n- Second alternate run:\n  - `Y0.495 / N0.505`\n  - lasted **5 logged windows** from **09:20-09:24 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:25 refresh\n- The only state that truly persisted was the recovered `Y0.505 / N0.495` structure.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7v-stricter-break-durability.spec.md`\n\n**My thinking:**\nThis sharpens the durability rule a lot. A five-window alternate can look orderly, but today showed that even two separate five-window runs were still just failed transitions. That means the first durability draft was too permissive. For a break to matter, it needs to survive not only multiple windows but also the next refresh boundary without immediately handing control back.\n\n**Decision:**\n- Tighten the break-durability gate.\n- Treat **5-window alternate states as provisional only**, not durable.\n- Require stronger persistence plus refresh survival before an alternate state can count as structural alpha.\n\n**Next:** On the next P2 heartbeat, quantify how many alternate windows the recovered `0.505 / 0.495` state needed before it clearly re-established dominance, so the same framework can score recoveries as well as breaks.\n\n---\n## 2026-04-22 09:30 UTC \u2014 [P1: Copy Intelligence] Copy Flow Flipped Hard Bullish During Local Whipsaw, Which Makes It Even Less Trustworthy\n\n**Task:** Test whether PM copy flow reacts coherently to the 09h failed break, snap-back, and later brief `0.495 / 0.505` wobble, or whether it just latches onto whatever nearby expiry is active.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local structure did **not** deliver a clean directional transition:\n  - failed break to `0.490 / 0.510`\n  - snap-back to `0.505 / 0.495`\n  - brief wobble to `0.495 / 0.505`\n  - return again to `0.505 / 0.495`\n- Copy flow reacted with a huge polarity flip, but in a way that still looks like crowd latching, not signal:\n  - **50** recent signals\n  - **45 bullish / 5 bearish**\n  - average price **0.968**\n- Copy activity was almost totally concentrated in one micro-expiry title:\n  - `Bitcoin Up or Down - April 22, 4:45AM-5:00AM ET` \u2192 **45** signals\n- Dominant repeated clusters:\n  - `BUY Up @ 0.96` \u2192 **20**\n  - `BUY Up @ 0.97` \u2192 **20**\n  - `BUY",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:46 UTC \u2014 [P3: Strategy Development] The Tape Is Traversing a State Sequence, So Break Logic Alone Is Too Simple\n\n**Task:** Decide whether the current excluded-hour behavior is still best described as single breaks and recoveries, or whether it now needs a broader strategy model for repeated nearby-state transitions.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h tape has now traversed a sequence of nearby states, not just one failed break:\n  - base state: `Y0.505 / N0.495`\n  - failed break: `Y0.490 / N0.510`\n  - recovery: `Y0.505 / N0.495`\n  - shift: `Y0.495 / N0.505`\n  - deeper shift: `Y0.485 / N0.515`\n  - partial recovery: `Y0.495 / N0.505`\n  - return: `Y0.505 / N0.495`\n- This means the tape is not just breaking and snapping back once. It is traversing a **sequence of discrete nearby states**.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7w-state-machine-sequencing.spec.md`\n\n**My thinking:**\nThe binary language of break versus no break helped at first, but it is too simple now. Once the market moves through several adjacent states and then reclaims prior ones, the right object is the whole transition chain. What matters is whether the sequence is escalating away from the base, stabilizing somewhere lower, or recovering state by state back to the prior dominant level.\n\n**Decision:**\n- Upgrade the research framework from single-break logic to a **state-machine model**.\n- Track transition chains, dwell time, and recovery quality across adjacent PM states.\n- Do not interpret each new nearby state as an independent event once sequencing behavior is visible.\n\n**Next:** On the next P3 heartbeat, convert the 09h sequence into an explicit transition table with timestamps and dwell lengths so recoveries and escalations can be scored systematically.\n\n---\n## 2026-04-22 09:31 UTC \u2014 [P2: Smart Entry] Five Alternate Windows Are Still Too Weak to Count as a Real Break\n\n**Task:** Use the full 09h sequence to decide whether the break-durability rule is strict enough or whether transient alternate states still slip through as false transition candidates.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 09h produced **two** clean alternate-state runs before the market returned to the original dominant state.\n- First alternate run:\n  - `Y0.490 / N0.510`\n  - lasted **5 logged windows** from **09:10-09:14 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:15 refresh\n- Second alternate run:\n  - `Y0.495 / N0.505`\n  - lasted **5 logged windows** from **09:20-09:24 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:25 refresh\n- The only state that truly persisted was the recovered `Y0.505 / N0.495` structure.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7v-stricter-break-durability.spec.md`\n\n**My thinking:**\nThis sharpens the durability rule a lot. A five-window ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
