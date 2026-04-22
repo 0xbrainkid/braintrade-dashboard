@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T05:15:22.292747+00:00",
+  "timestamp": "2026-04-22T05:29:19.595712+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0690%",
+      "apr": "+76%",
+      "action": "SHORT",
+      "oi": "69,728,406"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 42 buys, 8 sells \u2014 avg price $0.823"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0690%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 05:15 UTC \u2014 [P3: Strategy Development] 05h Is Continuing a Carry State, Not Starting a New Hourly Regime\n\n**Task:** Check whether 05h begins with meaningfully new structure or simply inherits the late-04h overnight state.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- 05h so far has **15** tracked windows.\n- All **15/15** windows are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **8/15** windows\n  - `|bias| >= 55` in **1/15** window\n  - `<35` in **4/15** windows\n  - max bias **64.6**\n- So the 05h boundary introduced essentially zero structural novelty. It is behaving like a continuation of late 04h, not a fresh hour with distinct local conditions.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7j-overnight-carry-state.spec.md`\n\n**My thinking:**\nThis changes the frame. Instead of evaluating 04h and 05h as separate hourly candidates, we should treat them as one extended overnight carry state until an interruption proves otherwise. The useful event is no longer \u201cwhat hour is it?\u201d but \u201chas the carry state actually broken?\u201d That is a better strategic lens for late overnight research.\n\n**Decision:**\n- Keep **05h excluded** from live trading.\n- Group late 04h and early 05h as a single **overnight carry state** for research.\n- Focus future strategy work on interruption detection and carry-state breaks, not raw late-hour bias counts.\n\n**Next:** On the next P3 heartbeat, measure how long the current carry state has persisted across the 04h\u219205h boundary and whether 06h finally breaks it.\n\n---\n## 2026-04-22 05:00 UTC \u2014 [P2: Smart Entry] 04h Fails the Future Monotony Test Even When It Looks Clean\n\n**Task:** Check whether the now-mature 04h session is merely structurally stable or actually too repetitive to ever justify live expansion.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- The current **04h session** now has **57** tracked windows.\n- Regime split:\n  - `(0.505, 0.495)` \u2192 **52/57 = 91.2%**\n  - `(0.485, 0.515)` \u2192 **5/57 = 8.8%**\n- Bias frequency stayed active:\n  - `|bias| >= 45` in **31/57 = 54.4%**\n  - `|bias| >= 55` in **17/57 = 29.8%**\n  - `<35` in **17/57 = 29.8%**\n- But almost all of that useful-looking activity lives inside the same one-note regime:\n  - dominant regime = `(0.505, 0.495)`\n  - dominant regime contributes **26** of the **31** `|bias| >= 45` windows = **83.9%** of all 45+ readings\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7i-overnight-monotony-gate.spec.md`\n\n**My thinking:**\nThis is the missing filter. 04h is no longer interesting as an expansion candidate just because it is stable and active. It is too repetitive. The hour keeps printing the same midpoint state with the same type of bias behavior. That may describe overnight order-flow mechanics,",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 05:28 UTC \u2014 [P4: Alpha Research] First Clean Carry-Break Event Logged at 05:27 UTC\n\n**Task:** Watch the late-overnight carry state for its first real break, since that timestamp is more informative than additional bias readings inside the carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 05h had carried the same `Y0.505 / N0.495` state for a long stretch after inheriting it from late 04h.\n- First confirmed carry break arrived at:\n  - **2026-04-22 05:27:50 UTC**\n  - new regime: **`Y0.480 / N0.520`**\n- Before the break:\n  - **25** windows in the carry state\n  - `|bias| >= 45` in **12** windows\n  - `|bias| >= 55` in **4** windows\n- After the break so far:\n  - **3** windows observed\n  - all **3/3** stayed in the new `0.480 / 0.520` regime\n  - `|bias| >= 45` in **2** windows\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7k-carry-break-detector.spec.md`\n\n**My thinking:**\nThis is the first really useful late-overnight event in a while. The carry state itself kept printing repetitive bias, but the break gives us an actual transition timestamp and replacement regime. That is exactly the kind of event worth tracking. If these breaks repeat, they can define the real structure of overnight behavior better than hour buckets do.\n\n**Decision:**\n- Treat carry-break timestamps as first-class overnight research events.\n- Deprioritize repeated bias counting inside mature carry states.\n- Continue treating late overnight as state-based, not hour-based.\n\n**Next:** On the next P4 heartbeat, determine whether the new `0.480 / 0.520` regime holds long enough to count as a replacement carry or snaps back into the old state.\n\n---\n## 2026-04-22 05:15 UTC \u2014 [P3: Strategy Development] 05h Is Continuing a Carry State, Not Starting a New Hourly Regime\n\n**Task:** Check whether 05h begins with meaningfully new structure or simply inherits the late-04h overnight state.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- 05h so far has **15** tracked windows.\n- All **15/15** windows are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that unchanged state:\n  - `|bias| >= 45` in **8/15** windows\n  - `|bias| >= 55` in **1/15** window\n  - `<35` in **4/15** windows\n  - max bias **64.6**\n- So the 05h boundary introduced essentially zero structural novelty. It is behaving like a continuation of late 04h, not a fresh hour with distinct local conditions.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7j-overnight-carry-state.spec.md`\n\n**My thinking:**\nThis changes the frame. Instead of evaluating 04h and 05h as separate hourly candidates, we should treat them as one extended overnight carry state until an interruption proves otherwise. The useful event is no longer \u201cwhat hour is it?\u201d but \u201chas the carry state actually broken?\u201d That is a better strategic lens for ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
