@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T14:30:02.863433+00:00",
+  "timestamp": "2026-04-22T14:30:46.959613+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0921%",
-      "apr": "+101%",
+      "rate": "+0.0928%",
+      "apr": "+102%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0921%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0928%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:28 UTC \u2014 [P1: Copy Intelligence] Copy Dispersion Still Never Clears, Micro-Expiry Flow Is Fully Crowd-Latched\n\n**Task:** Test whether any recent PM copy sample has become dispersed enough to be potentially informational, or whether micro-expiry flow remains trapped in crowd-latching mode.\n**Finding:**\n- Both bots are alive.\n- Latest stored copy sample is not merely crowded, it is maximally concentrated:\n  - **50 / 50** signals in one title\n  - `Bitcoin Up or Down - April 22, 10:20AM-10:25AM ET` \u2192 **100%** of titles\n- Triple concentration is also extreme:\n  - top triple share = **0.80**\n  - top two triples share = **0.90**\n- Exact top triples:\n  - `BUY Up @ 0.990` \u2192 **40**\n  - `BUY Up @ 0.985` \u2192 **5**\n  - `BUY Up @ 0.989` \u2192 **5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8n-copy-dispersion-never-clears-micro-expiry-crowding.spec.md`\n\n**My thinking:**\nThis is the strongest negative result yet. We were asking whether copy flow ever gets dispersed enough to matter. Right now the answer is no, and not barely no. The whole sample collapsed into a single title and almost a single trade template. That is not market intelligence, it is herd automation.\n\n**Decision:**\n- Treat micro-expiry copy flow as **crowd-latched by default**.\n- Assume it remains unusable unless title concentration falls materially below current thresholds.\n- Keep concentration-first logic as primary and do not wait for directional nuances to rescue copy flow quality.\n\n**Next:** On the next P1 heartbeat, compare whether non-micro markets like 4-hour or daily threshold contracts show materially lower title concentration, to test if usable copy quality only exists outside micro-expiry markets.\n\n---\n## 2026-04-22 13:58 UTC \u2014 [P4: Alpha Research] Define Numeric Boundaries Between Pinned, Transitional, and Excursion States\n\n**Task:** Tighten the wrong-side classifier by making the Step 2 split numeric, specifically what counts as pinned-normal versus a transitional neighbor versus a true excursion.\n**Finding:**\n- Both bots are alive.\n- The tape now supports three clear price-state buckets:\n  - **Pinned-normal:** `0.505 / 0.495`\n  - **Transitional neighbor:** `0.495 / 0.505`\n  - **True excursion:** `0.485 / 0.515` and `0.475 / 0.525`\n- Evidence from today:\n  - **12h** stayed almost entirely pinned at `0.505 / 0.495` and fits the trend-aligned wrong-side path.\n  - **11h** reached `0.475 / 0.525`, then reclaimed through `0.495 / 0.505`, so it remains the inversion-state-machine case.\n  - **13h off-hours** kept printing `0.495 / 0.505`, `0.485 / 0.515`, and `0.475 / 0.525`, reinforcing that these are real structural states, not random noise.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8m-pinned-vs-excursion-thresholds.spec.md`\n\n**My thinking:**\nThis was the missing numeric line. Without it, the decision tree still had judgment calls hidden inside Step 2",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 14:30 UTC \u2014 [P2: Smart Entry] Gate Copy Flow by Market Type, Not Just by Concentration\n\n**Task:** Test whether copy-flow handling should stay universal, or whether the bot should separate micro-expiry copy from threshold-market copy when deciding what to ignore versus what to keep on watch.\n**Finding:**\n- Both bots are alive.\n- Latest stored copy sample splits as:\n  - **46 / 50** micro-expiry signals\n  - **4 / 50** threshold-market signals\n- Threshold-market copy is sparse but notably less concentrated than micro flow.\n- The 4 threshold signals span two different non-micro titles:\n  - `Will the price of Bitcoin be above $80,000 on April 22?` \u2192 **2**\n  - `Bitcoin above 76,800 on April 22, 11AM ET?` \u2192 **2**\n- Their top triples were:\n  - `BUY No @ 0.928` \u2192 **2**\n  - `BUY Yes @ 0.980` \u2192 **2**\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8o-market-type-copy-gating.spec.md`\n\n**My thinking:**\nThis is the right split. Micro-expiry copy is hopelessly crowd-latched and should be treated as disabled by default. Threshold-market copy is still too small to trust, but it is not collapsing into a single spam lane the same way. That means it should stay on watch, not in the trash bin.\n\n**Decision:**\n- Gate copy flow by **market type**.\n- `Up or Down` micro markets = **hard-disable as informational input**.\n- Threshold / longer-duration markets = **watchlist-only**, pending more sample size.\n\n**Next:** On the next P2 heartbeat, define the minimum threshold-market sample size and maximum concentration level required before threshold copy can graduate from watchlist-only to weak contextual input.\n\n---\n## 2026-04-22 14:28 UTC \u2014 [P1: Copy Intelligence] Copy Dispersion Still Never Clears, Micro-Expiry Flow Is Fully Crowd-Latched\n\n**Task:** Test whether any recent PM copy sample has become dispersed enough to be potentially informational, or whether micro-expiry flow remains trapped in crowd-latching mode.\n**Finding:**\n- Both bots are alive.\n- Latest stored copy sample is not merely crowded, it is maximally concentrated:\n  - **50 / 50** signals in one title\n  - `Bitcoin Up or Down - April 22, 10:20AM-10:25AM ET` \u2192 **100%** of titles\n- Triple concentration is also extreme:\n  - top triple share = **0.80**\n  - top two triples share = **0.90**\n- Exact top triples:\n  - `BUY Up @ 0.990` \u2192 **40**\n  - `BUY Up @ 0.985` \u2192 **5**\n  - `BUY Up @ 0.989` \u2192 **5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8n-copy-dispersion-never-clears-micro-expiry-crowding.spec.md`\n\n**My thinking:**\nThis is the strongest negative result yet. We were asking whether copy flow ever gets dispersed enough to matter. Right now the answer is no, and not barely no. The whole sample collapsed into a single title and almost a single trade template. That is not market intelligence, it is herd automation.\n\n**Decision:**\n- Treat micro-expiry copy flow as **crowd-latched by de",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
