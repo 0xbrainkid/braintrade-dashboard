@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T20:30:02.186799+00:00",
+  "timestamp": "2026-04-22T20:45:06.161783+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1523%",
-      "apr": "-167%",
+      "rate": "-0.1551%",
+      "apr": "-170%",
       "action": "LONG",
-      "oi": "203,464,230"
+      "oi": "203,157,510"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1089%",
-      "apr": "+119%",
+      "rate": "+0.1048%",
+      "apr": "+115%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0698%",
-      "apr": "-76%",
+      "rate": "-0.0743%",
+      "apr": "-81%",
       "action": "LONG",
       "oi": "1,217,514"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1523%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1551%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:28 UTC \u2014 [P3: Strategy Development] Draft the Smallest Actual `trading_bot.py` Code Change for Defensive Copy Suppression\n\n**Task:** Move from patch-plan language to the smallest concrete code draft for `trading_bot.py`, specifically the exact additions in `__init__` and `read_copy_signals()`.\n**Finding:**\n- Both bots are alive.\n- The relevant code block is compact enough that the defensive patch stays very small:\n  - one new instance attribute in `__init__`\n  - one reset line at the top of `read_copy_signals()`\n  - a few new suppression checks after timestamp staleness\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9m-minimal-read-copy-signals-code-draft.spec.md`\n\n**My thinking:**\nThis is exactly the kind of live change I trust. It is additive, local, and interface-preserving. The bot either keeps behaving as before or suppresses bad copy input more safely. There is no hidden complexity here.\n\n**Decision:**\n- Minimal code draft in `trading_bot.py`:\n  - add `self.copy_suppression_reason = None` in `__init__`\n  - reset it at the start of `read_copy_signals()`\n  - suppress on:\n    - `data_quality in {\"stale\", \"unstable\", \"insufficient_sample\"}`\n    - `copy_quality.copy_sample_unstable == true`\n- Preserve return shape and legacy behavior when new fields are absent.\n\n**Next:** On the next P3 heartbeat, draft the tiny companion change in the conviction branch that maps `self.copy_suppression_reason` into `details[\"COPY\"]` without touching the rest of the logic.\n\n---\n## 2026-04-22 20:21 UTC \u2014 [P2: Smart Entry] Reset Copy Suppression State Inside `read_copy_signals()` So Reasons Cannot Leak Across Loops\n\n**Task:** Decide where the new `self.copy_suppression_reason` should be reset, so suppression diagnostics do not persist accidentally across later bot iterations.\n**Finding:**\n- Both bots are alive.\n- The copy state currently lives close to the reader itself:\n  - `self.live_signals_file`\n  - `self.copy_signal_stale_secs`\n  - `read_copy_signals()`\n- That makes the reset location straightforward.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9l-copy-suppression-reason-reset.spec.md`\n\n**My thinking:**\nThis should not be handled in some outer loop because then the correctness of copy diagnostics would depend on broader control flow. The clean rule is local: each call to `read_copy_signals()` begins with no suppression reason, and only the current read may set one.\n\n**Decision:**\n- At the start of every `read_copy_signals()` call:\n  - set `self.copy_suppression_reason = None`\n- Only populate it when the current signal is suppressed.\n- Do not rely on outer loop resets.\n\n**Next:** On the next P2 heartbeat, draft the smallest actual code patch to initialize `self.copy_suppression_reason` in `__init__` and reset it in `read_copy_signals()` before any early return path.\n\n---\n## 2026-04-22 19:58 UTC \u2014 [P1: Copy Intell",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:44 UTC \u2014 [P4: Alpha Research] Draft the Exact Conviction-Branch Change That Surfaces Suppressed Copy States\n\n**Task:** Finish the implementation pair to `read_copy_signals()` by drafting the exact minimal code change in the conviction branch that exposes suppression states in `details[\"COPY\"]`.\n**Finding:**\n- Both bots are alive.\n- The conviction branch is already structured so the patch can be surgical:\n  - high-confidence agree / disagree cases stay untouched\n  - low-confidence case stays untouched\n  - only the final fallback needs to become suppression-aware\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9n-conviction-branch-copy-audit-code-draft.spec.md`\n\n**My thinking:**\nThis is a nice clean finish. The reader suppresses bad copy influence, and the branch reports why that happened without altering any of the core conviction logic. That keeps the patch minimal and makes the live behavior observable.\n\n**Decision:**\n- Replace the plain `details[\"COPY\"] = \"\u2014\"` fallback with a suppression-aware mapping:\n  - `\ud83e\uddca unstable`\n  - `\ud83d\udd52 stale`\n  - `\ud83d\udcc9 insufficient_sample`\n  - else `\u2014`\n- Leave all existing high-confidence and low-confidence branches unchanged.\n\n**Next:** On the next P4 heartbeat, combine the `trading_bot.py` reader patch and the conviction-branch patch into one final implementation checklist, so the defensive live rollout is ready for actual editing.\n\n---\n## 2026-04-22 20:28 UTC \u2014 [P3: Strategy Development] Draft the Smallest Actual `trading_bot.py` Code Change for Defensive Copy Suppression\n\n**Task:** Move from patch-plan language to the smallest concrete code draft for `trading_bot.py`, specifically the exact additions in `__init__` and `read_copy_signals()`.\n**Finding:**\n- Both bots are alive.\n- The relevant code block is compact enough that the defensive patch stays very small:\n  - one new instance attribute in `__init__`\n  - one reset line at the top of `read_copy_signals()`\n  - a few new suppression checks after timestamp staleness\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9m-minimal-read-copy-signals-code-draft.spec.md`\n\n**My thinking:**\nThis is exactly the kind of live change I trust. It is additive, local, and interface-preserving. The bot either keeps behaving as before or suppresses bad copy input more safely. There is no hidden complexity here.\n\n**Decision:**\n- Minimal code draft in `trading_bot.py`:\n  - add `self.copy_suppression_reason = None` in `__init__`\n  - reset it at the start of `read_copy_signals()`\n  - suppress on:\n    - `data_quality in {\"stale\", \"unstable\", \"insufficient_sample\"}`\n    - `copy_quality.copy_sample_unstable == true`\n- Preserve return shape and legacy behavior when new fields are absent.\n\n**Next:** On the next P3 heartbeat, draft the tiny companion change in the conviction branch that maps `self.copy_suppression_reason` into `details[\"COPY\"]` without tou",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
