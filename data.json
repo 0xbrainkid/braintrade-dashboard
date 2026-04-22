@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T15:22:19.082344+00:00",
+  "timestamp": "2026-04-22T15:29:09.038874+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1019%",
-      "apr": "+112%",
+      "rate": "+0.0997%",
+      "apr": "+109%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1019%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0997%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 15:21 UTC \u2014 [P1: Copy Intelligence] Duplicate Collapse Shows Threshold Copy Is Still Just Burst Inflation\n\n**Task:** Check whether threshold-market copy still has any usable structure after collapsing exact duplicate prints, or whether the apparent sample size is mostly fake.\n**Finding:**\n- Both bots are alive.\n- Raw threshold-copy count looked better than before:\n  - **14** threshold prints\n- But after collapsing exact duplicates by timestamp, title, side, outcome, and price, it fell to:\n  - **3 unique signals**\n- Those 3 uniques were all the same title:\n  - `Will the price of Bitcoin be above $80,000 on April 22?`\n- And all the same directional lane:\n  - `SELL No`\n  - prices `0.960` and `0.963`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8r-duplicate-collapse-destroys-threshold-copy-signal.spec.md`\n\n**My thinking:**\nThis is actually brutal, and useful. Threshold copy looked less broken than micro flow only because duplicates were inflating the count. Once you collapse them, the entire sample shrinks into one title and one lane. So the problem is not just small sample size, it is fake sample size.\n\n**Decision:**\n- Collapse exact duplicates **before** computing any threshold-copy sample size or concentration metric.\n- Treat current threshold copy as fully non-informational.\n- Do not allow raw print count to influence confidence.\n\n**Next:** On the next P1 heartbeat, test whether near-duplicate prints with tiny price changes like `0.960` vs `0.963` should also be merged into one cluster before evaluating threshold-copy diversity.\n\n---\n## 2026-04-22 14:58 UTC \u2014 [P4: Alpha Research] Add a Recency Window So Threshold Copy Cannot Graduate on Stale or Burst-Duplicated Prints\n\n**Task:** Strengthen the threshold-copy graduation idea by checking whether sample size alone is enough, or whether the gate also needs a recency and diversity window.\n**Finding:**\n- Both bots are alive.\n- The current threshold sample is not just small, it is tightly clustered and duplicated:\n  - **4** threshold signals total\n  - really just **2 titles repeated twice**\n  - timestamps are nearly identical\n- That means a pure rolling-count gate would be unsafe. It could be satisfied by stale carryover or by a short burst of duplicate prints.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8q-threshold-copy-recency-window.spec.md`\n\n**My thinking:**\nThis is the same mistake people make with tiny datasets in trading all the time. If you only count observations and ignore their spacing and uniqueness, you can convince yourself you have a signal when you only have one repeated impulse. Threshold copy needs a freshness rule and a diversity rule, not just a count rule.\n\n**Decision:**\n- Threshold copy can only be tested for graduation if:\n  - at least **12** threshold signals exist\n  - they all occur inside the most recent **90 minutes**\n  - no single exact t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 15:28 UTC \u2014 [P2: Smart Entry] Add a Near-Duplicate Cluster Rule So Tiny Price Changes Cannot Inflate Copy Confidence\n\n**Task:** Decide whether near-duplicate threshold-copy prints with tiny price differences should count as separate evidence, or whether they should be merged into one clustered event.\n**Finding:**\n- Both bots are alive.\n- Current threshold-copy sample looked like **14** raw prints.\n- But when grouped by:\n  - same title\n  - same side\n  - same outcome\n  - same **60-second** time bucket\n  - same **1-cent** price bin\n- the entire sample collapsed to:\n  - **1 cluster**\n- That one cluster was:\n  - `Will the price of Bitcoin be above $80,000 on April 22?`\n  - `SELL No`\n  - price bin around **0.96**\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8s-near-duplicate-cluster-rule.spec.md`\n\n**My thinking:**\nThis is the right anti-noise rule. Counting `0.960` and `0.963` as separate evidence is fake precision. In a bursty copy stream those are the same event. If we do not cluster them, sample size and concentration stats will keep lying to us.\n\n**Decision:**\n- Collapse threshold-copy prints into one cluster when they share:\n  - title\n  - side\n  - outcome\n  - 60-second time bucket\n  - 1-cent price bin\n- Under this rule, current threshold copy has **zero** informational weight beyond one clustered event.\n\n**Next:** On the next P2 heartbeat, define whether micro-expiry copy should use an even harsher cluster rule, likely same title/side/outcome across the whole expiry window rather than 60-second buckets.\n\n---\n## 2026-04-22 15:21 UTC \u2014 [P1: Copy Intelligence] Duplicate Collapse Shows Threshold Copy Is Still Just Burst Inflation\n\n**Task:** Check whether threshold-market copy still has any usable structure after collapsing exact duplicate prints, or whether the apparent sample size is mostly fake.\n**Finding:**\n- Both bots are alive.\n- Raw threshold-copy count looked better than before:\n  - **14** threshold prints\n- But after collapsing exact duplicates by timestamp, title, side, outcome, and price, it fell to:\n  - **3 unique signals**\n- Those 3 uniques were all the same title:\n  - `Will the price of Bitcoin be above $80,000 on April 22?`\n- And all the same directional lane:\n  - `SELL No`\n  - prices `0.960` and `0.963`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8r-duplicate-collapse-destroys-threshold-copy-signal.spec.md`\n\n**My thinking:**\nThis is actually brutal, and useful. Threshold copy looked less broken than micro flow only because duplicates were inflating the count. Once you collapse them, the entire sample shrinks into one title and one lane. So the problem is not just small sample size, it is fake sample size.\n\n**Decision:**\n- Collapse exact duplicates **before** computing any threshold-copy sample size or concentration metric.\n- Treat current threshold copy as fully non-informational.\n- Do not allow raw ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
