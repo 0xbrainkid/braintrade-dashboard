@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T21:21:56.512836+00:00",
+  "timestamp": "2026-04-22T21:29:48.665045+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1044%",
-      "apr": "+114%",
+      "rate": "+0.0990%",
+      "apr": "+108%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0594%",
-      "apr": "-65%",
+      "rate": "-0.0572%",
+      "apr": "-63%",
       "action": "LONG",
       "oi": "1,218,728"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "-0.0538%",
+      "apr": "-59%",
+      "action": "LONG",
+      "oi": "234,883,960"
     }
   ],
   "daily_pnl": [
@@ -101,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1044%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0990%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:44 UTC \u2014 [P4: Alpha Research] Reduce the Defensive Rollout to a Direct Two-File Edit Checklist\n\n**Task:** Convert the final patch planning into an edit-ready checklist that can be executed directly against the two live files without any further design work.\n**Finding:**\n- Both bots are alive.\n- The defensive rollout has now been reduced to a very small live surface:\n  - `trading_bot.py`\n  - `copy_scanner_v2.py`\n- All remaining design questions are resolved enough that the next pass can be pure editing.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9p-two-file-defensive-edit-checklist.spec.md`\n\n**My thinking:**\nThis is the right final handoff artifact before touching code. At this point more theory would just waste cycles. The value now is in making the edit path painfully clear so the actual code change can happen cleanly and fast.\n\n**Decision:**\n- Treat the rollout as a direct two-file edit next:\n  - `trading_bot.py` for suppression and audit behavior\n  - `copy_scanner_v2.py` for additive metadata emission\n- Keep rollout defensive-only and compatibility-preserving.\n\n**Next:** On the next heartbeat for the relevant pillar, directly edit `trading_bot.py` and `copy_scanner_v2.py` using this checklist.\n\n---\n## 2026-04-22 20:59 UTC \u2014 [P2: Smart Entry] Re-test the live hour set against YES-only outcome data before touching entry thresholds\n\n**Task:** Re-run the Smart Entry filter set on the full `confidence_outcomes.jsonl` sample to see whether the next improvement should come from edge tightening or hour selection.\n**Finding:**\n- Both bots are alive.\n- Full-sample backtest still favors the current structure more than tighter edge gating:\n  - baseline: 113W/88L, +17.86 PnL, EV/trade +0.089, n=201\n  - profitable hours `[12,17,19,22]`: 47W/21L, +22.29, EV/trade +0.328, n=68\n  - YES-only overall: 100W/67L, +27.29, EV/trade +0.163, n=167\n- Inside the *current* live regime, edge tightening did **not** improve trade quality:\n  - current live hours `[11,12,19,20]` + YES only: 64W/24L, 72.7% WR, +36.69, avg +0.417, n=88\n  - same set with `edge >= 0.20`: 52W/21L, 71.2% WR, +29.03, avg +0.398, n=73\n  - same set with `edge >= 0.22`: 44W/18L, 71.0% WR, +24.67, avg +0.398, n=62\n- Hour contribution is more meaningful than edge tightening right now:\n  - `(11,12)` YES-only: 42W/12L, 77.8% WR, avg +0.515, n=54\n  - `(11,12,20)` YES-only: 51W/16L, 76.1% WR, avg +0.484, n=67\n  - adding 19h drops the average back to +0.417/trade, even though 19h is still net positive.\n- Analysis scripts written for reproducibility:\n  - `/home/ubuntu/clawd/tmp/p2_hour_direction_analysis.py`\n  - `/home/ubuntu/clawd/tmp/p2_edge_threshold_current_regime.py`\n  - `/home/ubuntu/clawd/tmp/p2_hour_subset_analysis.py`\n\n**My thinking:**\nThe next Smart Entry lever is not a harder edge floor. The live regime is already extracting most of the available edge. Tightening `min_",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 21:28 UTC \u2014 [P1: Copy Intelligence] Shipped the First Live Defensive Copy Rollout Into `trading_bot.py` and `copy_scanner_v2.py`\n\n**Task:** Move from planning into actual code edits by implementing the first live defensive copy rollout, limited to suppression, metadata, and audit visibility.\n**Finding:**\n- Both bots are alive.\n- I applied the first real live patch in two files:\n  - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n  - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n- `trading_bot.py` now:\n  - initializes `self.copy_suppression_reason`\n  - resets it inside `read_copy_signals()`\n  - suppresses copy influence on `stale`, `unstable`, and `insufficient_sample`\n  - suppresses on `copy_quality.copy_sample_unstable`\n  - surfaces suppression states into `details[\"COPY\"]`\n- `copy_scanner_v2.py` now emits additive defensive metadata blocks:\n  - `copy_quality`\n  - `collapsed_stats`\n  - `data_quality`\n- Existing legacy fields and the reader return shape remain intact.\n\n**My thinking:**\nThis is the right first ship. It adds real live defense without touching entry, sizing, regime, or execution logic. The bot is now better protected against bad copy input, and the suppression path is auditable instead of silent.\n\n**Decision:**\n- Keep this rollout defensive-only for now.\n- Next code step should improve the producer metadata from placeholder-safe values to real collapsed / instability stats.\n\n**Next:** On the next P1 heartbeat, validate the emitted `copy_signal.json` payload after this patch and confirm `trading_bot.py` would consume the new fields exactly as intended.\n\n---\n## 2026-04-22 20:44 UTC \u2014 [P4: Alpha Research] Reduce the Defensive Rollout to a Direct Two-File Edit Checklist\n\n**Task:** Convert the final patch planning into an edit-ready checklist that can be executed directly against the two live files without any further design work.\n**Finding:**\n- Both bots are alive.\n- The defensive rollout has now been reduced to a very small live surface:\n  - `trading_bot.py`\n  - `copy_scanner_v2.py`\n- All remaining design questions are resolved enough that the next pass can be pure editing.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9p-two-file-defensive-edit-checklist.spec.md`\n\n**My thinking:**\nThis is the right final handoff artifact before touching code. At this point more theory would just waste cycles. The value now is in making the edit path painfully clear so the actual code change can happen cleanly and fast.\n\n**Decision:**\n- Treat the rollout as a direct two-file edit next:\n  - `trading_bot.py` for suppression and audit behavior\n  - `copy_scanner_v2.py` for additive metadata emission\n- Keep rollout defensive-only and compatibility-preserving.\n\n**Next:** On the next heartbeat for the relevant pillar, directly edit `trading_bot.py` and `copy_scanner_v2.py` using this checklist.\n\n---\n## 2026-04-",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
