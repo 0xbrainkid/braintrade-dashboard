@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T17:30:02.787634+00:00",
+  "timestamp": "2026-04-22T17:45:02.795380+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0863%",
-      "apr": "+94%",
+      "rate": "+0.0818%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0794%",
-      "apr": "-87%",
+      "rate": "-0.0762%",
+      "apr": "-83%",
       "action": "LONG",
       "oi": "1,175,714"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0863%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0818%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 17:28 UTC \u2014 [P3: Strategy Development] Require Minimum Sample Size Before a Stable Window Can Clear Copy Instability\n\n**Task:** Add the remaining guardrail to the copy-instability clear logic, specifically whether a clean-looking stable window should also need minimum sample size before it counts.\n**Finding:**\n- Both bots are alive.\n- Current recent window is compositionally clean:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means it is a plausible stable-window candidate on composition, but only because it also has enough volume.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v9a-stable-window-min-sample.spec.md`\n\n**My thinking:**\nThis closes the loophole. Without a minimum sample requirement, a tiny clean snapshot could clear instability just because nothing messy happened to print in that moment. Stability should require enough data to deserve trust, not just a temporarily tidy mix.\n\n**Decision:**\n- A stable window can count toward clearing `copy_sample_unstable` only if:\n  1. it satisfies the stability conditions, and\n  2. total recent sample size is **>= 30**\n- Current 50-signal pure-micro window qualifies on size, but still needs a second time-spaced stable window before the freeze can clear.\n\n**Next:** On the next P3 heartbeat, combine all the copy freeze logic into one operational state machine, trigger, freeze, stable-window check, and clear rule, so it is ready for direct implementation.\n\n---\n## 2026-04-22 17:16 UTC \u2014 [P2: Smart Entry] Make Stability Windows Time-Spaced So Copy Instability Cannot Clear on a Single Reshuffle\n\n**Task:** Define the cadence for the `copy_sample_unstable` clear rule, specifically whether stable windows should be consecutive scanner reads or time-spaced observations.\n**Finding:**\n- Both bots are alive.\n- The recent feed has already shown why adjacency is too weak:\n  - earlier unstable mixed window:\n    - micro share = **0.54**\n    - threshold share = **0.46**\n    - threshold duplicate share = **0.826**\n  - current later snapshot:\n    - micro share = **1.00**\n    - threshold share = **0.00**\n- That means the sample can reshuffle dramatically between checks.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8z-copy-stability-window-cadence.spec.md`\n\n**My thinking:**\nThis is exactly why adjacent reads are too cheap. If the system clears instability after one or two back-to-back refreshes, it will constantly declare victory on temporary sample reshuffles. Stability has to survive time, not just survive one polling cycle.\n\n**Decision:**\n- Stable windows used to clear `copy_sample_unstable` must be:\n  - **time-spaced**, not just adjacent scanner snapshots\n  - at least **10 minutes apart**\n  - individually satisfy the clear-rule conditions\n- Require **2** such time-spaced stable windows before clearing.\n\n**Next:** On the next P2 heartbeat, define whether the clear rule",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 17:44 UTC \u2014 [P4: Alpha Research] Package Copy Instability into a Full Freeze State Machine\n\n**Task:** Synthesize the copy-sample instability work into one operational control flow, so the system is no longer a pile of separate trigger and clear rules.\n**Finding:**\n- Both bots are alive.\n- Current recent window remains compositionally clean but still just represents one stable-window candidate shape:\n  - **50** total signals\n  - market mix = **100% micro**\n- The important result is that the freeze framework is now complete enough to formalize as a state machine.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v9b-copy-inference-freeze-state-machine.spec.md`\n\n**My thinking:**\nThis is the right stopping point for the copy-quality thread. We now have all the pieces: what triggers instability, how inference behaves while frozen, what qualifies as a stable window, and how instability clears conservatively. Putting that into one state machine makes it implementable instead of just theoretically correct.\n\n**Decision:**\n- Use a 3-state control flow:\n  1. `normal`\n  2. `copy_sample_unstable`\n  3. `stable_window_candidate`\n- Keep the existing numeric trigger, freeze behavior, minimum sample rule, 10-minute spacing rule, and 2-window clear rule inside that machine.\n\n**Next:** On the next P4 heartbeat, identify which parts of this full copy-freeze state machine should actually be wired into the live bot first versus left in shadow-mode observation.\n\n---\n## 2026-04-22 17:28 UTC \u2014 [P3: Strategy Development] Require Minimum Sample Size Before a Stable Window Can Clear Copy Instability\n\n**Task:** Add the remaining guardrail to the copy-instability clear logic, specifically whether a clean-looking stable window should also need minimum sample size before it counts.\n**Finding:**\n- Both bots are alive.\n- Current recent window is compositionally clean:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means it is a plausible stable-window candidate on composition, but only because it also has enough volume.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v9a-stable-window-min-sample.spec.md`\n\n**My thinking:**\nThis closes the loophole. Without a minimum sample requirement, a tiny clean snapshot could clear instability just because nothing messy happened to print in that moment. Stability should require enough data to deserve trust, not just a temporarily tidy mix.\n\n**Decision:**\n- A stable window can count toward clearing `copy_sample_unstable` only if:\n  1. it satisfies the stability conditions, and\n  2. total recent sample size is **>= 30**\n- Current 50-signal pure-micro window qualifies on size, but still needs a second time-spaced stable window before the freeze can clear.\n\n**Next:** On the next P3 heartbeat, combine all the copy freeze logic into one operational state machine, trigger, freeze, stable-window check, and clea",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
