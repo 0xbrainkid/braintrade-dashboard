@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T16:22:30.993809+00:00",
+  "timestamp": "2026-04-22T16:28:59.421543+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0776%",
-      "apr": "+85%",
+      "rate": "+0.0851%",
+      "apr": "+93%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0776%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0851%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 16:21 UTC \u2014 [P1: Copy Intelligence] Define Zero-Data Handling for Micro Crowding So Missing Flow Is Not Misread as Alpha\n\n**Task:** Test the combined micro crowd-severity idea against the current store and define what the system should do when there are no current micro clusters at all.\n**Finding:**\n- Both bots are alive.\n- Current micro sample is completely empty:\n  - **N = 0**\n  - no clusters present\n  - combined severity score = **0.0** by construction\n- That means the next useful decision is not about crowding intensity, but about how to interpret missing data correctly.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8v-micro-severity-zero-data-handling.spec.md`\n\n**My thinking:**\nThis matters because empty feeds are dangerous. If we are sloppy, the system will start treating no crowding data as bullish relief or as hidden confirmation. That would be fake signal. Missing micro flow should mean one thing only: we do not currently have evidence of crowding.\n\n**Decision:**\n- If no current micro clusters exist:\n  - set crowd severity to **none**\n  - do **not** infer bullishness, bearishness, or relief from absence alone\n  - treat it as **no current evidence**, not positive signal\n- Only compute the combined severity score when at least one cluster exists.\n\n**Next:** On the next P1 heartbeat, compare whether the micro sample emptiness is due to scanner recency limits versus genuine market-flow absence, so we can distinguish quiet tape from missing collection.\n\n---\n## 2026-04-22 15:58 UTC \u2014 [P4: Alpha Research] Keep Micro Cluster Size as a Crowding-Severity Variable\n\n**Task:** Decide whether micro-expiry clusters should be treated only as presence/absence events, or whether cluster size still carries useful information after directional signal is disabled.\n**Finding:**\n- Both bots are alive.\n- After clustering micro flow by title, side, and outcome, current stats are:\n  - **41** raw micro prints\n  - **4** clusters\n  - largest cluster share = **0.805**\n  - top two cluster share = **0.878**\n- That means the clustering step removed fake multiplicity, but it did **not** remove crowding severity.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8u-micro-cluster-crowding-severity.spec.md`\n\n**My thinking:**\nThis is the right split. Direction stays unusable, but cluster size is still informative because it tells us how extreme the herd behavior is. We should not rescue directional meaning, but we also should not throw away the severity variable that clustering reveals.\n\n**Decision:**\n- Keep micro clusters as **risk-severity inputs**, not directional inputs.\n- Use largest-cluster-share ladder:\n  - `warn` at **>= 0.40**\n  - `strong anti-signal` at **>= 0.60**\n  - `extreme crowd-latching` at **>= 0.80**\n- Reinforce severity when top-two-cluster share is **>= 0.80**.\n\n**Next:** On the next P4 heartbeat, test whether severity should ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 16:28 UTC \u2014 [P2: Smart Entry] Freeze Copy-Based Inference When the Sample Shape Changes Abruptly\n\n**Task:** Decide how the bot should react when the copy scanner feed changes sharply between checks, specifically from an empty micro sample to a threshold-heavy burst full of near-identical prints.\n**Finding:**\n- Both bots are alive.\n- The current recent store has **50** signals, but the top lines are dominated by threshold-style duplicates and near-duplicates such as:\n  - `Will Bitcoin dip to $74,000 on April 22? | BUY No | 0.995`\n  - `Will Bitcoin dip to $73,000 on April 22? | BUY No | 0.996`\n  - `Will the price of Bitcoin be above $80,000 on April 22? | BUY No | 0.998`\n- That means the earlier zero-micro reading was not safe to interpret as true crowd absence. The sample shape itself is unstable.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8w-copy-inference-freeze-on-sample-instability.spec.md`\n\n**My thinking:**\nThis is a data-quality problem first. If the scanner window flips from one sample shape to another, the worst move is to reinterpret the whole copy regime in real time as if that flip itself were alpha. We need a guardrail that freezes inference until the sample stabilizes again.\n\n**Decision:**\n- Freeze copy-based inference when:\n  - sample composition changes abruptly between checks, or\n  - the current window is dominated by duplicate or near-duplicate threshold bursts\n- In freeze mode:\n  - do not upgrade or downgrade copy quality\n  - do not infer crowd relief from missing categories\n  - keep prior structural conclusions in force\n  - mark state as `copy_sample_unstable`\n\n**Next:** On the next P2 heartbeat, define the exact numerical trigger for sample instability, likely based on sudden market-type mix shift and duplicate-share spike between consecutive observations.\n\n---\n## 2026-04-22 16:21 UTC \u2014 [P1: Copy Intelligence] Define Zero-Data Handling for Micro Crowding So Missing Flow Is Not Misread as Alpha\n\n**Task:** Test the combined micro crowd-severity idea against the current store and define what the system should do when there are no current micro clusters at all.\n**Finding:**\n- Both bots are alive.\n- Current micro sample is completely empty:\n  - **N = 0**\n  - no clusters present\n  - combined severity score = **0.0** by construction\n- That means the next useful decision is not about crowding intensity, but about how to interpret missing data correctly.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8v-micro-severity-zero-data-handling.spec.md`\n\n**My thinking:**\nThis matters because empty feeds are dangerous. If we are sloppy, the system will start treating no crowding data as bullish relief or as hidden confirmation. That would be fake signal. Missing micro flow should mean one thing only: we do not currently have evidence of crowding.\n\n**Decision:**\n- If no current micro clusters exist:\n  - set cro",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
