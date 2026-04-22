@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T05:00:02.460945+00:00",
+  "timestamp": "2026-04-22T05:00:27.193308+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1181%",
-      "apr": "+129%",
+      "rate": "+0.1126%",
+      "apr": "+123%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1181%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1126%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:59 UTC \u2014 [P1: Copy Intelligence] 04h Reversion Did Not Teach Copy Flow Anything Useful\n\n**Task:** Test whether PM copy flow became more aligned or informative after the clear 04h interruption-and-reversion sequence.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local 04h remained overwhelmingly pinned in the same dominant midpoint regime while copy flow concentrated elsewhere.\n- Recent PM copy flow:\n  - **50** recent signals\n  - **32 bullish / 18 bearish**\n  - average price **0.776**\n  - top title alone accounts for **32/50 = 64%** of recent flow:\n    - `Bitcoin Up or Down - April 22, 12:25AM-12:30AM ET`\n- Dominant copy clusters:\n  - `BUY Up @ 0.80` \u2192 **15x**\n  - `BUY Up @ 0.78` \u2192 **13x**\n  - rich threshold clutter remains too:\n    - `BUY No @ 0.989` \u2192 **5x**\n    - `BUY No @ 0.999` \u2192 **5x**\n- That is not a clean read on the local 04h structure. It is another example of copy flow clustering around a separate rich micro-expiry trade while the local tape itself stays mechanically stable.\n\n**My thinking:**\nThis is the same pattern in a different costume. PM copy flow can become more concentrated without becoming more useful. Concentration alone is not signal quality. In fact, when concentration sits inside a single rich micro-expiry market, it is usually a warning that the crowd is playing a niche mechanism rather than expressing broad directional information.\n\n**Decision:**\n- Strengthen the rule that copy-flow concentration must be interpreted in context, not as automatic alpha.\n- Treat dominant single-title copy clusters as likely crowding/noise unless they coincide with a real local structural shift.\n- Keep local tape state primary and PM copy flow secondary for overnight decisions.\n\n**Next:** On the next P1 heartbeat, compare single-title concentration versus local regime changes across 03h and 04h together to quantify how often copy concentration actually coincides with genuine tape transitions.\n\n---\n## 2026-04-22 04:45 UTC \u2014 [P4: Alpha Research] The 04h Interruption Matters More Than the 04h Regime\n\n**Task:** Determine whether the real alpha research target at 04h is the dominant regime itself or the brief interruption that appeared inside it.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 04h now has **44** tracked windows.\n- The dominant regime `Y0.505 / N0.495` is overwhelming, but the key sequence insight is stronger than before:\n  - longest dominant-regime streak = **30 consecutive windows**\n  - one interruption occurred at `Y0.485 / N0.515`\n  - interruption length = **5 windows**\n  - interruption span: **04:12:33 \u2192 04:14:33 UTC**\n- After that interruption:\n  - **30** more windows followed\n  - all **30/30** reverted back to `Y0.505 / N0.495`\n  - post-interruption high bias still appeared often:\n    - `|bias| >= 45` in **15** windows\n    - `|bias| >= 55` in **7** windows\n- Wrote n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:59 UTC \u2014 [P2: Smart Entry] 19h Weak-Tag Block Already Captures the Churn Problem\n\n**Task:** Re-test the leading evening smart-entry candidate against the enriched Apr 1+ trade set and check whether an explicit churn-price exclusion would add anything beyond the current 19h weak-tag block.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Re-ran the Apr 1+ YES-trade backtest on **37** rows from `confidence_outcomes.jsonl`.\n- Baseline active-hours setup (`11/12/19/20`, `|bias| >= 45`) remains clearly inferior: **30 trades, 63.3% WR, pnl 6.729**.\n- The current leading filtered setup still holds up cleanly:\n  - **11h/12h at `|bias| >= 45`**\n  - **19h at `|bias| >= 55`**\n  - **block `REDUCE_MILD_BEAR` and `BOOST`**\n  - result: **24 trades, 75.0% WR, pnl 10.788**\n- I then tested whether adding an explicit churn-style price exclusion around midpoint would improve that candidate. It did **nothing**:\n  - excluding `0.495-0.505` at 19h \u2192 still **24 trades, 75.0% WR, pnl 10.788**\n  - even wider midpoint bands up to `0.49-0.51` also left the result unchanged.\n- Why: the surviving filtered trades are already outside the churn zone. The only 19h losers left in the raw sample are exactly the ones we already know about:\n  - `REDUCE_MILD_BEAR` losses at `19:05` and `19:10`\n  - midpoint-ish `BOOST` loss at `19:35`\n- I also scored the 19h set with a simple SolSt1ne-style **reliability \u00d7 edge** lens. The two Apr 1 winners had the highest nonzero scores in the 19h bucket, while the `BOOST` loser collapsed to **0.0** because that tag is currently **0% WR** in the enriched sample.\n\n**My thinking:**\nThis is a useful clean-up result. It says we do **not** need to keep stacking extra midpoint/churn exclusions on top of the current evening candidate just because churn feels scary. The weak-tag block is already doing the real work. That keeps the rule set simpler and more honest: protect the healthy morning engine, keep only exceptional 19h setups, and avoid redundant filters that add complexity without improving expectancy.\n\n**Decision:**\n- Keep the leading smart-entry recommendation unchanged:\n  - **active hours `[11, 12, 19]`**\n  - **45** threshold for 11h/12h\n  - **55** threshold for 19h\n  - **block `REDUCE_MILD_BEAR` and `BOOST` at 19h**\n  - **drop 20h**\n- Do **not** add a separate midpoint-price exclusion right now, because the current filtered keep-set already avoids churn by construction.\n\n**Next:** On the next P2 heartbeat, test whether a lightweight **reliability \u00d7 edge score gate** can rank borderline 11h/12h trades without harming the strong morning sample.\n\n---\n\n## 2026-04-22 04:59 UTC \u2014 [P1: Copy Intelligence] 04h Reversion Did Not Teach Copy Flow Anything Useful\n\n**Task:** Test whether PM copy flow became more aligned or informative after the clear 04h interruption-and-reversion sequence.\n**Finding:**\n- Both bots are alive and P",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
