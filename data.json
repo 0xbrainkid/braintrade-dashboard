@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T09:47:09.248214+00:00",
+  "timestamp": "2026-04-22T09:59:25.305768+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "AVNT",
-      "rate": "-0.0607%",
-      "apr": "-66%",
+      "rate": "-0.0547%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "6,845,122"
+      "oi": "6,839,326"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: AVNT at -0.0607%/8h \u2014 shorts paying longs"
+        "text": "Strongest: AVNT at -0.0547%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:46 UTC \u2014 [P3: Strategy Development] The Tape Is Traversing a State Sequence, So Break Logic Alone Is Too Simple\n\n**Task:** Decide whether the current excluded-hour behavior is still best described as single breaks and recoveries, or whether it now needs a broader strategy model for repeated nearby-state transitions.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h tape has now traversed a sequence of nearby states, not just one failed break:\n  - base state: `Y0.505 / N0.495`\n  - failed break: `Y0.490 / N0.510`\n  - recovery: `Y0.505 / N0.495`\n  - shift: `Y0.495 / N0.505`\n  - deeper shift: `Y0.485 / N0.515`\n  - partial recovery: `Y0.495 / N0.505`\n  - return: `Y0.505 / N0.495`\n- This means the tape is not just breaking and snapping back once. It is traversing a **sequence of discrete nearby states**.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7w-state-machine-sequencing.spec.md`\n\n**My thinking:**\nThe binary language of break versus no break helped at first, but it is too simple now. Once the market moves through several adjacent states and then reclaims prior ones, the right object is the whole transition chain. What matters is whether the sequence is escalating away from the base, stabilizing somewhere lower, or recovering state by state back to the prior dominant level.\n\n**Decision:**\n- Upgrade the research framework from single-break logic to a **state-machine model**.\n- Track transition chains, dwell time, and recovery quality across adjacent PM states.\n- Do not interpret each new nearby state as an independent event once sequencing behavior is visible.\n\n**Next:** On the next P3 heartbeat, convert the 09h sequence into an explicit transition table with timestamps and dwell lengths so recoveries and escalations can be scored systematically.\n\n---\n## 2026-04-22 09:31 UTC \u2014 [P2: Smart Entry] Five Alternate Windows Are Still Too Weak to Count as a Real Break\n\n**Task:** Use the full 09h sequence to decide whether the break-durability rule is strict enough or whether transient alternate states still slip through as false transition candidates.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 09h produced **two** clean alternate-state runs before the market returned to the original dominant state.\n- First alternate run:\n  - `Y0.490 / N0.510`\n  - lasted **5 logged windows** from **09:10-09:14 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:15 refresh\n- Second alternate run:\n  - `Y0.495 / N0.505`\n  - lasted **5 logged windows** from **09:20-09:24 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:25 refresh\n- The only state that truly persisted was the recovered `Y0.505 / N0.495` structure.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7v-stricter-break-durability.spec.md`\n\n**My thinking:**\nThis sharpens the durability rule a lot. A five-window ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:59 UTC \u2014 [P4: Alpha Research] The Deepest State, `0.485 / 0.515`, Was the Climax Before Recovery\n\n**Task:** Use the now-complete 09h transition chain to identify whether one state acted as the excursion climax before the market recovered back to the base regime.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h transition chain completed a full excursion-and-recovery sequence:\n  - `0.505 / 0.495`\n  - `0.490 / 0.510`\n  - `0.505 / 0.495`\n  - `0.495 / 0.505`\n  - `0.485 / 0.515`\n  - `0.495 / 0.505`\n  - `0.505 / 0.495`\n- The deepest state reached was:\n  - **`0.485 / 0.515`**\n- That deepest state did **not** extend further.\n- Instead, the market reclaimed adjacent states in order:\n  - first back to `0.495 / 0.505`\n  - then back to `0.505 / 0.495`\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7x-climax-state-recovery.spec.md`\n\n**My thinking:**\nThis gives the state-machine work a clearer alpha shape. The deepest adjacent state appears to function like a climax or exhaustion point. Once the market failed to push beyond `0.485 / 0.515`, the important information became the orderly reclaim of higher adjacent states. That sequence is much more informative than any single snapshot.\n\n**Decision:**\n- Treat the deepest state in a traversal as a potential **climax state**.\n- Use stepwise reclaim from that state as evidence the sequence has shifted from escalation into recovery.\n- Prioritize full transition-chain interpretation over isolated state labels.\n\n**Next:** On the next P4 heartbeat, convert the 09h chain into a compact timestamped transition map so climax depth, dwell time, and reclaim order can be compared across future episodes.\n\n---\n## 2026-04-22 09:46 UTC \u2014 [P3: Strategy Development] The Tape Is Traversing a State Sequence, So Break Logic Alone Is Too Simple\n\n**Task:** Decide whether the current excluded-hour behavior is still best described as single breaks and recoveries, or whether it now needs a broader strategy model for repeated nearby-state transitions.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 09h tape has now traversed a sequence of nearby states, not just one failed break:\n  - base state: `Y0.505 / N0.495`\n  - failed break: `Y0.490 / N0.510`\n  - recovery: `Y0.505 / N0.495`\n  - shift: `Y0.495 / N0.505`\n  - deeper shift: `Y0.485 / N0.515`\n  - partial recovery: `Y0.495 / N0.505`\n  - return: `Y0.505 / N0.495`\n- This means the tape is not just breaking and snapping back once. It is traversing a **sequence of discrete nearby states**.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7w-state-machine-sequencing.spec.md`\n\n**My thinking:**\nThe binary language of break versus no break helped at first, but it is too simple now. Once the market moves through several adjacent states and then reclaims prior ones, the right object is the whole transition chai",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
