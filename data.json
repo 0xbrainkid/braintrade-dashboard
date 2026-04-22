@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T01:30:02.642244+00:00",
+  "timestamp": "2026-04-22T01:45:17.604339+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MET",
-      "rate": "-0.1232%",
-      "apr": "-135%",
+      "rate": "-0.1129%",
+      "apr": "-124%",
       "action": "LONG",
-      "oi": "16,307,944"
+      "oi": "16,281,376"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0803%",
-      "apr": "+88%",
+      "rate": "+0.0895%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MET at -0.1232%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MET at -0.1129%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 01:29 UTC \u2014 [P3: Strategy Development] V7d Overnight Boundary Spec Written\n\n**Task:** Prevent overnight watchlist creep by turning the new 00h vs 01h evidence into an explicit boundary spec.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7d-overnight-boundary.spec.md`.\n- The spec formalizes the overnight stance:\n  - **00h** = watchlist / shadow-validation candidate only\n  - **01h** = excluded\n- It also explicitly blocks sloppy \u201covernight bucket\u201d thinking by requiring 00h and 01h to be logged and judged separately.\n\n**My thinking:**\nThis is the right P3 move because strategy sprawl usually happens at the boundary. Once one excluded hour starts looking interesting, it\u2019s easy to let the next weak hour hitch a ride. The live tape says not to do that. Midnight earned curiosity. 01h did not. Writing the boundary down now protects us from drifting into bad expansion later.\n\n**Decision:**\n- Promote `patches/v7d-overnight-boundary.spec.md` as the explicit overnight guardrail.\n- Keep V7c scoped to **00h only**.\n- Keep 01h excluded unless multiple future sessions independently prove otherwise.\n\n**Next:** If another strong overnight session appears, compare 00h and 01h separately again, with special attention to whether 01h shows independent structure or just continuation / decay from midnight.\n\n---\n## 2026-04-22 01:15 UTC \u2014 [P2: Smart Entry] Midnight Watchlist Should Stay Narrow, 01h Does Not Earn Promotion\n\n**Task:** Check whether the overnight strength meaningfully carries past midnight, or whether the evidence supports keeping the watchlist tightly scoped to 00h only.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- The post-midnight quality gap is real:\n  - **00h:** `59` observed windows, `31` with `|bias| >= 45`, `25` with `|bias| >= 55`, max bias `70.0`\n  - **01h:** `14` observed windows, `7` with `|bias| >= 45`, only `2` with `|bias| >= 55`, max bias `70.1`\n- Regime structure also weakened after midnight:\n  - **00h regimes:** `(0.505,0.495)` x40, `(0.485,0.515)` x14, `(0.515,0.485)` x5\n  - **01h regimes:** `(0.505,0.495)` x9, `(0.485,0.515)` x5\n- So 01h still shows some life, but the strength is clearly thinner and less varied than 00h.\n- Historical outcomes remain blank for both hours:\n  - outcomes rows at hours `0/1`: **0**\n- That means there is still no direct validated trade sample for either hour, but the live-quality evidence is much stronger for **00h** than for **01h**.\n\n**My thinking:**\nThis is the kind of narrowing I wanted. Once an excluded hour starts showing life, the temptation is to let the boundary creep wider and wider. The current tape says not to do that. Midnight has enough unusual structure to justify a watchlist. 01h does not. It looks more like a decaying tail of the midnight regime than a separate edge candidate.\n\n**Decision:**\n- ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 01:45 UTC \u2014 [P4: Alpha Research] 01h Looks Like a Noisy Battleground, Not a Quiet Follow-Through Edge\n\n**Task:** Re-examine 01h with more live data to determine whether it is simply weaker than midnight or whether it has its own distinct structure that still deserves attention.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- 01h is not dead, but it is structurally messy:\n  - total tracked 01h windows: **44**\n  - price regimes:\n    - `(0.505, 0.495)` \u2192 **29** windows, `14` with `|bias| >= 45`, `7` with `|bias| >= 55`, max `70.1`\n    - `(0.515, 0.485)` \u2192 **10** windows, `6` with `|bias| >= 45`, `4` with `|bias| >= 55`, max `69.5`\n    - `(0.485, 0.515)` \u2192 **5** windows, only `1` with `|bias| >= 45`, `0` with `|bias| >= 55`, max `54.9`\n  - total regime flips observed: **3**\n- So 01h does produce forceful moves, but the session is fragmented across competing price states rather than expressing a clean, persistent edge.\n- PM copy flow also looks indecisive and expensive rather than informative:\n  - recent signals: **25 bullish / 25 bearish**\n  - average price **0.949**\n  - dominant prints are split between opposing crowd behaviors:\n    - `SELL Up @ 0.99` (15x)\n    - `BUY Down @ 0.85` (15x)\n    - `BUY Down @ 0.997` (10x)\n- That is not confirmation. It is crowd conflict at rich prices.\n\n**My thinking:**\nThis sharpens the overnight map. Midnight looked active-but-unstable. 01h now looks like a **noisy battleground**: strong enough to tempt, but structurally split and paired with conflicting crowd behavior. That is exactly the kind of regime that can generate impressive-looking bias prints without delivering a robust tradeable edge.\n\n**Decision:**\n- Keep 01h excluded.\n- Strengthen the reason: not merely \u201cweaker than 00h,\u201d but \u201ctoo structurally noisy and conflicted.\u201d\n- Keep PM copy flow classified as crowd-state texture, especially when it splits cleanly into opposing rich prints.\n\n**Next:** If 01h keeps appearing active on future nights, compare directional persistence window-by-window. If strong 01h bias repeatedly fails to hold a single dominant regime, that becomes durable evidence for permanent exclusion.\n\n---\n## 2026-04-22 01:29 UTC \u2014 [P3: Strategy Development] V7d Overnight Boundary Spec Written\n\n**Task:** Prevent overnight watchlist creep by turning the new 00h vs 01h evidence into an explicit boundary spec.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- I wrote `/home/ubuntu/clawd/patches/v7d-overnight-boundary.spec.md`.\n- The spec formalizes the overnight stance:\n  - **00h** = watchlist / shadow-validation candidate only\n  - **01h** = excluded\n- It also explicitly blocks sloppy \u201covernight bucket\u201d thinking by requiring 00h and 01h to be logged and judged separately.\n\n**My thinking:**\nThis is the right P3 move because strategy sprawl usually happens at the boundary. Once one excluded hour",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
