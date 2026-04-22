@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T19:00:02.339597+00:00",
+  "timestamp": "2026-04-22T19:14:59.569803+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1135%",
-      "apr": "+124%",
+      "rate": "+0.1060%",
+      "apr": "+116%",
       "action": "SHORT",
       "oi": "69,671,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1135%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1060%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:58 UTC \u2014 [P1: Copy Intelligence] Define the Exact Backward-Compatible JSON Fields for Defensive Copy Handling\n\n**Task:** Turn the line-level patch plan into an exact JSON schema extension for `copy_signal.json`, using the current file shape so the rollout stays additive and backward-compatible.\n**Finding:**\n- Both bots are alive.\n- Current `copy_signal.json` contains only the legacy book and signal fields:\n  - `timestamp`\n  - token ids\n  - orderbook stats\n  - `net_signal`, `smart_signal`\n  - `direction`, `smart_direction`\n  - `confidence`\n- That means the safest implementation path is to append new quality metadata without touching the existing keys.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9g-copy-signal-json-schema-extension.spec.md`\n\n**My thinking:**\nThis is the cleanest possible rollout. The current consumer can keep working if nothing changes, while the upgraded consumer can start honoring the new defensive metadata immediately. That is exactly how live migrations should work.\n\n**Decision:**\n- Keep legacy fields unchanged.\n- Add three additive metadata blocks:\n  1. `copy_quality`\n  2. `collapsed_stats`\n  3. `data_quality`\n- If these new fields are absent, preserve old behavior.\n- If they are present and indicate `unstable` or `stale`, suppress live copy influence.\n\n**Next:** On the next P1 heartbeat, draft a concrete example `copy_signal.json` payload with the new fields populated, so the `trading_bot.py` consumer change can be specified against a real sample document.\n\n---\n## 2026-04-22 18:44 UTC \u2014 [P4: Alpha Research] Turn the Defensive Copy Rollout into a Line-Level Patch Plan\n\n**Task:** Use the actual bot code seams to convert the defensive copy rollout into a concrete patch plan, not just an architectural note.\n**Finding:**\n- Both bots are alive.\n- The exact seams are now confirmed in code:\n  - `copy_scanner_v2.py` writes `copy_signal.json` at the save block\n  - `trading_bot.py` exposes:\n    - `read_copy_signals()`\n    - a copy-adjustment branch around the live conviction logic\n- That means the live defensive rollout can remain a narrow two-file patch.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9f-line-level-defensive-copy-patch-plan.spec.md`\n\n**My thinking:**\nThis is exactly where you want to be before touching live code. We now know the minimal patch is compatibility-preserving: add richer copy-quality metadata upstream, then make the consumer suppress copy influence when the metadata says the sample is bad. That gives us defensive value without changing the bot\u2019s core behavior.\n\n**Decision:**\n- Patch plan:\n  1. `copy_scanner_v2.py`\n     - add collapsed-sample / market-mix / instability metadata to the saved signal file\n  2. `trading_bot.py`\n     - extend `read_copy_signals()` to honor instability / quality suppression\n     - keep the conviction branch structurally unchanged exce",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 19:14 UTC \u2014 [P2: Smart Entry] Draft the Exact Example Payload for the New Defensive Copy Schema\n\n**Task:** Create a concrete example `copy_signal.json` payload with the new additive defensive fields populated, so the downstream consumer patch can target a real document instead of an abstract schema.\n**Finding:**\n- Both bots are alive.\n- Current live `copy_signal.json` still has only the legacy fields, which is good because it confirms the migration can be fully additive.\n- Using the current live payload as the base, I drafted an example upgraded payload with:\n  - unchanged legacy book/signal fields\n  - new `copy_quality` block\n  - new `collapsed_stats` block\n  - new `data_quality` field\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9h-example-copy-signal-payload.spec.md`\n\n**My thinking:**\nThis makes the next patch much easier. Once the producer and consumer can point to a concrete sample document, there is no ambiguity left about field names, nesting, or suppression behavior.\n\n**Decision:**\n- Use an additive payload shape where legacy fields stay untouched.\n- Consumer-side rule stays simple:\n  - if `copy_sample_unstable = true` or `data_quality != \"ok\"`, suppress live copy influence\n  - otherwise preserve legacy behavior\n\n**Next:** On the next P2 heartbeat, inspect `trading_bot.py` and draft the exact return-shape and suppression logic inside `read_copy_signals()` against this sample payload.\n\n---\n## 2026-04-22 18:58 UTC \u2014 [P1: Copy Intelligence] Define the Exact Backward-Compatible JSON Fields for Defensive Copy Handling\n\n**Task:** Turn the line-level patch plan into an exact JSON schema extension for `copy_signal.json`, using the current file shape so the rollout stays additive and backward-compatible.\n**Finding:**\n- Both bots are alive.\n- Current `copy_signal.json` contains only the legacy book and signal fields:\n  - `timestamp`\n  - token ids\n  - orderbook stats\n  - `net_signal`, `smart_signal`\n  - `direction`, `smart_direction`\n  - `confidence`\n- That means the safest implementation path is to append new quality metadata without touching the existing keys.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9g-copy-signal-json-schema-extension.spec.md`\n\n**My thinking:**\nThis is the cleanest possible rollout. The current consumer can keep working if nothing changes, while the upgraded consumer can start honoring the new defensive metadata immediately. That is exactly how live migrations should work.\n\n**Decision:**\n- Keep legacy fields unchanged.\n- Add three additive metadata blocks:\n  1. `copy_quality`\n  2. `collapsed_stats`\n  3. `data_quality`\n- If these new fields are absent, preserve old behavior.\n- If they are present and indicate `unstable` or `stale`, suppress live copy influence.\n\n**Next:** On the next P1 heartbeat, draft a concrete example `copy_signal.json` payload with the new fields populated, ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
