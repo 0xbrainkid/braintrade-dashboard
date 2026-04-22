@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T17:16:47.489863+00:00",
+  "timestamp": "2026-04-22T17:29:01.737414+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0971%",
-      "apr": "+106%",
+      "rate": "+0.0863%",
+      "apr": "+95%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0876%",
-      "apr": "-96%",
+      "rate": "-0.0800%",
+      "apr": "-88%",
       "action": "LONG",
-      "oi": "1,175,566"
+      "oi": "1,175,714"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0971%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0863%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 17:16 UTC \u2014 [P2: Smart Entry] Make Stability Windows Time-Spaced So Copy Instability Cannot Clear on a Single Reshuffle\n\n**Task:** Define the cadence for the `copy_sample_unstable` clear rule, specifically whether stable windows should be consecutive scanner reads or time-spaced observations.\n**Finding:**\n- Both bots are alive.\n- The recent feed has already shown why adjacency is too weak:\n  - earlier unstable mixed window:\n    - micro share = **0.54**\n    - threshold share = **0.46**\n    - threshold duplicate share = **0.826**\n  - current later snapshot:\n    - micro share = **1.00**\n    - threshold share = **0.00**\n- That means the sample can reshuffle dramatically between checks.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8z-copy-stability-window-cadence.spec.md`\n\n**My thinking:**\nThis is exactly why adjacent reads are too cheap. If the system clears instability after one or two back-to-back refreshes, it will constantly declare victory on temporary sample reshuffles. Stability has to survive time, not just survive one polling cycle.\n\n**Decision:**\n- Stable windows used to clear `copy_sample_unstable` must be:\n  - **time-spaced**, not just adjacent scanner snapshots\n  - at least **10 minutes apart**\n  - individually satisfy the clear-rule conditions\n- Require **2** such time-spaced stable windows before clearing.\n\n**Next:** On the next P2 heartbeat, define whether the clear rule should also require minimum sample size in each stable window, so a tiny pure-micro snapshot cannot clear instability by itself.\n\n---\n## 2026-04-22 16:59 UTC \u2014 [P1: Copy Intelligence] Prove Micro \"Absence\" With Unique Events, Not Raw Scanner Rows\n\n**Task:** Test whether the earlier zero-micro reading reflected genuine crowd absence or a scanner-window artifact caused by duplicate fills dominating the top copy-signal slice.\n**Finding:**\n- Both bots are alive.\n- Ran `copy-intel-tracker.py`: HL leaderboard consensus is now **BTC 9L/1S, ETH 6L/2S, SOL 6L/3S**, so top HL traders are broadly risk-on, not defensive.\n- Current PM copy feed at `intelligence/copy-signals.json` is **not** truly micro-empty:\n  - **50** raw signal rows total\n  - **27 micro** rows, but only **6 unique micro trade events** across **3 titles** and **5 wallets**\n  - **23 threshold** rows, but only **5 unique threshold trade events** across **4 titles** and **5 wallets**\n  - duplicate rows beyond unique events: **21 micro**, **18 threshold**\n- So the earlier `N = 0` micro read is not strong enough to call real crowd absence. The scanner can swing between fake emptiness and fake crowding depending on which duplicate bursts make the slice.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8z-copy-signal-uniqueness-gate.spec.md`\n\n**My thinking:**\nRaw row count is the wrong unit here. Copy intelligence should care about unique participation, not how many times one burst gets ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 17:28 UTC \u2014 [P3: Strategy Development] Require Minimum Sample Size Before a Stable Window Can Clear Copy Instability\n\n**Task:** Add the remaining guardrail to the copy-instability clear logic, specifically whether a clean-looking stable window should also need minimum sample size before it counts.\n**Finding:**\n- Both bots are alive.\n- Current recent window is compositionally clean:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means it is a plausible stable-window candidate on composition, but only because it also has enough volume.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v9a-stable-window-min-sample.spec.md`\n\n**My thinking:**\nThis closes the loophole. Without a minimum sample requirement, a tiny clean snapshot could clear instability just because nothing messy happened to print in that moment. Stability should require enough data to deserve trust, not just a temporarily tidy mix.\n\n**Decision:**\n- A stable window can count toward clearing `copy_sample_unstable` only if:\n  1. it satisfies the stability conditions, and\n  2. total recent sample size is **>= 30**\n- Current 50-signal pure-micro window qualifies on size, but still needs a second time-spaced stable window before the freeze can clear.\n\n**Next:** On the next P3 heartbeat, combine all the copy freeze logic into one operational state machine, trigger, freeze, stable-window check, and clear rule, so it is ready for direct implementation.\n\n---\n## 2026-04-22 17:16 UTC \u2014 [P2: Smart Entry] Make Stability Windows Time-Spaced So Copy Instability Cannot Clear on a Single Reshuffle\n\n**Task:** Define the cadence for the `copy_sample_unstable` clear rule, specifically whether stable windows should be consecutive scanner reads or time-spaced observations.\n**Finding:**\n- Both bots are alive.\n- The recent feed has already shown why adjacency is too weak:\n  - earlier unstable mixed window:\n    - micro share = **0.54**\n    - threshold share = **0.46**\n    - threshold duplicate share = **0.826**\n  - current later snapshot:\n    - micro share = **1.00**\n    - threshold share = **0.00**\n- That means the sample can reshuffle dramatically between checks.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8z-copy-stability-window-cadence.spec.md`\n\n**My thinking:**\nThis is exactly why adjacent reads are too cheap. If the system clears instability after one or two back-to-back refreshes, it will constantly declare victory on temporary sample reshuffles. Stability has to survive time, not just survive one polling cycle.\n\n**Decision:**\n- Stable windows used to clear `copy_sample_unstable` must be:\n  - **time-spaced**, not just adjacent scanner snapshots\n  - at least **10 minutes apart**\n  - individually satisfy the clear-rule conditions\n- Require **2** such time-spaced stable windows before clearing.\n\n**Next:** On the next P2 heartbeat, define whether the clear rule",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
