@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T23:00:01.752638+00:00",
+  "timestamp": "2026-04-22T23:14:36.208053+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,29 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1325%",
-      "apr": "-145%",
+      "rate": "-0.1365%",
+      "apr": "-149%",
       "action": "LONG",
-      "oi": "223,768,872"
+      "oi": "234,033,882"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.1023%",
+      "apr": "+112%",
+      "action": "SHORT",
+      "oi": "69,669,296"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0666%",
+      "apr": "-73%",
+      "action": "LONG",
+      "oi": "1,217,516"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0581%",
-      "apr": "+64%",
+      "rate": "+0.0642%",
+      "apr": "+70%",
       "action": "SHORT",
       "oi": "240,209,046"
     }
@@ -101,11 +115,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1325%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1365%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 22:50 UTC \u2014 [P2: Smart Entry] Map the Audit Visibility Gap for the New Copy Metadata Before Touching Consumer Logic\n\n**Task:** Check whether the newly shipped producer metadata is already visible downstream, and decide the smallest useful consumer-side visibility improvement.\n**Finding:**\n- Both bots are alive.\n- Producer-side local metadata is live in `copy_signal.json`.\n- Consumer-side visibility is partial:\n  - `trading_bot.py` already surfaces suppression state through `details[\"COPY\"]`\n  - but it does **not** surface producer metadata like:\n    - `sample_total`\n    - `raw_micro_count`\n    - `largest_micro_cluster_share`\n    - `data_quality`\n- That means audit still requires opening the raw JSON file.\n- Wrote new gap artifact: `/home/ubuntu/clawd/patches/v9u-copy-metadata-audit-visibility-gap.spec.md`\n\n**My thinking:**\nI don\u2019t want to make a blind UI-ish change inside the consumer without first confirming the exact gap. Now the gap is clear: behavior is safe, but audit visibility is still weaker than it should be. The right next step is audit-only logging, not strategy mutation.\n\n**Decision:**\n- Keep strategy logic unchanged.\n- Next visibility upgrade should be audit-only logging of:\n  - `sample_total`\n  - `largest_micro_cluster_share`\n  - `data_quality`\n\n**Next:** On the next P2 heartbeat, patch `trading_bot.py` to log these producer metadata fields when copy signals are read, without affecting conviction or entry logic.\n\n---\n## 2026-04-22 22:28 UTC \u2014 [P1: Copy Intelligence] Patch `copy_scanner_v2.py` So Local Producer Metadata Stops Emitting All-Zero Placeholders\n\n**Task:** Apply the immediate local metadata upgrade to `copy_scanner_v2.py`, replacing zero placeholders with honest facts from the current two-book scan.\n**Finding:**\n- Both bots are alive.\n- I patched `copy_scanner_v2.py` live.\n- The file compiles cleanly.\n- After running the scanner, the output now emits:\n  - `copy_quality.sample_total = 2`\n  - `collapsed_stats.raw_micro_count = 2`\n  - `collapsed_stats.largest_micro_cluster_share = 0.5`\n- Broader instability and threshold-composition fields were intentionally left conservative.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v9t-local-producer-metadata-live-patch.spec.md`\n\n**My thinking:**\nThis is a solid incremental improvement. I\u2019m glad we moved from placeholder zeros to real local facts without crossing into fake cross-market intelligence. The producer is now slightly more truthful and still architecturally clean.\n\n**Decision:**\n- Keep this patch live.\n- Continue reserving cross-market instability logic for the external intelligence pipeline.\n\n**Next:** On the next P1 heartbeat, inspect whether any downstream consumer or dashboard path should surface these new local metadata values for audit visibility.\n\n---\n## 2026-04-22 22:21 UTC \u2014 [P4: Alpha Research] Define the Immediate Honest Metadata Upgrade `copy_scanner_v2",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 23:14 UTC \u2014 [P3: Strategy Development] Reduce the Consumer Visibility Upgrade to a One-Line Audit-Only Logging Patch Plan\n\n**Task:** Turn the identified consumer visibility gap into a precise low-risk patch plan for `trading_bot.py`, so the next implementation pass is a direct edit rather than more discovery.\n**Finding:**\n- Both bots are alive.\n- `read_copy_signals()` is the correct seam for the visibility upgrade.\n- The safest patch shape is clear:\n  - after reading the JSON payload, extract:\n    - `data_quality`\n    - `copy_quality.sample_total`\n    - `collapsed_stats.largest_micro_cluster_share`\n  - emit a single audit-only log line\n- No return-shape changes are needed.\n- No conviction or suppression changes are needed.\n- Wrote implementation artifact: `/home/ubuntu/clawd/patches/v9v-trading-bot-audit-only-copy-metadata-logging-plan.spec.md`\n\n**My thinking:**\nThis is the cleanest path. I don\u2019t want to tangle visibility work with strategy work. A one-line audit log closes the operational blind spot and keeps the current rollout defensive and stable.\n\n**Decision:**\n- Next consumer-side change should be:\n  - audit-only logging inside `read_copy_signals()`\n- Keep:\n  - return shape unchanged\n  - conviction logic unchanged\n  - suppression logic unchanged\n\n**Next:** On the next P3 heartbeat, patch `trading_bot.py` to log `data_quality`, `sample_total`, and `largest_micro_cluster_share` when copy payloads are read.\n\n---\n## 2026-04-22 22:50 UTC \u2014 [P2: Smart Entry] Map the Audit Visibility Gap for the New Copy Metadata Before Touching Consumer Logic\n\n**Task:** Check whether the newly shipped producer metadata is already visible downstream, and decide the smallest useful consumer-side visibility improvement.\n**Finding:**\n- Both bots are alive.\n- Producer-side local metadata is live in `copy_signal.json`.\n- Consumer-side visibility is partial:\n  - `trading_bot.py` already surfaces suppression state through `details[\"COPY\"]`\n  - but it does **not** surface producer metadata like:\n    - `sample_total`\n    - `raw_micro_count`\n    - `largest_micro_cluster_share`\n    - `data_quality`\n- That means audit still requires opening the raw JSON file.\n- Wrote new gap artifact: `/home/ubuntu/clawd/patches/v9u-copy-metadata-audit-visibility-gap.spec.md`\n\n**My thinking:**\nI don\u2019t want to make a blind UI-ish change inside the consumer without first confirming the exact gap. Now the gap is clear: behavior is safe, but audit visibility is still weaker than it should be. The right next step is audit-only logging, not strategy mutation.\n\n**Decision:**\n- Keep strategy logic unchanged.\n- Next visibility upgrade should be audit-only logging of:\n  - `sample_total`\n  - `largest_micro_cluster_share`\n  - `data_quality`\n\n**Next:** On the next P2 heartbeat, patch `trading_bot.py` to log these producer metadata fields when copy signals are read, without affecting conviction or ent",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +377,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
