@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T09:30:09.444036+00:00",
+  "timestamp": "2026-04-22T09:32:01.620399+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "AVNT",
-      "rate": "-0.0657%",
-      "apr": "-72%",
+      "rate": "-0.0672%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "6,697,228"
+      "oi": "6,686,692"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: AVNT at -0.0657%/8h \u2014 shorts paying longs"
+        "text": "Strongest: AVNT at -0.0672%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:30 UTC \u2014 [P1: Copy Intelligence] Copy Flow Flipped Hard Bullish During Local Whipsaw, Which Makes It Even Less Trustworthy\n\n**Task:** Test whether PM copy flow reacts coherently to the 09h failed break, snap-back, and later brief `0.495 / 0.505` wobble, or whether it just latches onto whatever nearby expiry is active.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local structure did **not** deliver a clean directional transition:\n  - failed break to `0.490 / 0.510`\n  - snap-back to `0.505 / 0.495`\n  - brief wobble to `0.495 / 0.505`\n  - return again to `0.505 / 0.495`\n- Copy flow reacted with a huge polarity flip, but in a way that still looks like crowd latching, not signal:\n  - **50** recent signals\n  - **45 bullish / 5 bearish**\n  - average price **0.968**\n- Copy activity was almost totally concentrated in one micro-expiry title:\n  - `Bitcoin Up or Down - April 22, 4:45AM-5:00AM ET` \u2192 **45** signals\n- Dominant repeated clusters:\n  - `BUY Up @ 0.96` \u2192 **20**\n  - `BUY Up @ 0.97` \u2192 **20**\n  - `BUY Up @ 0.961` \u2192 **5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7u-copy-flip-whipsaw.spec.md`\n\n**My thinking:**\nThis is actually stronger anti-signal evidence than a simple mismatch. Earlier, copy flow was heavily bearish. Now it has violently flipped bullish and concentrated almost entirely into one near-expiry Up contract, even though local structure only produced whipsaw and failed transitions. That means copy flow is not tracking durable market state. It is chasing the nearest crowd narrative.\n\n**Decision:**\n- Strengthen the rule that copy flow is **crowd-latching noise**, not confirmation.\n- Treat rapid copy polarity flips plus single-title dominance as especially bad evidence.\n- Do not allow copy-flow sentiment reversals to override local structure unless a durable break is already confirmed independently.\n\n**Next:** On the next P1 heartbeat, quantify dominant-title share and dominant-triple share on this bullish flip sample to tighten explicit anti-signal thresholds for copy crowding events.\n\n---\n## 2026-04-22 09:18 UTC \u2014 [P4: Alpha Research] The First 09h Break Failed and Reverted, So It Was Probe Noise Not Transition\n\n**Task:** Check whether the first structural move away from the long `0.505 / 0.495` pinned episode becomes a true transition or quickly fails.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The long pinned episode finally broke in early 09h:\n  - **09:10-09:14 UTC** logged `Y0.490 / N0.510`\n- But the move did **not** persist.\n- By **09:15 UTC** the market had already reverted to:\n  - `Y0.505 / N0.495`\n- Subsequent logs through the current sample stayed back in the original pinned state.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7t-failed-break-reversion.spec.md`\n\n**My thinking:**\nThis is the distinction we needed. Not every break from a ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 09:31 UTC \u2014 [P2: Smart Entry] Five Alternate Windows Are Still Too Weak to Count as a Real Break\n\n**Task:** Use the full 09h sequence to decide whether the break-durability rule is strict enough or whether transient alternate states still slip through as false transition candidates.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 09h produced **two** clean alternate-state runs before the market returned to the original dominant state.\n- First alternate run:\n  - `Y0.490 / N0.510`\n  - lasted **5 logged windows** from **09:10-09:14 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:15 refresh\n- Second alternate run:\n  - `Y0.495 / N0.505`\n  - lasted **5 logged windows** from **09:20-09:24 UTC**\n  - then reverted to `Y0.505 / N0.495` after the 09:25 refresh\n- The only state that truly persisted was the recovered `Y0.505 / N0.495` structure.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7v-stricter-break-durability.spec.md`\n\n**My thinking:**\nThis sharpens the durability rule a lot. A five-window alternate can look orderly, but today showed that even two separate five-window runs were still just failed transitions. That means the first durability draft was too permissive. For a break to matter, it needs to survive not only multiple windows but also the next refresh boundary without immediately handing control back.\n\n**Decision:**\n- Tighten the break-durability gate.\n- Treat **5-window alternate states as provisional only**, not durable.\n- Require stronger persistence plus refresh survival before an alternate state can count as structural alpha.\n\n**Next:** On the next P2 heartbeat, quantify how many alternate windows the recovered `0.505 / 0.495` state needed before it clearly re-established dominance, so the same framework can score recoveries as well as breaks.\n\n---\n## 2026-04-22 09:30 UTC \u2014 [P1: Copy Intelligence] Copy Flow Flipped Hard Bullish During Local Whipsaw, Which Makes It Even Less Trustworthy\n\n**Task:** Test whether PM copy flow reacts coherently to the 09h failed break, snap-back, and later brief `0.495 / 0.505` wobble, or whether it just latches onto whatever nearby expiry is active.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local structure did **not** deliver a clean directional transition:\n  - failed break to `0.490 / 0.510`\n  - snap-back to `0.505 / 0.495`\n  - brief wobble to `0.495 / 0.505`\n  - return again to `0.505 / 0.495`\n- Copy flow reacted with a huge polarity flip, but in a way that still looks like crowd latching, not signal:\n  - **50** recent signals\n  - **45 bullish / 5 bearish**\n  - average price **0.968**\n- Copy activity was almost totally concentrated in one micro-expiry title:\n  - `Bitcoin Up or Down - April 22, 4:45AM-5:00AM ET` \u2192 **45** signals\n- Dominant repeated clusters:\n  - `BUY Up @ 0.96` \u2192 **20**\n  - `BUY Up @ 0.97` \u2192 **20**\n  - `BUY",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
