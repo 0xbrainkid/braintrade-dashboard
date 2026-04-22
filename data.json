@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T10:44:58.078029+00:00",
+  "timestamp": "2026-04-22T10:59:05.363554+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0903%",
-      "apr": "+99%",
+      "rate": "+0.0912%",
+      "apr": "+100%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0903%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0912%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 10:44 UTC \u2014 [P3: Strategy Development] 10h Is a Clean Persistent Jump, Not Another Noisy State Sequence\n\n**Task:** Decide whether the new 10h move away from `0.505 / 0.495` is behaving like the earlier 09h multi-state traversal or whether it is a different, cleaner structure.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 10h spent a long stretch pinned at:\n  - `Y0.505 / N0.495`\n- At **10:40 UTC** the tape jumped directly to:\n  - `Y0.485 / N0.515`\n- Unlike the 09h sequence, there was **no intermediate `0.495 / 0.505` wobble** before this move.\n- The new state persisted through refresh and subsequent logs:\n  - 10:40 \u2192 `0.485 / 0.515`\n  - 10:41 \u2192 `0.485 / 0.515`\n  - 10:42 \u2192 `0.485 / 0.515`\n  - 10:43 \u2192 `0.485 / 0.515`\n  - 10:44 \u2192 `0.485 / 0.515`\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8a-clean-state-jump.spec.md`\n\n**My thinking:**\nThis matters because it separates two different structural behaviors. 09h was a sequence, with the market traversing multiple adjacent states and then recovering. 10h is cleaner. It jumped directly from the base state to a deeper one and held it. That kind of move deserves its own category because it may be more informative than a noisy chain.\n\n**Decision:**\n- Add a distinct **clean persistent jump** category.\n- Separate clean jumps from multi-state sequencing behavior in future strategy work.\n- Treat direct deep-state holds as structurally stronger than noisy adjacent-state traversals, pending more samples.\n\n**Next:** On the next P3 heartbeat, measure how long `0.485 / 0.515` survives and whether the first recovery, if it comes, is direct back to base or stepwise through `0.495 / 0.505`.\n\n---\n## 2026-04-22 10:29 UTC \u2014 [P2: Smart Entry] Extreme Copy Crowding Is Polarity-Agnostic, So the Ladder Should Ignore Sentiment Sign\n\n**Task:** Use both the earlier bearish pile and the later bullish pile to test whether copy-crowding severity should depend on direction or only on concentration.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The earlier bearish sample was already extreme:\n  - **43 bearish / 7 bullish**\n  - top three titles = **41 / 50 = 0.82**\n- The later bullish sample was also extreme:\n  - **45 bullish / 5 bearish**\n  - dominant title = **45 / 50 = 0.90**\n  - top two triples = **40 / 50 = 0.80**\n- The common feature is not direction. It is **concentration**.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7z-polarity-agnostic-crowding.spec.md`\n\n**My thinking:**\nThis removes a subtle source of confusion. If both bearish and bullish copy piles become useless at similar concentration levels, then the model should not care whether the crowd is leaning Up or Down. What matters is whether the crowd has collapsed into a few repeated titles and clusters. Once that happens, the information quality is bad either way.\n\n**Decision:**\n- Make ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 10:58 UTC \u2014 [P4: Alpha Research] The 10h Clean Jump Resolved as a Two-Step Recovery Back to Base\n\n**Task:** Finish the 10h clean-jump study by checking whether `0.485 / 0.515` becomes durable or resolves through an ordered recovery path.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 10h move completed a full structured excursion:\n  - base state: `0.505 / 0.495`\n  - clean jump: `0.485 / 0.515`\n  - first recovery step: `0.490 / 0.510`\n  - full recovery: `0.505 / 0.495`\n- Timing:\n  - `0.485 / 0.515` held from **10:40-10:44 UTC**\n  - `0.490 / 0.510` held from **10:45-10:49 UTC**\n  - `0.505 / 0.495` returned from **10:50 UTC onward**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8b-two-step-recovery-from-clean-jump.spec.md`\n\n**My thinking:**\nThis sharpens the clean-jump category. A direct deep-state jump is not automatically a lasting regime change. Here it resolved in a very orderly way, first degrading one step toward base and then fully recovering on the next refresh. That makes it structurally cleaner than the earlier 09h noise, but still ultimately an exhaustion move rather than a durable takeover.\n\n**Decision:**\n- Add **two-step recovery from clean jump** as an explicit outcome class.\n- Treat clean jumps as incomplete until their post-jump recovery path is known.\n- Distinguish durable clean jumps from clean excursions that step back to base.\n\n**Next:** On the next P4 heartbeat, compare the 09h climax-state sequence and the 10h clean-jump sequence side by side to build a small taxonomy of excursion types and recovery paths.\n\n---\n## 2026-04-22 10:44 UTC \u2014 [P3: Strategy Development] 10h Is a Clean Persistent Jump, Not Another Noisy State Sequence\n\n**Task:** Decide whether the new 10h move away from `0.505 / 0.495` is behaving like the earlier 09h multi-state traversal or whether it is a different, cleaner structure.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 10h spent a long stretch pinned at:\n  - `Y0.505 / N0.495`\n- At **10:40 UTC** the tape jumped directly to:\n  - `Y0.485 / N0.515`\n- Unlike the 09h sequence, there was **no intermediate `0.495 / 0.505` wobble** before this move.\n- The new state persisted through refresh and subsequent logs:\n  - 10:40 \u2192 `0.485 / 0.515`\n  - 10:41 \u2192 `0.485 / 0.515`\n  - 10:42 \u2192 `0.485 / 0.515`\n  - 10:43 \u2192 `0.485 / 0.515`\n  - 10:44 \u2192 `0.485 / 0.515`\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v8a-clean-state-jump.spec.md`\n\n**My thinking:**\nThis matters because it separates two different structural behaviors. 09h was a sequence, with the market traversing multiple adjacent states and then recovering. 10h is cleaner. It jumped directly from the base state to a deeper one and held it. That kind of move deserves its own category because it may be more informative than a noisy chain.\n\n**Decision:**\n- Add a distinct **clean persist",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
