@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T13:00:54.674565+00:00",
+  "timestamp": "2026-04-22T13:22:05.316394+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1036%",
-      "apr": "+113%",
+      "rate": "+0.0792%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1036%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0792%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 12:59 UTC \u2014 [P1: Copy Intelligence] Copy Flow Finally Produced a Dispersed Sample\n\n**Task:** Check whether any recent PM copy sample escaped crowd-latching and became informational enough to use as an overlay.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py`; HL leaderboard consensus flipped back to **BTC 7L/2S bullish, ETH 6L/1S bullish, SOL 4L/5S bearish**.\n- Pulled the latest 50 PM copy fills from `logs/pm-copy.log`.\n- Latest sample was **18 bullish / 32 bearish** across **10 unique titles**.\n- Concentration was far lower than the earlier Apr 22 crowd-pile events:\n  - dominant title share = **10 / 50 = 0.20**\n  - top-two title share = **19 / 50 = 0.38**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8k-copy-dispersion-informational-threshold.spec.md`\n\n**My thinking:**\nThis is the first recent sample that actually cleared the anti-crowding ladder instead of failing it. The flow still leaned bearish, but it was spread across enough titles that it reads more like broad positioning than one expiry cluster reflexively dogpiling.\n\n**Decision:**\n- Keep the crowding ladder intact.\n- Add a new working rule: copy flow is only eligible as a weak overlay when dominant-title share is below **0.40** and top-two title share is below **0.40**.\n- Do not let dispersed flow create trades by itself.\n\n**Next:** On the next P1 heartbeat, measure whether dispersed copy samples align with local tape better than concentrated samples, so we can decide if this overlay deserves any weight at all.\n\n\n## 2026-04-22 12:58 UTC \u2014 [P4: Alpha Research] Convert Wrong-Side Classification into a Staged Pipeline\n\n**Task:** Use the full 12h tape to move from isolated wrong-side labels toward a real research pipeline that escalates from suspicion to confirmed session rejection.\n**Finding:**\n- Both bots are alive.\n- The 12h tape now shows a complete progression:\n  - pinned price at `0.505 / 0.495`\n  - repeated wrong-sided direction through YES-only skips\n  - no meaningful price excursion first\n  - later regime confirmation with `TREND`\n- The clean confirmation window appeared by roughly **12:13-12:18 UTC**, after directional persistence had already been obvious for several minutes.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8j-wrong-side-classifier-pipeline.spec.md`\n\n**My thinking:**\nThis should not stay as a single stop rule. The tape naturally separates into stages: first the session looks suspicious, then structurally wrong-sided, then regime-confirmed, and only then fully rejectable. That is a better pipeline because it tells us not just what the session is, but when conviction should increase.\n\n**Decision:**\n- Add a staged wrong-side pipeline:\n  1. directional persistence watch\n  2. structural classification\n  3. regime confirmation\n  4. hard stop\n- Keep trend-aligned and inversion paths separate inside that pipeline.\n\n**",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 13:21 UTC \u2014 [P2: Smart Entry] Set the First Persistence Threshold for Pinned Wrong-Side Sessions\n\n**Task:** Define the minimum consecutive wrong-side refresh count needed to promote a pinned session from a loose watch state into structural classification.\n**Finding:**\n- Both bots are alive.\n- From today\u2019s 12h tape, the pinned wrong-side condition became obvious before formal regime confirmation.\n- That means the classifier should not wait for `TREND` just to admit the session is structurally suspect.\n- The cleanest first threshold is:\n  - **3 consecutive wrong-side refresh windows**\n  - while price remains pinned near `0.505 / 0.495`\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v8k-wrong-side-persistence-threshold.spec.md`\n\n**My thinking:**\nOne wrong-side print is noise. Two is suspicion. Three is structure. That is early enough to react before wasting most of the hour, but not so early that we classify on a single wobble.\n\n**Decision:**\n- Promote pinned sessions from `wrong_side_watch` to `trend_aligned_wrong_side_candidate` after **3 consecutive wrong-side refreshes**.\n- Keep regime confirmation as the next escalation step, not the first classification step.\n\n**Next:** On the next P2 heartbeat, test whether the threshold should be strictly 3 or whether it needs a time-based clause such as 3 refreshes within one token-refresh cycle.\n\n---\n## 2026-04-22 12:59 UTC \u2014 [P1: Copy Intelligence] Copy Flow Finally Produced a Dispersed Sample\n\n**Task:** Check whether any recent PM copy sample escaped crowd-latching and became informational enough to use as an overlay.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py`; HL leaderboard consensus flipped back to **BTC 7L/2S bullish, ETH 6L/1S bullish, SOL 4L/5S bearish**.\n- Pulled the latest 50 PM copy fills from `logs/pm-copy.log`.\n- Latest sample was **18 bullish / 32 bearish** across **10 unique titles**.\n- Concentration was far lower than the earlier Apr 22 crowd-pile events:\n  - dominant title share = **10 / 50 = 0.20**\n  - top-two title share = **19 / 50 = 0.38**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8k-copy-dispersion-informational-threshold.spec.md`\n\n**My thinking:**\nThis is the first recent sample that actually cleared the anti-crowding ladder instead of failing it. The flow still leaned bearish, but it was spread across enough titles that it reads more like broad positioning than one expiry cluster reflexively dogpiling.\n\n**Decision:**\n- Keep the crowding ladder intact.\n- Add a new working rule: copy flow is only eligible as a weak overlay when dominant-title share is below **0.40** and top-two title share is below **0.40**.\n- Do not let dispersed flow create trades by itself.\n\n**Next:** On the next P1 heartbeat, measure whether dispersed copy samples align with local tape better than concentrated samples, so we can decide if this over",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
