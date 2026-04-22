@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T11:30:02.720823+00:00",
+  "timestamp": "2026-04-22T11:44:50.368074+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1074%",
-      "apr": "+118%",
+      "rate": "+0.1067%",
+      "apr": "+117%",
       "action": "SHORT",
       "oi": "69,686,419"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1074%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1067%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 11:15 UTC \u2014 [P1: Copy Intelligence] Even Live-Hour Bearish Alignment Does Not Rescue Copy Flow When Crowding Stays Extreme\n\n**Task:** Check whether live-hour copy flow becomes useful when it leans the same way the bot is repeatedly skipping, or whether extreme crowding still makes it unusable.\n**Finding:**\n- Both bots are alive and PM is now in active hour **11h**.\n- The live tape briefly inverted to `Y0.515 / N0.485`, then snapped back to `Y0.505 / N0.495`.\n- The bot kept skipping because the edge was either **NO-side** or **below threshold**.\n- Recent PM copy flow did skew bearish:\n  - **50** signals\n  - **10 bullish / 40 bearish**\n  - average price **0.960**\n- But the sample remained extremely crowded:\n  - `Will Bitcoin dip to $60,000 in April?` \u2192 **20**\n  - `Bitcoin Up or Down - April 22, 6:45AM-7:00AM ET` \u2192 **20**\n  - top two triples = **40 / 50 = 0.80**\n- Dominant repeated clusters:\n  - `SELL No @ 0.988` \u2192 **20**\n  - `BUY Down @ 0.92` \u2192 **20**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8c-live-copy-crowding-still-not-confirmation.spec.md`\n\n**My thinking:**\nThis is an important edge case. Copy flow happened to lean bearish while the bot kept refusing NO-side setups. But the sample quality was still terrible because the crowd was collapsed into two giant clusters. So even when copy polarity looks directionally relevant, concentration can still completely invalidate it. Alignment is not enough. Quality still comes first.\n\n**Decision:**\n- Keep concentration as the **first gate** for copy-flow usefulness.\n- Do **not** treat live-hour directional alignment as confirmation when copy flow remains in extreme crowd-latching mode.\n- Require both relevance and acceptable dispersion before copy flow can influence confidence at all.\n\n**Next:** On the next P1 heartbeat, compare this live bearish-crowded sample against the earlier bullish-crowded sample to define whether any concentration pattern has ever produced usable copy-flow quality, or whether the answer is simply no.\n\n---\n## 2026-04-22 10:58 UTC \u2014 [P4: Alpha Research] The 10h Clean Jump Resolved as a Two-Step Recovery Back to Base\n\n**Task:** Finish the 10h clean-jump study by checking whether `0.485 / 0.515` becomes durable or resolves through an ordered recovery path.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- The 10h move completed a full structured excursion:\n  - base state: `0.505 / 0.495`\n  - clean jump: `0.485 / 0.515`\n  - first recovery step: `0.490 / 0.510`\n  - full recovery: `0.505 / 0.495`\n- Timing:\n  - `0.485 / 0.515` held from **10:40-10:44 UTC**\n  - `0.490 / 0.510` held from **10:45-10:49 UTC**\n  - `0.505 / 0.495` returned from **10:50 UTC onward**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8b-two-step-recovery-from-clean-jump.spec.md`\n\n**My thinking:**\nThis sharpens the clean-jump category. A direct deep-state jump i",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 11:44 UTC \u2014 [P2: Smart Entry] This 11h Session Is a Full Directional Inversion Day, Not Just a Bad Entry Patch\n\n**Task:** Determine whether today\u2019s weak 11h behavior is an entry-quality problem or a deeper hour-level regime where the whole session is structurally wrong-sided for the YES-only strategy.\n**Finding:**\n- Both bots are alive and PM is in active hour **11h**.\n- The hour has moved through two unusable phases for YES-only:\n  1. early inversion to `Y0.515 / N0.485`, then snap-back to `Y0.505 / N0.495`\n  2. later deeper slide to `Y0.475 / N0.525`\n- Across both phases, bias remained persistently **positive**, causing repeated NO-side skips rather than YES opportunities.\n- Recent live log pattern:\n  - many `YES_ONLY_FILTER` skips at **+45 to +70** bias\n  - repeated `NO_TRADE_SKIPPED` entries on the NO side\n  - no valid YES-side setup emerged from the deeper `0.475 / 0.525` move either\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v8d-11h-directional-inversion-day.spec.md`\n\n**My thinking:**\nThis is the key distinction. If the hour were merely noisy, a smarter filter might rescue it. But that is not what happened. The session stayed persistently on the wrong side for the deployed YES-only logic, and later price movement actually deepened the wrong-side structure. That makes this an hour-level directional inversion day, not a missed-entry problem.\n\n**Decision:**\n- Classify Apr 22 11h as a **directional inversion day**.\n- Do **not** try to salvage this session with entry tweaks.\n- Treat repeated NO-side dominance across multiple refresh cycles as evidence the hour is structurally unavailable for YES-only participation.\n\n**Next:** On the next P2 heartbeat, quantify how many NO-side skips or positive-bias refreshes should trigger an explicit inversion-day flag early enough to stop over-analyzing a dead session.\n\n---\n## 2026-04-22 11:15 UTC \u2014 [P1: Copy Intelligence] Even Live-Hour Bearish Alignment Does Not Rescue Copy Flow When Crowding Stays Extreme\n\n**Task:** Check whether live-hour copy flow becomes useful when it leans the same way the bot is repeatedly skipping, or whether extreme crowding still makes it unusable.\n**Finding:**\n- Both bots are alive and PM is now in active hour **11h**.\n- The live tape briefly inverted to `Y0.515 / N0.485`, then snapped back to `Y0.505 / N0.495`.\n- The bot kept skipping because the edge was either **NO-side** or **below threshold**.\n- Recent PM copy flow did skew bearish:\n  - **50** signals\n  - **10 bullish / 40 bearish**\n  - average price **0.960**\n- But the sample remained extremely crowded:\n  - `Will Bitcoin dip to $60,000 in April?` \u2192 **20**\n  - `Bitcoin Up or Down - April 22, 6:45AM-7:00AM ET` \u2192 **20**\n  - top two triples = **40 / 50 = 0.80**\n- Dominant repeated clusters:\n  - `SELL No @ 0.988` \u2192 **20**\n  - `BUY Down @ 0.92` \u2192 **20**\n- Wrote new research artifact: `/home/ubuntu/clawd/patch",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
