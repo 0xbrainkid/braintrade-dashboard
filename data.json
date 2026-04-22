@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T21:00:02.478638+00:00",
+  "timestamp": "2026-04-22T21:01:07.624264+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1154%",
-      "apr": "+126%",
+      "rate": "+0.1051%",
+      "apr": "+115%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0991%",
-      "apr": "-109%",
+      "rate": "-0.0947%",
+      "apr": "-104%",
       "action": "LONG",
-      "oi": "204,957,084"
+      "oi": "204,135,558"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0552%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "1,218,312"
     }
   ],
   "daily_pnl": [
@@ -101,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1154%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1051%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:58 UTC \u2014 [P1: Copy Intelligence] Consolidate the V9 Defensive Copy Work into a Single Implementation Checklist\n\n**Task:** Package the full V9 copy-quality thread into one implementation checklist so the defensive live rollout is ready for actual code editing without re-deriving the plan.\n**Finding:**\n- Both bots are alive.\n- The V9 series now covers every necessary piece:\n  - stable-window logic\n  - freeze state machine\n  - live-vs-shadow rollout boundary\n  - minimal live change set\n  - exact touchpoints\n  - backward-compatible JSON schema\n  - example payload\n  - consumer-side reader patch\n  - audit logging\n  - suppression reset rule\n  - conviction-branch patch\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9o-defensive-copy-rollout-implementation-checklist.spec.md`\n\n**My thinking:**\nThis is the right end-state for the research thread. We are no longer exploring. We now have a compact implementation checklist that can be handed directly to the next editing pass. That is how research actually turns into shipping.\n\n**Decision:**\n- Treat V9 as implementation-ready.\n- Use the checklist to drive the next real code-edit cycle.\n- Keep rollout defensive-only and compatibility-preserving.\n\n**Next:** On the next P1 heartbeat, actually edit the two live code files, `copy_scanner_v2.py` and `trading_bot.py`, using this checklist as the patch guide.\n\n---\n## 2026-04-22 20:44 UTC \u2014 [P4: Alpha Research] Draft the Exact Conviction-Branch Change That Surfaces Suppressed Copy States\n\n**Task:** Finish the implementation pair to `read_copy_signals()` by drafting the exact minimal code change in the conviction branch that exposes suppression states in `details[\"COPY\"]`.\n**Finding:**\n- Both bots are alive.\n- The conviction branch is already structured so the patch can be surgical:\n  - high-confidence agree / disagree cases stay untouched\n  - low-confidence case stays untouched\n  - only the final fallback needs to become suppression-aware\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9n-conviction-branch-copy-audit-code-draft.spec.md`\n\n**My thinking:**\nThis is a nice clean finish. The reader suppresses bad copy influence, and the branch reports why that happened without altering any of the core conviction logic. That keeps the patch minimal and makes the live behavior observable.\n\n**Decision:**\n- Replace the plain `details[\"COPY\"] = \"\u2014\"` fallback with a suppression-aware mapping:\n  - `\ud83e\uddca unstable`\n  - `\ud83d\udd52 stale`\n  - `\ud83d\udcc9 insufficient_sample`\n  - else `\u2014`\n- Leave all existing high-confidence and low-confidence branches unchanged.\n\n**Next:** On the next P4 heartbeat, combine the `trading_bot.py` reader patch and the conviction-branch patch into one final implementation checklist, so the defensive live rollout is ready for actual editing.\n\n---\n## 2026-04-22 20:28 UTC \u2014 [P3: Strategy Development] Draft the Smallest Actual `trading_",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 20:59 UTC \u2014 [P2: Smart Entry] Re-test the live hour set against YES-only outcome data before touching entry thresholds\n\n**Task:** Re-run the Smart Entry filter set on the full `confidence_outcomes.jsonl` sample to see whether the next improvement should come from edge tightening or hour selection.\n**Finding:**\n- Both bots are alive.\n- Full-sample backtest still favors the current structure more than tighter edge gating:\n  - baseline: 113W/88L, +17.86 PnL, EV/trade +0.089, n=201\n  - profitable hours `[12,17,19,22]`: 47W/21L, +22.29, EV/trade +0.328, n=68\n  - YES-only overall: 100W/67L, +27.29, EV/trade +0.163, n=167\n- Inside the *current* live regime, edge tightening did **not** improve trade quality:\n  - current live hours `[11,12,19,20]` + YES only: 64W/24L, 72.7% WR, +36.69, avg +0.417, n=88\n  - same set with `edge >= 0.20`: 52W/21L, 71.2% WR, +29.03, avg +0.398, n=73\n  - same set with `edge >= 0.22`: 44W/18L, 71.0% WR, +24.67, avg +0.398, n=62\n- Hour contribution is more meaningful than edge tightening right now:\n  - `(11,12)` YES-only: 42W/12L, 77.8% WR, avg +0.515, n=54\n  - `(11,12,20)` YES-only: 51W/16L, 76.1% WR, avg +0.484, n=67\n  - adding 19h drops the average back to +0.417/trade, even though 19h is still net positive.\n- Analysis scripts written for reproducibility:\n  - `/home/ubuntu/clawd/tmp/p2_hour_direction_analysis.py`\n  - `/home/ubuntu/clawd/tmp/p2_edge_threshold_current_regime.py`\n  - `/home/ubuntu/clawd/tmp/p2_hour_subset_analysis.py`\n\n**My thinking:**\nThe next Smart Entry lever is not a harder edge floor. The live regime is already extracting most of the available edge. Tightening `min_edge` would cut winning flow without improving average outcome. If we want a real V-next improvement, the place to attack is the weaker session bucket, especially 19h.\n\n**Decision:**\n- Do **not** raise `min_edge` right now.\n- Keep the current YES-only structure.\n- Treat 19h as the next candidate for conditional downgrade or removal, but do not change live hours yet because it is still positive and the sample is not huge.\n\n**Next:** On the next P2 heartbeat, isolate 19h further by splitting it by edge band and conviction bucket so I can decide whether 19h deserves a narrower rule or a full cut.\n\n---\n\n## 2026-04-22 20:58 UTC \u2014 [P1: Copy Intelligence] Consolidate the V9 Defensive Copy Work into a Single Implementation Checklist\n\n**Task:** Package the full V9 copy-quality thread into one implementation checklist so the defensive live rollout is ready for actual code editing without re-deriving the plan.\n**Finding:**\n- Both bots are alive.\n- The V9 series now covers every necessary piece:\n  - stable-window logic\n  - freeze state machine\n  - live-vs-shadow rollout boundary\n  - minimal live change set\n  - exact touchpoints\n  - backward-compatible JSON schema\n  - example payload\n  - consumer-side reader patch\n  - audit logging\n  - suppression reset ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
