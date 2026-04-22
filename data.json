@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T06:30:02.350803+00:00",
+  "timestamp": "2026-04-22T06:59:33.850355+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "CHIP",
-      "rate": "+0.0905%",
-      "apr": "+99%",
-      "action": "SHORT",
-      "oi": "106,341,660"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.0616%",
-      "apr": "+67%",
+      "rate": "+0.0752%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,728,406"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "+0.0696%",
+      "apr": "+76%",
+      "action": "SHORT",
+      "oi": "118,380,516"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at 0.0905%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0752%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 06:29 UTC \u2014 [P3: Strategy Development] 06h Acts Like a Reset Hour, Not a Continuation Hour\n\n**Task:** Determine whether 06h continues the late-05h alternate regimes or resets back to the dominant midpoint carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **27** tracked windows.\n- All **27/27** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that reset state:\n  - `|bias| >= 45` in **10** windows\n  - `|bias| >= 55` in **7** windows\n  - `<35` in **8** windows\n  - max bias **67.2**\n- So 06h is not inheriting the late-05h alternate regimes. It is re-establishing the dominant midpoint regime and holding it cleanly.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7m-06h-reset-hour.spec.md`\n\n**My thinking:**\nThis is strategically useful. The late-05h breaks only matter if 06h validates them. Today it didn\u2019t. Instead, 06h functioned like a reset checkpoint that discarded the late alternates and restored the old carry. That means 06h is not a source of new structure, it is a test of whether prior structure was real enough to survive.\n\n**Decision:**\n- Keep **06h excluded** from live trading.\n- Reclassify 06h as a **reset hour**.\n- Use 06h as the confirmation checkpoint for whether late-overnight breaks are durable or failed.\n\n**Next:** On the next P3 heartbeat, compare several overnight sessions to see whether 06h consistently behaves as a reset hour or if today was an outlier.\n\n---\n## 2026-04-22 06:14 UTC \u2014 [P2: Smart Entry] Overnight Breaks Need a Durability Gate, Not Just Detection\n\n**Task:** Compare the late-05h break regimes against the opening behavior of 06h to decide whether overnight break detection alone is enough to matter.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- **05h** now contains three regimes:\n  - `(0.505, 0.495)` \u2192 **50** windows\n  - `(0.480, 0.520)` \u2192 **5** windows\n  - `(0.485, 0.515)` \u2192 **5** windows\n  - `|bias| >= 45` in **29** windows, `|bias| >= 55` in **12**\n- **06h** so far reopened with zero ambiguity:\n  - `(0.505, 0.495)` \u2192 **14/14** windows\n  - `|bias| >= 45` in **4** windows, `|bias| >= 55` in **2**\n- So the late-05h break existed, but it did **not** survive the next boundary. The market returned immediately to the old carry state.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7l-break-durability-gate.spec.md`\n\n**My thinking:**\nBreak detection was a good first step, but it is not enough. Some breaks are just failed transitions. The strategic question is whether a new regime has enough durability to matter after it appears. If it cannot hold through the next cluster or next hour boundary, it belongs in the \"interesting but non-actionable\" bucket.\n\n**Decision:**\n- Add a **durability gate** to overnight break analysis.\n- Classify the late-05h break as **non-durable** because 06h reop",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 06:59 UTC \u2014 [P4: Alpha Research] 06h Graduated From Reset Checkpoint to Full Confirmation Regime\n\n**Task:** Determine whether late 06h still behaves like a tentative reset or whether it now fully confirms that the old overnight carry regime has been restored.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **57** tracked windows.\n- All **57/57** are in the exact same regime:\n  - `(0.505, 0.495)`\n- Bias remains active inside that completely stable state:\n  - `|bias| >= 45` in **24** windows\n  - `|bias| >= 55` in **14** windows\n  - `<35` in **18** windows\n  - max bias **68.5**\n- No alternate 05h-style regimes reappeared at any point in the observed 06h sample.\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7n-confirmation-regime.spec.md`\n\n**My thinking:**\nThis is stronger than a reset. Early 06h told us the late-05h breaks probably failed. Late 06h confirms it decisively. Once a full hour stays pinned in one regime with no reappearance of the alternates, the prior breaks should be treated as dead transitions, not open questions. That makes 06h extremely useful for classification even though it remains non-tradable.\n\n**Decision:**\n- Classify late 06h as a **confirmation regime** for the restored `0.505 / 0.495` state.\n- Mark the late-05h alternates as decisively failed transitions.\n- Continue treating 06h as research infrastructure, not a live trading candidate.\n\n**Next:** On the next P4 heartbeat, test whether the first post-06h regime change later in the morning is more informative than any late-overnight break, since 06h appears to clear the overnight noise cleanly.\n\n---\n## 2026-04-22 06:29 UTC \u2014 [P3: Strategy Development] 06h Acts Like a Reset Hour, Not a Continuation Hour\n\n**Task:** Determine whether 06h continues the late-05h alternate regimes or resets back to the dominant midpoint carry.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- 06h now has **27** tracked windows.\n- All **27/27** are in the same regime:\n  - `(0.505, 0.495)`\n- Bias is still active inside that reset state:\n  - `|bias| >= 45` in **10** windows\n  - `|bias| >= 55` in **7** windows\n  - `<35` in **8** windows\n  - max bias **67.2**\n- So 06h is not inheriting the late-05h alternate regimes. It is re-establishing the dominant midpoint regime and holding it cleanly.\n- Wrote new strategy research artifact: `/home/ubuntu/clawd/patches/v7m-06h-reset-hour.spec.md`\n\n**My thinking:**\nThis is strategically useful. The late-05h breaks only matter if 06h validates them. Today it didn\u2019t. Instead, 06h functioned like a reset checkpoint that discarded the late alternates and restored the old carry. That means 06h is not a source of new structure, it is a test of whether prior structure was real enough to survive.\n\n**Decision:**\n- Keep **06h excluded** from live trading.\n- Reclassify 06h as a **reset hour**.\n- Use",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
