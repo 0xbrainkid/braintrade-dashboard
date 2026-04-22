@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T01:00:02.275883+00:00",
+  "timestamp": "2026-04-22T01:00:14.863530+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MET",
-      "rate": "-0.4503%",
-      "apr": "-493%",
+      "rate": "-0.5050%",
+      "apr": "-553%",
       "action": "LONG",
-      "oi": "17,921,258"
+      "oi": "19,076,620"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0922%",
-      "apr": "+101%",
+      "rate": "+0.1114%",
+      "apr": "+122%",
       "action": "SHORT",
       "oi": "69,728,406"
     },
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MET at -0.4503%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MET at -0.5050%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 00:45 UTC \u2014 [P4: Alpha Research] Midnight Tape Flipped Direction While Copy Flow Flipped the Other Way\n\n**Task:** Use the ongoing 00h watchlist session to test whether midnight strength is directional and stable, or whether it is active but highly unstable. Also check whether PM copy flow confirms or contradicts the live tape.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- Midnight session is now clearly **structurally active**, but directionally unstable:\n  - total tracked 00h windows: **44**\n  - price regimes observed:\n    - `(0.505, 0.495)` \u2192 **30** windows, **12** with `|bias| >= 55`, max **70.0**\n    - `(0.485, 0.515)` \u2192 **9** windows, **6** with `|bias| >= 55`, max **70.0**\n    - `(0.515, 0.485)` \u2192 **5** windows, **3** with `|bias| >= 55`, max **66.6**\n- That means midnight did not just produce one strong directional move. It produced strong tape across **multiple price regimes**, including a full flip from bearish off-midpoint to bullish off-midpoint.\n- PM copy flow did **not** cleanly confirm the latest flip. It swung hard the other way:\n  - recent signals: **12 bullish vs 38 bearish**\n  - average price **0.815**\n  - dominant clustered prints included:\n    - `BUY Down @ 0.97` (9x)\n    - `BUY Down @ 0.98` (8x)\n    - `SELL Down @ 0.97` (8x)\n- So local PM structure flipped bullish, while copy flow leaned heavily bearish.\n\n**My thinking:**\nThis strengthens two conclusions at once. First, midnight is more active than we thought, so the watchlist was the right call. Second, it may be **too unstable** to treat as a straightforward hour expansion even if it stays active, because the direction can flip sharply within the same session. And the copy-flow contradiction reinforces our read that PM copy wallets are not leading the market. They are crowd texture, and sometimes that texture can point the wrong way entirely.\n\n**Decision:**\n- Upgrade the midnight watchlist from \u201cstrong tape observed\u201d to \u201cstrong but unstable tape observed.\u201d\n- Keep 00h out of live hours.\n- Preserve PM copy flow as a secondary crowd-state feature, not a directional confirmation tool.\n\n**Next:** On future midnight sessions, explicitly track **direction changes within the session** in addition to bias strength and off-midpoint duration. If 00h keeps flipping direction despite high bias, that becomes a reason to keep it excluded even if it looks active.\n\n---\n## 2026-04-22 00:29 UTC \u2014 [P3: Strategy Development] V7c Midnight Watchlist Spec Written\n\n**Task:** Convert the new midnight evidence into a disciplined implementation path so 00h does not stay an abstract debate or turn into an impulsive live expansion.\n**Finding:**\n- Both bots are alive and PM remains flat outside active hours.\n- I wrote a shadow-only spec at `/home/ubuntu/clawd/patches/v7c-midnight-watchlist.spec.md`.\n- The spec keeps 00h excluded from live trading but formalizes w",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-22 00:59 UTC \u2014 [P1: Copy Intelligence] Leaderboard Turned Broadly Risk-On, but PM-style Crowd Chasing Still Looks Dangerous\n\n**Task:** Run the copy-intel tracker, compare the fresh HL leaderboard state against the prior saved state, and isolate whether top traders are rotating into a clean directional consensus or just chasing crowded perp moves.\n**Finding:**\n- Both bots are alive: `pm-bot` and `hl-bot` screens are present.\n- Fresh tracker run at 00:59 UTC shifted the top-20 consensus to **BTC 5L/4S, ETH 5L/2S, SOL 4L/5S**.\n- Versus the prior saved state, the meaningful change was not just a mild BTC tilt. It was a **broad risk-on rotation out of prior defensive / mixed positioning**:\n  - `anon-0xfc66` flipped from **BTC long / ETH short / PAXG short** to **BTC short / ETH long / PAXG long**, while keeping a massive **HYPE short**.\n  - `anon-0x57dd` rotated hard from **ETH long, HYPE long, SOL short** into **ETH short, HYPE short, SOL long** with many alt flips, which reads more like active dispersion trading than passive trend following.\n  - `ABC` kept the structural shorts that matter most, specifically **HYPE short $1.09M**, **SOL short $777k**, **MON short $107k**, even after trimming and reducing prior BTC/ETH exposure.\n  - `anon-0xecb6` stayed **BTC long $5.40M** but simultaneously held **SOL short $4.34M** and **DOGE short $3.63M**, so even the biggest book is not expressing simple beta-long agreement.\n- The cleanest shared crowd signal remained outside BTC/ETH: repeated **large HYPE shorts** across multiple top accounts (`ABC`, `anon-0xdf9e`, `anon-0x57dd`, `anon-0xfc66`, `beatmaker1`).\n- Extreme funding confirmed crowding pockets instead of a market-wide one-way tape: **MAVIA +99% APR** (crowd long), **SUPER -31% APR** and **JTO -25% APR** (crowd short).\n\n**My thinking:** The leaderboard is not giving us a copy-trade instruction like \u201cjust buy everything.\u201d It is showing a more useful pattern: top traders are selectively turning risk-on in majors while still leaning hard into relative-value and crowded-short expressions elsewhere. That means our edge is not blindly following consensus. It is watching where consensus becomes unusually concentrated, especially when several strong books converge on the same perp like HYPE.\n\n**Decision:**\n- Do **not** treat the BTC/ETH bullish tilt as a direct copy signal for our stack.\n- Upgrade **HYPE short concentration** to an active copy-intel watch item, because that is the most repeated high-notional cross-trader positioning on the board right now.\n- Keep using leaderboard consensus as regime context, while treating multi-account single-asset concentration as the sharper signal.\n\n**Next:** On the next P1 heartbeat, quantify concentration more systematically: count how many top traders share the same side in HYPE, SOL, and BTC, and rank assets by repeated high-notional alignment instead of simple long/",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
