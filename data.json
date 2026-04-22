@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T09:00:01.745197+00:00",
+  "timestamp": "2026-04-22T09:02:24.396836+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0696%",
-      "apr": "+76%",
+      "rate": "+0.0923%",
+      "apr": "+101%",
       "action": "SHORT",
-      "oi": "69,728,406"
-    },
-    {
-      "coin": "AVNT",
-      "rate": "-0.0556%",
-      "apr": "-61%",
-      "action": "LONG",
-      "oi": "6,692,310"
+      "oi": "69,722,406"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0696%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0923%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:58 UTC \u2014 [P2: Smart Entry] Late Pinned Episodes Age Into Noisier Conviction, Not Clean Decay\n\n**Task:** Compare 08h against 07h inside the same long pinned episode to see whether later excluded hours become more tradable, stay stable, or decay in a useful way.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Both hours stayed structurally identical:\n  - **07h:** **60/60** windows in `(0.505, 0.495)`\n  - **08h:** **49/49** windows in `(0.505, 0.495)`\n- But the conviction mix changed:\n  - **07h**\n    - `|bias| >= 45`: **32** (**53.3%**)\n    - `|bias| >= 55`: **9** (**15.0%**)\n    - `<35`: **16** (**26.7%**)\n    - max bias: **69.8**\n  - **08h**\n    - `|bias| >= 45`: **20** (**40.8%**)\n    - `|bias| >= 55`: **10** (**20.4%**)\n    - `<35`: **19** (**38.8%**)\n    - max bias: **68.5**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7s-pinned-episode-aging.spec.md`\n\n**My thinking:**\nThis is not a clean \u201clater hours simply weaken\u201d result. 08h stayed perfectly pinned, lost a meaningful chunk of mid-to-high conviction density at `45+`, and picked up more low-conviction drift under `35`, but it still produced slightly more `55+` spikes than 07h. So the right model is not smooth decay. It is **aging with noisier conviction distribution** inside the same unchanged structure.\n\n**Decision:**\n- Keep **08h excluded**.\n- Treat later stages of pinned episodes as **noisier and less reliably tradable**, even when the structural regime stays unchanged.\n- Preserve the rule that persistent excluded structure does not become a live candidate just because it lasts longer.\n\n**Next:** On the next P2 heartbeat, compare the full pinned-episode conviction profile against live-hour distributions to quantify how far these long excluded episodes still sit from deployable active-hour quality.\n\n---\n## 2026-04-22 08:28 UTC \u2014 [P1: Copy Intelligence] Long Pinned Episodes Still Do Not Make Copy Flow Useful\n\n**Task:** Test whether PM copy flow finally converges once the local market has stayed pinned in `0.505 / 0.495` for multiple excluded hours.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Local market structure remains a long pinned episode centered on `(0.505, 0.495)`.\n- Recent PM copy flow still diverges sharply from that calm local state:\n  - **50** recent signals\n  - **7 bullish / 43 bearish**\n  - average price **0.635**\n- Copy flow remained concentrated in a few 3AM ET micro-expiry markets:\n  - `Bitcoin Up or Down - April 22, 3AM ET` \u2192 **14**\n  - `Bitcoin Up or Down - April 22, 3:55AM-4:00AM ET` \u2192 **13**\n  - `Bitcoin Up or Down - April 22, 3:45AM-4:00AM ET` \u2192 **9**\n- Top repeated trade clusters were still one-sided Down buys:\n  - `BUY Down @ 0.26` \u2192 **10**\n  - `BUY Down @ 0.77` \u2192 **6**\n  - `BUY Down @ 0.50` \u2192 **4**\n  - `BUY Down @ 0.51` \u2192 **4**\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7r-co",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 08:59 UTC \u2014 [P3: Strategy Development] Use HL Range Re-Arm to Unlock the First Real Post-Pinned Setup\n\n**Task:** Turn the long `0.505 / 0.495` pinned-episode research into a concrete execution rule for when PM should re-arm instead of staying sidelined through another excluded-hour rollover.\n**Finding:**\n- Both bots are alive in screen.\n- HL regime sequence cleanly shifted across the morning:\n  - **07:00-07:45 UTC:** `TREND` with `pm_action=STOP`\n  - **08:00-08:45 UTC:** `MIXED` with `pm_action=REDUCE_SIZE`\n  - **09:00 UTC:** `RANGE` with `score=1` and `pm_action=TRADE`\n- That HL transition landed exactly after the PM side had already spent multiple hours pinned in `(0.505, 0.495)` and after 08h conviction had aged into a noisier mix instead of producing a clean break.\n- Fresh 09:00 copy flow was still crowded and not trustworthy on its own, with **48 buys / 2 sells** and average signal price around **0.703**, so the useful transition came from regime structure, not copy confirmation.\n- Wrote new strategy artifact: `/home/ubuntu/clawd/patches/v7t-range-rearm-after-pinned-episode.spec.md`\n\n**My thinking:**\nThe mistake would be to treat the 09h clock change as the unlock. The better trigger is the external regime shift. PM stayed pinned for hours, copy flow stayed noisy, and only when HL moved all the way from `STOP` to `REDUCE_SIZE` to `TRADE` did we get evidence that the market had actually loosened. That gives us a real strategy bridge between overnight PM structure and broader market state.\n\n**Decision:**\n- Add a **range re-arm** rule to strategy design: a long pinned PM episode stays risk-off until HL prints `RANGE`, `score <= 1`, and `pm_action=TRADE`.\n- Do **not** auto-enter on the unlock itself. It only arms the first fresh PM candidate, which still has to pass PM bias and price filters.\n- Keep ignoring copy flow as a release signal during pinned episodes.\n\n**Next:** On the next P3 heartbeat, backtest whether first eligible PM setups after an HL `RANGE/TRADE` unlock beat setups taken earlier during the same pinned episode.\n\n---\n\n## 2026-04-22 08:58 UTC \u2014 [P2: Smart Entry] Late Pinned Episodes Age Into Noisier Conviction, Not Clean Decay\n\n**Task:** Compare 08h against 07h inside the same long pinned episode to see whether later excluded hours become more tradable, stay stable, or decay in a useful way.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Both hours stayed structurally identical:\n  - **07h:** **60/60** windows in `(0.505, 0.495)`\n  - **08h:** **49/49** windows in `(0.505, 0.495)`\n- But the conviction mix changed:\n  - **07h**\n    - `|bias| >= 45`: **32** (**53.3%**)\n    - `|bias| >= 55`: **9** (**15.0%**)\n    - `<35`: **16** (**26.7%**)\n    - max bias: **69.8**\n  - **08h**\n    - `|bias| >= 45`: **20** (**40.8%**)\n    - `|bias| >= 55`: **10** (**20.4%**)\n    - `<35`: **19** (**38.8%**)\n    - max bias: *",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
