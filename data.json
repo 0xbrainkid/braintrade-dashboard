@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T05:00:27.193308+00:00",
+  "timestamp": "2026-04-22T05:00:32.358897+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1126%",
-      "apr": "+123%",
+      "rate": "+0.1113%",
+      "apr": "+122%",
       "action": "SHORT",
       "oi": "69,728,406"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1126%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1113%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 04:59 UTC \u2014 [P2: Smart Entry] 19h Weak-Tag Block Already Captures the Churn Problem\n\n**Task:** Re-test the leading evening smart-entry candidate against the enriched Apr 1+ trade set and check whether an explicit churn-price exclusion would add anything beyond the current 19h weak-tag block.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Re-ran the Apr 1+ YES-trade backtest on **37** rows from `confidence_outcomes.jsonl`.\n- Baseline active-hours setup (`11/12/19/20`, `|bias| >= 45`) remains clearly inferior: **30 trades, 63.3% WR, pnl 6.729**.\n- The current leading filtered setup still holds up cleanly:\n  - **11h/12h at `|bias| >= 45`**\n  - **19h at `|bias| >= 55`**\n  - **block `REDUCE_MILD_BEAR` and `BOOST`**\n  - result: **24 trades, 75.0% WR, pnl 10.788**\n- I then tested whether adding an explicit churn-style price exclusion around midpoint would improve that candidate. It did **nothing**:\n  - excluding `0.495-0.505` at 19h \u2192 still **24 trades, 75.0% WR, pnl 10.788**\n  - even wider midpoint bands up to `0.49-0.51` also left the result unchanged.\n- Why: the surviving filtered trades are already outside the churn zone. The only 19h losers left in the raw sample are exactly the ones we already know about:\n  - `REDUCE_MILD_BEAR` losses at `19:05` and `19:10`\n  - midpoint-ish `BOOST` loss at `19:35`\n- I also scored the 19h set with a simple SolSt1ne-style **reliability \u00d7 edge** lens. The two Apr 1 winners had the highest nonzero scores in the 19h bucket, while the `BOOST` loser collapsed to **0.0** because that tag is currently **0% WR** in the enriched sample.\n\n**My thinking:**\nThis is a useful clean-up result. It says we do **not** need to keep stacking extra midpoint/churn exclusions on top of the current evening candidate just because churn feels scary. The weak-tag block is already doing the real work. That keeps the rule set simpler and more honest: protect the healthy morning engine, keep only exceptional 19h setups, and avoid redundant filters that add complexity without improving expectancy.\n\n**Decision:**\n- Keep the leading smart-entry recommendation unchanged:\n  - **active hours `[11, 12, 19]`**\n  - **45** threshold for 11h/12h\n  - **55** threshold for 19h\n  - **block `REDUCE_MILD_BEAR` and `BOOST` at 19h**\n  - **drop 20h**\n- Do **not** add a separate midpoint-price exclusion right now, because the current filtered keep-set already avoids churn by construction.\n\n**Next:** On the next P2 heartbeat, test whether a lightweight **reliability \u00d7 edge score gate** can rank borderline 11h/12h trades without harming the strong morning sample.\n\n---\n\n## 2026-04-22 04:59 UTC \u2014 [P1: Copy Intelligence] 04h Reversion Did Not Teach Copy Flow Anything Useful\n\n**Task:** Test whether PM copy flow became more aligned or informative after the clear 04h interruption-and-reversion sequence.\n**Finding:**\n- Both bots are alive and P",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 05:00 UTC \u2014 [P2: Smart Entry] 04h Fails the Future Monotony Test Even When It Looks Clean\n\n**Task:** Check whether the now-mature 04h session is merely structurally stable or actually too repetitive to ever justify live expansion.\n**Finding:**\n- Both bots are alive and PM remains correctly out of active hours.\n- The current **04h session** now has **57** tracked windows.\n- Regime split:\n  - `(0.505, 0.495)` \u2192 **52/57 = 91.2%**\n  - `(0.485, 0.515)` \u2192 **5/57 = 8.8%**\n- Bias frequency stayed active:\n  - `|bias| >= 45` in **31/57 = 54.4%**\n  - `|bias| >= 55` in **17/57 = 29.8%**\n  - `<35` in **17/57 = 29.8%**\n- But almost all of that useful-looking activity lives inside the same one-note regime:\n  - dominant regime = `(0.505, 0.495)`\n  - dominant regime contributes **26** of the **31** `|bias| >= 45` windows = **83.9%** of all 45+ readings\n- Wrote new research artifact: `/home/ubuntu/clawd/patches/v7i-overnight-monotony-gate.spec.md`\n\n**My thinking:**\nThis is the missing filter. 04h is no longer interesting as an expansion candidate just because it is stable and active. It is too repetitive. The hour keeps printing the same midpoint state with the same type of bias behavior. That may describe overnight order-flow mechanics, but it is not enough evidence of a distinct tradable edge.\n\n**Decision:**\n- Keep **04h excluded**.\n- Add a **monotony gate** to overnight research, alongside dominance and fragmentation checks.\n- 03h remains the richer overnight watch candidate because it showed more state movement before settling.\n\n**Next:** On the next P2 heartbeat, run the new monotony gate against 00h through 04h to separate excluded hours that are fragmented from those that are merely repetitive.\n\n---\n## 2026-04-22 04:59 UTC \u2014 [P2: Smart Entry] 19h Weak-Tag Block Already Captures the Churn Problem\n\n**Task:** Re-test the leading evening smart-entry candidate against the enriched Apr 1+ trade set and check whether an explicit churn-price exclusion would add anything beyond the current 19h weak-tag block.\n**Finding:**\n- Both bots are alive and PM remains out of active hours.\n- Re-ran the Apr 1+ YES-trade backtest on **37** rows from `confidence_outcomes.jsonl`.\n- Baseline active-hours setup (`11/12/19/20`, `|bias| >= 45`) remains clearly inferior: **30 trades, 63.3% WR, pnl 6.729**.\n- The current leading filtered setup still holds up cleanly:\n  - **11h/12h at `|bias| >= 45`**\n  - **19h at `|bias| >= 55`**\n  - **block `REDUCE_MILD_BEAR` and `BOOST`**\n  - result: **24 trades, 75.0% WR, pnl 10.788**\n- I then tested whether adding an explicit churn-style price exclusion around midpoint would improve that candidate. It did **nothing**:\n  - excluding `0.495-0.505` at 19h \u2192 still **24 trades, 75.0% WR, pnl 10.788**\n  - even wider midpoint bands up to `0.49-0.51` also left the result unchanged.\n- Why: the surviving filtered trades are already outside the churn zone",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
