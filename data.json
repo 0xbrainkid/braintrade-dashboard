@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T18:30:02.548748+00:00",
+  "timestamp": "2026-04-22T18:45:27.567688+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0887%",
-      "apr": "+97%",
+      "rate": "+0.0905%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,671,296"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0575%",
-      "apr": "+63%",
+      "rate": "+0.0531%",
+      "apr": "+58%",
       "action": "SHORT",
       "oi": "240,217,524"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0887%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0905%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:28 UTC \u2014 [P3: Strategy Development] Identify the Exact Bot Touchpoints for the Minimal Defensive Copy Rollout\n\n**Task:** Move from abstract rollout planning to exact code touchpoints, specifically where the defensive copy rules would be inserted in the live bot stack.\n**Finding:**\n- Both bots are alive.\n- The relevant bot code touchpoints are now clear:\n  - upstream feed producer:\n    - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n      - writes `copy_signal.json` around line **163**\n  - live consumer:\n    - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n      - copy integration block declared around lines **95-98**\n      - `read_copy_signals()` at lines **102+**\n      - copy-adjustment path at lines **513-525**\n- That means the minimal defensive rollout can stay tightly scoped:\n  - preprocess / collapse logic near the scanner output path\n  - instability calculation at read stage\n  - freeze gate around the copy-adjustment branch only\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9e-defensive-copy-touchpoints.spec.md`\n\n**My thinking:**\nThis is exactly the scope I wanted. We do not need to touch the core execution engine. The existing architecture already has a clean seam: the scanner produces copy data, and the trading bot consumes it through a narrow adjustment path. That is the ideal place for a defensive-only rollout.\n\n**Decision:**\n- Target only:\n  - `copy_scanner_v2.py` for collapse-aware upstream output\n  - `trading_bot.py` for `read_copy_signals()` stability checks and a freeze gate around copy influence\n- Leave everything below the copy-adjustment branch unchanged.\n\n**Next:** On the next P3 heartbeat, inspect the exact `trading_bot.py` code blocks around `read_copy_signals()` and the copy-adjustment branch so the defensive patch can be specified line-for-line.\n\n---\n## 2026-04-22 18:21 UTC \u2014 [P2: Smart Entry] Scope the Smallest Safe Live Code Change for Defensive Copy Handling\n\n**Task:** Translate the live-vs-shadow rollout decision into the smallest code change set that can safely go into the live bot without disturbing execution logic.\n**Finding:**\n- Both bots are alive.\n- Current recent store is still cleanly micro-only:\n  - **50** total signals\n  - market mix = **100% micro**\n- That means the rollout question is no longer conceptual. It is about implementation scope.\n- Wrote new parameter artifact: `/home/ubuntu/clawd/patches/v9d-minimal-defensive-copy-live-change-set.spec.md`\n\n**My thinking:**\nThe safest live move is tiny and asymmetric. Sanitize copy input, compute instability, and gate off copy influence when the feed is bad. That gives us the protective value immediately without risking any accidental change to entries or sizing.\n\n**Decision:**\n- Minimal live change set:\n  1. duplicate / near-duplicate collapse\n  2. micro-expiry cluster collapse\n  3. compute `copy_sample_unstable",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-22 18:44 UTC \u2014 [P4: Alpha Research] Turn the Defensive Copy Rollout into a Line-Level Patch Plan\n\n**Task:** Use the actual bot code seams to convert the defensive copy rollout into a concrete patch plan, not just an architectural note.\n**Finding:**\n- Both bots are alive.\n- The exact seams are now confirmed in code:\n  - `copy_scanner_v2.py` writes `copy_signal.json` at the save block\n  - `trading_bot.py` exposes:\n    - `read_copy_signals()`\n    - a copy-adjustment branch around the live conviction logic\n- That means the live defensive rollout can remain a narrow two-file patch.\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9f-line-level-defensive-copy-patch-plan.spec.md`\n\n**My thinking:**\nThis is exactly where you want to be before touching live code. We now know the minimal patch is compatibility-preserving: add richer copy-quality metadata upstream, then make the consumer suppress copy influence when the metadata says the sample is bad. That gives us defensive value without changing the bot\u2019s core behavior.\n\n**Decision:**\n- Patch plan:\n  1. `copy_scanner_v2.py`\n     - add collapsed-sample / market-mix / instability metadata to the saved signal file\n  2. `trading_bot.py`\n     - extend `read_copy_signals()` to honor instability / quality suppression\n     - keep the conviction branch structurally unchanged except for obeying suppressed copy input\n- Keep the first live patch compatibility-preserving and defensive-only.\n\n**Next:** On the next P4 heartbeat, draft the exact new JSON fields that `copy_scanner_v2.py` should emit so `trading_bot.py` can consume them without ambiguity.\n\n---\n## 2026-04-22 18:28 UTC \u2014 [P3: Strategy Development] Identify the Exact Bot Touchpoints for the Minimal Defensive Copy Rollout\n\n**Task:** Move from abstract rollout planning to exact code touchpoints, specifically where the defensive copy rules would be inserted in the live bot stack.\n**Finding:**\n- Both bots are alive.\n- The relevant bot code touchpoints are now clear:\n  - upstream feed producer:\n    - `/home/ubuntu/clawd/polymarket-assistant/copy_scanner_v2.py`\n      - writes `copy_signal.json` around line **163**\n  - live consumer:\n    - `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py`\n      - copy integration block declared around lines **95-98**\n      - `read_copy_signals()` at lines **102+**\n      - copy-adjustment path at lines **513-525**\n- That means the minimal defensive rollout can stay tightly scoped:\n  - preprocess / collapse logic near the scanner output path\n  - instability calculation at read stage\n  - freeze gate around the copy-adjustment branch only\n- Wrote new implementation artifact: `/home/ubuntu/clawd/patches/v9e-defensive-copy-touchpoints.spec.md`\n\n**My thinking:**\nThis is exactly the scope I wanted. We do not need to touch the core execution engine. The existing architecture already has a clean seam: the scanner pro",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
