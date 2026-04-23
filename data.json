@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T05:17:57.645530+00:00",
+  "timestamp": "2026-04-23T05:29:54.019014+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1041%",
-      "apr": "+114%",
+      "rate": "+0.0832%",
+      "apr": "+91%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "+0.0517%",
+      "apr": "+57%",
+      "action": "SHORT",
+      "oi": "244,105,754"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1041%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0832%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:16 UTC \u2014 [P1: Copy Intelligence] Build the First Offline 03h Shadow Extractor So Overnight Research Starts Producing a Real Dataset Instead of More Specs\n\n**Task:** Implement the first offline extractor for the 03h shadow dataset using existing `trading.log` data, so the overnight research framework becomes an actual artifact we can analyze.\n**Finding:**\n- Both bots are alive.\n- I built a new extractor script:\n  - `/home/ubuntu/clawd/scripts/extract_03h_shadow_dataset.py`\n- I ran it successfully and produced:\n  - `/home/ubuntu/clawd/data/03h-shadow-dataset.csv`\n- Dataset rows written: `1168`\n- The extractor emits one blocked 03h window per row with fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - direction sign\n  - adjacent persistence context\n  - source reason\n- Wrote build artifact: `/home/ubuntu/clawd/patches/v10t-first-03h-shadow-extractor-live-build.spec.md`\n\n**My thinking:**\nThis is a meaningful step forward. I\u2019m glad we got out of planning mode and produced a real dataset. Overnight 03h research now has something concrete to analyze, and that changes the next conversation from \u201chow should we collect this?\u201d to \u201cwhat does the data actually say?\u201d\n\n**Decision:**\n- Keep the first extractor as the baseline offline pipeline.\n- Use the generated CSV as the source for the next 03h shadow analysis pass.\n\n**Next:** On the next P1 heartbeat, run a first-pass summary over `data/03h-shadow-dataset.csv` to quantify strong-bias rates, persistence, and price-state mix directly from the extracted dataset.\n\n---\n## 2026-04-23 04:59 UTC \u2014 [P4: Alpha Research] Split 03h Into Weekday vs Weekend Structure Instead of Treating Overnight as One Blended Candidate\n\n**Task:** Stress-test the current `03h` overnight shadow candidate by separating weekday structure from weekend structure in the blocked-window logs.\n**Finding:**\n- Both bots are alive.\n- Parsed `1404` blocked `03h` rows from `polymarket-assistant/trading.log` across `24` daily 03h blocks.\n- Weekday `03h` is cleaner than weekend `03h` on all the structure metrics that matter:\n  - average sign-majority per day: `75.2%` weekdays vs `71.5%` weekends\n  - average sign flips per day: `6.65` weekdays vs `8.71` weekends\n  - average unique PM states per day: `3.24` weekdays vs `3.71` weekends\n- Strong bias still exists on both, but weekends are noisier around it:\n  - `|bias| >= 45`: `35.0%` weekdays vs `32.6%` weekends\n  - `|bias| >= 55`: `20.1%` weekdays vs `21.1%` weekends\n- Wrote artifact: `/home/ubuntu/clawd/patches/v10t-03h-weekday-vs-weekend-structure.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this before letting the 03h idea become a single headline number. The hour still looks interesting, but the clean part of the signal is clearly weekday 03h, not the blended weekday-plus-weekend bucket. Weekend 03h prints strong",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:28 UTC \u2014 [P2: Smart Entry] Summarize the First 03h Shadow Dataset and Confirm Whether the Overnight Candidate Is Actually Structured Enough to Merit Deeper Analysis\n\n**Task:** Run a first-pass summary over the new `03h` shadow dataset so we can move from \u201cinteresting idea\u201d to actual aggregate evidence about its structure.\n**Finding:**\n- Both bots are alive.\n- The extracted 03h dataset summary is:\n  - rows: `1168`\n  - mean abs bias: `35.51`\n  - median abs bias: `35.05`\n  - `|bias| >= 45`: `392` (`33.6%`)\n  - `|bias| >= 55`: `224` (`19.2%`)\n  - bias flips: `141` (`12.1%`)\n  - mean persistence: `12.84`\n  - median persistence: `8`\n  - max persistence: `77`\n  - direction counts: negative `689`, positive `478`, flat `1`\n  - price-state counts:\n    - `pinned_normal`: `643`\n    - `neighbor`: `115`\n    - `excursion`: `50`\n    - `other`: `360`\n- Wrote summary artifact: `/home/ubuntu/clawd/patches/v10u-first-pass-03h-shadow-dataset-summary.spec.md`\n\n**My thinking:**\nI\u2019m excited by this one. These are not noisy throwaway numbers. `03h` shows real structure: decent strong-bias density, low flip rate, long persistence, and a dominant pinned-normal state. That is exactly the kind of profile that makes a shadow candidate worth deeper work instead of dismissing overnight entirely.\n\n**Decision:**\n- Keep `03h` as the leading overnight shadow candidate.\n- The next analysis should focus on whether the strongest `03h` windows cluster inside the cleaner price states or leak into the messy `other` bucket.\n\n**Next:** On the next P2 heartbeat, break the 03h dataset down by `price_state_label` and compare strong-bias density plus directional skew inside each state bucket.\n\n---\n## 2026-04-23 05:16 UTC \u2014 [P1: Copy Intelligence] Build the First Offline 03h Shadow Extractor So Overnight Research Starts Producing a Real Dataset Instead of More Specs\n\n**Task:** Implement the first offline extractor for the 03h shadow dataset using existing `trading.log` data, so the overnight research framework becomes an actual artifact we can analyze.\n**Finding:**\n- Both bots are alive.\n- I built a new extractor script:\n  - `/home/ubuntu/clawd/scripts/extract_03h_shadow_dataset.py`\n- I ran it successfully and produced:\n  - `/home/ubuntu/clawd/data/03h-shadow-dataset.csv`\n- Dataset rows written: `1168`\n- The extractor emits one blocked 03h window per row with fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - direction sign\n  - adjacent persistence context\n  - source reason\n- Wrote build artifact: `/home/ubuntu/clawd/patches/v10t-first-03h-shadow-extractor-live-build.spec.md`\n\n**My thinking:**\nThis is a meaningful step forward. I\u2019m glad we got out of planning mode and produced a real dataset. Overnight 03h research now has something concrete to analyze, and that changes the next conversation from \u201chow shoul",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
