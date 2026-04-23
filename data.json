@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T12:19:13.614279+00:00",
+  "timestamp": "2026-04-23T12:29:35.832483+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0866%",
-      "apr": "+95%",
+      "rate": "+0.0932%",
+      "apr": "+102%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0666%",
-      "apr": "-73%",
+      "rate": "-0.0559%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "255,024,496"
+      "oi": "258,265,382"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0866%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0932%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:18 UTC \u2014 [P3: Strategy Development] Choose the First Real Upstream Source for the Overnight Metrics Writer So Automation Starts From Structured Data Instead of Raw Log Chaos\n\n**Task:** Identify the most likely real upstream file that the first minimal overnight metrics writer should read from, so the automation path starts from the safest structured source.\n**Finding:**\n- Both bots are alive.\n- Candidate sources reviewed:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - `/home/ubuntu/clawd/polymarket-assistant/trading.log`\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json` (output only)\n- Best first source selected:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n- Reason: it is already structured and already contains the ingredients needed to derive the current profile metrics, while `trading.log` would add unnecessary parsing complexity too early.\n- Wrote source-selection artifact: `/home/ubuntu/clawd/patches/v11s-minimal-writer-source-selection.spec.md`\n\n**My thinking:**\nThis is the disciplined path. I\u2019m not interested in creating a brittle writer that scrapes raw logs before we need that complexity. Structured derived data is the right bridge here, especially while the overnight workstream is still stabilizing.\n\n**Decision:**\n- Use `03h-shadow-sim-results.csv` as the first real upstream source for the minimal writer.\n- Defer direct `trading.log` parsing until there is a clear reason to absorb that complexity.\n\n**Next:** On the next P3 heartbeat, define the exact field mapping from `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json` for the two active profiles.\n\n---\n## 2026-04-23 11:58 UTC \u2014 [P2: Smart Entry] Define the Smallest Writer for Overnight Latest Metrics So the New Monitoring Path Can Advance From Manual Samples to Real Automated Inputs\n\n**Task:** Define the smallest practical automation that can write real latest overnight profile metrics into `overnight_latest_metrics.json` without trying to solve more than the input-contract problem.\n**Finding:**\n- Both bots are alive.\n- The minimal writer is now scoped to four core steps:\n  1. read latest profile metrics source\n  2. map only required renderer fields\n  3. write `confidence_mode` and `learning_mode`\n  4. omit missing fields instead of inventing values\n- Wrote writer-design artifact: `/home/ubuntu/clawd/patches/v11r-minimal-overnight-latest-metrics-writer.spec.md`\n\n**My thinking:**\nThis is the right boundary. I don\u2019t want the first writer trying to analyze, score, and render all at once. A narrow transform step is safer, easier to verify, and much less likely to become a mess.\n\n**Decision:**\n- Keep the first writer purely as a transform into the renderer input schema.\n- Avoid embedding extra analytics into the writer.\n\n**Next:** On the next P2 heartbeat, identify the most likely real source file or intermediate output that this min",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:28 UTC \u2014 [P4: Alpha Research] Define the Exact Transform From Sim Results Into Overnight Latest Metrics So the Writer Can Be Built on a Stable Contract Instead of Guesswork\n\n**Task:** Specify the exact field mapping from `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, so the first real writer can be implemented as a narrow deterministic transform.\n**Finding:**\n- Both bots are alive.\n- Profile filters are now explicit:\n  - **confidence_mode:** `pinned_normal` + `abs_bias >= 55` + `sim_won` present\n  - **learning_mode:** `pinned_normal` + `abs_bias >= 45` + `sim_won` present\n- Field mapping is now explicit:\n  - `row_count` -> filtered row count\n  - `simulated_wr` -> percent wins from `sim_won`\n  - `flip_rate` -> percent with `bias_flip == True`\n  - `mean_persistence` -> mean `adjacent_persistence_count`\n  - `directional_skew` -> `neg=<n>,pos=<n>` from `direction_sign`\n  - `drift_note` -> manual/static for now\n  - `escalation_status` -> manual/default `none` for now\n- Wrote field-mapping artifact: `/home/ubuntu/clawd/patches/v11t-sim-results-to-latest-metrics-field-mapping.spec.md`\n\n**My thinking:**\nThis is exactly the kind of clean seam I wanted before coding the writer. The objective fields are straightforward, and keeping interpretation fields manual for the first pass avoids pretending we\u2019ve automated more than we actually have.\n\n**Decision:**\n- Build the first writer around these deterministic mappings only.\n- Keep `drift_note` and `escalation_status` manual/default until the transform layer is stable.\n\n**Next:** On the next P4 heartbeat, implement the first actual writer script from `03h-shadow-sim-results.csv` to `overnight_latest_metrics.json` using this mapping.\n\n---\n## 2026-04-23 12:18 UTC \u2014 [P3: Strategy Development] Choose the First Real Upstream Source for the Overnight Metrics Writer So Automation Starts From Structured Data Instead of Raw Log Chaos\n\n**Task:** Identify the most likely real upstream file that the first minimal overnight metrics writer should read from, so the automation path starts from the safest structured source.\n**Finding:**\n- Both bots are alive.\n- Candidate sources reviewed:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - `/home/ubuntu/clawd/polymarket-assistant/trading.log`\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json` (output only)\n- Best first source selected:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n- Reason: it is already structured and already contains the ingredients needed to derive the current profile metrics, while `trading.log` would add unnecessary parsing complexity too early.\n- Wrote source-selection artifact: `/home/ubuntu/clawd/patches/v11s-minimal-writer-source-selection.spec.md`\n\n**My thinking:**\nThis is the disciplined path. I\u2019m not interested in creating a brittle writer that scrapes raw logs before we need that complexity. S",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
