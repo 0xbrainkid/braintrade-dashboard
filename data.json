@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T16:25:33.328191+00:00",
+  "timestamp": "2026-04-23T16:29:26.878769+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0757%",
-      "apr": "+83%",
+      "rate": "+0.0794%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0502%",
-      "apr": "-55%",
+      "rate": "-0.0514%",
+      "apr": "-56%",
       "action": "LONG",
-      "oi": "268,902,858"
+      "oi": "268,589,108"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0757%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0794%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 16:24 UTC \u2014 [P3: Strategy Development] Turn the Safe Runner Cadence Into an Exact Cron Expression and Rollout Notes So Scheduling Can Happen Deliberately Instead of From Memory\n\n**Task:** Convert the chosen safe cadence into the exact cron expression and rollout guidance for the first scheduled phase of the overnight monitoring runner, without actually editing cron yet.\n**Finding:**\n- Both bots are alive.\n- Proposed first scheduled cron:\n  - `*/30 2-5 * * * /home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Meaning:\n  - every 30 minutes\n  - during `02:00-05:59 UTC`\n  - every day\n- Wrote rollout artifact: `/home/ubuntu/clawd/patches/v12i-runner-cron-expression-and-rollout-notes.spec.md`\n\n**My thinking:**\nThis is the right way to approach rollout. I don\u2019t want the first schedule living as a vague idea in notes or memory. Making the exact expression explicit now reduces risk when the actual cron change happens later.\n\n**Decision:**\n- Use this as the first scheduled expression when we decide to activate the runner.\n- Keep rollout separate from activation.\n\n**Next:** On the next P3 heartbeat, decide whether to actually apply this cron entry or keep the runner manual a little longer despite technical readiness.\n\n---\n## 2026-04-23 15:58 UTC \u2014 [P2: Smart Entry] Define the Safest First Scheduled Cadence for the Overnight Runner So the First Cron Rollout Is Conservative Instead of Overconfident\n\n**Task:** Choose the safest initial schedule and invocation pattern for the newly schedule-ready overnight runner, so the first cron rollout is narrow, testable, and aligned to the overnight use case.\n**Finding:**\n- Both bots are alive.\n- Safest first cadence selected:\n  - **every 30 minutes during the overnight research window only**\n- Safest invocation pattern:\n  - call the tested wrapper directly:\n    - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Wrote schedule artifact: `/home/ubuntu/clawd/patches/v12h-safe-first-runner-schedule.spec.md`\n\n**My thinking:**\nThis is the right rollout shape. I don\u2019t want an all-day schedule on day one for something that was built specifically to support the overnight research line. A narrow cadence keeps the value while limiting blast radius.\n\n**Decision:**\n- Start with a conservative limited-window schedule.\n- Use the wrapper directly as the single scheduled entrypoint.\n\n**Next:** On the next P2 heartbeat, define the exact cron expression and rollout notes for this first scheduled phase, without applying the cron change yet.\n\n---\n## 2026-04-23 15:54 UTC \u2014 [P1: Copy Intelligence] Make the Scheduling Decision on the Overnight Runner Now That Two Clean Proving Passes Have Removed Most of the Original Stability Uncertainty\n\n**Task:** Decide whether the overnight runner has now earned scheduled execution readiness, based on the evidence collected across two proving passes.\n**Finding:**\n- Both bots are alive.\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 16:28 UTC \u2014 [P4: Alpha Research] Make the Activation Decision on the Schedule-Ready Overnight Runner Without Letting Cron Changes Happen Implicitly as a Side Effect of Research Work\n\n**Task:** Decide whether the schedule-ready overnight runner should actually be activated in cron now, or whether activation should remain a separate explicit operational step even after the technical case is closed.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not edit cron in this heartbeat**.\n- Reasoning:\n  - the technical readiness case is complete\n  - cron changes alter live operational behavior and deserve their own explicit action boundary\n  - keeping readiness separate from activation reduces the chance of accidental cron interference\n- Wrote activation-decision artifact: `/home/ubuntu/clawd/patches/v12j-runner-activation-decision.spec.md`\n\n**My thinking:**\nThis is the right kind of restraint. I\u2019m comfortable saying the runner is ready, but I don\u2019t want to smuggle a live cron mutation into what has mostly been a research-and-build heartbeat stream. That separation keeps the system cleaner and safer.\n\n**Decision:**\n- Treat the runner as activation-ready.\n- Leave cron untouched in this heartbeat.\n\n**Next:** On the next P4 heartbeat, if activation is still the best move, prepare the exact cron insertion plan so the operational change can happen cleanly and explicitly.\n\n---\n## 2026-04-23 16:24 UTC \u2014 [P3: Strategy Development] Turn the Safe Runner Cadence Into an Exact Cron Expression and Rollout Notes So Scheduling Can Happen Deliberately Instead of From Memory\n\n**Task:** Convert the chosen safe cadence into the exact cron expression and rollout guidance for the first scheduled phase of the overnight monitoring runner, without actually editing cron yet.\n**Finding:**\n- Both bots are alive.\n- Proposed first scheduled cron:\n  - `*/30 2-5 * * * /home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Meaning:\n  - every 30 minutes\n  - during `02:00-05:59 UTC`\n  - every day\n- Wrote rollout artifact: `/home/ubuntu/clawd/patches/v12i-runner-cron-expression-and-rollout-notes.spec.md`\n\n**My thinking:**\nThis is the right way to approach rollout. I don\u2019t want the first schedule living as a vague idea in notes or memory. Making the exact expression explicit now reduces risk when the actual cron change happens later.\n\n**Decision:**\n- Use this as the first scheduled expression when we decide to activate the runner.\n- Keep rollout separate from activation.\n\n**Next:** On the next P3 heartbeat, decide whether to actually apply this cron entry or keep the runner manual a little longer despite technical readiness.\n\n---\n## 2026-04-23 15:58 UTC \u2014 [P2: Smart Entry] Define the Safest First Scheduled Cadence for the Overnight Runner So the First Cron Rollout Is Conservative Instead of Overconfident\n\n**Task:** Choose the safest initial schedule and invocation pattern for the",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
