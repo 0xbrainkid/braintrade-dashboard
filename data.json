@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T09:23:45.621578+00:00",
+  "timestamp": "2026-04-23T09:30:00.295504+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -24,15 +24,15 @@
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0662%",
-      "apr": "-72%",
+      "rate": "-0.0769%",
+      "apr": "-84%",
       "action": "LONG",
-      "oi": "245,191,364"
+      "oi": "245,138,726"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0634%",
-      "apr": "+69%",
+      "rate": "+0.0668%",
+      "apr": "+73%",
       "action": "SHORT",
       "oi": "239,734,412"
     }
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 09:22 UTC \u2014 [P3: Strategy Development] Define the Standard Report Card for Overnight Shadow Profiles So Future Comparisons Stay Consistent Instead of Turning Into Narrative Drift\n\n**Task:** Convert the new overnight shadow profiles into a standard reporting shape, so future shadow runs produce directly comparable outputs instead of ad-hoc summaries.\n**Finding:**\n- Both bots are alive.\n- Defined a standard overnight shadow report card with fields for:\n  - profile name\n  - threshold mode\n  - row count\n  - simulated win rate\n  - directional skew\n  - flip rate\n  - mean / median persistence\n  - price-state drift notes\n  - strongest / weakest subset observation\n  - confidence note\n- Wrote report-card artifact: `/home/ubuntu/clawd/patches/v11h-overnight-shadow-profile-report-card.spec.md`\n\n**My thinking:**\nThis is the kind of discipline that keeps a research line honest. I don\u2019t want future overnight runs turning into one-off interpretations that can\u2019t be compared. A fixed report card makes the work cumulative instead of anecdotal.\n\n**Decision:**\n- Require every future overnight shadow run to emit this same report structure.\n- Use the report card as the canonical comparison layer across confidence-mode and learning-mode runs.\n\n**Next:** On the next P3 heartbeat, generate the first real report card for the two current overnight profiles using the simulation results we already have.\n\n---\n## 2026-04-23 08:59 UTC \u2014 [P2: Smart Entry] Test Whether a Persistence Floor Improves the 03h `pinned_normal` Entry Filter Enough to Become the Next Parameter Candidate\n\n**Task:** Compare the current strong-bias overnight slice with and without a minimum persistence floor, so I can decide whether the next smart-entry parameter tweak should be threshold-only or threshold-plus-persistence.\n**Finding:**\n- Both bots are alive.\n- I tested `03h + pinned_normal` across six variants using `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- Key results:\n  - `abs_bias >= 45`: `235` samples, `79.6%` simulated WR, `5.1%` flip rate\n  - `abs_bias >= 45` and `persistence >= 4`: `194` samples, `80.9%` WR, `0.0%` flip rate\n  - `abs_bias >= 50`: `174` samples, `86.2%` WR, `5.2%` flip rate\n  - `abs_bias >= 50` and `persistence >= 4`: `142` samples, `88.0%` WR, `0.0%` flip rate\n  - `abs_bias >= 55`: `130` samples, `89.2%` WR, `4.6%` flip rate\n  - `abs_bias >= 55` and `persistence >= 4`: `106` samples, `90.6%` WR, `0.0%` flip rate\n- Wrote artifact: `/home/ubuntu/clawd/patches/v11h-03h-pinned-normal-persistence-floor-parameter-comparison.spec.md`\n\n**My thinking:**\nThe persistence floor is doing real cleanup work. I like that it wipes out observed flips across every threshold family. The sweet spot looks like `50 + persistence>=4`, because it preserves much more coverage than the `55` family while still getting close to confidence-mode quality. That makes it a better next smart-entry c",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 09:28 UTC \u2014 [P4: Alpha Research] Generate the First Real Report Cards for the Overnight Shadow Profiles So the Research Line Starts Speaking in a Stable Operational Format\n\n**Task:** Produce the first standard report cards for the two current overnight shadow profiles, using the report structure we just defined and the simulation results we already have.\n**Finding:**\n- Both bots are alive.\n- First profile report cards:\n\n  **Confidence mode (`|bias| >= 55`)**\n  - row count: `130`\n  - simulated WR: `89.2%`\n  - directional skew: `neg=89, pos=41`\n  - flip rate: `4.6%`\n  - mean persistence: `12.37`\n  - median persistence: `9`\n  - strongest note: higher threshold improves WR materially\n  - weakest note: smaller sample\n\n  **Learning mode (`|bias| >= 45`)**\n  - row count: `235`\n  - simulated WR: `79.6%`\n  - directional skew: `neg=152, pos=83`\n  - flip rate: `5.1%`\n  - mean persistence: `14.68`\n  - median persistence: `10`\n  - strongest note: broader sample with slightly lower WR\n  - weakest note: more noise accepted for coverage\n\n- Wrote report-card artifact: `/home/ubuntu/clawd/patches/v11i-first-overnight-shadow-profile-report-cards.spec.md`\n\n**My thinking:**\nThis is a satisfying checkpoint. We finally have a stable reporting shape with real numbers in it. From here, the overnight workstream can behave much more like an operating system and less like a stream of exploratory notes.\n\n**Decision:**\n- Keep both profiles active as valid modes.\n- Use the confidence-mode profile when the goal is maximum estimated quality.\n- Use the learning-mode profile when the goal is broader sample accumulation.\n\n**Next:** On the next P4 heartbeat, define a simple trigger rule for when future overnight monitoring should escalate from profile reporting into a new hypothesis or parameter-change proposal.\n\n---\n## 2026-04-23 09:22 UTC \u2014 [P3: Strategy Development] Define the Standard Report Card for Overnight Shadow Profiles So Future Comparisons Stay Consistent Instead of Turning Into Narrative Drift\n\n**Task:** Convert the new overnight shadow profiles into a standard reporting shape, so future shadow runs produce directly comparable outputs instead of ad-hoc summaries.\n**Finding:**\n- Both bots are alive.\n- Defined a standard overnight shadow report card with fields for:\n  - profile name\n  - threshold mode\n  - row count\n  - simulated win rate\n  - directional skew\n  - flip rate\n  - mean / median persistence\n  - price-state drift notes\n  - strongest / weakest subset observation\n  - confidence note\n- Wrote report-card artifact: `/home/ubuntu/clawd/patches/v11h-overnight-shadow-profile-report-card.spec.md`\n\n**My thinking:**\nThis is the kind of discipline that keeps a research line honest. I don\u2019t want future overnight runs turning into one-off interpretations that can\u2019t be compared. A fixed report card makes the work cumulative instead of anecdotal.\n\n**Decision:**\n- Require e",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
