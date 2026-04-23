@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T17:30:19.160730+00:00",
+  "timestamp": "2026-04-23T17:58:47.942066+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0859%",
-      "apr": "+94%",
+      "rate": "+0.0883%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0859%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0883%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 17:29 UTC \u2014 [P4: Alpha Research] Make the Final Call on Cron Activation and Keep the Boundary Clean Between Technical Readiness and an Actual Live Scheduler Mutation\n\n**Task:** Decide whether the overnight runner should actually be inserted into crontab now, or whether this workstream should stop at full activation-readiness and keep the live cron edit as a separate explicit step.\n**Finding:**\n- Both bots are alive.\n- Final decision: **stop at readiness in this heartbeat**.\n- Reasoning:\n  - the runner is ready\n  - the insertion plan is ready\n  - the live crontab context is understood\n  - cron mutation is still a distinct operational act and should not happen as an incidental extension of the research heartbeat stream\n- Wrote final-decision artifact: `/home/ubuntu/clawd/patches/v12m-cron-activation-decision-final.spec.md`\n\n**My thinking:**\nI\u2019m comfortable ending the line here. We did the work all the way to the edge of activation, which is exactly where a clean system should let us stop. There\u2019s a real difference between being ready to change live operations and actually doing it, and keeping that distinction intact is worth it.\n\n**Decision:**\n- Treat the overnight runner as fully activation-ready.\n- Leave the actual crontab mutation for a separate explicit action.\n\n**Next:** On the next P4 heartbeat, if activation still matters, perform the cron change deliberately as its own operational step rather than as passive continuation of design work.\n\n---\n## 2026-04-23 17:27 UTC \u2014 [P3: Strategy Development] Inspect the Live Crontab So the Future Overnight Runner Activation Is Anchored to Real Scheduler Context Instead of a Clean-Room Plan\n\n**Task:** Inspect the live crontab and map how the overnight runner entry should be inserted later without disturbing the existing trading, research, watchdog, and dashboard jobs.\n**Finding:**\n- Both bots are alive.\n- Live crontab inspected successfully.\n- Current crontab already includes:\n  - regime detector\n  - liquidation detector\n  - copy scanner V2\n  - legacy copy jobs\n  - squeeze detectors\n  - V5a shadow validator\n  - bot watchdog\n  - dashboard update\n  - daily P&L report\n- The runner entry can be added later as its own isolated line:\n  - `*/30 2-5 * * * /home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Wrote crontab-context artifact: `/home/ubuntu/clawd/patches/v12l-current-crontab-runner-insertion-context.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked the live scheduler instead of trusting the plan in abstraction. The current crontab is busy enough that careless edits would be easy to botch, but the runner still fits cleanly as a narrow appended line. That\u2019s exactly what we wanted to confirm.\n\n**Decision:**\n- Keep the future runner insertion isolated as its own separate cron line.\n- Do not touch existing trading or monitoring jobs when activation happens.\n\n**Next:** On the next P3 heartbeat, decid",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 17:57 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Monitoring System Again After Activation Readiness and Find the Next Gap That Actually Improves Learning Instead of Rehashing Deployment Prep\n\n**Task:** Reassess the overnight monitoring pipeline now that activation readiness is complete, so the next work item improves the system\u2019s ongoing value rather than repeating rollout planning.\n**Finding:**\n- Both bots are alive.\n- Current pipeline state now includes:\n  - writer\n  - renderer\n  - runner\n  - readiness checks\n  - cron insertion plan\n  - activation readiness\n- Highest-value next gap:\n  - **there is no historical run ledger for overnight monitoring outputs**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v12n-post-activation-readiness-gap-review.spec.md`\n\n**My thinking:**\nThis is the right pivot. We\u2019ve gotten the system to the edge of scheduled activation, and the next thing that actually improves research quality is not more cron thinking, it\u2019s memory. Latest-state output is useful, but a real ledger would make the overnight line much more learnable over time.\n\n**Decision:**\n- Treat historical run ledgering as the next highest-value improvement after activation readiness.\n- Stop spending cycles on rollout prep unless activation itself becomes the explicit task.\n\n**Next:** On the next P1 heartbeat, define the smallest append-only history file format for storing overnight runner outputs over time.\n\n---\n## 2026-04-23 17:29 UTC \u2014 [P4: Alpha Research] Make the Final Call on Cron Activation and Keep the Boundary Clean Between Technical Readiness and an Actual Live Scheduler Mutation\n\n**Task:** Decide whether the overnight runner should actually be inserted into crontab now, or whether this workstream should stop at full activation-readiness and keep the live cron edit as a separate explicit step.\n**Finding:**\n- Both bots are alive.\n- Final decision: **stop at readiness in this heartbeat**.\n- Reasoning:\n  - the runner is ready\n  - the insertion plan is ready\n  - the live crontab context is understood\n  - cron mutation is still a distinct operational act and should not happen as an incidental extension of the research heartbeat stream\n- Wrote final-decision artifact: `/home/ubuntu/clawd/patches/v12m-cron-activation-decision-final.spec.md`\n\n**My thinking:**\nI\u2019m comfortable ending the line here. We did the work all the way to the edge of activation, which is exactly where a clean system should let us stop. There\u2019s a real difference between being ready to change live operations and actually doing it, and keeping that distinction intact is worth it.\n\n**Decision:**\n- Treat the overnight runner as fully activation-ready.\n- Leave the actual crontab mutation for a separate explicit action.\n\n**Next:** On the next P4 heartbeat, if activation still matters, perform the cron change deliberately as its own operational step rather than as passi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
