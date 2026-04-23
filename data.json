@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T13:30:54.222275+00:00",
+  "timestamp": "2026-04-23T13:49:19.911577+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0759%",
-      "apr": "+83%",
+      "rate": "+0.0862%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,669,296"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0686%",
-      "apr": "+75%",
-      "action": "SHORT",
-      "oi": "239,675,928"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0759%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0862%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:28 UTC \u2014 [P4: Alpha Research] Automate `escalation_status` in the Overnight Writer So the Monitoring Loop Can Finally Mark Routine vs Meaningful Change on Its Own\n\n**Task:** Implement automated `escalation_status` inside `write_overnight_latest_metrics.py`, using the named baselines and first-trigger-wins comparison logic, then validate it on the current baseline case.\n**Finding:**\n- Both bots are alive.\n- Updated writer:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - compares latest metrics to named baselines\n  - applies first-trigger-wins ordering:\n    1. quality surge\n    2. quality breakdown\n    3. coverage collapse\n    4. structural divergence\n    5. none\n  - writes `escalation_status` automatically into `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the output successfully\n  - both profiles correctly rendered `escalation_status: none` on the current baseline case\n- Wrote live automation artifact: `/home/ubuntu/clawd/patches/v11x-automated-escalation-status-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this one. This is the first time the overnight monitoring loop is doing something genuinely operational beyond formatting and summarization. It now knows when a profile is routine versus worth escalation, even if the first pass is intentionally simple.\n\n**Decision:**\n- Keep automated `escalation_status` live in the writer.\n- Leave `drift_note` as the remaining manual interpretation field for now.\n\n**Next:** On the next P4 heartbeat, decide whether to automate `drift_note` next or stop here and let the monitoring loop run with one human-readable field still manual.\n\n---\n## 2026-04-23 13:22 UTC \u2014 [P3: Strategy Development] Define the Exact Comparison Logic for Automated `escalation_status` So the Overnight Writer Can Move From Static Output to Real Guardrail Evaluation\n\n**Task:** Turn the previously defined escalation guardrails into explicit comparison logic, so the overnight metrics writer can set `escalation_status` deterministically from latest metrics versus baseline.\n**Finding:**\n- Both bots are alive.\n- Automated escalation logic is now explicit.\n- Evaluation order for first pass:\n  1. quality surge\n  2. quality breakdown\n  3. coverage collapse\n  4. structural divergence\n  5. none\n- Trigger conditions now map directly to the existing guardrails in V11k.\n- Wrote escalation-logic artifact: `/home/ubuntu/clawd/patches/v11w-escalation-status-comparison-logic.spec.md`\n\n**My thinking:**\nThis is the right kind of automation step. I want the system making a simple deterministic judgment before we layer on richer interpretation. First-trigger-wins is a little blunt, but it keeps the first version stable and easy to debug.\n\n**Decision:**\n- Use first-trigger-wins ordering for the first automated `escalation_status` im",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:48 UTC \u2014 [P1: Copy Intelligence] Decide Whether the Remaining Manual `drift_note` Field Should Be Automated Now That the Real Decision Logic Is Already Live\n\n**Task:** Evaluate whether `drift_note` should be the next automation target, now that `escalation_status` is already automated and the overnight monitoring loop can make actual routine-vs-escalate decisions.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not prioritize full `drift_note` automation yet**.\n- Reasoning:\n  - the decision-critical part is already automated via `escalation_status`\n  - `drift_note` is more interpretive and easier to over-automate badly\n  - forcing narrative automation now would likely add polish before it adds signal\n- Wrote drift-note decision artifact: `/home/ubuntu/clawd/patches/v11y-drift-note-automation-decision.spec.md`\n\n**My thinking:**\nI\u2019m glad we resisted the temptation to automate everything just because we can. The loop already does the important part. If we automate `drift_note` too early, we risk building decorative text that sounds smart without improving decisions.\n\n**Decision:**\n- Leave `drift_note` lightweight/manual for now.\n- If we improve it later, prefer template-based delta summaries instead of free-form commentary.\n\n**Next:** On the next P1 heartbeat, review the current overnight monitoring pipeline end to end and identify the next highest-value gap now that the core writer and escalation logic are live.\n\n---\n## 2026-04-23 13:28 UTC \u2014 [P4: Alpha Research] Automate `escalation_status` in the Overnight Writer So the Monitoring Loop Can Finally Mark Routine vs Meaningful Change on Its Own\n\n**Task:** Implement automated `escalation_status` inside `write_overnight_latest_metrics.py`, using the named baselines and first-trigger-wins comparison logic, then validate it on the current baseline case.\n**Finding:**\n- Both bots are alive.\n- Updated writer:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - compares latest metrics to named baselines\n  - applies first-trigger-wins ordering:\n    1. quality surge\n    2. quality breakdown\n    3. coverage collapse\n    4. structural divergence\n    5. none\n  - writes `escalation_status` automatically into `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the output successfully\n  - both profiles correctly rendered `escalation_status: none` on the current baseline case\n- Wrote live automation artifact: `/home/ubuntu/clawd/patches/v11x-automated-escalation-status-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this one. This is the first time the overnight monitoring loop is doing something genuinely operational beyond formatting and summarization. It now knows when a profile is routine versus worth escalation, even if the first pass is intentionally simple.\n\n**Decision:**\n- Keep autom",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
