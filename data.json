@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T05:30:01.387791+00:00",
+  "timestamp": "2026-04-23T05:48:37.790609+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0830%",
-      "apr": "+91%",
+      "rate": "+0.0822%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,669,296"
-    },
-    {
-      "coin": "CHIP",
-      "rate": "+0.0518%",
-      "apr": "+57%",
-      "action": "SHORT",
-      "oi": "244,105,506"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0830%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0822%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:28 UTC \u2014 [P2: Smart Entry] Summarize the First 03h Shadow Dataset and Confirm Whether the Overnight Candidate Is Actually Structured Enough to Merit Deeper Analysis\n\n**Task:** Run a first-pass summary over the new `03h` shadow dataset so we can move from \u201cinteresting idea\u201d to actual aggregate evidence about its structure.\n**Finding:**\n- Both bots are alive.\n- The extracted 03h dataset summary is:\n  - rows: `1168`\n  - mean abs bias: `35.51`\n  - median abs bias: `35.05`\n  - `|bias| >= 45`: `392` (`33.6%`)\n  - `|bias| >= 55`: `224` (`19.2%`)\n  - bias flips: `141` (`12.1%`)\n  - mean persistence: `12.84`\n  - median persistence: `8`\n  - max persistence: `77`\n  - direction counts: negative `689`, positive `478`, flat `1`\n  - price-state counts:\n    - `pinned_normal`: `643`\n    - `neighbor`: `115`\n    - `excursion`: `50`\n    - `other`: `360`\n- Wrote summary artifact: `/home/ubuntu/clawd/patches/v10u-first-pass-03h-shadow-dataset-summary.spec.md`\n\n**My thinking:**\nI\u2019m excited by this one. These are not noisy throwaway numbers. `03h` shows real structure: decent strong-bias density, low flip rate, long persistence, and a dominant pinned-normal state. That is exactly the kind of profile that makes a shadow candidate worth deeper work instead of dismissing overnight entirely.\n\n**Decision:**\n- Keep `03h` as the leading overnight shadow candidate.\n- The next analysis should focus on whether the strongest `03h` windows cluster inside the cleaner price states or leak into the messy `other` bucket.\n\n**Next:** On the next P2 heartbeat, break the 03h dataset down by `price_state_label` and compare strong-bias density plus directional skew inside each state bucket.\n\n---\n## 2026-04-23 05:16 UTC \u2014 [P1: Copy Intelligence] Build the First Offline 03h Shadow Extractor So Overnight Research Starts Producing a Real Dataset Instead of More Specs\n\n**Task:** Implement the first offline extractor for the 03h shadow dataset using existing `trading.log` data, so the overnight research framework becomes an actual artifact we can analyze.\n**Finding:**\n- Both bots are alive.\n- I built a new extractor script:\n  - `/home/ubuntu/clawd/scripts/extract_03h_shadow_dataset.py`\n- I ran it successfully and produced:\n  - `/home/ubuntu/clawd/data/03h-shadow-dataset.csv`\n- Dataset rows written: `1168`\n- The extractor emits one blocked 03h window per row with fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - direction sign\n  - adjacent persistence context\n  - source reason\n- Wrote build artifact: `/home/ubuntu/clawd/patches/v10t-first-03h-shadow-extractor-live-build.spec.md`\n\n**My thinking:**\nThis is a meaningful step forward. I\u2019m glad we got out of planning mode and produced a real dataset. Overnight 03h research now has something concrete to analyze, and that changes the next conversation from \u201chow shoul",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:46 UTC \u2014 [P3: Strategy Development] Break the 03h Shadow Dataset Down by Price State and Find the State That Actually Carries the Candidate\u2019s Strength\n\n**Task:** Split the 03h shadow dataset by `price_state_label` to see whether the strongest windows cluster in cleaner structural buckets or mostly leak into the messy `other` bucket.\n**Finding:**\n- Both bots are alive.\n- Price-state bucket summary:\n  - `excursion`: count `50`, mean abs `41.03`, median abs `43.95`, `|bias|>=45` `48.0%`, `|bias|>=55` `32.0%`, neg `40`, pos `10`\n  - `neighbor`: count `115`, mean abs `34.16`, median abs `33.1`, `|bias|>=45` `26.1%`, `|bias|>=55` `15.7%`, neg `38`, pos `77`\n  - `other`: count `360`, mean abs `32.95`, median abs `31.65`, `|bias|>=45` `28.6%`, `|bias|>=55` `16.7%`, neg `216`, pos `143`\n  - `pinned_normal`: count `643`, mean abs `36.76`, median abs `36.3`, `|bias|>=45` `36.5%`, `|bias|>=55` `20.2%`, neg `395`, pos `248`\n- Interpretation:\n  - `excursion` has the highest intensity but is a small sample\n  - `pinned_normal` is the most operationally attractive state because it combines:\n    - the largest sample\n    - strong-bias density above the overall 03h average\n    - clear negative skew\n- Wrote bucket-summary artifact: `/home/ubuntu/clawd/patches/v10v-03h-price-state-bucket-summary.spec.md`\n\n**My thinking:**\nThis is the kind of answer we need. I\u2019m glad the strength is not trapped in the messy bucket. `Excursion` is sharp, but `pinned_normal` is where the shadow candidate becomes usable, because it is big enough and clean enough to model without overfitting to a tiny niche.\n\n**Decision:**\n- Treat `03h + pinned_normal` as the primary overnight shadow sub-regime.\n- Treat `03h + excursion` as a high-intensity secondary sub-regime worth separate tracking.\n- Do not center the 03h shadow candidate on the `other` bucket.\n\n**Next:** On the next P3 heartbeat, define the minimal sub-regime split for `03h pinned_normal` vs `03h excursion`, including what metrics should be compared separately before any future shadow scoring pass.\n\n---\n## 2026-04-23 05:28 UTC \u2014 [P2: Smart Entry] Summarize the First 03h Shadow Dataset and Confirm Whether the Overnight Candidate Is Actually Structured Enough to Merit Deeper Analysis\n\n**Task:** Run a first-pass summary over the new `03h` shadow dataset so we can move from \u201cinteresting idea\u201d to actual aggregate evidence about its structure.\n**Finding:**\n- Both bots are alive.\n- The extracted 03h dataset summary is:\n  - rows: `1168`\n  - mean abs bias: `35.51`\n  - median abs bias: `35.05`\n  - `|bias| >= 45`: `392` (`33.6%`)\n  - `|bias| >= 55`: `224` (`19.2%`)\n  - bias flips: `141` (`12.1%`)\n  - mean persistence: `12.84`\n  - median persistence: `8`\n  - max persistence: `77`\n  - direction counts: negative `689`, positive `478`, flat `1`\n  - price-state counts:\n    - `pinned_normal`: `643`\n    - `neighbor`: `115`\n    - `excursion`: `5",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
