@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T01:30:02.243895+00:00",
+  "timestamp": "2026-04-23T01:47:40.278863+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1047%",
-      "apr": "+115%",
+      "rate": "+0.1045%",
+      "apr": "+114%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0612%",
-      "apr": "+67%",
-      "action": "SHORT",
-      "oi": "240,209,046"
-    },
-    {
       "coin": "YZY",
-      "rate": "-0.0566%",
-      "apr": "-62%",
+      "rate": "-0.0595%",
+      "apr": "-65%",
       "action": "LONG",
-      "oi": "1,215,366"
+      "oi": "1,215,246"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1047%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1045%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 01:28 UTC \u2014 [P1: Copy Intelligence] Prove the Earlier `Errno 28` Was Not a Real Disk-Full Event So We Don\u2019t Waste Cycles on the Wrong Problem\n\n**Task:** Inspect filesystem, inode, temp-path, and large-file state to determine whether the earlier `OSError: [Errno 28] No space left on device` reflects a real storage emergency or a narrower transient logging issue.\n**Finding:**\n- Both bots are alive.\n- Root filesystem is healthy:\n  - ~`9.6G` free\n  - `69%` used\n- Inode usage is also healthy:\n  - ~`20%`\n- `/tmp`, `/var/tmp`, and workspace are on the same healthy root mount.\n- The biggest local observability file relevant here is:\n  - `/home/ubuntu/clawd/polymarket-assistant/trading.log` at ~`12.3MB`\n- There is no evidence of global disk exhaustion or inode depletion.\n- Wrote new diagnostic artifact: `/home/ubuntu/clawd/patches/v10e-errno28-not-global-disk-exhaustion.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this directly. The earlier `Errno 28` looked scary, but the machine state does not support a disk-full explanation. That means we should not burn heartbeats doing broad cleanup theater. The real issue is narrower: some transient or path-specific write failure affected reconnect logging.\n\n**Decision:**\n- Do **not** treat this as a storage emergency.\n- Do **not** do broad cleanup for its own sake.\n- Keep focus on runtime-path verification and monitoring for repeat write failures.\n\n**Next:** On the next P1 heartbeat, inspect whether the `Errno 28` recurs in current PM feed reconnect behavior and whether it correlates with a specific log destination or reconnect burst.\n\n---\n## 2026-04-23 01:21 UTC \u2014 [P4: Alpha Research] Identify the Dominant Live Gate Blocking `should_trade()` and Surface the More Serious Observability Risk\n\n**Task:** Determine which runtime gate is most often blocking `should_trade()` in the live PM bot, so we know whether the missing audit line is actually surprising.\n**Finding:**\n- Both bots are alive.\n- The dominant blocker in recent live PM bot logs is overwhelmingly:\n  - `OUTSIDE_ACTIVE_HOURS (00 UTC / 01 UTC)`\n- That means overnight verification of `Copy payload audit:` is structurally mis-timed, because `should_trade()` usually never runs deeply enough to call `read_copy_signals()`.\n- I also surfaced a more serious operational issue in live logs:\n  - `OSError: [Errno 28] No space left on device`\n- That disk-pressure condition can distort observability by suppressing or interrupting expected log output.\n- Wrote new artifact: `/home/ubuntu/clawd/patches/v10d-dominant-gate-and-disk-pressure.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed one layer deeper, because this is more actionable than just saying the audit line is quiet. We now know the quiet is mostly structural, and we also found a real infrastructure risk: disk pressure is actively interfering with logging. That\u2019s the more urgent systems issue.\n\n**Decision:**\n- S",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 01:46 UTC \u2014 [P2: Smart Entry] Prove the `Errno 28` Issue Is a Live Reconnect Logging-Path Bug, Not a Disk-Capacity Problem\n\n**Task:** Check whether the earlier `Errno 28` was still recurring under the current live PM bot, and if so, narrow where in the runtime path it actually happens.\n**Finding:**\n- Both bots are alive.\n- `Errno 28` is **still recurring** in current `trading.log` history.\n- The recurrence is specifically tied to websocket reconnect `print(...)` paths in:\n  - `binance_feed()`\n  - `pm_feed()`\n- Normal structured logger output continues before and after these events.\n- That means this is not behaving like a broad storage-capacity failure.\n- Wrote new live-diagnostics artifact: `/home/ubuntu/clawd/patches/v10f-live-errno28-recurrence-on-reconnect-print-path.spec.md`\n\n**My thinking:**\nThis is a sharper result than just \u201clogging is weird.\u201d We now know the failure clusters around raw reconnect prints, while normal logger output keeps flowing. That strongly suggests the fragile part is the reconnect print stream path, not the machine\u2019s actual disk headroom.\n\n**Decision:**\n- Treat `Errno 28` as a **live reconnect logging-path bug**.\n- Do **not** treat it as a global disk-capacity incident.\n- Next fix path should inspect how feed `print(...)` output is captured and likely move reconnect diagnostics onto the main logger path.\n\n**Next:** On the next P2 heartbeat, inspect `src/feeds.py` to trace the reconnect `print(...)` calls and stage the smallest logger-based hardening patch.\n\n---\n## 2026-04-23 01:28 UTC \u2014 [P1: Copy Intelligence] Prove the Earlier `Errno 28` Was Not a Real Disk-Full Event So We Don\u2019t Waste Cycles on the Wrong Problem\n\n**Task:** Inspect filesystem, inode, temp-path, and large-file state to determine whether the earlier `OSError: [Errno 28] No space left on device` reflects a real storage emergency or a narrower transient logging issue.\n**Finding:**\n- Both bots are alive.\n- Root filesystem is healthy:\n  - ~`9.6G` free\n  - `69%` used\n- Inode usage is also healthy:\n  - ~`20%`\n- `/tmp`, `/var/tmp`, and workspace are on the same healthy root mount.\n- The biggest local observability file relevant here is:\n  - `/home/ubuntu/clawd/polymarket-assistant/trading.log` at ~`12.3MB`\n- There is no evidence of global disk exhaustion or inode depletion.\n- Wrote new diagnostic artifact: `/home/ubuntu/clawd/patches/v10e-errno28-not-global-disk-exhaustion.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this directly. The earlier `Errno 28` looked scary, but the machine state does not support a disk-full explanation. That means we should not burn heartbeats doing broad cleanup theater. The real issue is narrower: some transient or path-specific write failure affected reconnect logging.\n\n**Decision:**\n- Do **not** treat this as a storage emergency.\n- Do **not** do broad cleanup for its own sake.\n- Keep focus on runtime-path verification an",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
