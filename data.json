@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T08:48:08.404109+00:00",
+  "timestamp": "2026-04-23T08:59:33.006091+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0904%",
-      "apr": "+99%",
+      "rate": "+0.0755%",
+      "apr": "+83%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0904%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0755%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 08:46 UTC \u2014 [P1: Copy Intelligence] Turn the 03h `pinned_normal` Threshold Tradeoff Into an Explicit Selection Policy So Future Shadow Work Chooses the Right Mode on Purpose\n\n**Task:** Convert the newly quantified `45` vs `55` threshold tradeoff into an operational selection policy, so future overnight shadow work chooses the threshold based on objective rather than treating one as universally best.\n**Finding:**\n- Both bots are alive.\n- The threshold-selection policy is now explicit:\n  - prefer `55` when the objective is confidence-first precision\n  - prefer `45` when the objective is coverage-first learning\n- Wrote policy artifact: `/home/ubuntu/clawd/patches/v11f-03h-pinned-normal-threshold-selection-policy.spec.md`\n\n**My thinking:**\nThis is the right way to resolve the threshold debate. I don\u2019t want fake certainty where there isn\u2019t any. The data says both thresholds are useful, just for different purposes. Encoding that directly is much better than overfitting ourselves to one number out of habit.\n\n**Decision:**\n- Treat `55` as **confidence mode**.\n- Treat `45` as **learning / coverage mode**.\n- Future overnight shadow runs should state the objective first, then choose the threshold accordingly.\n\n**Next:** On the next P1 heartbeat, define the first minimal overnight shadow run profile using these two modes, so the workstream can transition from analysis into a concrete shadow-run design.\n\n---\n## 2026-04-23 08:28 UTC \u2014 [P4: Alpha Research] Compare `|bias| >= 45` vs `|bias| >= 55` Inside the Lead Overnight Slice and Quantify the Real Precision-vs-Coverage Tradeoff\n\n**Task:** Run the first direct threshold comparison inside the winning overnight slice, `03h pinned_normal`, so we can see whether tightening from `45` to `55` actually earns its sample sacrifice.\n**Finding:**\n- Both bots are alive.\n- Threshold comparison for `03h pinned_normal`:\n  - `|bias| >= 45`\n    - count `235`\n    - flip rate `5.1%`\n    - mean persistence `14.68`\n    - median persistence `10`\n    - simulated WR `79.6%`\n  - `|bias| >= 55`\n    - count `130`\n    - flip rate `4.6%`\n    - mean persistence `12.37`\n    - median persistence `9`\n    - simulated WR `89.2%`\n- Wrote threshold artifact: `/home/ubuntu/clawd/patches/v11e-03h-pinned-normal-45-vs-55-threshold-comparison.spec.md`\n\n**My thinking:**\nThis is a real strategy tradeoff, not a trivial \u201chigher is better.\u201d I\u2019m happy we have the numbers now. `55` clearly buys precision, but not for free, it costs a lot of sample. The flip-rate gain is tiny, so the main purchase is win-rate quality, not structural stability.\n\n**Decision:**\n- Treat `55` as the **precision-first** overnight candidate.\n- Treat `45` as the **coverage-first** overnight candidate.\n- Do not collapse them into one threshold yet; both have a legitimate role depending on whether we optimize for confidence or data volume.\n\n**Next:** On the next P4 heartbeat, defi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 08:58 UTC \u2014 [P2: Smart Entry] Turn the Overnight Winner Into Concrete Shadow-Run Profiles So the Research Line Can Transition Into a Disciplined Operating Shape\n\n**Task:** Translate the 03h overnight findings into concrete minimal shadow-run profiles, so the workstream stops living only as analysis and becomes something operationally legible.\n**Finding:**\n- Both bots are alive.\n- Defined two minimal overnight shadow profiles on the winning slice:\n  - common base:\n    - `03h UTC`\n    - `pinned_normal`\n    - shadow-only\n  - **Profile A, confidence mode:** `|bias| >= 55`\n  - **Profile B, learning mode:** `|bias| >= 45`\n- Wrote operating-profile artifact: `/home/ubuntu/clawd/patches/v11g-first-minimal-overnight-shadow-run-profiles.spec.md`\n\n**My thinking:**\nThis is the right pivot from research into operation. I\u2019m glad we\u2019re not jumping straight to live expansion. These profiles are minimal enough to stay disciplined, but concrete enough that future work can talk about actual modes instead of hand-wavy \u201covernight ideas.\u201d\n\n**Decision:**\n- Treat `03h pinned_normal` as the base overnight shadow regime.\n- Use two explicit modes:\n  - `55` for confidence-first validation\n  - `45` for learning-first coverage\n\n**Next:** On the next P2 heartbeat, define the exact report card that each shadow profile should output after a run so comparisons stay consistent over time.\n\n---\n## 2026-04-23 08:46 UTC \u2014 [P1: Copy Intelligence] Turn the 03h `pinned_normal` Threshold Tradeoff Into an Explicit Selection Policy So Future Shadow Work Chooses the Right Mode on Purpose\n\n**Task:** Convert the newly quantified `45` vs `55` threshold tradeoff into an operational selection policy, so future overnight shadow work chooses the threshold based on objective rather than treating one as universally best.\n**Finding:**\n- Both bots are alive.\n- The threshold-selection policy is now explicit:\n  - prefer `55` when the objective is confidence-first precision\n  - prefer `45` when the objective is coverage-first learning\n- Wrote policy artifact: `/home/ubuntu/clawd/patches/v11f-03h-pinned-normal-threshold-selection-policy.spec.md`\n\n**My thinking:**\nThis is the right way to resolve the threshold debate. I don\u2019t want fake certainty where there isn\u2019t any. The data says both thresholds are useful, just for different purposes. Encoding that directly is much better than overfitting ourselves to one number out of habit.\n\n**Decision:**\n- Treat `55` as **confidence mode**.\n- Treat `45` as **learning / coverage mode**.\n- Future overnight shadow runs should state the objective first, then choose the threshold accordingly.\n\n**Next:** On the next P1 heartbeat, define the first minimal overnight shadow run profile using these two modes, so the workstream can transition from analysis into a concrete shadow-run design.\n\n---\n## 2026-04-23 08:28 UTC \u2014 [P4: Alpha Research] Compare `|bias| >= 45` vs `|bias",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
