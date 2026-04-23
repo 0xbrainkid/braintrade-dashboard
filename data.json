@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T06:48:10.290996+00:00",
+  "timestamp": "2026-04-23T06:59:43.386391+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0980%",
+      "rate": "+0.0974%",
       "apr": "+107%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0601%",
-      "apr": "-66%",
+      "rate": "-0.0574%",
+      "apr": "-63%",
       "action": "LONG",
-      "oi": "2,144,233,588"
+      "oi": "2,144,306,980"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0980%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0974%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 06:46 UTC \u2014 [P3: Strategy Development] Define the Outcome-Quality Tie-Break Framework That Could Finally Separate 03h `pinned_normal` from `excursion`\n\n**Task:** Move the 03h sub-regime work to its next real discriminator by defining the exact outcome-quality framework that would break the current structural tie between `pinned_normal` and `excursion`.\n**Finding:**\n- Both bots are alive.\n- Defined the tie-break framework around simulated outcome quality for each 03h sub-regime.\n- Required metrics now include:\n  - hypothetical trade count\n  - win rate\n  - average edge at decision time\n  - average implied-direction quality\n  - average return per eligible window\n  - max drawdown streak\n  - consistency across `|bias| >= 45` and `|bias| >= 55`\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10z-03h-outcome-quality-tie-break-framework.spec.md`\n\n**My thinking:**\nThis is the right handoff from structure to quality. We\u2019ve squeezed a lot of value out of the static shape of 03h, but structure alone can only take us so far. If one regime is going to win, it has to win on decision quality, not just on looking neat in the logs.\n\n**Decision:**\n- Treat outcome-quality simulation as the next decisive stage.\n- Preserve a sample-size discount for `excursion` even if it looks stronger on a small set.\n\n**Next:** On the next P3 heartbeat, scope the lightest offline simulation method that could estimate these tie-break metrics from the current 03h dataset plus available price/outcome history.\n\n---\n## 2026-04-23 06:28 UTC \u2014 [P2: Smart Entry] Define the First Simple Scoring Rubric for 03h `pinned_normal` vs `excursion` So We Stop Making Ad-Hoc Regime Judgments\n\n**Task:** Turn the growing 03h sub-regime evidence into a simple repeatable rubric that compares `pinned_normal` and `excursion` on the dimensions we actually have now, before outcome-quality simulation exists.\n**Finding:**\n- Both bots are alive.\n- Defined a three-part rubric:\n  - sample-size strength (0-3)\n  - bias-intensity strength (0-3)\n  - stability strength (0-3)\n- First qualitative scoring:\n  - `pinned_normal`: `7/9`\n    - sample-size `3`\n    - intensity `2`\n    - stability `2`\n  - `excursion`: `7/9`\n    - sample-size `1`\n    - intensity `3`\n    - stability `3`\n- Wrote rubric artifact: `/home/ubuntu/clawd/patches/v10y-first-03h-sub-regime-scoring-rubric.spec.md`\n\n**My thinking:**\nThis is the right kind of simplification. I don\u2019t want fake precision, but I also don\u2019t want us re-arguing the same evidence every heartbeat. The tie is actually useful: it tells us the two regimes are interesting for different reasons, not that one cleanly dominates already.\n\n**Decision:**\n- Treat `pinned_normal` as the safer base regime.\n- Treat `excursion` as the sharper but sample-constrained challenger.\n- Do not declare a single winner before outcome-quality evidence exists.\n\n**Next:** On the next P2 heartbeat, d",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 06:58 UTC \u2014 [P4: Alpha Research] Scope the Lightest Offline 03h Simulation Method So the Outcome-Quality Tie-Break Can Become a Real Computation Next Cycle\n\n**Task:** Design the cheapest workable offline simulation method that can estimate the 03h outcome-quality tie-break metrics without first building a full backtest or PM market replay engine.\n**Finding:**\n- Both bots are alive.\n- The lightest viable path is now clear:\n  - use the extracted 03h rows as hypothetical decision candidates\n  - infer the side from bias sign\n  - use logged PM prices as entry context\n  - resolve the outcome from the corresponding 5-minute BTC direction, matching the bot\u2019s historical outcome logic\n- Existing logs confirm the bot previously resolved outcomes using BTC movement over the window, which is exactly the cheap offline bridge we need.\n- Wrote simulation-method artifact: `/home/ubuntu/clawd/patches/v11a-lightweight-03h-offline-simulation-method.spec.md`\n\n**My thinking:**\nThis is a good unlock. I\u2019m glad we don\u2019t need to wait on a heavy replay engine just to answer the next research question. The cheap estimator won\u2019t be perfect, but it\u2019s absolutely good enough to break the current regime tie and tell us where deeper work is warranted.\n\n**Decision:**\n- Use a lightweight BTC-direction-based estimator first.\n- Defer full PM replay complexity unless the cheap method produces promising results worth refining.\n\n**Next:** On the next P4 heartbeat, build the first offline 03h simulation script that joins extracted rows to 5-minute BTC direction and outputs the tie-break metrics by sub-regime.\n\n---\n## 2026-04-23 06:46 UTC \u2014 [P3: Strategy Development] Define the Outcome-Quality Tie-Break Framework That Could Finally Separate 03h `pinned_normal` from `excursion`\n\n**Task:** Move the 03h sub-regime work to its next real discriminator by defining the exact outcome-quality framework that would break the current structural tie between `pinned_normal` and `excursion`.\n**Finding:**\n- Both bots are alive.\n- Defined the tie-break framework around simulated outcome quality for each 03h sub-regime.\n- Required metrics now include:\n  - hypothetical trade count\n  - win rate\n  - average edge at decision time\n  - average implied-direction quality\n  - average return per eligible window\n  - max drawdown streak\n  - consistency across `|bias| >= 45` and `|bias| >= 55`\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10z-03h-outcome-quality-tie-break-framework.spec.md`\n\n**My thinking:**\nThis is the right handoff from structure to quality. We\u2019ve squeezed a lot of value out of the static shape of 03h, but structure alone can only take us so far. If one regime is going to win, it has to win on decision quality, not just on looking neat in the logs.\n\n**Decision:**\n- Treat outcome-quality simulation as the next decisive stage.\n- Preserve a sample-size discount for `excursion` even if it",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
