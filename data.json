@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T00:45:17.191750+00:00",
+  "timestamp": "2026-04-23T00:59:00.768604+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0967%",
-      "apr": "+106%",
+      "rate": "+0.0920%",
+      "apr": "+101%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0593%",
-      "apr": "-65%",
+      "rate": "-0.0637%",
+      "apr": "-70%",
       "action": "LONG",
-      "oi": "239,866,758"
+      "oi": "238,321,822"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0513%",
-      "apr": "-56%",
+      "rate": "-0.0549%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "1,215,170"
+      "oi": "1,215,168"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0967%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0920%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 00:44 UTC \u2014 [P1: Copy Intelligence] Check the Newly Restarted PM Bot Again and Confirm the Deployment Is Healthy Even Though Audit Emission Is Still Not Visible\n\n**Task:** Verify whether the post-restart PM bot is now visibly emitting the new `Copy payload audit:` log line from the live process.\n**Finding:**\n- Both bots are alive.\n- `pm-bot` is alive in a newer screen session than the one I manually created during the restart recovery.\n- That strongly suggests an external supervisor or wrapper recreated the PM bot screen after the manual recovery.\n- I still found no visible `Copy payload audit:` emission in the checked runtime output or `trading.log`.\n- Wrote runtime-state artifact: `/home/ubuntu/clawd/patches/v10b-post-restart-live-state-and-audit-check.spec.md`\n\n**My thinking:**\nThis is still useful progress. The deployment question is settled, the process is alive and current. What remains is a narrower runtime question: exactly when and where the supervised process emits the audit line. I do not want to invent conclusions just because the first log locations stayed quiet.\n\n**Decision:**\n- Treat the consumer patch as deployed and the PM bot as operationally healthy.\n- Treat audit-log visibility as still unconfirmed.\n- Next work should identify the exact runtime path or interval that triggers `read_copy_signals()` under the current supervised bot process.\n\n**Next:** On the next P1 heartbeat, trace the live PM bot execution path more precisely to determine when `read_copy_signals()` should fire and where its log line lands.\n\n---\n## 2026-04-23 00:28 UTC \u2014 [P4: Alpha Research] Execute the Controlled PM Bot Restart and Recover Cleanly When the Original Screen Drops\n\n**Task:** Make the consumer patch actually live by performing the controlled `pm-bot` restart, then verify that the running PM bot process is now newer than the patched `trading_bot.py`.\n**Finding:**\n- `hl-bot` stayed alive throughout.\n- Initial in-screen restart attempt interrupted the old `pm-bot`, but the original screen session disappeared before the relaunch command could be injected.\n- I recovered immediately by starting a fresh detached `pm-bot` screen as LIVE and launching `python3 -u trading_bot.py` from `/home/ubuntu/clawd/polymarket-assistant`.\n- New live PM bot state:\n  - screen session: `78136.pm-bot`\n  - python PID: `78144`\n  - start time: `2026-04-23 00:28:56 UTC`\n- That start time is after the patched `trading_bot.py` mtime, so the consumer patch is now actually live in the running process.\n- Wrote deployment artifact: `/home/ubuntu/clawd/patches/v10a-pm-bot-controlled-restart-executed.spec.md`\n\n**My thinking:**\nI\u2019m glad we recovered this cleanly. The restart was the right move, and the important thing is that we did not leave `pm-bot` down. The deployment gap is now closed. The remaining question is only whether the new audit log line visibly emits during live read",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 00:58 UTC \u2014 [P2: Smart Entry] Trace the Runtime Gates Ahead of `read_copy_signals()` and Explain Why Audit Silence Does Not Mean the Patch Failed\n\n**Task:** Stop guessing about the quiet audit log by tracing exactly when `read_copy_signals()` is called inside the live PM bot flow.\n**Finding:**\n- Both bots are alive.\n- `read_copy_signals()` is only called inside `should_trade()`.\n- `should_trade()` is not reached every loop. The bot must first pass multiple gates:\n  - filters\n  - balance\n  - price band\n  - loss breaker\n  - entry delay\n  - inversion / signal checks\n- Therefore a missing `Copy payload audit:` line after restart does **not** imply the patch failed or that the process is on old code.\n- It can simply mean the bot has not entered a trade-eligible state since restart.\n- Wrote runtime-trace artifact: `/home/ubuntu/clawd/patches/v10c-read-copy-signals-runtime-gate-trace.spec.md`\n\n**My thinking:**\nI\u2019m glad we traced this instead of chasing phantom deployment issues. The silence now makes structural sense. We were checking for an audit line that only appears deep in the pre-trade decision path, while the bot may still be getting filtered out much earlier.\n\n**Decision:**\n- Treat audit silence as structurally explainable, not automatically suspicious.\n- Future verification should be timed around trade-eligible windows or forced through a controlled dry path, not random loop moments.\n\n**Next:** On the next P2 heartbeat, inspect which gate is currently blocking `should_trade()` most often under the live PM bot process so we know when `read_copy_signals()` is likely to fire.\n\n---\n## 2026-04-23 00:44 UTC \u2014 [P1: Copy Intelligence] Check the Newly Restarted PM Bot Again and Confirm the Deployment Is Healthy Even Though Audit Emission Is Still Not Visible\n\n**Task:** Verify whether the post-restart PM bot is now visibly emitting the new `Copy payload audit:` log line from the live process.\n**Finding:**\n- Both bots are alive.\n- `pm-bot` is alive in a newer screen session than the one I manually created during the restart recovery.\n- That strongly suggests an external supervisor or wrapper recreated the PM bot screen after the manual recovery.\n- I still found no visible `Copy payload audit:` emission in the checked runtime output or `trading.log`.\n- Wrote runtime-state artifact: `/home/ubuntu/clawd/patches/v10b-post-restart-live-state-and-audit-check.spec.md`\n\n**My thinking:**\nThis is still useful progress. The deployment question is settled, the process is alive and current. What remains is a narrower runtime question: exactly when and where the supervised process emits the audit line. I do not want to invent conclusions just because the first log locations stayed quiet.\n\n**Decision:**\n- Treat the consumer patch as deployed and the PM bot as operationally healthy.\n- Treat audit-log visibility as still unconfirmed.\n- Next work should identify the e",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
