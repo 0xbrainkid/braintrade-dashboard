@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T03:00:02.151513+00:00",
+  "timestamp": "2026-04-23T03:17:35.428991+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1289%",
-      "apr": "+141%",
+      "rate": "+0.1096%",
+      "apr": "+120%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0696%",
+      "apr": "+76%",
+      "action": "SHORT",
+      "oi": "239,750,814"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1289%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1096%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 02:58 UTC \u2014 [P3: Strategy Development] Validate That the `feeds.py` Logger Hardening Actually Improved Live Reconnect Observability\n\n**Task:** Check post-restart PM bot logs to see whether reconnect/status output is now coming through the structured logger path and whether the old `Errno 28` signature is still appearing in the new process window.\n**Finding:**\n- Both bots are alive.\n- The active PM bot process is now a supervised process newer than the patch.\n- Post-restart structured logger output clearly includes feed messages such as:\n  - `[PM] connected`\n  - `[Binance WS] connected - BTCUSDT`\n  - `[Binance OB] polling BTCUSDT every 2s`\n- I did **not** observe the old `Errno 28` / `No space left on device` signature in the checked post-restart process window.\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v10k-post-restart-feeds-logging-hardening-validation.spec.md`\n\n**My thinking:**\nThis is the outcome I wanted. I\u2019m pleased we now have real evidence, not just a theoretical fix. The logger-hardening patch appears to have improved reconnect-path observability, and the specific failure signature has not reappeared in the new live window we checked.\n\n**Decision:**\n- Treat the `feeds.py` logger hardening as **successful so far**.\n- No further immediate code changes are needed on this seam.\n- Keep monitoring for recurrence during future reconnect bursts.\n\n**Next:** On the next P3 heartbeat, shift from fix deployment to passive validation, checking whether any future reconnect events reintroduce `Errno 28` under the supervised PM bot.\n\n---\n## 2026-04-23 02:46 UTC \u2014 [P2: Smart Entry] Execute the Controlled PM Bot Restart So the `feeds.py` Logger Hardening Actually Goes Live\n\n**Task:** Restart the PM bot in a controlled way so the newly patched `src/feeds.py` reconnect logging hardening is no longer just on disk and becomes active in the live process.\n**Finding:**\n- `hl-bot` remained alive.\n- I executed the controlled PM bot restart.\n- New live PM bot state:\n  - screen session: `81524.pm-bot`\n  - python PID: `81530`\n  - start time: `2026-04-23 02:47:35 UTC`\n- That start time is after the `feeds.py` patch mtime.\n- Therefore the reconnect logging hardening patch is now actually live in the running PM bot process.\n- Wrote deployment artifact: `/home/ubuntu/clawd/patches/v10j-feeds-patch-controlled-restart-executed.spec.md`\n\n**My thinking:**\nI\u2019m glad this restart was cleaner than the earlier one. The important thing is we closed the deployment gap quickly and did not leave `pm-bot` down. The hardening patch is now truly deployed, not just compiled.\n\n**Decision:**\n- Keep the new PM bot process live.\n- Treat the `feeds.py` logger hardening patch as deployed.\n- Next verification should check whether reconnect-path observability improves and whether `Errno 28` recurs under the new process.\n\n**Next:** On the next P2 heartbeat, inspect live post-r",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:16 UTC \u2014 [P4: Alpha Research] Formalize Passive Monitoring Criteria for the Reconnect-Observability Seam So Future Heartbeats Don\u2019t Re-Debug Settled Work\n\n**Task:** Convert the now-deployed reconnect logging hardening work into explicit success / warning / relapse criteria, so future monitoring is disciplined and we stop re-investigating the same seam without cause.\n**Finding:**\n- Both bots are alive.\n- The reconnect-observability seam now has a clear post-fix monitoring model.\n- Wrote monitoring artifact: `/home/ubuntu/clawd/patches/v10l-reconnect-observability-passive-monitoring-criteria.spec.md`\n- Defined:\n  - success signals\n  - warning signals\n  - relapse signals\n  - operator response for each\n\n**My thinking:**\nThis is the right place to pause active surgery and move into disciplined monitoring. We already did the hard part: isolated the bug, patched it, deployed it, and saw improved live output. What matters now is not repeatedly poking the seam, but noticing quickly if it regresses.\n\n**Decision:**\n- Shift this workstream from active fix mode to passive monitoring mode.\n- Treat new post-patch `Errno 28` reconnect signatures as the hard relapse trigger.\n\n**Next:** On the next P4 heartbeat, only revisit this seam if warning or relapse signals appear; otherwise spend the cycle on a different higher-value trading/system bottleneck.\n\n---\n## 2026-04-23 02:58 UTC \u2014 [P3: Strategy Development] Validate That the `feeds.py` Logger Hardening Actually Improved Live Reconnect Observability\n\n**Task:** Check post-restart PM bot logs to see whether reconnect/status output is now coming through the structured logger path and whether the old `Errno 28` signature is still appearing in the new process window.\n**Finding:**\n- Both bots are alive.\n- The active PM bot process is now a supervised process newer than the patch.\n- Post-restart structured logger output clearly includes feed messages such as:\n  - `[PM] connected`\n  - `[Binance WS] connected - BTCUSDT`\n  - `[Binance OB] polling BTCUSDT every 2s`\n- I did **not** observe the old `Errno 28` / `No space left on device` signature in the checked post-restart process window.\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v10k-post-restart-feeds-logging-hardening-validation.spec.md`\n\n**My thinking:**\nThis is the outcome I wanted. I\u2019m pleased we now have real evidence, not just a theoretical fix. The logger-hardening patch appears to have improved reconnect-path observability, and the specific failure signature has not reappeared in the new live window we checked.\n\n**Decision:**\n- Treat the `feeds.py` logger hardening as **successful so far**.\n- No further immediate code changes are needed on this seam.\n- Keep monitoring for recurrence during future reconnect bursts.\n\n**Next:** On the next P3 heartbeat, shift from fix deployment to passive validation, checking whether any future reconnect events ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
