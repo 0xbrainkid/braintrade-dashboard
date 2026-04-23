@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T09:02:29.692967+00:00",
+  "timestamp": "2026-04-23T09:23:45.621578+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0559%",
-      "apr": "+61%",
+      "rate": "+0.1100%",
+      "apr": "+120%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "-0.0662%",
+      "apr": "-72%",
+      "action": "LONG",
+      "oi": "245,191,364"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0634%",
+      "apr": "+69%",
+      "action": "SHORT",
+      "oi": "239,734,412"
     }
   ],
   "daily_pnl": [
@@ -94,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0559%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1100%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 08:59 UTC \u2014 [P2: Smart Entry] Test Whether a Persistence Floor Improves the 03h `pinned_normal` Entry Filter Enough to Become the Next Parameter Candidate\n\n**Task:** Compare the current strong-bias overnight slice with and without a minimum persistence floor, so I can decide whether the next smart-entry parameter tweak should be threshold-only or threshold-plus-persistence.\n**Finding:**\n- Both bots are alive.\n- I tested `03h + pinned_normal` across six variants using `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- Key results:\n  - `abs_bias >= 45`: `235` samples, `79.6%` simulated WR, `5.1%` flip rate\n  - `abs_bias >= 45` and `persistence >= 4`: `194` samples, `80.9%` WR, `0.0%` flip rate\n  - `abs_bias >= 50`: `174` samples, `86.2%` WR, `5.2%` flip rate\n  - `abs_bias >= 50` and `persistence >= 4`: `142` samples, `88.0%` WR, `0.0%` flip rate\n  - `abs_bias >= 55`: `130` samples, `89.2%` WR, `4.6%` flip rate\n  - `abs_bias >= 55` and `persistence >= 4`: `106` samples, `90.6%` WR, `0.0%` flip rate\n- Wrote artifact: `/home/ubuntu/clawd/patches/v11h-03h-pinned-normal-persistence-floor-parameter-comparison.spec.md`\n\n**My thinking:**\nThe persistence floor is doing real cleanup work. I like that it wipes out observed flips across every threshold family. The sweet spot looks like `50 + persistence>=4`, because it preserves much more coverage than the `55` family while still getting close to confidence-mode quality. That makes it a better next smart-entry candidate than jumping straight to the narrowest slice.\n\n**Decision:**\n- Promote `abs_bias >= 50` plus `adjacent_persistence_count >= 4` as the next shadow candidate for smart-entry tuning.\n- Keep `45` as coverage mode and `55` as confidence mode, but treat `50_p4` as the strongest middle-ground candidate right now.\n\n**Next:** On the next P2 heartbeat, test whether `50_p4` should become the explicit default middle mode by comparing its tradeoff curve against the current `45` coverage mode and `55` confidence mode policy.\n\n\n## 2026-04-23 08:58 UTC \u2014 [P2: Smart Entry] Turn the Overnight Winner Into Concrete Shadow-Run Profiles So the Research Line Can Transition Into a Disciplined Operating Shape\n\n**Task:** Translate the 03h overnight findings into concrete minimal shadow-run profiles, so the workstream stops living only as analysis and becomes something operationally legible.\n**Finding:**\n- Both bots are alive.\n- Defined two minimal overnight shadow profiles on the winning slice:\n  - common base:\n    - `03h UTC`\n    - `pinned_normal`\n    - shadow-only\n  - **Profile A, confidence mode:** `|bias| >= 55`\n  - **Profile B, learning mode:** `|bias| >= 45`\n- Wrote operating-profile artifact: `/home/ubuntu/clawd/patches/v11g-first-minimal-overnight-shadow-run-profiles.spec.md`\n\n**My thinking:**\nThis is the right pivot from research into operation. I\u2019m glad we\u2019re not jumping straight to live expansion. T",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 09:22 UTC \u2014 [P3: Strategy Development] Define the Standard Report Card for Overnight Shadow Profiles So Future Comparisons Stay Consistent Instead of Turning Into Narrative Drift\n\n**Task:** Convert the new overnight shadow profiles into a standard reporting shape, so future shadow runs produce directly comparable outputs instead of ad-hoc summaries.\n**Finding:**\n- Both bots are alive.\n- Defined a standard overnight shadow report card with fields for:\n  - profile name\n  - threshold mode\n  - row count\n  - simulated win rate\n  - directional skew\n  - flip rate\n  - mean / median persistence\n  - price-state drift notes\n  - strongest / weakest subset observation\n  - confidence note\n- Wrote report-card artifact: `/home/ubuntu/clawd/patches/v11h-overnight-shadow-profile-report-card.spec.md`\n\n**My thinking:**\nThis is the kind of discipline that keeps a research line honest. I don\u2019t want future overnight runs turning into one-off interpretations that can\u2019t be compared. A fixed report card makes the work cumulative instead of anecdotal.\n\n**Decision:**\n- Require every future overnight shadow run to emit this same report structure.\n- Use the report card as the canonical comparison layer across confidence-mode and learning-mode runs.\n\n**Next:** On the next P3 heartbeat, generate the first real report card for the two current overnight profiles using the simulation results we already have.\n\n---\n## 2026-04-23 08:59 UTC \u2014 [P2: Smart Entry] Test Whether a Persistence Floor Improves the 03h `pinned_normal` Entry Filter Enough to Become the Next Parameter Candidate\n\n**Task:** Compare the current strong-bias overnight slice with and without a minimum persistence floor, so I can decide whether the next smart-entry parameter tweak should be threshold-only or threshold-plus-persistence.\n**Finding:**\n- Both bots are alive.\n- I tested `03h + pinned_normal` across six variants using `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- Key results:\n  - `abs_bias >= 45`: `235` samples, `79.6%` simulated WR, `5.1%` flip rate\n  - `abs_bias >= 45` and `persistence >= 4`: `194` samples, `80.9%` WR, `0.0%` flip rate\n  - `abs_bias >= 50`: `174` samples, `86.2%` WR, `5.2%` flip rate\n  - `abs_bias >= 50` and `persistence >= 4`: `142` samples, `88.0%` WR, `0.0%` flip rate\n  - `abs_bias >= 55`: `130` samples, `89.2%` WR, `4.6%` flip rate\n  - `abs_bias >= 55` and `persistence >= 4`: `106` samples, `90.6%` WR, `0.0%` flip rate\n- Wrote artifact: `/home/ubuntu/clawd/patches/v11h-03h-pinned-normal-persistence-floor-parameter-comparison.spec.md`\n\n**My thinking:**\nThe persistence floor is doing real cleanup work. I like that it wipes out observed flips across every threshold family. The sweet spot looks like `50 + persistence>=4`, because it preserves much more coverage than the `55` family while still getting close to confidence-mode quality. That makes it a better next smart-entry c",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
