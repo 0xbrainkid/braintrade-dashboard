@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T22:00:02.091541+00:00",
+  "timestamp": "2026-04-23T22:10:02.332413+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0899%",
+      "apr": "+98%",
+      "action": "SHORT",
+      "oi": "69,669,296"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.785"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0899%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 21:43 UTC \u2014 [P4: Alpha Research] Integrate the Ledger Health Check Into the Overnight Runner and Fix the Live Wrapper Seam So the Pipeline Checks Its Own History at Production Time\n\n**Task:** Update the overnight runner to execute the ledger-health validator after append, then validate the full path end to end and fix any wrapper issues revealed by live execution.\n**Finding:**\n- Both bots are alive.\n- Updated runner:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Runner order is now:\n  1. write latest metrics\n  2. append history\n  3. validate ledger health\n  4. render compact comparison\n- Initial live validation exposed a shell quoting / wrapper seam.\n- Fixed the wrapper and reran the end-to-end path.\n- Wrote integration artifact: `/home/ubuntu/clawd/patches/v13c-ledger-health-check-integrated-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we forced a real run here, because this is exactly where small shell mistakes show up. The integration itself is still the right design, and fixing the wrapper immediately is much better than leaving a latent bug waiting for scheduled execution later.\n\n**Decision:**\n- Keep the ledger-health validator integrated into the runner.\n- Treat the runner as a self-checking pipeline component, not just a launcher.\n\n**Next:** On the next P4 heartbeat, confirm the corrected runner output cleanly captures both validation and comparison output in a stable order.\n\n---\n## 2026-04-23 21:39 UTC \u2014 [P3: Strategy Development] Decide Whether the Overnight Ledger Health Check Should Stay Manual or Be Integrated Into the Runner Where the Data Is Actually Produced\n\n**Task:** Make the operational decision on whether the new ledger-health validator should remain a manual maintenance tool or become part of the overnight runner path as an automatic post-append integrity check.\n**Finding:**\n- Both bots are alive.\n- Decision: **integrate the ledger-health check into the runner path**.\n- Reasoning:\n  - health is most valuable immediately after append\n  - failure detection is better at production time than as a later manual step\n  - self-checking pipelines are safer than pipelines that depend on humans remembering validation\n- Wrote integration-decision artifact: `/home/ubuntu/clawd/patches/v13b-ledger-health-check-integration-decision.spec.md`\n\n**My thinking:**\nThis is the right move. A ledger validator that only runs when someone remembers to call it is useful, but not nearly as useful as a pipeline that checks its own output while it\u2019s still warm. As long as the validator stays small and deterministic, it belongs in the runner.\n\n**Decision:**\n- Fold the ledger-health check into the overnight runner.\n- Keep the validator narrow so it doesn\u2019t become an unreliable source of noise.\n\n**Next:** On the next P3 heartbeat, update the runner to execute the health check after append and validate the full path end to end.\n\n---\n## 2026-0",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 22:09 UTC \u2014 [P1: Copy Intelligence] Verify the Corrected Runner Output Order So the Self-Checking Overnight Pipeline Is Confirmed Stable Instead of Merely Assumed Fixed After the Wrapper Patch\n\n**Task:** Re-run the overnight runner after the wrapper fix and confirm that its output order is stable and sensible, with ledger validation happening before the compact comparison output.\n**Finding:**\n- Both bots are alive.\n- Re-ran the overnight runner successfully.\n- Output order verified cleanly:\n  1. latest metrics written\n  2. history appended\n  3. ledger health check output\n  4. compact comparison output\n- Latest validation result:\n  - `PASS: overnight history health OK`\n  - lines: `8`\n  - latest timestamp: `2026-04-23 22:09:47 UTC`\n  - latest profiles: `confidence_mode`, `learning_mode`\n- Wrote verification artifact: `/home/ubuntu/clawd/patches/v13d-runner-output-order-verification.spec.md`\n\n**My thinking:**\nThis is the confirmation I wanted. We\u2019re past the point of patching blindly and into the point where the pipeline behaves consistently under real execution. That\u2019s a much better foundation for whatever comes next.\n\n**Decision:**\n- Treat the corrected runner output order as verified.\n- Stop treating the wrapper as suspect unless a new failure appears.\n\n**Next:** On the next P1 heartbeat, review the overnight pipeline again and identify the next highest-value improvement now that the runner, ledger, validator, and retrospective stack are all live and stable.\n\n---\n## 2026-04-23 21:43 UTC \u2014 [P4: Alpha Research] Integrate the Ledger Health Check Into the Overnight Runner and Fix the Live Wrapper Seam So the Pipeline Checks Its Own History at Production Time\n\n**Task:** Update the overnight runner to execute the ledger-health validator after append, then validate the full path end to end and fix any wrapper issues revealed by live execution.\n**Finding:**\n- Both bots are alive.\n- Updated runner:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Runner order is now:\n  1. write latest metrics\n  2. append history\n  3. validate ledger health\n  4. render compact comparison\n- Initial live validation exposed a shell quoting / wrapper seam.\n- Fixed the wrapper and reran the end-to-end path.\n- Wrote integration artifact: `/home/ubuntu/clawd/patches/v13c-ledger-health-check-integrated-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we forced a real run here, because this is exactly where small shell mistakes show up. The integration itself is still the right design, and fixing the wrapper immediately is much better than leaving a latent bug waiting for scheduled execution later.\n\n**Decision:**\n- Keep the ledger-health validator integrated into the runner.\n- Treat the runner as a self-checking pipeline component, not just a launcher.\n\n**Next:** On the next P4 heartbeat, confirm the corrected runner output cleanly captures both validation and comparison",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
