@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T04:47:48.720944+00:00",
+  "timestamp": "2026-04-23T04:59:04.399313+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,31 +17,31 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0994%",
-      "apr": "+109%",
+      "rate": "+0.1011%",
+      "apr": "+111%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0726%",
-      "apr": "-80%",
+      "rate": "-0.0664%",
+      "apr": "-73%",
       "action": "LONG",
-      "oi": "194,923,780"
-    },
-    {
-      "coin": "BLAST",
-      "rate": "-0.0555%",
-      "apr": "-61%",
-      "action": "LONG",
-      "oi": "2,138,709,084"
+      "oi": "208,846,804"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0523%",
-      "apr": "-57%",
+      "rate": "-0.0531%",
+      "apr": "-58%",
       "action": "LONG",
       "oi": "1,194,402"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0507%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "2,139,089,544"
     }
   ],
   "daily_pnl": [
@@ -115,7 +115,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0994%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1011%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -357,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 04:46 UTC \u2014 [P2: Smart Entry] Scope a Low-Instrumentation Way to Collect the 03h Shadow Metrics So We Can Start Cheaply Instead of Building a Big New Pipeline\n\n**Task:** Figure out how to gather the new `03h` shadow-evaluation metrics with minimal extra instrumentation, preferring reuse of current logs over building a new collector.\n**Finding:**\n- Both bots are alive.\n- Current `trading.log` already provides enough blocked-window information to support much of the framework:\n  - hour stamp\n  - bias score\n  - PM price state (`Y... N...`)\n  - repeated adjacent-window observations\n- That means current logs can already support:\n  - signal density\n  - directional skew\n  - price-state cleanliness\n  - persistence / adjacent-window tracking\n- Wrote collection artifact: `/home/ubuntu/clawd/patches/v10r-low-instrumentation-03h-shadow-metric-collection.spec.md`\n\n**My thinking:**\nI\u2019m glad this doesn\u2019t need a heavy build. The right move is to squeeze value from the logs we already have before inventing a new instrumentation layer. That keeps the 03h research path lightweight and fast.\n\n**Decision:**\n- Start with offline extraction from existing logs.\n- Add only one small extra instrumentation line later if a concrete missing metric remains, for example a structured `03h` shadow-candidate line.\n\n**Next:** On the next P2 heartbeat, define the exact offline extraction fields and output table for a first-pass `03h` shadow dataset using current logs only.\n\n---\n## 2026-04-23 04:28 UTC \u2014 [P1: Copy Intelligence] Define the Minimum 03h Shadow Evaluation Framework Before Any Overnight Expansion Gets Considered\n\n**Task:** Turn the newly selected `03h` overnight candidate into a disciplined shadow-evaluation framework, so future work measures the right evidence before anyone is tempted to expand live hours.\n**Finding:**\n- Both bots are alive.\n- `03h` now has an explicit evaluation framework covering:\n  - signal density\n  - directional stability\n  - price-state cleanliness\n  - shadow decision quality\n  - copy / structural context\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10q-03h-shadow-evaluation-framework.spec.md`\n\n**My thinking:**\nThis is the right checkpoint. Choosing `03h` as the best overnight candidate is only useful if we immediately define the evidence bar. Otherwise people drift from \u201cinteresting\u201d to \u201cshould trade it\u201d without a rigorous bridge. I want that bridge explicit.\n\n**Decision:**\n- Keep `03h` research-only for now.\n- Require this shadow framework to be passed before any restricted overnight expansion is even discussed.\n\n**Next:** On the next P1 heartbeat, start scoping how to collect the 03h shadow metrics from current logs with the least additional instrumentation.\n\n---\n## 2026-04-23 04:13 UTC \u2014 [P4: Alpha Research] Compare 02h vs 03h Price-State Structure and Pick the Cleaner Overnight Shadow Candidate\n\n**Task:** Compare the two most",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 04:58 UTC \u2014 [P3: Strategy Development] Define the Exact First-Pass 03h Shadow Dataset Schema So Offline Extraction Can Start Cleanly Next Cycle\n\n**Task:** Turn the low-instrumentation collection plan into a concrete first-pass dataset schema, so the next 03h shadow step can be a direct offline extractor rather than another design discussion.\n**Finding:**\n- Both bots are alive.\n- Defined a first-pass 03h shadow dataset with one blocked 03h decision window per row.\n- The schema includes fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - directional sign\n  - adjacent persistence context\n  - source reason\n- Wrote schema artifact: `/home/ubuntu/clawd/patches/v10s-first-pass-03h-shadow-dataset-schema.spec.md`\n\n**My thinking:**\nThis is the right handoff point from research into extraction. I\u2019m glad we pinned the row grain and field set explicitly, because that prevents the next step from ballooning into a messy one-off parser. Now the extractor has a real contract.\n\n**Decision:**\n- Use one blocked 03h decision window per row.\n- Start with current-log-derived fields only.\n- Leave outcome simulation for the next stage rather than overloading the first dataset.\n\n**Next:** On the next P3 heartbeat, build the first offline extractor that reads `trading.log` and emits this 03h shadow dataset schema.\n\n---\n## 2026-04-23 04:46 UTC \u2014 [P2: Smart Entry] Scope a Low-Instrumentation Way to Collect the 03h Shadow Metrics So We Can Start Cheaply Instead of Building a Big New Pipeline\n\n**Task:** Figure out how to gather the new `03h` shadow-evaluation metrics with minimal extra instrumentation, preferring reuse of current logs over building a new collector.\n**Finding:**\n- Both bots are alive.\n- Current `trading.log` already provides enough blocked-window information to support much of the framework:\n  - hour stamp\n  - bias score\n  - PM price state (`Y... N...`)\n  - repeated adjacent-window observations\n- That means current logs can already support:\n  - signal density\n  - directional skew\n  - price-state cleanliness\n  - persistence / adjacent-window tracking\n- Wrote collection artifact: `/home/ubuntu/clawd/patches/v10r-low-instrumentation-03h-shadow-metric-collection.spec.md`\n\n**My thinking:**\nI\u2019m glad this doesn\u2019t need a heavy build. The right move is to squeeze value from the logs we already have before inventing a new instrumentation layer. That keeps the 03h research path lightweight and fast.\n\n**Decision:**\n- Start with offline extraction from existing logs.\n- Add only one small extra instrumentation line later if a concrete missing metric remains, for example a structured `03h` shadow-candidate line.\n\n**Next:** On the next P2 heartbeat, define the exact offline extraction fields and output table for a first-pass `03h` shadow dataset using current logs only.\n\n---\n## 2026-04-23 04:2",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
