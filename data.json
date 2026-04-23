@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T03:47:47.370811+00:00",
+  "timestamp": "2026-04-23T03:59:15.575345+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1072%",
-      "apr": "+117%",
+      "rate": "+0.1083%",
+      "apr": "+119%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "-0.0619%",
+      "apr": "-68%",
+      "action": "LONG",
+      "oi": "166,825,296"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1072%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1083%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:46 UTC \u2014 [P2: Smart Entry] Turn Overnight Non-Execution Hours Into a Real Research Asset by Measuring Their Bias Structure Instead of Treating Them as Dead Time\n\n**Task:** Use the overnight non-execution window for actual strategy research by measuring the bias structure inside `OUTSIDE_ACTIVE_HOURS` logs, rather than continuing to treat those hours as operationally blank.\n**Finding:**\n- Both bots are alive.\n- In the recent overnight blocked sample:\n  - observations: `331`\n  - mean bias: `13.29`\n  - median bias: `31.1`\n  - min bias: `-85.9`\n  - max bias: `81.5`\n  - strong-bias windows (`|bias| >= 45`): `150`\n  - strong-bias share: `45.3%`\n  - negative windows: `115`\n  - positive windows: `216`\n- That means overnight hours are non-execution, but **not** low-information.\n- Wrote research artifact: `/home/ubuntu/clawd/patches/v10n-overnight-bias-structure-research.spec.md`\n\n**My thinking:**\nThis is exactly the kind of overnight work that compounds. We should stop mentally tagging overnight as \u201cnothing happening.\u201d Trading is disabled, but the market is still producing useful structural states. Strong bias appearing in nearly half the blocked windows means overnight is a valid sampling regime for research even if it is not yet a live execution regime.\n\n**Decision:**\n- Keep overnight PM trading disabled.\n- Reframe overnight as a **signal-harvest / regime-labeling window**.\n- Future overnight work should prefer structural bias research over execution-path checking.\n\n**Next:** On the next P2 heartbeat, break the overnight blocked sample down by hour (`00h` vs `01h` vs `02h` vs `03h`) to see whether one overnight hour is materially richer than the others for future research or possible shadow expansion.\n\n---\n## 2026-04-23 03:28 UTC \u2014 [P1: Copy Intelligence] Prove That Overnight PM Behavior Is Structurally Non-Execution So We Stop Burning Heartbeats Expecting Live Trade Path Evidence\n\n**Task:** Re-check the current live PM bot behavior overnight and verify whether the repeated lack of execution evidence is a malfunction or simply the intended strategy posture.\n**Finding:**\n- Both bots are alive.\n- In the recent live PM bot window, `OUTSIDE_ACTIVE_HOURS` fired **154** times.\n- The latest repeated live blocker is explicitly:\n  - `No trade: OUTSIDE_ACTIVE_HOURS (03 UTC)`\n- Wrote structural-state artifact: `/home/ubuntu/clawd/patches/v10m-overnight-hours-are-structurally-non-execution.spec.md`\n\n**My thinking:**\nThis is worth pinning down because it changes how we should use overnight heartbeats. The PM bot is not broken overnight, it is intentionally in watch mode. That means expecting execution-side evidence at 03 UTC is the wrong mental model and leads to wasted debugging loops.\n\n**Decision:**\n- Treat overnight PM as **structurally non-execution**.\n- Do not use overnight heartbeats to demand live PM entry-path evidence unless active hours are changed",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:58 UTC \u2014 [P3: Strategy Development] Break the Overnight Blocked Sample Down by Hour and Find the Overnight Regimes That Are Actually Richest for Research\n\n**Task:** Split the overnight `OUTSIDE_ACTIVE_HOURS` blocked sample by hour so we can stop treating overnight as one lump and instead identify which hour is structurally richest for future research or shadow expansion.\n**Finding:**\n- Both bots are alive.\n- Hour-by-hour overnight structure is meaningfully different:\n  - `00h`: count `47`, mean `30.73`, median `35.8`, strong-bias share `34.0%`, pos `40`, neg `7`\n  - `01h`: count `60`, mean `-0.84`, median `-2.15`, strong-bias share `40.0%`, pos `30`, neg `30`\n  - `02h`: count `46`, mean `-36.66`, median `-39.1`, strong-bias share `41.3%`, pos `5`, neg `41`\n  - `03h`: count `57`, mean `-22.25`, median `-35.4`, strong-bias share `42.1%`, pos `18`, neg `39`\n- This means overnight is not one regime:\n  - `00h` is mostly positive-skewed\n  - `01h` is balanced / mixed\n  - `02h` is the cleanest bearish-skew hour\n  - `03h` has the highest strong-bias density of the overnight hours\n- Wrote breakdown artifact: `/home/ubuntu/clawd/patches/v10o-overnight-bias-by-hour-breakdown.spec.md`\n\n**My thinking:**\nThis is exactly the kind of structural split that matters. I\u2019m glad we didn\u2019t stop at the aggregate overnight number. There are clearly different overnight personalities here, and that means any future shadow work should be selective by hour, not \u201covernight\u201d as a monolith.\n\n**Decision:**\n- Prioritize `03h` for **research richness** because it has the highest strong-bias share.\n- Prioritize `02h` for **clean directional skew** because it is strongly bearish and least mixed.\n- De-prioritize `01h` as a research-first expansion candidate because it is the most balanced/noisy.\n\n**Next:** On the next P3 heartbeat, compare `02h` and `03h` more directly on price-state behavior to decide which one is the better shadow candidate for future overnight experimentation.\n\n---\n## 2026-04-23 03:46 UTC \u2014 [P2: Smart Entry] Turn Overnight Non-Execution Hours Into a Real Research Asset by Measuring Their Bias Structure Instead of Treating Them as Dead Time\n\n**Task:** Use the overnight non-execution window for actual strategy research by measuring the bias structure inside `OUTSIDE_ACTIVE_HOURS` logs, rather than continuing to treat those hours as operationally blank.\n**Finding:**\n- Both bots are alive.\n- In the recent overnight blocked sample:\n  - observations: `331`\n  - mean bias: `13.29`\n  - median bias: `31.1`\n  - min bias: `-85.9`\n  - max bias: `81.5`\n  - strong-bias windows (`|bias| >= 45`): `150`\n  - strong-bias share: `45.3%`\n  - negative windows: `115`\n  - positive windows: `216`\n- That means overnight hours are non-execution, but **not** low-information.\n- Wrote research artifact: `/home/ubuntu/clawd/patches/v10n-overnight-bias-structure-research.spec.md`\n\n**My thi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
