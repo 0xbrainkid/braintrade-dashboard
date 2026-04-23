@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T11:49:28.423777+00:00",
+  "timestamp": "2026-04-23T11:59:22.676853+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1057%",
-      "apr": "-116%",
+      "rate": "-0.0985%",
+      "apr": "-108%",
       "action": "LONG",
-      "oi": "254,096,622"
+      "oi": "249,260,192"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0634%",
-      "apr": "+69%",
+      "rate": "+0.0646%",
+      "apr": "+71%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1057%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.0985%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 11:48 UTC \u2014 [P1: Copy Intelligence] Validate the Overnight Monitoring Path End to End So the New Schema and Renderer Are Proven Together Instead of Only Specified Separately\n\n**Task:** Write a sample `overnight_latest_metrics.json` file and run the compact comparison renderer against it, so the overnight monitoring path is validated from producer input through rendered output.\n**Finding:**\n- Both bots are alive.\n- Wrote sample producer file:\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Ran renderer successfully against the sample input.\n- Output confirmed the full baseline-vs-latest comparison path for both profiles.\n\n  **Confidence mode sample output**\n  - row count: `130 -> 124`\n  - simulated WR: `89.2% -> 86.8%`\n  - flip rate: `4.6% -> 5.6%`\n  - mean persistence: `12.37 -> 11.9`\n  - directional skew: `neg=89,pos=41 -> neg=82,pos=42`\n  - escalation: `none`\n\n  **Learning mode sample output**\n  - row count: `235 -> 228`\n  - simulated WR: `79.6% -> 78.4%`\n  - flip rate: `5.1% -> 5.4%`\n  - mean persistence: `14.68 -> 14.1`\n  - directional skew: `neg=152,pos=83 -> neg=146,pos=82`\n  - escalation: `none`\n\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v11q-end-to-end-overnight-renderer-validation.spec.md`\n\n**My thinking:**\nI\u2019m glad we closed the loop here. The overnight monitoring path is now an actual working chain, not a pile of disconnected ideas. Just as important, the sample drift stayed below escalation guardrails, so the current thresholds feel sane rather than fragile.\n\n**Decision:**\n- Treat the producer-to-renderer path as validated.\n- Keep the current escalation guardrails unchanged for now.\n\n**Next:** On the next P1 heartbeat, define the smallest follow-up automation that could write real latest metrics into `overnight_latest_metrics.json` from future profile runs.\n\n---\n## 2026-04-23 11:28 UTC \u2014 [P4: Alpha Research] Define the Minimal JSON Schema for Overnight Latest Metrics So the New Renderer Has a Clean Standard Input Contract\n\n**Task:** Define the minimum JSON schema for `/home/ubuntu/clawd/data/overnight_latest_metrics.json`, so future overnight profile runs can feed the compact comparison renderer in a stable, low-friction way.\n**Finding:**\n- Both bots are alive.\n- Defined the minimal JSON input contract for the renderer.\n- Supported per-profile fields:\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `drift_note`\n  - `escalation_status`\n- Omitted fields intentionally fall back to embedded baselines in the renderer.\n- Wrote schema artifact: `/home/ubuntu/clawd/patches/v11p-overnight-latest-metrics-json-schema.spec.md`\n\n**My thinking:**\nThis is a clean interface boundary. I\u2019m happy with it because it keeps the producer requirements light, but still gives the renderer enough structure to stay consistent. That\u2019s exactly the right shape for a young monitor",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 11:58 UTC \u2014 [P2: Smart Entry] Define the Smallest Writer for Overnight Latest Metrics So the New Monitoring Path Can Advance From Manual Samples to Real Automated Inputs\n\n**Task:** Define the smallest practical automation that can write real latest overnight profile metrics into `overnight_latest_metrics.json` without trying to solve more than the input-contract problem.\n**Finding:**\n- Both bots are alive.\n- The minimal writer is now scoped to four core steps:\n  1. read latest profile metrics source\n  2. map only required renderer fields\n  3. write `confidence_mode` and `learning_mode`\n  4. omit missing fields instead of inventing values\n- Wrote writer-design artifact: `/home/ubuntu/clawd/patches/v11r-minimal-overnight-latest-metrics-writer.spec.md`\n\n**My thinking:**\nThis is the right boundary. I don\u2019t want the first writer trying to analyze, score, and render all at once. A narrow transform step is safer, easier to verify, and much less likely to become a mess.\n\n**Decision:**\n- Keep the first writer purely as a transform into the renderer input schema.\n- Avoid embedding extra analytics into the writer.\n\n**Next:** On the next P2 heartbeat, identify the most likely real source file or intermediate output that this minimal writer should read from first.\n\n---\n## 2026-04-23 11:48 UTC \u2014 [P1: Copy Intelligence] Validate the Overnight Monitoring Path End to End So the New Schema and Renderer Are Proven Together Instead of Only Specified Separately\n\n**Task:** Write a sample `overnight_latest_metrics.json` file and run the compact comparison renderer against it, so the overnight monitoring path is validated from producer input through rendered output.\n**Finding:**\n- Both bots are alive.\n- Wrote sample producer file:\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Ran renderer successfully against the sample input.\n- Output confirmed the full baseline-vs-latest comparison path for both profiles.\n\n  **Confidence mode sample output**\n  - row count: `130 -> 124`\n  - simulated WR: `89.2% -> 86.8%`\n  - flip rate: `4.6% -> 5.6%`\n  - mean persistence: `12.37 -> 11.9`\n  - directional skew: `neg=89,pos=41 -> neg=82,pos=42`\n  - escalation: `none`\n\n  **Learning mode sample output**\n  - row count: `235 -> 228`\n  - simulated WR: `79.6% -> 78.4%`\n  - flip rate: `5.1% -> 5.4%`\n  - mean persistence: `14.68 -> 14.1`\n  - directional skew: `neg=152,pos=83 -> neg=146,pos=82`\n  - escalation: `none`\n\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v11q-end-to-end-overnight-renderer-validation.spec.md`\n\n**My thinking:**\nI\u2019m glad we closed the loop here. The overnight monitoring path is now an actual working chain, not a pile of disconnected ideas. Just as important, the sample drift stayed below escalation guardrails, so the current thresholds feel sane rather than fragile.\n\n**Decision:**\n- Treat the producer-to-renderer path as validated.\n- Keep the ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
