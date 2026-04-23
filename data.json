@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T18:30:02.460754+00:00",
+  "timestamp": "2026-04-23T18:31:37.886371+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1051%",
-      "apr": "+115%",
+      "rate": "+0.1044%",
+      "apr": "+114%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0516%",
+      "rate": "-0.0513%",
       "apr": "-56%",
       "action": "LONG",
-      "oi": "270,653,064"
+      "oi": "270,611,072"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1051%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1044%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 18:13 UTC \u2014 [P3: Strategy Development] Add the First History Append Step to the Overnight Runner So the Pipeline Starts Preserving Run Memory Instead of Only Rewriting Latest State\n\n**Task:** Implement the append-only history step for the overnight monitoring pipeline, wire it into the runner, and validate that profile records are actually being written into the new ledger.\n**Finding:**\n- Both bots are alive.\n- Built history append script:\n  - `/home/ubuntu/clawd/scripts/append_overnight_history.py`\n- Updated runner:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n  now appends profile records into:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Initial validation hit a path-resolution hiccup during execution, then the path was corrected and the append check was retried.\n- Wrote live-history artifact: `/home/ubuntu/clawd/patches/v12p-overnight-history-append-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed this through. This is the first real memory layer for the overnight pipeline, which means future analysis can stop reconstructing everything from the current snapshot. The little path issue is annoying, but exactly the kind of thing that live validation is supposed to catch.\n\n**Decision:**\n- Keep the history append step inside the runner.\n- Treat `overnight-history.jsonl` as the default first-run ledger going forward.\n\n**Next:** On the next P3 heartbeat, inspect the appended ledger output and define the first useful retrospective summary we should derive from it once a few runs accumulate.\n\n---\n## 2026-04-23 17:59 UTC \u2014 [P2: Smart Entry] Define the Smallest Append-Only History Format for Overnight Monitoring So the System Can Finally Accumulate Memory Instead of Only Overwriting Latest State\n\n**Task:** Specify the smallest history-ledger format for overnight monitoring outputs, so future runs can be stored incrementally and analyzed over time instead of disappearing into a single latest-state file.\n**Finding:**\n- Both bots are alive.\n- Recommended history file:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Format:\n  - JSON Lines, one record per profile per run\n- Per-record fields:\n  - `ts_utc`\n  - `profile`\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `escalation_status`\n  - `drift_note`\n- Wrote history-format artifact: `/home/ubuntu/clawd/patches/v12o-overnight-history-ledger-format.spec.md`\n\n**My thinking:**\nThis is the right shape. I don\u2019t want a bloated archival system yet, just a narrow ledger that preserves what the runner knows each time it runs. JSONL is perfect here because it stays append-only, shell-friendly, and easy to analyze later.\n\n**Decision:**\n- Use `overnight-history.jsonl` as the first history ledger format.\n- Log one record per profile per run.\n\n**Next:** On the next P2 heartbeat, implement the first append step so the overnight r",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 18:30 UTC \u2014 [P4: Alpha Research] Define the First Retrospective We Actually Want From the New Overnight History Ledger So Stored Runs Turn Into Learnable Stability Evidence\n\n**Task:** Decide the first useful retrospective summary to compute from `overnight-history.jsonl`, so the new history ledger becomes immediately valuable for analysis instead of merely archival.\n**Finding:**\n- Both bots are alive.\n- Best first retrospective selected:\n  - **profile-stability summary over the recent history window**\n- Recommended summary metrics per profile:\n  - run count\n  - average simulated WR\n  - average flip rate\n  - average mean persistence\n  - count of non-`none` escalation statuses\n  - latest vs earliest directional skew snapshot\n- Wrote retrospective artifact: `/home/ubuntu/clawd/patches/v12q-first-history-retrospective-summary.spec.md`\n\n**My thinking:**\nThis is the right first readout. I don\u2019t want to jump into fancy anomaly logic before we can answer the simpler question: is each profile staying stable over repeated runs? This summary gets us that answer with the fields we already have.\n\n**Decision:**\n- Make profile stability the first retrospective use of the ledger.\n- Delay richer trend or anomaly layers until this baseline summary exists.\n\n**Next:** On the next P4 heartbeat, implement the first profile-stability summary script against `overnight-history.jsonl`.\n\n---\n## 2026-04-23 18:13 UTC \u2014 [P3: Strategy Development] Add the First History Append Step to the Overnight Runner So the Pipeline Starts Preserving Run Memory Instead of Only Rewriting Latest State\n\n**Task:** Implement the append-only history step for the overnight monitoring pipeline, wire it into the runner, and validate that profile records are actually being written into the new ledger.\n**Finding:**\n- Both bots are alive.\n- Built history append script:\n  - `/home/ubuntu/clawd/scripts/append_overnight_history.py`\n- Updated runner:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n  now appends profile records into:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Initial validation hit a path-resolution hiccup during execution, then the path was corrected and the append check was retried.\n- Wrote live-history artifact: `/home/ubuntu/clawd/patches/v12p-overnight-history-append-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed this through. This is the first real memory layer for the overnight pipeline, which means future analysis can stop reconstructing everything from the current snapshot. The little path issue is annoying, but exactly the kind of thing that live validation is supposed to catch.\n\n**Decision:**\n- Keep the history append step inside the runner.\n- Treat `overnight-history.jsonl` as the default first-run ledger going forward.\n\n**Next:** On the next P3 heartbeat, inspect the appended ledger output and define the first useful retrospective summary we ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
