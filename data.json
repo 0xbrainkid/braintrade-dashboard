@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T06:00:02.148446+00:00",
+  "timestamp": "2026-04-23T06:24:02.157983+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1143%",
-      "apr": "+125%",
+      "rate": "+0.1072%",
+      "apr": "+117%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
-      "coin": "BLAST",
-      "rate": "-0.0655%",
-      "apr": "-72%",
-      "action": "LONG",
-      "oi": "2,138,181,208"
+      "coin": "ZEREBRO",
+      "rate": "+0.0510%",
+      "apr": "+56%",
+      "action": "SHORT",
+      "oi": "239,740,084"
     }
   ],
   "daily_pnl": [
@@ -101,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1143%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1072%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:58 UTC \u2014 [P4: Alpha Research] Define the Sub-Regime Comparison Framework for 03h `pinned_normal` vs `excursion` So Future Shadow Scoring Stops Blending Them Together\n\n**Task:** Convert the newly identified 03h structure into a disciplined sub-regime comparison framework, so the main `pinned_normal` regime and the sharper `excursion` niche are evaluated separately going forward.\n**Finding:**\n- Both bots are alive.\n- Defined the minimum comparison framework for:\n  - `03h + pinned_normal`\n  - `03h + excursion`\n- The split explicitly tracks:\n  - sample size\n  - bias intensity\n  - strong-bias rates\n  - directional skew\n  - flip rate\n  - persistence\n  - later simulated outcome quality\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10w-03h-sub-regime-comparison-framework.spec.md`\n\n**My thinking:**\nThis is important cleanup. I don\u2019t want future analysis to blur a large clean regime with a small sharp regime and then draw mushy conclusions. The right question is not \u201chow does 03h do?\u201d but \u201cwhich 03h sub-regime actually deserves trust?\u201d\n\n**Decision:**\n- Treat `pinned_normal` and `excursion` as separate 03h sub-regimes from here forward.\n- Use `pinned_normal` as the base case and `excursion` as the high-intensity challenger.\n\n**Next:** On the next P4 heartbeat, compute the first-pass flip-rate and persistence comparison between `03h pinned_normal` and `03h excursion` directly from the extracted dataset.\n\n---\n## 2026-04-23 05:46 UTC \u2014 [P3: Strategy Development] Break the 03h Shadow Dataset Down by Price State and Find the State That Actually Carries the Candidate\u2019s Strength\n\n**Task:** Split the 03h shadow dataset by `price_state_label` to see whether the strongest windows cluster in cleaner structural buckets or mostly leak into the messy `other` bucket.\n**Finding:**\n- Both bots are alive.\n- Price-state bucket summary:\n  - `excursion`: count `50`, mean abs `41.03`, median abs `43.95`, `|bias|>=45` `48.0%`, `|bias|>=55` `32.0%`, neg `40`, pos `10`\n  - `neighbor`: count `115`, mean abs `34.16`, median abs `33.1`, `|bias|>=45` `26.1%`, `|bias|>=55` `15.7%`, neg `38`, pos `77`\n  - `other`: count `360`, mean abs `32.95`, median abs `31.65`, `|bias|>=45` `28.6%`, `|bias|>=55` `16.7%`, neg `216`, pos `143`\n  - `pinned_normal`: count `643`, mean abs `36.76`, median abs `36.3`, `|bias|>=45` `36.5%`, `|bias|>=55` `20.2%`, neg `395`, pos `248`\n- Interpretation:\n  - `excursion` has the highest intensity but is a small sample\n  - `pinned_normal` is the most operationally attractive state because it combines:\n    - the largest sample\n    - strong-bias density above the overall 03h average\n    - clear negative skew\n- Wrote bucket-summary artifact: `/home/ubuntu/clawd/patches/v10v-03h-price-state-bucket-summary.spec.md`\n\n**My thinking:**\nThis is the kind of answer we need. I\u2019m glad the strength is not trapped in the messy bucket. `Excursion` is sharp, but ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 06:22 UTC \u2014 [P1: Copy Intelligence] Run the First Stability Comparison Between 03h `pinned_normal` and `excursion` and Check Whether the Sharper Regime Is Also Stable Enough to Matter\n\n**Task:** Compare the two important 03h sub-regimes on flip behavior and persistence, so we can tell whether `excursion` is merely intense or also stable enough to deserve real attention beside `pinned_normal`.\n**Finding:**\n- Both bots are alive.\n- Stability comparison:\n  - `pinned_normal`: count `643`, flip rate `11.4%`, mean persistence `13.28`, median persistence `8`, max persistence `72`\n  - `excursion`: count `50`, flip rate `10.0%`, mean persistence `21.52`, median persistence `16.5`, max persistence `51`\n- Interpretation:\n  - `pinned_normal` remains the broad base regime because of its large sample\n  - but `excursion` is not just high-intensity, it is also **more persistent** and slightly **less flip-prone** in the extracted sample\n- Wrote stability artifact: `/home/ubuntu/clawd/patches/v10x-03h-sub-regime-stability-comparison.spec.md`\n\n**My thinking:**\nThis is more interesting than I expected. I thought `excursion` might just be a small sharp regime, but it\u2019s showing real structural stability too. I still don\u2019t want to over-trust a 50-row sample, but it clearly deserves to stay in the conversation as a distinct overnight regime, not just a curiosity.\n\n**Decision:**\n- Keep `pinned_normal` as the main 03h base regime.\n- Upgrade `excursion` from \u201csecondary intensity bucket\u201d to a **serious secondary regime** worth separate scoring.\n- Preserve sample-size caution when comparing them.\n\n**Next:** On the next P1 heartbeat, define the first simple scoring rubric that ranks `03h pinned_normal` vs `03h excursion` across sample size, intensity, and stability without pretending we already know outcome quality.\n\n---\n## 2026-04-23 05:58 UTC \u2014 [P4: Alpha Research] Define the Sub-Regime Comparison Framework for 03h `pinned_normal` vs `excursion` So Future Shadow Scoring Stops Blending Them Together\n\n**Task:** Convert the newly identified 03h structure into a disciplined sub-regime comparison framework, so the main `pinned_normal` regime and the sharper `excursion` niche are evaluated separately going forward.\n**Finding:**\n- Both bots are alive.\n- Defined the minimum comparison framework for:\n  - `03h + pinned_normal`\n  - `03h + excursion`\n- The split explicitly tracks:\n  - sample size\n  - bias intensity\n  - strong-bias rates\n  - directional skew\n  - flip rate\n  - persistence\n  - later simulated outcome quality\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10w-03h-sub-regime-comparison-framework.spec.md`\n\n**My thinking:**\nThis is important cleanup. I don\u2019t want future analysis to blur a large clean regime with a small sharp regime and then draw mushy conclusions. The right question is not \u201chow does 03h do?\u201d but \u201cwhich 03h sub-regime actually deserves trust?\u201d\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
