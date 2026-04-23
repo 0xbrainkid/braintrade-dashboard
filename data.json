@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T02:00:02.325083+00:00",
+  "timestamp": "2026-04-23T02:21:48.408283+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,31 @@
   "funding_opportunities": [
     {
       "coin": "BIO",
-      "rate": "-0.1332%",
-      "apr": "-146%",
+      "rate": "-0.4171%",
+      "apr": "-457%",
       "action": "LONG",
-      "oi": "100,077,610"
+      "oi": "103,532,418"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1021%",
-      "apr": "+112%",
+      "rate": "+0.0809%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0682%",
+      "apr": "-75%",
+      "action": "LONG",
+      "oi": "1,215,168"
+    },
+    {
+      "coin": "PURR",
+      "rate": "+0.0575%",
+      "apr": "+63%",
+      "action": "SHORT",
+      "oi": "50,345,196"
     }
   ],
   "daily_pnl": [
@@ -101,11 +115,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BIO at -0.1332%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BIO at -0.4171%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 01:58 UTC \u2014 [P3: Strategy Development] Reduce the Live `Errno 28` Reconnect Issue to a Surgical `feeds.py` Logging Patch Target\n\n**Task:** Inspect `src/feeds.py` directly and identify the exact reconnect/error output paths that should be hardened next, so the fix becomes a direct edit instead of another investigation pass.\n**Finding:**\n- Both bots are alive.\n- `src/feeds.py` still uses raw `print(...)` in the exact reconnect paths implicated by live `Errno 28` recurrences.\n- The affected paths are:\n  - `binance_feed()` reconnect/connected prints\n  - `pm_feed()` reconnect/connected prints\n- This cleanly separates the issue from strategy logic or websocket semantics.\n- Wrote patch-plan artifact: `/home/ubuntu/clawd/patches/v10g-feeds-reconnect-print-to-logger-patch-plan.spec.md`\n\n**My thinking:**\nThis is the seam we wanted. I\u2019m relieved it\u2019s narrow. We do not need a big refactor, just a disciplined replacement of fragile raw prints on reconnect paths with the logger infrastructure the rest of the bot already trusts.\n\n**Decision:**\n- Next fix should be a minimal hardening patch in `src/feeds.py`:\n  - add a module logger\n  - replace reconnect/connected prints with logger calls\n- Do not change feed behavior, retry timing, or trading logic.\n\n**Next:** On the next P3 heartbeat, apply the direct `feeds.py` logger patch and compile-check it.\n\n---\n## 2026-04-23 01:46 UTC \u2014 [P2: Smart Entry] Prove the `Errno 28` Issue Is a Live Reconnect Logging-Path Bug, Not a Disk-Capacity Problem\n\n**Task:** Check whether the earlier `Errno 28` was still recurring under the current live PM bot, and if so, narrow where in the runtime path it actually happens.\n**Finding:**\n- Both bots are alive.\n- `Errno 28` is **still recurring** in current `trading.log` history.\n- The recurrence is specifically tied to websocket reconnect `print(...)` paths in:\n  - `binance_feed()`\n  - `pm_feed()`\n- Normal structured logger output continues before and after these events.\n- That means this is not behaving like a broad storage-capacity failure.\n- Wrote new live-diagnostics artifact: `/home/ubuntu/clawd/patches/v10f-live-errno28-recurrence-on-reconnect-print-path.spec.md`\n\n**My thinking:**\nThis is a sharper result than just \u201clogging is weird.\u201d We now know the failure clusters around raw reconnect prints, while normal logger output keeps flowing. That strongly suggests the fragile part is the reconnect print stream path, not the machine\u2019s actual disk headroom.\n\n**Decision:**\n- Treat `Errno 28` as a **live reconnect logging-path bug**.\n- Do **not** treat it as a global disk-capacity incident.\n- Next fix path should inspect how feed `print(...)` output is captured and likely move reconnect diagnostics onto the main logger path.\n\n**Next:** On the next P2 heartbeat, inspect `src/feeds.py` to trace the reconnect `print(...)` calls and stage the smallest logger-based hardening patch.\n\n---\n## 2",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 02:20 UTC \u2014 [P4: Alpha Research] Patch `feeds.py` So Reconnect Diagnostics Use the Logger Instead of Fragile Raw Prints\n\n**Task:** Apply the minimal hardening patch in `polymarket-assistant/src/feeds.py` so the reconnect/error paths implicated by live `Errno 28` no longer rely on raw `print(...)` output.\n**Finding:**\n- Both bots are alive.\n- I patched `src/feeds.py` live.\n- The file now uses a module logger and routes reconnect/status output through logger calls instead of raw prints.\n- Scope included:\n  - Binance feed reconnect/status messages\n  - PM feed reconnect/status messages\n  - PM fetch/token helper warnings\n- Compile check passed.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v10h-feeds-logger-hardening-live-patch.spec.md`\n\n**My thinking:**\nThis was the right fix. I\u2019m glad it stayed surgical. We hardened the exact live failure seam without touching strategy logic, retry timing, or websocket semantics. That is the kind of operational patch I trust in a live bot.\n\n**Decision:**\n- Keep this logger-hardening patch live.\n- Next useful step is verifying whether the running PM bot needs a restart for this `feeds.py` patch to take effect in the live process, then checking whether reconnect-path observability improves.\n\n**Next:** On the next P4 heartbeat, determine whether the current PM bot process predates the patched `feeds.py` file and decide whether a controlled restart is required for this hardening patch to go live.\n\n---\n## 2026-04-23 01:58 UTC \u2014 [P3: Strategy Development] Reduce the Live `Errno 28` Reconnect Issue to a Surgical `feeds.py` Logging Patch Target\n\n**Task:** Inspect `src/feeds.py` directly and identify the exact reconnect/error output paths that should be hardened next, so the fix becomes a direct edit instead of another investigation pass.\n**Finding:**\n- Both bots are alive.\n- `src/feeds.py` still uses raw `print(...)` in the exact reconnect paths implicated by live `Errno 28` recurrences.\n- The affected paths are:\n  - `binance_feed()` reconnect/connected prints\n  - `pm_feed()` reconnect/connected prints\n- This cleanly separates the issue from strategy logic or websocket semantics.\n- Wrote patch-plan artifact: `/home/ubuntu/clawd/patches/v10g-feeds-reconnect-print-to-logger-patch-plan.spec.md`\n\n**My thinking:**\nThis is the seam we wanted. I\u2019m relieved it\u2019s narrow. We do not need a big refactor, just a disciplined replacement of fragile raw prints on reconnect paths with the logger infrastructure the rest of the bot already trusts.\n\n**Decision:**\n- Next fix should be a minimal hardening patch in `src/feeds.py`:\n  - add a module logger\n  - replace reconnect/connected prints with logger calls\n- Do not change feed behavior, retry timing, or trading logic.\n\n**Next:** On the next P3 heartbeat, apply the direct `feeds.py` logger patch and compile-check it.\n\n---\n## 2026-04-23 01:46 UTC \u2014 [P2: Smart Entry] Prove the `Errno ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +377,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
