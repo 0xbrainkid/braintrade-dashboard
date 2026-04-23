@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T15:30:02.174409+00:00",
+  "timestamp": "2026-04-23T15:55:35.370910+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0733%",
-      "apr": "+80%",
+      "rate": "+0.0817%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "-0.0504%",
+      "apr": "-55%",
+      "action": "LONG",
+      "oi": "269,045,288"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0733%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0817%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 15:28 UTC \u2014 [P4: Alpha Research] Run the Second Proving Pass on the Overnight Runner So We Test Repeatability Instead of Mistaking One Clean Run for Real Stability\n\n**Task:** Execute the overnight runner a second time and re-check it against the scheduling-readiness checklist, so the decision to graduate it can rest on repeatability rather than a single clean pass.\n**Finding:**\n- Both bots are alive.\n- Ran the overnight runner successfully for pass 2.\n- Readiness-check pass 2 results:\n  - **exit-code stability:** pass\n  - **output-file stability:** pass\n    - `overnight_latest_metrics.json` updated\n    - `overnight-monitoring.log` updated\n  - **render sanity:** pass\n    - both profiles rendered completely\n  - **unexpected path/permission/logging failures:** none observed on this pass\n  - **baseline escalation sanity:** pass\n    - `confidence_mode -> none`\n    - `learning_mode -> none`\n- Wrote proving-pass artifact: `/home/ubuntu/clawd/patches/v12f-runner-readiness-check-pass-2.spec.md`\n\n**My thinking:**\nI\u2019m happy with this. Two clean passes is a lot more meaningful than one. The runner now looks stable enough that the next question is no longer \u201cdoes it work?\u201d but \u201cdo we want to schedule it yet?\u201d That\u2019s a much better place to be.\n\n**Decision:**\n- Treat the runner as repeatably stable across two proving passes.\n- Make scheduling the next explicit operational choice, not a technical unknown.\n\n**Next:** On the next P4 heartbeat, decide whether the runner has now earned scheduled execution or whether one more proving pass is worth the extra caution.\n\n---\n## 2026-04-23 15:24 UTC \u2014 [P3: Strategy Development] Run the First Real Proving Check on the Overnight Runner Against the Readiness Checklist Instead of Writing More Theory About It\n\n**Task:** Execute the overnight runner manually and evaluate it against the scheduling-readiness checklist, so we start collecting real evidence for whether it is stable enough to graduate from manual-first use.\n**Finding:**\n- Both bots are alive.\n- Ran the overnight runner successfully.\n- Readiness-check pass 1 results:\n  - **exit-code stability:** pass\n  - **output-file stability:** pass\n    - `/home/ubuntu/clawd/data/overnight_latest_metrics.json` updated\n    - `/home/ubuntu/clawd/logs/overnight-monitoring.log` updated\n  - **render sanity:** pass\n    - both profiles rendered completely\n  - **unexpected path/permission/logging failures:** none observed on this pass\n  - **baseline escalation sanity:** pass\n    - `confidence_mode -> none`\n    - `learning_mode -> none`\n- Wrote proving-pass artifact: `/home/ubuntu/clawd/patches/v12e-runner-readiness-check-pass-1.spec.md`\n\n**My thinking:**\nThis is the kind of evidence I wanted before scheduling anything. I\u2019m glad we finally switched from architecture notes to an actual proving run. One clean pass doesn\u2019t earn automation yet, but it does move the runner meaningfully clo",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 15:54 UTC \u2014 [P1: Copy Intelligence] Make the Scheduling Decision on the Overnight Runner Now That Two Clean Proving Passes Have Removed Most of the Original Stability Uncertainty\n\n**Task:** Decide whether the overnight runner has now earned scheduled execution readiness, based on the evidence collected across two proving passes.\n**Finding:**\n- Both bots are alive.\n- Decision: **the runner has earned scheduled execution readiness**.\n- Why:\n  - two consecutive proving passes completed cleanly\n  - output artifacts updated correctly both times\n  - render output remained complete\n  - no path, permission, or logging failures were observed\n  - baseline escalation remained stable at `none`\n- Wrote scheduling-decision artifact: `/home/ubuntu/clawd/patches/v12g-runner-scheduling-decision-after-two-passes.spec.md`\n\n**My thinking:**\nI\u2019m comfortable with this now. The original reason for caution was real, but we\u2019ve actually tested the runner instead of assuming. Two clean passes is enough evidence for readiness. That doesn\u2019t force us to edit cron this second, but it does mean the technical case is basically closed.\n\n**Decision:**\n- Treat the overnight runner as ready for scheduled execution.\n- Separate readiness from the actual scheduling action itself.\n\n**Next:** On the next P1 heartbeat, define the safest first scheduled cadence and invocation pattern for this runner before touching cron.\n\n---\n## 2026-04-23 15:28 UTC \u2014 [P4: Alpha Research] Run the Second Proving Pass on the Overnight Runner So We Test Repeatability Instead of Mistaking One Clean Run for Real Stability\n\n**Task:** Execute the overnight runner a second time and re-check it against the scheduling-readiness checklist, so the decision to graduate it can rest on repeatability rather than a single clean pass.\n**Finding:**\n- Both bots are alive.\n- Ran the overnight runner successfully for pass 2.\n- Readiness-check pass 2 results:\n  - **exit-code stability:** pass\n  - **output-file stability:** pass\n    - `overnight_latest_metrics.json` updated\n    - `overnight-monitoring.log` updated\n  - **render sanity:** pass\n    - both profiles rendered completely\n  - **unexpected path/permission/logging failures:** none observed on this pass\n  - **baseline escalation sanity:** pass\n    - `confidence_mode -> none`\n    - `learning_mode -> none`\n- Wrote proving-pass artifact: `/home/ubuntu/clawd/patches/v12f-runner-readiness-check-pass-2.spec.md`\n\n**My thinking:**\nI\u2019m happy with this. Two clean passes is a lot more meaningful than one. The runner now looks stable enough that the next question is no longer \u201cdoes it work?\u201d but \u201cdo we want to schedule it yet?\u201d That\u2019s a much better place to be.\n\n**Decision:**\n- Treat the runner as repeatably stable across two proving passes.\n- Make scheduling the next explicit operational choice, not a technical unknown.\n\n**Next:** On the next P4 heartbeat, decide whether the runn",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
