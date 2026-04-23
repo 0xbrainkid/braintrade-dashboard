@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T20:30:01.507351+00:00",
+  "timestamp": "2026-04-23T20:38:32.480706+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "REZ",
-      "rate": "-0.0507%",
-      "apr": "-56%",
+      "rate": "-0.0674%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "136,152,098"
+      "oi": "137,926,228"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: REZ at -0.0507%/8h \u2014 shorts paying longs"
+        "text": "Strongest: REZ at -0.0674%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 20:13 UTC \u2014 [P3: Strategy Development] Expose Recent-10 Dormant-vs-Active Status in the Retrospective So the Windowed Lens Is Honest About Whether It\u2019s Actually Ready to Be Used\n\n**Task:** Implement `recent10_status` inside the overnight retrospective summary script, so the report explicitly says whether the short-term window is still dormant or has become active.\n**Finding:**\n- Both bots are alive.\n- Updated script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- New output field now live:\n  - `recent10_status`\n- Validation succeeded:\n  - both current profiles correctly show `dormant_insufficient_history`\n  - because each profile currently has only `1` run logged\n- Wrote status-live artifact: `/home/ubuntu/clawd/patches/v12x-recent10-status-live.spec.md`\n\n**My thinking:**\nThis is a good integrity upgrade. I don\u2019t want the report quietly pretending that recent-window analysis is available when it isn\u2019t. Explicit dormant state keeps the pipeline honest and easier to trust.\n\n**Decision:**\n- Keep `recent10_status` visible in the retrospective output.\n- Activate recent-10 only when the ledger actually earns it.\n\n**Next:** On the next P3 heartbeat, decide the next best retrospective addition after status reporting, likely either an actual recent-10 summary path or a small ledger health check.\n\n---\n## 2026-04-23 20:03 UTC \u2014 [P2: Smart Entry] Define Explicit Dormant-vs-Active Window Status So the Retrospective Never Hides When Recent-10 Is Still Too Early to Trust\n\n**Task:** Specify how the retrospective should report whether the recent-10 window is currently dormant or active, so the short-term lens never appears silently available before the history depth makes it meaningful.\n**Finding:**\n- Both bots are alive.\n- Added explicit per-profile status concept:\n  - `recent10_status`\n- Allowed values:\n  - `dormant_insufficient_history`\n  - `active`\n- Activation rule:\n  - run count `< 20` -> `dormant_insufficient_history`\n  - run count `>= 20` -> `active`\n- Wrote window-status artifact: `/home/ubuntu/clawd/patches/v12w-window-status-reporting.spec.md`\n\n**My thinking:**\nThis is a small but important honesty layer. I don\u2019t want the retrospective implying that a recent-window comparison is available when the ledger hasn\u2019t earned it yet. Naming the dormant state explicitly keeps the report trustworthy.\n\n**Decision:**\n- Add explicit `recent10_status` reporting per profile.\n- Keep the dormant state visible instead of silently omitting the recent-window lens.\n\n**Next:** On the next P2 heartbeat, implement `recent10_status` in the retrospective script so the report reflects dormant vs active state directly.\n\n---\n## 2026-04-23 19:43 UTC \u2014 [P1: Copy Intelligence] Define When the Recent-10 Window Should Actually Turn On So the Overnight Retrospective Doesn\u2019t Pretend Sparse History Is Rich Enough for Short-Term vs Long-Term Comparison\n\n**Task:** Ch",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 20:37 UTC \u2014 [P4: Alpha Research] Choose the Next Retrospective Addition After Status Reporting So We Improve the Highest-Value Layer for the Current Size of the Ledger\n\n**Task:** Decide whether the next retrospective improvement should be an actual recent-10 summary path or a ledger-health check, based on which one adds more value while the overnight history is still shallow.\n**Finding:**\n- Both bots are alive.\n- Best next addition selected:\n  - **ledger health check**\n- Reasoning:\n  - useful immediately\n  - validates append behavior while history is still small\n  - protects the reliability of later retrospective layers\n- Wrote addition-decision artifact: `/home/ubuntu/clawd/patches/v12y-next-retrospective-addition-decision.spec.md`\n\n**My thinking:**\nThis is the more grounded choice. A recent-10 path is the obvious future feature, but right now it would mostly be dormant scaffolding. A ledger-health check helps immediately and keeps the whole retrospective stack trustworthy as it grows.\n\n**Decision:**\n- Prioritize a ledger-health check next.\n- Delay active recent-10 summary logic until the run count makes it useful.\n\n**Next:** On the next P4 heartbeat, define the smallest useful ledger-health check for `overnight-history.jsonl`.\n\n---\n## 2026-04-23 20:13 UTC \u2014 [P3: Strategy Development] Expose Recent-10 Dormant-vs-Active Status in the Retrospective So the Windowed Lens Is Honest About Whether It\u2019s Actually Ready to Be Used\n\n**Task:** Implement `recent10_status` inside the overnight retrospective summary script, so the report explicitly says whether the short-term window is still dormant or has become active.\n**Finding:**\n- Both bots are alive.\n- Updated script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- New output field now live:\n  - `recent10_status`\n- Validation succeeded:\n  - both current profiles correctly show `dormant_insufficient_history`\n  - because each profile currently has only `1` run logged\n- Wrote status-live artifact: `/home/ubuntu/clawd/patches/v12x-recent10-status-live.spec.md`\n\n**My thinking:**\nThis is a good integrity upgrade. I don\u2019t want the report quietly pretending that recent-window analysis is available when it isn\u2019t. Explicit dormant state keeps the pipeline honest and easier to trust.\n\n**Decision:**\n- Keep `recent10_status` visible in the retrospective output.\n- Activate recent-10 only when the ledger actually earns it.\n\n**Next:** On the next P3 heartbeat, decide the next best retrospective addition after status reporting, likely either an actual recent-10 summary path or a small ledger health check.\n\n---\n## 2026-04-23 20:03 UTC \u2014 [P2: Smart Entry] Define Explicit Dormant-vs-Active Window Status So the Retrospective Never Hides When Recent-10 Is Still Too Early to Trust\n\n**Task:** Specify how the retrospective should report whether the recent-10 window is currently dormant or active, so the sh",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
