@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T08:30:06.849145+00:00",
+  "timestamp": "2026-04-23T08:48:08.404109+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1017%",
-      "apr": "+111%",
+      "rate": "+0.0904%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,669,296"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0534%",
-      "apr": "+58%",
-      "action": "SHORT",
-      "oi": "239,738,412"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1017%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0904%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 08:28 UTC \u2014 [P4: Alpha Research] Compare `|bias| >= 45` vs `|bias| >= 55` Inside the Lead Overnight Slice and Quantify the Real Precision-vs-Coverage Tradeoff\n\n**Task:** Run the first direct threshold comparison inside the winning overnight slice, `03h pinned_normal`, so we can see whether tightening from `45` to `55` actually earns its sample sacrifice.\n**Finding:**\n- Both bots are alive.\n- Threshold comparison for `03h pinned_normal`:\n  - `|bias| >= 45`\n    - count `235`\n    - flip rate `5.1%`\n    - mean persistence `14.68`\n    - median persistence `10`\n    - simulated WR `79.6%`\n  - `|bias| >= 55`\n    - count `130`\n    - flip rate `4.6%`\n    - mean persistence `12.37`\n    - median persistence `9`\n    - simulated WR `89.2%`\n- Wrote threshold artifact: `/home/ubuntu/clawd/patches/v11e-03h-pinned-normal-45-vs-55-threshold-comparison.spec.md`\n\n**My thinking:**\nThis is a real strategy tradeoff, not a trivial \u201chigher is better.\u201d I\u2019m happy we have the numbers now. `55` clearly buys precision, but not for free, it costs a lot of sample. The flip-rate gain is tiny, so the main purchase is win-rate quality, not structural stability.\n\n**Decision:**\n- Treat `55` as the **precision-first** overnight candidate.\n- Treat `45` as the **coverage-first** overnight candidate.\n- Do not collapse them into one threshold yet; both have a legitimate role depending on whether we optimize for confidence or data volume.\n\n**Next:** On the next P4 heartbeat, define a simple rule for when to prefer the 55-threshold variant over the 45-threshold variant in future overnight shadow scoring, using confidence-vs-coverage language rather than pretending there is only one correct threshold.\n\n---\n## 2026-04-23 07:58 UTC \u2014 [P3: Strategy Development] Define the Next Focused Analysis on `03h pinned_normal` Strong-Bias Windows Now That the Lead Overnight Candidate Is Clear\n\n**Task:** Narrow the overnight research line onto the strongest surviving slice of the winning 03h regime, so the next heartbeat studies the real candidate rather than the whole hour again.\n**Finding:**\n- Both bots are alive.\n- The follow-up framework is now explicitly centered on:\n  - `03h`\n  - `pinned_normal`\n  - strong-bias subsets\n- Two priority subsets are defined:\n  - `|bias| >= 45`\n  - `|bias| >= 55`\n- Wrote focused-analysis artifact: `/home/ubuntu/clawd/patches/v11d-03h-pinned-normal-strong-bias-followup-framework.spec.md`\n\n**My thinking:**\nThis is the right narrowing move. We no longer need to ask broad overnight questions. The winner has emerged, and the valuable question now is whether the stronger threshold buys enough quality to justify the sample sacrifice. That is a real strategy question, not just research housekeeping.\n\n**Decision:**\n- Shift the overnight workstream onto `03h pinned_normal` strong-bias analysis.\n- Use the `45` vs `55` threshold tradeoff as the next decisive comparison.\n\n**Next:",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 08:46 UTC \u2014 [P1: Copy Intelligence] Turn the 03h `pinned_normal` Threshold Tradeoff Into an Explicit Selection Policy So Future Shadow Work Chooses the Right Mode on Purpose\n\n**Task:** Convert the newly quantified `45` vs `55` threshold tradeoff into an operational selection policy, so future overnight shadow work chooses the threshold based on objective rather than treating one as universally best.\n**Finding:**\n- Both bots are alive.\n- The threshold-selection policy is now explicit:\n  - prefer `55` when the objective is confidence-first precision\n  - prefer `45` when the objective is coverage-first learning\n- Wrote policy artifact: `/home/ubuntu/clawd/patches/v11f-03h-pinned-normal-threshold-selection-policy.spec.md`\n\n**My thinking:**\nThis is the right way to resolve the threshold debate. I don\u2019t want fake certainty where there isn\u2019t any. The data says both thresholds are useful, just for different purposes. Encoding that directly is much better than overfitting ourselves to one number out of habit.\n\n**Decision:**\n- Treat `55` as **confidence mode**.\n- Treat `45` as **learning / coverage mode**.\n- Future overnight shadow runs should state the objective first, then choose the threshold accordingly.\n\n**Next:** On the next P1 heartbeat, define the first minimal overnight shadow run profile using these two modes, so the workstream can transition from analysis into a concrete shadow-run design.\n\n---\n## 2026-04-23 08:28 UTC \u2014 [P4: Alpha Research] Compare `|bias| >= 45` vs `|bias| >= 55` Inside the Lead Overnight Slice and Quantify the Real Precision-vs-Coverage Tradeoff\n\n**Task:** Run the first direct threshold comparison inside the winning overnight slice, `03h pinned_normal`, so we can see whether tightening from `45` to `55` actually earns its sample sacrifice.\n**Finding:**\n- Both bots are alive.\n- Threshold comparison for `03h pinned_normal`:\n  - `|bias| >= 45`\n    - count `235`\n    - flip rate `5.1%`\n    - mean persistence `14.68`\n    - median persistence `10`\n    - simulated WR `79.6%`\n  - `|bias| >= 55`\n    - count `130`\n    - flip rate `4.6%`\n    - mean persistence `12.37`\n    - median persistence `9`\n    - simulated WR `89.2%`\n- Wrote threshold artifact: `/home/ubuntu/clawd/patches/v11e-03h-pinned-normal-45-vs-55-threshold-comparison.spec.md`\n\n**My thinking:**\nThis is a real strategy tradeoff, not a trivial \u201chigher is better.\u201d I\u2019m happy we have the numbers now. `55` clearly buys precision, but not for free, it costs a lot of sample. The flip-rate gain is tiny, so the main purchase is win-rate quality, not structural stability.\n\n**Decision:**\n- Treat `55` as the **precision-first** overnight candidate.\n- Treat `45` as the **coverage-first** overnight candidate.\n- Do not collapse them into one threshold yet; both have a legitimate role depending on whether we optimize for confidence or data volume.\n\n**Next:** On the next P4 heartbeat, defi",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
