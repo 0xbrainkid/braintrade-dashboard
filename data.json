@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T19:00:02.311021+00:00",
+  "timestamp": "2026-04-23T19:01:33.758672+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1181%",
-      "apr": "+129%",
+      "rate": "+0.1202%",
+      "apr": "+132%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0754%",
-      "apr": "+83%",
+      "rate": "+0.0780%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "239,343,126"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1181%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1202%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 18:43 UTC \u2014 [P1: Copy Intelligence] Implement the First Profile-Stability Summary So the New Overnight Ledger Starts Producing Retrospective Signal Instead of Just Accumulating Lines\n\n**Task:** Build the first retrospective summary script on top of `overnight-history.jsonl`, so the overnight monitoring ledger can immediately answer basic profile-stability questions.\n**Finding:**\n- Both bots are alive.\n- Built retrospective script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- The script now reports, per profile:\n  - run count\n  - average simulated WR\n  - average flip rate\n  - average mean persistence\n  - non-`none` escalation count\n  - earliest vs latest directional skew\n- Validation succeeded on the current ledger.\n- Current results:\n\n  **confidence_mode**\n  - run count: `1`\n  - avg simulated WR: `89.2`\n  - avg flip rate: `4.6`\n  - avg mean persistence: `12.37`\n  - non-`none` escalations: `0`\n  - earliest/latest skew: `neg=89,pos=41`\n\n  **learning_mode**\n  - run count: `1`\n  - avg simulated WR: `79.6`\n  - avg flip rate: `5.1`\n  - avg mean persistence: `14.68`\n  - non-`none` escalations: `0`\n  - earliest/latest skew: `neg=152,pos=83`\n\n- Wrote retrospective-live artifact: `/home/ubuntu/clawd/patches/v12r-first-profile-stability-summary-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this. The overnight pipeline finally has a proper feedback loop: current state, history, and a first retrospective lens. Even with just one run logged so far, the system is already structurally in the right place for learning over time.\n\n**Decision:**\n- Keep this as the default first retrospective layer for the overnight ledger.\n- Let the history accumulate before adding more complex trend logic.\n\n**Next:** On the next P1 heartbeat, decide the next best retrospective upgrade, likely either a recent-window filter or a drift-delta summary between earliest and latest values.\n\n---\n## 2026-04-23 18:30 UTC \u2014 [P4: Alpha Research] Define the First Retrospective We Actually Want From the New Overnight History Ledger So Stored Runs Turn Into Learnable Stability Evidence\n\n**Task:** Decide the first useful retrospective summary to compute from `overnight-history.jsonl`, so the new history ledger becomes immediately valuable for analysis instead of merely archival.\n**Finding:**\n- Both bots are alive.\n- Best first retrospective selected:\n  - **profile-stability summary over the recent history window**\n- Recommended summary metrics per profile:\n  - run count\n  - average simulated WR\n  - average flip rate\n  - average mean persistence\n  - count of non-`none` escalation statuses\n  - latest vs earliest directional skew snapshot\n- Wrote retrospective artifact: `/home/ubuntu/clawd/patches/v12q-first-history-retrospective-summary.spec.md`\n\n**My thinking:**\nThis is the right first readout. I don\u2019t want to jump into fancy anomaly logic before we can answer the simpler ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 19:00 UTC \u2014 [P2: Smart Entry] Choose the Next Retrospective Upgrade for the Overnight Ledger So We Add the Highest-Value Lens Instead of Just Accumulating More Reporting Surface\n\n**Task:** Decide whether the next retrospective improvement should be a recent-window filter or a drift-delta summary, based on which one adds more value at the current size of the overnight history ledger.\n**Finding:**\n- Both bots are alive.\n- Best next retrospective upgrade:\n  - **drift-delta summary**\n- Reasoning:\n  - it works even with a small ledger\n  - it directly highlights earliest vs latest change\n  - it complements the current stability summary naturally\n- Wrote upgrade-decision artifact: `/home/ubuntu/clawd/patches/v12s-next-retrospective-upgrade-decision.spec.md`\n\n**My thinking:**\nThis is the right choice for where the system is now. A recent-window filter will matter later, but today it would mostly be scaffolding waiting for more data. A drift-delta layer gives immediate value with the history we already have.\n\n**Decision:**\n- Prioritize a drift-delta summary next.\n- Delay recent-window filtering until the ledger has more depth.\n\n**Next:** On the next P2 heartbeat, implement a simple drift-delta summary on top of the existing stability script.\n\n---\n## 2026-04-23 18:43 UTC \u2014 [P1: Copy Intelligence] Implement the First Profile-Stability Summary So the New Overnight Ledger Starts Producing Retrospective Signal Instead of Just Accumulating Lines\n\n**Task:** Build the first retrospective summary script on top of `overnight-history.jsonl`, so the overnight monitoring ledger can immediately answer basic profile-stability questions.\n**Finding:**\n- Both bots are alive.\n- Built retrospective script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- The script now reports, per profile:\n  - run count\n  - average simulated WR\n  - average flip rate\n  - average mean persistence\n  - non-`none` escalation count\n  - earliest vs latest directional skew\n- Validation succeeded on the current ledger.\n- Current results:\n\n  **confidence_mode**\n  - run count: `1`\n  - avg simulated WR: `89.2`\n  - avg flip rate: `4.6`\n  - avg mean persistence: `12.37`\n  - non-`none` escalations: `0`\n  - earliest/latest skew: `neg=89,pos=41`\n\n  **learning_mode**\n  - run count: `1`\n  - avg simulated WR: `79.6`\n  - avg flip rate: `5.1`\n  - avg mean persistence: `14.68`\n  - non-`none` escalations: `0`\n  - earliest/latest skew: `neg=152,pos=83`\n\n- Wrote retrospective-live artifact: `/home/ubuntu/clawd/patches/v12r-first-profile-stability-summary-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this. The overnight pipeline finally has a proper feedback loop: current state, history, and a first retrospective lens. Even with just one run logged so far, the system is already structurally in the right place for learning over time.\n\n**Decision:**\n- Keep this as the default first retrospective ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
