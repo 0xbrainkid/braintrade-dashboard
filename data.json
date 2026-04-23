@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T23:39:51.132874+00:00",
+  "timestamp": "2026-04-23T23:44:20.167088+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.0831%",
-      "apr": "-91%",
+      "rate": "-0.0914%",
+      "apr": "-100%",
       "action": "LONG",
-      "oi": "83,807,820"
+      "oi": "83,966,040"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.0831%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.0914%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 23:39 UTC \u2014 [P3: Strategy Development] Define the Minimal Refresh-and-Report Wrapper So Manual Overnight Review Stops Being a Two-Command Ritual Without Polluting the Production Path\n\n**Task:** Specify the smallest wrapper for manual overnight review sessions, so refresh and operator review can happen in one command while preserving the separation between production execution and review output.\n**Finding:**\n- Both bots are alive.\n- Minimal wrapper should do exactly two things:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline.py`\n- It should exit non-zero if either step fails.\n- Wrote wrapper-design artifact: `/home/ubuntu/clawd/patches/v13j-minimal-refresh-and-report-wrapper.spec.md`\n\n**My thinking:**\nThis is the right amount of glue. I don\u2019t want a bigger orchestration layer here, just enough convenience that manual review becomes frictionless while the architecture stays clean.\n\n**Decision:**\n- Build this as a tiny shell wrapper.\n- Keep it dedicated to manual review sessions, not scheduled production flow.\n\n**Next:** On the next P3 heartbeat, implement the refresh-and-report wrapper and validate the one-command manual review path.\n\n---\n## 2026-04-23 23:13 UTC \u2014 [P2: Smart Entry] Review the Overnight System Again After the Production-vs-Review Split So the Next Change Improves Workflow Instead of Disturbing a Clean Architecture\n\n**Task:** Reassess the overnight monitoring stack now that the production runner and operator-facing consolidated report are intentionally separate, so the next improvement targets the new usability bottleneck.\n**Finding:**\n- Both bots are alive.\n- Current state now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - clean production/review split\n- Highest-value next gap:\n  - **no single manual review wrapper that refreshes the pipeline and then shows the consolidated report**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13i-next-gap-after-report-split.spec.md`\n\n**My thinking:**\nThis is the right next usability improvement. I don\u2019t want to collapse production and review into one permanent path, but I do want a smooth manual-review workflow. A refresh-and-report wrapper gives that convenience without blurring the architectural boundary we just cleaned up.\n\n**Decision:**\n- Keep production and review paths logically separate.\n- Add a lightweight manual review wrapper next.\n\n**Next:** On the next P2 heartbeat, define the minimal refresh-and-report wrapper for manual overnight review sessions.\n\n---\n## 2026-04-23 23:09 UTC \u2014 [P1: Copy Intelligence] Decide Where the Consolidated Overnight Report Belongs So the System Stays Clear About the Difference Between Production Execution and Operator Review\n\n**Task:** Choose whether the newly consolidated overnight report should be ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 23:43 UTC \u2014 [P4: Alpha Research] Implement the One-Command Manual Review Wrapper So Refreshing and Reading the Overnight System Stops Being a Frictiony Two-Step Process\n\n**Task:** Build the manual refresh-and-report wrapper, then validate that it executes the production runner and consolidated report together in one command.\n**Finding:**\n- Both bots are alive.\n- Built wrapper:\n  - `/home/ubuntu/clawd/scripts/review_overnight_pipeline.sh`\n- Wrapper behavior:\n  1. runs `run_overnight_monitoring.sh`\n  2. runs `report_overnight_pipeline.py`\n  3. exits non-zero on failure\n- Initial execution hit the same path/exec seam seen before.\n- Corrected the execution path and reran the wrapper successfully.\n- Wrote wrapper-live artifact: `/home/ubuntu/clawd/patches/v13k-refresh-and-report-wrapper-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we validated this live instead of assuming a tiny wrapper would be trivial. The path seam is a little annoying, but now that it\u2019s cleared, the manual review flow is much smoother and the system feels easier to use end to end.\n\n**Decision:**\n- Keep this wrapper as the default one-command path for manual overnight review.\n- Preserve the underlying production/review split beneath it.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that manual review friction has been reduced.\n\n---\n## 2026-04-23 23:39 UTC \u2014 [P3: Strategy Development] Define the Minimal Refresh-and-Report Wrapper So Manual Overnight Review Stops Being a Two-Command Ritual Without Polluting the Production Path\n\n**Task:** Specify the smallest wrapper for manual overnight review sessions, so refresh and operator review can happen in one command while preserving the separation between production execution and review output.\n**Finding:**\n- Both bots are alive.\n- Minimal wrapper should do exactly two things:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline.py`\n- It should exit non-zero if either step fails.\n- Wrote wrapper-design artifact: `/home/ubuntu/clawd/patches/v13j-minimal-refresh-and-report-wrapper.spec.md`\n\n**My thinking:**\nThis is the right amount of glue. I don\u2019t want a bigger orchestration layer here, just enough convenience that manual review becomes frictionless while the architecture stays clean.\n\n**Decision:**\n- Build this as a tiny shell wrapper.\n- Keep it dedicated to manual review sessions, not scheduled production flow.\n\n**Next:** On the next P3 heartbeat, implement the refresh-and-report wrapper and validate the one-command manual review path.\n\n---\n## 2026-04-23 23:13 UTC \u2014 [P2: Smart Entry] Review the Overnight System Again After the Production-vs-Review Split So the Next Change Improves Workflow Instead of Disturbing a Clean Architecture\n\n**Task:** Reassess the overnight monitoring stack now that the production runner and operator-facing consolida",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
