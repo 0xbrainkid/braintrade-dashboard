@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T01:01:42.333627+00:00",
+  "timestamp": "2026-04-23T01:21:50.832210+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,31 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1136%",
-      "apr": "+124%",
+      "rate": "+0.1042%",
+      "apr": "+114%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
-      "coin": "CHIP",
-      "rate": "-0.0830%",
-      "apr": "-91%",
-      "action": "LONG",
-      "oi": "237,357,890"
-    },
-    {
       "coin": "ZEREBRO",
-      "rate": "+0.0755%",
-      "apr": "+83%",
+      "rate": "+0.0682%",
+      "apr": "+75%",
       "action": "SHORT",
       "oi": "240,209,046"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0514%",
-      "apr": "-56%",
+      "rate": "-0.0552%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "1,215,168"
+      "oi": "1,215,366"
     }
   ],
   "daily_pnl": [
@@ -115,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1136%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1042%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -357,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-23 01:01 UTC \u2014 [P3: Strategy Development] Kill the Zero-Balance HL Entry Loop and Harden Order Validation\n\n**Task:** Audit the live Hyperliquid bot for execution-quality failures, then stop it from firing fake entries when the wallet has no deployable capital.\n**Finding:**\n- Both bots were alive at heartbeat start.\n- The live `hl-bot` wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` currently has `accountValue: 0.0` from Hyperliquid `clearinghouseState`.\n- Despite that, `hl_live_trader.py` was still scanning signals and repeatedly attempting zero-size orders on names like `SUPER` and `DOGE`.\n- Worse, the bot treated API responses like `{'error': 'Order has zero size.'}` as success and logged `\u2705 Position opened`, which is false-positive execution telemetry.\n- I patched `hl_live_trader.py` to:\n  - skip orders when the computed size rounds to zero\n  - require an actual fill in returned order statuses before logging success\n  - skip new entries entirely when balance is below a $10 trading floor\n  - emit a throttled low-balance warning instead of noisy pseudo-trading\n- Restarted `hl-bot` cleanly. New runtime now logs: `Balance $0.00 below trading floor $10.00; skipping new entries...`\n\n**My thinking:**\nThis was the highest-value P3 fix because bad execution telemetry corrupts strategy evaluation. If the bot claims it opened positions when the exchange rejected them, every downstream review becomes contaminated. The right move was to harden the executor first, then revisit strategy only once live signals map to real fills.\n\n**Decision:**\n- Keep the patched `hl-bot` live.\n- Treat this wallet as capital-unavailable until funding or wallet-routing is corrected.\n- Do not trust older HL log lines that reported successful entries unless they have a real fill object behind them.\n\n**Next:** On the next P3 heartbeat, trace why this bot is pointed at an empty wallet while the expected HL capital is higher, and decide whether the fix is wallet funding, wallet selection, or retiring this launcher in favor of the newer HL engine.\n\n\n## 2026-04-23 00:58 UTC \u2014 [P2: Smart Entry] Trace the Runtime Gates Ahead of `read_copy_signals()` and Explain Why Audit Silence Does Not Mean the Patch Failed\n\n**Task:** Stop guessing about the quiet audit log by tracing exactly when `read_copy_signals()` is called inside the live PM bot flow.\n**Finding:**\n- Both bots are alive.\n- `read_copy_signals()` is only called inside `should_trade()`.\n- `should_trade()` is not reached every loop. The bot must first pass multiple gates:\n  - filters\n  - balance\n  - price band\n  - loss breaker\n  - entry delay\n  - inversion / signal checks\n- Therefore a missing `Copy payload audit:` line after restart does **not** imply the patch failed or that the process is on old code.\n- It can simply mean the bot has not entered a trade-eligible state since restart.\n- Wrote runtime-trace artifact: `/home/ubun",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 01:21 UTC \u2014 [P4: Alpha Research] Identify the Dominant Live Gate Blocking `should_trade()` and Surface the More Serious Observability Risk\n\n**Task:** Determine which runtime gate is most often blocking `should_trade()` in the live PM bot, so we know whether the missing audit line is actually surprising.\n**Finding:**\n- Both bots are alive.\n- The dominant blocker in recent live PM bot logs is overwhelmingly:\n  - `OUTSIDE_ACTIVE_HOURS (00 UTC / 01 UTC)`\n- That means overnight verification of `Copy payload audit:` is structurally mis-timed, because `should_trade()` usually never runs deeply enough to call `read_copy_signals()`.\n- I also surfaced a more serious operational issue in live logs:\n  - `OSError: [Errno 28] No space left on device`\n- That disk-pressure condition can distort observability by suppressing or interrupting expected log output.\n- Wrote new artifact: `/home/ubuntu/clawd/patches/v10d-dominant-gate-and-disk-pressure.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed one layer deeper, because this is more actionable than just saying the audit line is quiet. We now know the quiet is mostly structural, and we also found a real infrastructure risk: disk pressure is actively interfering with logging. That\u2019s the more urgent systems issue.\n\n**Decision:**\n- Stop treating overnight audit-log silence as suspicious by itself.\n- Future audit verification should target active trading hours.\n- Next operational priority should inspect disk usage and cleanup candidates, because log observability is already being degraded.\n\n**Next:** On the next P4 heartbeat, inspect what is consuming disk and stage the smallest safe cleanup plan that restores log reliability without risking trading state.\n\n---\n## 2026-04-23 01:01 UTC \u2014 [P3: Strategy Development] Kill the Zero-Balance HL Entry Loop and Harden Order Validation\n\n**Task:** Audit the live Hyperliquid bot for execution-quality failures, then stop it from firing fake entries when the wallet has no deployable capital.\n**Finding:**\n- Both bots were alive at heartbeat start.\n- The live `hl-bot` wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` currently has `accountValue: 0.0` from Hyperliquid `clearinghouseState`.\n- Despite that, `hl_live_trader.py` was still scanning signals and repeatedly attempting zero-size orders on names like `SUPER` and `DOGE`.\n- Worse, the bot treated API responses like `{'error': 'Order has zero size.'}` as success and logged `\u2705 Position opened`, which is false-positive execution telemetry.\n- I patched `hl_live_trader.py` to:\n  - skip orders when the computed size rounds to zero\n  - require an actual fill in returned order statuses before logging success\n  - skip new entries entirely when balance is below a $10 trading floor\n  - emit a throttled low-balance warning instead of noisy pseudo-trading\n- Restarted `hl-bot` cleanly. New runtime now logs: `Balance $0.00 below trading floo",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -377,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "4 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
