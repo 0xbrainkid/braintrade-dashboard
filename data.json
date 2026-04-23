@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T13:00:01.781610+00:00",
+  "timestamp": "2026-04-23T13:02:53.020833+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0604%",
-      "apr": "+66%",
+      "rate": "+0.0699%",
+      "apr": "+76%",
       "action": "SHORT",
       "oi": "239,732,738"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0604%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.0699%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:58 UTC \u2014 [P2: Smart Entry] Choose the Next Automation Target in the Overnight Monitoring Loop So We Upgrade the Highest-Leverage Manual Field First\n\n**Task:** Decide whether the next automation step after the first working writer should target `drift_note` or `escalation_status`, using leverage and system value rather than convenience.\n**Finding:**\n- Both bots are alive.\n- The better next automation target is:\n  - **`escalation_status` first**\n- Reasoning:\n  - `drift_note` is lower risk but mostly descriptive\n  - `escalation_status` directly upgrades the loop into a real decision surface\n  - the guardrails needed for escalation logic are already defined in V11k\n- Wrote priority-decision artifact: `/home/ubuntu/clawd/patches/v11v-next-automation-priority-drift-vs-escalation.spec.md`\n\n**My thinking:**\nThis feels like the right call. I\u2019m not interested in polishing narration before the system can make the more important judgment. If we automate escalation first, the loop becomes materially smarter; if we automate drift-note first, it mostly just sounds nicer.\n\n**Decision:**\n- Prioritize automation of `escalation_status` before `drift_note`.\n- Leave `drift_note` manual until the escalation path is live.\n\n**Next:** On the next P2 heartbeat, define the exact comparison logic the writer should use to set `escalation_status` from current metrics versus the named baselines.\n\n---\n## 2026-04-23 12:48 UTC \u2014 [P1: Copy Intelligence] Ship the First Real Overnight Metrics Writer So the Monitoring Loop Finally Produces Its Own Latest JSON Instead of Living on Specs and Samples\n\n**Task:** Implement the first actual writer that transforms `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, then validate it by rendering the compact comparison output.\n**Finding:**\n- Both bots are alive.\n- Built writer script:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - reads `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - computes confidence-mode metrics from `pinned_normal` rows with `abs_bias >= 55`\n  - computes learning-mode metrics from `pinned_normal` rows with `abs_bias >= 45`\n  - writes objective metrics to `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the produced JSON successfully\n- Wrote live-shipping artifact: `/home/ubuntu/clawd/patches/v11u-first-overnight-latest-metrics-writer-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we finally turned this from a design line into a working pipeline component. This is the first moment where the overnight monitoring system feels operational rather than conceptual. The writer is intentionally narrow, and that\u2019s a strength, not a limitation.\n\n**Decision:**\n- Keep this first writer narrow and objective-only.\n- Use it as the default producer for `overnight_latest_metrics.json` going f",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:59 UTC \u2014 [P2: Smart Entry] Recheck Whether the 45 Bias Floor Still Deserves Capital or If the Learning Gate Should Tighten to 50\n\n**Task:** Backtest recent resolved pinned-normal shadow trades to compare the current `abs_bias >= 45` learning threshold against tighter Smart Entry cutoffs and see whether persistence can rescue the weaker band.\n**Finding:** The weak spot is still the `45-50` band. In all resolved pinned-normal history, `>=45` produced `79.6%` WR on `n=235`, while `>=50` improved to `86.2%` on `n=174`. In the latest 7-day window, `>=45` came in at `76.2%` on `n=42`, while `>=50` improved to `80.0%` on `n=30`. The `45-50` slice specifically is only `60.7%` WR all-time and `66.7%` WR recently. Persistence filters did not add enough uplift to justify keeping the lower floor unchanged.\n**My thinking:** I\u2019m seeing the same structural story again: the first band above 45 is not clean enough to deserve unconditional entries. The good news is that the edge does not disappear, it concentrates fast once bias reaches 50+. That means the problem is not Smart Entry overall, it is the lowest-quality acceptance zone.\n**Decision:** Keep the main confidence bar where it is, but treat `45-49.9` as probationary rather than broadly valid. Until a second confirming feature exists, the data supports using `>=50` as the cleaner learning threshold instead of `>=45`.\n**Next:** On the next P2 heartbeat, test whether adding a second edge to the `45-49.9` bucket, such as price-state or fresh-flip context, can salvage enough sample quality to keep that lower band tradable.\n\n\n## 2026-04-23 12:58 UTC \u2014 [P2: Smart Entry] Choose the Next Automation Target in the Overnight Monitoring Loop So We Upgrade the Highest-Leverage Manual Field First\n\n**Task:** Decide whether the next automation step after the first working writer should target `drift_note` or `escalation_status`, using leverage and system value rather than convenience.\n**Finding:**\n- Both bots are alive.\n- The better next automation target is:\n  - **`escalation_status` first**\n- Reasoning:\n  - `drift_note` is lower risk but mostly descriptive\n  - `escalation_status` directly upgrades the loop into a real decision surface\n  - the guardrails needed for escalation logic are already defined in V11k\n- Wrote priority-decision artifact: `/home/ubuntu/clawd/patches/v11v-next-automation-priority-drift-vs-escalation.spec.md`\n\n**My thinking:**\nThis feels like the right call. I\u2019m not interested in polishing narration before the system can make the more important judgment. If we automate escalation first, the loop becomes materially smarter; if we automate drift-note first, it mostly just sounds nicer.\n\n**Decision:**\n- Prioritize automation of `escalation_status` before `drift_note`.\n- Leave `drift_note` manual until the escalation path is live.\n\n**Next:** On the next P2 heartbeat, define the exact comparison log",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
