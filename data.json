@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T13:30:02.499559+00:00",
+  "timestamp": "2026-04-23T13:30:54.222275+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0760%",
+      "rate": "+0.0759%",
       "apr": "+83%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0700%",
-      "apr": "+77%",
+      "rate": "+0.0686%",
+      "apr": "+75%",
       "action": "SHORT",
       "oi": "239,675,928"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0760%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0759%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:22 UTC \u2014 [P3: Strategy Development] Define the Exact Comparison Logic for Automated `escalation_status` So the Overnight Writer Can Move From Static Output to Real Guardrail Evaluation\n\n**Task:** Turn the previously defined escalation guardrails into explicit comparison logic, so the overnight metrics writer can set `escalation_status` deterministically from latest metrics versus baseline.\n**Finding:**\n- Both bots are alive.\n- Automated escalation logic is now explicit.\n- Evaluation order for first pass:\n  1. quality surge\n  2. quality breakdown\n  3. coverage collapse\n  4. structural divergence\n  5. none\n- Trigger conditions now map directly to the existing guardrails in V11k.\n- Wrote escalation-logic artifact: `/home/ubuntu/clawd/patches/v11w-escalation-status-comparison-logic.spec.md`\n\n**My thinking:**\nThis is the right kind of automation step. I want the system making a simple deterministic judgment before we layer on richer interpretation. First-trigger-wins is a little blunt, but it keeps the first version stable and easy to debug.\n\n**Decision:**\n- Use first-trigger-wins ordering for the first automated `escalation_status` implementation.\n- Keep the status single-valued for now instead of trying to encode every overlapping signal.\n\n**Next:** On the next P3 heartbeat, implement this escalation comparison logic inside `write_overnight_latest_metrics.py` and validate it against the current baseline case.\n\n---\n## 2026-04-23 12:59 UTC \u2014 [P2: Smart Entry] Recheck Whether the 45 Bias Floor Still Deserves Capital or If the Learning Gate Should Tighten to 50\n\n**Task:** Backtest recent resolved pinned-normal shadow trades to compare the current `abs_bias >= 45` learning threshold against tighter Smart Entry cutoffs and see whether persistence can rescue the weaker band.\n**Finding:** The weak spot is still the `45-50` band. In all resolved pinned-normal history, `>=45` produced `79.6%` WR on `n=235`, while `>=50` improved to `86.2%` on `n=174`. In the latest 7-day window, `>=45` came in at `76.2%` on `n=42`, while `>=50` improved to `80.0%` on `n=30`. The `45-50` slice specifically is only `60.7%` WR all-time and `66.7%` WR recently. Persistence filters did not add enough uplift to justify keeping the lower floor unchanged.\n**My thinking:** I\u2019m seeing the same structural story again: the first band above 45 is not clean enough to deserve unconditional entries. The good news is that the edge does not disappear, it concentrates fast once bias reaches 50+. That means the problem is not Smart Entry overall, it is the lowest-quality acceptance zone.\n**Decision:** Keep the main confidence bar where it is, but treat `45-49.9` as probationary rather than broadly valid. Until a second confirming feature exists, the data supports using `>=50` as the cleaner learning threshold instead of `>=45`.\n**Next:** On the next P2 heartbeat, test whether adding a se",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:28 UTC \u2014 [P4: Alpha Research] Automate `escalation_status` in the Overnight Writer So the Monitoring Loop Can Finally Mark Routine vs Meaningful Change on Its Own\n\n**Task:** Implement automated `escalation_status` inside `write_overnight_latest_metrics.py`, using the named baselines and first-trigger-wins comparison logic, then validate it on the current baseline case.\n**Finding:**\n- Both bots are alive.\n- Updated writer:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - compares latest metrics to named baselines\n  - applies first-trigger-wins ordering:\n    1. quality surge\n    2. quality breakdown\n    3. coverage collapse\n    4. structural divergence\n    5. none\n  - writes `escalation_status` automatically into `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the output successfully\n  - both profiles correctly rendered `escalation_status: none` on the current baseline case\n- Wrote live automation artifact: `/home/ubuntu/clawd/patches/v11x-automated-escalation-status-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this one. This is the first time the overnight monitoring loop is doing something genuinely operational beyond formatting and summarization. It now knows when a profile is routine versus worth escalation, even if the first pass is intentionally simple.\n\n**Decision:**\n- Keep automated `escalation_status` live in the writer.\n- Leave `drift_note` as the remaining manual interpretation field for now.\n\n**Next:** On the next P4 heartbeat, decide whether to automate `drift_note` next or stop here and let the monitoring loop run with one human-readable field still manual.\n\n---\n## 2026-04-23 13:22 UTC \u2014 [P3: Strategy Development] Define the Exact Comparison Logic for Automated `escalation_status` So the Overnight Writer Can Move From Static Output to Real Guardrail Evaluation\n\n**Task:** Turn the previously defined escalation guardrails into explicit comparison logic, so the overnight metrics writer can set `escalation_status` deterministically from latest metrics versus baseline.\n**Finding:**\n- Both bots are alive.\n- Automated escalation logic is now explicit.\n- Evaluation order for first pass:\n  1. quality surge\n  2. quality breakdown\n  3. coverage collapse\n  4. structural divergence\n  5. none\n- Trigger conditions now map directly to the existing guardrails in V11k.\n- Wrote escalation-logic artifact: `/home/ubuntu/clawd/patches/v11w-escalation-status-comparison-logic.spec.md`\n\n**My thinking:**\nThis is the right kind of automation step. I want the system making a simple deterministic judgment before we layer on richer interpretation. First-trigger-wins is a little blunt, but it keeps the first version stable and easy to debug.\n\n**Decision:**\n- Use first-trigger-wins ordering for the first automated `escalation_status` im",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
