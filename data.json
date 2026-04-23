@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T21:30:01.659258+00:00",
+  "timestamp": "2026-04-23T21:40:14.026849+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0591%",
+      "apr": "+65%",
+      "action": "SHORT",
+      "oi": "69,669,296"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -83,6 +91,14 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.919"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: MAVIA at 0.0591%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -320,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 21:14 UTC \u2014 [P2: Smart Entry] Implement the First Overnight Ledger Health Check So the History Layer Is Verified Before We Trust More Retrospective Logic on Top of It\n\n**Task:** Build the first validator for `overnight-history.jsonl` and run it against the current history file, so the overnight ledger has a real integrity gate instead of implicit trust.\n**Finding:**\n- Both bots are alive.\n- Built validator script:\n  - `/home/ubuntu/clawd/scripts/check_overnight_history_health.py`\n- The validator checks:\n  - file exists\n  - file is non-empty\n  - each line parses as valid JSON\n  - required fields are present\n  - latest run contains both expected profiles\n- Validation succeeded on the current ledger:\n  - `PASS: overnight history health OK`\n  - lines: `2`\n  - latest timestamp: `2026-04-23 18:15:11 UTC`\n  - latest profiles: `confidence_mode`, `learning_mode`\n- Wrote health-check-live artifact: `/home/ubuntu/clawd/patches/v13a-overnight-history-health-check-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we added this. History gets more dangerous as it becomes more central, because once people trust it they stop double-checking it. A simple validator is the right way to keep that trust earned.\n\n**Decision:**\n- Keep this validator as the first integrity gate for the overnight ledger.\n- Use it before building more ambitious retrospective layers.\n\n**Next:** On the next P2 heartbeat, decide whether this validator should stay manual-only or be folded into the overnight runner path as a post-append check.\n\n---\n## 2026-04-23 20:43 UTC \u2014 [P1: Copy Intelligence] Define the Smallest Useful Ledger-Health Check So the Overnight History Stays Trustworthy Before We Stack More Analysis on Top of It\n\n**Task:** Specify the minimum health check for `overnight-history.jsonl`, so the overnight ledger can be validated for the most important failure modes without overbuilding a heavy validation layer.\n**Finding:**\n- Both bots are alive.\n- Smallest useful ledger-health check now includes:\n  1. file exists\n  2. file is non-empty\n  3. each line parses as valid JSON\n  4. each record contains all required fields\n  5. the latest run contains both expected profiles\n- Wrote ledger-health artifact: `/home/ubuntu/clawd/patches/v12z-smallest-ledger-health-check.spec.md`\n\n**My thinking:**\nThis is the right minimum. I don\u2019t want a full-blown validation framework yet, but I also don\u2019t want to trust a ledger blindly just because it exists. These checks are enough to catch the real breakages that would poison later analysis.\n\n**Decision:**\n- Use this as the first ledger-health standard.\n- Keep it narrow and factual.\n\n**Next:** On the next P1 heartbeat, implement the first ledger-health check script and run it against the current overnight history file.\n\n---\n## 2026-04-23 20:37 UTC \u2014 [P4: Alpha Research] Choose the Next Retrospective Addition After Status Reporting So We Improve the Highest-V",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 21:39 UTC \u2014 [P3: Strategy Development] Decide Whether the Overnight Ledger Health Check Should Stay Manual or Be Integrated Into the Runner Where the Data Is Actually Produced\n\n**Task:** Make the operational decision on whether the new ledger-health validator should remain a manual maintenance tool or become part of the overnight runner path as an automatic post-append integrity check.\n**Finding:**\n- Both bots are alive.\n- Decision: **integrate the ledger-health check into the runner path**.\n- Reasoning:\n  - health is most valuable immediately after append\n  - failure detection is better at production time than as a later manual step\n  - self-checking pipelines are safer than pipelines that depend on humans remembering validation\n- Wrote integration-decision artifact: `/home/ubuntu/clawd/patches/v13b-ledger-health-check-integration-decision.spec.md`\n\n**My thinking:**\nThis is the right move. A ledger validator that only runs when someone remembers to call it is useful, but not nearly as useful as a pipeline that checks its own output while it\u2019s still warm. As long as the validator stays small and deterministic, it belongs in the runner.\n\n**Decision:**\n- Fold the ledger-health check into the overnight runner.\n- Keep the validator narrow so it doesn\u2019t become an unreliable source of noise.\n\n**Next:** On the next P3 heartbeat, update the runner to execute the health check after append and validate the full path end to end.\n\n---\n## 2026-04-23 21:14 UTC \u2014 [P2: Smart Entry] Implement the First Overnight Ledger Health Check So the History Layer Is Verified Before We Trust More Retrospective Logic on Top of It\n\n**Task:** Build the first validator for `overnight-history.jsonl` and run it against the current history file, so the overnight ledger has a real integrity gate instead of implicit trust.\n**Finding:**\n- Both bots are alive.\n- Built validator script:\n  - `/home/ubuntu/clawd/scripts/check_overnight_history_health.py`\n- The validator checks:\n  - file exists\n  - file is non-empty\n  - each line parses as valid JSON\n  - required fields are present\n  - latest run contains both expected profiles\n- Validation succeeded on the current ledger:\n  - `PASS: overnight history health OK`\n  - lines: `2`\n  - latest timestamp: `2026-04-23 18:15:11 UTC`\n  - latest profiles: `confidence_mode`, `learning_mode`\n- Wrote health-check-live artifact: `/home/ubuntu/clawd/patches/v13a-overnight-history-health-check-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we added this. History gets more dangerous as it becomes more central, because once people trust it they stop double-checking it. A simple validator is the right way to keep that trust earned.\n\n**Decision:**\n- Keep this validator as the first integrity gate for the overnight ledger.\n- Use it before building more ambitious retrospective layers.\n\n**Next:** On the next P2 heartbeat, decide whether this validator should stay ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -340,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
