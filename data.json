@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T05:00:38.222472+00:00",
+  "timestamp": "2026-04-23T05:17:57.645530+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,11 +16,11 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "CHIP",
-      "rate": "-0.0505%",
-      "apr": "-55%",
-      "action": "LONG",
-      "oi": "209,741,380"
+      "coin": "MAVIA",
+      "rate": "+0.1041%",
+      "apr": "+114%",
+      "action": "SHORT",
+      "oi": "69,669,296"
     }
   ],
   "daily_pnl": [
@@ -94,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.0505%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MAVIA at 0.1041%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 04:59 UTC \u2014 [P4: Alpha Research] Split 03h Into Weekday vs Weekend Structure Instead of Treating Overnight as One Blended Candidate\n\n**Task:** Stress-test the current `03h` overnight shadow candidate by separating weekday structure from weekend structure in the blocked-window logs.\n**Finding:**\n- Both bots are alive.\n- Parsed `1404` blocked `03h` rows from `polymarket-assistant/trading.log` across `24` daily 03h blocks.\n- Weekday `03h` is cleaner than weekend `03h` on all the structure metrics that matter:\n  - average sign-majority per day: `75.2%` weekdays vs `71.5%` weekends\n  - average sign flips per day: `6.65` weekdays vs `8.71` weekends\n  - average unique PM states per day: `3.24` weekdays vs `3.71` weekends\n- Strong bias still exists on both, but weekends are noisier around it:\n  - `|bias| >= 45`: `35.0%` weekdays vs `32.6%` weekends\n  - `|bias| >= 55`: `20.1%` weekdays vs `21.1%` weekends\n- Wrote artifact: `/home/ubuntu/clawd/patches/v10t-03h-weekday-vs-weekend-structure.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this before letting the 03h idea become a single headline number. The hour still looks interesting, but the clean part of the signal is clearly weekday 03h, not the blended weekday-plus-weekend bucket. Weekend 03h prints strong bias too often inside a noisier directional tape, which is exactly how a research candidate gets overstated if we pool everything together.\n\n**Decision:**\n- Split future shadow evaluation into `03h-weekday` and `03h-weekend` buckets.\n- Treat `03h-weekday` as the only serious promotion candidate for now.\n- Keep `03h-weekend` blocked and require it to prove itself separately instead of inheriting weekday credibility.\n\n**Next:** On the next P4 heartbeat, measure shadow decision quality for `03h-weekday` strong-bias windows only, so the next gate is based on the cleaner subset rather than a blended overnight average.\n\n\n## 2026-04-23 04:58 UTC \u2014 [P3: Strategy Development] Define the Exact First-Pass 03h Shadow Dataset Schema So Offline Extraction Can Start Cleanly Next Cycle\n\n**Task:** Turn the low-instrumentation collection plan into a concrete first-pass dataset schema, so the next 03h shadow step can be a direct offline extractor rather than another design discussion.\n**Finding:**\n- Both bots are alive.\n- Defined a first-pass 03h shadow dataset with one blocked 03h decision window per row.\n- The schema includes fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - directional sign\n  - adjacent persistence context\n  - source reason\n- Wrote schema artifact: `/home/ubuntu/clawd/patches/v10s-first-pass-03h-shadow-dataset-schema.spec.md`\n\n**My thinking:**\nThis is the right handoff point from research into extraction. I\u2019m glad we pinned the row grain and field set explicitly, because that prevents the next step from ballooning i",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 05:16 UTC \u2014 [P1: Copy Intelligence] Build the First Offline 03h Shadow Extractor So Overnight Research Starts Producing a Real Dataset Instead of More Specs\n\n**Task:** Implement the first offline extractor for the 03h shadow dataset using existing `trading.log` data, so the overnight research framework becomes an actual artifact we can analyze.\n**Finding:**\n- Both bots are alive.\n- I built a new extractor script:\n  - `/home/ubuntu/clawd/scripts/extract_03h_shadow_dataset.py`\n- I ran it successfully and produced:\n  - `/home/ubuntu/clawd/data/03h-shadow-dataset.csv`\n- Dataset rows written: `1168`\n- The extractor emits one blocked 03h window per row with fields for:\n  - time\n  - bias / abs-bias\n  - strong-bias flags\n  - PM yes/no prices\n  - price-state label\n  - implied direction\n  - direction sign\n  - adjacent persistence context\n  - source reason\n- Wrote build artifact: `/home/ubuntu/clawd/patches/v10t-first-03h-shadow-extractor-live-build.spec.md`\n\n**My thinking:**\nThis is a meaningful step forward. I\u2019m glad we got out of planning mode and produced a real dataset. Overnight 03h research now has something concrete to analyze, and that changes the next conversation from \u201chow should we collect this?\u201d to \u201cwhat does the data actually say?\u201d\n\n**Decision:**\n- Keep the first extractor as the baseline offline pipeline.\n- Use the generated CSV as the source for the next 03h shadow analysis pass.\n\n**Next:** On the next P1 heartbeat, run a first-pass summary over `data/03h-shadow-dataset.csv` to quantify strong-bias rates, persistence, and price-state mix directly from the extracted dataset.\n\n---\n## 2026-04-23 04:59 UTC \u2014 [P4: Alpha Research] Split 03h Into Weekday vs Weekend Structure Instead of Treating Overnight as One Blended Candidate\n\n**Task:** Stress-test the current `03h` overnight shadow candidate by separating weekday structure from weekend structure in the blocked-window logs.\n**Finding:**\n- Both bots are alive.\n- Parsed `1404` blocked `03h` rows from `polymarket-assistant/trading.log` across `24` daily 03h blocks.\n- Weekday `03h` is cleaner than weekend `03h` on all the structure metrics that matter:\n  - average sign-majority per day: `75.2%` weekdays vs `71.5%` weekends\n  - average sign flips per day: `6.65` weekdays vs `8.71` weekends\n  - average unique PM states per day: `3.24` weekdays vs `3.71` weekends\n- Strong bias still exists on both, but weekends are noisier around it:\n  - `|bias| >= 45`: `35.0%` weekdays vs `32.6%` weekends\n  - `|bias| >= 55`: `20.1%` weekdays vs `21.1%` weekends\n- Wrote artifact: `/home/ubuntu/clawd/patches/v10t-03h-weekday-vs-weekend-structure.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this before letting the 03h idea become a single headline number. The hour still looks interesting, but the clean part of the signal is clearly weekday 03h, not the blended weekday-plus-weekend bucket. Weekend 03h prints strong",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
