@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T23:30:02.139112+00:00",
+  "timestamp": "2026-04-23T23:39:51.132874+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.0654%",
-      "apr": "-72%",
+      "rate": "-0.0831%",
+      "apr": "-91%",
       "action": "LONG",
-      "oi": "83,018,402"
-    },
-    {
-      "coin": "MAVIA",
-      "rate": "+0.0577%",
-      "apr": "+63%",
-      "action": "SHORT",
-      "oi": "69,669,296"
+      "oi": "83,807,820"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.0654%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.0831%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 23:13 UTC \u2014 [P2: Smart Entry] Review the Overnight System Again After the Production-vs-Review Split So the Next Change Improves Workflow Instead of Disturbing a Clean Architecture\n\n**Task:** Reassess the overnight monitoring stack now that the production runner and operator-facing consolidated report are intentionally separate, so the next improvement targets the new usability bottleneck.\n**Finding:**\n- Both bots are alive.\n- Current state now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - clean production/review split\n- Highest-value next gap:\n  - **no single manual review wrapper that refreshes the pipeline and then shows the consolidated report**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13i-next-gap-after-report-split.spec.md`\n\n**My thinking:**\nThis is the right next usability improvement. I don\u2019t want to collapse production and review into one permanent path, but I do want a smooth manual-review workflow. A refresh-and-report wrapper gives that convenience without blurring the architectural boundary we just cleaned up.\n\n**Decision:**\n- Keep production and review paths logically separate.\n- Add a lightweight manual review wrapper next.\n\n**Next:** On the next P2 heartbeat, define the minimal refresh-and-report wrapper for manual overnight review sessions.\n\n---\n## 2026-04-23 23:09 UTC \u2014 [P1: Copy Intelligence] Decide Where the Consolidated Overnight Report Belongs So the System Stays Clear About the Difference Between Production Execution and Operator Review\n\n**Task:** Choose whether the newly consolidated overnight report should be folded directly into the runner output or remain a separate top-level command, based on clarity and operational usefulness.\n**Finding:**\n- Both bots are alive.\n- Decision: **keep the consolidated report as a separate top-level command for now**.\n- Reasoning:\n  - the runner already handles production steps and validation\n  - folding the full report into the runner would make routine output noisier\n  - separating execution from review keeps the system easier to understand and operate\n- Wrote placement artifact: `/home/ubuntu/clawd/patches/v13h-consolidated-report-placement-decision.spec.md`\n\n**My thinking:**\nThis feels cleaner. I don\u2019t want the runner turning into a giant blob that both executes and narrates everything. Production path and review path are both important, but they aren\u2019t the same thing, and the system is better when that remains obvious.\n\n**Decision:**\n- Keep the runner as the production path.\n- Keep the consolidated report as the operator-facing review path.\n\n**Next:** On the next P1 heartbeat, review the overnight pipeline again and decide the next highest-value improvement now that production, validation, history, retrospective analysis, and operator reporting ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 23:39 UTC \u2014 [P3: Strategy Development] Define the Minimal Refresh-and-Report Wrapper So Manual Overnight Review Stops Being a Two-Command Ritual Without Polluting the Production Path\n\n**Task:** Specify the smallest wrapper for manual overnight review sessions, so refresh and operator review can happen in one command while preserving the separation between production execution and review output.\n**Finding:**\n- Both bots are alive.\n- Minimal wrapper should do exactly two things:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline.py`\n- It should exit non-zero if either step fails.\n- Wrote wrapper-design artifact: `/home/ubuntu/clawd/patches/v13j-minimal-refresh-and-report-wrapper.spec.md`\n\n**My thinking:**\nThis is the right amount of glue. I don\u2019t want a bigger orchestration layer here, just enough convenience that manual review becomes frictionless while the architecture stays clean.\n\n**Decision:**\n- Build this as a tiny shell wrapper.\n- Keep it dedicated to manual review sessions, not scheduled production flow.\n\n**Next:** On the next P3 heartbeat, implement the refresh-and-report wrapper and validate the one-command manual review path.\n\n---\n## 2026-04-23 23:13 UTC \u2014 [P2: Smart Entry] Review the Overnight System Again After the Production-vs-Review Split So the Next Change Improves Workflow Instead of Disturbing a Clean Architecture\n\n**Task:** Reassess the overnight monitoring stack now that the production runner and operator-facing consolidated report are intentionally separate, so the next improvement targets the new usability bottleneck.\n**Finding:**\n- Both bots are alive.\n- Current state now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - clean production/review split\n- Highest-value next gap:\n  - **no single manual review wrapper that refreshes the pipeline and then shows the consolidated report**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13i-next-gap-after-report-split.spec.md`\n\n**My thinking:**\nThis is the right next usability improvement. I don\u2019t want to collapse production and review into one permanent path, but I do want a smooth manual-review workflow. A refresh-and-report wrapper gives that convenience without blurring the architectural boundary we just cleaned up.\n\n**Decision:**\n- Keep production and review paths logically separate.\n- Add a lightweight manual review wrapper next.\n\n**Next:** On the next P2 heartbeat, define the minimal refresh-and-report wrapper for manual overnight review sessions.\n\n---\n## 2026-04-23 23:09 UTC \u2014 [P1: Copy Intelligence] Decide Where the Consolidated Overnight Report Belongs So the System Stays Clear About the Difference Between Production Execution and Operator Review\n\n**Task:** Choose whether the newly consolidated overnight report should be ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
