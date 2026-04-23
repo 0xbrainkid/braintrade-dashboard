@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T04:00:01.492345+00:00",
+  "timestamp": "2026-04-23T04:14:15.445087+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.4307%",
-      "apr": "-472%",
+      "rate": "-0.1652%",
+      "apr": "-181%",
       "action": "LONG",
-      "oi": "167,751,518"
+      "oi": "177,109,070"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0993%",
-      "apr": "+109%",
+      "rate": "+0.1077%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0679%",
-      "apr": "+74%",
-      "action": "SHORT",
-      "oi": "239,750,058"
+      "coin": "YZY",
+      "rate": "-0.0645%",
+      "apr": "-71%",
+      "action": "LONG",
+      "oi": "1,193,612"
     }
   ],
   "daily_pnl": [
@@ -108,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.4307%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1652%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:58 UTC \u2014 [P3: Strategy Development] Break the Overnight Blocked Sample Down by Hour and Find the Overnight Regimes That Are Actually Richest for Research\n\n**Task:** Split the overnight `OUTSIDE_ACTIVE_HOURS` blocked sample by hour so we can stop treating overnight as one lump and instead identify which hour is structurally richest for future research or shadow expansion.\n**Finding:**\n- Both bots are alive.\n- Hour-by-hour overnight structure is meaningfully different:\n  - `00h`: count `47`, mean `30.73`, median `35.8`, strong-bias share `34.0%`, pos `40`, neg `7`\n  - `01h`: count `60`, mean `-0.84`, median `-2.15`, strong-bias share `40.0%`, pos `30`, neg `30`\n  - `02h`: count `46`, mean `-36.66`, median `-39.1`, strong-bias share `41.3%`, pos `5`, neg `41`\n  - `03h`: count `57`, mean `-22.25`, median `-35.4`, strong-bias share `42.1%`, pos `18`, neg `39`\n- This means overnight is not one regime:\n  - `00h` is mostly positive-skewed\n  - `01h` is balanced / mixed\n  - `02h` is the cleanest bearish-skew hour\n  - `03h` has the highest strong-bias density of the overnight hours\n- Wrote breakdown artifact: `/home/ubuntu/clawd/patches/v10o-overnight-bias-by-hour-breakdown.spec.md`\n\n**My thinking:**\nThis is exactly the kind of structural split that matters. I\u2019m glad we didn\u2019t stop at the aggregate overnight number. There are clearly different overnight personalities here, and that means any future shadow work should be selective by hour, not \u201covernight\u201d as a monolith.\n\n**Decision:**\n- Prioritize `03h` for **research richness** because it has the highest strong-bias share.\n- Prioritize `02h` for **clean directional skew** because it is strongly bearish and least mixed.\n- De-prioritize `01h` as a research-first expansion candidate because it is the most balanced/noisy.\n\n**Next:** On the next P3 heartbeat, compare `02h` and `03h` more directly on price-state behavior to decide which one is the better shadow candidate for future overnight experimentation.\n\n---\n## 2026-04-23 03:46 UTC \u2014 [P2: Smart Entry] Turn Overnight Non-Execution Hours Into a Real Research Asset by Measuring Their Bias Structure Instead of Treating Them as Dead Time\n\n**Task:** Use the overnight non-execution window for actual strategy research by measuring the bias structure inside `OUTSIDE_ACTIVE_HOURS` logs, rather than continuing to treat those hours as operationally blank.\n**Finding:**\n- Both bots are alive.\n- In the recent overnight blocked sample:\n  - observations: `331`\n  - mean bias: `13.29`\n  - median bias: `31.1`\n  - min bias: `-85.9`\n  - max bias: `81.5`\n  - strong-bias windows (`|bias| >= 45`): `150`\n  - strong-bias share: `45.3%`\n  - negative windows: `115`\n  - positive windows: `216`\n- That means overnight hours are non-execution, but **not** low-information.\n- Wrote research artifact: `/home/ubuntu/clawd/patches/v10n-overnight-bias-structure-research.spec.md`\n\n**My thi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 04:13 UTC \u2014 [P4: Alpha Research] Compare 02h vs 03h Price-State Structure and Pick the Cleaner Overnight Shadow Candidate\n\n**Task:** Compare the two most interesting overnight hours, `02h` and `03h`, on actual PM price-state behavior so we can choose the cleaner candidate for future overnight shadow work.\n**Finding:**\n- Both bots are alive.\n- `02h` price-state mix:\n  - `Y0.505 N0.495`: `34 / 46` = `73.9%`\n  - `Y0.520 N0.480`: `5 / 46` = `10.9%`\n  - `Y0.515 N0.485`: `5 / 46` = `10.9%`\n  - minor tails at `0.530/0.480` and `0.480/0.530`\n- `03h` price-state mix:\n  - `Y0.505 N0.495`: `45 / 60` = `75.0%`\n  - `Y0.525 N0.475`: `10 / 60` = `16.7%`\n  - `Y0.515 N0.485`: `5 / 60` = `8.3%`\n- Interpretation:\n  - both hours are strongly pinned\n  - `02h` is slightly more fragmented across multiple neighboring states\n  - `03h` is cleaner, with one dominant pinned state and one main excursion family\n- Wrote comparison artifact: `/home/ubuntu/clawd/patches/v10p-02h-vs-03h-price-state-comparison.spec.md`\n\n**My thinking:**\nThis is the kind of result we want before shadowing anything. I\u2019m glad we checked structure, not just bias intensity. `03h` is not only rich, it is cleaner. That makes it easier to model and less likely to create false complexity if we ever test an overnight shadow regime.\n\n**Decision:**\n- Promote `03h` as the **best overnight shadow candidate** right now.\n- Keep `02h` as a secondary bearish-skew research hour.\n- Do not treat all overnight hours equally anymore.\n\n**Next:** On the next P4 heartbeat, define the minimal `03h` shadow-evaluation framework, specifically what metrics we would collect before even considering any future overnight restricted expansion.\n\n---\n## 2026-04-23 03:58 UTC \u2014 [P3: Strategy Development] Break the Overnight Blocked Sample Down by Hour and Find the Overnight Regimes That Are Actually Richest for Research\n\n**Task:** Split the overnight `OUTSIDE_ACTIVE_HOURS` blocked sample by hour so we can stop treating overnight as one lump and instead identify which hour is structurally richest for future research or shadow expansion.\n**Finding:**\n- Both bots are alive.\n- Hour-by-hour overnight structure is meaningfully different:\n  - `00h`: count `47`, mean `30.73`, median `35.8`, strong-bias share `34.0%`, pos `40`, neg `7`\n  - `01h`: count `60`, mean `-0.84`, median `-2.15`, strong-bias share `40.0%`, pos `30`, neg `30`\n  - `02h`: count `46`, mean `-36.66`, median `-39.1`, strong-bias share `41.3%`, pos `5`, neg `41`\n  - `03h`: count `57`, mean `-22.25`, median `-35.4`, strong-bias share `42.1%`, pos `18`, neg `39`\n- This means overnight is not one regime:\n  - `00h` is mostly positive-skewed\n  - `01h` is balanced / mixed\n  - `02h` is the cleanest bearish-skew hour\n  - `03h` has the highest strong-bias density of the overnight hours\n- Wrote breakdown artifact: `/home/ubuntu/clawd/patches/v10o-overnight-bias-by-hour-breakdown.spe",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
