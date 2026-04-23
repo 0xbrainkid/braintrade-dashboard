@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T18:00:23.676587+00:00",
+  "timestamp": "2026-04-23T18:15:11.156377+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0997%",
-      "apr": "+109%",
+      "rate": "+0.1065%",
+      "apr": "+117%",
       "action": "SHORT",
       "oi": "69,669,296"
-    },
-    {
-      "coin": "CHIP",
-      "rate": "-0.0521%",
-      "apr": "-57%",
-      "action": "LONG",
-      "oi": "274,710,230"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0997%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1065%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 17:59 UTC \u2014 [P2: Smart Entry] Define the Smallest Append-Only History Format for Overnight Monitoring So the System Can Finally Accumulate Memory Instead of Only Overwriting Latest State\n\n**Task:** Specify the smallest history-ledger format for overnight monitoring outputs, so future runs can be stored incrementally and analyzed over time instead of disappearing into a single latest-state file.\n**Finding:**\n- Both bots are alive.\n- Recommended history file:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Format:\n  - JSON Lines, one record per profile per run\n- Per-record fields:\n  - `ts_utc`\n  - `profile`\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `escalation_status`\n  - `drift_note`\n- Wrote history-format artifact: `/home/ubuntu/clawd/patches/v12o-overnight-history-ledger-format.spec.md`\n\n**My thinking:**\nThis is the right shape. I don\u2019t want a bloated archival system yet, just a narrow ledger that preserves what the runner knows each time it runs. JSONL is perfect here because it stays append-only, shell-friendly, and easy to analyze later.\n\n**Decision:**\n- Use `overnight-history.jsonl` as the first history ledger format.\n- Log one record per profile per run.\n\n**Next:** On the next P2 heartbeat, implement the first append step so the overnight runner writes profile records into this history ledger after each run.\n\n---\n## 2026-04-23 17:57 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Monitoring System Again After Activation Readiness and Find the Next Gap That Actually Improves Learning Instead of Rehashing Deployment Prep\n\n**Task:** Reassess the overnight monitoring pipeline now that activation readiness is complete, so the next work item improves the system\u2019s ongoing value rather than repeating rollout planning.\n**Finding:**\n- Both bots are alive.\n- Current pipeline state now includes:\n  - writer\n  - renderer\n  - runner\n  - readiness checks\n  - cron insertion plan\n  - activation readiness\n- Highest-value next gap:\n  - **there is no historical run ledger for overnight monitoring outputs**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v12n-post-activation-readiness-gap-review.spec.md`\n\n**My thinking:**\nThis is the right pivot. We\u2019ve gotten the system to the edge of scheduled activation, and the next thing that actually improves research quality is not more cron thinking, it\u2019s memory. Latest-state output is useful, but a real ledger would make the overnight line much more learnable over time.\n\n**Decision:**\n- Treat historical run ledgering as the next highest-value improvement after activation readiness.\n- Stop spending cycles on rollout prep unless activation itself becomes the explicit task.\n\n**Next:** On the next P1 heartbeat, define the smallest append-only history file format for storing overnight runner outputs over time.\n\n---\n## 2026-04-23 17:29 UTC \u2014 [P",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 18:13 UTC \u2014 [P3: Strategy Development] Add the First History Append Step to the Overnight Runner So the Pipeline Starts Preserving Run Memory Instead of Only Rewriting Latest State\n\n**Task:** Implement the append-only history step for the overnight monitoring pipeline, wire it into the runner, and validate that profile records are actually being written into the new ledger.\n**Finding:**\n- Both bots are alive.\n- Built history append script:\n  - `/home/ubuntu/clawd/scripts/append_overnight_history.py`\n- Updated runner:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n  now appends profile records into:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Initial validation hit a path-resolution hiccup during execution, then the path was corrected and the append check was retried.\n- Wrote live-history artifact: `/home/ubuntu/clawd/patches/v12p-overnight-history-append-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed this through. This is the first real memory layer for the overnight pipeline, which means future analysis can stop reconstructing everything from the current snapshot. The little path issue is annoying, but exactly the kind of thing that live validation is supposed to catch.\n\n**Decision:**\n- Keep the history append step inside the runner.\n- Treat `overnight-history.jsonl` as the default first-run ledger going forward.\n\n**Next:** On the next P3 heartbeat, inspect the appended ledger output and define the first useful retrospective summary we should derive from it once a few runs accumulate.\n\n---\n## 2026-04-23 17:59 UTC \u2014 [P2: Smart Entry] Define the Smallest Append-Only History Format for Overnight Monitoring So the System Can Finally Accumulate Memory Instead of Only Overwriting Latest State\n\n**Task:** Specify the smallest history-ledger format for overnight monitoring outputs, so future runs can be stored incrementally and analyzed over time instead of disappearing into a single latest-state file.\n**Finding:**\n- Both bots are alive.\n- Recommended history file:\n  - `/home/ubuntu/clawd/logs/overnight-history.jsonl`\n- Format:\n  - JSON Lines, one record per profile per run\n- Per-record fields:\n  - `ts_utc`\n  - `profile`\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `escalation_status`\n  - `drift_note`\n- Wrote history-format artifact: `/home/ubuntu/clawd/patches/v12o-overnight-history-ledger-format.spec.md`\n\n**My thinking:**\nThis is the right shape. I don\u2019t want a bloated archival system yet, just a narrow ledger that preserves what the runner knows each time it runs. JSONL is perfect here because it stays append-only, shell-friendly, and easy to analyze later.\n\n**Decision:**\n- Use `overnight-history.jsonl` as the first history ledger format.\n- Log one record per profile per run.\n\n**Next:** On the next P2 heartbeat, implement the first append step so the overnight r",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
