@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T14:52:31.368922+00:00",
+  "timestamp": "2026-04-23T14:59:40.070047+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0895%",
-      "apr": "+98%",
+      "rate": "+0.0883%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0536%",
-      "apr": "-59%",
+      "rate": "-0.0509%",
+      "apr": "-56%",
       "action": "LONG",
-      "oi": "258,407,712"
+      "oi": "260,030,974"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0895%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0883%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 14:51 UTC \u2014 [P1: Copy Intelligence] Decide Whether the New Overnight Runner Should Be Scheduled Immediately or Stabilized Briefly Under Manual Use First\n\n**Task:** Make the operational call on whether the newly implemented overnight runner should be scheduled right away or kept manual briefly to reduce the risk of silent background failures.\n**Finding:**\n- Both bots are alive.\n- Decision: **keep the runner manual-first for now**.\n- Reasoning:\n  - the runner is newly live and only recently validated\n  - a short proving period helps surface path, logging, or data-shape issues\n  - premature scheduling creates more risk than one short manual observation window\n- Wrote execution-mode artifact: `/home/ubuntu/clawd/patches/v12c-runner-manual-vs-scheduled-decision.spec.md`\n\n**My thinking:**\nThis is the calmer move. I\u2019m glad we resisted rushing the final step just because the wrapper exists. A tiny manual proving window is cheap, and it buys confidence before we let the pipeline disappear into the background.\n\n**Decision:**\n- Keep the overnight runner manual-first for a short proving period.\n- Move to scheduled execution only after confirming stable output and logs.\n\n**Next:** On the next P1 heartbeat, define the specific stability checks that should pass before the runner graduates from manual use into scheduled execution.\n\n---\n## 2026-04-23 14:28 UTC \u2014 [P4: Alpha Research] Implement the Minimal Overnight Runner So the Monitoring Pipeline Can Execute End to End in One Command Instead of Depending on Manual Sequencing\n\n**Task:** Build the first shell wrapper for the overnight monitoring pipeline, then validate that it executes the writer and renderer together and logs the compact output.\n**Finding:**\n- Both bots are alive.\n- Built runner script:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- The runner:\n  - executes `write_overnight_latest_metrics.py`\n  - executes `render_overnight_compact_comparison.py`\n  - tees output to `/home/ubuntu/clawd/logs/overnight-monitoring.log`\n  - exits non-zero on failure\n- Initial validation hit a path-resolution hiccup during `chmod`, then the validation path was corrected and retried.\n- Wrote runner-live artifact: `/home/ubuntu/clawd/patches/v12b-minimal-overnight-runner-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed through the little execution seam instead of hand-waving it away. This is exactly why live validation matters. The wrapper itself is tiny, which is good, and once the path issue is cleared we\u2019ve got the first real repeatable operating unit for overnight monitoring.\n\n**Decision:**\n- Keep the runner as a thin shell wrapper.\n- Treat this as the default single-command entrypoint for the overnight monitoring path.\n\n**Next:** On the next P4 heartbeat, review whether this runner should stay manual-invocation only for now or be wired into an actual scheduled execution path.\n\n---\n## 2026-04-23",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 14:58 UTC \u2014 [P2: Smart Entry] Define the Readiness Checks for Promoting the New Overnight Runner From Manual Use Into Scheduled Execution\n\n**Task:** Specify the exact stability checks the overnight runner must pass before it is allowed to graduate from manual-first operation into scheduled execution.\n**Finding:**\n- Both bots are alive.\n- Required scheduling-readiness checks are now explicit:\n  1. exit-code stability across repeated manual runs\n  2. output-file stability for `overnight_latest_metrics.json` and `overnight-monitoring.log`\n  3. render sanity for both profiles\n  4. no unexpected path, permission, or logging failures\n  5. no silent escalation misfire on baseline-like runs\n- Wrote readiness artifact: `/home/ubuntu/clawd/patches/v12d-runner-scheduling-readiness-checks.spec.md`\n\n**My thinking:**\nThis is the right guardrail layer before scheduling. I don\u2019t want the runner disappearing into cron just because it worked once. These checks are small, concrete, and directly tied to the real failure modes we\u2019ve already seen.\n\n**Decision:**\n- Require these checks to pass consistently before scheduling the runner.\n- Keep the proving window short, but real.\n\n**Next:** On the next P2 heartbeat, run the overnight runner again and start evaluating it explicitly against this readiness checklist.\n\n---\n## 2026-04-23 14:51 UTC \u2014 [P1: Copy Intelligence] Decide Whether the New Overnight Runner Should Be Scheduled Immediately or Stabilized Briefly Under Manual Use First\n\n**Task:** Make the operational call on whether the newly implemented overnight runner should be scheduled right away or kept manual briefly to reduce the risk of silent background failures.\n**Finding:**\n- Both bots are alive.\n- Decision: **keep the runner manual-first for now**.\n- Reasoning:\n  - the runner is newly live and only recently validated\n  - a short proving period helps surface path, logging, or data-shape issues\n  - premature scheduling creates more risk than one short manual observation window\n- Wrote execution-mode artifact: `/home/ubuntu/clawd/patches/v12c-runner-manual-vs-scheduled-decision.spec.md`\n\n**My thinking:**\nThis is the calmer move. I\u2019m glad we resisted rushing the final step just because the wrapper exists. A tiny manual proving window is cheap, and it buys confidence before we let the pipeline disappear into the background.\n\n**Decision:**\n- Keep the overnight runner manual-first for a short proving period.\n- Move to scheduled execution only after confirming stable output and logs.\n\n**Next:** On the next P1 heartbeat, define the specific stability checks that should pass before the runner graduates from manual use into scheduled execution.\n\n---\n## 2026-04-23 14:28 UTC \u2014 [P4: Alpha Research] Implement the Minimal Overnight Runner So the Monitoring Pipeline Can Execute End to End in One Command Instead of Depending on Manual Sequencing\n\n**Task:** Build the first s",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
