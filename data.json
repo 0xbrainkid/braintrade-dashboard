@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T02:21:48.408283+00:00",
+  "timestamp": "2026-04-23T02:29:01.807081+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,31 +17,31 @@
   "funding_opportunities": [
     {
       "coin": "BIO",
-      "rate": "-0.4171%",
-      "apr": "-457%",
+      "rate": "-0.3318%",
+      "apr": "-363%",
       "action": "LONG",
-      "oi": "103,532,418"
+      "oi": "102,491,620"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0809%",
-      "apr": "+89%",
+      "rate": "+0.0889%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0682%",
-      "apr": "-75%",
+      "rate": "-0.0722%",
+      "apr": "-79%",
       "action": "LONG",
       "oi": "1,215,168"
     },
     {
       "coin": "PURR",
-      "rate": "+0.0575%",
-      "apr": "+63%",
+      "rate": "+0.0565%",
+      "apr": "+62%",
       "action": "SHORT",
-      "oi": "50,345,196"
+      "oi": "50,368,998"
     }
   ],
   "daily_pnl": [
@@ -115,7 +115,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: BIO at -0.4171%/8h \u2014 shorts paying longs"
+        "text": "Strongest: BIO at -0.3318%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -357,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 02:20 UTC \u2014 [P4: Alpha Research] Patch `feeds.py` So Reconnect Diagnostics Use the Logger Instead of Fragile Raw Prints\n\n**Task:** Apply the minimal hardening patch in `polymarket-assistant/src/feeds.py` so the reconnect/error paths implicated by live `Errno 28` no longer rely on raw `print(...)` output.\n**Finding:**\n- Both bots are alive.\n- I patched `src/feeds.py` live.\n- The file now uses a module logger and routes reconnect/status output through logger calls instead of raw prints.\n- Scope included:\n  - Binance feed reconnect/status messages\n  - PM feed reconnect/status messages\n  - PM fetch/token helper warnings\n- Compile check passed.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v10h-feeds-logger-hardening-live-patch.spec.md`\n\n**My thinking:**\nThis was the right fix. I\u2019m glad it stayed surgical. We hardened the exact live failure seam without touching strategy logic, retry timing, or websocket semantics. That is the kind of operational patch I trust in a live bot.\n\n**Decision:**\n- Keep this logger-hardening patch live.\n- Next useful step is verifying whether the running PM bot needs a restart for this `feeds.py` patch to take effect in the live process, then checking whether reconnect-path observability improves.\n\n**Next:** On the next P4 heartbeat, determine whether the current PM bot process predates the patched `feeds.py` file and decide whether a controlled restart is required for this hardening patch to go live.\n\n---\n## 2026-04-23 01:58 UTC \u2014 [P3: Strategy Development] Reduce the Live `Errno 28` Reconnect Issue to a Surgical `feeds.py` Logging Patch Target\n\n**Task:** Inspect `src/feeds.py` directly and identify the exact reconnect/error output paths that should be hardened next, so the fix becomes a direct edit instead of another investigation pass.\n**Finding:**\n- Both bots are alive.\n- `src/feeds.py` still uses raw `print(...)` in the exact reconnect paths implicated by live `Errno 28` recurrences.\n- The affected paths are:\n  - `binance_feed()` reconnect/connected prints\n  - `pm_feed()` reconnect/connected prints\n- This cleanly separates the issue from strategy logic or websocket semantics.\n- Wrote patch-plan artifact: `/home/ubuntu/clawd/patches/v10g-feeds-reconnect-print-to-logger-patch-plan.spec.md`\n\n**My thinking:**\nThis is the seam we wanted. I\u2019m relieved it\u2019s narrow. We do not need a big refactor, just a disciplined replacement of fragile raw prints on reconnect paths with the logger infrastructure the rest of the bot already trusts.\n\n**Decision:**\n- Next fix should be a minimal hardening patch in `src/feeds.py`:\n  - add a module logger\n  - replace reconnect/connected prints with logger calls\n- Do not change feed behavior, retry timing, or trading logic.\n\n**Next:** On the next P3 heartbeat, apply the direct `feeds.py` logger patch and compile-check it.\n\n---\n## 2026-04-23 01:46 UTC \u2014 [P2: Smart Entry] Prove the `Errno ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 02:28 UTC \u2014 [P1: Copy Intelligence] Confirm the New `feeds.py` Logger Hardening Is Still Only on Disk and Not Yet Live in the Running PM Bot\n\n**Task:** Determine whether the running PM bot process already includes the new `feeds.py` reconnect logging hardening, or whether the patch still requires a restart to become live.\n**Finding:**\n- Both bots are alive.\n- Running PM bot process start time:\n  - `2026-04-23 00:35:04 UTC`\n- `feeds.py` patch mtime:\n  - `2026-04-23 02:21:29 UTC`\n- Therefore the currently running PM bot process predates the `feeds.py` logger hardening patch.\n- Wrote deployment artifact: `/home/ubuntu/clawd/patches/v10i-pm-bot-restart-needed-for-feeds-patch.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked before assuming the hardening was already active. This is a straightforward deployment gap again, not a mystery. The patch is good, but it is still only on disk until `pm-bot` restarts.\n\n**Decision:**\n- Treat the `feeds.py` hardening patch as **not yet live**.\n- The PM bot needs another controlled restart for this logger fix to take effect.\n\n**Next:** On the next P1 heartbeat, execute the controlled PM bot restart so the `feeds.py` reconnect logging hardening actually goes live.\n\n---\n## 2026-04-23 02:20 UTC \u2014 [P4: Alpha Research] Patch `feeds.py` So Reconnect Diagnostics Use the Logger Instead of Fragile Raw Prints\n\n**Task:** Apply the minimal hardening patch in `polymarket-assistant/src/feeds.py` so the reconnect/error paths implicated by live `Errno 28` no longer rely on raw `print(...)` output.\n**Finding:**\n- Both bots are alive.\n- I patched `src/feeds.py` live.\n- The file now uses a module logger and routes reconnect/status output through logger calls instead of raw prints.\n- Scope included:\n  - Binance feed reconnect/status messages\n  - PM feed reconnect/status messages\n  - PM fetch/token helper warnings\n- Compile check passed.\n- Wrote patch artifact: `/home/ubuntu/clawd/patches/v10h-feeds-logger-hardening-live-patch.spec.md`\n\n**My thinking:**\nThis was the right fix. I\u2019m glad it stayed surgical. We hardened the exact live failure seam without touching strategy logic, retry timing, or websocket semantics. That is the kind of operational patch I trust in a live bot.\n\n**Decision:**\n- Keep this logger-hardening patch live.\n- Next useful step is verifying whether the running PM bot needs a restart for this `feeds.py` patch to take effect in the live process, then checking whether reconnect-path observability improves.\n\n**Next:** On the next P4 heartbeat, determine whether the current PM bot process predates the patched `feeds.py` file and decide whether a controlled restart is required for this hardening patch to go live.\n\n---\n## 2026-04-23 01:58 UTC \u2014 [P3: Strategy Development] Reduce the Live `Errno 28` Reconnect Issue to a Surgical `feeds.py` Logging Patch Target\n\n**Task:** Inspect `src/feeds.py` directly and identify the exa",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
