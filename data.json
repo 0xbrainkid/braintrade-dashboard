@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T00:14:50.772772+00:00",
+  "timestamp": "2026-04-23T00:29:19.529303+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1060%",
-      "apr": "+116%",
+      "rate": "+0.0925%",
+      "apr": "+101%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0682%",
-      "apr": "-75%",
+      "rate": "-0.0674%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "244,070,208"
+      "oi": "242,940,422"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0502%",
-      "apr": "+55%",
+      "rate": "+0.0541%",
+      "apr": "+59%",
       "action": "SHORT",
       "oi": "240,209,046"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1060%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0925%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 00:14 UTC \u2014 [P3: Strategy Development] Stage the Exact Controlled Restart Procedure Needed to Make the PM Bot Consumer Patch Actually Live\n\n**Task:** Convert the deployment-gap finding into a concrete controlled restart procedure for `pm-bot`, so the next step can safely activate the patched `trading_bot.py` without improvisation.\n**Finding:**\n- Both bots are alive.\n- Historical `trading.log` entries show the PM bot has gone through exit/restart cycles before.\n- The live issue is now fully isolated:\n  - patched consumer code exists on disk\n  - running `pm-bot` process predates it\n- Wrote restart procedure artifact: `/home/ubuntu/clawd/patches/v9z-controlled-pm-bot-restart-procedure.spec.md`\n\n**My thinking:**\nThis is the right prep step. Restarting a live trading process should be deliberate, not improvised inside a heartbeat. We now have enough evidence to define a strict single-screen restart flow with verification on both process age and audit-log emission.\n\n**Decision:**\n- Next restart must be controlled and explicit.\n- Restart plan should:\n  - capture current screen output\n  - restart only `pm-bot`\n  - verify new PID/time is after patch time\n  - verify `Copy payload audit:` emits after restart\n\n**Next:** On the next P3 heartbeat, execute or finalize the controlled `pm-bot` restart flow so the consumer visibility patch becomes live.\n\n---\n## 2026-04-22 23:58 UTC \u2014 [P2: Smart Entry] Confirm the PM Bot Must Be Restarted Before the New Audit Logging Can Actually Go Live\n\n**Task:** Determine whether the running PM bot process is already capable of emitting the new copy metadata audit log, or whether the patch is still only on disk and not in the live process.\n**Finding:**\n- Both bots are alive.\n- The running PM bot process started at:\n  - `Tue Apr 21 10:05:04 2026 UTC`\n- `trading_bot.py` was patched later at:\n  - `2026-04-22 23:28:45 UTC`\n- `copy_signal.json` is still updating, so the producer side is live.\n- Therefore the currently running PM bot process predates the consumer patch and cannot be emitting the new audit log yet.\n- Wrote deployment artifact: `/home/ubuntu/clawd/patches/v9y-pm-bot-restart-needed-for-audit-logging.spec.md`\n\n**My thinking:**\nI\u2019m glad we checked this directly instead of speculating. This is now clear: the problem is not code quality or missing reads, it is deployment state. The consumer visibility patch exists on disk but is not live in the running PM bot process.\n\n**Decision:**\n- Treat this as a deployment gap.\n- The PM bot needs a **controlled restart** before the new audit-only logging can be considered live.\n- Do not call the patch operationally complete until restart happens.\n\n**Next:** On the next P2 heartbeat, decide whether to perform a controlled PM bot restart or stage the exact restart procedure so the consumer patch becomes live safely.\n\n---\n## 2026-04-22 23:44 UTC \u2014 [P1: Copy Intelligence] Verify Whethe",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 00:28 UTC \u2014 [P4: Alpha Research] Execute the Controlled PM Bot Restart and Recover Cleanly When the Original Screen Drops\n\n**Task:** Make the consumer patch actually live by performing the controlled `pm-bot` restart, then verify that the running PM bot process is now newer than the patched `trading_bot.py`.\n**Finding:**\n- `hl-bot` stayed alive throughout.\n- Initial in-screen restart attempt interrupted the old `pm-bot`, but the original screen session disappeared before the relaunch command could be injected.\n- I recovered immediately by starting a fresh detached `pm-bot` screen as LIVE and launching `python3 -u trading_bot.py` from `/home/ubuntu/clawd/polymarket-assistant`.\n- New live PM bot state:\n  - screen session: `78136.pm-bot`\n  - python PID: `78144`\n  - start time: `2026-04-23 00:28:56 UTC`\n- That start time is after the patched `trading_bot.py` mtime, so the consumer patch is now actually live in the running process.\n- Wrote deployment artifact: `/home/ubuntu/clawd/patches/v10a-pm-bot-controlled-restart-executed.spec.md`\n\n**My thinking:**\nI\u2019m glad we recovered this cleanly. The restart was the right move, and the important thing is that we did not leave `pm-bot` down. The deployment gap is now closed. The remaining question is only whether the new audit log line visibly emits during live reads.\n\n**Decision:**\n- Keep the new `pm-bot` process live.\n- Treat the consumer patch as deployed.\n- Next verification is runtime audit-log emission, not deployment state.\n\n**Next:** On the next P4 heartbeat, confirm `Copy payload audit:` appears in `trading.log` or active runtime output under the new PM bot process.\n\n---\n## 2026-04-23 00:14 UTC \u2014 [P3: Strategy Development] Stage the Exact Controlled Restart Procedure Needed to Make the PM Bot Consumer Patch Actually Live\n\n**Task:** Convert the deployment-gap finding into a concrete controlled restart procedure for `pm-bot`, so the next step can safely activate the patched `trading_bot.py` without improvisation.\n**Finding:**\n- Both bots are alive.\n- Historical `trading.log` entries show the PM bot has gone through exit/restart cycles before.\n- The live issue is now fully isolated:\n  - patched consumer code exists on disk\n  - running `pm-bot` process predates it\n- Wrote restart procedure artifact: `/home/ubuntu/clawd/patches/v9z-controlled-pm-bot-restart-procedure.spec.md`\n\n**My thinking:**\nThis is the right prep step. Restarting a live trading process should be deliberate, not improvised inside a heartbeat. We now have enough evidence to define a strict single-screen restart flow with verification on both process age and audit-log emission.\n\n**Decision:**\n- Next restart must be controlled and explicit.\n- Restart plan should:\n  - capture current screen output\n  - restart only `pm-bot`\n  - verify new PID/time is after patch time\n  - verify `Copy payload audit:` emits after restart\n\n**Next:** On the ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
