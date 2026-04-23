@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T19:34:41.726613+00:00",
+  "timestamp": "2026-04-23T19:44:22.395714+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,15 +16,8 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0566%",
-      "apr": "+62%",
-      "action": "SHORT",
-      "oi": "239,343,126"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.0560%",
+      "rate": "+0.0555%",
       "apr": "+61%",
       "action": "SHORT",
       "oi": "69,669,296"
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0566%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0555%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 19:33 UTC \u2014 [P4: Alpha Research] Define the First Recent-Window Filter for the Overnight Ledger So the Next Retrospective Layer Is Ready When History Depth Finally Makes Windowed Comparison Worth It\n\n**Task:** Choose the first recent-window filter the overnight retrospective should use once the history ledger has enough runs to support a meaningful short-term vs long-term comparison.\n**Finding:**\n- Both bots are alive.\n- Recommended first recent-window filter:\n  - **most recent 10 runs per profile**\n- Why this is the right first window:\n  - large enough to show short-term drift\n  - small enough to stay sensitive to recent change\n  - simple and intuitive for the first windowed comparison\n- Wrote window-filter artifact: `/home/ubuntu/clawd/patches/v12u-first-recent-window-filter.spec.md`\n\n**My thinking:**\nThis is a good future-ready choice. I don\u2019t want to build the window logic too early, but I do want the design call settled so the next step is obvious once the ledger has more than a trivial amount of history.\n\n**Decision:**\n- Use recent-10 as the first windowed lens when the ledger is deep enough.\n- Compare recent-10 against full-history summary rather than inventing a more complex window stack too soon.\n\n**Next:** On the next P4 heartbeat, define the minimum history depth required before the recent-10 filter should become active instead of staying dormant.\n\n---\n## 2026-04-23 19:13 UTC \u2014 [P3: Strategy Development] Add the Drift-Delta Layer to the Overnight Retrospective So the Ledger Can Highlight Change Directly Instead of Only Reporting Aggregates\n\n**Task:** Upgrade the overnight history summary script to include simple earliest-vs-latest drift deltas, so the retrospective layer can surface directional change without needing a larger time-window system yet.\n**Finding:**\n- Both bots are alive.\n- Updated script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- New summary fields now included:\n  - `delta_simulated_wr`\n  - `delta_flip_rate`\n  - `delta_mean_persistence`\n- Validation succeeded against the current ledger.\n- Current results are correctly flat with one run logged:\n  - both profiles show delta values of `0.0`\n- Wrote drift-delta artifact: `/home/ubuntu/clawd/patches/v12t-drift-delta-summary-live.spec.md`\n\n**My thinking:**\nI\u2019m glad this came out cleanly. The fact that the deltas are zero right now is reassuring, because it means the summary is telling the truth instead of manufacturing significance from tiny data. That\u2019s exactly the kind of honesty I want in this monitoring layer.\n\n**Decision:**\n- Keep drift-delta as the next retrospective layer on top of the stability summary.\n- Wait for more ledger depth before pushing into heavier time-window analysis.\n\n**Next:** On the next P3 heartbeat, define the first recent-window filter we\u2019ll want once the history ledger has enough runs to make windowed comparison meaningfu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 19:43 UTC \u2014 [P1: Copy Intelligence] Define When the Recent-10 Window Should Actually Turn On So the Overnight Retrospective Doesn\u2019t Pretend Sparse History Is Rich Enough for Short-Term vs Long-Term Comparison\n\n**Task:** Choose the minimum ledger depth required before the recent-10 windowed comparison should activate, so the first windowed lens turns on only when it is truly more informative than redundant.\n**Finding:**\n- Both bots are alive.\n- Decision: require at least **20 runs per profile** before activating recent-10.\n- Why:\n  - creates a meaningful full-history baseline\n  - prevents the recent window from overlapping too much with total history too early\n  - keeps recent-10 as a real short-term lens rather than sparse-history theater\n- Wrote activation-threshold artifact: `/home/ubuntu/clawd/patches/v12v-recent10-activation-threshold.spec.md`\n\n**My thinking:**\nThis threshold feels right. I don\u2019t want the system claiming to compare short-term versus long-term behavior when \u201clong-term\u201d is only a handful of points. Twenty runs is enough to make the split feel honest without waiting forever.\n\n**Decision:**\n- Keep recent-10 dormant until a profile reaches 20 runs.\n- Activate recent-10 vs full-history comparison only at that threshold or higher.\n\n**Next:** On the next P1 heartbeat, define how the retrospective script should expose dormant-vs-active window status so the report stays explicit about when the recent-10 lens is not yet meaningful.\n\n---\n## 2026-04-23 19:33 UTC \u2014 [P4: Alpha Research] Define the First Recent-Window Filter for the Overnight Ledger So the Next Retrospective Layer Is Ready When History Depth Finally Makes Windowed Comparison Worth It\n\n**Task:** Choose the first recent-window filter the overnight retrospective should use once the history ledger has enough runs to support a meaningful short-term vs long-term comparison.\n**Finding:**\n- Both bots are alive.\n- Recommended first recent-window filter:\n  - **most recent 10 runs per profile**\n- Why this is the right first window:\n  - large enough to show short-term drift\n  - small enough to stay sensitive to recent change\n  - simple and intuitive for the first windowed comparison\n- Wrote window-filter artifact: `/home/ubuntu/clawd/patches/v12u-first-recent-window-filter.spec.md`\n\n**My thinking:**\nThis is a good future-ready choice. I don\u2019t want to build the window logic too early, but I do want the design call settled so the next step is obvious once the ledger has more than a trivial amount of history.\n\n**Decision:**\n- Use recent-10 as the first windowed lens when the ledger is deep enough.\n- Compare recent-10 against full-history summary rather than inventing a more complex window stack too soon.\n\n**Next:** On the next P4 heartbeat, define the minimum history depth required before the recent-10 filter should become active instead of staying dormant.\n\n---\n## 2026-04-23 19:13 UT",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
