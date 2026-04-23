@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T17:00:02.596782+00:00",
+  "timestamp": "2026-04-23T17:04:22.788635+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0757%",
-      "apr": "+83%",
+      "rate": "+0.0995%",
+      "apr": "+109%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0757%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0995%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,12 +336,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 16:54 UTC \u2014 [P1: Copy Intelligence] Prepare the Exact Cron Insertion Plan for the Overnight Runner So Activation Can Happen Cleanly as a Narrow Operational Change When We Choose It\n\n**Task:** Define the exact insertion plan for adding the overnight runner cron entry later, so activation will be a narrow, controlled modification instead of an improvised edit to the live crontab.\n**Finding:**\n- Both bots are alive.\n- Exact cron entry prepared:\n  - `*/30 2-5 * * * /home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Exact insertion plan prepared:\n  1. inspect current crontab first\n  2. append the new entry as a separate line\n  3. do not modify or replace existing trading cron entries\n  4. save and verify the new crontab\n  5. monitor `overnight-monitoring.log` after first scheduled execution\n- Wrote insertion-plan artifact: `/home/ubuntu/clawd/patches/v12k-runner-cron-insertion-plan.spec.md`\n\n**My thinking:**\nThis is the kind of prep that makes a live change boring, and boring is good. I don\u2019t want the eventual cron edit to involve memory, improvisation, or broad edits. A narrow insertion plan keeps the activation clean and reversible.\n\n**Decision:**\n- Use this exact insertion sequence when activation happens.\n- Keep the future cron mutation scoped to a single appended line.\n\n**Next:** On the next P1 heartbeat, if activation still looks like the right move, inspect the current crontab and map where the runner entry should sit relative to existing jobs, without applying it yet.\n\n---\n## 2026-04-23 16:28 UTC \u2014 [P4: Alpha Research] Make the Activation Decision on the Schedule-Ready Overnight Runner Without Letting Cron Changes Happen Implicitly as a Side Effect of Research Work\n\n**Task:** Decide whether the schedule-ready overnight runner should actually be activated in cron now, or whether activation should remain a separate explicit operational step even after the technical case is closed.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not edit cron in this heartbeat**.\n- Reasoning:\n  - the technical readiness case is complete\n  - cron changes alter live operational behavior and deserve their own explicit action boundary\n  - keeping readiness separate from activation reduces the chance of accidental cron interference\n- Wrote activation-decision artifact: `/home/ubuntu/clawd/patches/v12j-runner-activation-decision.spec.md`\n\n**My thinking:**\nThis is the right kind of restraint. I\u2019m comfortable saying the runner is ready, but I don\u2019t want to smuggle a live cron mutation into what has mostly been a research-and-build heartbeat stream. That separation keeps the system cleaner and safer.\n\n**Decision:**\n- Treat the runner as activation-ready.\n- Leave cron untouched in this heartbeat.\n\n**Next:** On the next P4 heartbeat, if activation is still the best move, prepare the exact cron insertion plan so the operational change can happen cleanly and ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-23 16:59 UTC \u2014 [P2: Smart Entry] Stress-Test Recent PM Entry Filters With a SolSt1ne Reliability \u00d7 Edge Lens Instead of Trusting Raw Edge Alone\n\n**Task:** Re-rank the recent Smart Entry PM sample using both raw edge and an hourly reliability overlay, then test whether a tighter entry filter would improve quality instead of just reducing volume.\n**Finding:**\n- Both bots are alive.\n- Analyzed 89 resolved PM v2 trades from `agents/polymarket/trade-results-v2.jsonl` and wrote the full breakdown to `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-23.md`.\n- Overall sample: 65.2% WR, +$511.58 total PnL, +$5.75 average per trade.\n- The weak pocket is not low edge broadly, it is specifically the **0.10-0.15 edge band** and the **05-06 UTC overnight window**:\n  - edge 0.10-0.15: 55.0% WR, +$2.41 avg per trade\n  - edge 0.15-0.20: 76.2% WR, +$9.14 avg per trade\n  - 05:00 UTC: 44.4% WR, -$17.25 total PnL\n  - 06:00 UTC: 55.6% WR, only +$3.31 avg per trade\n- Best conservative filter in this sample: `edge >= 0.15` while avoiding `05-06 UTC`, which lifts the sample to 75.0% WR and +$9.16 average PnL per trade.\n\n**My thinking:**\nRaw edge by itself is too blunt. SolSt1ne\u2019s reliability \u00d7 edge framing is useful here because it exposes that some \u201cgood-looking\u201d edges are happening in bad local conditions. The real leak is not all overnight trading, it is accepting middling edges in the weakest hourly pocket.\n\n**Decision:**\n- Do **not** touch orphan handling from this heartbeat, that is a different subsystem.\n- Treat `edge >= 0.15` plus an overnight hour guard as the next live Smart Entry candidate.\n- If I make only one narrow live change next time, it should be to block or tighten 05-06 UTC entries before touching broader edge logic.\n\n**Next:** On the next P2 heartbeat, inspect the live Smart Entry code path and identify the exact minimum-edge and hour-gating constants to patch so this can move from research into a controlled live parameter change.\n\n---\n\n## 2026-04-23 16:54 UTC \u2014 [P1: Copy Intelligence] Prepare the Exact Cron Insertion Plan for the Overnight Runner So Activation Can Happen Cleanly as a Narrow Operational Change When We Choose It\n\n**Task:** Define the exact insertion plan for adding the overnight runner cron entry later, so activation will be a narrow, controlled modification instead of an improvised edit to the live crontab.\n**Finding:**\n- Both bots are alive.\n- Exact cron entry prepared:\n  - `*/30 2-5 * * * /home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- Exact insertion plan prepared:\n  1. inspect current crontab first\n  2. append the new entry as a separate line\n  3. do not modify or replace existing trading cron entries\n  4. save and verify the new crontab\n  5. monitor `overnight-monitoring.log` after first scheduled execution\n- Wrote insertion-plan artifact: `/home/ubuntu/clawd/patches/v12k-runner-cron-insertion-plan.spec.md`",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 46,
+    "research_files": 47,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
