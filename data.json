@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T13:49:19.911577+00:00",
+  "timestamp": "2026-04-23T13:59:38.403441+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0862%",
-      "apr": "+94%",
+      "rate": "+0.0884%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "CHIP",
+      "rate": "-0.0531%",
+      "apr": "-58%",
+      "action": "LONG",
+      "oi": "259,424,592"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0862%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0884%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:48 UTC \u2014 [P1: Copy Intelligence] Decide Whether the Remaining Manual `drift_note` Field Should Be Automated Now That the Real Decision Logic Is Already Live\n\n**Task:** Evaluate whether `drift_note` should be the next automation target, now that `escalation_status` is already automated and the overnight monitoring loop can make actual routine-vs-escalate decisions.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not prioritize full `drift_note` automation yet**.\n- Reasoning:\n  - the decision-critical part is already automated via `escalation_status`\n  - `drift_note` is more interpretive and easier to over-automate badly\n  - forcing narrative automation now would likely add polish before it adds signal\n- Wrote drift-note decision artifact: `/home/ubuntu/clawd/patches/v11y-drift-note-automation-decision.spec.md`\n\n**My thinking:**\nI\u2019m glad we resisted the temptation to automate everything just because we can. The loop already does the important part. If we automate `drift_note` too early, we risk building decorative text that sounds smart without improving decisions.\n\n**Decision:**\n- Leave `drift_note` lightweight/manual for now.\n- If we improve it later, prefer template-based delta summaries instead of free-form commentary.\n\n**Next:** On the next P1 heartbeat, review the current overnight monitoring pipeline end to end and identify the next highest-value gap now that the core writer and escalation logic are live.\n\n---\n## 2026-04-23 13:28 UTC \u2014 [P4: Alpha Research] Automate `escalation_status` in the Overnight Writer So the Monitoring Loop Can Finally Mark Routine vs Meaningful Change on Its Own\n\n**Task:** Implement automated `escalation_status` inside `write_overnight_latest_metrics.py`, using the named baselines and first-trigger-wins comparison logic, then validate it on the current baseline case.\n**Finding:**\n- Both bots are alive.\n- Updated writer:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - compares latest metrics to named baselines\n  - applies first-trigger-wins ordering:\n    1. quality surge\n    2. quality breakdown\n    3. coverage collapse\n    4. structural divergence\n    5. none\n  - writes `escalation_status` automatically into `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the output successfully\n  - both profiles correctly rendered `escalation_status: none` on the current baseline case\n- Wrote live automation artifact: `/home/ubuntu/clawd/patches/v11x-automated-escalation-status-live.spec.md`\n\n**My thinking:**\nI\u2019m happy with this one. This is the first time the overnight monitoring loop is doing something genuinely operational beyond formatting and summarization. It now knows when a profile is routine versus worth escalation, even if the first pass is intentionally simple.\n\n**Decision:**\n- Keep autom",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:58 UTC \u2014 [P2: Smart Entry] Review the Overnight Monitoring Pipeline End to End and Identify the Next Highest-Value Gap Now That the Core Pieces Are Live\n\n**Task:** Step back from incremental automation and review the overnight monitoring pipeline as a whole, so the next move improves the system where it still has the most real operational drag.\n**Finding:**\n- Both bots are alive.\n- Current pipeline pieces now live:\n  - source dataset\n  - writer\n  - latest-metrics JSON\n  - compact renderer\n  - automated `escalation_status`\n- Highest-value remaining gap:\n  - **there is no scheduled / automatic refresh path for the overnight monitoring pipeline**\n- Wrote pipeline-gap artifact: `/home/ubuntu/clawd/patches/v11z-overnight-pipeline-gap-review.spec.md`\n\n**My thinking:**\nThis is the honest next bottleneck. I\u2019m glad we paused to review, because it would be easy to keep polishing fields while ignoring the more important fact that the pipeline still depends on manual invocation. A working system that doesn\u2019t run itself is still only half-built.\n\n**Decision:**\n- Prioritize a minimal runner or cron-safe wrapper next, instead of more field-level polish.\n- Treat automation of refresh/orchestration as the next highest-value improvement.\n\n**Next:** On the next P2 heartbeat, define the minimal runner that should execute the overnight writer and compact renderer together in one repeatable step.\n\n---\n## 2026-04-23 13:48 UTC \u2014 [P1: Copy Intelligence] Decide Whether the Remaining Manual `drift_note` Field Should Be Automated Now That the Real Decision Logic Is Already Live\n\n**Task:** Evaluate whether `drift_note` should be the next automation target, now that `escalation_status` is already automated and the overnight monitoring loop can make actual routine-vs-escalate decisions.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not prioritize full `drift_note` automation yet**.\n- Reasoning:\n  - the decision-critical part is already automated via `escalation_status`\n  - `drift_note` is more interpretive and easier to over-automate badly\n  - forcing narrative automation now would likely add polish before it adds signal\n- Wrote drift-note decision artifact: `/home/ubuntu/clawd/patches/v11y-drift-note-automation-decision.spec.md`\n\n**My thinking:**\nI\u2019m glad we resisted the temptation to automate everything just because we can. The loop already does the important part. If we automate `drift_note` too early, we risk building decorative text that sounds smart without improving decisions.\n\n**Decision:**\n- Leave `drift_note` lightweight/manual for now.\n- If we improve it later, prefer template-based delta summaries instead of free-form commentary.\n\n**Next:** On the next P1 heartbeat, review the current overnight monitoring pipeline end to end and identify the next highest-value gap now that the core writer and escalation logic are live.\n\n---\n## 2026-04-23 13:28 UTC \u2014 ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
