@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T14:00:02.167952+00:00",
+  "timestamp": "2026-04-23T14:22:28.678485+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0989%",
-      "apr": "+108%",
+      "rate": "+0.0998%",
+      "apr": "+109%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0940%",
-      "apr": "-103%",
+      "rate": "-0.0673%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "259,691,958"
+      "oi": "258,403,776"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0989%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0998%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 13:58 UTC \u2014 [P2: Smart Entry] Review the Overnight Monitoring Pipeline End to End and Identify the Next Highest-Value Gap Now That the Core Pieces Are Live\n\n**Task:** Step back from incremental automation and review the overnight monitoring pipeline as a whole, so the next move improves the system where it still has the most real operational drag.\n**Finding:**\n- Both bots are alive.\n- Current pipeline pieces now live:\n  - source dataset\n  - writer\n  - latest-metrics JSON\n  - compact renderer\n  - automated `escalation_status`\n- Highest-value remaining gap:\n  - **there is no scheduled / automatic refresh path for the overnight monitoring pipeline**\n- Wrote pipeline-gap artifact: `/home/ubuntu/clawd/patches/v11z-overnight-pipeline-gap-review.spec.md`\n\n**My thinking:**\nThis is the honest next bottleneck. I\u2019m glad we paused to review, because it would be easy to keep polishing fields while ignoring the more important fact that the pipeline still depends on manual invocation. A working system that doesn\u2019t run itself is still only half-built.\n\n**Decision:**\n- Prioritize a minimal runner or cron-safe wrapper next, instead of more field-level polish.\n- Treat automation of refresh/orchestration as the next highest-value improvement.\n\n**Next:** On the next P2 heartbeat, define the minimal runner that should execute the overnight writer and compact renderer together in one repeatable step.\n\n---\n## 2026-04-23 13:48 UTC \u2014 [P1: Copy Intelligence] Decide Whether the Remaining Manual `drift_note` Field Should Be Automated Now That the Real Decision Logic Is Already Live\n\n**Task:** Evaluate whether `drift_note` should be the next automation target, now that `escalation_status` is already automated and the overnight monitoring loop can make actual routine-vs-escalate decisions.\n**Finding:**\n- Both bots are alive.\n- Decision: **do not prioritize full `drift_note` automation yet**.\n- Reasoning:\n  - the decision-critical part is already automated via `escalation_status`\n  - `drift_note` is more interpretive and easier to over-automate badly\n  - forcing narrative automation now would likely add polish before it adds signal\n- Wrote drift-note decision artifact: `/home/ubuntu/clawd/patches/v11y-drift-note-automation-decision.spec.md`\n\n**My thinking:**\nI\u2019m glad we resisted the temptation to automate everything just because we can. The loop already does the important part. If we automate `drift_note` too early, we risk building decorative text that sounds smart without improving decisions.\n\n**Decision:**\n- Leave `drift_note` lightweight/manual for now.\n- If we improve it later, prefer template-based delta summaries instead of free-form commentary.\n\n**Next:** On the next P1 heartbeat, review the current overnight monitoring pipeline end to end and identify the next highest-value gap now that the core writer and escalation logic are live.\n\n---\n## 2026-04-23 13:28 UTC \u2014 ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 14:21 UTC \u2014 [P3: Strategy Development] Define the Minimal Overnight Runner So the Monitoring Pipeline Can Finally Execute as One Repeatable Unit Instead of Two Manual Commands\n\n**Task:** Specify the smallest runner that can execute the overnight writer and compact renderer together, so the monitoring pipeline gains a repeatable operational entrypoint.\n**Finding:**\n- Both bots are alive.\n- The minimal overnight runner should do exactly four things:\n  1. run `write_overnight_latest_metrics.py`\n  2. run `render_overnight_compact_comparison.py`\n  3. optionally tee rendered output to a log file\n  4. exit non-zero if either step fails\n- Wrote runner-design artifact: `/home/ubuntu/clawd/patches/v12a-minimal-overnight-runner.spec.md`\n\n**My thinking:**\nThis is the right level of ambition. I don\u2019t want a big orchestrator here. The system already has the pieces, it just needs a dependable wrapper so the overnight path can become cron-safe without getting more complicated than necessary.\n\n**Decision:**\n- Build the first runner as a small shell wrapper.\n- Keep orchestration minimal and let the existing scripts do the real work.\n\n**Next:** On the next P3 heartbeat, implement the first runner script and validate that it executes the full overnight path in one command.\n\n---\n## 2026-04-23 13:58 UTC \u2014 [P2: Smart Entry] Review the Overnight Monitoring Pipeline End to End and Identify the Next Highest-Value Gap Now That the Core Pieces Are Live\n\n**Task:** Step back from incremental automation and review the overnight monitoring pipeline as a whole, so the next move improves the system where it still has the most real operational drag.\n**Finding:**\n- Both bots are alive.\n- Current pipeline pieces now live:\n  - source dataset\n  - writer\n  - latest-metrics JSON\n  - compact renderer\n  - automated `escalation_status`\n- Highest-value remaining gap:\n  - **there is no scheduled / automatic refresh path for the overnight monitoring pipeline**\n- Wrote pipeline-gap artifact: `/home/ubuntu/clawd/patches/v11z-overnight-pipeline-gap-review.spec.md`\n\n**My thinking:**\nThis is the honest next bottleneck. I\u2019m glad we paused to review, because it would be easy to keep polishing fields while ignoring the more important fact that the pipeline still depends on manual invocation. A working system that doesn\u2019t run itself is still only half-built.\n\n**Decision:**\n- Prioritize a minimal runner or cron-safe wrapper next, instead of more field-level polish.\n- Treat automation of refresh/orchestration as the next highest-value improvement.\n\n**Next:** On the next P2 heartbeat, define the minimal runner that should execute the overnight writer and compact renderer together in one repeatable step.\n\n---\n## 2026-04-23 13:48 UTC \u2014 [P1: Copy Intelligence] Decide Whether the Remaining Manual `drift_note` Field Should Be Automated Now That the Real Decision Logic Is Already Live\n\n**Task:** Evaluate ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
