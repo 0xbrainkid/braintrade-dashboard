@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T19:30:02.747248+00:00",
+  "timestamp": "2026-04-23T19:34:41.726613+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0615%",
-      "apr": "+67%",
-      "action": "SHORT",
-      "oi": "69,669,296"
-    },
-    {
       "coin": "ZEREBRO",
-      "rate": "+0.0583%",
-      "apr": "+64%",
+      "rate": "+0.0566%",
+      "apr": "+62%",
       "action": "SHORT",
       "oi": "239,343,126"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0560%",
+      "apr": "+61%",
+      "action": "SHORT",
+      "oi": "69,669,296"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0615%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.0566%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 19:13 UTC \u2014 [P3: Strategy Development] Add the Drift-Delta Layer to the Overnight Retrospective So the Ledger Can Highlight Change Directly Instead of Only Reporting Aggregates\n\n**Task:** Upgrade the overnight history summary script to include simple earliest-vs-latest drift deltas, so the retrospective layer can surface directional change without needing a larger time-window system yet.\n**Finding:**\n- Both bots are alive.\n- Updated script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- New summary fields now included:\n  - `delta_simulated_wr`\n  - `delta_flip_rate`\n  - `delta_mean_persistence`\n- Validation succeeded against the current ledger.\n- Current results are correctly flat with one run logged:\n  - both profiles show delta values of `0.0`\n- Wrote drift-delta artifact: `/home/ubuntu/clawd/patches/v12t-drift-delta-summary-live.spec.md`\n\n**My thinking:**\nI\u2019m glad this came out cleanly. The fact that the deltas are zero right now is reassuring, because it means the summary is telling the truth instead of manufacturing significance from tiny data. That\u2019s exactly the kind of honesty I want in this monitoring layer.\n\n**Decision:**\n- Keep drift-delta as the next retrospective layer on top of the stability summary.\n- Wait for more ledger depth before pushing into heavier time-window analysis.\n\n**Next:** On the next P3 heartbeat, define the first recent-window filter we\u2019ll want once the history ledger has enough runs to make windowed comparison meaningful.\n\n---\n## 2026-04-23 19:00 UTC \u2014 [P2: Smart Entry] Choose the Next Retrospective Upgrade for the Overnight Ledger So We Add the Highest-Value Lens Instead of Just Accumulating More Reporting Surface\n\n**Task:** Decide whether the next retrospective improvement should be a recent-window filter or a drift-delta summary, based on which one adds more value at the current size of the overnight history ledger.\n**Finding:**\n- Both bots are alive.\n- Best next retrospective upgrade:\n  - **drift-delta summary**\n- Reasoning:\n  - it works even with a small ledger\n  - it directly highlights earliest vs latest change\n  - it complements the current stability summary naturally\n- Wrote upgrade-decision artifact: `/home/ubuntu/clawd/patches/v12s-next-retrospective-upgrade-decision.spec.md`\n\n**My thinking:**\nThis is the right choice for where the system is now. A recent-window filter will matter later, but today it would mostly be scaffolding waiting for more data. A drift-delta layer gives immediate value with the history we already have.\n\n**Decision:**\n- Prioritize a drift-delta summary next.\n- Delay recent-window filtering until the ledger has more depth.\n\n**Next:** On the next P2 heartbeat, implement a simple drift-delta summary on top of the existing stability script.\n\n---\n## 2026-04-23 18:43 UTC \u2014 [P1: Copy Intelligence] Implement the First Profile-Stability Summary So the New Overnight Led",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 19:33 UTC \u2014 [P4: Alpha Research] Define the First Recent-Window Filter for the Overnight Ledger So the Next Retrospective Layer Is Ready When History Depth Finally Makes Windowed Comparison Worth It\n\n**Task:** Choose the first recent-window filter the overnight retrospective should use once the history ledger has enough runs to support a meaningful short-term vs long-term comparison.\n**Finding:**\n- Both bots are alive.\n- Recommended first recent-window filter:\n  - **most recent 10 runs per profile**\n- Why this is the right first window:\n  - large enough to show short-term drift\n  - small enough to stay sensitive to recent change\n  - simple and intuitive for the first windowed comparison\n- Wrote window-filter artifact: `/home/ubuntu/clawd/patches/v12u-first-recent-window-filter.spec.md`\n\n**My thinking:**\nThis is a good future-ready choice. I don\u2019t want to build the window logic too early, but I do want the design call settled so the next step is obvious once the ledger has more than a trivial amount of history.\n\n**Decision:**\n- Use recent-10 as the first windowed lens when the ledger is deep enough.\n- Compare recent-10 against full-history summary rather than inventing a more complex window stack too soon.\n\n**Next:** On the next P4 heartbeat, define the minimum history depth required before the recent-10 filter should become active instead of staying dormant.\n\n---\n## 2026-04-23 19:13 UTC \u2014 [P3: Strategy Development] Add the Drift-Delta Layer to the Overnight Retrospective So the Ledger Can Highlight Change Directly Instead of Only Reporting Aggregates\n\n**Task:** Upgrade the overnight history summary script to include simple earliest-vs-latest drift deltas, so the retrospective layer can surface directional change without needing a larger time-window system yet.\n**Finding:**\n- Both bots are alive.\n- Updated script:\n  - `/home/ubuntu/clawd/scripts/summarize_overnight_history.py`\n- New summary fields now included:\n  - `delta_simulated_wr`\n  - `delta_flip_rate`\n  - `delta_mean_persistence`\n- Validation succeeded against the current ledger.\n- Current results are correctly flat with one run logged:\n  - both profiles show delta values of `0.0`\n- Wrote drift-delta artifact: `/home/ubuntu/clawd/patches/v12t-drift-delta-summary-live.spec.md`\n\n**My thinking:**\nI\u2019m glad this came out cleanly. The fact that the deltas are zero right now is reassuring, because it means the summary is telling the truth instead of manufacturing significance from tiny data. That\u2019s exactly the kind of honesty I want in this monitoring layer.\n\n**Decision:**\n- Keep drift-delta as the next retrospective layer on top of the stability summary.\n- Wait for more ledger depth before pushing into heavier time-window analysis.\n\n**Next:** On the next P3 heartbeat, define the first recent-window filter we\u2019ll want once the history ledger has enough runs to make windowed comparison meaningfu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
