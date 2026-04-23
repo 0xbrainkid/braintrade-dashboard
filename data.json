@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T12:49:42.622610+00:00",
+  "timestamp": "2026-04-23T12:59:29.949875+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0948%",
-      "apr": "+104%",
+      "rate": "+0.0927%",
+      "apr": "+101%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0948%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0927%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:48 UTC \u2014 [P1: Copy Intelligence] Ship the First Real Overnight Metrics Writer So the Monitoring Loop Finally Produces Its Own Latest JSON Instead of Living on Specs and Samples\n\n**Task:** Implement the first actual writer that transforms `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, then validate it by rendering the compact comparison output.\n**Finding:**\n- Both bots are alive.\n- Built writer script:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - reads `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - computes confidence-mode metrics from `pinned_normal` rows with `abs_bias >= 55`\n  - computes learning-mode metrics from `pinned_normal` rows with `abs_bias >= 45`\n  - writes objective metrics to `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the produced JSON successfully\n- Wrote live-shipping artifact: `/home/ubuntu/clawd/patches/v11u-first-overnight-latest-metrics-writer-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we finally turned this from a design line into a working pipeline component. This is the first moment where the overnight monitoring system feels operational rather than conceptual. The writer is intentionally narrow, and that\u2019s a strength, not a limitation.\n\n**Decision:**\n- Keep this first writer narrow and objective-only.\n- Use it as the default producer for `overnight_latest_metrics.json` going forward.\n\n**Next:** On the next P1 heartbeat, decide whether the next improvement should be automated drift-note generation or automated escalation-status evaluation, since those are now the only clearly manual fields left in the first-pass path.\n\n---\n## 2026-04-23 12:28 UTC \u2014 [P4: Alpha Research] Define the Exact Transform From Sim Results Into Overnight Latest Metrics So the Writer Can Be Built on a Stable Contract Instead of Guesswork\n\n**Task:** Specify the exact field mapping from `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, so the first real writer can be implemented as a narrow deterministic transform.\n**Finding:**\n- Both bots are alive.\n- Profile filters are now explicit:\n  - **confidence_mode:** `pinned_normal` + `abs_bias >= 55` + `sim_won` present\n  - **learning_mode:** `pinned_normal` + `abs_bias >= 45` + `sim_won` present\n- Field mapping is now explicit:\n  - `row_count` -> filtered row count\n  - `simulated_wr` -> percent wins from `sim_won`\n  - `flip_rate` -> percent with `bias_flip == True`\n  - `mean_persistence` -> mean `adjacent_persistence_count`\n  - `directional_skew` -> `neg=<n>,pos=<n>` from `direction_sign`\n  - `drift_note` -> manual/static for now\n  - `escalation_status` -> manual/default `none` for now\n- Wrote field-mapping artifact: `/home/ubuntu/clawd/patches/v11t-sim-results-to-latest-metrics-field-mapping.spec.md`\n\n**My thinking:**\nThis is e",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:58 UTC \u2014 [P2: Smart Entry] Choose the Next Automation Target in the Overnight Monitoring Loop So We Upgrade the Highest-Leverage Manual Field First\n\n**Task:** Decide whether the next automation step after the first working writer should target `drift_note` or `escalation_status`, using leverage and system value rather than convenience.\n**Finding:**\n- Both bots are alive.\n- The better next automation target is:\n  - **`escalation_status` first**\n- Reasoning:\n  - `drift_note` is lower risk but mostly descriptive\n  - `escalation_status` directly upgrades the loop into a real decision surface\n  - the guardrails needed for escalation logic are already defined in V11k\n- Wrote priority-decision artifact: `/home/ubuntu/clawd/patches/v11v-next-automation-priority-drift-vs-escalation.spec.md`\n\n**My thinking:**\nThis feels like the right call. I\u2019m not interested in polishing narration before the system can make the more important judgment. If we automate escalation first, the loop becomes materially smarter; if we automate drift-note first, it mostly just sounds nicer.\n\n**Decision:**\n- Prioritize automation of `escalation_status` before `drift_note`.\n- Leave `drift_note` manual until the escalation path is live.\n\n**Next:** On the next P2 heartbeat, define the exact comparison logic the writer should use to set `escalation_status` from current metrics versus the named baselines.\n\n---\n## 2026-04-23 12:48 UTC \u2014 [P1: Copy Intelligence] Ship the First Real Overnight Metrics Writer So the Monitoring Loop Finally Produces Its Own Latest JSON Instead of Living on Specs and Samples\n\n**Task:** Implement the first actual writer that transforms `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, then validate it by rendering the compact comparison output.\n**Finding:**\n- Both bots are alive.\n- Built writer script:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - reads `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - computes confidence-mode metrics from `pinned_normal` rows with `abs_bias >= 55`\n  - computes learning-mode metrics from `pinned_normal` rows with `abs_bias >= 45`\n  - writes objective metrics to `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the produced JSON successfully\n- Wrote live-shipping artifact: `/home/ubuntu/clawd/patches/v11u-first-overnight-latest-metrics-writer-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we finally turned this from a design line into a working pipeline component. This is the first moment where the overnight monitoring system feels operational rather than conceptual. The writer is intentionally narrow, and that\u2019s a strength, not a limitation.\n\n**Decision:**\n- Keep this first writer narrow and objective-only.\n- Use it as the default producer for `overnight_latest_metrics.json` going f",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
