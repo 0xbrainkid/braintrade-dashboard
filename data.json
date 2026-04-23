@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T07:00:02.081289+00:00",
+  "timestamp": "2026-04-23T07:19:11.984698+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,11 +16,25 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "MAVIA",
+      "rate": "+0.1070%",
+      "apr": "+117%",
+      "action": "SHORT",
+      "oi": "69,669,296"
+    },
+    {
       "coin": "CHIP",
-      "rate": "-0.0720%",
-      "apr": "-79%",
+      "rate": "-0.0727%",
+      "apr": "-80%",
       "action": "LONG",
-      "oi": "243,277,576"
+      "oi": "241,307,890"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0598%",
+      "apr": "-66%",
+      "action": "LONG",
+      "oi": "2,141,644,718"
     }
   ],
   "daily_pnl": [
@@ -94,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.0720%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MAVIA at 0.1070%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -336,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 06:58 UTC \u2014 [P4: Alpha Research] Scope the Lightest Offline 03h Simulation Method So the Outcome-Quality Tie-Break Can Become a Real Computation Next Cycle\n\n**Task:** Design the cheapest workable offline simulation method that can estimate the 03h outcome-quality tie-break metrics without first building a full backtest or PM market replay engine.\n**Finding:**\n- Both bots are alive.\n- The lightest viable path is now clear:\n  - use the extracted 03h rows as hypothetical decision candidates\n  - infer the side from bias sign\n  - use logged PM prices as entry context\n  - resolve the outcome from the corresponding 5-minute BTC direction, matching the bot\u2019s historical outcome logic\n- Existing logs confirm the bot previously resolved outcomes using BTC movement over the window, which is exactly the cheap offline bridge we need.\n- Wrote simulation-method artifact: `/home/ubuntu/clawd/patches/v11a-lightweight-03h-offline-simulation-method.spec.md`\n\n**My thinking:**\nThis is a good unlock. I\u2019m glad we don\u2019t need to wait on a heavy replay engine just to answer the next research question. The cheap estimator won\u2019t be perfect, but it\u2019s absolutely good enough to break the current regime tie and tell us where deeper work is warranted.\n\n**Decision:**\n- Use a lightweight BTC-direction-based estimator first.\n- Defer full PM replay complexity unless the cheap method produces promising results worth refining.\n\n**Next:** On the next P4 heartbeat, build the first offline 03h simulation script that joins extracted rows to 5-minute BTC direction and outputs the tie-break metrics by sub-regime.\n\n---\n## 2026-04-23 06:46 UTC \u2014 [P3: Strategy Development] Define the Outcome-Quality Tie-Break Framework That Could Finally Separate 03h `pinned_normal` from `excursion`\n\n**Task:** Move the 03h sub-regime work to its next real discriminator by defining the exact outcome-quality framework that would break the current structural tie between `pinned_normal` and `excursion`.\n**Finding:**\n- Both bots are alive.\n- Defined the tie-break framework around simulated outcome quality for each 03h sub-regime.\n- Required metrics now include:\n  - hypothetical trade count\n  - win rate\n  - average edge at decision time\n  - average implied-direction quality\n  - average return per eligible window\n  - max drawdown streak\n  - consistency across `|bias| >= 45` and `|bias| >= 55`\n- Wrote framework artifact: `/home/ubuntu/clawd/patches/v10z-03h-outcome-quality-tie-break-framework.spec.md`\n\n**My thinking:**\nThis is the right handoff from structure to quality. We\u2019ve squeezed a lot of value out of the static shape of 03h, but structure alone can only take us so far. If one regime is going to win, it has to win on decision quality, not just on looking neat in the logs.\n\n**Decision:**\n- Treat outcome-quality simulation as the next decisive stage.\n- Preserve a sample-size discount for `excursion` even if it",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 07:16 UTC \u2014 [P1: Copy Intelligence] Build the First Lightweight 03h Simulator So the Overnight Regime Tie Can Finally Be Tested on Simulated Outcome Quality\n\n**Task:** Implement the first cheap offline simulator for the 03h dataset, so the outcome-quality tie-break can advance from planning into actual computed rows.\n**Finding:**\n- Both bots are alive.\n- I built a new simulation script:\n  - `/home/ubuntu/clawd/scripts/simulate_03h_shadow_outcomes.py`\n- I ran it successfully and produced:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n- Output summary:\n  - total rows: `1168`\n  - resolved rows: `1167`\n- The simulator uses:\n  - extracted 03h decision rows\n  - inferred direction from bias sign\n  - nearby bias snapshots from `trading.log`\n  - a lightweight simulated win/loss field\n- Wrote build artifact: `/home/ubuntu/clawd/patches/v11b-first-lightweight-03h-simulator-live-build.spec.md`\n\n**My thinking:**\nI\u2019m glad we shipped this. It\u2019s not a perfect replay engine, but it doesn\u2019t need to be yet. We now have the minimum working bridge from structural overnight research into outcome-quality comparison, and that\u2019s enough to make the next heartbeat materially more informative.\n\n**Decision:**\n- Keep this simulator as the first cheap estimator.\n- Use its output for the first comparative 03h outcome-quality pass.\n- Hold off on heavier replay work unless the cheap pass shows something worth refining.\n\n**Next:** On the next P1 heartbeat, compute the first comparative simulated outcome summary for `03h pinned_normal` vs `03h excursion` from `data/03h-shadow-sim-results.csv`.\n\n---\n## 2026-04-23 06:58 UTC \u2014 [P4: Alpha Research] Scope the Lightest Offline 03h Simulation Method So the Outcome-Quality Tie-Break Can Become a Real Computation Next Cycle\n\n**Task:** Design the cheapest workable offline simulation method that can estimate the 03h outcome-quality tie-break metrics without first building a full backtest or PM market replay engine.\n**Finding:**\n- Both bots are alive.\n- The lightest viable path is now clear:\n  - use the extracted 03h rows as hypothetical decision candidates\n  - infer the side from bias sign\n  - use logged PM prices as entry context\n  - resolve the outcome from the corresponding 5-minute BTC direction, matching the bot\u2019s historical outcome logic\n- Existing logs confirm the bot previously resolved outcomes using BTC movement over the window, which is exactly the cheap offline bridge we need.\n- Wrote simulation-method artifact: `/home/ubuntu/clawd/patches/v11a-lightweight-03h-offline-simulation-method.spec.md`\n\n**My thinking:**\nThis is a good unlock. I\u2019m glad we don\u2019t need to wait on a heavy replay engine just to answer the next research question. The cheap estimator won\u2019t be perfect, but it\u2019s absolutely good enough to break the current regime tie and tell us where deeper work is warranted.\n\n**Decision:**\n- Use a lightweight BTC-d",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
