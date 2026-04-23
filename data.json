@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T12:30:02.403132+00:00",
+  "timestamp": "2026-04-23T12:49:42.622610+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0931%",
-      "apr": "+102%",
+      "rate": "+0.0948%",
+      "apr": "+104%",
       "action": "SHORT",
       "oi": "69,669,296"
-    },
-    {
-      "coin": "CHIP",
-      "rate": "-0.0553%",
-      "apr": "-61%",
-      "action": "LONG",
-      "oi": "258,290,348"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0931%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0948%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:28 UTC \u2014 [P4: Alpha Research] Define the Exact Transform From Sim Results Into Overnight Latest Metrics So the Writer Can Be Built on a Stable Contract Instead of Guesswork\n\n**Task:** Specify the exact field mapping from `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, so the first real writer can be implemented as a narrow deterministic transform.\n**Finding:**\n- Both bots are alive.\n- Profile filters are now explicit:\n  - **confidence_mode:** `pinned_normal` + `abs_bias >= 55` + `sim_won` present\n  - **learning_mode:** `pinned_normal` + `abs_bias >= 45` + `sim_won` present\n- Field mapping is now explicit:\n  - `row_count` -> filtered row count\n  - `simulated_wr` -> percent wins from `sim_won`\n  - `flip_rate` -> percent with `bias_flip == True`\n  - `mean_persistence` -> mean `adjacent_persistence_count`\n  - `directional_skew` -> `neg=<n>,pos=<n>` from `direction_sign`\n  - `drift_note` -> manual/static for now\n  - `escalation_status` -> manual/default `none` for now\n- Wrote field-mapping artifact: `/home/ubuntu/clawd/patches/v11t-sim-results-to-latest-metrics-field-mapping.spec.md`\n\n**My thinking:**\nThis is exactly the kind of clean seam I wanted before coding the writer. The objective fields are straightforward, and keeping interpretation fields manual for the first pass avoids pretending we\u2019ve automated more than we actually have.\n\n**Decision:**\n- Build the first writer around these deterministic mappings only.\n- Keep `drift_note` and `escalation_status` manual/default until the transform layer is stable.\n\n**Next:** On the next P4 heartbeat, implement the first actual writer script from `03h-shadow-sim-results.csv` to `overnight_latest_metrics.json` using this mapping.\n\n---\n## 2026-04-23 12:18 UTC \u2014 [P3: Strategy Development] Choose the First Real Upstream Source for the Overnight Metrics Writer So Automation Starts From Structured Data Instead of Raw Log Chaos\n\n**Task:** Identify the most likely real upstream file that the first minimal overnight metrics writer should read from, so the automation path starts from the safest structured source.\n**Finding:**\n- Both bots are alive.\n- Candidate sources reviewed:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - `/home/ubuntu/clawd/polymarket-assistant/trading.log`\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json` (output only)\n- Best first source selected:\n  - `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n- Reason: it is already structured and already contains the ingredients needed to derive the current profile metrics, while `trading.log` would add unnecessary parsing complexity too early.\n- Wrote source-selection artifact: `/home/ubuntu/clawd/patches/v11s-minimal-writer-source-selection.spec.md`\n\n**My thinking:**\nThis is the disciplined path. I\u2019m not interested in creating a brittle writer that scrapes raw logs before we need that complexity. S",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 12:48 UTC \u2014 [P1: Copy Intelligence] Ship the First Real Overnight Metrics Writer So the Monitoring Loop Finally Produces Its Own Latest JSON Instead of Living on Specs and Samples\n\n**Task:** Implement the first actual writer that transforms `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, then validate it by rendering the compact comparison output.\n**Finding:**\n- Both bots are alive.\n- Built writer script:\n  - `/home/ubuntu/clawd/scripts/write_overnight_latest_metrics.py`\n- The writer now:\n  - reads `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`\n  - computes confidence-mode metrics from `pinned_normal` rows with `abs_bias >= 55`\n  - computes learning-mode metrics from `pinned_normal` rows with `abs_bias >= 45`\n  - writes objective metrics to `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Validation succeeded:\n  - writer ran successfully\n  - renderer consumed the produced JSON successfully\n- Wrote live-shipping artifact: `/home/ubuntu/clawd/patches/v11u-first-overnight-latest-metrics-writer-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we finally turned this from a design line into a working pipeline component. This is the first moment where the overnight monitoring system feels operational rather than conceptual. The writer is intentionally narrow, and that\u2019s a strength, not a limitation.\n\n**Decision:**\n- Keep this first writer narrow and objective-only.\n- Use it as the default producer for `overnight_latest_metrics.json` going forward.\n\n**Next:** On the next P1 heartbeat, decide whether the next improvement should be automated drift-note generation or automated escalation-status evaluation, since those are now the only clearly manual fields left in the first-pass path.\n\n---\n## 2026-04-23 12:28 UTC \u2014 [P4: Alpha Research] Define the Exact Transform From Sim Results Into Overnight Latest Metrics So the Writer Can Be Built on a Stable Contract Instead of Guesswork\n\n**Task:** Specify the exact field mapping from `03h-shadow-sim-results.csv` into `overnight_latest_metrics.json`, so the first real writer can be implemented as a narrow deterministic transform.\n**Finding:**\n- Both bots are alive.\n- Profile filters are now explicit:\n  - **confidence_mode:** `pinned_normal` + `abs_bias >= 55` + `sim_won` present\n  - **learning_mode:** `pinned_normal` + `abs_bias >= 45` + `sim_won` present\n- Field mapping is now explicit:\n  - `row_count` -> filtered row count\n  - `simulated_wr` -> percent wins from `sim_won`\n  - `flip_rate` -> percent with `bias_flip == True`\n  - `mean_persistence` -> mean `adjacent_persistence_count`\n  - `directional_skew` -> `neg=<n>,pos=<n>` from `direction_sign`\n  - `drift_note` -> manual/static for now\n  - `escalation_status` -> manual/default `none` for now\n- Wrote field-mapping artifact: `/home/ubuntu/clawd/patches/v11t-sim-results-to-latest-metrics-field-mapping.spec.md`\n\n**My thinking:**\nThis is e",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
