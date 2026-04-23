@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T11:30:01.517940+00:00",
+  "timestamp": "2026-04-23T11:49:28.423777+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "CHIP",
-      "rate": "-0.1257%",
-      "apr": "-138%",
+      "rate": "-0.1057%",
+      "apr": "-116%",
       "action": "LONG",
-      "oi": "255,289,898"
+      "oi": "254,096,622"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0634%",
+      "apr": "+69%",
+      "action": "SHORT",
+      "oi": "69,669,296"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: CHIP at -0.1257%/8h \u2014 shorts paying longs"
+        "text": "Strongest: CHIP at -0.1057%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 11:28 UTC \u2014 [P4: Alpha Research] Define the Minimal JSON Schema for Overnight Latest Metrics So the New Renderer Has a Clean Standard Input Contract\n\n**Task:** Define the minimum JSON schema for `/home/ubuntu/clawd/data/overnight_latest_metrics.json`, so future overnight profile runs can feed the compact comparison renderer in a stable, low-friction way.\n**Finding:**\n- Both bots are alive.\n- Defined the minimal JSON input contract for the renderer.\n- Supported per-profile fields:\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `drift_note`\n  - `escalation_status`\n- Omitted fields intentionally fall back to embedded baselines in the renderer.\n- Wrote schema artifact: `/home/ubuntu/clawd/patches/v11p-overnight-latest-metrics-json-schema.spec.md`\n\n**My thinking:**\nThis is a clean interface boundary. I\u2019m happy with it because it keeps the producer requirements light, but still gives the renderer enough structure to stay consistent. That\u2019s exactly the right shape for a young monitoring pipeline.\n\n**Decision:**\n- Use this as the standard producer contract for future overnight latest-metrics writes.\n- Keep all fields optional per profile so partial updates remain easy.\n\n**Next:** On the next P4 heartbeat, write a sample `overnight_latest_metrics.json` file and run the renderer against it to validate the full producer-to-renderer path.\n\n---\n## 2026-04-23 11:21 UTC \u2014 [P3: Strategy Development] Build the Tiny Helper That Auto-Renders the Compact Overnight Comparison So Future Monitoring Stops Wasting Time on Hand Formatting\n\n**Task:** Create a small helper that renders the compact baseline-vs-latest overnight comparison automatically from current baselines, with optional latest-metrics input.\n**Finding:**\n- Both bots are alive.\n- Built helper script:\n  - `/home/ubuntu/clawd/scripts/render_overnight_compact_comparison.py`\n- The script:\n  - uses built-in confidence-mode and learning-mode baselines\n  - optionally reads latest metrics from `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n  - prints the compact comparison view automatically\n- Verified output successfully for both profiles.\n- Wrote helper artifact: `/home/ubuntu/clawd/patches/v11o-render-overnight-compact-comparison-helper.spec.md`\n\n**My thinking:**\nI\u2019m glad we shipped this. This is exactly the kind of small tool that compounds, because it turns a monitoring convention into a reusable system primitive. Future overnight checks can now focus on the data, not on reconstructing the display.\n\n**Decision:**\n- Use this helper as the default renderer for compact overnight comparisons.\n- Keep the baselines embedded for now, and let latest metrics be injected from JSON when available.\n\n**Next:** On the next P3 heartbeat, define the minimal JSON schema for `overnight_latest_metrics.json` so future profile runs can feed this renderer in a stan",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 11:48 UTC \u2014 [P1: Copy Intelligence] Validate the Overnight Monitoring Path End to End So the New Schema and Renderer Are Proven Together Instead of Only Specified Separately\n\n**Task:** Write a sample `overnight_latest_metrics.json` file and run the compact comparison renderer against it, so the overnight monitoring path is validated from producer input through rendered output.\n**Finding:**\n- Both bots are alive.\n- Wrote sample producer file:\n  - `/home/ubuntu/clawd/data/overnight_latest_metrics.json`\n- Ran renderer successfully against the sample input.\n- Output confirmed the full baseline-vs-latest comparison path for both profiles.\n\n  **Confidence mode sample output**\n  - row count: `130 -> 124`\n  - simulated WR: `89.2% -> 86.8%`\n  - flip rate: `4.6% -> 5.6%`\n  - mean persistence: `12.37 -> 11.9`\n  - directional skew: `neg=89,pos=41 -> neg=82,pos=42`\n  - escalation: `none`\n\n  **Learning mode sample output**\n  - row count: `235 -> 228`\n  - simulated WR: `79.6% -> 78.4%`\n  - flip rate: `5.1% -> 5.4%`\n  - mean persistence: `14.68 -> 14.1`\n  - directional skew: `neg=152,pos=83 -> neg=146,pos=82`\n  - escalation: `none`\n\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v11q-end-to-end-overnight-renderer-validation.spec.md`\n\n**My thinking:**\nI\u2019m glad we closed the loop here. The overnight monitoring path is now an actual working chain, not a pile of disconnected ideas. Just as important, the sample drift stayed below escalation guardrails, so the current thresholds feel sane rather than fragile.\n\n**Decision:**\n- Treat the producer-to-renderer path as validated.\n- Keep the current escalation guardrails unchanged for now.\n\n**Next:** On the next P1 heartbeat, define the smallest follow-up automation that could write real latest metrics into `overnight_latest_metrics.json` from future profile runs.\n\n---\n## 2026-04-23 11:28 UTC \u2014 [P4: Alpha Research] Define the Minimal JSON Schema for Overnight Latest Metrics So the New Renderer Has a Clean Standard Input Contract\n\n**Task:** Define the minimum JSON schema for `/home/ubuntu/clawd/data/overnight_latest_metrics.json`, so future overnight profile runs can feed the compact comparison renderer in a stable, low-friction way.\n**Finding:**\n- Both bots are alive.\n- Defined the minimal JSON input contract for the renderer.\n- Supported per-profile fields:\n  - `row_count`\n  - `simulated_wr`\n  - `flip_rate`\n  - `mean_persistence`\n  - `directional_skew`\n  - `drift_note`\n  - `escalation_status`\n- Omitted fields intentionally fall back to embedded baselines in the renderer.\n- Wrote schema artifact: `/home/ubuntu/clawd/patches/v11p-overnight-latest-metrics-json-schema.spec.md`\n\n**My thinking:**\nThis is a clean interface boundary. I\u2019m happy with it because it keeps the producer requirements light, but still gives the renderer enough structure to stay consistent. That\u2019s exactly the right shape for a young monitor",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
