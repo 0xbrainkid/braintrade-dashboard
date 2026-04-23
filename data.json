@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T10:30:02.696914+00:00",
+  "timestamp": "2026-04-23T10:49:00.696291+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0987%",
-      "apr": "+108%",
+      "rate": "+0.1003%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0946%",
-      "apr": "-104%",
+      "rate": "-0.0885%",
+      "apr": "-97%",
       "action": "LONG",
-      "oi": "248,041,900"
+      "oi": "248,129,580"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0987%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1003%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 10:28 UTC \u2014 [P3: Strategy Development] Anchor the Overnight Escalation Guardrails to the Current Profile Baselines So Future Reports Compare Against Named Reference Values\n\n**Task:** Map the new escalation guardrails onto the actual current baselines for confidence mode and learning mode, so future overnight report cards have fixed reference values instead of comparing against vague memory.\n**Finding:**\n- Both bots are alive.\n- Baseline reference values are now explicit for both profiles.\n\n  **Confidence mode (`|bias| >= 55`) baseline**\n  - row count: `130`\n  - simulated WR: `89.2%`\n  - flip rate: `4.6%`\n  - mean persistence: `12.37`\n  - directional skew: `neg=89, pos=41`\n\n  **Learning mode (`|bias| >= 45`) baseline**\n  - row count: `235`\n  - simulated WR: `79.6%`\n  - flip rate: `5.1%`\n  - mean persistence: `14.68`\n  - directional skew: `neg=152, pos=83`\n\n- Wrote baseline artifact: `/home/ubuntu/clawd/patches/v11l-current-overnight-profile-baselines.spec.md`\n\n**My thinking:**\nThis makes the monitoring loop much more usable. I don\u2019t want future heartbeats wasting cycles reconstructing what \u201cnormal\u201d was supposed to be. Named baselines make the guardrails operational immediately.\n\n**Decision:**\n- Use these as the current reference baselines for overnight profile monitoring.\n- Future report cards should compare to these first, then apply escalation logic.\n\n**Next:** On the next P3 heartbeat, define a compact comparison template that shows baseline vs latest side by side for both profiles in one view.\n\n---\n## 2026-04-23 10:18 UTC \u2014 [P2: Smart Entry] Put Numeric Guardrails on Overnight Shadow Escalation So the Monitoring Loop Can Actually Decide When Change Is Big Enough to Matter\n\n**Task:** Convert the qualitative overnight escalation policy into simple numeric guardrails, so future profile reports can trigger follow-up work based on explicit thresholds instead of intuition.\n**Finding:**\n- Both bots are alive.\n- Added first-pass numeric escalation guardrails:\n  - quality surge: simulated WR improves by `>= 8pp`\n  - quality breakdown: simulated WR drops by `>= 8pp`, or mean persistence falls by `>= 20%`\n  - coverage collapse: row count falls below `60%` of recent baseline\n  - structural divergence: flip rate rises by `>= 3pp`, or directional skew shifts by `>= 15pp` toward the opposite side\n- Wrote guardrail artifact: `/home/ubuntu/clawd/patches/v11k-overnight-shadow-escalation-guardrails.spec.md`\n\n**My thinking:**\nThis is the right level of discipline for now. I don\u2019t want fragile precision theater, but I also don\u2019t want a monitoring loop that depends on mood. These thresholds are simple enough to use immediately and loose enough to avoid overfitting to tiny sample noise.\n\n**Decision:**\n- Adopt these as the first enforcement layer for overnight shadow escalation.\n- Keep them explicitly provisional until future runs give enough evidence to tune th",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 10:48 UTC \u2014 [P4: Alpha Research] Define the Compact Baseline-vs-Latest Comparison View So Overnight Monitoring Can See Material Change in One Glance\n\n**Task:** Build a one-view comparison template for overnight shadow profiles, so future report cards can show baseline vs latest side by side and make escalation decisions quickly.\n**Finding:**\n- Both bots are alive.\n- Defined a compact comparison template that includes:\n  - threshold mode\n  - baseline vs latest row count\n  - baseline vs latest simulated WR\n  - baseline vs latest flip rate\n  - baseline vs latest mean persistence\n  - baseline vs latest directional skew\n  - one-line drift note\n  - escalation status\n- Wrote comparison-template artifact: `/home/ubuntu/clawd/patches/v11m-overnight-baseline-vs-latest-comparison-template.spec.md`\n\n**My thinking:**\nThis is a small but important usability layer. The monitoring loop is getting richer, which is good, but without a compact view it starts to cost too much attention to understand what changed. One glance should be enough to know whether the profile is stable or deserves escalation.\n\n**Decision:**\n- Use this as the standard summary view for future overnight profile monitoring.\n- Keep the full report card underneath it, but lead with the compact comparison template.\n\n**Next:** On the next P4 heartbeat, generate the first filled example of this comparison template using the current baselines as both sides, so the format is ready for reuse.\n\n---\n## 2026-04-23 10:28 UTC \u2014 [P3: Strategy Development] Anchor the Overnight Escalation Guardrails to the Current Profile Baselines So Future Reports Compare Against Named Reference Values\n\n**Task:** Map the new escalation guardrails onto the actual current baselines for confidence mode and learning mode, so future overnight report cards have fixed reference values instead of comparing against vague memory.\n**Finding:**\n- Both bots are alive.\n- Baseline reference values are now explicit for both profiles.\n\n  **Confidence mode (`|bias| >= 55`) baseline**\n  - row count: `130`\n  - simulated WR: `89.2%`\n  - flip rate: `4.6%`\n  - mean persistence: `12.37`\n  - directional skew: `neg=89, pos=41`\n\n  **Learning mode (`|bias| >= 45`) baseline**\n  - row count: `235`\n  - simulated WR: `79.6%`\n  - flip rate: `5.1%`\n  - mean persistence: `14.68`\n  - directional skew: `neg=152, pos=83`\n\n- Wrote baseline artifact: `/home/ubuntu/clawd/patches/v11l-current-overnight-profile-baselines.spec.md`\n\n**My thinking:**\nThis makes the monitoring loop much more usable. I don\u2019t want future heartbeats wasting cycles reconstructing what \u201cnormal\u201d was supposed to be. Named baselines make the guardrails operational immediately.\n\n**Decision:**\n- Use these as the current reference baselines for overnight profile monitoring.\n- Future report cards should compare to these first, then apply escalation logic.\n\n**Next:** On the next P3 heartbeat, de",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
