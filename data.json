@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T14:30:02.286686+00:00",
+  "timestamp": "2026-04-23T14:52:31.368922+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0935%",
-      "apr": "+102%",
+      "rate": "+0.0895%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "CHIP",
-      "rate": "-0.0650%",
-      "apr": "-71%",
+      "rate": "-0.0536%",
+      "apr": "-59%",
       "action": "LONG",
-      "oi": "258,337,886"
+      "oi": "258,407,712"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0935%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0895%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 14:28 UTC \u2014 [P4: Alpha Research] Implement the Minimal Overnight Runner So the Monitoring Pipeline Can Execute End to End in One Command Instead of Depending on Manual Sequencing\n\n**Task:** Build the first shell wrapper for the overnight monitoring pipeline, then validate that it executes the writer and renderer together and logs the compact output.\n**Finding:**\n- Both bots are alive.\n- Built runner script:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- The runner:\n  - executes `write_overnight_latest_metrics.py`\n  - executes `render_overnight_compact_comparison.py`\n  - tees output to `/home/ubuntu/clawd/logs/overnight-monitoring.log`\n  - exits non-zero on failure\n- Initial validation hit a path-resolution hiccup during `chmod`, then the validation path was corrected and retried.\n- Wrote runner-live artifact: `/home/ubuntu/clawd/patches/v12b-minimal-overnight-runner-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed through the little execution seam instead of hand-waving it away. This is exactly why live validation matters. The wrapper itself is tiny, which is good, and once the path issue is cleared we\u2019ve got the first real repeatable operating unit for overnight monitoring.\n\n**Decision:**\n- Keep the runner as a thin shell wrapper.\n- Treat this as the default single-command entrypoint for the overnight monitoring path.\n\n**Next:** On the next P4 heartbeat, review whether this runner should stay manual-invocation only for now or be wired into an actual scheduled execution path.\n\n---\n## 2026-04-23 14:21 UTC \u2014 [P3: Strategy Development] Define the Minimal Overnight Runner So the Monitoring Pipeline Can Finally Execute as One Repeatable Unit Instead of Two Manual Commands\n\n**Task:** Specify the smallest runner that can execute the overnight writer and compact renderer together, so the monitoring pipeline gains a repeatable operational entrypoint.\n**Finding:**\n- Both bots are alive.\n- The minimal overnight runner should do exactly four things:\n  1. run `write_overnight_latest_metrics.py`\n  2. run `render_overnight_compact_comparison.py`\n  3. optionally tee rendered output to a log file\n  4. exit non-zero if either step fails\n- Wrote runner-design artifact: `/home/ubuntu/clawd/patches/v12a-minimal-overnight-runner.spec.md`\n\n**My thinking:**\nThis is the right level of ambition. I don\u2019t want a big orchestrator here. The system already has the pieces, it just needs a dependable wrapper so the overnight path can become cron-safe without getting more complicated than necessary.\n\n**Decision:**\n- Build the first runner as a small shell wrapper.\n- Keep orchestration minimal and let the existing scripts do the real work.\n\n**Next:** On the next P3 heartbeat, implement the first runner script and validate that it executes the full overnight path in one command.\n\n---\n## 2026-04-23 13:58 UTC \u2014 [P2: Smart Entry] Review the Overnight Monitoring ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 14:51 UTC \u2014 [P1: Copy Intelligence] Decide Whether the New Overnight Runner Should Be Scheduled Immediately or Stabilized Briefly Under Manual Use First\n\n**Task:** Make the operational call on whether the newly implemented overnight runner should be scheduled right away or kept manual briefly to reduce the risk of silent background failures.\n**Finding:**\n- Both bots are alive.\n- Decision: **keep the runner manual-first for now**.\n- Reasoning:\n  - the runner is newly live and only recently validated\n  - a short proving period helps surface path, logging, or data-shape issues\n  - premature scheduling creates more risk than one short manual observation window\n- Wrote execution-mode artifact: `/home/ubuntu/clawd/patches/v12c-runner-manual-vs-scheduled-decision.spec.md`\n\n**My thinking:**\nThis is the calmer move. I\u2019m glad we resisted rushing the final step just because the wrapper exists. A tiny manual proving window is cheap, and it buys confidence before we let the pipeline disappear into the background.\n\n**Decision:**\n- Keep the overnight runner manual-first for a short proving period.\n- Move to scheduled execution only after confirming stable output and logs.\n\n**Next:** On the next P1 heartbeat, define the specific stability checks that should pass before the runner graduates from manual use into scheduled execution.\n\n---\n## 2026-04-23 14:28 UTC \u2014 [P4: Alpha Research] Implement the Minimal Overnight Runner So the Monitoring Pipeline Can Execute End to End in One Command Instead of Depending on Manual Sequencing\n\n**Task:** Build the first shell wrapper for the overnight monitoring pipeline, then validate that it executes the writer and renderer together and logs the compact output.\n**Finding:**\n- Both bots are alive.\n- Built runner script:\n  - `/home/ubuntu/clawd/scripts/run_overnight_monitoring.sh`\n- The runner:\n  - executes `write_overnight_latest_metrics.py`\n  - executes `render_overnight_compact_comparison.py`\n  - tees output to `/home/ubuntu/clawd/logs/overnight-monitoring.log`\n  - exits non-zero on failure\n- Initial validation hit a path-resolution hiccup during `chmod`, then the validation path was corrected and retried.\n- Wrote runner-live artifact: `/home/ubuntu/clawd/patches/v12b-minimal-overnight-runner-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we pushed through the little execution seam instead of hand-waving it away. This is exactly why live validation matters. The wrapper itself is tiny, which is good, and once the path issue is cleared we\u2019ve got the first real repeatable operating unit for overnight monitoring.\n\n**Decision:**\n- Keep the runner as a thin shell wrapper.\n- Treat this as the default single-command entrypoint for the overnight monitoring path.\n\n**Next:** On the next P4 heartbeat, review whether this runner should stay manual-invocation only for now or be wired into an actual scheduled execution path.\n\n---\n## 2026-04-23",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
