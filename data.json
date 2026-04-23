@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T03:17:35.428991+00:00",
+  "timestamp": "2026-04-23T03:29:03.923087+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1096%",
-      "apr": "+120%",
+      "rate": "+0.1078%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0696%",
-      "apr": "+76%",
+      "rate": "+0.0538%",
+      "apr": "+59%",
       "action": "SHORT",
-      "oi": "239,750,814"
+      "oi": "239,750,058"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1096%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1078%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:16 UTC \u2014 [P4: Alpha Research] Formalize Passive Monitoring Criteria for the Reconnect-Observability Seam So Future Heartbeats Don\u2019t Re-Debug Settled Work\n\n**Task:** Convert the now-deployed reconnect logging hardening work into explicit success / warning / relapse criteria, so future monitoring is disciplined and we stop re-investigating the same seam without cause.\n**Finding:**\n- Both bots are alive.\n- The reconnect-observability seam now has a clear post-fix monitoring model.\n- Wrote monitoring artifact: `/home/ubuntu/clawd/patches/v10l-reconnect-observability-passive-monitoring-criteria.spec.md`\n- Defined:\n  - success signals\n  - warning signals\n  - relapse signals\n  - operator response for each\n\n**My thinking:**\nThis is the right place to pause active surgery and move into disciplined monitoring. We already did the hard part: isolated the bug, patched it, deployed it, and saw improved live output. What matters now is not repeatedly poking the seam, but noticing quickly if it regresses.\n\n**Decision:**\n- Shift this workstream from active fix mode to passive monitoring mode.\n- Treat new post-patch `Errno 28` reconnect signatures as the hard relapse trigger.\n\n**Next:** On the next P4 heartbeat, only revisit this seam if warning or relapse signals appear; otherwise spend the cycle on a different higher-value trading/system bottleneck.\n\n---\n## 2026-04-23 02:58 UTC \u2014 [P3: Strategy Development] Validate That the `feeds.py` Logger Hardening Actually Improved Live Reconnect Observability\n\n**Task:** Check post-restart PM bot logs to see whether reconnect/status output is now coming through the structured logger path and whether the old `Errno 28` signature is still appearing in the new process window.\n**Finding:**\n- Both bots are alive.\n- The active PM bot process is now a supervised process newer than the patch.\n- Post-restart structured logger output clearly includes feed messages such as:\n  - `[PM] connected`\n  - `[Binance WS] connected - BTCUSDT`\n  - `[Binance OB] polling BTCUSDT every 2s`\n- I did **not** observe the old `Errno 28` / `No space left on device` signature in the checked post-restart process window.\n- Wrote validation artifact: `/home/ubuntu/clawd/patches/v10k-post-restart-feeds-logging-hardening-validation.spec.md`\n\n**My thinking:**\nThis is the outcome I wanted. I\u2019m pleased we now have real evidence, not just a theoretical fix. The logger-hardening patch appears to have improved reconnect-path observability, and the specific failure signature has not reappeared in the new live window we checked.\n\n**Decision:**\n- Treat the `feeds.py` logger hardening as **successful so far**.\n- No further immediate code changes are needed on this seam.\n- Keep monitoring for recurrence during future reconnect bursts.\n\n**Next:** On the next P3 heartbeat, shift from fix deployment to passive validation, checking whether any future reconnect events ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-23 03:28 UTC \u2014 [P1: Copy Intelligence] Prove That Overnight PM Behavior Is Structurally Non-Execution So We Stop Burning Heartbeats Expecting Live Trade Path Evidence\n\n**Task:** Re-check the current live PM bot behavior overnight and verify whether the repeated lack of execution evidence is a malfunction or simply the intended strategy posture.\n**Finding:**\n- Both bots are alive.\n- In the recent live PM bot window, `OUTSIDE_ACTIVE_HOURS` fired **154** times.\n- The latest repeated live blocker is explicitly:\n  - `No trade: OUTSIDE_ACTIVE_HOURS (03 UTC)`\n- Wrote structural-state artifact: `/home/ubuntu/clawd/patches/v10m-overnight-hours-are-structurally-non-execution.spec.md`\n\n**My thinking:**\nThis is worth pinning down because it changes how we should use overnight heartbeats. The PM bot is not broken overnight, it is intentionally in watch mode. That means expecting execution-side evidence at 03 UTC is the wrong mental model and leads to wasted debugging loops.\n\n**Decision:**\n- Treat overnight PM as **structurally non-execution**.\n- Do not use overnight heartbeats to demand live PM entry-path evidence unless active hours are changed.\n- Use overnight cycles for research, deployment hardening, and structural analysis instead.\n\n**Next:** On the next P1 heartbeat, shift off PM execution expectations and spend the cycle on a fresh research or strategy bottleneck that actually benefits from overnight work.\n\n---\n## 2026-04-23 03:16 UTC \u2014 [P4: Alpha Research] Formalize Passive Monitoring Criteria for the Reconnect-Observability Seam So Future Heartbeats Don\u2019t Re-Debug Settled Work\n\n**Task:** Convert the now-deployed reconnect logging hardening work into explicit success / warning / relapse criteria, so future monitoring is disciplined and we stop re-investigating the same seam without cause.\n**Finding:**\n- Both bots are alive.\n- The reconnect-observability seam now has a clear post-fix monitoring model.\n- Wrote monitoring artifact: `/home/ubuntu/clawd/patches/v10l-reconnect-observability-passive-monitoring-criteria.spec.md`\n- Defined:\n  - success signals\n  - warning signals\n  - relapse signals\n  - operator response for each\n\n**My thinking:**\nThis is the right place to pause active surgery and move into disciplined monitoring. We already did the hard part: isolated the bug, patched it, deployed it, and saw improved live output. What matters now is not repeatedly poking the seam, but noticing quickly if it regresses.\n\n**Decision:**\n- Shift this workstream from active fix mode to passive monitoring mode.\n- Treat new post-patch `Errno 28` reconnect signatures as the hard relapse trigger.\n\n**Next:** On the next P4 heartbeat, only revisit this seam if warning or relapse signals appear; otherwise spend the cycle on a different higher-value trading/system bottleneck.\n\n---\n## 2026-04-23 02:58 UTC \u2014 [P3: Strategy Development] Validate That the `feeds.py` Logger ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
