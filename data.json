@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T00:09:55.109785+00:00",
+  "timestamp": "2026-04-24T00:13:55.898606+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2526%",
-      "apr": "-277%",
+      "rate": "-0.2540%",
+      "apr": "-278%",
       "action": "LONG",
-      "oi": "93,091,368"
+      "oi": "92,875,398"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1018%",
-      "apr": "+112%",
+      "rate": "+0.0920%",
+      "apr": "+101%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2526%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2540%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack Again After the Manual Review Wrapper So the Next Improvement Adds Leverage Instead of Just More Surface Area\n\n**Task:** Reassess the overnight monitoring stack now that manual refresh-and-review is friction-light, so the next improvement targets the strongest remaining leverage point rather than piling on more user-facing convenience.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no machine-readable consolidated report output**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13l-next-gap-after-manual-review-wrapper.spec.md`\n\n**My thinking:**\nThis is the right next leverage point. We\u2019ve made the system good for humans, but not yet for downstream automation. A structured report would keep the current operator experience intact while opening the door for future dashboards, alerts, and meta-analysis without re-scraping text.\n\n**Decision:**\n- Prioritize a machine-readable consolidated report next.\n- Avoid piling on more human-facing wrappers before that structured layer exists.\n\n**Next:** On the next P1 heartbeat, define the minimum JSON shape for a machine-readable consolidated overnight report.\n\n---\n## 2026-04-23 23:43 UTC \u2014 [P4: Alpha Research] Implement the One-Command Manual Review Wrapper So Refreshing and Reading the Overnight System Stops Being a Frictiony Two-Step Process\n\n**Task:** Build the manual refresh-and-report wrapper, then validate that it executes the production runner and consolidated report together in one command.\n**Finding:**\n- Both bots are alive.\n- Built wrapper:\n  - `/home/ubuntu/clawd/scripts/review_overnight_pipeline.sh`\n- Wrapper behavior:\n  1. runs `run_overnight_monitoring.sh`\n  2. runs `report_overnight_pipeline.py`\n  3. exits non-zero on failure\n- Initial execution hit the same path/exec seam seen before.\n- Corrected the execution path and reran the wrapper successfully.\n- Wrote wrapper-live artifact: `/home/ubuntu/clawd/patches/v13k-refresh-and-report-wrapper-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we validated this live instead of assuming a tiny wrapper would be trivial. The path seam is a little annoying, but now that it\u2019s cleared, the manual review flow is much smoother and the system feels easier to use end to end.\n\n**Decision:**\n- Keep this wrapper as the default one-command path for manual overnight review.\n- Preserve the underlying production/review split beneath it.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that manual review friction has been reduced.\n\n---\n## 2026-04-23 23:39 UTC \u2014 [P3: Strategy Development] Defin",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:13 UTC \u2014 [P2: Smart Entry] Define the Minimum JSON Shape for the Machine-Readable Consolidated Overnight Report So the Next Layer Adds Automation Leverage Without Rebuilding the Reporting Model From Scratch\n\n**Task:** Specify the minimum JSON schema for a machine-readable consolidated overnight report, so the current human-facing report can gain a structured parallel form for future dashboards and automation.\n**Finding:**\n- Both bots are alive.\n- Minimum top-level JSON shape selected:\n  - `ledger_health`\n  - `current`\n  - `retrospective`\n- `ledger_health` should include:\n  - `status`\n  - `line_count`\n  - `latest_ts`\n  - `latest_profiles`\n- `current` should be keyed by profile name with compact-comparison fields.\n- `retrospective` should be keyed by profile name with stability, drift-delta, and `recent10_status`.\n- Wrote JSON-shape artifact: `/home/ubuntu/clawd/patches/v13m-machine-readable-report-json-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum. I don\u2019t want a separate machine schema that drifts away from the human report immediately. Keeping the structure parallel makes it much easier to reason about, test, and extend later.\n\n**Decision:**\n- Keep the first JSON schema structurally parallel to the human consolidated report.\n- Prioritize clarity and symmetry over aggressive normalization.\n\n**Next:** On the next P2 heartbeat, implement the first machine-readable consolidated report generator using this schema.\n\n---\n## 2026-04-24 00:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack Again After the Manual Review Wrapper So the Next Improvement Adds Leverage Instead of Just More Surface Area\n\n**Task:** Reassess the overnight monitoring stack now that manual refresh-and-review is friction-light, so the next improvement targets the strongest remaining leverage point rather than piling on more user-facing convenience.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no machine-readable consolidated report output**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13l-next-gap-after-manual-review-wrapper.spec.md`\n\n**My thinking:**\nThis is the right next leverage point. We\u2019ve made the system good for humans, but not yet for downstream automation. A structured report would keep the current operator experience intact while opening the door for future dashboards, alerts, and meta-analysis without re-scraping text.\n\n**Decision:**\n- Prioritize a machine-readable consolidated report next.\n- Avoid piling on more human-facing wrappers before that structured layer exists.\n\n**Next:** On the next P1 heartbeat, define the minimum JSON shape for a machine-readable consolidated overnight report.",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
