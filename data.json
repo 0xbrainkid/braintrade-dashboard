@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T01:00:02.623639+00:00",
+  "timestamp": "2026-04-24T01:01:04.186624+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2810%",
-      "apr": "-308%",
+      "rate": "-0.2772%",
+      "apr": "-303%",
       "action": "LONG",
-      "oi": "82,416,814"
+      "oi": "82,419,444"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1177%",
-      "apr": "+129%",
+      "rate": "+0.1151%",
+      "apr": "+126%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2810%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2772%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:43 UTC \u2014 [P4: Alpha Research] Review the Overnight System After Human and Machine Reports Went Live So the Next Improvement Adds More Leverage Instead of Just Another Interface Layer\n\n**Task:** Reassess the overnight pipeline now that both human-facing and machine-readable consolidated reports exist, so the next improvement targets the strongest remaining leverage gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - ledger validation and history\n  - human consolidated report\n  - machine-readable consolidated report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no persistent saved machine-readable snapshot file**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13o-next-gap-after-human-machine-reports.spec.md`\n\n**My thinking:**\nThis is the right next move. Structured JSON on stdout is useful, but it still makes downstream integration more awkward than it needs to be. A stable snapshot file is a small change with real leverage, and it keeps the rest of the system intact.\n\n**Decision:**\n- Prioritize saving the machine-readable report to a stable file path next.\n- Avoid adding more interfaces until the structured output is easier to consume programmatically.\n\n**Next:** On the next P4 heartbeat, define the minimum stable file path and write behavior for the saved machine-readable overnight report.\n\n---\n## 2026-04-24 00:39 UTC \u2014 [P3: Strategy Development] Implement the Machine-Readable Consolidated Overnight Report So the Stable Human Review Surface Finally Gains a Structured Automation Layer\n\n**Task:** Build the first machine-readable consolidated overnight report generator, so the current human-facing review output gains a structured parallel form for downstream automation and analysis.\n**Finding:**\n- Both bots are alive.\n- Built JSON report generator:\n  - `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py`\n- The generator now emits three top-level sections:\n  - `ledger_health`\n  - `current`\n  - `retrospective`\n- Validation succeeded and produced structured JSON for the full overnight pipeline state.\n- Wrote machine-readable-report artifact: `/home/ubuntu/clawd/patches/v13n-machine-readable-consolidated-report-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we shipped this. This is the first real bridge from a usable human workflow into a usable machine workflow. Once a system reaches this point, it becomes much easier to build higher-level automation without re-parsing terminal text or reassembling state from scattered pieces.\n\n**Decision:**\n- Keep this machine-readable report as the structured parallel to the human consolidated report.\n- Use it as the default downstream integration surface going forward.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and decide the next highest-value improvement now that both human-facing and machi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:59 UTC \u2014 [P1] Hyperliquid leaderboard flipped risk-off hard, so I validated the copy-intel signal before the bot reacts blindly\n\n**Task:** Run the live copy-intel tracker, inspect which top Hyperliquid traders actually changed positioning, and compare that crowd shift against our current HL book.\n**Finding:** The fresh leaderboard scan flipped sharply from the last stored state. Consensus moved to **BTC 3L/7S, ETH 5L/3S, SOL 3L/7S**, versus the prior logged read that was broadly bullish. The biggest change was concentrated in large books, not noise: `anon-0xecb6` flipped from massive BTC and ETH longs into a broad market short book led by **BTC short $18.2M, SOL short $3.47M, DOGE short $4.03M**; `anon-0xfc66` flipped BTC and SOL from long to short while keeping a **$10.1M HYPE short**; `anon-0x3bca` appeared with a fresh **BTC short $4.95M / SOL short $2.75M / HYPE short $1.11M** basket. Our own HL account is flat with **$37.39 USDC** and no open positions, so we are not currently caught wrong-way against this regime change.\n**My thinking:** This was real copy-intel work, not just a dashboard pulse. The leader cohort is no longer expressing simple beta risk-on. BTC and SOL positioning among bigger accounts turned decisively defensive while ETH stayed mixed-to-bullish, which looks more like selective rotation plus hedging than a clean market-wide short. Because our HL book is flat, the right move is to treat this as regime information for upcoming entries, not to chase after already-established whale shorts.\n**Decision:** No live HL trade right now. I am keeping risk off until P3/P4 work confirms whether this is the start of a broader downside regime or a temporary leaderboard hedge cluster. For immediate tactical use, I want BTC and SOL longs treated with extra skepticism on the next strategy pass, while ETH remains the relative-strength exception.\n**Next:** On the next P1 heartbeat, measure whether this BTC/SOL bearish turn persists for at least one more scan and isolate which traders are leading the move versus merely following it.\n\n## 2026-04-24 00:43 UTC \u2014 [P4: Alpha Research] Review the Overnight System After Human and Machine Reports Went Live So the Next Improvement Adds More Leverage Instead of Just Another Interface Layer\n\n**Task:** Reassess the overnight pipeline now that both human-facing and machine-readable consolidated reports exist, so the next improvement targets the strongest remaining leverage gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - ledger validation and history\n  - human consolidated report\n  - machine-readable consolidated report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no persistent saved machine-readable snapshot file**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13o-next-gap-after-human-machine-reports.spec.md",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
