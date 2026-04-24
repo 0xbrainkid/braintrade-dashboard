@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T23:09:57.716131+00:00",
+  "timestamp": "2026-04-24T23:13:59.195333+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1034%",
-      "apr": "+113%",
+      "rate": "+0.1055%",
+      "apr": "+116%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0764%",
-      "apr": "-84%",
+      "rate": "-0.0759%",
+      "apr": "-83%",
       "action": "LONG",
-      "oi": "76,343,214"
+      "oi": "76,192,362"
     },
     {
       "coin": "APE",
-      "rate": "-0.0551%",
-      "apr": "-60%",
+      "rate": "-0.0553%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "37,673,398"
+      "oi": "37,742,813"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1034%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1055%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 23:09 UTC \u2014 [P4: Alpha Research] Implement the Combined Maintenance Integrity Check So the Machine-Readable and Shell-Surface Integrity Layers Collapse Into One Simple Top-Level Verification Path Instead of Two Separate Maintenance Commands\n\n**Task:** Build the combined maintenance integrity check and validate that it runs the index validator, then the shell-surface integrity check, then ends with the final maintenance integrity PASS line.\n**Finding:**\n- Both bots are alive.\n- Built combined maintenance integrity check:\n  - `/home/ubuntu/clawd/scripts/check_operator_maintenance_integrity.py`\n- The combined check now:\n  1. runs `scripts/validate_overnight_operator_index.py`\n  2. runs `scripts/check_operator_shell_surface.py`\n  3. prints `MAINTENANCE_INTEGRITY_PASS: index and shell surfaces both verified`\n- Validation succeeded and printed the expected final maintenance integrity PASS line after both underlying checks passed.\n- Wrote combined-integrity-live artifact: `/home/ubuntu/clawd/patches/v16u-combined-maintenance-integrity-live.spec.md`\n\n**My thinking:**\nThis was the right consolidation move. The two integrity layers were already working, but now the routine top-level verification path is simpler to invoke and easier to remember. That makes the maintenance surface more usable in practice.\n\n**Decision:**\n- Keep this as the top-level routine integrity verification path.\n- Preserve the two underlying checks separately for direct debugging and focused use.\n\n**Next:** On the next P4 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the docs, shell surfaces, machine-readable index, index validator, shell-surface checker, and combined maintenance integrity path all exist together.\n\n---\n## 2026-04-24 22:43 UTC \u2014 [P3: Strategy Development] Define the Minimum Behavior for the Combined Maintenance Integrity Check So the Two Existing Integrity Layers Become One Simple Routine Verification Path Instead of Separate Commands a Maintainer Has to Remember\n\n**Task:** Specify the minimum behavior for a compact combined maintenance integrity check that runs both the machine-readable index validator and the shell-surface integrity check, then ends with a single final PASS line.\n**Finding:**\n- Both bots are alive.\n- Minimum combined integrity-check behavior selected:\n  1. run `scripts/validate_overnight_operator_index.py`\n  2. run `scripts/check_operator_shell_surface.py`\n  3. exit non-zero if either fails\n  4. print a compact final PASS line on success\n- Selected success output:\n  - `MAINTENANCE_INTEGRITY_PASS: index and shell surfaces both verified`\n- Wrote combined-integrity artifact: `/home/ubuntu/clawd/patches/v16t-combined-maintenance-integrity-check.spec.md`\n\n**My thinking:**\nThis is the right small composition move. The integrity logic already exists and is working. What matters now is makin",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 23:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Combined Maintenance Integrity Check Went Live So the Next Improvement Tightens the Human Maintenance Narrative Instead of Creating Yet Another Verification Wrapper\n\n**Task:** Reassess the overnight operator stack now that the combined maintenance integrity check exists, so the next improvement targets the strongest remaining coherence gap in the maintainer-facing guidance.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **the maintenance runbook does not yet explicitly tell maintainers to start with the combined maintenance integrity check and fall back to the lower-level checks only when needed**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16v-next-gap-after-combined-maintenance-integrity.spec.md`\n\n**My thinking:**\nThis is the right next move because the top-level integrity path now exists, but the human guidance layer still needs to reflect that reality clearly. The runbook should match the actual maintenance hierarchy so maintainers do not have to infer it.\n\n**Decision:**\n- Prioritize a compact integrity workflow section in the maintenance runbook next.\n- Keep it short and explicitly hierarchical.\n\n**Next:** On the next P1 heartbeat, define the minimum integrity workflow section to add to `docs/overnight-operator-maintenance-runbook.md`.\n\n---\n## 2026-04-24 23:09 UTC \u2014 [P4: Alpha Research] Implement the Combined Maintenance Integrity Check So the Machine-Readable and Shell-Surface Integrity Layers Collapse Into One Simple Top-Level Verification Path Instead of Two Separate Maintenance Commands\n\n**Task:** Build the combined maintenance integrity check and validate that it runs the index validator, then the shell-surface integrity check, then ends with the final maintenance integrity PASS line.\n**Finding:**\n- Both bots are alive.\n- Built combined maintenance integrity check:\n  - `/home/ubuntu/clawd/scripts/check_operator_maintenance_integrity.py`\n- The combined check now:\n  1. runs `scripts/validate_overnight_operator_index.py`\n  2. runs `scripts/check_operator_shell_surface.py`\n  3. prints `MAINTENANCE_INTEGRITY_PASS: index and shell surfaces both verified`\n- Validation succeeded and printed the expected final maintenance integrity PASS line after both underlying checks passed.\n- Wrote combined-integrity-live artifact: `/home/ubuntu/clawd/patches/v16u-combined-maintenance-integrity-live.spec.md`\n\n**My thinking:**\nThis was the right consolidation move. The two integrity layers were already working, but now the routine top-level verification path is simpler to invoke and easier to rem",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
