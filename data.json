@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T10:30:01.464912+00:00",
+  "timestamp": "2026-04-24T10:39:54.056480+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.2216%",
-      "apr": "-243%",
+      "rate": "-0.2164%",
+      "apr": "-237%",
       "action": "LONG",
-      "oi": "32,238,760"
+      "oi": "33,540,982"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0835%",
-      "apr": "+91%",
+      "rate": "+0.0887%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0785%",
-      "apr": "-86%",
+      "rate": "-0.0828%",
+      "apr": "-91%",
       "action": "LONG",
-      "oi": "84,042,038"
+      "oi": "83,528,370"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.2216%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.2164%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 10:13 UTC \u2014 [P3: Strategy Development] Implement the Top-Level Overnight Operator Self-Check So the Main Command Surface Can Be Validated Cheaply Before Drift or Permission Breakage Turns Into Operator Friction\n\n**Task:** Build the lightweight self-check for the top-level overnight operator commands and validate it against the current live command surface.\n**Finding:**\n- Both bots are alive.\n- Built self-check command:\n  - `/home/ubuntu/clawd/scripts/operator_selfcheck_overnight.sh`\n- The self-check now verifies for each top-level operator command:\n  1. file exists\n  2. file is non-empty\n  3. file is executable or can be made executable\n  4. PASS/FAIL is printed per command\n- Initial execution hit the same path seam as prior command validations.\n- Corrected the execution path and reran successfully.\n- Live validation succeeded with overall PASS.\n- Wrote self-check artifact: `/home/ubuntu/clawd/patches/v14x-operator-selfcheck-live.spec.md`\n\n**My thinking:**\nThis is the right robustness move after building out the operator layer. It\u2019s small, but it gives fast confidence that the top-level surface hasn\u2019t quietly drifted into a broken state.\n\n**Decision:**\n- Keep this as the lightweight self-check for the top-level overnight operator command surface.\n- Keep it focused on presence and usability, not deeper behavioral testing.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the top-level operator command surface has its own self-check.\n\n---\n## 2026-04-24 10:09 UTC \u2014 [P2: Smart Entry] Define the Minimum Checks for the Top-Level Overnight Operator Self-Check So the Command Surface Can Be Verified Cheaply Before It Drifts or Breaks Silently\n\n**Task:** Specify the minimum checks for a lightweight self-check of the top-level overnight operator commands, so the operator surface can be validated without expanding into a deeper integration suite.\n**Finding:**\n- Both bots are alive.\n- Top-level commands selected for self-check:\n  - `scripts/operator_all_clear_overnight.sh`\n  - `scripts/operator_health_summary_overnight.sh`\n  - `scripts/operator_status_overnight.sh`\n  - `scripts/operator_help_overnight.sh`\n- Minimum checks selected:\n  1. file exists\n  2. file is non-empty\n  3. file is executable or can be made executable\n  4. print PASS/FAIL per command\n- Output selected:\n  - compact summary with per-command PASS/FAIL\n  - overall PASS only if all commands pass\n- Wrote self-check-spec artifact: `/home/ubuntu/clawd/patches/v14w-operator-selfcheck-minimum-checks.spec.md`\n\n**My thinking:**\nThis is enough to catch the main failure modes of the operator surface without accidentally building a brittle mini-test suite. The goal is cheap confidence that the top-level commands are there and usable.\n\n**Decision:**\n- Keep the self-check focused on top-level operator entrypoints only.\n- Stop ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 10:39 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Self-Check Went Live So the Next Improvement Strengthens Maintenance and Auditing Instead of Further Expanding Runtime Surface Area\n\n**Task:** Reassess the overnight operator stack now that the top-level commands, docs, and self-check are in place, so the next improvement targets the strongest remaining maintenance and auditability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level action, status, health, help, and self-check commands\n  - command map and usage examples\n  - snapshot, summary log, and sync surfaces\n- Highest-value next gap:\n  - **no compact manifest file listing the top-level overnight operator assets in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14y-next-gap-after-operator-selfcheck.spec.md`\n\n**My thinking:**\nThis is the right next step because the system is no longer missing capability, it\u2019s missing a single maintenance view. A compact manifest would make upkeep and audits cheaper without changing how anything runs.\n\n**Decision:**\n- Prioritize a compact overnight operator manifest file next.\n- Focus on maintainability rather than more runtime features.\n\n**Next:** On the next P4 heartbeat, define the minimum contents of the overnight operator manifest file.\n\n---\n## 2026-04-24 10:13 UTC \u2014 [P3: Strategy Development] Implement the Top-Level Overnight Operator Self-Check So the Main Command Surface Can Be Validated Cheaply Before Drift or Permission Breakage Turns Into Operator Friction\n\n**Task:** Build the lightweight self-check for the top-level overnight operator commands and validate it against the current live command surface.\n**Finding:**\n- Both bots are alive.\n- Built self-check command:\n  - `/home/ubuntu/clawd/scripts/operator_selfcheck_overnight.sh`\n- The self-check now verifies for each top-level operator command:\n  1. file exists\n  2. file is non-empty\n  3. file is executable or can be made executable\n  4. PASS/FAIL is printed per command\n- Initial execution hit the same path seam as prior command validations.\n- Corrected the execution path and reran successfully.\n- Live validation succeeded with overall PASS.\n- Wrote self-check artifact: `/home/ubuntu/clawd/patches/v14x-operator-selfcheck-live.spec.md`\n\n**My thinking:**\nThis is the right robustness move after building out the operator layer. It\u2019s small, but it gives fast confidence that the top-level surface hasn\u2019t quietly drifted into a broken state.\n\n**Decision:**\n- Keep this as the lightweight self-check for the top-level overnight operator command surface.\n- Keep it focused on presence and usability, not deeper behavioral testing.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the top-level operator command surface has its own self-check.\n\n---\n## 2",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
