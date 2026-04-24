@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T17:30:02.367078+00:00",
+  "timestamp": "2026-04-24T17:36:05.093679+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0926%",
-      "apr": "-101%",
+      "rate": "-0.0904%",
+      "apr": "-99%",
       "action": "LONG",
-      "oi": "35,847,290"
+      "oi": "35,928,436"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0787%",
-      "apr": "+86%",
+      "rate": "+0.0820%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0722%",
-      "apr": "-79%",
+      "rate": "-0.0702%",
+      "apr": "-77%",
       "action": "LONG",
-      "oi": "87,990,068"
+      "oi": "87,738,600"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0926%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0904%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:28 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Maintainer Quickstart So a New Maintainer Can Orient, Verify, and Escalate Correctly in the First Few Minutes Without Reading the Full Operator Corpus\n\n**Task:** Build the compact overnight operator maintainer quickstart and validate that it gives a usable first-five-minutes path into maintenance verification, read-only inspection, fallback checks, and next docs.\n**Finding:**\n- Both bots are alive.\n- Built maintainer quickstart:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md`\n- Quickstart now includes:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Initial readback returned blank despite the file write succeeding.\n- Follow-up direct verification confirmed the file exists with the expected content.\n- Wrote quickstart artifact: `/home/ubuntu/clawd/patches/v15y-maintainer-quickstart-live.spec.md`\n\n**My thinking:**\nThis is the right resilience layer for handoff. A maintainer usually does not need the whole system explained, they need one safe first command, one fallback path, and a short list of where to read next. Now that path exists.\n\n**Decision:**\n- Keep this as the compact maintainer onboarding entrypoint.\n- Keep the other docs specialized behind it.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has both maintainability and maintainer-onboarding layers.\n\n---\n## 2026-04-24 17:14 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Maintainer Quickstart So a New Maintainer Can Get Oriented and Verify the Stack in the First Few Minutes Without Digging Through Every Supporting Doc\n\n**Task:** Specify the minimum contents for a compact overnight operator maintainer quickstart, so the handoff and first-use experience becomes simpler and more reliable.\n**Finding:**\n- Both bots are alive.\n- Required quickstart sections selected:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Key actions selected:\n  - first run `scripts/operator_maintenance_check_overnight.sh`\n  - if status only, run `scripts/operator_status_overnight.sh`\n  - if maintenance fails, run self-check and index validator directly\n- Reference docs selected:\n  - overview doc\n  - audit checklist\n  - manifest\n  - changelog\n- Wrote quickstart-contents artifact: `/home/ubuntu/clawd/patches/v15x-maintainer-quickstart-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum because a new maintainer does not need the full architecture first. They need one starting command, one fallback path, and a short list of where to read next.\n\n**Decision:**\n- Keep the quickstart short and first-five-minute",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:28 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Maintainer Quickstart Went Live So the Next Improvement Tightens Human and Machine Surface Alignment Instead of Expanding Reference Docs Further\n\n**Task:** Reassess the overnight operator stack now that the maintainer quickstart exists, so the next improvement targets the highest remaining consistency gap between the documented surface and the indexed machine-readable surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator docs\n  - machine-readable index\n  - maintenance validator\n  - combined maintenance check\n  - maintenance cadence runbook\n  - maintainer quickstart\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly include the new maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15z-next-gap-after-maintainer-quickstart.spec.md`\n\n**My thinking:**\nThis is the right cleanup move because once the index stops reflecting the actual doc surface, the validator and discovery layer begin to drift from reality. The next leverage point is not more docs, it is restoring full alignment between the human and machine views.\n\n**Decision:**\n- Prioritize indexing the maintenance runbook and maintainer quickstart next.\n- Revalidate the operator index immediately after that change.\n\n**Next:** On the next P3 heartbeat, add the new maintenance-facing docs to the overnight operator index and rerun validation.\n\n---\n## 2026-04-24 17:28 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Maintainer Quickstart So a New Maintainer Can Orient, Verify, and Escalate Correctly in the First Few Minutes Without Reading the Full Operator Corpus\n\n**Task:** Build the compact overnight operator maintainer quickstart and validate that it gives a usable first-five-minutes path into maintenance verification, read-only inspection, fallback checks, and next docs.\n**Finding:**\n- Both bots are alive.\n- Built maintainer quickstart:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md`\n- Quickstart now includes:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Initial readback returned blank despite the file write succeeding.\n- Follow-up direct verification confirmed the file exists with the expected content.\n- Wrote quickstart artifact: `/home/ubuntu/clawd/patches/v15y-maintainer-quickstart-live.spec.md`\n\n**My thinking:**\nThis is the right resilience layer for handoff. A maintainer usually does not need the whole system explained, they need one safe first command, one fallback path, and a short list of where to read next. Now that path exists.\n\n**Decision:**\n- Keep this as the compact maintainer onboarding entrypoint.\n- Keep the other docs specialized behin",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
