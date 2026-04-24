@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T00:30:02.256353+00:00",
+  "timestamp": "2026-04-24T00:40:05.049323+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2187%",
-      "apr": "-239%",
+      "rate": "-0.2278%",
+      "apr": "-249%",
       "action": "LONG",
-      "oi": "83,312,764"
+      "oi": "82,713,356"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0944%",
-      "apr": "+103%",
+      "rate": "+0.0974%",
+      "apr": "+107%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2187%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2278%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:13 UTC \u2014 [P2: Smart Entry] Define the Minimum JSON Shape for the Machine-Readable Consolidated Overnight Report So the Next Layer Adds Automation Leverage Without Rebuilding the Reporting Model From Scratch\n\n**Task:** Specify the minimum JSON schema for a machine-readable consolidated overnight report, so the current human-facing report can gain a structured parallel form for future dashboards and automation.\n**Finding:**\n- Both bots are alive.\n- Minimum top-level JSON shape selected:\n  - `ledger_health`\n  - `current`\n  - `retrospective`\n- `ledger_health` should include:\n  - `status`\n  - `line_count`\n  - `latest_ts`\n  - `latest_profiles`\n- `current` should be keyed by profile name with compact-comparison fields.\n- `retrospective` should be keyed by profile name with stability, drift-delta, and `recent10_status`.\n- Wrote JSON-shape artifact: `/home/ubuntu/clawd/patches/v13m-machine-readable-report-json-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum. I don\u2019t want a separate machine schema that drifts away from the human report immediately. Keeping the structure parallel makes it much easier to reason about, test, and extend later.\n\n**Decision:**\n- Keep the first JSON schema structurally parallel to the human consolidated report.\n- Prioritize clarity and symmetry over aggressive normalization.\n\n**Next:** On the next P2 heartbeat, implement the first machine-readable consolidated report generator using this schema.\n\n---\n## 2026-04-24 00:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack Again After the Manual Review Wrapper So the Next Improvement Adds Leverage Instead of Just More Surface Area\n\n**Task:** Reassess the overnight monitoring stack now that manual refresh-and-review is friction-light, so the next improvement targets the strongest remaining leverage point rather than piling on more user-facing convenience.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - integrated ledger validation\n  - append-only history ledger\n  - retrospective summary\n  - consolidated operator report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no machine-readable consolidated report output**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13l-next-gap-after-manual-review-wrapper.spec.md`\n\n**My thinking:**\nThis is the right next leverage point. We\u2019ve made the system good for humans, but not yet for downstream automation. A structured report would keep the current operator experience intact while opening the door for future dashboards, alerts, and meta-analysis without re-scraping text.\n\n**Decision:**\n- Prioritize a machine-readable consolidated report next.\n- Avoid piling on more human-facing wrappers before that structured layer exists.\n\n**Next:** On the next P1 heartbeat, define the minimum JSON shape for a machine-readable consolidated overnight report.",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:39 UTC \u2014 [P3: Strategy Development] Implement the Machine-Readable Consolidated Overnight Report So the Stable Human Review Surface Finally Gains a Structured Automation Layer\n\n**Task:** Build the first machine-readable consolidated overnight report generator, so the current human-facing review output gains a structured parallel form for downstream automation and analysis.\n**Finding:**\n- Both bots are alive.\n- Built JSON report generator:\n  - `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py`\n- The generator now emits three top-level sections:\n  - `ledger_health`\n  - `current`\n  - `retrospective`\n- Validation succeeded and produced structured JSON for the full overnight pipeline state.\n- Wrote machine-readable-report artifact: `/home/ubuntu/clawd/patches/v13n-machine-readable-consolidated-report-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we shipped this. This is the first real bridge from a usable human workflow into a usable machine workflow. Once a system reaches this point, it becomes much easier to build higher-level automation without re-parsing terminal text or reassembling state from scattered pieces.\n\n**Decision:**\n- Keep this machine-readable report as the structured parallel to the human consolidated report.\n- Use it as the default downstream integration surface going forward.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and decide the next highest-value improvement now that both human-facing and machine-readable consolidated views are live.\n\n---\n## 2026-04-24 00:13 UTC \u2014 [P2: Smart Entry] Define the Minimum JSON Shape for the Machine-Readable Consolidated Overnight Report So the Next Layer Adds Automation Leverage Without Rebuilding the Reporting Model From Scratch\n\n**Task:** Specify the minimum JSON schema for a machine-readable consolidated overnight report, so the current human-facing report can gain a structured parallel form for future dashboards and automation.\n**Finding:**\n- Both bots are alive.\n- Minimum top-level JSON shape selected:\n  - `ledger_health`\n  - `current`\n  - `retrospective`\n- `ledger_health` should include:\n  - `status`\n  - `line_count`\n  - `latest_ts`\n  - `latest_profiles`\n- `current` should be keyed by profile name with compact-comparison fields.\n- `retrospective` should be keyed by profile name with stability, drift-delta, and `recent10_status`.\n- Wrote JSON-shape artifact: `/home/ubuntu/clawd/patches/v13m-machine-readable-report-json-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum. I don\u2019t want a separate machine schema that drifts away from the human report immediately. Keeping the structure parallel makes it much easier to reason about, test, and extend later.\n\n**Decision:**\n- Keep the first JSON schema structurally parallel to the human consolidated report.\n- Prioritize clarity and symmetry over aggressive normalization.\n\n**Next:** On the next P2 heartbe",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
