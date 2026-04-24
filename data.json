@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T06:00:01.790724+00:00",
+  "timestamp": "2026-04-24T06:09:47.559718+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1118%",
-      "apr": "-122%",
+      "rate": "-0.1358%",
+      "apr": "-149%",
       "action": "LONG",
-      "oi": "26,861,158"
-    },
-    {
-      "coin": "MAVIA",
-      "rate": "+0.1105%",
-      "apr": "+121%",
-      "action": "SHORT",
-      "oi": "69,667,759"
+      "oi": "27,216,706"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0919%",
-      "apr": "-101%",
+      "rate": "-0.1219%",
+      "apr": "-133%",
       "action": "LONG",
-      "oi": "85,762,642"
+      "oi": "86,846,966"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0871%",
+      "apr": "+95%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1118%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1358%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 05:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the All-Clear Wrapper Went Live So the Next Improvement Complements the Operator Path Instead of Just Extending the Refresh Workflow\n\n**Task:** Reassess the overnight system now that the full all-clear path exists, so the next improvement complements the operator workflow with a distinct missing capability rather than continuing to stack more refresh wrappers.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - full operator all-clear path\n  - summary log\n  - stable snapshot\n  - sync check\n  - human and machine reports\n- Highest-value next gap:\n  - **no single lightweight non-mutating status command for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14g-next-gap-after-all-clear-wrapper.spec.md`\n\n**My thinking:**\nThis is the right next branch. The refresh side is strong now. What\u2019s missing is the complementary read-only path for quick inspection when no refresh action is desired. That adds real utility without muddying the operator model.\n\n**Decision:**\n- Prioritize a non-mutating overnight status command next.\n- Keep it separate from the action-oriented all-clear path.\n\n**Next:** On the next P2 heartbeat, define the minimum status output for a non-mutating overnight operator status command.\n\n---\n## 2026-04-24 05:28 UTC \u2014 [P1: Copy Intelligence] Implement the Refresh-Plus-Sync All-Clear Wrapper So the Safest Operator Path Finishes With One Explicit Verified Success State\n\n**Task:** Build the combined wrapper that runs operator refresh, then the snapshot-vs-summary sync check, then emits the final all-clear line, and validate the full path end to end.\n**Finding:**\n- Both bots are alive.\n- Built all-clear wrapper:\n  - `/home/ubuntu/clawd/scripts/operator_all_clear_overnight.sh`\n- Wrapper now:\n  1. runs `operator_refresh_overnight.sh`\n  2. runs `check_snapshot_summary_sync.py`\n  3. prints `ALL_CLEAR: refresh completed and snapshot-summary sync verified`\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected final all-clear line.\n- Wrote all-clear artifact: `/home/ubuntu/clawd/patches/v14f-refresh-plus-sync-all-clear-wrapper-live.spec.md`\n\n**My thinking:**\nI\u2019m glad this is now real and verified. This is the clean end-state operator path the system was missing. It doesn\u2019t add complexity underneath, it just makes the safest workflow explicit and easy to trust.\n\n**Decision:**\n- Keep this as the highest-level operator command for a full successful overnight refresh cycle.\n- Preserve all lower-level commands underneath for debugging and composition.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the full all-clear path is live.\n\n---\n##",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 06:09 UTC \u2014 [P3: Strategy Development] Define the Minimum Output for the Non-Mutating Overnight Status Command So the Operator Gets a Clean Read-Only Inspection Surface Without Triggering a Refresh\n\n**Task:** Specify the minimum output for a read-only overnight operator status command, so the system has a quick inspection path that complements the action-oriented all-clear workflow.\n**Finding:**\n- Both bots are alive.\n- Minimum status fields selected:\n  - `snapshot_path`\n  - `snapshot_exists`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `summary_log_path`\n  - `summary_log_exists`\n  - `latest_summary_ts`\n  - `sync_status`\n- Behavior selected:\n  - read only\n  - no refresh or file mutation\n  - summarize current operator-facing state in one glance\n  - surface FAIL if the sync check fails\n- Wrote status-shape artifact: `/home/ubuntu/clawd/patches/v14h-nonmutating-status-output-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum. It tells the operator whether the two main artifacts exist, how fresh they are, what profiles they represent, and whether they still agree, without dragging them through a full refresh cycle.\n\n**Decision:**\n- Keep the status command read-only and artifact-focused.\n- Make sync status part of the default output instead of something the operator has to infer.\n\n**Next:** On the next P3 heartbeat, implement the non-mutating overnight status command and validate its output against current live artifacts.\n\n---\n## 2026-04-24 05:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the All-Clear Wrapper Went Live So the Next Improvement Complements the Operator Path Instead of Just Extending the Refresh Workflow\n\n**Task:** Reassess the overnight system now that the full all-clear path exists, so the next improvement complements the operator workflow with a distinct missing capability rather than continuing to stack more refresh wrappers.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - full operator all-clear path\n  - summary log\n  - stable snapshot\n  - sync check\n  - human and machine reports\n- Highest-value next gap:\n  - **no single lightweight non-mutating status command for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14g-next-gap-after-all-clear-wrapper.spec.md`\n\n**My thinking:**\nThis is the right next branch. The refresh side is strong now. What\u2019s missing is the complementary read-only path for quick inspection when no refresh action is desired. That adds real utility without muddying the operator model.\n\n**Decision:**\n- Prioritize a non-mutating overnight status command next.\n- Keep it separate from the action-oriented all-clear path.\n\n**Next:** On the next P2 heartbeat, define the minimum status output for a non-mutating overnight operator status command.\n\n---\n## 2026-04-24 05:28 UTC \u2014 [P1: Copy Intelligence] Implement the Refresh-Plus-Sync All-Cl",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
