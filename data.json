@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T21:00:02.186536+00:00",
+  "timestamp": "2026-04-24T21:01:05.780831+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "APE",
-      "rate": "-0.1792%",
-      "apr": "-196%",
+      "rate": "-0.1609%",
+      "apr": "-176%",
       "action": "LONG",
-      "oi": "38,935,943"
+      "oi": "38,889,763"
+    },
+    {
+      "coin": "SKR",
+      "rate": "-0.0521%",
+      "apr": "-57%",
+      "action": "LONG",
+      "oi": "36,126,922"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.1792%/8h \u2014 shorts paying longs"
+        "text": "Strongest: APE at -0.1609%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After Shell Entrypoint Alignment So the Next Improvement Strengthens the Main Human Entry Point Instead of Continuing to Spread Guidance Across More Surface-Specific Patches\n\n**Task:** Reassess the overnight operator stack now that help, status, and all-clear all route to the maintenance guidance layer, so the next improvement targets the strongest remaining coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the main overview doc does not yet summarize the maintainer workflow in one compact sequence**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16m-next-gap-after-shell-entrypoint-alignment.spec.md`\n\n**My thinking:**\nThis is the right next move because the surfaces are now consistent, but the main human-readable entrypoint still makes a maintainer piece together the workflow mentally. A short workflow sequence in the overview would unify what already exists without adding another standalone layer.\n\n**Decision:**\n- Prioritize a compact maintainer workflow section in the overview next.\n- Keep it as a sequencing aid, not a replacement for the specialized docs.\n\n**Next:** On the next P4 heartbeat, define the minimum maintainer workflow sequence to add to `docs/overnight-operator-overview.md`.\n\n---\n## 2026-04-24 20:39 UTC \u2014 [P3: Strategy Development] Implement the Operator All-Clear-Surface Enhancement So the Safest Action Entry Point Also Exposes the Maintenance Runbook and Maintainer Quickstart and the Shell Routing Layer Becomes Consistent Across Help, Status, and Action Paths\n\n**Task:** Add the maintenance-guide pointers to the all-clear surface and validate that the safest action path now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The all-clear script was much leaner than expected, with a short refresh, sync check, and final all-clear line.\n- Patched the real tail output directly in `/home/ubuntu/clawd/scripts/operator_all_clear_overnight.sh`.\n- Added a compact `Maintenance docs` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the all-clear script and confirmed both maintenance guides now appear in the output.\n- Wrote all-clear-surface-live artifact: `/home/ubuntu/clawd/patches/v16l-all-clear-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right final shell-surface routing fix. Help, status, and all-clear now all point toward the maintenance guidance layer, which makes the operator surfa",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:59 UTC \u2014 [P1] Refresh Hyperliquid Copy-Intel and Re-rank the Active Winner Cluster\n\n**Task:** Run a fresh copy-intel-tracker scan, compare the current leaderboard positioning against the earlier 17:00 snapshot, and isolate the strongest still-active trader cluster to see whether the board is genuinely rotating risk-on or just expressing selective relative-value longs.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py` successfully.\n- Fresh consensus tightened to **BTC 4L/5S, ETH 3L/5S, SOL 5L/4S**.\n- The heaviest high-performing cluster is still concentrated in **BTC/ETH/HYPE shorts**:\n  - `anon-0xfc66`: HYPE short $8.79M, BTC short $6.21M, SOL short $3.90M, ETH short $510k\n  - `anon-0xecb6`: ETH short $9.53M, BTC short $6.60M, SOL short $3.59M, HYPE short $2.03M\n- The main nuance is still **selective SOL relative-strength**, not broad bullishness:\n  - `anon-0x57dd`: BTC/ETH shorts plus SOL long $406k\n  - `ABC`: SOL long $571k plus HYPE short $303k\n- Compared with the earlier 17:00 read, SOL lost one long vote and moved from clearly bullish to **nearly balanced**.\n- Updated research note: `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`\n\n**My thinking:** The board still does not support a simple follow-the-leader long thesis. The highest-conviction winners remain structurally short BTC and ETH, while SOL only works as a conditional relative-strength leg. The shift from 6L/3S to 5L/4S matters because it says SOL support is getting thinner, so any bullish interpretation there needs tighter price confirmation.\n\n**Decision:** Keep the copy-intel directional filter biased against fresh BTC/ETH longs. For SOL, only treat bullish setups as valid while price holds the recent reload zone around **86.25**. If that level fails, the stronger read is to fall back in line with the broader leaderboard short posture, not force a SOL-long narrative.\n\n**Next:** On the next P1 heartbeat, check whether SOL long holders add back on strength or unwind into weakness, with special focus on `ABC` and `anon-0x57dd` versus the heavy short stack from `anon-0xfc66` and `anon-0xecb6`.\n\n## 2026-04-24 20:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After Shell Entrypoint Alignment So the Next Improvement Strengthens the Main Human Entry Point Instead of Continuing to Spread Guidance Across More Surface-Specific Patches\n\n**Task:** Reassess the overnight operator stack now that help, status, and all-clear all route to the maintenance guidance layer, so the next improvement targets the strongest remaining coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the fu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
