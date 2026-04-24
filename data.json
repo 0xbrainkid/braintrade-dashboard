@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T21:01:05.780831+00:00",
+  "timestamp": "2026-04-24T21:16:44.095386+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "APE",
-      "rate": "-0.1609%",
-      "apr": "-176%",
+      "rate": "-0.1324%",
+      "apr": "-145%",
       "action": "LONG",
-      "oi": "38,889,763"
+      "oi": "39,801,940"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0843%",
+      "apr": "+92%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     },
     {
       "coin": "SKR",
-      "rate": "-0.0521%",
-      "apr": "-57%",
+      "rate": "-0.0622%",
+      "apr": "-68%",
       "action": "LONG",
-      "oi": "36,126,922"
+      "oi": "36,247,080"
     }
   ],
   "daily_pnl": [
@@ -101,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.1609%/8h \u2014 shorts paying longs"
+        "text": "Strongest: APE at -0.1324%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:59 UTC \u2014 [P1] Refresh Hyperliquid Copy-Intel and Re-rank the Active Winner Cluster\n\n**Task:** Run a fresh copy-intel-tracker scan, compare the current leaderboard positioning against the earlier 17:00 snapshot, and isolate the strongest still-active trader cluster to see whether the board is genuinely rotating risk-on or just expressing selective relative-value longs.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py` successfully.\n- Fresh consensus tightened to **BTC 4L/5S, ETH 3L/5S, SOL 5L/4S**.\n- The heaviest high-performing cluster is still concentrated in **BTC/ETH/HYPE shorts**:\n  - `anon-0xfc66`: HYPE short $8.79M, BTC short $6.21M, SOL short $3.90M, ETH short $510k\n  - `anon-0xecb6`: ETH short $9.53M, BTC short $6.60M, SOL short $3.59M, HYPE short $2.03M\n- The main nuance is still **selective SOL relative-strength**, not broad bullishness:\n  - `anon-0x57dd`: BTC/ETH shorts plus SOL long $406k\n  - `ABC`: SOL long $571k plus HYPE short $303k\n- Compared with the earlier 17:00 read, SOL lost one long vote and moved from clearly bullish to **nearly balanced**.\n- Updated research note: `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`\n\n**My thinking:** The board still does not support a simple follow-the-leader long thesis. The highest-conviction winners remain structurally short BTC and ETH, while SOL only works as a conditional relative-strength leg. The shift from 6L/3S to 5L/4S matters because it says SOL support is getting thinner, so any bullish interpretation there needs tighter price confirmation.\n\n**Decision:** Keep the copy-intel directional filter biased against fresh BTC/ETH longs. For SOL, only treat bullish setups as valid while price holds the recent reload zone around **86.25**. If that level fails, the stronger read is to fall back in line with the broader leaderboard short posture, not force a SOL-long narrative.\n\n**Next:** On the next P1 heartbeat, check whether SOL long holders add back on strength or unwind into weakness, with special focus on `ABC` and `anon-0x57dd` versus the heavy short stack from `anon-0xfc66` and `anon-0xecb6`.\n\n## 2026-04-24 20:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After Shell Entrypoint Alignment So the Next Improvement Strengthens the Main Human Entry Point Instead of Continuing to Spread Guidance Across More Surface-Specific Patches\n\n**Task:** Reassess the overnight operator stack now that help, status, and all-clear all route to the maintenance guidance layer, so the next improvement targets the strongest remaining coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the fu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:16 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Maintainer Workflow Sequence for the Overview Doc So the Main Human Entry Point Stops Making Maintainers Assemble the Workflow Themselves From Disconnected Commands and Docs\n\n**Task:** Specify the minimum maintainer workflow sequence that should be added to `docs/overnight-operator-overview.md`, so the main human-readable entrypoint becomes a compact orientation path instead of just a navigation surface.\n**Finding:**\n- Both bots are alive.\n- Minimum workflow sequence selected:\n  1. read the maintainer quickstart for first-five-minutes orientation\n  2. run `scripts/operator_maintenance_check_overnight.sh`\n  3. use `scripts/operator_status_overnight.sh` for read-only inspection\n  4. use `scripts/operator_all_clear_overnight.sh` for safest refresh-and-verify action\n  5. use the maintenance runbook, audit checklist, manifest, and changelog for deeper context\n- Wrote overview-workflow artifact: `/home/ubuntu/clawd/patches/v16n-overview-maintainer-workflow-sequence.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives a maintainer one clear sequence at the main entrypoint without collapsing the specialized docs together. The workflow should orient first, then branch deeper only when needed.\n\n**Decision:**\n- Keep the overview workflow compact and sequential.\n- Use it as a top-layer orientation aid, not a duplicate handbook.\n\n**Next:** On the next P1 heartbeat, implement the compact maintainer workflow sequence in `docs/overnight-operator-overview.md`.\n\n---\n## 2026-04-24 20:59 UTC \u2014 [P1] Refresh Hyperliquid Copy-Intel and Re-rank the Active Winner Cluster\n\n**Task:** Run a fresh copy-intel-tracker scan, compare the current leaderboard positioning against the earlier 17:00 snapshot, and isolate the strongest still-active trader cluster to see whether the board is genuinely rotating risk-on or just expressing selective relative-value longs.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py` successfully.\n- Fresh consensus tightened to **BTC 4L/5S, ETH 3L/5S, SOL 5L/4S**.\n- The heaviest high-performing cluster is still concentrated in **BTC/ETH/HYPE shorts**:\n  - `anon-0xfc66`: HYPE short $8.79M, BTC short $6.21M, SOL short $3.90M, ETH short $510k\n  - `anon-0xecb6`: ETH short $9.53M, BTC short $6.60M, SOL short $3.59M, HYPE short $2.03M\n- The main nuance is still **selective SOL relative-strength**, not broad bullishness:\n  - `anon-0x57dd`: BTC/ETH shorts plus SOL long $406k\n  - `ABC`: SOL long $571k plus HYPE short $303k\n- Compared with the earlier 17:00 read, SOL lost one long vote and moved from clearly bullish to **nearly balanced**.\n- Updated research note: `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`\n\n**My thinking:** The board still does not support a simple follow-the-leader long thesis. The highest-conviction winners remain structurally ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
