@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T06:30:02.749309+00:00",
+  "timestamp": "2026-04-24T06:39:54.971300+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1486%",
-      "apr": "-163%",
+      "rate": "-0.1675%",
+      "apr": "-183%",
       "action": "LONG",
-      "oi": "28,427,860"
+      "oi": "29,020,012"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.1192%",
-      "apr": "-131%",
+      "rate": "-0.1176%",
+      "apr": "-129%",
       "action": "LONG",
-      "oi": "86,839,030"
+      "oi": "86,762,776"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0861%",
-      "apr": "+94%",
+      "rate": "+0.0892%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1486%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1675%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 06:13 UTC \u2014 [P4: Alpha Research] Implement the Non-Mutating Overnight Status Command So the Operator Has a Clean Read-Only Inspection Surface That Complements the Action-Oriented All-Clear Path\n\n**Task:** Build the read-only overnight operator status command, then validate that it reports current artifact state and sync health without triggering a refresh.\n**Finding:**\n- Both bots are alive.\n- Built read-only status command:\n  - `/home/ubuntu/clawd/scripts/operator_status_overnight.sh`\n- Status output now includes:\n  - `snapshot_path`\n  - `snapshot_exists`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `summary_log_path`\n  - `summary_log_exists`\n  - `latest_summary_ts`\n  - `sync_status`\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the current artifact state without triggering a refresh.\n- Wrote status-command artifact: `/home/ubuntu/clawd/patches/v14i-nonmutating-status-command-live.spec.md`\n\n**My thinking:**\nThis is the right complement to the all-clear path. One command acts, one command inspects. That separation is clean, and it makes the operator model easier to trust instead of more muddled.\n\n**Decision:**\n- Keep this as the read-only inspection entrypoint for the overnight operator stack.\n- Keep refresh and status as separate top-level workflows.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both action and inspection paths are live.\n\n---\n## 2026-04-24 06:09 UTC \u2014 [P3: Strategy Development] Define the Minimum Output for the Non-Mutating Overnight Status Command So the Operator Gets a Clean Read-Only Inspection Surface Without Triggering a Refresh\n\n**Task:** Specify the minimum output for a read-only overnight operator status command, so the system has a quick inspection path that complements the action-oriented all-clear workflow.\n**Finding:**\n- Both bots are alive.\n- Minimum status fields selected:\n  - `snapshot_path`\n  - `snapshot_exists`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `summary_log_path`\n  - `summary_log_exists`\n  - `latest_summary_ts`\n  - `sync_status`\n- Behavior selected:\n  - read only\n  - no refresh or file mutation\n  - summarize current operator-facing state in one glance\n  - surface FAIL if the sync check fails\n- Wrote status-shape artifact: `/home/ubuntu/clawd/patches/v14h-nonmutating-status-output-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum. It tells the operator whether the two main artifacts exist, how fresh they are, what profiles they represent, and whether they still agree, without dragging them through a full refresh cycle.\n\n**Decision:**\n- Keep the status command read-only and artifact-focused.\n- Make sync status part of the default output instead of something the operator has to infer.\n\n**Next:** On t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 06:39 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Read-Only Status Command Went Live So the Next Improvement Clarifies the Operator Surface Instead of Expanding It Blindly\n\n**Task:** Reassess the overnight operator stack now that both action and inspection paths exist, so the next improvement improves clarity of use instead of continuing to add neighboring commands without an organizing layer.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - action path via operator all-clear command\n  - read-only inspection path via status command\n  - summary log\n  - snapshot\n  - sync check\n- Highest-value next gap:\n  - **no compact operator command map that explains the hierarchy from low-level to high-level**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14j-next-gap-after-status-command.spec.md`\n\n**My thinking:**\nThis is the right next move. The system is useful now, but usefulness starts to erode if the command surface becomes obvious only to someone who built it. A tiny operator map adds leverage by making the stack easier to approach and safer to use correctly.\n\n**Decision:**\n- Prioritize a compact overnight operator command map next.\n- Improve clarity before adding more behavior.\n\n**Next:** On the next P1 heartbeat, define the minimum content for the overnight operator command map.\n\n---\n## 2026-04-24 06:13 UTC \u2014 [P4: Alpha Research] Implement the Non-Mutating Overnight Status Command So the Operator Has a Clean Read-Only Inspection Surface That Complements the Action-Oriented All-Clear Path\n\n**Task:** Build the read-only overnight operator status command, then validate that it reports current artifact state and sync health without triggering a refresh.\n**Finding:**\n- Both bots are alive.\n- Built read-only status command:\n  - `/home/ubuntu/clawd/scripts/operator_status_overnight.sh`\n- Status output now includes:\n  - `snapshot_path`\n  - `snapshot_exists`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `summary_log_path`\n  - `summary_log_exists`\n  - `latest_summary_ts`\n  - `sync_status`\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the current artifact state without triggering a refresh.\n- Wrote status-command artifact: `/home/ubuntu/clawd/patches/v14i-nonmutating-status-command-live.spec.md`\n\n**My thinking:**\nThis is the right complement to the all-clear path. One command acts, one command inspects. That separation is clean, and it makes the operator model easier to trust instead of more muddled.\n\n**Decision:**\n- Keep this as the read-only inspection entrypoint for the overnight operator stack.\n- Keep refresh and status as separate top-level workflows.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both action",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
