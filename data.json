@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T15:10:15.871368+00:00",
+  "timestamp": "2026-04-24T15:14:05.226663+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1164%",
-      "apr": "-127%",
+      "rate": "-0.1121%",
+      "apr": "-123%",
       "action": "LONG",
-      "oi": "36,729,650"
+      "oi": "36,840,754"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0718%",
-      "apr": "+79%",
+      "rate": "+0.0730%",
+      "apr": "+80%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1164%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1121%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:09 UTC \u2014 [P1: Copy Intelligence] Implement the Overnight Operator Index Validator So the Machine-Readable Layer Stays Trustworthy as the Human-Facing Operator Surface Evolves Over Time\n\n**Task:** Build the lightweight validator for the machine-readable overnight operator index and validate it against the current live operator asset surface.\n**Finding:**\n- Both bots are alive.\n- Built index validator:\n  - `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py`\n- The validator now checks:\n  1. JSON loads successfully\n  2. required top-level keys exist\n  3. every indexed path exists\n  4. key expected assets appear in the correct sections\n- Live validation succeeded:\n  - `PASS: overnight operator index is aligned with asset surface`\n- Wrote index-validator artifact: `/home/ubuntu/clawd/patches/v15p-operator-index-validator-live.spec.md`\n\n**My thinking:**\nThis is the right trust-preserving layer for the structured surface. The machine-readable index is only useful if it stays aligned with reality, and now we have a cheap way to verify that.\n\n**Decision:**\n- Keep this as the lightweight validator for `overnight_operator_index.json`.\n- Use it to protect trust in the machine-readable operator layer without adding heavier testing burden.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the human-readable and machine-readable operator layers have maintenance checks.\n\n---\n## 2026-04-24 14:43 UTC \u2014 [P4: Alpha Research] Define the Minimum Checks for the Overnight Operator Index Validator So the Machine-Readable Layer Can Stay Trustworthy Without Turning Into Another Heavy Audit System\n\n**Task:** Specify the minimum checks for a validator that confirms the machine-readable overnight operator index stays aligned with the real operator asset surface.\n**Finding:**\n- Both bots are alive.\n- Validator inputs selected:\n  - `data/overnight_operator_index.json`\n  - current operator asset surface in scripts/docs/data/logs\n- Minimum checks selected:\n  1. JSON loads successfully\n  2. required top-level keys exist\n  3. every indexed path exists\n  4. key expected assets appear in the correct sections\n  5. report PASS/FAIL clearly\n- Scope selected:\n  - alignment check only\n  - no deeper behavioral validation of listed assets\n- Wrote validator-checks artifact: `/home/ubuntu/clawd/patches/v15o-operator-index-validator-checks.spec.md`\n\n**My thinking:**\nThis is the right minimum. Once we have a machine-readable layer, the main risk is silent drift, not lack of expressive power. A small alignment validator addresses that directly without creating another heavyweight maintenance burden.\n\n**Decision:**\n- Keep the validator lightweight and index-focused.\n- Use it to protect trust in the structured operator layer.\n\n**Next:** On the next P4 heartbeat, implement the overnight operator i",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Operator Index Validator Went Live So the Next Improvement Tightens Routine Maintenance Verification Instead of Expanding the Surface Further\n\n**Task:** Reassess the overnight operator stack now that both the human-readable and machine-readable operator surfaces have trust-preserving validation, so the next improvement targets the strongest remaining maintenance-verification gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator layer\n  - machine-readable operator layer\n  - validators and self-checks\n  - maintenance docs\n- Highest-value next gap:\n  - **no single combined maintenance check that runs both the top-level command self-check and the operator-index validator together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15q-next-gap-after-operator-index-validator.spec.md`\n\n**My thinking:**\nThis is the right next move because we now have the two main maintenance trust checks, but they still require separate execution. A combined check would make periodic verification faster and reduce the chance that one gets skipped.\n\n**Decision:**\n- Prioritize a compact combined maintenance check next.\n- Keep it focused on composing the two existing trust checks, not inventing new ones.\n\n**Next:** On the next P2 heartbeat, define the minimum behavior for the combined overnight operator maintenance check.\n\n---\n## 2026-04-24 15:09 UTC \u2014 [P1: Copy Intelligence] Implement the Overnight Operator Index Validator So the Machine-Readable Layer Stays Trustworthy as the Human-Facing Operator Surface Evolves Over Time\n\n**Task:** Build the lightweight validator for the machine-readable overnight operator index and validate it against the current live operator asset surface.\n**Finding:**\n- Both bots are alive.\n- Built index validator:\n  - `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py`\n- The validator now checks:\n  1. JSON loads successfully\n  2. required top-level keys exist\n  3. every indexed path exists\n  4. key expected assets appear in the correct sections\n- Live validation succeeded:\n  - `PASS: overnight operator index is aligned with asset surface`\n- Wrote index-validator artifact: `/home/ubuntu/clawd/patches/v15p-operator-index-validator-live.spec.md`\n\n**My thinking:**\nThis is the right trust-preserving layer for the structured surface. The machine-readable index is only useful if it stays aligned with reality, and now we have a cheap way to verify that.\n\n**Decision:**\n- Keep this as the lightweight validator for `overnight_operator_index.json`.\n- Use it to protect trust in the machine-readable operator layer without adding heavier testing burden.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the human-readable and machine-readable ope",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
