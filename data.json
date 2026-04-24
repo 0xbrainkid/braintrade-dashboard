@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T20:40:00.374204+00:00",
+  "timestamp": "2026-04-24T20:44:01.165243+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,38 +17,31 @@
   "funding_opportunities": [
     {
       "coin": "APE",
-      "rate": "-0.4206%",
+      "rate": "-0.4210%",
       "apr": "-461%",
       "action": "LONG",
-      "oi": "40,877,883"
+      "oi": "40,397,233"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0777%",
-      "apr": "+85%",
+      "rate": "+0.0784%",
+      "apr": "+86%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "SKR",
-      "rate": "-0.0530%",
-      "apr": "-58%",
+      "rate": "-0.0550%",
+      "apr": "-60%",
       "action": "LONG",
-      "oi": "36,137,774"
+      "oi": "36,139,304"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0512%",
-      "apr": "-56%",
+      "rate": "-0.0502%",
+      "apr": "-55%",
       "action": "LONG",
-      "oi": "89,054,218"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0505%",
-      "apr": "+55%",
-      "action": "SHORT",
-      "oi": "237,711,182"
+      "oi": "88,676,970"
     }
   ],
   "daily_pnl": [
@@ -122,11 +115,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.4206%/8h \u2014 shorts paying longs"
+        "text": "Strongest: APE at -0.4210%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "3 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bearish"
+        "text": "3 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -364,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:39 UTC \u2014 [P3: Strategy Development] Implement the Operator All-Clear-Surface Enhancement So the Safest Action Entry Point Also Exposes the Maintenance Runbook and Maintainer Quickstart and the Shell Routing Layer Becomes Consistent Across Help, Status, and Action Paths\n\n**Task:** Add the maintenance-guide pointers to the all-clear surface and validate that the safest action path now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The all-clear script was much leaner than expected, with a short refresh, sync check, and final all-clear line.\n- Patched the real tail output directly in `/home/ubuntu/clawd/scripts/operator_all_clear_overnight.sh`.\n- Added a compact `Maintenance docs` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the all-clear script and confirmed both maintenance guides now appear in the output.\n- Wrote all-clear-surface-live artifact: `/home/ubuntu/clawd/patches/v16l-all-clear-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right final shell-surface routing fix. Help, status, and all-clear now all point toward the maintenance guidance layer, which makes the operator surface much more coherent no matter where a maintainer starts.\n\n**Decision:**\n- Keep the all-clear surface pointer-oriented and non-invasive.\n- Treat these maintenance-guide pointers as part of the stable action-surface output.\n\n**Next:** On the next P3 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the shell entrypoints, docs, index, and validator all reflect the maintenance layer consistently.\n\n---\n## 2026-04-24 20:13 UTC \u2014 [P2: Smart Entry] Define the Minimum All-Clear-Surface Enhancement for Maintenance-Guide Discoverability So the Safest Action Entry Point Also Routes Maintainers Toward the New Guidance Layer and the Shell Surface Becomes Consistent End to End\n\n**Task:** Specify the minimum all-clear-surface enhancement needed so the safest operator action path explicitly points maintainers to the maintenance runbook and maintainer quickstart.\n**Finding:**\n- Both bots are alive.\n- Minimum enhancement selected:\n  - add one compact `Maintenance docs` section to `scripts/operator_all_clear_overnight.sh`\n  - include:\n    - `docs/overnight-operator-maintenance-runbook.md` \u2014 maintenance cadence guide\n    - `docs/overnight-operator-maintainer-quickstart.md` \u2014 first-five-minutes maintainer guide\n- Wrote all-clear-surface artifact: `/home/ubuntu/clawd/patches/v16k-all-clear-surface-maintenance-guide-discoverability.spec.md`\n\n**My thinking:**\nThis is the right minimum because it closes the last obvious shell-level routing gap. Once help, status, and all-clear all point toward the same guidance layer, the maintenance surface becomes much more consistent ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After Shell Entrypoint Alignment So the Next Improvement Strengthens the Main Human Entry Point Instead of Continuing to Spread Guidance Across More Surface-Specific Patches\n\n**Task:** Reassess the overnight operator stack now that help, status, and all-clear all route to the maintenance guidance layer, so the next improvement targets the strongest remaining coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the main overview doc does not yet summarize the maintainer workflow in one compact sequence**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16m-next-gap-after-shell-entrypoint-alignment.spec.md`\n\n**My thinking:**\nThis is the right next move because the surfaces are now consistent, but the main human-readable entrypoint still makes a maintainer piece together the workflow mentally. A short workflow sequence in the overview would unify what already exists without adding another standalone layer.\n\n**Decision:**\n- Prioritize a compact maintainer workflow section in the overview next.\n- Keep it as a sequencing aid, not a replacement for the specialized docs.\n\n**Next:** On the next P4 heartbeat, define the minimum maintainer workflow sequence to add to `docs/overnight-operator-overview.md`.\n\n---\n## 2026-04-24 20:39 UTC \u2014 [P3: Strategy Development] Implement the Operator All-Clear-Surface Enhancement So the Safest Action Entry Point Also Exposes the Maintenance Runbook and Maintainer Quickstart and the Shell Routing Layer Becomes Consistent Across Help, Status, and Action Paths\n\n**Task:** Add the maintenance-guide pointers to the all-clear surface and validate that the safest action path now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The all-clear script was much leaner than expected, with a short refresh, sync check, and final all-clear line.\n- Patched the real tail output directly in `/home/ubuntu/clawd/scripts/operator_all_clear_overnight.sh`.\n- Added a compact `Maintenance docs` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the all-clear script and confirmed both maintenance guides now appear in the output.\n- Wrote all-clear-surface-live artifact: `/home/ubuntu/clawd/patches/v16l-all-clear-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right final shell-surface routing fix. Help, status, and all-clear now all point toward the maintenance guidance layer, which makes the operator surfa",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -384,7 +377,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "5 opportunities"
+        "last_signal": "4 opportunities"
       },
       {
         "name": "SolSt1ne Content",
