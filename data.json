@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T05:00:01.288415+00:00",
+  "timestamp": "2026-04-24T05:00:56.045036+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1187%",
-      "apr": "-130%",
+      "rate": "-0.1308%",
+      "apr": "-143%",
       "action": "LONG",
-      "oi": "25,143,208"
+      "oi": "25,210,458"
     }
   ],
   "daily_pnl": [
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1187%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1308%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Snapshot-vs-Summary Sync Check Went Live So the Next Improvement Tightens the Operator Path Instead of Multiplying Independent Safety Steps\n\n**Task:** Reassess the overnight system now that the snapshot and summary log are cross-checked, so the next improvement strengthens the operator path without adding unnecessary conceptual branches.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human and machine reports\n  - stable snapshot\n  - operator summary log\n  - snapshot-vs-summary sync check\n  - refresh wrappers\n  - history and validation\n- Highest-value next gap:\n  - **no single command that runs operator refresh and then immediately runs the sync check, ending with a compact all-clear result**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14d-next-gap-after-sync-check.spec.md`\n\n**My thinking:**\nThis is the clean next tightening move. The pieces are all there, but the safest operator path still requires remembering one more step. A tiny combined command would reduce that gap without changing the underlying architecture at all.\n\n**Decision:**\n- Prioritize a wrapper that runs operator refresh and then the sync check.\n- End with a compact all-clear result on success.\n\n**Next:** On the next P3 heartbeat, define the minimum behavior for the refresh-plus-sync all-clear wrapper.\n\n---\n## 2026-04-24 04:39 UTC \u2014 [P2: Smart Entry] Implement the Snapshot-vs-Summary Sync Check So the Two Highest-Signal Operator Artifacts Can Be Verified Against Each Other With a Cheap Live PASS/FAIL Test\n\n**Task:** Build the tiny integrity check that confirms the latest machine-readable snapshot and latest operator summary-log entry are in sync, then validate it against the current live files.\n**Finding:**\n- Both bots are alive.\n- Built sync-check utility:\n  - `/home/ubuntu/clawd/scripts/check_snapshot_summary_sync.py`\n- The check verifies:\n  1. summary log exists and is non-empty\n  2. latest summary entry contains `snapshot_path`\n  3. latest summary entry path matches the expected snapshot file\n  4. latest summary entry `snapshot_ts` matches current snapshot mtime\n- Live validation succeeded:\n  - `PASS: snapshot and summary log are in sync`\n- Wrote sync-check-live artifact: `/home/ubuntu/clawd/patches/v14c-snapshot-summary-sync-check-live.spec.md`\n\n**My thinking:**\nThis is exactly the kind of tiny safety check I like. It\u2019s cheap, specific, and catches a real class of silent drift without dragging in a lot of extra machinery.\n\n**Decision:**\n- Keep this check as the integrity test for the two operator-facing artifacts.\n- Use it as the lightweight consistency guard for snapshot freshness vs persisted summary state.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator summary and sn",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 05:00 UTC \u2014 [P4: Alpha Research] Wire Live Regime and Fear-Greed Context into the Overnight Snapshot So the Dashboard Carries Actual Market Posture Instead of Only Internal Pipeline Health\n\n**Task:** Extend the overnight JSON snapshot with live alpha context by pulling the BTC regime classifier and Fear & Greed signal into the same report the dashboard refresh consumes.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py` to append an `alpha_context` block.\n- Live snapshot now includes:\n  - BTC regime: `RANGE`, score `2`, PM action `TRADE`\n  - Fear & Greed: `39` (`Fear`), but current sizing modifier stays neutral at `+0.00` and `1.00x`\n  - Consolidated execution posture with the regime gate plus confidence and sizing modifiers\n- Regime and sentiment are no longer trapped in separate tools, they now ride with the overnight snapshot used by operators.\n\n**My thinking:**\nThis is the right P4 move because it upgrades the snapshot from a pure pipeline-status artifact into a market-state artifact. The useful read right now is clear: regime is permissive, but sentiment is only mildly fearful, so there is no reason to juice size just because the gate is open.\n\n**Decision:**\n- Keep the new `alpha_context` block in the overnight report.\n- Treat `RANGE + neutral F&G modifier` as a green light for normal operation, not aggressive sizing.\n\n**Next:** On the next P4 heartbeat, push this same alpha context into the operator summary path so the latest refresh output shows market posture without needing a JSON dive.\n\n\n## 2026-04-24 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Snapshot-vs-Summary Sync Check Went Live So the Next Improvement Tightens the Operator Path Instead of Multiplying Independent Safety Steps\n\n**Task:** Reassess the overnight system now that the snapshot and summary log are cross-checked, so the next improvement strengthens the operator path without adding unnecessary conceptual branches.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human and machine reports\n  - stable snapshot\n  - operator summary log\n  - snapshot-vs-summary sync check\n  - refresh wrappers\n  - history and validation\n- Highest-value next gap:\n  - **no single command that runs operator refresh and then immediately runs the sync check, ending with a compact all-clear result**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14d-next-gap-after-sync-check.spec.md`\n\n**My thinking:**\nThis is the clean next tightening move. The pieces are all there, but the safest operator path still requires remembering one more step. A tiny combined command would reduce that gap without changing the underlying architecture at all.\n\n**Decision:**\n- Prioritize a wrapper that runs operator refresh and then the sync check.\n- End with a compact all-clear result on success.\n\n**Next",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
