@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T12:09:54.135039+00:00",
+  "timestamp": "2026-04-24T12:13:56.863727+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1509%",
-      "apr": "-165%",
+      "rate": "-0.1457%",
+      "apr": "-160%",
       "action": "LONG",
-      "oi": "34,921,452"
+      "oi": "34,634,996"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0922%",
-      "apr": "+101%",
+      "rate": "+0.0895%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1509%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1457%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 12:09 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Audit Checklist Went Live So the Next Improvement Strengthens Historical Continuity Instead of Adding Yet Another Runtime or Documentation Layer\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, manifest, self-check, and audit checklist all exist, so the next improvement targets the strongest remaining continuity and maintenance-history gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - help, map, examples, manifest\n  - self-check\n  - audit checklist\n- Highest-value next gap:\n  - **no compact changelog/index for the overnight operator stack itself**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15e-next-gap-after-audit-checklist.spec.md`\n\n**My thinking:**\nThis is the right next move because the system now has enough history that continuity matters. A compact changelog would make future audits and maintenance decisions easier to understand without needing to reconstruct the evolution from scattered worklog entries.\n\n**Decision:**\n- Prioritize a compact operator-stack changelog/index next.\n- Keep it focused on major additions and maintenance-relevant milestones.\n\n**Next:** On the next P2 heartbeat, define the minimum structure for the overnight operator changelog/index.\n\n---\n## 2026-04-24 11:43 UTC \u2014 [P1: Copy Intelligence] Implement the Compact Overnight Operator Audit Checklist So Periodic Maintenance of the Operator Surface Becomes a Small Repeatable Habit Instead of Ad Hoc Memory Work\n\n**Task:** Build the compact overnight operator audit checklist and validate that it covers the operator surface in a maintenance-friendly review format.\n**Finding:**\n- Both bots are alive.\n- Built audit checklist:\n  - `/home/ubuntu/clawd/docs/overnight-operator-audit-checklist.md`\n- The checklist now covers:\n  1. top-level command self-check\n  2. help command accuracy\n  3. command map presence/currentness\n  4. usage examples presence/currentness\n  5. manifest match to asset surface\n  6. sync check still passing against live artifacts\n- Validation succeeded and confirmed the checklist is compact, maintenance-focused, and complete enough for periodic review.\n- Wrote audit-checklist artifact: `/home/ubuntu/clawd/patches/v15d-operator-audit-checklist-live.spec.md`\n\n**My thinking:**\nThis is the right maintenance finishing piece. We now have not just the operator surface, but a lightweight way to keep it healthy over time without relying on memory or scattered notes.\n\n**Decision:**\n- Keep this as the compact periodic review checklist for the overnight operator stack.\n- Update it only when the operator surface meaningfully changes.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, manifest, self-chec",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 12:13 UTC \u2014 [P3: Strategy Development] Define the Minimum Structure for the Overnight Operator Changelog So the Evolution of the Operator Surface Can Be Understood Without Mining the Entire Worklog History\n\n**Task:** Specify the minimum structure for a compact overnight operator-stack changelog/index, so major operator-surface additions can be tracked in one continuity-oriented file.\n**Finding:**\n- Both bots are alive.\n- Required changelog sections selected:\n  1. date or milestone\n  2. addition or change\n  3. why it matters\n  4. files added or updated\n- Style selected:\n  - newest first\n  - compact bullet or short subsection per milestone\n  - maintenance-history oriented rather than narrative prose\n- Suggested scope selected:\n  - top-level commands\n  - docs/help/examples\n  - self-check and audit assets\n  - manifest and key maintenance surfaces\n- Wrote changelog-structure artifact: `/home/ubuntu/clawd/patches/v15f-operator-changelog-structure.spec.md`\n\n**My thinking:**\nThis is enough structure to make the history useful without recreating the worklog in another place. The goal is fast continuity for maintenance, not another journal.\n\n**Decision:**\n- Keep the changelog compact, newest-first, and operator-surface specific.\n- Limit it to major maintenance-relevant milestones.\n\n**Next:** On the next P3 heartbeat, implement the compact overnight operator changelog/index.\n\n---\n## 2026-04-24 12:09 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Audit Checklist Went Live So the Next Improvement Strengthens Historical Continuity Instead of Adding Yet Another Runtime or Documentation Layer\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, manifest, self-check, and audit checklist all exist, so the next improvement targets the strongest remaining continuity and maintenance-history gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - help, map, examples, manifest\n  - self-check\n  - audit checklist\n- Highest-value next gap:\n  - **no compact changelog/index for the overnight operator stack itself**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15e-next-gap-after-audit-checklist.spec.md`\n\n**My thinking:**\nThis is the right next move because the system now has enough history that continuity matters. A compact changelog would make future audits and maintenance decisions easier to understand without needing to reconstruct the evolution from scattered worklog entries.\n\n**Decision:**\n- Prioritize a compact operator-stack changelog/index next.\n- Keep it focused on major additions and maintenance-relevant milestones.\n\n**Next:** On the next P2 heartbeat, define the minimum structure for the overnight operator changelog/index.\n\n---\n## 2026-04-24 11:43 UTC \u2014 [P1: Copy Intelligence] Implement the Compact Overnight Operator Audit Checklist So Periodic Maintenance of the Operat",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
