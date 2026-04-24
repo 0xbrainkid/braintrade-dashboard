@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T03:39:49.760037+00:00",
+  "timestamp": "2026-04-24T03:44:19.795931+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,21 +17,21 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2415%",
-      "apr": "-264%",
+      "rate": "-0.2327%",
+      "apr": "-255%",
       "action": "LONG",
-      "oi": "91,640,688"
+      "oi": "90,889,188"
     },
     {
       "coin": "YZY",
-      "rate": "-0.1102%",
-      "apr": "-121%",
+      "rate": "-0.1113%",
+      "apr": "-122%",
       "action": "LONG",
       "oi": "1,149,962"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0740%",
+      "rate": "+0.0744%",
       "apr": "+81%",
       "action": "SHORT",
       "oi": "69,667,759"
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2415%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2327%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 03:39 UTC \u2014 [P2: Smart Entry] Define the Lightweight Operator Summary Log Path and Format So the Highest-Signal Refresh Outcome Stops Disappearing Into Ephemeral Stdout\n\n**Task:** Specify the file path and minimum format for a persistent lightweight log of the operator refresh summary, so the end-state signal remains available without requiring a full log dive.\n**Finding:**\n- Both bots are alive.\n- Selected summary log path:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Selected per-run summary fields:\n  - UTC timestamp\n  - status\n  - snapshot_path\n  - snapshot_ts\n  - latest_profiles\n  - ledger_health_status\n- Selected style:\n  - compact human-readable append log\n  - blank-line or delimiter separated\n  - optimized for fast skim rather than strict machine parsing\n- Wrote summary-log artifact: `/home/ubuntu/clawd/patches/v13y-operator-summary-log-path-and-format.spec.md`\n\n**My thinking:**\nThis gives us the useful middle layer we\u2019re missing. Full logs are too noisy for quick checks, and stdout is too fleeting. A small append-only summary log keeps the highest-signal operational state visible without creating another heavy system.\n\n**Decision:**\n- Use `logs/operator-refresh-summary.log` for persistent lightweight operator summaries.\n- Keep the format human-readable and intentionally compact.\n\n**Next:** On the next P2 heartbeat, implement summary-log appending in the operator refresh command and validate the new log output.\n\n---\n## 2026-04-24 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Refresh Command Went Live So the Next Improvement Adds Observability Instead of Just More Surface Area\n\n**Task:** Reassess the overnight system now that the operator-facing refresh command exists, so the next improvement strengthens observability and inspection value instead of blindly extending the interface surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable snapshot\n  - refresh-and-snapshot wrapper\n  - operator-facing refresh command with concise summary\n- Highest-value next gap:\n  - **no dedicated lightweight log artifact for the concise operator refresh summary**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13x-next-gap-after-operator-refresh-command.spec.md`\n\n**My thinking:**\nThis is the next clean step. The summary is useful, but right now it disappears unless someone captures stdout manually. A dedicated lightweight log would preserve the high-signal operational surface without forcing a dive into full logs.\n\n**Decision:**\n- Prioritize appending the concise operator refresh summary to its own lightweight log file.\n- Avoid adding new report surfaces before improving lightweight observability.\n\n**Next:** On the next P1 heartbeat, define the minimum format ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 03:43 UTC \u2014 [P3: Strategy Development] Implement the Lightweight Operator Summary Log So High-Signal Refresh Outcomes Persist Without Forcing a Full Log Dive\n\n**Task:** Update the operator refresh command so it appends its concise end-state summary to a lightweight persistent log, then validate the log output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated operator command:\n  - `/home/ubuntu/clawd/scripts/operator_refresh_overnight.sh`\n- New lightweight summary log:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- The command now:\n  - refreshes the system\n  - prints the concise summary to stdout\n  - appends the same summary to the lightweight log\n- Initial validation hit a shell quoting bug.\n- Fixed the quoting issue and reran successfully.\n- Validation confirmed appended summary entries in the log.\n- Wrote summary-log-live artifact: `/home/ubuntu/clawd/patches/v13z-operator-summary-log-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we caught the quoting bug immediately. This is exactly the kind of tiny operational break that can quietly make observability worse if it ships unchecked. Now the high-signal summary persists cleanly and stays easy to skim.\n\n**Decision:**\n- Keep `operator-refresh-summary.log` as the lightweight persistent trail for refresh outcomes.\n- Preserve the full logs and richer reports as separate deeper layers.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that lightweight persistent operator summaries are live.\n\n---\n## 2026-04-24 03:39 UTC \u2014 [P2: Smart Entry] Define the Lightweight Operator Summary Log Path and Format So the Highest-Signal Refresh Outcome Stops Disappearing Into Ephemeral Stdout\n\n**Task:** Specify the file path and minimum format for a persistent lightweight log of the operator refresh summary, so the end-state signal remains available without requiring a full log dive.\n**Finding:**\n- Both bots are alive.\n- Selected summary log path:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Selected per-run summary fields:\n  - UTC timestamp\n  - status\n  - snapshot_path\n  - snapshot_ts\n  - latest_profiles\n  - ledger_health_status\n- Selected style:\n  - compact human-readable append log\n  - blank-line or delimiter separated\n  - optimized for fast skim rather than strict machine parsing\n- Wrote summary-log artifact: `/home/ubuntu/clawd/patches/v13y-operator-summary-log-path-and-format.spec.md`\n\n**My thinking:**\nThis gives us the useful middle layer we\u2019re missing. Full logs are too noisy for quick checks, and stdout is too fleeting. A small append-only summary log keeps the highest-signal operational state visible without creating another heavy system.\n\n**Decision:**\n- Use `logs/operator-refresh-summary.log` for persistent lightweight operator summaries.\n- Keep the format human-readable and intentionally compact.\n\n*",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
