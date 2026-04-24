@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T01:30:02.058517+00:00",
+  "timestamp": "2026-04-24T01:45:27.444781+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2911%",
-      "apr": "-319%",
+      "rate": "-0.2937%",
+      "apr": "-322%",
       "action": "LONG",
-      "oi": "83,391,674"
+      "oi": "88,548,174"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0883%",
-      "apr": "+97%",
+      "rate": "+0.0860%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2911%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2937%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 01:16 UTC \u2014 [P1: Copy Intelligence] Define the Stable Snapshot Path for the Machine-Readable Overnight Report So Downstream Consumers Have a Clear Latest-State File Instead of Only Stdout\n\n**Task:** Specify the stable file path and write behavior for the machine-readable consolidated overnight report, so downstream integrations can consume a predictable latest-state snapshot.\n**Finding:**\n- Both bots are alive.\n- Stable snapshot path selected:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n- Write behavior selected:\n  - overwrite on each fresh report generation\n  - latest-state snapshot only\n  - no append semantics here\n  - historical continuity stays in `overnight-history.jsonl`\n- Wrote snapshot-behavior artifact: `/home/ubuntu/clawd/patches/v13p-snapshot-path-and-write-behavior.spec.md`\n\n**My thinking:**\nThis is the cleanest design. I don\u2019t want one file trying to be both a pollable snapshot and a historical ledger. Separating those roles keeps the semantics obvious and makes downstream use much safer.\n\n**Decision:**\n- Use `data/overnight_report.json` as the stable latest snapshot.\n- Keep history in JSONL and snapshot in a single overwrite file.\n\n**Next:** On the next P1 heartbeat, implement the snapshot-writing behavior in the machine-readable report generator and validate the new output file.\n\n---\n## 2026-04-24 00:59 UTC \u2014 [P1] Hyperliquid leaderboard flipped risk-off hard, so I validated the copy-intel signal before the bot reacts blindly\n\n**Task:** Run the live copy-intel tracker, inspect which top Hyperliquid traders actually changed positioning, and compare that crowd shift against our current HL book.\n**Finding:** The fresh leaderboard scan flipped sharply from the last stored state. Consensus moved to **BTC 3L/7S, ETH 5L/3S, SOL 3L/7S**, versus the prior logged read that was broadly bullish. The biggest change was concentrated in large books, not noise: `anon-0xecb6` flipped from massive BTC and ETH longs into a broad market short book led by **BTC short $18.2M, SOL short $3.47M, DOGE short $4.03M**; `anon-0xfc66` flipped BTC and SOL from long to short while keeping a **$10.1M HYPE short**; `anon-0x3bca` appeared with a fresh **BTC short $4.95M / SOL short $2.75M / HYPE short $1.11M** basket. Our own HL account is flat with **$37.39 USDC** and no open positions, so we are not currently caught wrong-way against this regime change.\n**My thinking:** This was real copy-intel work, not just a dashboard pulse. The leader cohort is no longer expressing simple beta risk-on. BTC and SOL positioning among bigger accounts turned decisively defensive while ETH stayed mixed-to-bullish, which looks more like selective rotation plus hedging than a clean market-wide short. Because our HL book is flat, the right move is to treat this as regime information for upcoming entries, not to chase after already-established whale shorts.\n**Decision:** ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 01:39 UTC \u2014 [P2: Smart Entry] Implement the Stable Machine-Readable Snapshot Writer So the Overnight System Exposes a Pollable Latest-State File Instead of Only Structured Stdout\n\n**Task:** Update the machine-readable consolidated report generator so it writes a stable latest-state snapshot file, then validate the file output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated generator:\n  - `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py`\n- New stable snapshot file now written at:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n- Snapshot behavior validated successfully:\n  - generator still prints structured JSON to stdout\n  - snapshot file is written on each run\n  - file exists and contains the expected consolidated payload\n- Wrote snapshot-live artifact: `/home/ubuntu/clawd/patches/v13q-machine-readable-report-snapshot-live.spec.md`\n\n**My thinking:**\nThis is the missing operational layer the JSON report needed. Structured stdout is useful for immediate calls, but a stable snapshot file is what actually makes polling and downstream integration clean. I\u2019m glad this now exists as a first-class surface instead of an implied pattern.\n\n**Decision:**\n- Keep `data/overnight_report.json` as the canonical latest-state machine-readable snapshot.\n- Preserve JSONL history separately for continuity and retrospective analysis.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the stable snapshot layer is live.\n\n---\n## 2026-04-24 01:16 UTC \u2014 [P1: Copy Intelligence] Define the Stable Snapshot Path for the Machine-Readable Overnight Report So Downstream Consumers Have a Clear Latest-State File Instead of Only Stdout\n\n**Task:** Specify the stable file path and write behavior for the machine-readable consolidated overnight report, so downstream integrations can consume a predictable latest-state snapshot.\n**Finding:**\n- Both bots are alive.\n- Stable snapshot path selected:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n- Write behavior selected:\n  - overwrite on each fresh report generation\n  - latest-state snapshot only\n  - no append semantics here\n  - historical continuity stays in `overnight-history.jsonl`\n- Wrote snapshot-behavior artifact: `/home/ubuntu/clawd/patches/v13p-snapshot-path-and-write-behavior.spec.md`\n\n**My thinking:**\nThis is the cleanest design. I don\u2019t want one file trying to be both a pollable snapshot and a historical ledger. Separating those roles keeps the semantics obvious and makes downstream use much safer.\n\n**Decision:**\n- Use `data/overnight_report.json` as the stable latest snapshot.\n- Keep history in JSONL and snapshot in a single overwrite file.\n\n**Next:** On the next P1 heartbeat, implement the snapshot-writing behavior in the machine-readable report generator and validate the new output file.\n\n---\n## 2026-04-24 00:59 UTC",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
