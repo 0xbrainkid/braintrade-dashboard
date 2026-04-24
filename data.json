@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T14:30:01.613497+00:00",
+  "timestamp": "2026-04-24T14:39:57.203420+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1391%",
-      "apr": "-152%",
+      "rate": "-0.1434%",
+      "apr": "-157%",
       "action": "LONG",
-      "oi": "38,632,648"
+      "oi": "37,341,338"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0961%",
-      "apr": "+105%",
+      "rate": "+0.0847%",
+      "apr": "+93%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1391%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1434%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 14:13 UTC \u2014 [P2: Smart Entry] Implement the Machine-Readable Overnight Operator Index So the Full Operator Surface Becomes Easier to Consume for Future Automation and Audit Tooling\n\n**Task:** Build the machine-readable overnight operator index and validate that it emits a clean JSON representation of the operator surface.\n**Finding:**\n- Both bots are alive.\n- Built machine-readable index:\n  - `/home/ubuntu/clawd/data/overnight_operator_index.json`\n- Index now exposes four top-level sections:\n  - `commands`\n  - `docs`\n  - `artifacts`\n  - `integrity_tools`\n- Each item includes:\n  - `name`\n  - `path`\n  - `role`\n- Validation succeeded and confirmed the JSON loads and prints cleanly.\n- Wrote index artifact: `/home/ubuntu/clawd/patches/v15m-operator-index-live.spec.md`\n\n**My thinking:**\nThis is the right next leverage layer. The human-facing operator surface is now strong, and this gives future automation or audit tooling a direct structured view instead of forcing it to infer everything from prose docs.\n\n**Decision:**\n- Keep this as the machine-readable companion to the human operator surface.\n- Extend it only when the operator asset surface materially changes.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both human-readable and machine-readable operator index layers are live.\n\n---\n## 2026-04-24 14:09 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Schema for the Machine-Readable Overnight Operator Index So the Full Operator Surface Becomes Easier to Consume for Future Automation and Audit Tooling\n\n**Task:** Specify the minimum schema for a machine-readable overnight operator index, so the operator surface can be represented compactly for future automation and audit use without depending only on human-readable docs.\n**Finding:**\n- Both bots are alive.\n- Selected top-level index object:\n  - `commands`\n  - `docs`\n  - `artifacts`\n  - `integrity_tools`\n- Selected minimum item fields:\n  - `name`\n  - `path`\n  - `role`\n- Scope selected:\n  - commands = top-level operator commands\n  - docs = command map, examples, manifest, audit checklist, changelog, overview\n  - artifacts = snapshot, summary log, history log\n  - integrity_tools = sync check and self-check\n- Wrote operator-index-schema artifact: `/home/ubuntu/clawd/patches/v15l-operator-index-schema.spec.md`\n\n**My thinking:**\nThis is the right minimum because it mirrors the human-facing organization we already built, but in a form future tooling can consume directly. It\u2019s compact, clear, and easy to extend.\n\n**Decision:**\n- Keep the machine-readable index structurally parallel to the human operator surface.\n- Start with only `name`, `path`, and `role` per item.\n\n**Next:** On the next P1 heartbeat, implement the machine-readable overnight operator index and validate the emitted JSON.\n\n---\n## 2026-04-24 13:43 UTC \u2014 [P4: Alph",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 14:39 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Machine-Readable Operator Index Went Live So the Next Improvement Protects Trust in the Structured Layer Instead of Merely Adding More Metadata\n\n**Task:** Reassess the overnight operator stack now that both human-readable and machine-readable operator index layers exist, so the next improvement targets the strongest remaining robustness gap in that structured surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator docs and workflows\n  - machine-readable operator index\n  - maintenance docs and checks\n- Highest-value next gap:\n  - **no validator that confirms `overnight_operator_index.json` stays aligned with the real operator asset surface**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15n-next-gap-after-operator-index.spec.md`\n\n**My thinking:**\nThis is the right next move. Once a machine-readable layer exists, its value depends on trust. A lightweight validator is the cleanest way to keep that trust without complicating the human-facing side.\n\n**Decision:**\n- Prioritize a validator for the machine-readable operator index next.\n- Keep it lightweight and asset-surface focused.\n\n**Next:** On the next P3 heartbeat, define the minimum checks for the overnight operator index validator.\n\n---\n## 2026-04-24 14:13 UTC \u2014 [P2: Smart Entry] Implement the Machine-Readable Overnight Operator Index So the Full Operator Surface Becomes Easier to Consume for Future Automation and Audit Tooling\n\n**Task:** Build the machine-readable overnight operator index and validate that it emits a clean JSON representation of the operator surface.\n**Finding:**\n- Both bots are alive.\n- Built machine-readable index:\n  - `/home/ubuntu/clawd/data/overnight_operator_index.json`\n- Index now exposes four top-level sections:\n  - `commands`\n  - `docs`\n  - `artifacts`\n  - `integrity_tools`\n- Each item includes:\n  - `name`\n  - `path`\n  - `role`\n- Validation succeeded and confirmed the JSON loads and prints cleanly.\n- Wrote index artifact: `/home/ubuntu/clawd/patches/v15m-operator-index-live.spec.md`\n\n**My thinking:**\nThis is the right next leverage layer. The human-facing operator surface is now strong, and this gives future automation or audit tooling a direct structured view instead of forcing it to infer everything from prose docs.\n\n**Decision:**\n- Keep this as the machine-readable companion to the human operator surface.\n- Extend it only when the operator asset surface materially changes.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both human-readable and machine-readable operator index layers are live.\n\n---\n## 2026-04-24 14:09 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Schema for the Machine-Readable Overnight Operator Index So the Full Operator Surface Beco",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
