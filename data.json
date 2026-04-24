@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T02:39:51.283490+00:00",
+  "timestamp": "2026-04-24T02:43:50.172077+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2637%",
-      "apr": "-289%",
+      "rate": "-0.2653%",
+      "apr": "-291%",
       "action": "LONG",
-      "oi": "90,968,246"
+      "oi": "91,121,058"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0796%",
+      "rate": "+0.0793%",
       "apr": "+87%",
       "action": "SHORT",
       "oi": "69,669,296"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0625%",
-      "apr": "-68%",
+      "rate": "-0.0649%",
+      "apr": "-71%",
       "action": "LONG",
       "oi": "1,151,934"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2637%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2653%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 02:39 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Refresh-and-Snapshot Wrapper Went Live So the Next Improvement Reduces Operator Friction Without Disturbing the Core Architecture\n\n**Task:** Reassess the overnight monitoring stack now that snapshot freshness has an explicit operational path, so the next improvement targets the strongest remaining usability gap without undoing the clean separation underneath.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - ledger validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable latest snapshot file\n  - manual review wrapper\n  - refresh-and-snapshot wrapper\n- Highest-value next gap:\n  - **no single operator-facing command that refreshes, rewrites the snapshot, and prints a concise end-state summary**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13u-next-gap-after-refresh-and-snapshot-wrapper.spec.md`\n\n**My thinking:**\nThis is a usability layer, but it\u2019s finally the right kind: not another disconnected surface, just a tighter end-state summary after the important work finishes. The underlying architecture is already in good shape, so the best next move is reducing operator mental overhead at the finish line.\n\n**Decision:**\n- Prioritize a thin operator-facing wrapper that refreshes the system and emits a concise end-state summary.\n- Keep the current production/report/snapshot layers intact underneath.\n\n**Next:** On the next P2 heartbeat, define the minimum outcome summary for this operator-facing refresh command.\n\n---\n## 2026-04-24 02:13 UTC \u2014 [P1: Copy Intelligence] Implement the Refresh-and-Snapshot Wrapper So the Overnight System Has One Explicit Success Path That Guarantees a Fresh Machine-Readable Snapshot\n\n**Task:** Build the wrapper that refreshes the overnight pipeline and regenerates the stable machine-readable snapshot in one flow, then validate that the snapshot file is rewritten on success.\n**Finding:**\n- Both bots are alive.\n- Built wrapper:\n  - `/home/ubuntu/clawd/scripts/refresh_and_snapshot_overnight.sh`\n- Wrapper behavior:\n  1. runs `run_overnight_monitoring.sh`\n  2. runs `report_overnight_pipeline_json.py`\n  3. exits non-zero on failure\n  4. rewrites `data/overnight_report.json` on success\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Snapshot timestamp validation passed.\n- Wrote wrapper-live artifact: `/home/ubuntu/clawd/patches/v13t-refresh-and-snapshot-wrapper-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we validated this instead of just declaring it done. The wrapper is small, but this is exactly the kind of operational contract that needs a real end-to-end proof. Now freshness is explicit and mechanically verifiable.\n\n**Decision:**\n- Keep this wrapper as the canonical refresh-plus-fresh-snapshot co",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 02:43 UTC \u2014 [P3: Strategy Development] Define the Minimum Outcome Summary for the Operator Refresh Command So Freshness and Health Can Be Confirmed in One Glance Instead of Reassembled From Multiple Outputs\n\n**Task:** Specify the minimum end-state summary for the operator-facing refresh command, so operators can confirm success, freshness, and ledger health without rereading full report output.\n**Finding:**\n- Both bots are alive.\n- Minimum summary fields selected:\n  - `status`\n  - `snapshot_path`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `ledger_health_status`\n- Presentation choice:\n  - concise human-readable lines emitted at the end of a successful refresh flow\n- Wrote summary-shape artifact: `/home/ubuntu/clawd/patches/v13v-operator-refresh-summary-shape.spec.md`\n\n**My thinking:**\nThis is enough. Anything smaller would still force a human to go hunting, and anything much larger would turn the summary back into another full report. The point is glanceable operational confidence.\n\n**Decision:**\n- Keep the operator summary minimal and end-state focused.\n- Optimize for quick confirmation of success, freshness, and health.\n\n**Next:** On the next P3 heartbeat, implement the operator-facing refresh command and emit this concise end-state summary.\n\n---\n## 2026-04-24 02:39 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Refresh-and-Snapshot Wrapper Went Live So the Next Improvement Reduces Operator Friction Without Disturbing the Core Architecture\n\n**Task:** Reassess the overnight monitoring stack now that snapshot freshness has an explicit operational path, so the next improvement targets the strongest remaining usability gap without undoing the clean separation underneath.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - ledger validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable latest snapshot file\n  - manual review wrapper\n  - refresh-and-snapshot wrapper\n- Highest-value next gap:\n  - **no single operator-facing command that refreshes, rewrites the snapshot, and prints a concise end-state summary**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13u-next-gap-after-refresh-and-snapshot-wrapper.spec.md`\n\n**My thinking:**\nThis is a usability layer, but it\u2019s finally the right kind: not another disconnected surface, just a tighter end-state summary after the important work finishes. The underlying architecture is already in good shape, so the best next move is reducing operator mental overhead at the finish line.\n\n**Decision:**\n- Prioritize a thin operator-facing wrapper that refreshes the system and emits a concise end-state summary.\n- Keep the current production/report/snapshot layers intact underneath.\n\n**Next:** On the next P2 heartbeat, define the minimum outcome summary for this operator-facing refresh command.\n\n---\n## 2026-04-24 02:13 U",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
