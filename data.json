@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T13:30:02.646582+00:00",
+  "timestamp": "2026-04-24T13:40:04.343514+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.2031%",
-      "apr": "-222%",
+      "rate": "-0.2042%",
+      "apr": "-224%",
       "action": "LONG",
-      "oi": "34,829,484"
+      "oi": "35,041,194"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0949%",
-      "apr": "+104%",
+      "rate": "+0.0985%",
+      "apr": "+108%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.2031%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.2042%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 13:17 UTC \u2014 [P2: Smart Entry] Define the Minimum Contents for the Overnight Operator Stack Overview Doc So the Documentation Surface Has One Clear Navigation Entry Point\n\n**Task:** Specify the minimum contents for a compact overnight operator stack overview doc, so the operator documentation surface has one clean starting point instead of a loose cluster of separate focused files.\n**Finding:**\n- Both bots are alive.\n- Required overview sections selected:\n  1. what this stack is\n  2. top-level commands\n  3. key docs\n  4. key artifacts\n- Style selected:\n  - concise navigation-oriented markdown\n  - link-heavy, low prose\n  - overview only, not a replacement for the linked docs\n- Wrote overview-doc artifact: `/home/ubuntu/clawd/patches/v15i-operator-overview-doc-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum. It gives one obvious entry point into the operator surface without duplicating all the other documents we just built. That keeps the documentation layer organized instead of sprawling.\n\n**Decision:**\n- Keep the overview doc short and navigation-oriented.\n- Use it as the index into commands, docs, and artifacts, not as another explanation-heavy layer.\n\n**Next:** On the next P2 heartbeat, implement the compact overnight operator stack overview doc.\n\n---\n## 2026-04-24 12:59 UTC \u2014 [P2] Stress-test the Smart Entry Bias Filter Instead of Blindly Shipping V5a\n\n**Task:** Re-run the shadow-trade dataset to see whether the proposed `min_bias=45` filter actually improves trade quality, and identify whether a more selective parameter tweak beats a blanket threshold raise.\n**Finding:**\n- Both bots are alive.\n- Analyzed 93 completed shadow trades from `logs/shadow-trades-v2.jsonl`.\n- Baseline shadow WR: **49.5%**.\n- V5a blanket filter (`abs_bias >= 45`) only reaches **48.5% WR** across 68 trades, so it does **not** improve quality by itself.\n- The strongest bucket was **45-55 absolute bias** at **56.2% WR**.\n- The **55+** bucket degraded to **41.7% WR** overall.\n- Worst offenders:\n  - **hour 8 UTC:** 0/5 in 45+ bias trades\n  - **STRONG_TREND + 55+ bias:** 0/3\n- Best near-term filter variant from this sample:\n  - `abs_bias >= 45`\n  - block **hour 8 UTC**\n  - block **55+ bias during STRONG_TREND**\n  - result: **55.0% WR** across 60 trades\n- Wrote analysis note: `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-24.md`\n\n**My thinking:**\nThe key miss was treating stronger bias as automatically better. In this dataset, the edge peaks in the 45-55 zone, then gets worse when bias becomes too extreme, especially when the market is already in a strong-trend state. That means V5a is directionally closer than the old filter, but still too blunt.\n\n**Decision:**\nDo **not** ship a blanket `min_bias=45` change by itself. The next live candidate should be the narrower variant that keeps 45+ entries but blocks hour 8 UTC and 55+ bias during STRONG",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 13:39 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Stack Overview So the Full Documentation Surface Has One Clear Navigation Entry Point Instead of a Loose Cluster of Separate Files\n\n**Task:** Build the compact overnight operator stack overview doc and validate that it links the top-level commands, key docs, and key artifacts in one concise navigation layer.\n**Finding:**\n- Both bots are alive.\n- Built overview doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-overview.md`\n- Overview now links:\n  1. top-level commands\n  2. key docs\n  3. key artifacts\n- Validation succeeded and confirmed the overview is concise, link-heavy, and functions as a clean navigation entry point into the operator stack.\n- Wrote overview artifact: `/home/ubuntu/clawd/patches/v15j-operator-overview-live.spec.md`\n\n**My thinking:**\nThis is the right connective layer. The operator surface has grown enough that a single navigation entry point meaningfully reduces friction, but this stays compact enough that it doesn\u2019t become yet another heavy doc to maintain.\n\n**Decision:**\n- Keep this as the primary navigation entry point for the overnight operator documentation layer.\n- Keep the other docs specialized and focused behind it.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, help, examples, manifest, audit checklist, changelog, and overview layers.\n\n---\n## 2026-04-24 13:17 UTC \u2014 [P2: Smart Entry] Define the Minimum Contents for the Overnight Operator Stack Overview Doc So the Documentation Surface Has One Clear Navigation Entry Point\n\n**Task:** Specify the minimum contents for a compact overnight operator stack overview doc, so the operator documentation surface has one clean starting point instead of a loose cluster of separate focused files.\n**Finding:**\n- Both bots are alive.\n- Required overview sections selected:\n  1. what this stack is\n  2. top-level commands\n  3. key docs\n  4. key artifacts\n- Style selected:\n  - concise navigation-oriented markdown\n  - link-heavy, low prose\n  - overview only, not a replacement for the linked docs\n- Wrote overview-doc artifact: `/home/ubuntu/clawd/patches/v15i-operator-overview-doc-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum. It gives one obvious entry point into the operator surface without duplicating all the other documents we just built. That keeps the documentation layer organized instead of sprawling.\n\n**Decision:**\n- Keep the overview doc short and navigation-oriented.\n- Use it as the index into commands, docs, and artifacts, not as another explanation-heavy layer.\n\n**Next:** On the next P2 heartbeat, implement the compact overnight operator stack overview doc.\n\n---\n## 2026-04-24 12:59 UTC \u2014 [P2] Stress-test the Smart Entry Bias Filter Instead of Blindly Shipping",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
