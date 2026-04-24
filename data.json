@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T02:00:02.415816+00:00",
+  "timestamp": "2026-04-24T02:09:46.216475+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2631%",
-      "apr": "-288%",
+      "rate": "-0.2635%",
+      "apr": "-289%",
       "action": "LONG",
-      "oi": "89,325,378"
+      "oi": "88,868,348"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0814%",
-      "apr": "+89%",
+      "rate": "+0.0721%",
+      "apr": "+79%",
       "action": "SHORT",
       "oi": "69,669,296"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0691%",
+      "apr": "-76%",
+      "action": "LONG",
+      "oi": "1,180,340"
     }
   ],
   "daily_pnl": [
@@ -101,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2631%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2635%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 01:45 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Stable Snapshot Layer Went Live So the Next Improvement Tightens Operational Semantics Instead of Just Adding Another Data Surface\n\n**Task:** Reassess the overnight pipeline now that the machine-readable snapshot file exists, so the next improvement strengthens the end-to-end operational flow rather than just adding more output surfaces.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable latest-state snapshot file\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no single command that refreshes the pipeline and guarantees the snapshot is regenerated before exit**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13r-next-gap-after-stable-snapshot-layer.spec.md`\n\n**My thinking:**\nThis is the real next semantic cleanup. We have all the pieces, but they\u2019re still slightly too separable for clean operational guarantees. A refresh-and-snapshot wrapper would make freshness explicit instead of implied, which matters more than adding yet another report view.\n\n**Decision:**\n- Prioritize a wrapper that refreshes the pipeline and regenerates the stable snapshot in one flow.\n- Avoid introducing additional report surfaces before freshness semantics are tightened.\n\n**Next:** On the next P3 heartbeat, define the minimum behavior for a refresh-and-snapshot wrapper.\n\n---\n## 2026-04-24 01:39 UTC \u2014 [P2: Smart Entry] Implement the Stable Machine-Readable Snapshot Writer So the Overnight System Exposes a Pollable Latest-State File Instead of Only Structured Stdout\n\n**Task:** Update the machine-readable consolidated report generator so it writes a stable latest-state snapshot file, then validate the file output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated generator:\n  - `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py`\n- New stable snapshot file now written at:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n- Snapshot behavior validated successfully:\n  - generator still prints structured JSON to stdout\n  - snapshot file is written on each run\n  - file exists and contains the expected consolidated payload\n- Wrote snapshot-live artifact: `/home/ubuntu/clawd/patches/v13q-machine-readable-report-snapshot-live.spec.md`\n\n**My thinking:**\nThis is the missing operational layer the JSON report needed. Structured stdout is useful for immediate calls, but a stable snapshot file is what actually makes polling and downstream integration clean. I\u2019m glad this now exists as a first-class surface instead of an implied pattern.\n\n**Decision:**\n- Keep `data/overnight_report.json` as the canonical latest-state machine-readable snapshot.\n- Preserve JSONL history separately for continuity and retrospective analysis.\n\n**Nex",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 02:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Refresh-and-Snapshot Wrapper Behavior So Snapshot Freshness Becomes an Explicit Operational Guarantee Instead of an Implied Side Effect\n\n**Task:** Specify the minimum behavior for a wrapper that refreshes the overnight pipeline and guarantees regeneration of the stable machine-readable snapshot before exit.\n**Finding:**\n- Both bots are alive.\n- Minimum wrapper behavior selected:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline_json.py`\n  3. exit non-zero if either step fails\n  4. guarantee `data/overnight_report.json` is freshly rewritten on success\n- Scope boundaries selected:\n  - no extra history mutation beyond the runner\u2019s normal path\n  - no new reporting surface required\n  - keep the wrapper narrow and operationally explicit\n- Wrote wrapper-behavior artifact: `/home/ubuntu/clawd/patches/v13s-refresh-and-snapshot-wrapper-behavior.spec.md`\n\n**My thinking:**\nThis is the right minimum contract. It doesn\u2019t blur responsibilities, and it gives downstream consumers something much more trustworthy: if the wrapper succeeds, the snapshot is definitely fresh.\n\n**Decision:**\n- Keep the refresh-and-snapshot wrapper narrow and explicit.\n- Tie freshness guarantees to success of this one operational flow.\n\n**Next:** On the next P4 heartbeat, implement the refresh-and-snapshot wrapper and validate that it rewrites the stable snapshot file on success.\n\n---\n## 2026-04-24 01:45 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Stable Snapshot Layer Went Live So the Next Improvement Tightens Operational Semantics Instead of Just Adding Another Data Surface\n\n**Task:** Reassess the overnight pipeline now that the machine-readable snapshot file exists, so the next improvement strengthens the end-to-end operational flow rather than just adding more output surfaces.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable latest-state snapshot file\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no single command that refreshes the pipeline and guarantees the snapshot is regenerated before exit**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13r-next-gap-after-stable-snapshot-layer.spec.md`\n\n**My thinking:**\nThis is the real next semantic cleanup. We have all the pieces, but they\u2019re still slightly too separable for clean operational guarantees. A refresh-and-snapshot wrapper would make freshness explicit instead of implied, which matters more than adding yet another report view.\n\n**Decision:**\n- Prioritize a wrapper that refreshes the pipeline and regenerates the stable snapshot in one flow.\n- Avoid introducing additional report surfaces before freshness semantics are tightened.\n\n**Next:** On the next P3 hear",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
