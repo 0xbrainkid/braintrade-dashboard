@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T14:00:02.404061+00:00",
+  "timestamp": "2026-04-24T14:09:54.078893+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1569%",
-      "apr": "-172%",
+      "rate": "-0.1409%",
+      "apr": "-154%",
       "action": "LONG",
-      "oi": "36,130,002"
+      "oi": "38,116,700"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0884%",
-      "apr": "+97%",
+      "rate": "+0.1001%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "69,667,759"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0500%",
-      "apr": "+55%",
-      "action": "SHORT",
-      "oi": "237,713,754"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1569%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1409%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 13:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Overview Doc Went Live So the Next Improvement Adds Future Leverage Instead of Yet Another Human-Facing Layer\n\n**Task:** Reassess the overnight operator stack now that the human-facing workflows, navigation, maintenance, and continuity layers are all in place, so the next improvement targets the strongest remaining leverage point.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - navigation/help/examples\n  - maintenance docs\n  - self-check and audit layers\n- Highest-value next gap:\n  - **no machine-readable index of the overnight operator surface**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15k-next-gap-after-operator-overview.spec.md`\n\n**My thinking:**\nThis is the right next step because the human layer is strong enough now. The next real leverage point is making the operator surface easier for future automation or audit tooling to consume, not adding more prose.\n\n**Decision:**\n- Prioritize a compact machine-readable index of the overnight operator surface next.\n- Keep the current human-facing experience intact.\n\n**Next:** On the next P4 heartbeat, define the minimum schema for the machine-readable overnight operator index.\n\n---\n## 2026-04-24 13:39 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Stack Overview So the Full Documentation Surface Has One Clear Navigation Entry Point Instead of a Loose Cluster of Separate Files\n\n**Task:** Build the compact overnight operator stack overview doc and validate that it links the top-level commands, key docs, and key artifacts in one concise navigation layer.\n**Finding:**\n- Both bots are alive.\n- Built overview doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-overview.md`\n- Overview now links:\n  1. top-level commands\n  2. key docs\n  3. key artifacts\n- Validation succeeded and confirmed the overview is concise, link-heavy, and functions as a clean navigation entry point into the operator stack.\n- Wrote overview artifact: `/home/ubuntu/clawd/patches/v15j-operator-overview-live.spec.md`\n\n**My thinking:**\nThis is the right connective layer. The operator surface has grown enough that a single navigation entry point meaningfully reduces friction, but this stays compact enough that it doesn\u2019t become yet another heavy doc to maintain.\n\n**Decision:**\n- Keep this as the primary navigation entry point for the overnight operator documentation layer.\n- Keep the other docs specialized and focused behind it.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, help, examples, manifest, audit checklist, changelog, and overview layers.\n\n---\n## 2026-04-24 13:17 UTC \u2014 [P2: Smart Entry] Define the Minimum Contents for the Overnight Operator Stack Over",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 14:09 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Schema for the Machine-Readable Overnight Operator Index So the Full Operator Surface Becomes Easier to Consume for Future Automation and Audit Tooling\n\n**Task:** Specify the minimum schema for a machine-readable overnight operator index, so the operator surface can be represented compactly for future automation and audit use without depending only on human-readable docs.\n**Finding:**\n- Both bots are alive.\n- Selected top-level index object:\n  - `commands`\n  - `docs`\n  - `artifacts`\n  - `integrity_tools`\n- Selected minimum item fields:\n  - `name`\n  - `path`\n  - `role`\n- Scope selected:\n  - commands = top-level operator commands\n  - docs = command map, examples, manifest, audit checklist, changelog, overview\n  - artifacts = snapshot, summary log, history log\n  - integrity_tools = sync check and self-check\n- Wrote operator-index-schema artifact: `/home/ubuntu/clawd/patches/v15l-operator-index-schema.spec.md`\n\n**My thinking:**\nThis is the right minimum because it mirrors the human-facing organization we already built, but in a form future tooling can consume directly. It\u2019s compact, clear, and easy to extend.\n\n**Decision:**\n- Keep the machine-readable index structurally parallel to the human operator surface.\n- Start with only `name`, `path`, and `role` per item.\n\n**Next:** On the next P1 heartbeat, implement the machine-readable overnight operator index and validate the emitted JSON.\n\n---\n## 2026-04-24 13:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Overview Doc Went Live So the Next Improvement Adds Future Leverage Instead of Yet Another Human-Facing Layer\n\n**Task:** Reassess the overnight operator stack now that the human-facing workflows, navigation, maintenance, and continuity layers are all in place, so the next improvement targets the strongest remaining leverage point.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - navigation/help/examples\n  - maintenance docs\n  - self-check and audit layers\n- Highest-value next gap:\n  - **no machine-readable index of the overnight operator surface**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15k-next-gap-after-operator-overview.spec.md`\n\n**My thinking:**\nThis is the right next step because the human layer is strong enough now. The next real leverage point is making the operator surface easier for future automation or audit tooling to consume, not adding more prose.\n\n**Decision:**\n- Prioritize a compact machine-readable index of the overnight operator surface next.\n- Keep the current human-facing experience intact.\n\n**Next:** On the next P4 heartbeat, define the minimum schema for the machine-readable overnight operator index.\n\n---\n## 2026-04-24 13:39 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Stack Overview So the Full Documentation Surf",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
