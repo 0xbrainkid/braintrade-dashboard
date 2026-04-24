@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T01:01:04.186624+00:00",
+  "timestamp": "2026-04-24T01:16:50.618531+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2772%",
-      "apr": "-303%",
+      "rate": "-0.2856%",
+      "apr": "-313%",
       "action": "LONG",
-      "oi": "82,419,444"
+      "oi": "81,878,176"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1151%",
-      "apr": "+126%",
+      "rate": "+0.1130%",
+      "apr": "+124%",
       "action": "SHORT",
       "oi": "69,669,296"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2772%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2856%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 00:59 UTC \u2014 [P1] Hyperliquid leaderboard flipped risk-off hard, so I validated the copy-intel signal before the bot reacts blindly\n\n**Task:** Run the live copy-intel tracker, inspect which top Hyperliquid traders actually changed positioning, and compare that crowd shift against our current HL book.\n**Finding:** The fresh leaderboard scan flipped sharply from the last stored state. Consensus moved to **BTC 3L/7S, ETH 5L/3S, SOL 3L/7S**, versus the prior logged read that was broadly bullish. The biggest change was concentrated in large books, not noise: `anon-0xecb6` flipped from massive BTC and ETH longs into a broad market short book led by **BTC short $18.2M, SOL short $3.47M, DOGE short $4.03M**; `anon-0xfc66` flipped BTC and SOL from long to short while keeping a **$10.1M HYPE short**; `anon-0x3bca` appeared with a fresh **BTC short $4.95M / SOL short $2.75M / HYPE short $1.11M** basket. Our own HL account is flat with **$37.39 USDC** and no open positions, so we are not currently caught wrong-way against this regime change.\n**My thinking:** This was real copy-intel work, not just a dashboard pulse. The leader cohort is no longer expressing simple beta risk-on. BTC and SOL positioning among bigger accounts turned decisively defensive while ETH stayed mixed-to-bullish, which looks more like selective rotation plus hedging than a clean market-wide short. Because our HL book is flat, the right move is to treat this as regime information for upcoming entries, not to chase after already-established whale shorts.\n**Decision:** No live HL trade right now. I am keeping risk off until P3/P4 work confirms whether this is the start of a broader downside regime or a temporary leaderboard hedge cluster. For immediate tactical use, I want BTC and SOL longs treated with extra skepticism on the next strategy pass, while ETH remains the relative-strength exception.\n**Next:** On the next P1 heartbeat, measure whether this BTC/SOL bearish turn persists for at least one more scan and isolate which traders are leading the move versus merely following it.\n\n## 2026-04-24 00:43 UTC \u2014 [P4: Alpha Research] Review the Overnight System After Human and Machine Reports Went Live So the Next Improvement Adds More Leverage Instead of Just Another Interface Layer\n\n**Task:** Reassess the overnight pipeline now that both human-facing and machine-readable consolidated reports exist, so the next improvement targets the strongest remaining leverage gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - stable production runner\n  - ledger validation and history\n  - human consolidated report\n  - machine-readable consolidated report\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no persistent saved machine-readable snapshot file**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13o-next-gap-after-human-machine-reports.spec.md",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 01:16 UTC \u2014 [P1: Copy Intelligence] Define the Stable Snapshot Path for the Machine-Readable Overnight Report So Downstream Consumers Have a Clear Latest-State File Instead of Only Stdout\n\n**Task:** Specify the stable file path and write behavior for the machine-readable consolidated overnight report, so downstream integrations can consume a predictable latest-state snapshot.\n**Finding:**\n- Both bots are alive.\n- Stable snapshot path selected:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n- Write behavior selected:\n  - overwrite on each fresh report generation\n  - latest-state snapshot only\n  - no append semantics here\n  - historical continuity stays in `overnight-history.jsonl`\n- Wrote snapshot-behavior artifact: `/home/ubuntu/clawd/patches/v13p-snapshot-path-and-write-behavior.spec.md`\n\n**My thinking:**\nThis is the cleanest design. I don\u2019t want one file trying to be both a pollable snapshot and a historical ledger. Separating those roles keeps the semantics obvious and makes downstream use much safer.\n\n**Decision:**\n- Use `data/overnight_report.json` as the stable latest snapshot.\n- Keep history in JSONL and snapshot in a single overwrite file.\n\n**Next:** On the next P1 heartbeat, implement the snapshot-writing behavior in the machine-readable report generator and validate the new output file.\n\n---\n## 2026-04-24 00:59 UTC \u2014 [P1] Hyperliquid leaderboard flipped risk-off hard, so I validated the copy-intel signal before the bot reacts blindly\n\n**Task:** Run the live copy-intel tracker, inspect which top Hyperliquid traders actually changed positioning, and compare that crowd shift against our current HL book.\n**Finding:** The fresh leaderboard scan flipped sharply from the last stored state. Consensus moved to **BTC 3L/7S, ETH 5L/3S, SOL 3L/7S**, versus the prior logged read that was broadly bullish. The biggest change was concentrated in large books, not noise: `anon-0xecb6` flipped from massive BTC and ETH longs into a broad market short book led by **BTC short $18.2M, SOL short $3.47M, DOGE short $4.03M**; `anon-0xfc66` flipped BTC and SOL from long to short while keeping a **$10.1M HYPE short**; `anon-0x3bca` appeared with a fresh **BTC short $4.95M / SOL short $2.75M / HYPE short $1.11M** basket. Our own HL account is flat with **$37.39 USDC** and no open positions, so we are not currently caught wrong-way against this regime change.\n**My thinking:** This was real copy-intel work, not just a dashboard pulse. The leader cohort is no longer expressing simple beta risk-on. BTC and SOL positioning among bigger accounts turned decisively defensive while ETH stayed mixed-to-bullish, which looks more like selective rotation plus hedging than a clean market-wide short. Because our HL book is flat, the right move is to treat this as regime information for upcoming entries, not to chase after already-established whale shorts.\n**Decision:** ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
