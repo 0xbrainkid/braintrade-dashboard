@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T17:15:09.487692+00:00",
+  "timestamp": "2026-04-24T17:29:30.965565+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0935%",
+      "rate": "-0.0927%",
       "apr": "-102%",
       "action": "LONG",
-      "oi": "34,861,526"
+      "oi": "35,855,844"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0832%",
-      "apr": "+91%",
+      "rate": "+0.0789%",
+      "apr": "+86%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0618%",
-      "apr": "-68%",
+      "rate": "-0.0724%",
+      "apr": "-79%",
       "action": "LONG",
-      "oi": "88,941,170"
+      "oi": "87,993,184"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0935%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0927%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:14 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Maintainer Quickstart So a New Maintainer Can Get Oriented and Verify the Stack in the First Few Minutes Without Digging Through Every Supporting Doc\n\n**Task:** Specify the minimum contents for a compact overnight operator maintainer quickstart, so the handoff and first-use experience becomes simpler and more reliable.\n**Finding:**\n- Both bots are alive.\n- Required quickstart sections selected:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Key actions selected:\n  - first run `scripts/operator_maintenance_check_overnight.sh`\n  - if status only, run `scripts/operator_status_overnight.sh`\n  - if maintenance fails, run self-check and index validator directly\n- Reference docs selected:\n  - overview doc\n  - audit checklist\n  - manifest\n  - changelog\n- Wrote quickstart-contents artifact: `/home/ubuntu/clawd/patches/v15x-maintainer-quickstart-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum because a new maintainer does not need the full architecture first. They need one starting command, one fallback path, and a short list of where to read next.\n\n**Decision:**\n- Keep the quickstart short and first-five-minutes oriented.\n- Optimize for orientation and safe first actions, not completeness.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight operator maintainer quickstart.\n\n---\n## 2026-04-24 17:00 UTC \u2014 [P1: Copy Intelligence] Re-run the Hyperliquid Leaderboard Scan and Isolate the New Large-Cap Rotation So Our Next Bias Filter Tracks What Top Traders Actually Rotated Into Instead of Trading Stale Morning Positioning\n\n**Task:** Run a fresh copy-intel pass on the Hyperliquid leaderboard, compare the live state against the prior saved leaderboard snapshot, and identify where the biggest traders actually rotated across BTC, ETH, SOL, and HYPE.\n**Finding:**\n- Both bots are alive.\n- Fresh leaderboard scan flipped the consensus to **BTC 3L/5S, ETH 3L/5S, SOL 6L/3S**.\n- The biggest actionable rotations were:\n  - **ABC** closed prior BTC and ETH exposure, kept a focused **SOL long** ($570.7k) and **HYPE short** ($303.3k).\n  - **anon-0xfc66** flipped into **BTC short** ($6.21M) and **SOL short** ($3.90M) while keeping a huge **HYPE short** ($8.79M).\n  - **beatmaker1@proton.me** flipped from BTC/ETH longs into **BTC short** ($238k) and **ETH short** ($72.5k), while turning SOL long.\n  - **anon-0x3bca** closed a large BTC short and opened a new **ETH long** ($924.9k), but that was the exception, not the broad tape.\n- Funding stayed close to neutral on BTC/ETH/HYPE, while SOL funding was only mildly negative, so this was not just obvious funding-arb crowding.\n- Wrote the detailed note to `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`.\n\n**My thi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:28 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Maintainer Quickstart So a New Maintainer Can Orient, Verify, and Escalate Correctly in the First Few Minutes Without Reading the Full Operator Corpus\n\n**Task:** Build the compact overnight operator maintainer quickstart and validate that it gives a usable first-five-minutes path into maintenance verification, read-only inspection, fallback checks, and next docs.\n**Finding:**\n- Both bots are alive.\n- Built maintainer quickstart:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md`\n- Quickstart now includes:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Initial readback returned blank despite the file write succeeding.\n- Follow-up direct verification confirmed the file exists with the expected content.\n- Wrote quickstart artifact: `/home/ubuntu/clawd/patches/v15y-maintainer-quickstart-live.spec.md`\n\n**My thinking:**\nThis is the right resilience layer for handoff. A maintainer usually does not need the whole system explained, they need one safe first command, one fallback path, and a short list of where to read next. Now that path exists.\n\n**Decision:**\n- Keep this as the compact maintainer onboarding entrypoint.\n- Keep the other docs specialized behind it.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has both maintainability and maintainer-onboarding layers.\n\n---\n## 2026-04-24 17:14 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Maintainer Quickstart So a New Maintainer Can Get Oriented and Verify the Stack in the First Few Minutes Without Digging Through Every Supporting Doc\n\n**Task:** Specify the minimum contents for a compact overnight operator maintainer quickstart, so the handoff and first-use experience becomes simpler and more reliable.\n**Finding:**\n- Both bots are alive.\n- Required quickstart sections selected:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Key actions selected:\n  - first run `scripts/operator_maintenance_check_overnight.sh`\n  - if status only, run `scripts/operator_status_overnight.sh`\n  - if maintenance fails, run self-check and index validator directly\n- Reference docs selected:\n  - overview doc\n  - audit checklist\n  - manifest\n  - changelog\n- Wrote quickstart-contents artifact: `/home/ubuntu/clawd/patches/v15x-maintainer-quickstart-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum because a new maintainer does not need the full architecture first. They need one starting command, one fallback path, and a short list of where to read next.\n\n**Decision:**\n- Keep the quickstart short and first-five-minute",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
