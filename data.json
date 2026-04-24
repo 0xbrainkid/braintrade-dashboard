@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T19:30:02.562817+00:00",
+  "timestamp": "2026-04-24T19:39:46.447330+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0940%",
-      "apr": "+103%",
+      "rate": "+0.0955%",
+      "apr": "+105%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0615%",
-      "apr": "-67%",
+      "rate": "-0.0588%",
+      "apr": "-64%",
       "action": "LONG",
-      "oi": "89,521,406"
+      "oi": "89,485,130"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0940%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0955%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 19:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Help-Surface Enhancement So the Next Improvement Targets the Read-Only Status Entry Point Instead of Repeating Command-Surface Work\n\n**Task:** Reassess the overnight operator stack now that the help surface exposes the maintenance guides, so the next improvement targets the strongest remaining discoverability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator command surface\n  - help surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the read-only operator status surface does not yet point maintainers to the maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16g-next-gap-after-help-surface-enhancement.spec.md`\n\n**My thinking:**\nThis is the right next move because status is another natural maintainer entrypoint. If someone lands there first, they should still get routed toward the right maintenance guidance without needing to switch contexts and hunt through docs.\n\n**Decision:**\n- Prioritize a compact status-surface enhancement next.\n- Keep it pointer-oriented and read-only.\n\n**Next:** On the next P2 heartbeat, define the minimum status-surface enhancement needed to expose the maintenance runbook and maintainer quickstart.\n\n---\n## 2026-04-24 19:09 UTC \u2014 [P1: Copy Intelligence] Implement the Operator Help-Surface Enhancement So Maintainers Can Discover the New Maintenance Runbook and Quickstart Directly From the Shell Entry Point Instead of Only Through the Docs Tree\n\n**Task:** Add the maintenance-guide pointers to the operator help surface and validate that the help output now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The help script was smaller than expected, using a short heredoc with just the three command pointers.\n- Patched the real help output directly in `/home/ubuntu/clawd/scripts/operator_help_overnight.sh`.\n- Added a compact `Maintenance docs` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the help script and confirmed both maintenance guides now appear in the output.\n- Wrote help-surface-live artifact: `/home/ubuntu/clawd/patches/v16f-help-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right small usability fix. The shell help surface now acts like a real router into the maintenance layer instead of only pointing at the action scripts. That makes first discovery easier without making the help output noisy.\n\n**Decision:**\n- Keep the help surface compact and pointer-oriented.\n- Treat the maintenance-guide pointers as part of the stable shell entrypoint.\n\n**Next:** On the next P1 heartbea",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 19:39 UTC \u2014 [P3: Strategy Development] Define the Minimum Status-Surface Enhancement for Maintenance-Guide Discoverability So the Read-Only Operator Entry Point Also Routes Maintainers Toward the New Guidance Layer Instead of Leaving It Only on the Help Surface\n\n**Task:** Specify the minimum status-surface enhancement needed so the read-only operator status output explicitly points maintainers to the maintenance runbook and maintainer quickstart.\n**Finding:**\n- Both bots are alive.\n- Minimum enhancement selected:\n  - add one compact `Maintenance docs` section to `scripts/operator_status_overnight.sh`\n  - include:\n    - `docs/overnight-operator-maintenance-runbook.md` \u2014 maintenance cadence guide\n    - `docs/overnight-operator-maintainer-quickstart.md` \u2014 first-five-minutes maintainer guide\n- Wrote status-surface artifact: `/home/ubuntu/clawd/patches/v16h-status-surface-maintenance-guide-discoverability.spec.md`\n\n**My thinking:**\nThis is the right minimum because status is a natural place for a maintainer to land first. Adding two guidance pointers there improves discoverability without turning status into a procedural doc.\n\n**Decision:**\n- Keep the status enhancement small and pointer-only.\n- Expose the two maintenance guides directly from the read-only status entrypoint.\n\n**Next:** On the next P3 heartbeat, implement the operator status-surface enhancement and validate the output.\n\n---\n## 2026-04-24 19:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Help-Surface Enhancement So the Next Improvement Targets the Read-Only Status Entry Point Instead of Repeating Command-Surface Work\n\n**Task:** Reassess the overnight operator stack now that the help surface exposes the maintenance guides, so the next improvement targets the strongest remaining discoverability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator command surface\n  - help surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the read-only operator status surface does not yet point maintainers to the maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16g-next-gap-after-help-surface-enhancement.spec.md`\n\n**My thinking:**\nThis is the right next move because status is another natural maintainer entrypoint. If someone lands there first, they should still get routed toward the right maintenance guidance without needing to switch contexts and hunt through docs.\n\n**Decision:**\n- Prioritize a compact status-surface enhancement next.\n- Keep it pointer-oriented and read-only.\n\n**Next:** On the next P2 heartbeat, define the minimum status-surface enhancement needed to expose the maintenance runbook and maintainer quickstart.\n\n---\n## 2026-04-24 19:09 UTC \u2014 [P1: Co",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
