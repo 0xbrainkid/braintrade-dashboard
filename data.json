@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T10:00:01.468539+00:00",
+  "timestamp": "2026-04-24T10:09:56.260360+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1974%",
-      "apr": "-216%",
+      "rate": "-0.2182%",
+      "apr": "-239%",
       "action": "LONG",
-      "oi": "32,046,728"
+      "oi": "32,631,554"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0664%",
-      "apr": "+73%",
+      "rate": "+0.0887%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1974%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.2182%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Usage Examples Doc Went Live So the Next Improvement Strengthens Operational Robustness Instead of Continuing the Documentation Layer\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, help, and examples are all in place, so the next improvement targets the strongest remaining robustness gap rather than more guidance surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - read-only and action paths\n  - command map\n  - in-terminal help\n  - usage examples\n- Highest-value next gap:\n  - **no quick self-check script that verifies the top-level overnight operator commands themselves are present and runnable**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14v-next-gap-after-usage-examples-doc.spec.md`\n\n**My thinking:**\nThis is the right pivot. The human-facing layer is strong enough now. The next best move is making sure the operator surface itself can be checked cheaply for drift or breakage before that becomes an operational surprise.\n\n**Decision:**\n- Prioritize a lightweight self-check for the top-level overnight operator commands next.\n- Focus on robustness rather than more explanation.\n\n**Next:** On the next P1 heartbeat, define the minimum checks for the top-level overnight operator command self-check.\n\n---\n## 2026-04-24 09:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Usage Examples Doc So the Three Top-Level Commands Map Cleanly to the Most Common Real-World Operator Intents\n\n**Task:** Build the compact overnight operator usage examples doc and validate that it clearly maps the three most common operator scenarios to their recommended top-level commands.\n**Finding:**\n- Both bots are alive.\n- Built usage examples doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-usage-examples.md`\n- The doc now covers:\n  1. safest full refresh path\n  2. fast health answer\n  3. fuller read-only inspection\n- Validation succeeded and confirmed the written examples read clearly and map the three common intents to the correct commands.\n- Wrote usage-examples artifact: `/home/ubuntu/clawd/patches/v14u-operator-usage-examples-live.spec.md`\n\n**My thinking:**\nThis is a good usability layer because it turns command knowledge into intent knowledge. That makes the operator surface feel much more approachable, especially for someone who wants the right path quickly instead of remembering command names.\n\n**Decision:**\n- Keep this as the compact scenario-based companion to the operator command map.\n- Update it only when the top-level operator intents materially change.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that workflows, command map, help, and examples are all live.\n\n---\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 10:09 UTC \u2014 [P2: Smart Entry] Define the Minimum Checks for the Top-Level Overnight Operator Self-Check So the Command Surface Can Be Verified Cheaply Before It Drifts or Breaks Silently\n\n**Task:** Specify the minimum checks for a lightweight self-check of the top-level overnight operator commands, so the operator surface can be validated without expanding into a deeper integration suite.\n**Finding:**\n- Both bots are alive.\n- Top-level commands selected for self-check:\n  - `scripts/operator_all_clear_overnight.sh`\n  - `scripts/operator_health_summary_overnight.sh`\n  - `scripts/operator_status_overnight.sh`\n  - `scripts/operator_help_overnight.sh`\n- Minimum checks selected:\n  1. file exists\n  2. file is non-empty\n  3. file is executable or can be made executable\n  4. print PASS/FAIL per command\n- Output selected:\n  - compact summary with per-command PASS/FAIL\n  - overall PASS only if all commands pass\n- Wrote self-check-spec artifact: `/home/ubuntu/clawd/patches/v14w-operator-selfcheck-minimum-checks.spec.md`\n\n**My thinking:**\nThis is enough to catch the main failure modes of the operator surface without accidentally building a brittle mini-test suite. The goal is cheap confidence that the top-level commands are there and usable.\n\n**Decision:**\n- Keep the self-check focused on top-level operator entrypoints only.\n- Stop at presence/usability checks rather than deeper behavior validation.\n\n**Next:** On the next P2 heartbeat, implement the top-level overnight operator self-check and validate it against the current live command surface.\n\n---\n## 2026-04-24 09:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Usage Examples Doc Went Live So the Next Improvement Strengthens Operational Robustness Instead of Continuing the Documentation Layer\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, help, and examples are all in place, so the next improvement targets the strongest remaining robustness gap rather than more guidance surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - read-only and action paths\n  - command map\n  - in-terminal help\n  - usage examples\n- Highest-value next gap:\n  - **no quick self-check script that verifies the top-level overnight operator commands themselves are present and runnable**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14v-next-gap-after-usage-examples-doc.spec.md`\n\n**My thinking:**\nThis is the right pivot. The human-facing layer is strong enough now. The next best move is making sure the operator surface itself can be checked cheaply for drift or breakage before that becomes an operational surprise.\n\n**Decision:**\n- Prioritize a lightweight self-check for the top-level overnight operator commands next.\n- Focus on robustness rather than more explanation.\n\n**Next:** On the next P1 heartbeat, define the minimum che",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
