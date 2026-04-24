@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T09:40:09.268654+00:00",
+  "timestamp": "2026-04-24T09:44:13.346250+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1768%",
-      "apr": "-194%",
+      "rate": "-0.1795%",
+      "apr": "-197%",
       "action": "LONG",
-      "oi": "30,273,756"
+      "oi": "30,268,212"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0781%",
-      "apr": "+86%",
+      "rate": "+0.0813%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1768%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1795%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Usage Examples Doc So the Three Top-Level Commands Map Cleanly to the Most Common Real-World Operator Intents\n\n**Task:** Build the compact overnight operator usage examples doc and validate that it clearly maps the three most common operator scenarios to their recommended top-level commands.\n**Finding:**\n- Both bots are alive.\n- Built usage examples doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-usage-examples.md`\n- The doc now covers:\n  1. safest full refresh path\n  2. fast health answer\n  3. fuller read-only inspection\n- Validation succeeded and confirmed the written examples read clearly and map the three common intents to the correct commands.\n- Wrote usage-examples artifact: `/home/ubuntu/clawd/patches/v14u-operator-usage-examples-live.spec.md`\n\n**My thinking:**\nThis is a good usability layer because it turns command knowledge into intent knowledge. That makes the operator surface feel much more approachable, especially for someone who wants the right path quickly instead of remembering command names.\n\n**Decision:**\n- Keep this as the compact scenario-based companion to the operator command map.\n- Update it only when the top-level operator intents materially change.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that workflows, command map, help, and examples are all live.\n\n---\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy Development] Define the Minimum Scenarios for the Overnight Operator Usage Examples Doc So the Top-Level Commands Map Cleanly to the Most Common Operator Intents\n\n**Task:** Specify the minimum example scenarios for the compact overnight operator usage examples doc, so the top-level commands become easier to choose from practical intent rather than labels alone.\n**Finding:**\n- Both bots are alive.\n- Required scenarios selected:\n  1. I want the safest full refresh path \u2192 `operator_all_clear_overnight.sh`\n  2. I just want a fast health answer \u2192 `operator_health_summary_overnight.sh`\n  3. I want a fuller read-only inspection \u2192 `operator_status_overnight.sh`\n- Style selected:\n  - one short scenario per section\n  - one recommended command per scenario\n  - minimal explanation\n- Wrote usage-scenarios artifact: `/home/ubuntu/clawd/patches/v14t-operator-usage-examples-scenarios.spec.md`\n\n**My thinking:**\nThis is enough. These three scenarios cover the overwhelming majority of top-level operator needs, and they make command choice feel obvious instead of memorized.\n\n**Decision:**\n- Keep the examples doc tightly centered on the three top-level intents.\n- Avoid duplicating the fuller command map.\n\n**Next:** On the next P3 heartbeat, implement the compact overnight operator usage examples doc.\n\n---\n## 2026-04-24 09:00 UTC \u2014 [P3: Strategy Development] Audit HL Directional Readiness Befo",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Usage Examples Doc Went Live So the Next Improvement Strengthens Operational Robustness Instead of Continuing the Documentation Layer\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, help, and examples are all in place, so the next improvement targets the strongest remaining robustness gap rather than more guidance surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator workflows\n  - read-only and action paths\n  - command map\n  - in-terminal help\n  - usage examples\n- Highest-value next gap:\n  - **no quick self-check script that verifies the top-level overnight operator commands themselves are present and runnable**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14v-next-gap-after-usage-examples-doc.spec.md`\n\n**My thinking:**\nThis is the right pivot. The human-facing layer is strong enough now. The next best move is making sure the operator surface itself can be checked cheaply for drift or breakage before that becomes an operational surprise.\n\n**Decision:**\n- Prioritize a lightweight self-check for the top-level overnight operator commands next.\n- Focus on robustness rather than more explanation.\n\n**Next:** On the next P1 heartbeat, define the minimum checks for the top-level overnight operator command self-check.\n\n---\n## 2026-04-24 09:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Usage Examples Doc So the Three Top-Level Commands Map Cleanly to the Most Common Real-World Operator Intents\n\n**Task:** Build the compact overnight operator usage examples doc and validate that it clearly maps the three most common operator scenarios to their recommended top-level commands.\n**Finding:**\n- Both bots are alive.\n- Built usage examples doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-usage-examples.md`\n- The doc now covers:\n  1. safest full refresh path\n  2. fast health answer\n  3. fuller read-only inspection\n- Validation succeeded and confirmed the written examples read clearly and map the three common intents to the correct commands.\n- Wrote usage-examples artifact: `/home/ubuntu/clawd/patches/v14u-operator-usage-examples-live.spec.md`\n\n**My thinking:**\nThis is a good usability layer because it turns command knowledge into intent knowledge. That makes the operator surface feel much more approachable, especially for someone who wants the right path quickly instead of remembering command names.\n\n**Decision:**\n- Keep this as the compact scenario-based companion to the operator command map.\n- Update it only when the top-level operator intents materially change.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that workflows, command map, help, and examples are all live.\n\n---\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
