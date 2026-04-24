@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T03:30:02.518829+00:00",
+  "timestamp": "2026-04-24T03:39:49.760037+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2504%",
-      "apr": "-274%",
+      "rate": "-0.2415%",
+      "apr": "-264%",
       "action": "LONG",
-      "oi": "92,373,366"
+      "oi": "91,640,688"
     },
     {
       "coin": "YZY",
-      "rate": "-0.1055%",
-      "apr": "-116%",
+      "rate": "-0.1102%",
+      "apr": "-121%",
       "action": "LONG",
       "oi": "1,149,962"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0733%",
-      "apr": "+80%",
+      "rate": "+0.0740%",
+      "apr": "+81%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2504%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2415%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Refresh Command Went Live So the Next Improvement Adds Observability Instead of Just More Surface Area\n\n**Task:** Reassess the overnight system now that the operator-facing refresh command exists, so the next improvement strengthens observability and inspection value instead of blindly extending the interface surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable snapshot\n  - refresh-and-snapshot wrapper\n  - operator-facing refresh command with concise summary\n- Highest-value next gap:\n  - **no dedicated lightweight log artifact for the concise operator refresh summary**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13x-next-gap-after-operator-refresh-command.spec.md`\n\n**My thinking:**\nThis is the next clean step. The summary is useful, but right now it disappears unless someone captures stdout manually. A dedicated lightweight log would preserve the high-signal operational surface without forcing a dive into full logs.\n\n**Decision:**\n- Prioritize appending the concise operator refresh summary to its own lightweight log file.\n- Avoid adding new report surfaces before improving lightweight observability.\n\n**Next:** On the next P1 heartbeat, define the minimum format and file path for the operator refresh summary log.\n\n---\n## 2026-04-24 03:09 UTC \u2014 [P4: Alpha Research] Implement the Operator-Facing Refresh Command So the Overnight System Ends With a Short Trustworthy Summary Instead of Making Humans Reassemble Success, Freshness, and Health Manually\n\n**Task:** Build the operator-facing refresh command that runs the refresh-and-snapshot flow and emits the concise end-state summary, then validate the summary output end to end.\n**Finding:**\n- Both bots are alive.\n- Built operator-facing command:\n  - `/home/ubuntu/clawd/scripts/operator_refresh_overnight.sh`\n- Summary now emits:\n  - `status`\n  - `snapshot_path`\n  - `snapshot_ts`\n  - `latest_profiles`\n  - `ledger_health_status`\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected concise end-state summary.\n- Wrote operator-command artifact: `/home/ubuntu/clawd/patches/v13w-operator-refresh-command-live.spec.md`\n\n**My thinking:**\nThis is a good finish for the current usability arc. The underlying pipeline is still clean, but now the operator gets an immediate trustworthy summary instead of having to infer success from multiple outputs. That\u2019s the kind of polish that actually reduces mistakes.\n\n**Decision:**\n- Keep this as the operator-facing refresh entrypoint.\n- Preserve the lower-level runner/report/snapshot commands for composability underneath.\n\n**N",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 03:39 UTC \u2014 [P2: Smart Entry] Define the Lightweight Operator Summary Log Path and Format So the Highest-Signal Refresh Outcome Stops Disappearing Into Ephemeral Stdout\n\n**Task:** Specify the file path and minimum format for a persistent lightweight log of the operator refresh summary, so the end-state signal remains available without requiring a full log dive.\n**Finding:**\n- Both bots are alive.\n- Selected summary log path:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Selected per-run summary fields:\n  - UTC timestamp\n  - status\n  - snapshot_path\n  - snapshot_ts\n  - latest_profiles\n  - ledger_health_status\n- Selected style:\n  - compact human-readable append log\n  - blank-line or delimiter separated\n  - optimized for fast skim rather than strict machine parsing\n- Wrote summary-log artifact: `/home/ubuntu/clawd/patches/v13y-operator-summary-log-path-and-format.spec.md`\n\n**My thinking:**\nThis gives us the useful middle layer we\u2019re missing. Full logs are too noisy for quick checks, and stdout is too fleeting. A small append-only summary log keeps the highest-signal operational state visible without creating another heavy system.\n\n**Decision:**\n- Use `logs/operator-refresh-summary.log` for persistent lightweight operator summaries.\n- Keep the format human-readable and intentionally compact.\n\n**Next:** On the next P2 heartbeat, implement summary-log appending in the operator refresh command and validate the new log output.\n\n---\n## 2026-04-24 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Refresh Command Went Live So the Next Improvement Adds Observability Instead of Just More Surface Area\n\n**Task:** Reassess the overnight system now that the operator-facing refresh command exists, so the next improvement strengthens observability and inspection value instead of blindly extending the interface surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable snapshot\n  - refresh-and-snapshot wrapper\n  - operator-facing refresh command with concise summary\n- Highest-value next gap:\n  - **no dedicated lightweight log artifact for the concise operator refresh summary**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13x-next-gap-after-operator-refresh-command.spec.md`\n\n**My thinking:**\nThis is the next clean step. The summary is useful, but right now it disappears unless someone captures stdout manually. A dedicated lightweight log would preserve the high-signal operational surface without forcing a dive into full logs.\n\n**Decision:**\n- Prioritize appending the concise operator refresh summary to its own lightweight log file.\n- Avoid adding new report surfaces before improving lightweight observability.\n\n**Next:** On the next P1 heartbeat, define the minimum format ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
