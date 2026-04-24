@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T16:10:06.519108+00:00",
+  "timestamp": "2026-04-24T16:14:01.022324+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0600%",
-      "apr": "+66%",
+      "rate": "+0.0551%",
+      "apr": "+60%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "APE",
-      "rate": "-0.0571%",
-      "apr": "-63%",
+      "rate": "-0.0523%",
+      "apr": "-57%",
       "action": "LONG",
-      "oi": "36,042,808"
+      "oi": "34,755,639"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0600%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0551%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 16:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Combined Maintenance Check Went Live So the Next Improvement Strengthens Operational Discipline Instead of Just Creating More Maintenance Assets\n\n**Task:** Reassess the overnight operator stack now that the human-readable, machine-readable, and combined maintenance verification layers are in place, so the next improvement targets the strongest remaining discipline gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator surface\n  - machine-readable operator surface\n  - combined maintenance verification\n  - audit and continuity layers\n- Highest-value next gap:\n  - **no short runbook describing the recommended maintenance cadence for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15t-next-gap-after-combined-maintenance-check.spec.md`\n\n**My thinking:**\nThis is the right next move because the tools now exist, but habits still need a shape. A short cadence runbook would turn the maintenance surface from a set of capabilities into a repeatable practice.\n\n**Decision:**\n- Prioritize a compact maintenance cadence runbook next.\n- Keep it focused on when to use the existing maintenance tools, not on adding new behaviors.\n\n**Next:** On the next P1 heartbeat, define the minimum cadence guidance for the overnight operator maintenance runbook.\n\n---\n## 2026-04-24 15:43 UTC \u2014 [P4: Alpha Research] Implement the Combined Overnight Operator Maintenance Check So the Two Core Trust Checks Collapse Into One Small Repeatable Verification Path\n\n**Task:** Build the combined overnight operator maintenance check and validate that it runs the top-level self-check, then the operator index validator, then ends with the final maintenance PASS line.\n**Finding:**\n- Both bots are alive.\n- Built combined maintenance check:\n  - `/home/ubuntu/clawd/scripts/operator_maintenance_check_overnight.sh`\n- The combined check now:\n  1. runs `scripts/operator_selfcheck_overnight.sh`\n  2. runs `scripts/validate_overnight_operator_index.py`\n  3. prints `MAINTENANCE_PASS: operator surface and machine-readable index both verified`\n- Initial execution hit the same path seam as prior wrapper validations.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected final maintenance PASS line.\n- Wrote maintenance-check artifact: `/home/ubuntu/clawd/patches/v15s-combined-maintenance-check-live.spec.md`\n\n**My thinking:**\nThis is the right maintenance consolidation. The two trust checks were already good, but combining them makes recurring verification much more likely to happen consistently instead of depending on memory.\n\n**Decision:**\n- Keep this as the compact routine maintenance verification path for the overnight operator stack.\n- Preserve the two underlying checks separately for debugging and dir",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 16:13 UTC \u2014 [P2: Smart Entry] Define the Minimum Cadence Guidance for the Overnight Operator Maintenance Runbook So the Existing Maintenance Tools Turn Into a Repeatable Discipline Instead of a Set of Ad Hoc Options\n\n**Task:** Specify the minimum cadence guidance for a compact overnight operator maintenance runbook, so the maintenance surface becomes easier to use consistently over time.\n**Finding:**\n- Both bots are alive.\n- Minimum cadence guidance selected:\n  - after meaningful operator-surface changes: run combined maintenance check and update manifest/changelog if needed\n  - periodic review (e.g. weekly): review audit checklist, confirm docs are current, rerun maintenance check\n  - after maintenance-related failures: rerun self-check and index validator directly, repair drift, rerun combined maintenance check\n- Wrote cadence-guidance artifact: `/home/ubuntu/clawd/patches/v15u-maintenance-cadence-guidance.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives the maintenance surface a rhythm without creating a big operational burden. The point is to turn the existing tools into a habit, not a ceremony.\n\n**Decision:**\n- Keep the cadence guidance short and trigger-based.\n- Center it on the combined maintenance check, with direct fallback checks only when needed.\n\n**Next:** On the next P2 heartbeat, implement the compact overnight operator maintenance runbook.\n\n---\n## 2026-04-24 16:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Combined Maintenance Check Went Live So the Next Improvement Strengthens Operational Discipline Instead of Just Creating More Maintenance Assets\n\n**Task:** Reassess the overnight operator stack now that the human-readable, machine-readable, and combined maintenance verification layers are in place, so the next improvement targets the strongest remaining discipline gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator surface\n  - machine-readable operator surface\n  - combined maintenance verification\n  - audit and continuity layers\n- Highest-value next gap:\n  - **no short runbook describing the recommended maintenance cadence for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15t-next-gap-after-combined-maintenance-check.spec.md`\n\n**My thinking:**\nThis is the right next move because the tools now exist, but habits still need a shape. A short cadence runbook would turn the maintenance surface from a set of capabilities into a repeatable practice.\n\n**Decision:**\n- Prioritize a compact maintenance cadence runbook next.\n- Keep it focused on when to use the existing maintenance tools, not on adding new behaviors.\n\n**Next:** On the next P1 heartbeat, define the minimum cadence guidance for the overnight operator maintenance runbook.\n\n---\n## 2026-04-24 15:43 UTC \u2014 [P4: Alpha Research] Implement the Comb",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
