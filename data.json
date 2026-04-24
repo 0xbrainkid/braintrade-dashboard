@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T22:00:02.228649+00:00",
+  "timestamp": "2026-04-24T22:09:47.725554+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1234%",
-      "apr": "+135%",
+      "rate": "+0.0893%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1234%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0893%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Overview Workflow Addition So the Next Improvement Protects the Real Shell Outputs Instead of Continuing to Add More Documentation Layers\n\n**Task:** Reassess the overnight operator stack now that the overview doc sequences the maintainer workflow, so the next improvement targets the strongest remaining integrity gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **there is no lightweight integrity check for the shell entrypoint outputs themselves**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16p-next-gap-after-overview-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the operator surface is now coherent, but coherence can still drift at the output layer. A compact shell-surface integrity check would protect the actual user-facing entrypoints without adding a lot of new maintenance burden.\n\n**Decision:**\n- Prioritize a lightweight shell-surface integrity check next.\n- Keep it output-oriented and narrow.\n\n**Next:** On the next P3 heartbeat, define the minimum shell-surface integrity check needed to verify maintenance-guide pointers across help, status, and all-clear outputs.\n\n---\n## 2026-04-24 21:39 UTC \u2014 [P2: Smart Entry] Implement the Compact Maintainer Workflow Sequence in the Overview Doc So the Main Human Entry Point Becomes a Real Orientation Path Instead of Just a Flat Navigation List\n\n**Task:** Add the maintainer workflow sequence to the overnight operator overview doc and validate that the main human-readable entrypoint now sequences quickstart, maintenance check, status, all-clear, and deeper references in one compact section.\n**Finding:**\n- Both bots are alive.\n- The overview doc was slimmer than expected, so the correct patch point was the tail after `## Key artifacts`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-overview.md` directly.\n- Added:\n  - `## Maintenance view`\n  - `## Maintainer workflow`\n- Confirmed the overview now sequences:\n  1. maintainer quickstart\n  2. maintenance check\n  3. status inspection\n  4. all-clear action path\n  5. deeper maintenance references\n- Wrote overview-workflow-live artifact: `/home/ubuntu/clawd/patches/v16o-overview-maintainer-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The main entry doc now does more than list pieces, it gives a maintainer a compact route through them. That makes the overall surface much easier to understand without flattening the specialized docs.\n\n**Decision:**\n- Keep the overview workflow co",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 22:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Shell-Surface Integrity Check So the Maintenance-Guide Pointers Across Help, Status, and All-Clear Stop Depending on Manual Spot Checks and Gain a Real Lightweight Enforcement Layer\n\n**Task:** Specify the minimum shell-surface integrity check needed to verify that the main operator entrypoints all continue exposing the maintenance-guide pointers.\n**Finding:**\n- Both bots are alive.\n- Minimum shell-surface check selected:\n  - run:\n    - `scripts/operator_help_overnight.sh`\n    - `scripts/operator_status_overnight.sh`\n    - `scripts/operator_all_clear_overnight.sh`\n  - require both strings in each output:\n    - `docs/overnight-operator-maintenance-runbook.md`\n    - `docs/overnight-operator-maintainer-quickstart.md`\n  - fail on non-zero exit\n  - fail if either required string is missing\n  - print clear PASS/FAIL summary per script\n- Wrote shell-surface-check artifact: `/home/ubuntu/clawd/patches/v16q-shell-surface-integrity-check.spec.md`\n\n**My thinking:**\nThis is the right minimum because it protects the actual user-facing shell layer directly, not just the docs and index behind it. It also stays intentionally small, which means it is more likely to remain maintained.\n\n**Decision:**\n- Keep the shell-surface integrity check narrow and output-oriented.\n- Treat it as the shell-layer counterpart to the machine-readable index validator.\n\n**Next:** On the next P4 heartbeat, implement the shell-surface integrity check and validate it against the current aligned operator outputs.\n\n---\n## 2026-04-24 21:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Overview Workflow Addition So the Next Improvement Protects the Real Shell Outputs Instead of Continuing to Add More Documentation Layers\n\n**Task:** Reassess the overnight operator stack now that the overview doc sequences the maintainer workflow, so the next improvement targets the strongest remaining integrity gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **there is no lightweight integrity check for the shell entrypoint outputs themselves**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16p-next-gap-after-overview-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the operator surface is now coherent, but coherence can still drift at the output layer. A compact shell-surface integrity check would protect the actual user-facing entrypoints without adding a lot of new maintenance burden.\n\n**Decision:**\n- Prioritize a lightweight shell-surface integrity check nex",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
