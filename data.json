@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T13:01:55.307077+00:00",
+  "timestamp": "2026-04-24T13:17:46.092869+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1795%",
-      "apr": "-197%",
+      "rate": "-0.1951%",
+      "apr": "-214%",
       "action": "LONG",
-      "oi": "35,081,106"
+      "oi": "34,886,072"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1095%",
-      "apr": "+120%",
+      "rate": "+0.0937%",
+      "apr": "+103%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1795%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1951%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-24 12:59 UTC \u2014 [P2] Stress-test the Smart Entry Bias Filter Instead of Blindly Shipping V5a\n\n**Task:** Re-run the shadow-trade dataset to see whether the proposed `min_bias=45` filter actually improves trade quality, and identify whether a more selective parameter tweak beats a blanket threshold raise.\n**Finding:**\n- Both bots are alive.\n- Analyzed 93 completed shadow trades from `logs/shadow-trades-v2.jsonl`.\n- Baseline shadow WR: **49.5%**.\n- V5a blanket filter (`abs_bias >= 45`) only reaches **48.5% WR** across 68 trades, so it does **not** improve quality by itself.\n- The strongest bucket was **45-55 absolute bias** at **56.2% WR**.\n- The **55+** bucket degraded to **41.7% WR** overall.\n- Worst offenders:\n  - **hour 8 UTC:** 0/5 in 45+ bias trades\n  - **STRONG_TREND + 55+ bias:** 0/3\n- Best near-term filter variant from this sample:\n  - `abs_bias >= 45`\n  - block **hour 8 UTC**\n  - block **55+ bias during STRONG_TREND**\n  - result: **55.0% WR** across 60 trades\n- Wrote analysis note: `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-24.md`\n\n**My thinking:**\nThe key miss was treating stronger bias as automatically better. In this dataset, the edge peaks in the 45-55 zone, then gets worse when bias becomes too extreme, especially when the market is already in a strong-trend state. That means V5a is directionally closer than the old filter, but still too blunt.\n\n**Decision:**\nDo **not** ship a blanket `min_bias=45` change by itself. The next live candidate should be the narrower variant that keeps 45+ entries but blocks hour 8 UTC and 55+ bias during STRONG_TREND, because that is the first version in this sample that actually pushes WR back above the 55% target zone.\n\n**Next:** On the next P2 heartbeat, validate this same pattern against active-hour V5a windows and recent bot logs before touching production.\n\n\n## 2026-04-24 12:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Changelog Went Live So the Next Improvement Reduces Documentation Navigation Friction Instead of Creating More Runtime Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, self-check, audit checklist, manifest, and changelog all exist, so the next improvement targets the strongest remaining navigation and maintenance-friction gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - workflows\n  - help, map, examples\n  - self-check\n  - manifest\n  - audit checklist\n  - changelog\n- Highest-value next gap:\n  - **no compact operator stack overview doc that links the major docs together in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15h-next-gap-after-operator-changelog.spec.md`\n\n**My thinking:**\nThis is the right next step because the doc layer is now good but slightly fragmented. A tiny overview file would make the documentation surface feel coherent without adding ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 13:17 UTC \u2014 [P2: Smart Entry] Define the Minimum Contents for the Overnight Operator Stack Overview Doc So the Documentation Surface Has One Clear Navigation Entry Point\n\n**Task:** Specify the minimum contents for a compact overnight operator stack overview doc, so the operator documentation surface has one clean starting point instead of a loose cluster of separate focused files.\n**Finding:**\n- Both bots are alive.\n- Required overview sections selected:\n  1. what this stack is\n  2. top-level commands\n  3. key docs\n  4. key artifacts\n- Style selected:\n  - concise navigation-oriented markdown\n  - link-heavy, low prose\n  - overview only, not a replacement for the linked docs\n- Wrote overview-doc artifact: `/home/ubuntu/clawd/patches/v15i-operator-overview-doc-contents.spec.md`\n\n**My thinking:**\nThis is the right minimum. It gives one obvious entry point into the operator surface without duplicating all the other documents we just built. That keeps the documentation layer organized instead of sprawling.\n\n**Decision:**\n- Keep the overview doc short and navigation-oriented.\n- Use it as the index into commands, docs, and artifacts, not as another explanation-heavy layer.\n\n**Next:** On the next P2 heartbeat, implement the compact overnight operator stack overview doc.\n\n---\n## 2026-04-24 12:59 UTC \u2014 [P2] Stress-test the Smart Entry Bias Filter Instead of Blindly Shipping V5a\n\n**Task:** Re-run the shadow-trade dataset to see whether the proposed `min_bias=45` filter actually improves trade quality, and identify whether a more selective parameter tweak beats a blanket threshold raise.\n**Finding:**\n- Both bots are alive.\n- Analyzed 93 completed shadow trades from `logs/shadow-trades-v2.jsonl`.\n- Baseline shadow WR: **49.5%**.\n- V5a blanket filter (`abs_bias >= 45`) only reaches **48.5% WR** across 68 trades, so it does **not** improve quality by itself.\n- The strongest bucket was **45-55 absolute bias** at **56.2% WR**.\n- The **55+** bucket degraded to **41.7% WR** overall.\n- Worst offenders:\n  - **hour 8 UTC:** 0/5 in 45+ bias trades\n  - **STRONG_TREND + 55+ bias:** 0/3\n- Best near-term filter variant from this sample:\n  - `abs_bias >= 45`\n  - block **hour 8 UTC**\n  - block **55+ bias during STRONG_TREND**\n  - result: **55.0% WR** across 60 trades\n- Wrote analysis note: `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-24.md`\n\n**My thinking:**\nThe key miss was treating stronger bias as automatically better. In this dataset, the edge peaks in the 45-55 zone, then gets worse when bias becomes too extreme, especially when the market is already in a strong-trend state. That means V5a is directionally closer than the old filter, but still too blunt.\n\n**Decision:**\nDo **not** ship a blanket `min_bias=45` change by itself. The next live candidate should be the narrower variant that keeps 45+ entries but blocks hour 8 UTC and 55+ bias during STRONG",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
