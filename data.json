@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T07:39:52.939669+00:00",
+  "timestamp": "2026-04-24T07:44:07.800379+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1573%",
-      "apr": "-172%",
+      "rate": "-0.1584%",
+      "apr": "-173%",
       "action": "LONG",
-      "oi": "30,023,666"
+      "oi": "29,713,628"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0877%",
-      "apr": "+96%",
+      "rate": "+0.0890%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0567%",
-      "apr": "-62%",
+      "rate": "-0.0556%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "88,614,346"
+      "oi": "88,705,884"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1573%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1584%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:39 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Output for the Compact Overnight Health Summary So Operators Can Get a Fast Coherence Answer Without Pulling the Fuller Status Payload\n\n**Task:** Specify the minimum output for a compact overnight health-summary command, so the system has a fast top-level inspection path that complements the more detailed read-only status command.\n**Finding:**\n- Both bots are alive.\n- Minimum health-summary fields selected:\n  - `overall_status`\n  - `snapshot_exists`\n  - `summary_log_exists`\n  - `sync_status`\n  - `latest_profiles`\n- Behavior selected:\n  - compact one-screen output\n  - read only\n  - summarize presence and coherence instead of detailed timestamps and paths\n  - report FAIL clearly if any core artifact is missing or sync is broken\n- Wrote health-summary-shape artifact: `/home/ubuntu/clawd/patches/v14n-health-summary-output-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum because it answers the quick operator question directly: is the overnight stack basically healthy right now? Anything more belongs in the detailed status command.\n\n**Decision:**\n- Keep the health-summary command short and top-level.\n- Reserve paths, timestamps, and richer detail for the full status command.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight health-summary command and validate its output against current live artifacts.\n\n---\n## 2026-04-24 07:13 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Command Map Went Live So the Next Improvement Sharpens the Inspection Surface Instead of Just Extending Documentation\n\n**Task:** Reassess the overnight operator stack now that workflows and their hierarchy are both implemented and documented, so the next improvement targets the strongest remaining usability gap rather than continuing the documentation layer indefinitely.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - action workflows\n  - read-only inspection\n  - safety checks\n  - compact operator command map\n- Highest-value next gap:\n  - **no compact health-summary command for a quick artifact-presence and coherence answer**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14m-next-gap-after-operator-command-map.spec.md`\n\n**My thinking:**\nThis is the right next move. We have detailed inspection and we have a map, but there\u2019s still value in a faster top-level answer when the operator doesn\u2019t want the full status payload. That\u2019s a distinct need, not just more of the same.\n\n**Decision:**\n- Prioritize a compact overnight health-summary command next.\n- Keep it focused on artifact presence and coherence rather than detailed state reporting.\n\n**Next:** On the next P4 heartbeat, define the minimum output for the compact overnight health-summary command.\n\n---\n## 2026-04-24 07:09 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operat",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:43 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Health Summary So the Operator Can Get a Fast Coherence Answer Without Pulling the Fuller Read-Only Status Payload\n\n**Task:** Build the compact overnight health-summary command and validate that it reports the top-level health of the current overnight operator artifacts against live files.\n**Finding:**\n- Both bots are alive.\n- Built compact health-summary command:\n  - `/home/ubuntu/clawd/scripts/operator_health_summary_overnight.sh`\n- Health summary now reports:\n  - `overall_status`\n  - `snapshot_exists`\n  - `summary_log_exists`\n  - `sync_status`\n  - `latest_profiles`\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected compact health summary.\n- Wrote health-summary artifact: `/home/ubuntu/clawd/patches/v14o-health-summary-command-live.spec.md`\n\n**My thinking:**\nThis is the right final complement to the inspection side. Sometimes you want the full status view, and sometimes you just want a clean yes-or-no-style answer with a tiny bit of context. Now we have both.\n\n**Decision:**\n- Keep this as the fastest read-only health check for the overnight operator stack.\n- Keep the fuller status command available for deeper inspection.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that compact health summary, full status, and full operator action paths all exist.\n\n---\n## 2026-04-24 07:39 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Output for the Compact Overnight Health Summary So Operators Can Get a Fast Coherence Answer Without Pulling the Fuller Status Payload\n\n**Task:** Specify the minimum output for a compact overnight health-summary command, so the system has a fast top-level inspection path that complements the more detailed read-only status command.\n**Finding:**\n- Both bots are alive.\n- Minimum health-summary fields selected:\n  - `overall_status`\n  - `snapshot_exists`\n  - `summary_log_exists`\n  - `sync_status`\n  - `latest_profiles`\n- Behavior selected:\n  - compact one-screen output\n  - read only\n  - summarize presence and coherence instead of detailed timestamps and paths\n  - report FAIL clearly if any core artifact is missing or sync is broken\n- Wrote health-summary-shape artifact: `/home/ubuntu/clawd/patches/v14n-health-summary-output-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum because it answers the quick operator question directly: is the overnight stack basically healthy right now? Anything more belongs in the detailed status command.\n\n**Decision:**\n- Keep the health-summary command short and top-level.\n- Reserve paths, timestamps, and richer detail for the full status command.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight health-summary comma",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
