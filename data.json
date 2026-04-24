@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T05:00:56.045036+00:00",
+  "timestamp": "2026-04-24T05:15:11.547230+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1308%",
-      "apr": "-143%",
+      "rate": "-0.1504%",
+      "apr": "-165%",
       "action": "LONG",
-      "oi": "25,210,458"
+      "oi": "25,703,466"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0717%",
+      "apr": "+79%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1308%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1504%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 05:00 UTC \u2014 [P4: Alpha Research] Wire Live Regime and Fear-Greed Context into the Overnight Snapshot So the Dashboard Carries Actual Market Posture Instead of Only Internal Pipeline Health\n\n**Task:** Extend the overnight JSON snapshot with live alpha context by pulling the BTC regime classifier and Fear & Greed signal into the same report the dashboard refresh consumes.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py` to append an `alpha_context` block.\n- Live snapshot now includes:\n  - BTC regime: `RANGE`, score `2`, PM action `TRADE`\n  - Fear & Greed: `39` (`Fear`), but current sizing modifier stays neutral at `+0.00` and `1.00x`\n  - Consolidated execution posture with the regime gate plus confidence and sizing modifiers\n- Regime and sentiment are no longer trapped in separate tools, they now ride with the overnight snapshot used by operators.\n\n**My thinking:**\nThis is the right P4 move because it upgrades the snapshot from a pure pipeline-status artifact into a market-state artifact. The useful read right now is clear: regime is permissive, but sentiment is only mildly fearful, so there is no reason to juice size just because the gate is open.\n\n**Decision:**\n- Keep the new `alpha_context` block in the overnight report.\n- Treat `RANGE + neutral F&G modifier` as a green light for normal operation, not aggressive sizing.\n\n**Next:** On the next P4 heartbeat, push this same alpha context into the operator summary path so the latest refresh output shows market posture without needing a JSON dive.\n\n\n## 2026-04-24 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Snapshot-vs-Summary Sync Check Went Live So the Next Improvement Tightens the Operator Path Instead of Multiplying Independent Safety Steps\n\n**Task:** Reassess the overnight system now that the snapshot and summary log are cross-checked, so the next improvement strengthens the operator path without adding unnecessary conceptual branches.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human and machine reports\n  - stable snapshot\n  - operator summary log\n  - snapshot-vs-summary sync check\n  - refresh wrappers\n  - history and validation\n- Highest-value next gap:\n  - **no single command that runs operator refresh and then immediately runs the sync check, ending with a compact all-clear result**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14d-next-gap-after-sync-check.spec.md`\n\n**My thinking:**\nThis is the clean next tightening move. The pieces are all there, but the safest operator path still requires remembering one more step. A tiny combined command would reduce that gap without changing the underlying architecture at all.\n\n**Decision:**\n- Prioritize a wrapper that runs operator refresh and then the sync check.\n- End with a compact all-clear result on success.\n\n**Next",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 05:14 UTC \u2014 [P4: Alpha Research] Define the Minimum Refresh-Plus-Sync All-Clear Wrapper Behavior So the Safest Operator Path Collapses Into One Explicit Success Contract\n\n**Task:** Specify the minimum behavior for a wrapper that runs the operator refresh flow and then the snapshot-vs-summary sync check, finishing with a compact all-clear result on success.\n**Finding:**\n- Both bots are alive.\n- Minimum wrapper behavior selected:\n  1. run `operator_refresh_overnight.sh`\n  2. run `check_snapshot_summary_sync.py`\n  3. exit non-zero if either step fails\n  4. print a short final all-clear line on success\n- Selected success output:\n  - `ALL_CLEAR: refresh completed and snapshot-summary sync verified`\n- Wrote wrapper-behavior artifact: `/home/ubuntu/clawd/patches/v14e-refresh-plus-sync-wrapper-behavior.spec.md`\n\n**My thinking:**\nThis is exactly the right amount of extra structure. It doesn\u2019t create a new system. It just makes the safest operational path explicit and easy to trust.\n\n**Decision:**\n- Keep the all-clear wrapper thin and terminal-focused.\n- Use it to represent the fully successful operator path end to end.\n\n**Next:** On the next P4 heartbeat, implement the refresh-plus-sync all-clear wrapper and validate the final success output.\n\n---\n## 2026-04-24 05:00 UTC \u2014 [P4: Alpha Research] Wire Live Regime and Fear-Greed Context into the Overnight Snapshot So the Dashboard Carries Actual Market Posture Instead of Only Internal Pipeline Health\n\n**Task:** Extend the overnight JSON snapshot with live alpha context by pulling the BTC regime classifier and Fear & Greed signal into the same report the dashboard refresh consumes.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/scripts/report_overnight_pipeline_json.py` to append an `alpha_context` block.\n- Live snapshot now includes:\n  - BTC regime: `RANGE`, score `2`, PM action `TRADE`\n  - Fear & Greed: `39` (`Fear`), but current sizing modifier stays neutral at `+0.00` and `1.00x`\n  - Consolidated execution posture with the regime gate plus confidence and sizing modifiers\n- Regime and sentiment are no longer trapped in separate tools, they now ride with the overnight snapshot used by operators.\n\n**My thinking:**\nThis is the right P4 move because it upgrades the snapshot from a pure pipeline-status artifact into a market-state artifact. The useful read right now is clear: regime is permissive, but sentiment is only mildly fearful, so there is no reason to juice size just because the gate is open.\n\n**Decision:**\n- Keep the new `alpha_context` block in the overnight report.\n- Treat `RANGE + neutral F&G modifier` as a green light for normal operation, not aggressive sizing.\n\n**Next:** On the next P4 heartbeat, push this same alpha context into the operator summary path so the latest refresh output shows market posture without needing a JSON dive.\n\n\n## 2026-04-24 04:43 UTC \u2014 [P3: Strategy",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
