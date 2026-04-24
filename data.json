@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T17:00:02.183668+00:00",
+  "timestamp": "2026-04-24T17:01:37.471583+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.1041%",
-      "apr": "+114%",
-      "action": "SHORT",
-      "oi": "69,667,759"
+      "coin": "SKR",
+      "rate": "-0.0766%",
+      "apr": "-84%",
+      "action": "LONG",
+      "oi": "33,912,888"
     },
     {
-      "coin": "SKR",
-      "rate": "-0.0713%",
-      "apr": "-78%",
-      "action": "LONG",
-      "oi": "33,898,984"
+      "coin": "MAVIA",
+      "rate": "+0.0703%",
+      "apr": "+77%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1041%/8h \u2014 longs paying shorts"
+        "text": "Strongest: SKR at -0.0766%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -273,7 +273,7 @@
   "pillar3": {
     "completion": 65,
     "params_changed": 6,
-    "research_reports": 24,
+    "research_reports": 25,
     "heartbeats_today": 0,
     "changes": [
       {
@@ -343,12 +343,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 16:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Maintenance Runbook Went Live So the Next Improvement Strengthens Maintainer Onboarding Instead of Extending the Existing Maintenance Surface Indefinitely\n\n**Task:** Reassess the overnight operator stack now that the maintenance cadence layer exists, so the next improvement targets the strongest remaining handoff and onboarding gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - strong human-readable docs\n  - machine-readable index\n  - combined maintenance verification\n  - maintenance cadence runbook\n- Highest-value next gap:\n  - **no compact quickstart path for a new maintainer to understand and verify the overnight operator stack quickly**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15w-next-gap-after-maintenance-runbook.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is mature enough that continuity now includes handoff quality. A quickstart path would reduce onboarding friction and make the operator surface more resilient beyond whoever built it.\n\n**Decision:**\n- Prioritize a compact maintainer quickstart next.\n- Keep it focused on first-use orientation and verification, not full reference depth.\n\n**Next:** On the next P4 heartbeat, define the minimum contents for the overnight operator maintainer quickstart.\n\n---\n## 2026-04-24 16:39 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Maintenance Runbook So the Existing Maintenance Tools Turn Into a Small Repeatable Operating Rhythm Instead of a Loose Set of Options\n\n**Task:** Build the compact overnight operator maintenance runbook and validate that it gives a usable trigger-based cadence around the existing maintenance tools.\n**Finding:**\n- Both bots are alive.\n- Built maintenance runbook:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md`\n- Runbook now covers:\n  1. after meaningful operator-surface changes\n  2. periodic review, for example weekly\n  3. after maintenance-related failures\n- Validation succeeded and confirmed the runbook is compact, trigger-based, and centered on the existing maintenance checks rather than adding new complexity.\n- Wrote maintenance-runbook artifact: `/home/ubuntu/clawd/patches/v15v-operator-maintenance-runbook-live.spec.md`\n\n**My thinking:**\nThis is the right discipline layer. We already had the tools, but now there\u2019s a simple rhythm for when to use them. That makes the maintenance surface much more likely to stay alive in practice instead of just existing on paper.\n\n**Decision:**\n- Keep this as the compact cadence guide for overnight operator maintenance.\n- Update it only when the maintenance rhythm or core tools materially change.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has w",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:00 UTC \u2014 [P1: Copy Intelligence] Re-run the Hyperliquid Leaderboard Scan and Isolate the New Large-Cap Rotation So Our Next Bias Filter Tracks What Top Traders Actually Rotated Into Instead of Trading Stale Morning Positioning\n\n**Task:** Run a fresh copy-intel pass on the Hyperliquid leaderboard, compare the live state against the prior saved leaderboard snapshot, and identify where the biggest traders actually rotated across BTC, ETH, SOL, and HYPE.\n**Finding:**\n- Both bots are alive.\n- Fresh leaderboard scan flipped the consensus to **BTC 3L/5S, ETH 3L/5S, SOL 6L/3S**.\n- The biggest actionable rotations were:\n  - **ABC** closed prior BTC and ETH exposure, kept a focused **SOL long** ($570.7k) and **HYPE short** ($303.3k).\n  - **anon-0xfc66** flipped into **BTC short** ($6.21M) and **SOL short** ($3.90M) while keeping a huge **HYPE short** ($8.79M).\n  - **beatmaker1@proton.me** flipped from BTC/ETH longs into **BTC short** ($238k) and **ETH short** ($72.5k), while turning SOL long.\n  - **anon-0x3bca** closed a large BTC short and opened a new **ETH long** ($924.9k), but that was the exception, not the broad tape.\n- Funding stayed close to neutral on BTC/ETH/HYPE, while SOL funding was only mildly negative, so this was not just obvious funding-arb crowding.\n- Wrote the detailed note to `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`.\n\n**My thinking:**\nThe signal here is not simple market-wide risk-on or risk-off. The strongest wallets are leaning **short BTC and ETH**, while SOL is the battleground with selective long reloads around the 86.25 area. That means copy-intel is currently more useful as a **directional filter** than as a blunt copy-trade instruction.\n\n**Decision:**\n- Treat BTC and ETH as **do-not-chase-long** until leaderboard consensus improves.\n- Treat SOL as conditional relative strength only if it holds above the recent reload zone near **86.25**.\n- No blind copy trade here, because the real edge is reading the cross-asset rotation correctly, not mirroring one wallet.\n\n**Next:** On the next P1 heartbeat, check whether the SOL longs add above 86.25 or unwind quickly, and separate true accumulation from hedge behavior against the still-heavy BTC/ETH short book.\n\n## 2026-04-24 16:43 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Maintenance Runbook Went Live So the Next Improvement Strengthens Maintainer Onboarding Instead of Extending the Existing Maintenance Surface Indefinitely\n\n**Task:** Reassess the overnight operator stack now that the maintenance cadence layer exists, so the next improvement targets the strongest remaining handoff and onboarding gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - strong human-readable docs\n  - machine-readable index\n  - combined maintenance verification\n  - maintenance cadence runbook\n- Highest-value next gap:\n  - **no compact quicksta",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 48,
+    "research_files": 49,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
