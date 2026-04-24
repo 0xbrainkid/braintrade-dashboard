@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T07:30:02.394684+00:00",
+  "timestamp": "2026-04-24T07:39:52.939669+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1669%",
-      "apr": "-183%",
+      "rate": "-0.1573%",
+      "apr": "-172%",
       "action": "LONG",
-      "oi": "30,139,310"
+      "oi": "30,023,666"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0966%",
-      "apr": "+106%",
+      "rate": "+0.0877%",
+      "apr": "+96%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0578%",
-      "apr": "-63%",
+      "rate": "-0.0567%",
+      "apr": "-62%",
       "action": "LONG",
-      "oi": "88,597,820"
+      "oi": "88,614,346"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1669%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1573%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:13 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Command Map Went Live So the Next Improvement Sharpens the Inspection Surface Instead of Just Extending Documentation\n\n**Task:** Reassess the overnight operator stack now that workflows and their hierarchy are both implemented and documented, so the next improvement targets the strongest remaining usability gap rather than continuing the documentation layer indefinitely.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - action workflows\n  - read-only inspection\n  - safety checks\n  - compact operator command map\n- Highest-value next gap:\n  - **no compact health-summary command for a quick artifact-presence and coherence answer**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14m-next-gap-after-operator-command-map.spec.md`\n\n**My thinking:**\nThis is the right next move. We have detailed inspection and we have a map, but there\u2019s still value in a faster top-level answer when the operator doesn\u2019t want the full status payload. That\u2019s a distinct need, not just more of the same.\n\n**Decision:**\n- Prioritize a compact overnight health-summary command next.\n- Keep it focused on artifact presence and coherence rather than detailed state reporting.\n\n**Next:** On the next P4 heartbeat, define the minimum output for the compact overnight health-summary command.\n\n---\n## 2026-04-24 07:09 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Command Map So the Command Surface Stays Navigable As the Operator Stack Becomes More Capable\n\n**Task:** Build the compact overnight operator command map and validate that it clearly covers the high-level, read-only, mid-level, low-level, and artifact-location layers of the stack.\n**Finding:**\n- Both bots are alive.\n- Built command map:\n  - `/home/ubuntu/clawd/docs/overnight-operator-command-map.md`\n- Map covers:\n  1. highest-level command\n  2. read-only status command\n  3. mid-level operator command\n  4. low-level checks and components\n  5. key artifact locations\n- Initial readback hit the same path seam pattern seen in prior wrapper validations.\n- Corrected the validation path and confirmed the written content is present and complete.\n- Wrote command-map artifact: `/home/ubuntu/clawd/patches/v14l-operator-command-map-live.spec.md`\n\n**My thinking:**\nThis is useful polish, not fluff. The operator surface is now strong enough that a compact map genuinely reduces mistakes and hesitation. I\u2019m glad it exists in one place instead of only in scattered worklog context.\n\n**Decision:**\n- Keep this map as the compact orientation doc for the overnight operator stack.\n- Update it when new top-level entrypoints or key artifacts are added.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the workflows and their operator map ar",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:39 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Output for the Compact Overnight Health Summary So Operators Can Get a Fast Coherence Answer Without Pulling the Fuller Status Payload\n\n**Task:** Specify the minimum output for a compact overnight health-summary command, so the system has a fast top-level inspection path that complements the more detailed read-only status command.\n**Finding:**\n- Both bots are alive.\n- Minimum health-summary fields selected:\n  - `overall_status`\n  - `snapshot_exists`\n  - `summary_log_exists`\n  - `sync_status`\n  - `latest_profiles`\n- Behavior selected:\n  - compact one-screen output\n  - read only\n  - summarize presence and coherence instead of detailed timestamps and paths\n  - report FAIL clearly if any core artifact is missing or sync is broken\n- Wrote health-summary-shape artifact: `/home/ubuntu/clawd/patches/v14n-health-summary-output-shape.spec.md`\n\n**My thinking:**\nThis is the right minimum because it answers the quick operator question directly: is the overnight stack basically healthy right now? Anything more belongs in the detailed status command.\n\n**Decision:**\n- Keep the health-summary command short and top-level.\n- Reserve paths, timestamps, and richer detail for the full status command.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight health-summary command and validate its output against current live artifacts.\n\n---\n## 2026-04-24 07:13 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Command Map Went Live So the Next Improvement Sharpens the Inspection Surface Instead of Just Extending Documentation\n\n**Task:** Reassess the overnight operator stack now that workflows and their hierarchy are both implemented and documented, so the next improvement targets the strongest remaining usability gap rather than continuing the documentation layer indefinitely.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - action workflows\n  - read-only inspection\n  - safety checks\n  - compact operator command map\n- Highest-value next gap:\n  - **no compact health-summary command for a quick artifact-presence and coherence answer**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14m-next-gap-after-operator-command-map.spec.md`\n\n**My thinking:**\nThis is the right next move. We have detailed inspection and we have a map, but there\u2019s still value in a faster top-level answer when the operator doesn\u2019t want the full status payload. That\u2019s a distinct need, not just more of the same.\n\n**Decision:**\n- Prioritize a compact overnight health-summary command next.\n- Keep it focused on artifact presence and coherence rather than detailed state reporting.\n\n**Next:** On the next P4 heartbeat, define the minimum output for the compact overnight health-summary command.\n\n---\n## 2026-04-24 07:09 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operat",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
