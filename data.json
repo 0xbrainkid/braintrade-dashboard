@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T21:30:01.564565+00:00",
+  "timestamp": "2026-04-24T21:40:06.950390+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,38 +17,38 @@
   "funding_opportunities": [
     {
       "coin": "APE",
-      "rate": "-0.1123%",
-      "apr": "-123%",
+      "rate": "-0.0886%",
+      "apr": "-97%",
       "action": "LONG",
-      "oi": "38,141,952"
-    },
-    {
-      "coin": "ME",
-      "rate": "-0.0812%",
-      "apr": "-89%",
-      "action": "LONG",
-      "oi": "2,086,833"
+      "oi": "38,883,302"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0788%",
-      "apr": "+86%",
+      "rate": "+0.0861%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
-      "coin": "SKR",
-      "rate": "-0.0651%",
-      "apr": "-71%",
+      "coin": "ME",
+      "rate": "-0.0703%",
+      "apr": "-77%",
       "action": "LONG",
-      "oi": "36,517,578"
+      "oi": "2,075,064"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0578%",
-      "apr": "-63%",
+      "rate": "-0.0634%",
+      "apr": "-69%",
       "action": "LONG",
-      "oi": "84,386,142"
+      "oi": "81,968,436"
+    },
+    {
+      "coin": "SKR",
+      "rate": "-0.0607%",
+      "apr": "-66%",
+      "action": "LONG",
+      "oi": "36,954,786"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.1123%/8h \u2014 shorts paying longs"
+        "text": "Strongest: APE at -0.0886%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -364,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:16 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Maintainer Workflow Sequence for the Overview Doc So the Main Human Entry Point Stops Making Maintainers Assemble the Workflow Themselves From Disconnected Commands and Docs\n\n**Task:** Specify the minimum maintainer workflow sequence that should be added to `docs/overnight-operator-overview.md`, so the main human-readable entrypoint becomes a compact orientation path instead of just a navigation surface.\n**Finding:**\n- Both bots are alive.\n- Minimum workflow sequence selected:\n  1. read the maintainer quickstart for first-five-minutes orientation\n  2. run `scripts/operator_maintenance_check_overnight.sh`\n  3. use `scripts/operator_status_overnight.sh` for read-only inspection\n  4. use `scripts/operator_all_clear_overnight.sh` for safest refresh-and-verify action\n  5. use the maintenance runbook, audit checklist, manifest, and changelog for deeper context\n- Wrote overview-workflow artifact: `/home/ubuntu/clawd/patches/v16n-overview-maintainer-workflow-sequence.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives a maintainer one clear sequence at the main entrypoint without collapsing the specialized docs together. The workflow should orient first, then branch deeper only when needed.\n\n**Decision:**\n- Keep the overview workflow compact and sequential.\n- Use it as a top-layer orientation aid, not a duplicate handbook.\n\n**Next:** On the next P1 heartbeat, implement the compact maintainer workflow sequence in `docs/overnight-operator-overview.md`.\n\n---\n## 2026-04-24 20:59 UTC \u2014 [P1] Refresh Hyperliquid Copy-Intel and Re-rank the Active Winner Cluster\n\n**Task:** Run a fresh copy-intel-tracker scan, compare the current leaderboard positioning against the earlier 17:00 snapshot, and isolate the strongest still-active trader cluster to see whether the board is genuinely rotating risk-on or just expressing selective relative-value longs.\n**Finding:**\n- Both bots are alive.\n- Ran `scripts/copy-intel-tracker.py` successfully.\n- Fresh consensus tightened to **BTC 4L/5S, ETH 3L/5S, SOL 5L/4S**.\n- The heaviest high-performing cluster is still concentrated in **BTC/ETH/HYPE shorts**:\n  - `anon-0xfc66`: HYPE short $8.79M, BTC short $6.21M, SOL short $3.90M, ETH short $510k\n  - `anon-0xecb6`: ETH short $9.53M, BTC short $6.60M, SOL short $3.59M, HYPE short $2.03M\n- The main nuance is still **selective SOL relative-strength**, not broad bullishness:\n  - `anon-0x57dd`: BTC/ETH shorts plus SOL long $406k\n  - `ABC`: SOL long $571k plus HYPE short $303k\n- Compared with the earlier 17:00 read, SOL lost one long vote and moved from clearly bullish to **nearly balanced**.\n- Updated research note: `/home/ubuntu/clawd/research/trader-analysis-2026-04-24.md`\n\n**My thinking:** The board still does not support a simple follow-the-leader long thesis. The highest-conviction winners remain structurally ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:39 UTC \u2014 [P2: Smart Entry] Implement the Compact Maintainer Workflow Sequence in the Overview Doc So the Main Human Entry Point Becomes a Real Orientation Path Instead of Just a Flat Navigation List\n\n**Task:** Add the maintainer workflow sequence to the overnight operator overview doc and validate that the main human-readable entrypoint now sequences quickstart, maintenance check, status, all-clear, and deeper references in one compact section.\n**Finding:**\n- Both bots are alive.\n- The overview doc was slimmer than expected, so the correct patch point was the tail after `## Key artifacts`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-overview.md` directly.\n- Added:\n  - `## Maintenance view`\n  - `## Maintainer workflow`\n- Confirmed the overview now sequences:\n  1. maintainer quickstart\n  2. maintenance check\n  3. status inspection\n  4. all-clear action path\n  5. deeper maintenance references\n- Wrote overview-workflow-live artifact: `/home/ubuntu/clawd/patches/v16o-overview-maintainer-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The main entry doc now does more than list pieces, it gives a maintainer a compact route through them. That makes the overall surface much easier to understand without flattening the specialized docs.\n\n**Decision:**\n- Keep the overview workflow compact and sequential.\n- Treat it as the top-layer orientation path for maintainers.\n\n**Next:** On the next P2 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the shell entrypoints, overview doc, specialized docs, machine-readable index, and validator all reflect the maintenance layer coherently.\n\n---\n## 2026-04-24 21:16 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Maintainer Workflow Sequence for the Overview Doc So the Main Human Entry Point Stops Making Maintainers Assemble the Workflow Themselves From Disconnected Commands and Docs\n\n**Task:** Specify the minimum maintainer workflow sequence that should be added to `docs/overnight-operator-overview.md`, so the main human-readable entrypoint becomes a compact orientation path instead of just a navigation surface.\n**Finding:**\n- Both bots are alive.\n- Minimum workflow sequence selected:\n  1. read the maintainer quickstart for first-five-minutes orientation\n  2. run `scripts/operator_maintenance_check_overnight.sh`\n  3. use `scripts/operator_status_overnight.sh` for read-only inspection\n  4. use `scripts/operator_all_clear_overnight.sh` for safest refresh-and-verify action\n  5. use the maintenance runbook, audit checklist, manifest, and changelog for deeper context\n- Wrote overview-workflow artifact: `/home/ubuntu/clawd/patches/v16n-overview-maintainer-workflow-sequence.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives a maintainer one clear sequence at the main entrypoint without collapsing the specia",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
