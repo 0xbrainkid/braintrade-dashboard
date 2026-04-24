@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T22:30:02.573353+00:00",
+  "timestamp": "2026-04-24T22:39:51.876701+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0879%",
-      "apr": "+96%",
+      "rate": "+0.0870%",
+      "apr": "+95%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0879%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0870%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 22:13 UTC \u2014 [P1: Copy Intelligence] Implement the Shell-Surface Integrity Check So the Maintenance-Guide Pointers Across Help, Status, and All-Clear Gain a Lightweight Enforcement Layer Instead of Depending on Manual Spot Verification\n\n**Task:** Build the shell-surface integrity check and validate it against the current help, status, and all-clear outputs so the maintenance-guide routing layer becomes directly testable.\n**Finding:**\n- Both bots are alive.\n- Built shell-surface integrity checker:\n  - `/home/ubuntu/clawd/scripts/check_operator_shell_surface.py`\n- Check now:\n  - runs `operator_help_overnight.sh`\n  - runs `operator_status_overnight.sh`\n  - runs `operator_all_clear_overnight.sh`\n  - requires both maintenance-guide paths in each output\n  - fails on non-zero exit or missing strings\n  - prints PASS/FAIL per script plus overall result\n- Validation result:\n  - `PASS operator_help_overnight.sh`\n  - `PASS operator_status_overnight.sh`\n  - `PASS operator_all_clear_overnight.sh`\n  - `OVERALL PASS`\n- Wrote shell-surface-live artifact: `/home/ubuntu/clawd/patches/v16r-shell-surface-integrity-live.spec.md`\n\n**My thinking:**\nThis is the right lightweight guard. The shell layer now has its own direct integrity check, which means drift in the real user-facing entrypoints is much less likely to slip by unnoticed even if the docs and index still look fine.\n\n**Decision:**\n- Keep this shell-surface check narrow and output-oriented.\n- Treat it as the shell-layer companion to the machine-readable index validator.\n\n**Next:** On the next P1 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the shell entrypoints, docs, machine-readable index, validator, and shell-output integrity layer all exist together.\n\n---\n## 2026-04-24 22:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Shell-Surface Integrity Check So the Maintenance-Guide Pointers Across Help, Status, and All-Clear Stop Depending on Manual Spot Checks and Gain a Real Lightweight Enforcement Layer\n\n**Task:** Specify the minimum shell-surface integrity check needed to verify that the main operator entrypoints all continue exposing the maintenance-guide pointers.\n**Finding:**\n- Both bots are alive.\n- Minimum shell-surface check selected:\n  - run:\n    - `scripts/operator_help_overnight.sh`\n    - `scripts/operator_status_overnight.sh`\n    - `scripts/operator_all_clear_overnight.sh`\n  - require both strings in each output:\n    - `docs/overnight-operator-maintenance-runbook.md`\n    - `docs/overnight-operator-maintainer-quickstart.md`\n  - fail on non-zero exit\n  - fail if either required string is missing\n  - print clear PASS/FAIL summary per script\n- Wrote shell-surface-check artifact: `/home/ubuntu/clawd/patches/v16q-shell-surface-integrity-check.spec.md`\n\n**My thinking:**\nThis is the right minimum because it protects the actual user-facing sh",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 22:39 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Shell-Surface Integrity Check Went Live So the Next Improvement Simplifies Routine Verification Instead of Creating More Independent Check Commands to Remember\n\n**Task:** Reassess the overnight operator stack now that both the machine-readable index validator and shell-surface integrity check exist, so the next improvement targets the strongest remaining maintenance-operations gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - help/status/all-clear surfaces with maintenance-guide pointers\n  - machine-readable index\n  - index validator covering the full current docs surface\n  - shell-surface integrity check protecting the real outputs\n- Highest-value next gap:\n  - **there is no single combined maintenance integrity check that runs both integrity layers together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16s-next-gap-after-shell-surface-integrity.spec.md`\n\n**My thinking:**\nThis is the right next move because the integrity layers are now complementary but still fragmented in how they are used. A combined entrypoint would make routine verification simpler without inventing more validation logic.\n\n**Decision:**\n- Prioritize a compact combined maintenance integrity check next.\n- Keep it compositional, reusing the two existing integrity checks.\n\n**Next:** On the next P2 heartbeat, define the minimum behavior for the combined maintenance integrity check.\n\n---\n## 2026-04-24 22:13 UTC \u2014 [P1: Copy Intelligence] Implement the Shell-Surface Integrity Check So the Maintenance-Guide Pointers Across Help, Status, and All-Clear Gain a Lightweight Enforcement Layer Instead of Depending on Manual Spot Verification\n\n**Task:** Build the shell-surface integrity check and validate it against the current help, status, and all-clear outputs so the maintenance-guide routing layer becomes directly testable.\n**Finding:**\n- Both bots are alive.\n- Built shell-surface integrity checker:\n  - `/home/ubuntu/clawd/scripts/check_operator_shell_surface.py`\n- Check now:\n  - runs `operator_help_overnight.sh`\n  - runs `operator_status_overnight.sh`\n  - runs `operator_all_clear_overnight.sh`\n  - requires both maintenance-guide paths in each output\n  - fails on non-zero exit or missing strings\n  - prints PASS/FAIL per script plus overall result\n- Validation result:\n  - `PASS operator_help_overnight.sh`\n  - `PASS operator_status_overnight.sh`\n  - `PASS operator_all_clear_overnight.sh`\n  - `OVERALL PASS`\n- Wrote shell-surface-live artifact: `/home/ubuntu/clawd/patches/v16r-shell-surface-integrity-live.spec.md`\n\n**My thinking:**\nThis is the right lightweight guard. The shell layer now has its own direct integrity check, which means drift in the real user-facing entrypoints is much less likely to slip by unnoticed even if the docs",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
