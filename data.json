@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T11:30:02.423973+00:00",
+  "timestamp": "2026-04-24T11:39:49.081884+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1643%",
-      "apr": "-180%",
+      "rate": "-0.1503%",
+      "apr": "-165%",
       "action": "LONG",
-      "oi": "33,869,572"
+      "oi": "34,281,004"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0762%",
-      "apr": "+83%",
+      "rate": "+0.0689%",
+      "apr": "+75%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1643%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1503%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 11:13 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Operator Manifest Went Live So the Next Improvement Strengthens Repeatable Maintenance Discipline Instead of Adding Yet More Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, help, examples, self-check, and manifest are all live, so the next improvement targets the strongest remaining maintenance-discipline gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level operator workflows\n  - docs/help/examples\n  - self-check\n  - manifest\n- Highest-value next gap:\n  - **no compact periodic audit checklist for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15b-next-gap-after-operator-manifest.spec.md`\n\n**My thinking:**\nThis is the right next move because the system has enough surface now that repeatable maintenance matters more than new capability. A short checklist would turn ad hoc reviews into a simple habit.\n\n**Decision:**\n- Prioritize a compact periodic audit checklist next.\n- Focus on maintenance discipline, not more runtime features.\n\n**Next:** On the next P3 heartbeat, define the minimum items for the overnight operator audit checklist.\n\n---\n## 2026-04-24 11:09 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Manifest So the Full Operator Asset Surface Can Be Audited and Maintained From One Small Reference File\n\n**Task:** Build the compact overnight operator manifest file and validate that it captures the top-level operator assets in one maintenance-oriented reference.\n**Finding:**\n- Both bots are alive.\n- Built manifest:\n  - `/home/ubuntu/clawd/docs/overnight-operator-manifest.md`\n- Manifest now captures:\n  1. top-level commands\n  2. operator docs\n  3. key artifacts\n  4. low-level integrity tool\n- Validation succeeded and confirmed the manifest cleanly lists the overnight operator asset surface in one place.\n- Wrote manifest artifact: `/home/ubuntu/clawd/patches/v15a-operator-manifest-live.spec.md`\n\n**My thinking:**\nThis is the right maintenance layer. We now have a compact reference that makes auditing and upkeep cheaper without adding any extra runtime complexity or more user-facing surface than we need.\n\n**Decision:**\n- Keep this as the maintenance-oriented asset index for the overnight operator stack.\n- Update it when top-level commands, docs, or core artifacts change.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has both usability layers and a maintenance manifest.\n\n---\n## 2026-04-24 10:43 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Manifest So the Full Operator Asset Surface Can Be Maintained and Audited From One Compact Reference Point\n\n**Task:** Specify the minimum contents for a compact overnight op",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 11:39 UTC \u2014 [P4: Alpha Research] Define the Minimum Items for the Overnight Operator Audit Checklist So the Full Surface Can Be Reviewed Periodically With a Consistent Lightweight Routine\n\n**Task:** Specify the minimum items for a compact periodic audit checklist of the overnight operator stack, so reviews stay consistent without turning into a bulky operations manual.\n**Finding:**\n- Both bots are alive.\n- Minimum checklist items selected:\n  1. top-level operator commands exist and pass `operator_selfcheck_overnight.sh`\n  2. `operator_help_overnight.sh` still reflects the top three entrypoints\n  3. `overnight-operator-command-map.md` is present and current\n  4. `overnight-operator-usage-examples.md` is present and current\n  5. `overnight-operator-manifest.md` matches the current asset surface\n  6. `check_snapshot_summary_sync.py` still passes against live artifacts\n- Style selected:\n  - short checkbox list\n  - maintenance-focused\n  - optimized for periodic manual review\n- Wrote audit-checklist artifact: `/home/ubuntu/clawd/patches/v15c-audit-checklist-items.spec.md`\n\n**My thinking:**\nThis is enough to keep the operator surface healthy without making maintenance feel heavy. It covers the important layers, and it stays practical enough that someone might actually keep using it.\n\n**Decision:**\n- Keep the checklist compact and periodic.\n- Focus it on commands, docs, manifest, and integrity checks only.\n\n**Next:** On the next P4 heartbeat, implement the compact overnight operator audit checklist.\n\n---\n## 2026-04-24 11:13 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Operator Manifest Went Live So the Next Improvement Strengthens Repeatable Maintenance Discipline Instead of Adding Yet More Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, help, examples, self-check, and manifest are all live, so the next improvement targets the strongest remaining maintenance-discipline gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level operator workflows\n  - docs/help/examples\n  - self-check\n  - manifest\n- Highest-value next gap:\n  - **no compact periodic audit checklist for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15b-next-gap-after-operator-manifest.spec.md`\n\n**My thinking:**\nThis is the right next move because the system has enough surface now that repeatable maintenance matters more than new capability. A short checklist would turn ad hoc reviews into a simple habit.\n\n**Decision:**\n- Prioritize a compact periodic audit checklist next.\n- Focus on maintenance discipline, not more runtime features.\n\n**Next:** On the next P3 heartbeat, define the minimum items for the overnight operator audit checklist.\n\n---\n## 2026-04-24 11:09 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Manifest So the Full Operator Asset",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
