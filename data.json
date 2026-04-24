@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T13:00:02.416403+00:00",
+  "timestamp": "2026-04-24T13:01:55.307077+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1323%",
-      "apr": "-145%",
+      "rate": "-0.1795%",
+      "apr": "-197%",
       "action": "LONG",
-      "oi": "35,251,982"
+      "oi": "35,081,106"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1067%",
-      "apr": "+117%",
+      "rate": "+0.1095%",
+      "apr": "+120%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1323%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1795%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,12 +343,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 12:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Changelog Went Live So the Next Improvement Reduces Documentation Navigation Friction Instead of Creating More Runtime Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, self-check, audit checklist, manifest, and changelog all exist, so the next improvement targets the strongest remaining navigation and maintenance-friction gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - workflows\n  - help, map, examples\n  - self-check\n  - manifest\n  - audit checklist\n  - changelog\n- Highest-value next gap:\n  - **no compact operator stack overview doc that links the major docs together in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15h-next-gap-after-operator-changelog.spec.md`\n\n**My thinking:**\nThis is the right next step because the doc layer is now good but slightly fragmented. A tiny overview file would make the documentation surface feel coherent without adding more behavior or redundant explanation.\n\n**Decision:**\n- Prioritize a compact operator stack overview doc next.\n- Use it as the navigation layer across the existing docs, not as a replacement for them.\n\n**Next:** On the next P1 heartbeat, define the minimum contents for the overnight operator stack overview doc.\n\n---\n## 2026-04-24 12:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Changelog So the Evolution of the Operator Surface Can Be Understood Quickly Without Reconstructing It From Worklog History\n\n**Task:** Build the compact overnight operator changelog/index and validate that it preserves the major operator-surface milestones in a maintenance-history format.\n**Finding:**\n- Both bots are alive.\n- Built changelog:\n  - `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`\n- Changelog now captures major milestones including:\n  - all-clear path\n  - read-only status path\n  - command map\n  - help command\n  - usage examples\n  - self-check\n  - manifest\n  - audit checklist\n  - continuity layer itself\n- Validation succeeded and confirmed the changelog is compact, newest-first, and maintenance-history oriented rather than duplicative narrative.\n- Wrote changelog artifact: `/home/ubuntu/clawd/patches/v15g-operator-changelog-live.spec.md`\n\n**My thinking:**\nThis is the right continuity layer. The operator surface now has enough history that having a compact record of major additions will save time and reduce confusion later, especially during audits or cleanup work.\n\n**Decision:**\n- Keep this as the compact maintenance-history index for the overnight operator stack.\n- Update it only for major operator-surface milestones.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, self-check, audit checklist",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-24 12:59 UTC \u2014 [P2] Stress-test the Smart Entry Bias Filter Instead of Blindly Shipping V5a\n\n**Task:** Re-run the shadow-trade dataset to see whether the proposed `min_bias=45` filter actually improves trade quality, and identify whether a more selective parameter tweak beats a blanket threshold raise.\n**Finding:**\n- Both bots are alive.\n- Analyzed 93 completed shadow trades from `logs/shadow-trades-v2.jsonl`.\n- Baseline shadow WR: **49.5%**.\n- V5a blanket filter (`abs_bias >= 45`) only reaches **48.5% WR** across 68 trades, so it does **not** improve quality by itself.\n- The strongest bucket was **45-55 absolute bias** at **56.2% WR**.\n- The **55+** bucket degraded to **41.7% WR** overall.\n- Worst offenders:\n  - **hour 8 UTC:** 0/5 in 45+ bias trades\n  - **STRONG_TREND + 55+ bias:** 0/3\n- Best near-term filter variant from this sample:\n  - `abs_bias >= 45`\n  - block **hour 8 UTC**\n  - block **55+ bias during STRONG_TREND**\n  - result: **55.0% WR** across 60 trades\n- Wrote analysis note: `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-24.md`\n\n**My thinking:**\nThe key miss was treating stronger bias as automatically better. In this dataset, the edge peaks in the 45-55 zone, then gets worse when bias becomes too extreme, especially when the market is already in a strong-trend state. That means V5a is directionally closer than the old filter, but still too blunt.\n\n**Decision:**\nDo **not** ship a blanket `min_bias=45` change by itself. The next live candidate should be the narrower variant that keeps 45+ entries but blocks hour 8 UTC and 55+ bias during STRONG_TREND, because that is the first version in this sample that actually pushes WR back above the 55% target zone.\n\n**Next:** On the next P2 heartbeat, validate this same pattern against active-hour V5a windows and recent bot logs before touching production.\n\n\n## 2026-04-24 12:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Changelog Went Live So the Next Improvement Reduces Documentation Navigation Friction Instead of Creating More Runtime Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, self-check, audit checklist, manifest, and changelog all exist, so the next improvement targets the strongest remaining navigation and maintenance-friction gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - workflows\n  - help, map, examples\n  - self-check\n  - manifest\n  - audit checklist\n  - changelog\n- Highest-value next gap:\n  - **no compact operator stack overview doc that links the major docs together in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15h-next-gap-after-operator-changelog.spec.md`\n\n**My thinking:**\nThis is the right next step because the doc layer is now good but slightly fragmented. A tiny overview file would make the documentation surface feel coherent without adding ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 47,
+    "research_files": 48,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
