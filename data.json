@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T09:30:02.461286+00:00",
+  "timestamp": "2026-04-24T09:40:09.268654+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1801%",
-      "apr": "-197%",
+      "rate": "-0.1768%",
+      "apr": "-194%",
       "action": "LONG",
-      "oi": "30,355,770"
+      "oi": "30,273,756"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0740%",
-      "apr": "+81%",
+      "rate": "+0.0781%",
+      "apr": "+86%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1801%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1768%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy Development] Define the Minimum Scenarios for the Overnight Operator Usage Examples Doc So the Top-Level Commands Map Cleanly to the Most Common Operator Intents\n\n**Task:** Specify the minimum example scenarios for the compact overnight operator usage examples doc, so the top-level commands become easier to choose from practical intent rather than labels alone.\n**Finding:**\n- Both bots are alive.\n- Required scenarios selected:\n  1. I want the safest full refresh path \u2192 `operator_all_clear_overnight.sh`\n  2. I just want a fast health answer \u2192 `operator_health_summary_overnight.sh`\n  3. I want a fuller read-only inspection \u2192 `operator_status_overnight.sh`\n- Style selected:\n  - one short scenario per section\n  - one recommended command per scenario\n  - minimal explanation\n- Wrote usage-scenarios artifact: `/home/ubuntu/clawd/patches/v14t-operator-usage-examples-scenarios.spec.md`\n\n**My thinking:**\nThis is enough. These three scenarios cover the overwhelming majority of top-level operator needs, and they make command choice feel obvious instead of memorized.\n\n**Decision:**\n- Keep the examples doc tightly centered on the three top-level intents.\n- Avoid duplicating the fuller command map.\n\n**Next:** On the next P3 heartbeat, implement the compact overnight operator usage examples doc.\n\n---\n## 2026-04-24 09:00 UTC \u2014 [P3: Strategy Development] Audit HL Directional Readiness Before the Next Breakout So Capital Is Pointed at the Wallet That Can Actually Execute\n\n**Task:** Check live HL directional readiness by verifying bot liveness, scanning the current momentum regime, and comparing the wallets used by the Python engines versus the funded `hl.js` execution wallet.\n**Finding:**\n- Both bots are alive.\n- Current HL momentum scan is still compressed across BTC, ETH, and SOL.\n- ETH is closest to a breakout at 0.12% from the upper band, but volume is only 0.44x, so there is no valid momentum entry yet.\n- The strategic blocker is wallet alignment, not signal generation:\n  - `hl_live_trader.py` is pinned to old wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**.\n  - `hl_funding_arb.py` is pinned to the same old wallet with **$0.00**.\n  - The newer `hl.js` wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` still has **$37.39**.\n- Wrote alignment artifact: `/home/ubuntu/clawd/patches/v14t-hl-wallet-alignment-guard.spec.md`\n\n**My thinking:**\nRight now the market is not offering a clean breakout anyway, so forcing a trade would be sloppy. The bigger issue is that the live Python engines are aimed at an empty wallet, which means the next real signal would still get skipped. That is execution drag masquerading as strategic inactivity.\n\n**Decision:**\n- Do **not** force new HL directional exposure in a compressed, low-volume tape.\n- Prioritize a wallet-alignment guard before the next P3 execution pass, because strategy qu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Usage Examples Doc So the Three Top-Level Commands Map Cleanly to the Most Common Real-World Operator Intents\n\n**Task:** Build the compact overnight operator usage examples doc and validate that it clearly maps the three most common operator scenarios to their recommended top-level commands.\n**Finding:**\n- Both bots are alive.\n- Built usage examples doc:\n  - `/home/ubuntu/clawd/docs/overnight-operator-usage-examples.md`\n- The doc now covers:\n  1. safest full refresh path\n  2. fast health answer\n  3. fuller read-only inspection\n- Validation succeeded and confirmed the written examples read clearly and map the three common intents to the correct commands.\n- Wrote usage-examples artifact: `/home/ubuntu/clawd/patches/v14u-operator-usage-examples-live.spec.md`\n\n**My thinking:**\nThis is a good usability layer because it turns command knowledge into intent knowledge. That makes the operator surface feel much more approachable, especially for someone who wants the right path quickly instead of remembering command names.\n\n**Decision:**\n- Keep this as the compact scenario-based companion to the operator command map.\n- Update it only when the top-level operator intents materially change.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that workflows, command map, help, and examples are all live.\n\n---\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy Development] Define the Minimum Scenarios for the Overnight Operator Usage Examples Doc So the Top-Level Commands Map Cleanly to the Most Common Operator Intents\n\n**Task:** Specify the minimum example scenarios for the compact overnight operator usage examples doc, so the top-level commands become easier to choose from practical intent rather than labels alone.\n**Finding:**\n- Both bots are alive.\n- Required scenarios selected:\n  1. I want the safest full refresh path \u2192 `operator_all_clear_overnight.sh`\n  2. I just want a fast health answer \u2192 `operator_health_summary_overnight.sh`\n  3. I want a fuller read-only inspection \u2192 `operator_status_overnight.sh`\n- Style selected:\n  - one short scenario per section\n  - one recommended command per scenario\n  - minimal explanation\n- Wrote usage-scenarios artifact: `/home/ubuntu/clawd/patches/v14t-operator-usage-examples-scenarios.spec.md`\n\n**My thinking:**\nThis is enough. These three scenarios cover the overwhelming majority of top-level operator needs, and they make command choice feel obvious instead of memorized.\n\n**Decision:**\n- Keep the examples doc tightly centered on the three top-level intents.\n- Avoid duplicating the fuller command map.\n\n**Next:** On the next P3 heartbeat, implement the compact overnight operator usage examples doc.\n\n---\n## 2026-04-24 09:00 UTC \u2014 [P3: Strategy Development] Audit HL Directional Readiness Befo",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
