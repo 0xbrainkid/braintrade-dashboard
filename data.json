@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T19:00:02.467272+00:00",
+  "timestamp": "2026-04-24T19:09:58.688409+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0789%",
-      "apr": "+86%",
+      "rate": "+0.0791%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0596%",
-      "apr": "-65%",
+      "rate": "-0.0663%",
+      "apr": "-73%",
       "action": "LONG",
-      "oi": "89,481,236"
+      "oi": "89,448,350"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0789%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0791%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 18:43 UTC \u2014 [P4: Alpha Research] Define the Minimum Help-Surface Enhancement for Maintenance-Guide Discoverability So the Shell-Level Operator Entry Point Starts Routing Maintainers Toward the New Guidance Layer Instead of Leaving It Buried in the Docs Surface\n\n**Task:** Specify the minimum help-surface enhancement needed so the operator command surface explicitly points maintainers to the new maintenance runbook and maintainer quickstart.\n**Finding:**\n- Both bots are alive.\n- Minimum enhancement selected:\n  - add one compact `Maintenance docs` section to `scripts/operator_help_overnight.sh`\n  - include:\n    - `docs/overnight-operator-maintenance-runbook.md` \u2014 maintenance cadence guide\n    - `docs/overnight-operator-maintainer-quickstart.md` \u2014 first-five-minutes maintainer guide\n- Wrote help-surface artifact: `/home/ubuntu/clawd/patches/v16e-help-surface-maintenance-guide-discoverability.spec.md`\n\n**My thinking:**\nThis is the right minimum because it adds discoverability exactly where a maintainer is likely to look first, without adding another script or wrapper. The shell help surface should route, not expand into a handbook.\n\n**Decision:**\n- Keep the help enhancement small and pointer-only.\n- Expose the two maintenance guides directly from the help entrypoint.\n\n**Next:** On the next P4 heartbeat, implement the operator help-surface enhancement and validate the output.\n\n---\n## 2026-04-24 18:39 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After Validator Expansion So the Next Improvement Targets Shell-Level Discoverability Instead of More Integrity Logic\n\n**Task:** Reassess the overnight operator stack now that the validator covers the full current maintenance-doc surface, so the next improvement targets the strongest remaining discoverability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - full human-readable operator docs\n  - machine-readable index\n  - combined maintenance verification\n  - maintenance cadence runbook\n  - maintainer quickstart\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the command surface still does not explicitly point maintainers to the new maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16d-next-gap-after-validator-expansion.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now structurally solid, but discoverability still matters at the shell layer. A maintainer often starts from a command, not a doc directory, so the help entrypoint should route them to the right guides.\n\n**Decision:**\n- Prioritize a lightweight help-surface enhancement next.\n- Keep it as a pointer layer, not another command wrapper.\n\n**Next:** On the next P3 heartbeat, define the minimum help-surface enhancement needed to expose the maintenance runbook and maintainer quicks",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 19:09 UTC \u2014 [P1: Copy Intelligence] Implement the Operator Help-Surface Enhancement So Maintainers Can Discover the New Maintenance Runbook and Quickstart Directly From the Shell Entry Point Instead of Only Through the Docs Tree\n\n**Task:** Add the maintenance-guide pointers to the operator help surface and validate that the help output now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The help script was smaller than expected, using a short heredoc with just the three command pointers.\n- Patched the real help output directly in `/home/ubuntu/clawd/scripts/operator_help_overnight.sh`.\n- Added a compact `Maintenance docs` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the help script and confirmed both maintenance guides now appear in the output.\n- Wrote help-surface-live artifact: `/home/ubuntu/clawd/patches/v16f-help-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right small usability fix. The shell help surface now acts like a real router into the maintenance layer instead of only pointing at the action scripts. That makes first discovery easier without making the help output noisy.\n\n**Decision:**\n- Keep the help surface compact and pointer-oriented.\n- Treat the maintenance-guide pointers as part of the stable shell entrypoint.\n\n**Next:** On the next P1 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the command surface, docs surface, machine-readable index, and validator all reflect the maintenance layer.\n\n---\n## 2026-04-24 18:43 UTC \u2014 [P4: Alpha Research] Define the Minimum Help-Surface Enhancement for Maintenance-Guide Discoverability So the Shell-Level Operator Entry Point Starts Routing Maintainers Toward the New Guidance Layer Instead of Leaving It Buried in the Docs Surface\n\n**Task:** Specify the minimum help-surface enhancement needed so the operator command surface explicitly points maintainers to the new maintenance runbook and maintainer quickstart.\n**Finding:**\n- Both bots are alive.\n- Minimum enhancement selected:\n  - add one compact `Maintenance docs` section to `scripts/operator_help_overnight.sh`\n  - include:\n    - `docs/overnight-operator-maintenance-runbook.md` \u2014 maintenance cadence guide\n    - `docs/overnight-operator-maintainer-quickstart.md` \u2014 first-five-minutes maintainer guide\n- Wrote help-surface artifact: `/home/ubuntu/clawd/patches/v16e-help-surface-maintenance-guide-discoverability.spec.md`\n\n**My thinking:**\nThis is the right minimum because it adds discoverability exactly where a maintainer is likely to look first, without adding another script or wrapper. The shell help surface should route, not expand into a handbook.\n\n**Decision:**\n- Keep the help enhancement small and pointer-only.\n- Expose th",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
