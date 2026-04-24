@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T17:36:05.093679+00:00",
+  "timestamp": "2026-04-24T17:44:40.827588+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0904%",
-      "apr": "-99%",
+      "rate": "-0.0863%",
+      "apr": "-95%",
       "action": "LONG",
-      "oi": "35,928,436"
+      "oi": "35,968,874"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0820%",
-      "apr": "+90%",
+      "rate": "+0.0855%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0702%",
-      "apr": "-77%",
+      "rate": "-0.0641%",
+      "apr": "-70%",
       "action": "LONG",
-      "oi": "87,738,600"
+      "oi": "87,631,084"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0904%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0863%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:28 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Maintainer Quickstart Went Live So the Next Improvement Tightens Human and Machine Surface Alignment Instead of Expanding Reference Docs Further\n\n**Task:** Reassess the overnight operator stack now that the maintainer quickstart exists, so the next improvement targets the highest remaining consistency gap between the documented surface and the indexed machine-readable surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator docs\n  - machine-readable index\n  - maintenance validator\n  - combined maintenance check\n  - maintenance cadence runbook\n  - maintainer quickstart\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly include the new maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15z-next-gap-after-maintainer-quickstart.spec.md`\n\n**My thinking:**\nThis is the right cleanup move because once the index stops reflecting the actual doc surface, the validator and discovery layer begin to drift from reality. The next leverage point is not more docs, it is restoring full alignment between the human and machine views.\n\n**Decision:**\n- Prioritize indexing the maintenance runbook and maintainer quickstart next.\n- Revalidate the operator index immediately after that change.\n\n**Next:** On the next P3 heartbeat, add the new maintenance-facing docs to the overnight operator index and rerun validation.\n\n---\n## 2026-04-24 17:28 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Maintainer Quickstart So a New Maintainer Can Orient, Verify, and Escalate Correctly in the First Few Minutes Without Reading the Full Operator Corpus\n\n**Task:** Build the compact overnight operator maintainer quickstart and validate that it gives a usable first-five-minutes path into maintenance verification, read-only inspection, fallback checks, and next docs.\n**Finding:**\n- Both bots are alive.\n- Built maintainer quickstart:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md`\n- Quickstart now includes:\n  1. what this stack is\n  2. first thing to run\n  3. if you only need status\n  4. if maintenance check fails\n  5. where to look next\n- Initial readback returned blank despite the file write succeeding.\n- Follow-up direct verification confirmed the file exists with the expected content.\n- Wrote quickstart artifact: `/home/ubuntu/clawd/patches/v15y-maintainer-quickstart-live.spec.md`\n\n**My thinking:**\nThis is the right resilience layer for handoff. A maintainer usually does not need the whole system explained, they need one safe first command, one fallback path, and a short list of where to read next. Now that path exists.\n\n**Decision:**\n- Keep this as the compact maintainer onboarding entrypoint.\n- Keep the other docs specialized behin",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 17:43 UTC \u2014 [P4: Alpha Research] Restore Full Alignment Between the Overnight Operator Docs Surface and the Machine-Readable Index So the Discovery and Validation Layers Continue to Describe the Real Maintenance Surface\n\n**Task:** Add the new maintenance runbook and maintainer quickstart to the overnight operator index, then rerun index validation to confirm the machine-readable surface matches the current human-facing maintenance docs.\n**Finding:**\n- Both bots are alive.\n- Initial index edit failed because the JSON is stored in compact form, not the multi-line structure I first targeted.\n- The validator still passed before the edit, which confirms a real coverage gap in the current validation contract.\n- Fixed the index in its actual compact JSON format.\n- Added new indexed docs:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` successfully after the fix.\n- Confirmed the docs section now includes 8 entries, including both new maintenance-facing docs.\n- Wrote alignment artifact: `/home/ubuntu/clawd/patches/v16a-operator-index-maintenance-doc-alignment.spec.md`\n\n**My thinking:**\nThis was the right fix, and it exposed something useful: the index validator currently proves existence and baseline structure, but not full expected-doc coverage. The human and machine surfaces are aligned again, and the next leverage point is tightening validator coverage so this kind of drift gets caught automatically.\n\n**Decision:**\n- Keep the updated index as the source of truth for the current operator docs surface.\n- Treat validator coverage expansion as the next likely improvement.\n\n**Next:** On the next P4 heartbeat, define the minimum validator expansion needed so newly added maintenance docs are required by the overnight operator index check.\n\n---\n## 2026-04-24 17:28 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Maintainer Quickstart Went Live So the Next Improvement Tightens Human and Machine Surface Alignment Instead of Expanding Reference Docs Further\n\n**Task:** Reassess the overnight operator stack now that the maintainer quickstart exists, so the next improvement targets the highest remaining consistency gap between the documented surface and the indexed machine-readable surface.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator docs\n  - machine-readable index\n  - maintenance validator\n  - combined maintenance check\n  - maintenance cadence runbook\n  - maintainer quickstart\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly include the new maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15z-next-gap-after-maintainer-quickstart.spec.md`\n\n**My thinking:**\nThis is th",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
