@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T04:09:52.962038+00:00",
+  "timestamp": "2026-04-24T04:13:55.596005+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,35 +17,35 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1191%",
-      "apr": "-130%",
+      "rate": "-0.1204%",
+      "apr": "-132%",
       "action": "LONG",
-      "oi": "25,880,742"
-    },
-    {
-      "coin": "STABLE",
-      "rate": "-0.1177%",
-      "apr": "-129%",
-      "action": "LONG",
-      "oi": "88,070,310"
+      "oi": "25,915,936"
     },
     {
       "coin": "YZY",
-      "rate": "-0.1159%",
-      "apr": "-127%",
+      "rate": "-0.1169%",
+      "apr": "-128%",
       "action": "LONG",
       "oi": "1,152,090"
     },
     {
+      "coin": "STABLE",
+      "rate": "-0.1072%",
+      "apr": "-117%",
+      "action": "LONG",
+      "oi": "88,097,490"
+    },
+    {
       "coin": "MAVIA",
-      "rate": "+0.0870%",
-      "apr": "+95%",
+      "rate": "+0.0668%",
+      "apr": "+73%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0508%",
+      "rate": "+0.0516%",
       "apr": "+56%",
       "action": "SHORT",
       "oi": "238,088,750"
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1191%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1204%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -364,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Persistent Summary Log Went Live So the Next Improvement Adds Safety Instead of Just More Output Surfaces\n\n**Task:** Reassess the overnight pipeline now that lightweight persistent operator summaries exist, so the next improvement targets the strongest remaining safety and consistency gap rather than continuing to add parallel outputs.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - history and validation\n  - human report\n  - machine-readable report\n  - stable snapshot\n  - operator refresh command\n  - lightweight persistent summary log\n- Highest-value next gap:\n  - **no tiny integrity check that confirms the latest snapshot and latest summary-log entry are in sync**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14a-next-gap-after-persistent-summary-log.spec.md`\n\n**My thinking:**\nThis is the right next move. We now have two lightweight operator-facing artifacts, and the highest-value improvement is making sure they agree. That\u2019s a small addition with real safety value, and it\u2019s much better than inventing yet another report surface.\n\n**Decision:**\n- Prioritize a small sync-check utility for `overnight_report.json` and `operator-refresh-summary.log`.\n- Focus on integrity and consistency instead of adding more outputs.\n\n**Next:** On the next P4 heartbeat, define the minimum behavior for the snapshot-vs-summary sync check.\n\n---\n## 2026-04-24 03:43 UTC \u2014 [P3: Strategy Development] Implement the Lightweight Operator Summary Log So High-Signal Refresh Outcomes Persist Without Forcing a Full Log Dive\n\n**Task:** Update the operator refresh command so it appends its concise end-state summary to a lightweight persistent log, then validate the log output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated operator command:\n  - `/home/ubuntu/clawd/scripts/operator_refresh_overnight.sh`\n- New lightweight summary log:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- The command now:\n  - refreshes the system\n  - prints the concise summary to stdout\n  - appends the same summary to the lightweight log\n- Initial validation hit a shell quoting bug.\n- Fixed the quoting issue and reran successfully.\n- Validation confirmed appended summary entries in the log.\n- Wrote summary-log-live artifact: `/home/ubuntu/clawd/patches/v13z-operator-summary-log-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we caught the quoting bug immediately. This is exactly the kind of tiny operational break that can quietly make observability worse if it ships unchecked. Now the high-signal summary persists cleanly and stays easy to skim.\n\n**Decision:**\n- Keep `operator-refresh-summary.log` as the lightweight persistent trail for refresh outcomes.\n- Preserve the full logs and richer reports as separate deeper layers.\n\n**Next:** On the next P3 heartbeat, re",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:13 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Snapshot-vs-Summary Sync Check So the Two Highest-Signal Operator Artifacts Can Be Verified Against Each Other Cheaply and Reliably\n\n**Task:** Specify the minimum behavior for a tiny integrity check that confirms the latest machine-readable snapshot and latest operator summary-log entry are in sync.\n**Finding:**\n- Both bots are alive.\n- Minimum sync-check inputs selected:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Minimum checks selected:\n  1. summary log exists and has at least one entry\n  2. latest summary entry contains `snapshot_path`\n  3. latest summary entry path matches the expected snapshot file\n  4. latest summary entry `snapshot_ts` matches the current snapshot file mtime\n- Output contract selected:\n  - PASS on clean match\n  - FAIL with concise reason on mismatch or missing data\n- Wrote sync-check-behavior artifact: `/home/ubuntu/clawd/patches/v14b-snapshot-summary-sync-check-behavior.spec.md`\n\n**My thinking:**\nThis is enough to catch the meaningful failures without turning a tiny check into another full audit system. The goal is cheap confidence that the two operator-facing artifacts still agree.\n\n**Decision:**\n- Keep the sync check tiny, explicit, and artifact-focused.\n- Use it to catch silent drift between snapshot and summary log.\n\n**Next:** On the next P1 heartbeat, implement the snapshot-vs-summary sync check and validate it against the current live files.\n\n---\n## 2026-04-24 04:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Persistent Summary Log Went Live So the Next Improvement Adds Safety Instead of Just More Output Surfaces\n\n**Task:** Reassess the overnight pipeline now that lightweight persistent operator summaries exist, so the next improvement targets the strongest remaining safety and consistency gap rather than continuing to add parallel outputs.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - history and validation\n  - human report\n  - machine-readable report\n  - stable snapshot\n  - operator refresh command\n  - lightweight persistent summary log\n- Highest-value next gap:\n  - **no tiny integrity check that confirms the latest snapshot and latest summary-log entry are in sync**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14a-next-gap-after-persistent-summary-log.spec.md`\n\n**My thinking:**\nThis is the right next move. We now have two lightweight operator-facing artifacts, and the highest-value improvement is making sure they agree. That\u2019s a small addition with real safety value, and it\u2019s much better than inventing yet another report surface.\n\n**Decision:**\n- Prioritize a small sync-check utility for `overnight_report.json` and `operator-refresh-summary.log`.\n- Focus on integrity and consistency instead of adding more ou",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
