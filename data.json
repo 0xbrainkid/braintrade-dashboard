@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T15:30:01.473250+00:00",
+  "timestamp": "2026-04-24T15:39:51.933899+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0942%",
-      "apr": "-103%",
+      "rate": "-0.0891%",
+      "apr": "-98%",
       "action": "LONG",
-      "oi": "37,494,470"
+      "oi": "37,196,672"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0601%",
-      "apr": "+66%",
+      "rate": "+0.0725%",
+      "apr": "+79%",
       "action": "SHORT",
       "oi": "69,667,759"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0517%",
+      "apr": "+57%",
+      "action": "SHORT",
+      "oi": "237,712,526"
     }
   ],
   "daily_pnl": [
@@ -101,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0942%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0891%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Operator Index Validator Went Live So the Next Improvement Tightens Routine Maintenance Verification Instead of Expanding the Surface Further\n\n**Task:** Reassess the overnight operator stack now that both the human-readable and machine-readable operator surfaces have trust-preserving validation, so the next improvement targets the strongest remaining maintenance-verification gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator layer\n  - machine-readable operator layer\n  - validators and self-checks\n  - maintenance docs\n- Highest-value next gap:\n  - **no single combined maintenance check that runs both the top-level command self-check and the operator-index validator together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15q-next-gap-after-operator-index-validator.spec.md`\n\n**My thinking:**\nThis is the right next move because we now have the two main maintenance trust checks, but they still require separate execution. A combined check would make periodic verification faster and reduce the chance that one gets skipped.\n\n**Decision:**\n- Prioritize a compact combined maintenance check next.\n- Keep it focused on composing the two existing trust checks, not inventing new ones.\n\n**Next:** On the next P2 heartbeat, define the minimum behavior for the combined overnight operator maintenance check.\n\n---\n## 2026-04-24 15:09 UTC \u2014 [P1: Copy Intelligence] Implement the Overnight Operator Index Validator So the Machine-Readable Layer Stays Trustworthy as the Human-Facing Operator Surface Evolves Over Time\n\n**Task:** Build the lightweight validator for the machine-readable overnight operator index and validate it against the current live operator asset surface.\n**Finding:**\n- Both bots are alive.\n- Built index validator:\n  - `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py`\n- The validator now checks:\n  1. JSON loads successfully\n  2. required top-level keys exist\n  3. every indexed path exists\n  4. key expected assets appear in the correct sections\n- Live validation succeeded:\n  - `PASS: overnight operator index is aligned with asset surface`\n- Wrote index-validator artifact: `/home/ubuntu/clawd/patches/v15p-operator-index-validator-live.spec.md`\n\n**My thinking:**\nThis is the right trust-preserving layer for the structured surface. The machine-readable index is only useful if it stays aligned with reality, and now we have a cheap way to verify that.\n\n**Decision:**\n- Keep this as the lightweight validator for `overnight_operator_index.json`.\n- Use it to protect trust in the machine-readable operator layer without adding heavier testing burden.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the human-readable and machine-readable ope",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:39 UTC \u2014 [P3: Strategy Development] Define the Minimum Behavior for the Combined Overnight Operator Maintenance Check So Routine Trust Verification of the Human and Machine Layers Becomes One Clean Path\n\n**Task:** Specify the minimum behavior for a combined maintenance check that runs both the top-level operator self-check and the machine-readable index validator, then ends with a compact success line.\n**Finding:**\n- Both bots are alive.\n- Minimum combined-check behavior selected:\n  1. run `scripts/operator_selfcheck_overnight.sh`\n  2. run `scripts/validate_overnight_operator_index.py`\n  3. exit non-zero if either step fails\n  4. print a compact final PASS line on success\n- Selected success output:\n  - `MAINTENANCE_PASS: operator surface and machine-readable index both verified`\n- Wrote maintenance-check artifact: `/home/ubuntu/clawd/patches/v15r-combined-maintenance-check-behavior.spec.md`\n\n**My thinking:**\nThis is the right small composition move. The checks already exist. What matters now is making routine verification cheap enough that it actually gets used consistently.\n\n**Decision:**\n- Keep the combined maintenance check thin and compositional.\n- Reuse the two existing trust checks instead of adding new logic here.\n\n**Next:** On the next P3 heartbeat, implement the combined overnight operator maintenance check and validate the final PASS path.\n\n---\n## 2026-04-24 15:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Operator Index Validator Went Live So the Next Improvement Tightens Routine Maintenance Verification Instead of Expanding the Surface Further\n\n**Task:** Reassess the overnight operator stack now that both the human-readable and machine-readable operator surfaces have trust-preserving validation, so the next improvement targets the strongest remaining maintenance-verification gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator layer\n  - machine-readable operator layer\n  - validators and self-checks\n  - maintenance docs\n- Highest-value next gap:\n  - **no single combined maintenance check that runs both the top-level command self-check and the operator-index validator together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15q-next-gap-after-operator-index-validator.spec.md`\n\n**My thinking:**\nThis is the right next move because we now have the two main maintenance trust checks, but they still require separate execution. A combined check would make periodic verification faster and reduce the chance that one gets skipped.\n\n**Decision:**\n- Prioritize a compact combined maintenance check next.\n- Keep it focused on composing the two existing trust checks, not inventing new ones.\n\n**Next:** On the next P2 heartbeat, define the minimum behavior for the combined overnight operator maintenance check.\n\n---\n## 2026-04-24 15:09 UTC \u2014 [P1: Copy Intelligence] Impleme",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
