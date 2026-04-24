@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T04:00:02.499230+00:00",
+  "timestamp": "2026-04-24T04:09:52.962038+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,38 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1523%",
-      "apr": "-167%",
+      "rate": "-0.1191%",
+      "apr": "-130%",
       "action": "LONG",
-      "oi": "25,953,852"
+      "oi": "25,880,742"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0750%",
-      "apr": "-82%",
+      "rate": "-0.1177%",
+      "apr": "-129%",
       "action": "LONG",
-      "oi": "90,389,888"
+      "oi": "88,070,310"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.1159%",
+      "apr": "-127%",
+      "action": "LONG",
+      "oi": "1,152,090"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0870%",
+      "apr": "+95%",
+      "action": "SHORT",
+      "oi": "69,667,759"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0508%",
+      "apr": "+56%",
+      "action": "SHORT",
+      "oi": "238,088,750"
     }
   ],
   "daily_pnl": [
@@ -101,11 +122,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1523%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1191%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "3 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -343,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 03:43 UTC \u2014 [P3: Strategy Development] Implement the Lightweight Operator Summary Log So High-Signal Refresh Outcomes Persist Without Forcing a Full Log Dive\n\n**Task:** Update the operator refresh command so it appends its concise end-state summary to a lightweight persistent log, then validate the log output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated operator command:\n  - `/home/ubuntu/clawd/scripts/operator_refresh_overnight.sh`\n- New lightweight summary log:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- The command now:\n  - refreshes the system\n  - prints the concise summary to stdout\n  - appends the same summary to the lightweight log\n- Initial validation hit a shell quoting bug.\n- Fixed the quoting issue and reran successfully.\n- Validation confirmed appended summary entries in the log.\n- Wrote summary-log-live artifact: `/home/ubuntu/clawd/patches/v13z-operator-summary-log-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we caught the quoting bug immediately. This is exactly the kind of tiny operational break that can quietly make observability worse if it ships unchecked. Now the high-signal summary persists cleanly and stays easy to skim.\n\n**Decision:**\n- Keep `operator-refresh-summary.log` as the lightweight persistent trail for refresh outcomes.\n- Preserve the full logs and richer reports as separate deeper layers.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that lightweight persistent operator summaries are live.\n\n---\n## 2026-04-24 03:39 UTC \u2014 [P2: Smart Entry] Define the Lightweight Operator Summary Log Path and Format So the Highest-Signal Refresh Outcome Stops Disappearing Into Ephemeral Stdout\n\n**Task:** Specify the file path and minimum format for a persistent lightweight log of the operator refresh summary, so the end-state signal remains available without requiring a full log dive.\n**Finding:**\n- Both bots are alive.\n- Selected summary log path:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Selected per-run summary fields:\n  - UTC timestamp\n  - status\n  - snapshot_path\n  - snapshot_ts\n  - latest_profiles\n  - ledger_health_status\n- Selected style:\n  - compact human-readable append log\n  - blank-line or delimiter separated\n  - optimized for fast skim rather than strict machine parsing\n- Wrote summary-log artifact: `/home/ubuntu/clawd/patches/v13y-operator-summary-log-path-and-format.spec.md`\n\n**My thinking:**\nThis gives us the useful middle layer we\u2019re missing. Full logs are too noisy for quick checks, and stdout is too fleeting. A small append-only summary log keeps the highest-signal operational state visible without creating another heavy system.\n\n**Decision:**\n- Use `logs/operator-refresh-summary.log` for persistent lightweight operator summaries.\n- Keep the format human-readable and intentionally compact.\n\n*",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Persistent Summary Log Went Live So the Next Improvement Adds Safety Instead of Just More Output Surfaces\n\n**Task:** Reassess the overnight pipeline now that lightweight persistent operator summaries exist, so the next improvement targets the strongest remaining safety and consistency gap rather than continuing to add parallel outputs.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - history and validation\n  - human report\n  - machine-readable report\n  - stable snapshot\n  - operator refresh command\n  - lightweight persistent summary log\n- Highest-value next gap:\n  - **no tiny integrity check that confirms the latest snapshot and latest summary-log entry are in sync**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14a-next-gap-after-persistent-summary-log.spec.md`\n\n**My thinking:**\nThis is the right next move. We now have two lightweight operator-facing artifacts, and the highest-value improvement is making sure they agree. That\u2019s a small addition with real safety value, and it\u2019s much better than inventing yet another report surface.\n\n**Decision:**\n- Prioritize a small sync-check utility for `overnight_report.json` and `operator-refresh-summary.log`.\n- Focus on integrity and consistency instead of adding more outputs.\n\n**Next:** On the next P4 heartbeat, define the minimum behavior for the snapshot-vs-summary sync check.\n\n---\n## 2026-04-24 03:43 UTC \u2014 [P3: Strategy Development] Implement the Lightweight Operator Summary Log So High-Signal Refresh Outcomes Persist Without Forcing a Full Log Dive\n\n**Task:** Update the operator refresh command so it appends its concise end-state summary to a lightweight persistent log, then validate the log output end to end.\n**Finding:**\n- Both bots are alive.\n- Updated operator command:\n  - `/home/ubuntu/clawd/scripts/operator_refresh_overnight.sh`\n- New lightweight summary log:\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- The command now:\n  - refreshes the system\n  - prints the concise summary to stdout\n  - appends the same summary to the lightweight log\n- Initial validation hit a shell quoting bug.\n- Fixed the quoting issue and reran successfully.\n- Validation confirmed appended summary entries in the log.\n- Wrote summary-log-live artifact: `/home/ubuntu/clawd/patches/v13z-operator-summary-log-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we caught the quoting bug immediately. This is exactly the kind of tiny operational break that can quietly make observability worse if it ships unchecked. Now the high-signal summary persists cleanly and stays easy to skim.\n\n**Decision:**\n- Keep `operator-refresh-summary.log` as the lightweight persistent trail for refresh outcomes.\n- Preserve the full logs and richer reports as separate deeper layers.\n\n**Next:** On the next P3 heartbeat, re",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +384,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "5 opportunities"
       },
       {
         "name": "SolSt1ne Content",
