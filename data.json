@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T07:10:08.608043+00:00",
+  "timestamp": "2026-04-24T07:14:01.961968+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1664%",
-      "apr": "-182%",
+      "rate": "-0.1700%",
+      "apr": "-186%",
       "action": "LONG",
-      "oi": "30,165,666"
+      "oi": "30,211,112"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0905%",
-      "apr": "+99%",
+      "rate": "+0.0916%",
+      "apr": "+100%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0779%",
-      "apr": "-85%",
+      "rate": "-0.0710%",
+      "apr": "-78%",
       "action": "LONG",
-      "oi": "86,703,278"
+      "oi": "87,446,920"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1664%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1700%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:09 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Command Map So the Command Surface Stays Navigable As the Operator Stack Becomes More Capable\n\n**Task:** Build the compact overnight operator command map and validate that it clearly covers the high-level, read-only, mid-level, low-level, and artifact-location layers of the stack.\n**Finding:**\n- Both bots are alive.\n- Built command map:\n  - `/home/ubuntu/clawd/docs/overnight-operator-command-map.md`\n- Map covers:\n  1. highest-level command\n  2. read-only status command\n  3. mid-level operator command\n  4. low-level checks and components\n  5. key artifact locations\n- Initial readback hit the same path seam pattern seen in prior wrapper validations.\n- Corrected the validation path and confirmed the written content is present and complete.\n- Wrote command-map artifact: `/home/ubuntu/clawd/patches/v14l-operator-command-map-live.spec.md`\n\n**My thinking:**\nThis is useful polish, not fluff. The operator surface is now strong enough that a compact map genuinely reduces mistakes and hesitation. I\u2019m glad it exists in one place instead of only in scattered worklog context.\n\n**Decision:**\n- Keep this map as the compact orientation doc for the overnight operator stack.\n- Update it when new top-level entrypoints or key artifacts are added.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the workflows and their operator map are live.\n\n---\n## 2026-04-24 06:43 UTC \u2014 [P2: Smart Entry] Define the Minimum Content for the Overnight Operator Command Map So the Growing Command Surface Stays Easy to Navigate and Use Correctly\n\n**Task:** Specify the minimum content for a compact command map that explains the overnight operator stack from highest-level workflow entrypoints down to the more surgical low-level checks and artifacts.\n**Finding:**\n- Both bots are alive.\n- Required command-map sections selected:\n  1. highest-level command: `operator_all_clear_overnight.sh`\n  2. read-only status command: `operator_status_overnight.sh`\n  3. mid-level operator command: `operator_refresh_overnight.sh`\n  4. low-level checks: `check_snapshot_summary_sync.py` and other direct inspection/report commands worth naming\n  5. artifact locations: snapshot, summary log, history log\n- Ordering principle selected:\n  - safest/highest-level to most surgical/low-level\n- Wrote command-map-content artifact: `/home/ubuntu/clawd/patches/v14k-operator-command-map-content.spec.md`\n\n**My thinking:**\nThis is the right minimum. It tells an operator where to start, when to stay high-level, when to drop down a layer, and where the important artifacts live, without turning the map into a manual.\n\n**Decision:**\n- Keep the command map compact, role-oriented, and ordered by operational safety level.\n- Optimize for quick orientation, not exhaustiv",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 07:13 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Command Map Went Live So the Next Improvement Sharpens the Inspection Surface Instead of Just Extending Documentation\n\n**Task:** Reassess the overnight operator stack now that workflows and their hierarchy are both implemented and documented, so the next improvement targets the strongest remaining usability gap rather than continuing the documentation layer indefinitely.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - action workflows\n  - read-only inspection\n  - safety checks\n  - compact operator command map\n- Highest-value next gap:\n  - **no compact health-summary command for a quick artifact-presence and coherence answer**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14m-next-gap-after-operator-command-map.spec.md`\n\n**My thinking:**\nThis is the right next move. We have detailed inspection and we have a map, but there\u2019s still value in a faster top-level answer when the operator doesn\u2019t want the full status payload. That\u2019s a distinct need, not just more of the same.\n\n**Decision:**\n- Prioritize a compact overnight health-summary command next.\n- Keep it focused on artifact presence and coherence rather than detailed state reporting.\n\n**Next:** On the next P4 heartbeat, define the minimum output for the compact overnight health-summary command.\n\n---\n## 2026-04-24 07:09 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Command Map So the Command Surface Stays Navigable As the Operator Stack Becomes More Capable\n\n**Task:** Build the compact overnight operator command map and validate that it clearly covers the high-level, read-only, mid-level, low-level, and artifact-location layers of the stack.\n**Finding:**\n- Both bots are alive.\n- Built command map:\n  - `/home/ubuntu/clawd/docs/overnight-operator-command-map.md`\n- Map covers:\n  1. highest-level command\n  2. read-only status command\n  3. mid-level operator command\n  4. low-level checks and components\n  5. key artifact locations\n- Initial readback hit the same path seam pattern seen in prior wrapper validations.\n- Corrected the validation path and confirmed the written content is present and complete.\n- Wrote command-map artifact: `/home/ubuntu/clawd/patches/v14l-operator-command-map-live.spec.md`\n\n**My thinking:**\nThis is useful polish, not fluff. The operator surface is now strong enough that a compact map genuinely reduces mistakes and hesitation. I\u2019m glad it exists in one place instead of only in scattered worklog context.\n\n**Decision:**\n- Keep this map as the compact orientation doc for the overnight operator stack.\n- Update it when new top-level entrypoints or key artifacts are added.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that both the workflows and their operator map ar",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
