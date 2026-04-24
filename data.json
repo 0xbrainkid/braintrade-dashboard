@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T18:30:01.627530+00:00",
+  "timestamp": "2026-04-24T18:39:52.290471+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0918%",
-      "apr": "-101%",
+      "rate": "-0.0905%",
+      "apr": "-99%",
       "action": "LONG",
-      "oi": "36,177,122"
+      "oi": "36,051,356"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0852%",
-      "apr": "+93%",
+      "rate": "+0.0835%",
+      "apr": "+91%",
       "action": "SHORT",
       "oi": "69,667,759"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0566%",
-      "apr": "+62%",
-      "action": "SHORT",
-      "oi": "237,711,182"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0918%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0905%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 18:13 UTC \u2014 [P2: Smart Entry] Expand the Overnight Operator Index Validator So the New Maintenance-Facing Docs Become Required and Future Doc-Surface Drift Stops Passing Silently\n\n**Task:** Implement the validator expansion for required maintenance-doc coverage, then rerun validation to prove the current aligned index still passes.\n**Finding:**\n- Both bots are alive.\n- The first patch target missed because the validator uses a single `EXPECTED_PATHS` structure rather than the constant layout assumed by the draft spec.\n- Patched the real `docs` expected-path set in `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py`.\n- Added required coverage for:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` successfully after the change.\n- Wrote validator-live artifact: `/home/ubuntu/clawd/patches/v16c-validator-required-doc-coverage-live.spec.md`\n\n**My thinking:**\nThis is the right enforcement upgrade because it closes the exact gap exposed by the earlier false-green validation. The validator is still simple, but now it actually reflects the real current maintenance-doc surface.\n\n**Decision:**\n- Keep the validator explicit and path-based.\n- Treat the expanded required-doc set as the new baseline for operator-doc integrity.\n\n**Next:** On the next P2 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the validator covers the full current maintenance-doc surface.\n\n---\n## 2026-04-24 18:09 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Validator Expansion for Overnight Operator Maintenance-Doc Coverage So the Machine-Readable Index Stops Passing When Key Maintenance Docs Drift Out of the Indexed Surface\n\n**Task:** Specify the minimum validator expansion needed so the overnight operator index check explicitly requires the full current maintenance-facing docs surface.\n**Finding:**\n- Both bots are alive.\n- Minimum validator expansion selected:\n  - require these docs in the `docs` section:\n    - `docs/overnight-operator-overview.md`\n    - `docs/overnight-operator-command-map.md`\n    - `docs/overnight-operator-usage-examples.md`\n    - `docs/overnight-operator-manifest.md`\n    - `docs/overnight-operator-audit-checklist.md`\n    - `docs/overnight-operator-changelog.md`\n    - `docs/overnight-operator-maintenance-runbook.md`\n    - `docs/overnight-operator-maintainer-quickstart.md`\n  - fail if any are missing\n  - print the missing required docs\n  - preserve existing top-level-key and path-exists checks\n- Wrote validator-expansion artifact: `/home/ubuntu/clawd/patches/v16b-validator-expansion-maintenance-doc-coverage.spec.md`\n\n**My thinking:**\nThis is the right minimum because it directly covers the real gap we just hit. The validator does not need to become complex",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 18:39 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After Validator Expansion So the Next Improvement Targets Shell-Level Discoverability Instead of More Integrity Logic\n\n**Task:** Reassess the overnight operator stack now that the validator covers the full current maintenance-doc surface, so the next improvement targets the strongest remaining discoverability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - full human-readable operator docs\n  - machine-readable index\n  - combined maintenance verification\n  - maintenance cadence runbook\n  - maintainer quickstart\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the command surface still does not explicitly point maintainers to the new maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16d-next-gap-after-validator-expansion.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now structurally solid, but discoverability still matters at the shell layer. A maintainer often starts from a command, not a doc directory, so the help entrypoint should route them to the right guides.\n\n**Decision:**\n- Prioritize a lightweight help-surface enhancement next.\n- Keep it as a pointer layer, not another command wrapper.\n\n**Next:** On the next P3 heartbeat, define the minimum help-surface enhancement needed to expose the maintenance runbook and maintainer quickstart from the operator command surface.\n\n---\n## 2026-04-24 18:13 UTC \u2014 [P2: Smart Entry] Expand the Overnight Operator Index Validator So the New Maintenance-Facing Docs Become Required and Future Doc-Surface Drift Stops Passing Silently\n\n**Task:** Implement the validator expansion for required maintenance-doc coverage, then rerun validation to prove the current aligned index still passes.\n**Finding:**\n- Both bots are alive.\n- The first patch target missed because the validator uses a single `EXPECTED_PATHS` structure rather than the constant layout assumed by the draft spec.\n- Patched the real `docs` expected-path set in `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py`.\n- Added required coverage for:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` successfully after the change.\n- Wrote validator-live artifact: `/home/ubuntu/clawd/patches/v16c-validator-required-doc-coverage-live.spec.md`\n\n**My thinking:**\nThis is the right enforcement upgrade because it closes the exact gap exposed by the earlier false-green validation. The validator is still simple, but now it actually reflects the real current maintenance-doc surface.\n\n**Decision:**\n- Keep the validator explicit and path-based.\n- Treat the expanded required-doc set as the new baseline for",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
