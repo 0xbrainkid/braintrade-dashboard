@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T16:30:01.813804+00:00",
+  "timestamp": "2026-04-24T16:40:12.209847+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0668%",
-      "apr": "+73%",
+      "rate": "+0.0648%",
+      "apr": "+71%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0549%",
-      "apr": "+60%",
+      "rate": "+0.0572%",
+      "apr": "+63%",
       "action": "SHORT",
       "oi": "237,712,526"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0668%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0648%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 16:13 UTC \u2014 [P2: Smart Entry] Define the Minimum Cadence Guidance for the Overnight Operator Maintenance Runbook So the Existing Maintenance Tools Turn Into a Repeatable Discipline Instead of a Set of Ad Hoc Options\n\n**Task:** Specify the minimum cadence guidance for a compact overnight operator maintenance runbook, so the maintenance surface becomes easier to use consistently over time.\n**Finding:**\n- Both bots are alive.\n- Minimum cadence guidance selected:\n  - after meaningful operator-surface changes: run combined maintenance check and update manifest/changelog if needed\n  - periodic review (e.g. weekly): review audit checklist, confirm docs are current, rerun maintenance check\n  - after maintenance-related failures: rerun self-check and index validator directly, repair drift, rerun combined maintenance check\n- Wrote cadence-guidance artifact: `/home/ubuntu/clawd/patches/v15u-maintenance-cadence-guidance.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives the maintenance surface a rhythm without creating a big operational burden. The point is to turn the existing tools into a habit, not a ceremony.\n\n**Decision:**\n- Keep the cadence guidance short and trigger-based.\n- Center it on the combined maintenance check, with direct fallback checks only when needed.\n\n**Next:** On the next P2 heartbeat, implement the compact overnight operator maintenance runbook.\n\n---\n## 2026-04-24 16:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Combined Maintenance Check Went Live So the Next Improvement Strengthens Operational Discipline Instead of Just Creating More Maintenance Assets\n\n**Task:** Reassess the overnight operator stack now that the human-readable, machine-readable, and combined maintenance verification layers are in place, so the next improvement targets the strongest remaining discipline gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator surface\n  - machine-readable operator surface\n  - combined maintenance verification\n  - audit and continuity layers\n- Highest-value next gap:\n  - **no short runbook describing the recommended maintenance cadence for the overnight operator stack**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15t-next-gap-after-combined-maintenance-check.spec.md`\n\n**My thinking:**\nThis is the right next move because the tools now exist, but habits still need a shape. A short cadence runbook would turn the maintenance surface from a set of capabilities into a repeatable practice.\n\n**Decision:**\n- Prioritize a compact maintenance cadence runbook next.\n- Keep it focused on when to use the existing maintenance tools, not on adding new behaviors.\n\n**Next:** On the next P1 heartbeat, define the minimum cadence guidance for the overnight operator maintenance runbook.\n\n---\n## 2026-04-24 15:43 UTC \u2014 [P4: Alpha Research] Implement the Comb",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 16:39 UTC \u2014 [P3: Strategy Development] Implement the Compact Overnight Operator Maintenance Runbook So the Existing Maintenance Tools Turn Into a Small Repeatable Operating Rhythm Instead of a Loose Set of Options\n\n**Task:** Build the compact overnight operator maintenance runbook and validate that it gives a usable trigger-based cadence around the existing maintenance tools.\n**Finding:**\n- Both bots are alive.\n- Built maintenance runbook:\n  - `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md`\n- Runbook now covers:\n  1. after meaningful operator-surface changes\n  2. periodic review, for example weekly\n  3. after maintenance-related failures\n- Validation succeeded and confirmed the runbook is compact, trigger-based, and centered on the existing maintenance checks rather than adding new complexity.\n- Wrote maintenance-runbook artifact: `/home/ubuntu/clawd/patches/v15v-operator-maintenance-runbook-live.spec.md`\n\n**My thinking:**\nThis is the right discipline layer. We already had the tools, but now there\u2019s a simple rhythm for when to use them. That makes the maintenance surface much more likely to stay alive in practice instead of just existing on paper.\n\n**Decision:**\n- Keep this as the compact cadence guide for overnight operator maintenance.\n- Update it only when the maintenance rhythm or core tools materially change.\n\n**Next:** On the next P3 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, navigation docs, maintenance docs, machine-readable index, validators, and a cadence runbook.\n\n---\n## 2026-04-24 16:13 UTC \u2014 [P2: Smart Entry] Define the Minimum Cadence Guidance for the Overnight Operator Maintenance Runbook So the Existing Maintenance Tools Turn Into a Repeatable Discipline Instead of a Set of Ad Hoc Options\n\n**Task:** Specify the minimum cadence guidance for a compact overnight operator maintenance runbook, so the maintenance surface becomes easier to use consistently over time.\n**Finding:**\n- Both bots are alive.\n- Minimum cadence guidance selected:\n  - after meaningful operator-surface changes: run combined maintenance check and update manifest/changelog if needed\n  - periodic review (e.g. weekly): review audit checklist, confirm docs are current, rerun maintenance check\n  - after maintenance-related failures: rerun self-check and index validator directly, repair drift, rerun combined maintenance check\n- Wrote cadence-guidance artifact: `/home/ubuntu/clawd/patches/v15u-maintenance-cadence-guidance.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives the maintenance surface a rhythm without creating a big operational burden. The point is to turn the existing tools into a habit, not a ceremony.\n\n**Decision:**\n- Keep the cadence guidance short and trigger-based.\n- Center it on the combined maintenance check, with dir",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
