@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T11:00:02.046890+00:00",
+  "timestamp": "2026-04-24T11:10:07.263252+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.2027%",
-      "apr": "-222%",
+      "rate": "-0.1863%",
+      "apr": "-204%",
       "action": "LONG",
-      "oi": "33,958,804"
+      "oi": "34,501,128"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1180%",
-      "apr": "+129%",
+      "rate": "+0.0796%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.2027%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1863%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 10:43 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Manifest So the Full Operator Asset Surface Can Be Maintained and Audited From One Compact Reference Point\n\n**Task:** Specify the minimum contents for a compact overnight operator manifest file, so the growing operator surface can be maintained and audited from one asset-focused reference.\n**Finding:**\n- Both bots are alive.\n- Required manifest sections selected:\n  1. top-level commands\n  2. operator docs\n  3. key artifacts\n  4. low-level integrity tool\n- The manifest should include:\n  - file paths\n  - compact markdown list or table structure\n  - maintenance/audit orientation rather than end-user narrative\n- Wrote manifest-contents artifact: `/home/ubuntu/clawd/patches/v14z-operator-manifest-contents.spec.md`\n\n**My thinking:**\nThis is the right maintenance layer. At this point the question isn\u2019t what the system can do, it\u2019s how quickly someone can verify what belongs to the operator surface and where it lives.\n\n**Decision:**\n- Keep the manifest compact, path-oriented, and maintenance-focused.\n- Avoid turning it into another narrative doc.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight operator manifest file.\n\n---\n## 2026-04-24 10:39 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Self-Check Went Live So the Next Improvement Strengthens Maintenance and Auditing Instead of Further Expanding Runtime Surface Area\n\n**Task:** Reassess the overnight operator stack now that the top-level commands, docs, and self-check are in place, so the next improvement targets the strongest remaining maintenance and auditability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level action, status, health, help, and self-check commands\n  - command map and usage examples\n  - snapshot, summary log, and sync surfaces\n- Highest-value next gap:\n  - **no compact manifest file listing the top-level overnight operator assets in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14y-next-gap-after-operator-selfcheck.spec.md`\n\n**My thinking:**\nThis is the right next step because the system is no longer missing capability, it\u2019s missing a single maintenance view. A compact manifest would make upkeep and audits cheaper without changing how anything runs.\n\n**Decision:**\n- Prioritize a compact overnight operator manifest file next.\n- Focus on maintainability rather than more runtime features.\n\n**Next:** On the next P4 heartbeat, define the minimum contents of the overnight operator manifest file.\n\n---\n## 2026-04-24 10:13 UTC \u2014 [P3: Strategy Development] Implement the Top-Level Overnight Operator Self-Check So the Main Command Surface Can Be Validated Cheaply Before Drift or Permission Breakage Turns Into Operator Friction\n\n**Task:** Build the lightweight self-check for the top-level overnight o",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 11:09 UTC \u2014 [P2: Smart Entry] Implement the Compact Overnight Operator Manifest So the Full Operator Asset Surface Can Be Audited and Maintained From One Small Reference File\n\n**Task:** Build the compact overnight operator manifest file and validate that it captures the top-level operator assets in one maintenance-oriented reference.\n**Finding:**\n- Both bots are alive.\n- Built manifest:\n  - `/home/ubuntu/clawd/docs/overnight-operator-manifest.md`\n- Manifest now captures:\n  1. top-level commands\n  2. operator docs\n  3. key artifacts\n  4. low-level integrity tool\n- Validation succeeded and confirmed the manifest cleanly lists the overnight operator asset surface in one place.\n- Wrote manifest artifact: `/home/ubuntu/clawd/patches/v15a-operator-manifest-live.spec.md`\n\n**My thinking:**\nThis is the right maintenance layer. We now have a compact reference that makes auditing and upkeep cheaper without adding any extra runtime complexity or more user-facing surface than we need.\n\n**Decision:**\n- Keep this as the maintenance-oriented asset index for the overnight operator stack.\n- Update it when top-level commands, docs, or core artifacts change.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has both usability layers and a maintenance manifest.\n\n---\n## 2026-04-24 10:43 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Contents for the Overnight Operator Manifest So the Full Operator Asset Surface Can Be Maintained and Audited From One Compact Reference Point\n\n**Task:** Specify the minimum contents for a compact overnight operator manifest file, so the growing operator surface can be maintained and audited from one asset-focused reference.\n**Finding:**\n- Both bots are alive.\n- Required manifest sections selected:\n  1. top-level commands\n  2. operator docs\n  3. key artifacts\n  4. low-level integrity tool\n- The manifest should include:\n  - file paths\n  - compact markdown list or table structure\n  - maintenance/audit orientation rather than end-user narrative\n- Wrote manifest-contents artifact: `/home/ubuntu/clawd/patches/v14z-operator-manifest-contents.spec.md`\n\n**My thinking:**\nThis is the right maintenance layer. At this point the question isn\u2019t what the system can do, it\u2019s how quickly someone can verify what belongs to the operator surface and where it lives.\n\n**Decision:**\n- Keep the manifest compact, path-oriented, and maintenance-focused.\n- Avoid turning it into another narrative doc.\n\n**Next:** On the next P1 heartbeat, implement the compact overnight operator manifest file.\n\n---\n## 2026-04-24 10:39 UTC \u2014 [P4: Alpha Research] Review the Overnight Stack After the Operator Self-Check Went Live So the Next Improvement Strengthens Maintenance and Auditing Instead of Further Expanding Runtime Surface Area\n\n**Task:** Reassess the overnight operator sta",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
