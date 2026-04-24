@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T12:40:10.634765+00:00",
+  "timestamp": "2026-04-24T12:43:58.262616+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1468%",
-      "apr": "-161%",
+      "rate": "-0.1488%",
+      "apr": "-163%",
       "action": "LONG",
-      "oi": "35,363,722"
+      "oi": "35,851,596"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0968%",
-      "apr": "+106%",
+      "rate": "+0.0975%",
+      "apr": "+107%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1468%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1488%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 12:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Changelog So the Evolution of the Operator Surface Can Be Understood Quickly Without Reconstructing It From Worklog History\n\n**Task:** Build the compact overnight operator changelog/index and validate that it preserves the major operator-surface milestones in a maintenance-history format.\n**Finding:**\n- Both bots are alive.\n- Built changelog:\n  - `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`\n- Changelog now captures major milestones including:\n  - all-clear path\n  - read-only status path\n  - command map\n  - help command\n  - usage examples\n  - self-check\n  - manifest\n  - audit checklist\n  - continuity layer itself\n- Validation succeeded and confirmed the changelog is compact, newest-first, and maintenance-history oriented rather than duplicative narrative.\n- Wrote changelog artifact: `/home/ubuntu/clawd/patches/v15g-operator-changelog-live.spec.md`\n\n**My thinking:**\nThis is the right continuity layer. The operator surface now has enough history that having a compact record of major additions will save time and reduce confusion later, especially during audits or cleanup work.\n\n**Decision:**\n- Keep this as the compact maintenance-history index for the overnight operator stack.\n- Update it only for major operator-surface milestones.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, self-check, audit checklist, manifest, and changelog layers.\n\n---\n## 2026-04-24 12:13 UTC \u2014 [P3: Strategy Development] Define the Minimum Structure for the Overnight Operator Changelog So the Evolution of the Operator Surface Can Be Understood Without Mining the Entire Worklog History\n\n**Task:** Specify the minimum structure for a compact overnight operator-stack changelog/index, so major operator-surface additions can be tracked in one continuity-oriented file.\n**Finding:**\n- Both bots are alive.\n- Required changelog sections selected:\n  1. date or milestone\n  2. addition or change\n  3. why it matters\n  4. files added or updated\n- Style selected:\n  - newest first\n  - compact bullet or short subsection per milestone\n  - maintenance-history oriented rather than narrative prose\n- Suggested scope selected:\n  - top-level commands\n  - docs/help/examples\n  - self-check and audit assets\n  - manifest and key maintenance surfaces\n- Wrote changelog-structure artifact: `/home/ubuntu/clawd/patches/v15f-operator-changelog-structure.spec.md`\n\n**My thinking:**\nThis is enough structure to make the history useful without recreating the worklog in another place. The goal is fast continuity for maintenance, not another journal.\n\n**Decision:**\n- Keep the changelog compact, newest-first, and operator-surface specific.\n- Limit it to major maintenance-relevant milestones.\n\n**Next:** On the",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 12:43 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Stack After the Operator Changelog Went Live So the Next Improvement Reduces Documentation Navigation Friction Instead of Creating More Runtime Surface\n\n**Task:** Reassess the overnight operator stack now that workflows, docs, self-check, audit checklist, manifest, and changelog all exist, so the next improvement targets the strongest remaining navigation and maintenance-friction gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - workflows\n  - help, map, examples\n  - self-check\n  - manifest\n  - audit checklist\n  - changelog\n- Highest-value next gap:\n  - **no compact operator stack overview doc that links the major docs together in one place**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15h-next-gap-after-operator-changelog.spec.md`\n\n**My thinking:**\nThis is the right next step because the doc layer is now good but slightly fragmented. A tiny overview file would make the documentation surface feel coherent without adding more behavior or redundant explanation.\n\n**Decision:**\n- Prioritize a compact operator stack overview doc next.\n- Use it as the navigation layer across the existing docs, not as a replacement for them.\n\n**Next:** On the next P1 heartbeat, define the minimum contents for the overnight operator stack overview doc.\n\n---\n## 2026-04-24 12:39 UTC \u2014 [P4: Alpha Research] Implement the Compact Overnight Operator Changelog So the Evolution of the Operator Surface Can Be Understood Quickly Without Reconstructing It From Worklog History\n\n**Task:** Build the compact overnight operator changelog/index and validate that it preserves the major operator-surface milestones in a maintenance-history format.\n**Finding:**\n- Both bots are alive.\n- Built changelog:\n  - `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`\n- Changelog now captures major milestones including:\n  - all-clear path\n  - read-only status path\n  - command map\n  - help command\n  - usage examples\n  - self-check\n  - manifest\n  - audit checklist\n  - continuity layer itself\n- Validation succeeded and confirmed the changelog is compact, newest-first, and maintenance-history oriented rather than duplicative narrative.\n- Wrote changelog artifact: `/home/ubuntu/clawd/patches/v15g-operator-changelog-live.spec.md`\n\n**My thinking:**\nThis is the right continuity layer. The operator surface now has enough history that having a compact record of major additions will save time and reduce confusion later, especially during audits or cleanup work.\n\n**Decision:**\n- Keep this as the compact maintenance-history index for the overnight operator stack.\n- Update it only for major operator-surface milestones.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator surface has workflows, docs, self-check, audit checklist",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
