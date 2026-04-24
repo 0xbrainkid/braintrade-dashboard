@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T21:40:06.950390+00:00",
+  "timestamp": "2026-04-24T21:43:58.480855+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,39 +16,39 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "APE",
-      "rate": "-0.0886%",
-      "apr": "-97%",
-      "action": "LONG",
-      "oi": "38,883,302"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.0861%",
-      "apr": "+94%",
+      "rate": "+0.0876%",
+      "apr": "+96%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
-      "coin": "ME",
-      "rate": "-0.0703%",
-      "apr": "-77%",
+      "coin": "APE",
+      "rate": "-0.0827%",
+      "apr": "-91%",
       "action": "LONG",
-      "oi": "2,075,064"
+      "oi": "39,376,773"
+    },
+    {
+      "coin": "ME",
+      "rate": "-0.0643%",
+      "apr": "-70%",
+      "action": "LONG",
+      "oi": "2,075,369"
     },
     {
       "coin": "STABLE",
       "rate": "-0.0634%",
       "apr": "-69%",
       "action": "LONG",
-      "oi": "81,968,436"
+      "oi": "80,377,570"
     },
     {
       "coin": "SKR",
-      "rate": "-0.0607%",
-      "apr": "-66%",
+      "rate": "-0.0587%",
+      "apr": "-64%",
       "action": "LONG",
-      "oi": "36,954,786"
+      "oi": "37,194,090"
     }
   ],
   "daily_pnl": [
@@ -122,7 +122,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.0886%/8h \u2014 shorts paying longs"
+        "text": "Strongest: MAVIA at 0.0876%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -364,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:39 UTC \u2014 [P2: Smart Entry] Implement the Compact Maintainer Workflow Sequence in the Overview Doc So the Main Human Entry Point Becomes a Real Orientation Path Instead of Just a Flat Navigation List\n\n**Task:** Add the maintainer workflow sequence to the overnight operator overview doc and validate that the main human-readable entrypoint now sequences quickstart, maintenance check, status, all-clear, and deeper references in one compact section.\n**Finding:**\n- Both bots are alive.\n- The overview doc was slimmer than expected, so the correct patch point was the tail after `## Key artifacts`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-overview.md` directly.\n- Added:\n  - `## Maintenance view`\n  - `## Maintainer workflow`\n- Confirmed the overview now sequences:\n  1. maintainer quickstart\n  2. maintenance check\n  3. status inspection\n  4. all-clear action path\n  5. deeper maintenance references\n- Wrote overview-workflow-live artifact: `/home/ubuntu/clawd/patches/v16o-overview-maintainer-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The main entry doc now does more than list pieces, it gives a maintainer a compact route through them. That makes the overall surface much easier to understand without flattening the specialized docs.\n\n**Decision:**\n- Keep the overview workflow compact and sequential.\n- Treat it as the top-layer orientation path for maintainers.\n\n**Next:** On the next P2 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the shell entrypoints, overview doc, specialized docs, machine-readable index, and validator all reflect the maintenance layer coherently.\n\n---\n## 2026-04-24 21:16 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Maintainer Workflow Sequence for the Overview Doc So the Main Human Entry Point Stops Making Maintainers Assemble the Workflow Themselves From Disconnected Commands and Docs\n\n**Task:** Specify the minimum maintainer workflow sequence that should be added to `docs/overnight-operator-overview.md`, so the main human-readable entrypoint becomes a compact orientation path instead of just a navigation surface.\n**Finding:**\n- Both bots are alive.\n- Minimum workflow sequence selected:\n  1. read the maintainer quickstart for first-five-minutes orientation\n  2. run `scripts/operator_maintenance_check_overnight.sh`\n  3. use `scripts/operator_status_overnight.sh` for read-only inspection\n  4. use `scripts/operator_all_clear_overnight.sh` for safest refresh-and-verify action\n  5. use the maintenance runbook, audit checklist, manifest, and changelog for deeper context\n- Wrote overview-workflow artifact: `/home/ubuntu/clawd/patches/v16n-overview-maintainer-workflow-sequence.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives a maintainer one clear sequence at the main entrypoint without collapsing the specia",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 21:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Overview Workflow Addition So the Next Improvement Protects the Real Shell Outputs Instead of Continuing to Add More Documentation Layers\n\n**Task:** Reassess the overnight operator stack now that the overview doc sequences the maintainer workflow, so the next improvement targets the strongest remaining integrity gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - all-clear surface with maintenance-guide pointers\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **there is no lightweight integrity check for the shell entrypoint outputs themselves**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16p-next-gap-after-overview-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the operator surface is now coherent, but coherence can still drift at the output layer. A compact shell-surface integrity check would protect the actual user-facing entrypoints without adding a lot of new maintenance burden.\n\n**Decision:**\n- Prioritize a lightweight shell-surface integrity check next.\n- Keep it output-oriented and narrow.\n\n**Next:** On the next P3 heartbeat, define the minimum shell-surface integrity check needed to verify maintenance-guide pointers across help, status, and all-clear outputs.\n\n---\n## 2026-04-24 21:39 UTC \u2014 [P2: Smart Entry] Implement the Compact Maintainer Workflow Sequence in the Overview Doc So the Main Human Entry Point Becomes a Real Orientation Path Instead of Just a Flat Navigation List\n\n**Task:** Add the maintainer workflow sequence to the overnight operator overview doc and validate that the main human-readable entrypoint now sequences quickstart, maintenance check, status, all-clear, and deeper references in one compact section.\n**Finding:**\n- Both bots are alive.\n- The overview doc was slimmer than expected, so the correct patch point was the tail after `## Key artifacts`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-overview.md` directly.\n- Added:\n  - `## Maintenance view`\n  - `## Maintainer workflow`\n- Confirmed the overview now sequences:\n  1. maintainer quickstart\n  2. maintenance check\n  3. status inspection\n  4. all-clear action path\n  5. deeper maintenance references\n- Wrote overview-workflow-live artifact: `/home/ubuntu/clawd/patches/v16o-overview-maintainer-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The main entry doc now does more than list pieces, it gives a maintainer a compact route through them. That makes the overall surface much easier to understand without flattening the specialized docs.\n\n**Decision:**\n- Keep the overview workflow co",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
