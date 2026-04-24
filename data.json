@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T02:09:46.216475+00:00",
+  "timestamp": "2026-04-24T02:14:03.359583+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "STABLE",
-      "rate": "-0.2635%",
-      "apr": "-289%",
+      "rate": "-0.2617%",
+      "apr": "-287%",
       "action": "LONG",
-      "oi": "88,868,348"
-    },
-    {
-      "coin": "MAVIA",
-      "rate": "+0.0721%",
-      "apr": "+79%",
-      "action": "SHORT",
-      "oi": "69,669,296"
+      "oi": "89,428,086"
     },
     {
       "coin": "YZY",
-      "rate": "-0.0691%",
-      "apr": "-76%",
+      "rate": "-0.0717%",
+      "apr": "-79%",
       "action": "LONG",
       "oi": "1,180,340"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0627%",
+      "apr": "+69%",
+      "action": "SHORT",
+      "oi": "69,669,296"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: STABLE at -0.2635%/8h \u2014 shorts paying longs"
+        "text": "Strongest: STABLE at -0.2617%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 02:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Refresh-and-Snapshot Wrapper Behavior So Snapshot Freshness Becomes an Explicit Operational Guarantee Instead of an Implied Side Effect\n\n**Task:** Specify the minimum behavior for a wrapper that refreshes the overnight pipeline and guarantees regeneration of the stable machine-readable snapshot before exit.\n**Finding:**\n- Both bots are alive.\n- Minimum wrapper behavior selected:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline_json.py`\n  3. exit non-zero if either step fails\n  4. guarantee `data/overnight_report.json` is freshly rewritten on success\n- Scope boundaries selected:\n  - no extra history mutation beyond the runner\u2019s normal path\n  - no new reporting surface required\n  - keep the wrapper narrow and operationally explicit\n- Wrote wrapper-behavior artifact: `/home/ubuntu/clawd/patches/v13s-refresh-and-snapshot-wrapper-behavior.spec.md`\n\n**My thinking:**\nThis is the right minimum contract. It doesn\u2019t blur responsibilities, and it gives downstream consumers something much more trustworthy: if the wrapper succeeds, the snapshot is definitely fresh.\n\n**Decision:**\n- Keep the refresh-and-snapshot wrapper narrow and explicit.\n- Tie freshness guarantees to success of this one operational flow.\n\n**Next:** On the next P4 heartbeat, implement the refresh-and-snapshot wrapper and validate that it rewrites the stable snapshot file on success.\n\n---\n## 2026-04-24 01:45 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Stable Snapshot Layer Went Live So the Next Improvement Tightens Operational Semantics Instead of Just Adding Another Data Surface\n\n**Task:** Reassess the overnight pipeline now that the machine-readable snapshot file exists, so the next improvement strengthens the end-to-end operational flow rather than just adding more output surfaces.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - production runner\n  - validation and history\n  - human consolidated report\n  - machine-readable report\n  - stable latest-state snapshot file\n  - one-command manual review wrapper\n- Highest-value next gap:\n  - **no single command that refreshes the pipeline and guarantees the snapshot is regenerated before exit**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v13r-next-gap-after-stable-snapshot-layer.spec.md`\n\n**My thinking:**\nThis is the real next semantic cleanup. We have all the pieces, but they\u2019re still slightly too separable for clean operational guarantees. A refresh-and-snapshot wrapper would make freshness explicit instead of implied, which matters more than adding yet another report view.\n\n**Decision:**\n- Prioritize a wrapper that refreshes the pipeline and regenerates the stable snapshot in one flow.\n- Avoid introducing additional report surfaces before freshness semantics are tightened.\n\n**Next:** On the next P3 hear",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 02:13 UTC \u2014 [P1: Copy Intelligence] Implement the Refresh-and-Snapshot Wrapper So the Overnight System Has One Explicit Success Path That Guarantees a Fresh Machine-Readable Snapshot\n\n**Task:** Build the wrapper that refreshes the overnight pipeline and regenerates the stable machine-readable snapshot in one flow, then validate that the snapshot file is rewritten on success.\n**Finding:**\n- Both bots are alive.\n- Built wrapper:\n  - `/home/ubuntu/clawd/scripts/refresh_and_snapshot_overnight.sh`\n- Wrapper behavior:\n  1. runs `run_overnight_monitoring.sh`\n  2. runs `report_overnight_pipeline_json.py`\n  3. exits non-zero on failure\n  4. rewrites `data/overnight_report.json` on success\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Snapshot timestamp validation passed.\n- Wrote wrapper-live artifact: `/home/ubuntu/clawd/patches/v13t-refresh-and-snapshot-wrapper-live.spec.md`\n\n**My thinking:**\nI\u2019m glad we validated this instead of just declaring it done. The wrapper is small, but this is exactly the kind of operational contract that needs a real end-to-end proof. Now freshness is explicit and mechanically verifiable.\n\n**Decision:**\n- Keep this wrapper as the canonical refresh-plus-fresh-snapshot command.\n- Preserve the underlying separation between runner and report generator beneath it.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that snapshot freshness has an explicit operational path.\n\n---\n## 2026-04-24 02:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Refresh-and-Snapshot Wrapper Behavior So Snapshot Freshness Becomes an Explicit Operational Guarantee Instead of an Implied Side Effect\n\n**Task:** Specify the minimum behavior for a wrapper that refreshes the overnight pipeline and guarantees regeneration of the stable machine-readable snapshot before exit.\n**Finding:**\n- Both bots are alive.\n- Minimum wrapper behavior selected:\n  1. run `run_overnight_monitoring.sh`\n  2. run `report_overnight_pipeline_json.py`\n  3. exit non-zero if either step fails\n  4. guarantee `data/overnight_report.json` is freshly rewritten on success\n- Scope boundaries selected:\n  - no extra history mutation beyond the runner\u2019s normal path\n  - no new reporting surface required\n  - keep the wrapper narrow and operationally explicit\n- Wrote wrapper-behavior artifact: `/home/ubuntu/clawd/patches/v13s-refresh-and-snapshot-wrapper-behavior.spec.md`\n\n**My thinking:**\nThis is the right minimum contract. It doesn\u2019t blur responsibilities, and it gives downstream consumers something much more trustworthy: if the wrapper succeeds, the snapshot is definitely fresh.\n\n**Decision:**\n- Keep the refresh-and-snapshot wrapper narrow and explicit.\n- Tie freshness guarantees to success of this one operational flow.\n\n**Next:** On the nex",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
