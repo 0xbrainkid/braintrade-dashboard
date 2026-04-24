@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T15:39:51.933899+00:00",
+  "timestamp": "2026-04-24T15:44:08.765730+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.0891%",
-      "apr": "-98%",
+      "rate": "-0.0861%",
+      "apr": "-94%",
       "action": "LONG",
-      "oi": "37,196,672"
+      "oi": "37,573,220"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0725%",
-      "apr": "+79%",
+      "rate": "+0.0757%",
+      "apr": "+83%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0517%",
-      "apr": "+57%",
+      "rate": "+0.0545%",
+      "apr": "+60%",
       "action": "SHORT",
       "oi": "237,712,526"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.0891%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.0861%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:39 UTC \u2014 [P3: Strategy Development] Define the Minimum Behavior for the Combined Overnight Operator Maintenance Check So Routine Trust Verification of the Human and Machine Layers Becomes One Clean Path\n\n**Task:** Specify the minimum behavior for a combined maintenance check that runs both the top-level operator self-check and the machine-readable index validator, then ends with a compact success line.\n**Finding:**\n- Both bots are alive.\n- Minimum combined-check behavior selected:\n  1. run `scripts/operator_selfcheck_overnight.sh`\n  2. run `scripts/validate_overnight_operator_index.py`\n  3. exit non-zero if either step fails\n  4. print a compact final PASS line on success\n- Selected success output:\n  - `MAINTENANCE_PASS: operator surface and machine-readable index both verified`\n- Wrote maintenance-check artifact: `/home/ubuntu/clawd/patches/v15r-combined-maintenance-check-behavior.spec.md`\n\n**My thinking:**\nThis is the right small composition move. The checks already exist. What matters now is making routine verification cheap enough that it actually gets used consistently.\n\n**Decision:**\n- Keep the combined maintenance check thin and compositional.\n- Reuse the two existing trust checks instead of adding new logic here.\n\n**Next:** On the next P3 heartbeat, implement the combined overnight operator maintenance check and validate the final PASS path.\n\n---\n## 2026-04-24 15:13 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the Operator Index Validator Went Live So the Next Improvement Tightens Routine Maintenance Verification Instead of Expanding the Surface Further\n\n**Task:** Reassess the overnight operator stack now that both the human-readable and machine-readable operator surfaces have trust-preserving validation, so the next improvement targets the strongest remaining maintenance-verification gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-readable operator layer\n  - machine-readable operator layer\n  - validators and self-checks\n  - maintenance docs\n- Highest-value next gap:\n  - **no single combined maintenance check that runs both the top-level command self-check and the operator-index validator together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v15q-next-gap-after-operator-index-validator.spec.md`\n\n**My thinking:**\nThis is the right next move because we now have the two main maintenance trust checks, but they still require separate execution. A combined check would make periodic verification faster and reduce the chance that one gets skipped.\n\n**Decision:**\n- Prioritize a compact combined maintenance check next.\n- Keep it focused on composing the two existing trust checks, not inventing new ones.\n\n**Next:** On the next P2 heartbeat, define the minimum behavior for the combined overnight operator maintenance check.\n\n---\n## 2026-04-24 15:09 UTC \u2014 [P1: Copy Intelligence] Impleme",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 15:43 UTC \u2014 [P4: Alpha Research] Implement the Combined Overnight Operator Maintenance Check So the Two Core Trust Checks Collapse Into One Small Repeatable Verification Path\n\n**Task:** Build the combined overnight operator maintenance check and validate that it runs the top-level self-check, then the operator index validator, then ends with the final maintenance PASS line.\n**Finding:**\n- Both bots are alive.\n- Built combined maintenance check:\n  - `/home/ubuntu/clawd/scripts/operator_maintenance_check_overnight.sh`\n- The combined check now:\n  1. runs `scripts/operator_selfcheck_overnight.sh`\n  2. runs `scripts/validate_overnight_operator_index.py`\n  3. prints `MAINTENANCE_PASS: operator surface and machine-readable index both verified`\n- Initial execution hit the same path seam as prior wrapper validations.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected final maintenance PASS line.\n- Wrote maintenance-check artifact: `/home/ubuntu/clawd/patches/v15s-combined-maintenance-check-live.spec.md`\n\n**My thinking:**\nThis is the right maintenance consolidation. The two trust checks were already good, but combining them makes recurring verification much more likely to happen consistently instead of depending on memory.\n\n**Decision:**\n- Keep this as the compact routine maintenance verification path for the overnight operator stack.\n- Preserve the two underlying checks separately for debugging and direct use.\n\n**Next:** On the next P4 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the human-facing, machine-readable, and maintenance verification layers are all in place.\n\n---\n## 2026-04-24 15:39 UTC \u2014 [P3: Strategy Development] Define the Minimum Behavior for the Combined Overnight Operator Maintenance Check So Routine Trust Verification of the Human and Machine Layers Becomes One Clean Path\n\n**Task:** Specify the minimum behavior for a combined maintenance check that runs both the top-level operator self-check and the machine-readable index validator, then ends with a compact success line.\n**Finding:**\n- Both bots are alive.\n- Minimum combined-check behavior selected:\n  1. run `scripts/operator_selfcheck_overnight.sh`\n  2. run `scripts/validate_overnight_operator_index.py`\n  3. exit non-zero if either step fails\n  4. print a compact final PASS line on success\n- Selected success output:\n  - `MAINTENANCE_PASS: operator surface and machine-readable index both verified`\n- Wrote maintenance-check artifact: `/home/ubuntu/clawd/patches/v15r-combined-maintenance-check-behavior.spec.md`\n\n**My thinking:**\nThis is the right small composition move. The checks already exist. What matters now is making routine verification cheap enough that it actually gets used consistently.\n\n**Decision:**\n- Keep the combined maintenance check thin and compositional.\n- Reuse ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
