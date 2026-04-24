@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T04:39:59.620070+00:00",
+  "timestamp": "2026-04-24T04:43:58.150342+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,31 +17,31 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1578%",
-      "apr": "-173%",
+      "rate": "-0.1558%",
+      "apr": "-171%",
       "action": "LONG",
-      "oi": "25,612,646"
+      "oi": "25,590,252"
     },
     {
       "coin": "YZY",
-      "rate": "-0.1140%",
-      "apr": "-125%",
+      "rate": "-0.1047%",
+      "apr": "-115%",
       "action": "LONG",
       "oi": "1,152,384"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0840%",
-      "apr": "+92%",
+      "rate": "+0.0795%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0822%",
-      "apr": "-90%",
+      "rate": "-0.0778%",
+      "apr": "-85%",
       "action": "LONG",
-      "oi": "86,166,568"
+      "oi": "86,481,196"
     }
   ],
   "daily_pnl": [
@@ -115,7 +115,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1578%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1558%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -357,7 +357,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:39 UTC \u2014 [P2: Smart Entry] Implement the Snapshot-vs-Summary Sync Check So the Two Highest-Signal Operator Artifacts Can Be Verified Against Each Other With a Cheap Live PASS/FAIL Test\n\n**Task:** Build the tiny integrity check that confirms the latest machine-readable snapshot and latest operator summary-log entry are in sync, then validate it against the current live files.\n**Finding:**\n- Both bots are alive.\n- Built sync-check utility:\n  - `/home/ubuntu/clawd/scripts/check_snapshot_summary_sync.py`\n- The check verifies:\n  1. summary log exists and is non-empty\n  2. latest summary entry contains `snapshot_path`\n  3. latest summary entry path matches the expected snapshot file\n  4. latest summary entry `snapshot_ts` matches current snapshot mtime\n- Live validation succeeded:\n  - `PASS: snapshot and summary log are in sync`\n- Wrote sync-check-live artifact: `/home/ubuntu/clawd/patches/v14c-snapshot-summary-sync-check-live.spec.md`\n\n**My thinking:**\nThis is exactly the kind of tiny safety check I like. It\u2019s cheap, specific, and catches a real class of silent drift without dragging in a lot of extra machinery.\n\n**Decision:**\n- Keep this check as the integrity test for the two operator-facing artifacts.\n- Use it as the lightweight consistency guard for snapshot freshness vs persisted summary state.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator summary and snapshot artifacts are cross-checked.\n\n---\n## 2026-04-24 04:13 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Snapshot-vs-Summary Sync Check So the Two Highest-Signal Operator Artifacts Can Be Verified Against Each Other Cheaply and Reliably\n\n**Task:** Specify the minimum behavior for a tiny integrity check that confirms the latest machine-readable snapshot and latest operator summary-log entry are in sync.\n**Finding:**\n- Both bots are alive.\n- Minimum sync-check inputs selected:\n  - `/home/ubuntu/clawd/data/overnight_report.json`\n  - `/home/ubuntu/clawd/logs/operator-refresh-summary.log`\n- Minimum checks selected:\n  1. summary log exists and has at least one entry\n  2. latest summary entry contains `snapshot_path`\n  3. latest summary entry path matches the expected snapshot file\n  4. latest summary entry `snapshot_ts` matches the current snapshot file mtime\n- Output contract selected:\n  - PASS on clean match\n  - FAIL with concise reason on mismatch or missing data\n- Wrote sync-check-behavior artifact: `/home/ubuntu/clawd/patches/v14b-snapshot-summary-sync-check-behavior.spec.md`\n\n**My thinking:**\nThis is enough to catch the meaningful failures without turning a tiny check into another full audit system. The goal is cheap confidence that the two operator-facing artifacts still agree.\n\n**Decision:**\n- Keep the sync check tiny, explicit, and artifact-focused.\n- Use it to catch silent drift between s",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Stack After the Snapshot-vs-Summary Sync Check Went Live So the Next Improvement Tightens the Operator Path Instead of Multiplying Independent Safety Steps\n\n**Task:** Reassess the overnight system now that the snapshot and summary log are cross-checked, so the next improvement strengthens the operator path without adding unnecessary conceptual branches.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human and machine reports\n  - stable snapshot\n  - operator summary log\n  - snapshot-vs-summary sync check\n  - refresh wrappers\n  - history and validation\n- Highest-value next gap:\n  - **no single command that runs operator refresh and then immediately runs the sync check, ending with a compact all-clear result**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14d-next-gap-after-sync-check.spec.md`\n\n**My thinking:**\nThis is the clean next tightening move. The pieces are all there, but the safest operator path still requires remembering one more step. A tiny combined command would reduce that gap without changing the underlying architecture at all.\n\n**Decision:**\n- Prioritize a wrapper that runs operator refresh and then the sync check.\n- End with a compact all-clear result on success.\n\n**Next:** On the next P3 heartbeat, define the minimum behavior for the refresh-plus-sync all-clear wrapper.\n\n---\n## 2026-04-24 04:39 UTC \u2014 [P2: Smart Entry] Implement the Snapshot-vs-Summary Sync Check So the Two Highest-Signal Operator Artifacts Can Be Verified Against Each Other With a Cheap Live PASS/FAIL Test\n\n**Task:** Build the tiny integrity check that confirms the latest machine-readable snapshot and latest operator summary-log entry are in sync, then validate it against the current live files.\n**Finding:**\n- Both bots are alive.\n- Built sync-check utility:\n  - `/home/ubuntu/clawd/scripts/check_snapshot_summary_sync.py`\n- The check verifies:\n  1. summary log exists and is non-empty\n  2. latest summary entry contains `snapshot_path`\n  3. latest summary entry path matches the expected snapshot file\n  4. latest summary entry `snapshot_ts` matches current snapshot mtime\n- Live validation succeeded:\n  - `PASS: snapshot and summary log are in sync`\n- Wrote sync-check-live artifact: `/home/ubuntu/clawd/patches/v14c-snapshot-summary-sync-check-live.spec.md`\n\n**My thinking:**\nThis is exactly the kind of tiny safety check I like. It\u2019s cheap, specific, and catches a real class of silent drift without dragging in a lot of extra machinery.\n\n**Decision:**\n- Keep this check as the integrity test for the two operator-facing artifacts.\n- Use it as the lightweight consistency guard for snapshot freshness vs persisted summary state.\n\n**Next:** On the next P2 heartbeat, review the overnight stack again and identify the next highest-value improvement now that the operator summary and sn",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
