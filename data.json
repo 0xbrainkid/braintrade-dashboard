@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T08:40:03.829369+00:00",
+  "timestamp": "2026-04-24T08:43:56.873779+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.2214%",
-      "apr": "-242%",
+      "rate": "-0.2170%",
+      "apr": "-238%",
       "action": "LONG",
-      "oi": "28,768,416"
+      "oi": "28,679,130"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0742%",
-      "apr": "+81%",
+      "rate": "+0.0769%",
+      "apr": "+84%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.2214%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.2170%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 08:39 UTC \u2014 [P1: Copy Intelligence] Implement the Tiny Overnight Operator Help Command So the Three Top-Level Choices Are Instantly Visible In-Terminal Without Opening Any Docs\n\n**Task:** Build the tiny in-terminal overnight operator help command and validate that it prints the three top-level entrypoints with short purpose phrases.\n**Finding:**\n- Both bots are alive.\n- Built in-terminal help command:\n  - `/home/ubuntu/clawd/scripts/operator_help_overnight.sh`\n- Help output now lists:\n  1. `operator_all_clear_overnight.sh` \u2014 full safest action path\n  2. `operator_health_summary_overnight.sh` \u2014 fastest health check\n  3. `operator_status_overnight.sh` \u2014 fuller read-only inspection\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected three-command help view.\n- Wrote help-command artifact: `/home/ubuntu/clawd/patches/v14r-operator-help-command-live.spec.md`\n\n**My thinking:**\nThis is a nice finishing touch for the operator surface. It makes the three top-level choices obvious in the place they\u2019re most likely to be needed, without forcing someone into a doc file or a longer status output.\n\n**Decision:**\n- Keep this as the tiny in-terminal help entrypoint for the overnight operator stack.\n- Keep the fuller command map as the deeper orientation layer behind it.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value improvement now that action, status, health, map, and help layers are all live.\n\n---\n## 2026-04-24 08:13 UTC \u2014 [P4: Alpha Research] Define the Minimum Output for the Overnight Operator Help Command So the Top-Level Choices Are Instantly Visible In-Terminal Without Opening the Full Command Map\n\n**Task:** Specify the minimum output for the tiny in-terminal overnight operator help command, so the most important operator entrypoints can be recalled instantly without opening a doc file.\n**Finding:**\n- Both bots are alive.\n- Required help entries selected:\n  1. `operator_all_clear_overnight.sh` \u2014 full safest action path\n  2. `operator_health_summary_overnight.sh` \u2014 fastest health check\n  3. `operator_status_overnight.sh` \u2014 fuller read-only inspection\n- Style selected:\n  - 3 concise lines or bullets\n  - one short purpose phrase per command\n  - optimized for instant terminal recall\n- Wrote help-shape artifact: `/home/ubuntu/clawd/patches/v14q-operator-help-output-shape.spec.md`\n\n**My thinking:**\nThis is the right amount of help. Anything more and it stops being instant. Anything less and it stops being useful. The point is to make the three top-level choices obvious at a glance.\n\n**Decision:**\n- Keep the help command tightly focused on the three top-level entrypoints.\n- Leave low-level tools to the fuller command map.\n\n**Next:** On the next P4 heartbeat, implement the overnight",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 08:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the In-Terminal Help Command Went Live So the Next Improvement Adds Practical Operator Fluency Instead of More Surface Area\n\n**Task:** Reassess the overnight operator stack now that the help layer, command map, action paths, and inspection paths all exist, so the next improvement targets practical operator fluency rather than continuing to add more adjacent interfaces.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level help\n  - compact command map\n  - health/status/all-clear workflows\n  - sync check and summary log\n- Highest-value next gap:\n  - **no compact example workflow doc showing the most common operator scenarios and which top-level command to use**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14s-next-gap-after-operator-help-command.spec.md`\n\n**My thinking:**\nThis is the right next move because knowing a command exists isn\u2019t always the same as knowing when to use it. A tiny scenario-based guide would make the operator surface feel more obvious without changing any mechanics.\n\n**Decision:**\n- Prioritize a compact usage examples doc for the top-level overnight operator commands.\n- Keep it example-based, not exhaustive.\n\n**Next:** On the next P2 heartbeat, define the minimum scenarios to include in the overnight operator usage examples doc.\n\n---\n## 2026-04-24 08:39 UTC \u2014 [P1: Copy Intelligence] Implement the Tiny Overnight Operator Help Command So the Three Top-Level Choices Are Instantly Visible In-Terminal Without Opening Any Docs\n\n**Task:** Build the tiny in-terminal overnight operator help command and validate that it prints the three top-level entrypoints with short purpose phrases.\n**Finding:**\n- Both bots are alive.\n- Built in-terminal help command:\n  - `/home/ubuntu/clawd/scripts/operator_help_overnight.sh`\n- Help output now lists:\n  1. `operator_all_clear_overnight.sh` \u2014 full safest action path\n  2. `operator_health_summary_overnight.sh` \u2014 fastest health check\n  3. `operator_status_overnight.sh` \u2014 fuller read-only inspection\n- Initial execution hit the same path/exec seam as prior wrapper work.\n- Corrected the execution path and reran successfully.\n- Validation succeeded and printed the expected three-command help view.\n- Wrote help-command artifact: `/home/ubuntu/clawd/patches/v14r-operator-help-command-live.spec.md`\n\n**My thinking:**\nThis is a nice finishing touch for the operator surface. It makes the three top-level choices obvious in the place they\u2019re most likely to be needed, without forcing someone into a doc file or a longer status output.\n\n**Decision:**\n- Keep this as the tiny in-terminal help entrypoint for the overnight operator stack.\n- Keep the fuller command map as the deeper orientation layer behind it.\n\n**Next:** On the next P1 heartbeat, review the overnight stack again and identify the next highest-value im",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
