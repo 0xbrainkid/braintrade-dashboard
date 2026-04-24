@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T09:01:18.978916+00:00",
+  "timestamp": "2026-04-24T09:17:10.958988+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "SKR",
-      "rate": "-0.1996%",
-      "apr": "-219%",
+      "rate": "-0.1995%",
+      "apr": "-218%",
       "action": "LONG",
-      "oi": "28,758,722"
+      "oi": "30,190,748"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0770%",
-      "apr": "+84%",
+      "rate": "+0.0843%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,667,759"
-    },
-    {
-      "coin": "STABLE",
-      "rate": "-0.0515%",
-      "apr": "-56%",
-      "action": "LONG",
-      "oi": "85,840,642"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: SKR at -0.1996%/8h \u2014 shorts paying longs"
+        "text": "Strongest: SKR at -0.1995%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:00 UTC \u2014 [P3: Strategy Development] Audit HL Directional Readiness Before the Next Breakout So Capital Is Pointed at the Wallet That Can Actually Execute\n\n**Task:** Check live HL directional readiness by verifying bot liveness, scanning the current momentum regime, and comparing the wallets used by the Python engines versus the funded `hl.js` execution wallet.\n**Finding:**\n- Both bots are alive.\n- Current HL momentum scan is still compressed across BTC, ETH, and SOL.\n- ETH is closest to a breakout at 0.12% from the upper band, but volume is only 0.44x, so there is no valid momentum entry yet.\n- The strategic blocker is wallet alignment, not signal generation:\n  - `hl_live_trader.py` is pinned to old wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**.\n  - `hl_funding_arb.py` is pinned to the same old wallet with **$0.00**.\n  - The newer `hl.js` wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` still has **$37.39**.\n- Wrote alignment artifact: `/home/ubuntu/clawd/patches/v14t-hl-wallet-alignment-guard.spec.md`\n\n**My thinking:**\nRight now the market is not offering a clean breakout anyway, so forcing a trade would be sloppy. The bigger issue is that the live Python engines are aimed at an empty wallet, which means the next real signal would still get skipped. That is execution drag masquerading as strategic inactivity.\n\n**Decision:**\n- Do **not** force new HL directional exposure in a compressed, low-volume tape.\n- Prioritize a wallet-alignment guard before the next P3 execution pass, because strategy quality does not matter if the engine is pointed at dead capital.\n\n**Next:** On the next P3 heartbeat, implement the wallet-alignment audit/guard so HL engines can detect when they are scanning correctly but cannot deploy from funded capital.\n\n## 2026-04-24 08:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Stack After the In-Terminal Help Command Went Live So the Next Improvement Adds Practical Operator Fluency Instead of More Surface Area\n\n**Task:** Reassess the overnight operator stack now that the help layer, command map, action paths, and inspection paths all exist, so the next improvement targets practical operator fluency rather than continuing to add more adjacent interfaces.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - top-level help\n  - compact command map\n  - health/status/all-clear workflows\n  - sync check and summary log\n- Highest-value next gap:\n  - **no compact example workflow doc showing the most common operator scenarios and which top-level command to use**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v14s-next-gap-after-operator-help-command.spec.md`\n\n**My thinking:**\nThis is the right next move because knowing a command exists isn\u2019t always the same as knowing when to use it. A tiny scenario-based guide would make the operator surface feel more obvious without changing an",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 09:16 UTC \u2014 [P3: Strategy Development] Define the Minimum Scenarios for the Overnight Operator Usage Examples Doc So the Top-Level Commands Map Cleanly to the Most Common Operator Intents\n\n**Task:** Specify the minimum example scenarios for the compact overnight operator usage examples doc, so the top-level commands become easier to choose from practical intent rather than labels alone.\n**Finding:**\n- Both bots are alive.\n- Required scenarios selected:\n  1. I want the safest full refresh path \u2192 `operator_all_clear_overnight.sh`\n  2. I just want a fast health answer \u2192 `operator_health_summary_overnight.sh`\n  3. I want a fuller read-only inspection \u2192 `operator_status_overnight.sh`\n- Style selected:\n  - one short scenario per section\n  - one recommended command per scenario\n  - minimal explanation\n- Wrote usage-scenarios artifact: `/home/ubuntu/clawd/patches/v14t-operator-usage-examples-scenarios.spec.md`\n\n**My thinking:**\nThis is enough. These three scenarios cover the overwhelming majority of top-level operator needs, and they make command choice feel obvious instead of memorized.\n\n**Decision:**\n- Keep the examples doc tightly centered on the three top-level intents.\n- Avoid duplicating the fuller command map.\n\n**Next:** On the next P3 heartbeat, implement the compact overnight operator usage examples doc.\n\n---\n## 2026-04-24 09:00 UTC \u2014 [P3: Strategy Development] Audit HL Directional Readiness Before the Next Breakout So Capital Is Pointed at the Wallet That Can Actually Execute\n\n**Task:** Check live HL directional readiness by verifying bot liveness, scanning the current momentum regime, and comparing the wallets used by the Python engines versus the funded `hl.js` execution wallet.\n**Finding:**\n- Both bots are alive.\n- Current HL momentum scan is still compressed across BTC, ETH, and SOL.\n- ETH is closest to a breakout at 0.12% from the upper band, but volume is only 0.44x, so there is no valid momentum entry yet.\n- The strategic blocker is wallet alignment, not signal generation:\n  - `hl_live_trader.py` is pinned to old wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**.\n  - `hl_funding_arb.py` is pinned to the same old wallet with **$0.00**.\n  - The newer `hl.js` wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` still has **$37.39**.\n- Wrote alignment artifact: `/home/ubuntu/clawd/patches/v14t-hl-wallet-alignment-guard.spec.md`\n\n**My thinking:**\nRight now the market is not offering a clean breakout anyway, so forcing a trade would be sloppy. The bigger issue is that the live Python engines are aimed at an empty wallet, which means the next real signal would still get skipped. That is execution drag masquerading as strategic inactivity.\n\n**Decision:**\n- Do **not** force new HL directional exposure in a compressed, low-volume tape.\n- Prioritize a wallet-alignment guard before the next P3 execution pass, because strategy qu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
