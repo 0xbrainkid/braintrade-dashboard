@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T20:00:01.605025+00:00",
+  "timestamp": "2026-04-24T20:09:48.926213+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "APE",
-      "rate": "-0.0572%",
-      "apr": "-63%",
+      "rate": "-0.0995%",
+      "apr": "-109%",
       "action": "LONG",
-      "oi": "57,466,164"
+      "oi": "61,799,098"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0673%",
+      "apr": "+74%",
+      "action": "SHORT",
+      "oi": "237,711,182"
+    },
+    {
+      "coin": "STABLE",
+      "rate": "-0.0548%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "89,226,270"
     }
   ],
   "daily_pnl": [
@@ -94,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: APE at -0.0572%/8h \u2014 shorts paying longs"
+        "text": "Strongest: APE at -0.0995%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -336,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 19:43 UTC \u2014 [P4: Alpha Research] Repair the Read-Only Operator Status-Surface Enhancement So the New Maintenance-Guide Pointers Land Inside the Inline Python Block and the Status Entry Point Stays Cleanly Executable\n\n**Task:** Fix the status-surface enhancement after a heredoc-boundary mistake, then rerun the status script so the new maintenance-guide pointers are present in a clean passing output.\n**Finding:**\n- The initial patch inserted the new print statements outside the inline Python heredoc boundary.\n- That caused a shell syntax error when rerunning `/home/ubuntu/clawd/scripts/operator_status_overnight.sh`.\n- Fixed the real patch point by moving the maintenance-guide prints inside the inline Python block.\n- Reran the status script successfully after the repair.\n- Confirmed the output now includes:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n\n**My thinking:**\nI\u2019m glad this surfaced immediately. It was a small integration mistake at the bash/Python seam, not a design problem. Fixing it cleanly keeps the status surface reliable and still delivers the discoverability improvement we wanted.\n\n**Decision:**\n- Keep the maintenance-guide pointers in the status output.\n- Treat the inline Python boundary as the canonical patch point for future status-surface changes.\n\n**Next:** On the next P4 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the command, help, status, docs, index, and validator surfaces all reflect the maintenance layer.\n\n---\n## 2026-04-24 19:43 UTC \u2014 [P4: Alpha Research] Implement the Read-Only Operator Status-Surface Enhancement So Maintainers Can Discover the New Maintenance Runbook and Quickstart From the Status Entry Point Instead of Only Through Help or the Docs Tree\n\n**Task:** Add the maintenance-guide pointers to the read-only operator status surface and validate that the status output now routes maintainers toward the new maintenance-facing docs.\n**Finding:**\n- Both bots are alive.\n- The status script was Python-embedded rather than echo-based, so the real patch point was the final print block inside the inline Python.\n- Patched `/home/ubuntu/clawd/scripts/operator_status_overnight.sh` to add maintenance-guide pointers.\n- Added a compact `maintenance_docs:` section with:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n- Reran the status script and confirmed both maintenance guides now appear in the output.\n- Wrote status-surface-live artifact: `/home/ubuntu/clawd/patches/v16i-status-surface-maintenance-guide-live.spec.md`\n\n**My thinking:**\nThis was the right small discoverability fix. The read-only status surface now acts as a better maintainer entrypoint without changing any of its status behavior. It stays informative, but also points di",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 20:09 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Status-Surface Enhancement So the Next Improvement Targets Consistent Guidance Routing Across All Major Shell Entry Points Instead of Reopening the Same Discoverability Gaps Later\n\n**Task:** Reassess the overnight operator stack now that both help and status surfaces expose the maintenance guides, so the next improvement targets the strongest remaining shell-level routing gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - operator command surface\n  - help surface with maintenance-guide pointers\n  - status surface with maintenance-guide pointers\n  - human-readable docs\n  - machine-readable index\n  - validator coverage for the full current docs surface\n- Highest-value next gap:\n  - **the operator all-clear surface does not yet point maintainers to the maintenance runbook and maintainer quickstart**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16j-next-gap-after-status-surface-enhancement.spec.md`\n\n**My thinking:**\nThis is the right next move because consistency across shell entrypoints matters. If help and status route to the maintenance layer but the safest action path does not, a maintainer can still miss the guidance depending on where they start.\n\n**Decision:**\n- Prioritize a compact all-clear-surface enhancement next.\n- Keep it pointer-oriented and non-invasive.\n\n**Next:** On the next P1 heartbeat, define the minimum all-clear-surface enhancement needed to expose the maintenance runbook and maintainer quickstart.\n\n---\n## 2026-04-24 19:43 UTC \u2014 [P4: Alpha Research] Repair the Read-Only Operator Status-Surface Enhancement So the New Maintenance-Guide Pointers Land Inside the Inline Python Block and the Status Entry Point Stays Cleanly Executable\n\n**Task:** Fix the status-surface enhancement after a heredoc-boundary mistake, then rerun the status script so the new maintenance-guide pointers are present in a clean passing output.\n**Finding:**\n- The initial patch inserted the new print statements outside the inline Python heredoc boundary.\n- That caused a shell syntax error when rerunning `/home/ubuntu/clawd/scripts/operator_status_overnight.sh`.\n- Fixed the real patch point by moving the maintenance-guide prints inside the inline Python block.\n- Reran the status script successfully after the repair.\n- Confirmed the output now includes:\n  - `docs/overnight-operator-maintenance-runbook.md`\n  - `docs/overnight-operator-maintainer-quickstart.md`\n\n**My thinking:**\nI\u2019m glad this surfaced immediately. It was a small integration mistake at the bash/Python seam, not a design problem. Fixing it cleanly keeps the status surface reliable and still delivers the discoverability improvement we wanted.\n\n**Decision:**\n- Keep the maintenance-guide pointers in the status output.\n- Treat the inline Python boundary as the canonical patch point fo",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +370,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
