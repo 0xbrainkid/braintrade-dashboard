@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:20:37.589936+00:00",
+  "timestamp": "2026-04-25T01:21:41.136642+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,14 +17,14 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.0730%",
-      "apr": "-80%",
+      "rate": "-0.0825%",
+      "apr": "-90%",
       "action": "LONG",
       "oi": "1,204,486"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0729%",
+      "rate": "+0.0728%",
       "apr": "+80%",
       "action": "SHORT",
       "oi": "69,667,759"
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.0730%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.0825%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:20 UTC \u2014 [P1: Copy Intelligence] Check Whether the Tiny SOL-LONG/HYPE-SHORT Cohort Is Strengthening or Just Sitting There So We Know if the Relative-Value Read Is Gaining Real Support\n\n**Task:** Revisit the small `SOL LONG / HYPE SHORT` cohort and compare current positions to the previous saved leaderboard state to see whether the trade is attracting conviction or stagnating.\n**Finding:**\n- Both bots are alive.\n- The cohort is still only `2` accounts, but both have become more explicit and more concentrated in the theme:\n  - `ABC` flipped `SOL` from **SHORT \u2192 LONG**, kept `HYPE SHORT`, and fully exited prior `BTC` and `ETH` exposure.\n  - `anon-0x57dd` flipped `SOL` from **SHORT \u2192 LONG** and `HYPE` from **LONG \u2192 SHORT**, while also adding much larger `BTC` and `ETH` shorts.\n- Current cohort expression:\n  - `ABC`: almost pure pair trade, `SOL LONG $1.14M` vs `HYPE SHORT $866k`\n  - `anon-0x57dd`: hybrid book, `SOL LONG $1.28M` vs `HYPE SHORT $201k`, alongside large `BTC/ETH` shorts\n- This means the niche camp did **not** gain breadth, but it did gain **clarity**. Both members rotated into the pair more decisively versus the previous snapshot.\n\n**My thinking:**\nThat is a subtle but valuable read. The trade still lacks consensus breadth, so I would not treat it as a broad market call. But the fact that both members moved toward the same pair structure instead of away from it tells me the idea is becoming more intentional inside that subgroup. In copy-intel terms, that upgrades it from random noise to a credible niche relative-value signal.\n\n**Decision:**\n- Keep `SOL LONG / HYPE SHORT` classified as a niche but strengthening subgroup trade.\n- Continue treating `HYPE short` as the dominant broad signal, with the pair trade as a secondary nuance layer.\n\n**Next:** On the next P1 heartbeat, watch whether a third meaningful account joins the `SOL LONG / HYPE SHORT` setup; that would materially raise confidence in the pair signal.\n\n## 2026-04-25 01:19 UTC \u2014 [P1: Copy Intelligence] Clean Up Stale Active-Hour Documentation in Reporting Surfaces So the Written Record Stops Contradicting the New Strategy State After the 19 UTC Removal\n\n**Task:** Follow the stale-reference trail from the last audit and update reporting surfaces that still documented the old active-hour set.\n**Finding:**\n- Both bots are alive.\n- Confirmed the live bot now uses `active_hours = [11, 12, 20]` in `trading_bot.py`.\n- Patched stale report generators that still advertised the removed `19 UTC` hour:\n  - `scripts/daily-pnl-report.sh`\n  - `scripts/generate-daily-report.py`\n- Both now document:\n  - `Active Hours: [11, 12, 20] UTC`\n\n**My thinking:**\nThis is small but important hygiene. Once research turns into a live parameter change, written reports become part of the operational truth. If they keep publishing the old hour set, they quietly corrupt future analysis and make it harder t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:21 UTC \u2014 [P2: Smart Entry] Recheck the Post-Patch Active-Hour Mix So We Know Whether 20 UTC Still Deserves Probation or Is Quietly Dragging the New Hour Set\n\n**Task:** Evaluate the new live active-hour set after removing `19 UTC` and see whether the remaining `20 UTC` hour adds enough value to keep.\n**Finding:**\n- Both bots are alive.\n- Current tagged `v5a_pass` performance by remaining hour set:\n  - active hours `11/12/20`: `17` trades, `70.6%` WR, `+0.364` EV\n  - `11/12` only: `15` trades, `73.3%` WR, `+0.416` EV\n  - `20` only: `2` trades, `50.0%` WR, `-0.029` EV\n- This means `20 UTC` is still slightly dilutive versus the stronger `11/12` core, but the sample is too small to justify another live cut yet.\n- Supporting filter context on the surviving hour set:\n  - `v6_cooldown_tag=BLOCK`: `80.0%` WR, `+0.544` EV\n  - `v6_cooldown_tag=PASS`: `66.7%` WR, `+0.291` EV\n  - `v5b_tag=NORMAL`: `83.3%` WR, `+0.606` EV\n  - `v5b_tag=BOOST`: `0%` WR on the lone trade\n\n**My thinking:**\nThe hour patch did its job, the new active set is materially healthier. But this also reinforces that `20 UTC` is not a proven profit center, it is just not yet convicted enough to kill. I\u2019m glad we left it on probation instead of assuming it belonged with the strong midday cluster.\n\n**Decision:**\n- Keep `20 UTC` active for now, still explicitly probationary.\n- Do not make a second hour cut until more sample accumulates.\n\n**Next:** On the next P2 heartbeat, examine whether the lone `BOOST` context loser points to another stale sizing/boost rule that should be demoted or removed before it hurts the cleaner hour set.\n\n## 2026-04-25 01:20 UTC \u2014 [P1: Copy Intelligence] Check Whether the Tiny SOL-LONG/HYPE-SHORT Cohort Is Strengthening or Just Sitting There So We Know if the Relative-Value Read Is Gaining Real Support\n\n**Task:** Revisit the small `SOL LONG / HYPE SHORT` cohort and compare current positions to the previous saved leaderboard state to see whether the trade is attracting conviction or stagnating.\n**Finding:**\n- Both bots are alive.\n- The cohort is still only `2` accounts, but both have become more explicit and more concentrated in the theme:\n  - `ABC` flipped `SOL` from **SHORT \u2192 LONG**, kept `HYPE SHORT`, and fully exited prior `BTC` and `ETH` exposure.\n  - `anon-0x57dd` flipped `SOL` from **SHORT \u2192 LONG** and `HYPE` from **LONG \u2192 SHORT**, while also adding much larger `BTC` and `ETH` shorts.\n- Current cohort expression:\n  - `ABC`: almost pure pair trade, `SOL LONG $1.14M` vs `HYPE SHORT $866k`\n  - `anon-0x57dd`: hybrid book, `SOL LONG $1.28M` vs `HYPE SHORT $201k`, alongside large `BTC/ETH` shorts\n- This means the niche camp did **not** gain breadth, but it did gain **clarity**. Both members rotated into the pair more decisively versus the previous snapshot.\n\n**My thinking:**\nThat is a subtle but valuable read. The trade still lacks consensus breadth, so I would",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
