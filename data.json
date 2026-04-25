@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:46:18.987660+00:00",
+  "timestamp": "2026-04-25T01:47:53.077772+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.3159%",
-      "apr": "-346%",
+      "rate": "-0.3272%",
+      "apr": "-358%",
       "action": "LONG",
-      "oi": "1,330,840"
+      "oi": "1,356,458"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0803%",
-      "apr": "+88%",
+      "rate": "+0.0816%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.3159%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3272%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:45 UTC \u2014 [P1: Copy Intelligence] Check Whether ABC Is Still Scaling the SOL>HYPE Thesis or Starting to Plateau, Because Persistence Matters More When Size Is Still Being Added\n\n**Task:** Compare ABC\u2019s recent sequence of `SOL LONG / HYPE SHORT` snapshots to see whether the thesis is still being actively scaled or has started flattening out.\n**Finding:**\n- Both bots are alive.\n- Recent ABC sequence shows the structure is persistent, but sizing is **not monotonic straight up**:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.77M | HYPE SHORT $852k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- Read-through on sizing:\n  - `HYPE SHORT` is still near recent highs and slightly above the prior `$852k` snapshot\n  - `SOL LONG` has come down from the local peak `$1.77M`, but remains far above the earlier `$570k` starter size\n- So ABC is **not exiting** the thesis, but it may be transitioning from aggressive scale-up into active size management.\n\n**My thinking:**\nThat is a healthy nuance. Persistence does not require straight-line growth forever. The important thing is that ABC has not abandoned the structure even after trimming from peak SOL size. If anything, this looks like thesis retention with tactical resizing, not conviction collapse.\n\n**Decision:**\n- Keep ABC\u2019s `SOL > HYPE` read classified as a persistent clean minority thesis.\n- Do not over-interpret the lower current SOL notional as weakness unless the structure itself breaks.\n\n**Next:** On the next P1 heartbeat, check for structural break risk, specifically whether ABC reintroduces BTC/ETH exposure or drops one leg of the pair entirely.\n\n## 2026-04-25 01:44 UTC \u2014 [P4: Alpha Research] Move the Leading Candidate Refinement and ABC Minority-Thesis Update Onto a Durable Research Surface So It Does Not Live Only in the Worklog\n\n**Task:** Check whether the leading high-bias refinement candidate and the strengthened ABC minority-thesis read are documented anywhere durable outside `WORKLOG.md`, and patch a research surface if needed.\n**Finding:**\n- Both bots are alive.\n- The repo already had the high-bias refinement candidate documented in `reports/weekly-review-2026-W13.md`, but the richer ABC follow-up and the current combined read were not captured in the main trader-analysis note.\n- Patched `research/trader-analysis-2026-04-24.md` to add a follow-up note that now records:\n  - `ABC` as a **persistent clean minority `SOL > HYPE` thesis**\n  - `max_bias=70` as the current preferred ceiling\n  - the shadow candidate rule `if |bias| >= 65 and |macd_h| < 10: block`\n\n**My thinking:**\nI\u2019m glad this is now on a durable research surface. Worklogs are great for flow, but decisions get lost there. The trader-analysis file is a much better place for future me to rediscover the actual state of play without replaying an entire heartbeat chain.\n\n**Decision:",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:46 UTC \u2014 [P2: Smart Entry] Compare a 20UTC-Only Version of the Candidate Rule Against the Global Version So We Know Whether the Better Logic Is Session-Specific or Truly Cross-Hour\n\n**Task:** Test whether applying the `65+ weak-MACD` rule only to `20 UTC` would capture most of the benefit, versus applying it across all surviving live hours.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- `20 UTC`-only version of the rule:\n  - `8` trades, `75.0%` WR, `+0.447` EV\n- Global version of the rule:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The `20 UTC`-only version blocks just one trade:\n  - the `20 UTC` loss\n- The global version blocks one additional trade:\n  - a separate `12 UTC` loss\n\n**My thinking:**\nThis settles it pretty cleanly. A session-specific patch helps, but the global extreme-bias quality rule is better because the problem is not isolated to `20 UTC`. That makes the cross-hour interpretation stronger and reduces the temptation to keep inventing hour-specific fixes for what is really a signal-quality issue.\n\n**Decision:**\n- Prefer the global candidate rule over any `20 UTC`-only variant.\n- Treat the refinement as a cross-hour quality gate for extreme bias.\n\n**Next:** On the next P2 heartbeat, check whether the candidate rule should stay purely binary (`block`) or whether a softer size-reduction version is worth considering for future shadow testing.\n\n## 2026-04-25 01:45 UTC \u2014 [P1: Copy Intelligence] Check Whether ABC Is Still Scaling the SOL>HYPE Thesis or Starting to Plateau, Because Persistence Matters More When Size Is Still Being Added\n\n**Task:** Compare ABC\u2019s recent sequence of `SOL LONG / HYPE SHORT` snapshots to see whether the thesis is still being actively scaled or has started flattening out.\n**Finding:**\n- Both bots are alive.\n- Recent ABC sequence shows the structure is persistent, but sizing is **not monotonic straight up**:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.77M | HYPE SHORT $852k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- Read-through on sizing:\n  - `HYPE SHORT` is still near recent highs and slightly above the prior `$852k` snapshot\n  - `SOL LONG` has come down from the local peak `$1.77M`, but remains far above the earlier `$570k` starter size\n- So ABC is **not exiting** the thesis, but it may be transitioning from aggressive scale-up into active size management.\n\n**My thinking:**\nThat is a healthy nuance. Persistence does not require straight-line growth forever. The important thing is that ABC has not abandoned the structure even after trimming from peak SOL size. If anything, this looks like thesis retention with tactical resizing, not conviction collapse.\n\n**Decision:**\n- Keep ABC\u2019s `SOL > HYPE` read classified as a persistent clean minority thesis.\n- Do not over-interpret the l",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
