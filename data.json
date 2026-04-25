@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:23:39.473659+00:00",
+  "timestamp": "2026-04-25T01:24:41.473468+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.1031%",
-      "apr": "-113%",
+      "rate": "-0.1157%",
+      "apr": "-127%",
       "action": "LONG",
-      "oi": "1,204,486"
+      "oi": "1,189,628"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0745%",
-      "apr": "+82%",
+      "rate": "+0.0740%",
+      "apr": "+81%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.1031%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.1157%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:23 UTC \u2014 [P4: Alpha Research] Verify Whether the OBI-Based V5b Boost Still Touches Live Decision Flow or Has Quietly Degraded Into Shadow Metadata Only\n\n**Task:** Trace the current `v5b` boost/reduction tags through the PM bot code and determine whether they still influence live sizing or just outcome logging.\n**Finding:**\n- Both bots are alive.\n- `v5b_multiplier` appears in `trading_bot.py` only inside the outcome logger block around lines `240-249`.\n- There are **no live uses** of `v5b_multiplier` in trade sizing or trade execution logic.\n- Real live sizing currently flows through:\n  - Kelly sizing\n  - `max_position_pct`\n  - Fear & Greed size multiplier (`fg_size_mult`)\n- Tagged results on the surviving `11/12/20` sample still show:\n  - `BOOST`: `1` trade, `0%` WR\n  - `NORMAL`: `6` trades, `83.3%` WR\n  - both reduction tags happened to win in single-trade samples, but they are still only shadow labels\n\n**My thinking:**\nThis is actually a relief. The suspicious `BOOST` rule is not currently changing live size, so it is not an urgent production risk. What we have is a stale shadow-analysis label, not a live execution lever. That means we can treat the v5b workstream as research cleanup rather than emergency bot surgery.\n\n**Decision:**\n- Leave live execution untouched for now, because `v5b` is shadow metadata only.\n- Treat any future removal or redesign of `BOOST` as a cleanup/refinement task, not a hotfix.\n\n**Next:** On the next P4 heartbeat, update one analysis/report surface to stop implying that `v5b` is an active sizing rule if it is only being logged post-trade.\n\n## 2026-04-25 01:22 UTC \u2014 [P3: Strategy Development] Audit the Lone BOOST Case in the Cleaner Hour Set So We Know Whether the OBI-Based Sizing Boost Is Still Worth Keeping Alive at All\n\n**Task:** Inspect the surviving tagged trades under the new active-hour set and isolate the single `BOOST`-tagged case to see whether the OBI-based boost rule still has a credible role.\n**Finding:**\n- Both bots are alive.\n- On the current surviving `11/12/20` tagged set:\n  - `v5b NORMAL`: `6` trades, `83.3%` WR\n  - `v5b BOOST`: only `1` trade, and it **lost**\n- The lone surviving `BOOST` case was:\n  - `2026-04-06 12:10 UTC`\n  - loss\n  - `hour=12`\n  - `obi=-0.614`\n  - `macd_h=-2.313`\n  - `cooldown=PASS`\n  - `bias=-66.8`\n- Current V5b logic in `trading_bot.py` still awards:\n  - `BOOST` when `obi < -0.5`\n  - size reduction when OBI is only mildly bearish or strongly bullish\n- So the strongest OBI-based sizing boost is being justified by a single surviving example, and that example failed.\n\n**My thinking:**\nI\u2019m not ready to rip the rule out on one sample, but this is a warning sign. The boost logic reflects an older belief that very negative OBI is premium edge. Our newer work keeps finding that session quality matters more, and the one remaining boosted trade in the cleaner regime did not validat",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:24 UTC \u2014 [P1: Copy Intelligence] Verify Whether a Third Meaningful Account Has Joined the SOL-LONG/HYPE-SHORT Camp So We Do Not Overstate a Pair Trade That Still Might Be Just Two Traders\n\n**Task:** Recheck the current leaderboard for any additional meaningful account expressing `SOL LONG / HYPE SHORT`, and compare that niche camp against the broader HYPE-short crowd.\n**Finding:**\n- Both bots are alive.\n- There are still only **2** meaningful `SOL LONG / HYPE SHORT` accounts above the $50k threshold on both legs:\n  - `anon-0x57dd`\n  - `ABC`\n- No third account has joined the setup yet.\n- Meanwhile, the broader HYPE-short crowd remains much wider and heavier:\n  - `anon-0xfc66`: `HYPE SHORT $9.74M`, `SOL SHORT`\n  - `anon-0xdf9e`: `HYPE SHORT $2.85M`, no SOL leg\n  - `anon-0xecb6`: `HYPE SHORT $2.61M`, `SOL SHORT`\n  - plus the two niche pair-trade accounts\n- This keeps the hierarchy clear:\n  - **primary signal:** HYPE short pressure\n  - **secondary nuance:** a tiny but intentional subgroup prefers `SOL > HYPE`\n\n**My thinking:**\nI\u2019m glad we checked again instead of letting the story drift. The pair trade is real, but it is still not broad enough to promote into consensus copy intelligence. The safest read is still that HYPE is the main pressure point, while SOL relative strength is only a minority view held by two accounts we should keep tracking.\n\n**Decision:**\n- Do not upgrade `SOL LONG / HYPE SHORT` beyond niche status yet.\n- Keep `HYPE short` as the dominant copy-intel takeaway.\n\n**Next:** On the next P1 heartbeat, watch whether either `ABC` or `anon-0x57dd` starts reducing the pair, because that would weaken the niche relative-strength signal even further.\n\n## 2026-04-25 01:23 UTC \u2014 [P4: Alpha Research] Verify Whether the OBI-Based V5b Boost Still Touches Live Decision Flow or Has Quietly Degraded Into Shadow Metadata Only\n\n**Task:** Trace the current `v5b` boost/reduction tags through the PM bot code and determine whether they still influence live sizing or just outcome logging.\n**Finding:**\n- Both bots are alive.\n- `v5b_multiplier` appears in `trading_bot.py` only inside the outcome logger block around lines `240-249`.\n- There are **no live uses** of `v5b_multiplier` in trade sizing or trade execution logic.\n- Real live sizing currently flows through:\n  - Kelly sizing\n  - `max_position_pct`\n  - Fear & Greed size multiplier (`fg_size_mult`)\n- Tagged results on the surviving `11/12/20` sample still show:\n  - `BOOST`: `1` trade, `0%` WR\n  - `NORMAL`: `6` trades, `83.3%` WR\n  - both reduction tags happened to win in single-trade samples, but they are still only shadow labels\n\n**My thinking:**\nThis is actually a relief. The suspicious `BOOST` rule is not currently changing live size, so it is not an urgent production risk. What we have is a stale shadow-analysis label, not a live execution lever. That means we can treat the v5b workstream as r",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
