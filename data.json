@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:11:32.384622+00:00",
+  "timestamp": "2026-04-25T01:12:25.383746+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0857%",
-      "apr": "+94%",
+      "rate": "+0.0838%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0857%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0838%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:11 UTC \u2014 [P1: Copy Intelligence] Test the HYPE-SOL Pair Hypothesis Across Current Leaderboard Winners So We Know Whether That Relative-Value Read Is Real or Just a Few Eye-Catching Anecdotes\n\n**Task:** Examine current top-trader positioning specifically on `HYPE` versus `SOL` to see whether the pair-trade pattern identified earlier is broad enough to count as real copy intelligence.\n**Finding:**\n- Both bots are alive.\n- Current account-level HYPE/SOL structure among the largest relevant traders:\n  - `anon-0xecb6`: `HYPE SHORT $2.61M` and `SOL SHORT $1.36M`\n  - `anon-0xfc66`: `HYPE SHORT $9.74M` and `SOL SHORT $1.92M`\n  - `anon-0x57dd`: `HYPE SHORT $201k` and `SOL LONG $1.28M`\n  - `anon-0xc926`: `HYPE LONG $1.41M` and `SOL LONG $195k`\n  - `ABC`: `HYPE SHORT $866k` and `SOL LONG $1.14M`\n- Cross-board counts:\n  - `HYPE`: `3` long / `6` short\n  - `SOL`: `5` long / `5` short\n  - Accounts holding both: `5` same-direction, `3` opposite-direction\n- Interpretation of the pair signal:\n  - `HYPE` has a clearer bearish lean than `SOL`\n  - The strongest repeated **opposite-direction** expression is still `SOL LONG / HYPE SHORT`\n  - But the board is not unified on that pair, because the two biggest accounts (`anon-0xecb6`, `anon-0xfc66`) are simply short both legs\n\n**My thinking:**\nThis means the pair idea is real, but narrower than a full-market consensus. The leaderboard is giving two overlapping messages at once: broad de-risking via HYPE shorts, and a smaller relative-strength camp that prefers SOL over HYPE. That is useful, but only if we treat it as a secondary signal layered beneath the larger risk-off posture.\n\n**Decision:**\n- Keep `HYPE short` as the stronger copy-intel consensus.\n- Treat `SOL > HYPE` as a conditional relative-value signal, not a standalone market call.\n\n**Next:** On the next P1 heartbeat, track whether the `SOL LONG / HYPE SHORT` cohort adds size or fades, because persistence there would make it much more actionable.\n\n## 2026-04-25 01:10 UTC \u2014 [P4: Alpha Research] Add Liquidation Cascade State to the Unified Alpha Snapshot So PM Risk Can See Fast OI Shock Context Alongside Regime and Funding Instead of Treating It as a Separate Specialist Feed\n\n**Task:** Extend the unified alpha snapshot again, this time wiring the liquidation cascade detector into `research/alpha-signals.json` and folding its PM impact into the derived risk context.\n**Finding:**\n- Both bots are alive.\n- Located the live liquidation feed in `intelligence/liq-signals.json`.\n- Patched `scripts/alpha-signal-update.sh` to add:\n  - `liquidation_signal` block from `liq-signals.json`\n  - liquidation-aware `pm_risk_context`\n- Fresh snapshot now includes:\n  - `liquidation_signal.direction = neutral`\n  - `liquidation_signal.pm_adjustment = 0`\n  - `pm_risk_context.liq_direction = neutral`\n  - `pm_risk_context.liq_pm_adjustment = 0`\n- The unified alpha surface now carries",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:11 UTC \u2014 [P2: Smart Entry] Reconcile the Bias-Bucket Theory With the New Tagged Sample So We Do Not Carry an Outdated Dead-Zone Assumption Into the Current Hour-Filter Decision\n\n**Task:** Compare the older bias-bucket research against the newer tagged `v5a_pass` sample and see whether the current improvement is really about bias magnitude or still mostly about session timing.\n**Finding:**\n- Both bots are alive.\n- Under current tagged `v5a_pass` data:\n  - hours `11/12` only: `15` trades, `73.3%` WR, `+0.416` EV\n  - hours `19/20` only: `8` trades, `37.5%` WR, `-0.272` EV\n  - hours `11/12/20`: `17` trades, `70.6%` WR, `+0.364` EV\n- Bias buckets in the same tagged set do **not** show a fresh dead-zone problem:\n  - `|bias| 45-60`: `15` trades, `60.0%` WR, `+0.157` EV\n  - `|bias| 60+`: `8` trades, `62.5%` WR, `+0.214` EV\n  - there were no material tagged `30-45` survivors left after current gating\n- So the newer sample says the strongest active edge remains **time-window selection**, not another immediate bias-bucket rewrite.\n\n**My thinking:**\nThis is a useful correction. The older research about widening the dead zone may still be valid historically, but the current tagged trade set is already dominated by stronger filters. Right now the bigger mistake would be optimizing around a stale bias hypothesis while the live data is screaming that session timing matters more.\n\n**Decision:**\n- Keep the dead-zone idea in reserve, not as the next live priority.\n- Focus the next parameter change on session-hour control, especially cutting `19 UTC` while preserving the productive `11/12` core.\n\n**Next:** On the next P2 heartbeat, verify where active trading hours are configured so the 19 UTC exclusion can be translated from research into an actual controlled code change.\n\n## 2026-04-25 01:11 UTC \u2014 [P1: Copy Intelligence] Test the HYPE-SOL Pair Hypothesis Across Current Leaderboard Winners So We Know Whether That Relative-Value Read Is Real or Just a Few Eye-Catching Anecdotes\n\n**Task:** Examine current top-trader positioning specifically on `HYPE` versus `SOL` to see whether the pair-trade pattern identified earlier is broad enough to count as real copy intelligence.\n**Finding:**\n- Both bots are alive.\n- Current account-level HYPE/SOL structure among the largest relevant traders:\n  - `anon-0xecb6`: `HYPE SHORT $2.61M` and `SOL SHORT $1.36M`\n  - `anon-0xfc66`: `HYPE SHORT $9.74M` and `SOL SHORT $1.92M`\n  - `anon-0x57dd`: `HYPE SHORT $201k` and `SOL LONG $1.28M`\n  - `anon-0xc926`: `HYPE LONG $1.41M` and `SOL LONG $195k`\n  - `ABC`: `HYPE SHORT $866k` and `SOL LONG $1.14M`\n- Cross-board counts:\n  - `HYPE`: `3` long / `6` short\n  - `SOL`: `5` long / `5` short\n  - Accounts holding both: `5` same-direction, `3` opposite-direction\n- Interpretation of the pair signal:\n  - `HYPE` has a clearer bearish lean than `SOL`\n  - The strongest repeated **opposite-direction** ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
