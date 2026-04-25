@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T04:40:05.825333+00:00",
+  "timestamp": "2026-04-25T04:44:01.022840+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0845%",
-      "apr": "+92%",
+      "rate": "+0.0820%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0845%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0820%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 04:39 UTC \u2014 [P2: Smart Entry] Add the Maintenance-Stack Summary Block to the Manifest So the Canonical Asset Index Finally Carries One Short High-Level Description of the Current Maintenance Stack Instead of Reading Only as Inventory\n\n**Task:** Add the maintenance-stack summary block to the overnight operator manifest and validate that the manifest now includes one compact high-level summary while preserving its role as the canonical asset list.\n**Finding:**\n- Both bots are alive.\n- The manifest was slimmer than the draft assumed, so the correct patch point was the top of the document before `## Top-level commands`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-manifest.md` directly.\n- Added `## Maintenance stack at a glance`.\n- Confirmed the manifest now summarizes:\n  - overview workflow + purpose map\n  - quickstart\n  - runbook\n  - shell entrypoints\n  - machine-readable index\n  - integrity checks\n  - smoke test\n- Wrote manifest-summary-live artifact: `/home/ubuntu/clawd/patches/v17m-manifest-maintenance-stack-summary-live.spec.md`\n\n**My thinking:**\nThis was the right final coherence fix for the manifest. It still serves as the canonical asset list, but now it also tells a maintainer what the current asset set forms together. That makes it much more useful on its own.\n\n**Decision:**\n- Keep the manifest summary short and high-level.\n- Preserve the manifest as the canonical asset list with one compact orientation layer on top.\n\n**Next:** On the next P2 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the manifest also carries a maintenance-stack summary.\n\n---\n## 2026-04-25 04:13 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Maintenance-Stack Summary Block for the Manifest So the Canonical Asset Index Also Carries One Short Orientation Layer Instead of Reading Purely as Inventory While the Rest of the Operator Surface Has Already Gained Workflow and Purpose Explanations\n\n**Task:** Specify the minimum maintenance-stack summary block that should be added to `docs/overnight-operator-manifest.md`, so the manifest becomes more useful as a standalone maintainer-facing document.\n**Finding:**\n- Both bots are alive.\n- Minimum summary block selected:\n  - overview doc: maintainer workflow + top-level check purpose map\n  - quickstart: first-five-minutes orientation\n  - runbook: cadence + integrity workflow\n  - shell entrypoints: help, status, all-clear\n  - machine-readable index: operator asset surface\n  - integrity checks: index validator, shell-surface integrity check, combined maintenance integrity check\n  - smoke test: shallow end-to-end operator-surface confidence check\n- Wrote manifest-summary artifact: `/home/ubuntu/clawd/patches/v17l-manifest-maintenance-stack-summary.spec.md`\n\n**My thinking:**\nThis is the right minimum because the manifest should still be an asset index first,",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Manifest Summary Addition So the Next Improvement Sharpens Audit Usefulness Instead of Continuing to Add General-Purpose Orientation Layers to an Already Well-Shaped Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the manifest also carries a maintenance-stack summary, so the next improvement targets the strongest remaining audit-side coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with workflow and top-level check purposes\n  - maintenance runbook with cadence and integrity workflow\n  - maintainer quickstart\n  - manifest with maintenance-stack summary\n  - changelog milestone summary\n  - machine-readable index with integrity tools\n  - validators and operator-surface smoke test\n- Highest-value next gap:\n  - **the audit checklist does not yet summarize what a healthy completed operator surface should look like in one compact audit-facing note**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17n-next-gap-after-manifest-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the main surfaces are now strong, and the remaining friction is on the review side. A short audit-facing end-state summary would make the checklist easier to use without turning it into another overview doc.\n\n**Decision:**\n- Prioritize a compact \u201chealthy operator surface\u201d note in the audit checklist next.\n- Keep it short and review-oriented.\n\n**Next:** On the next P3 heartbeat, define the minimum healthy-operator-surface summary to add to `docs/overnight-operator-audit-checklist.md`.\n\n---\n## 2026-04-25 04:39 UTC \u2014 [P2: Smart Entry] Add the Maintenance-Stack Summary Block to the Manifest So the Canonical Asset Index Finally Carries One Short High-Level Description of the Current Maintenance Stack Instead of Reading Only as Inventory\n\n**Task:** Add the maintenance-stack summary block to the overnight operator manifest and validate that the manifest now includes one compact high-level summary while preserving its role as the canonical asset list.\n**Finding:**\n- Both bots are alive.\n- The manifest was slimmer than the draft assumed, so the correct patch point was the top of the document before `## Top-level commands`.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-manifest.md` directly.\n- Added `## Maintenance stack at a glance`.\n- Confirmed the manifest now summarizes:\n  - overview workflow + purpose map\n  - quickstart\n  - runbook\n  - shell entrypoints\n  - machine-readable index\n  - integrity checks\n  - smoke test\n- Wrote manifest-summary-live artifact: `/home/ubuntu/clawd/patches/v17m-manifest-maintenance-stack-summary-live.spec.md`\n\n**My thinking:**\nThis was the right final coherence fix for the manifest. It still serves as the canonical asset list, but now it also tells a maintainer",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
