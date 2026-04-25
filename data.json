@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:47:53.077772+00:00",
+  "timestamp": "2026-04-25T01:48:51.099605+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.3272%",
-      "apr": "-358%",
+      "rate": "-0.3307%",
+      "apr": "-362%",
       "action": "LONG",
       "oi": "1,356,458"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0816%",
-      "apr": "+89%",
+      "rate": "+0.0821%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.3272%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3307%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:46 UTC \u2014 [P2: Smart Entry] Compare a 20UTC-Only Version of the Candidate Rule Against the Global Version So We Know Whether the Better Logic Is Session-Specific or Truly Cross-Hour\n\n**Task:** Test whether applying the `65+ weak-MACD` rule only to `20 UTC` would capture most of the benefit, versus applying it across all surviving live hours.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- `20 UTC`-only version of the rule:\n  - `8` trades, `75.0%` WR, `+0.447` EV\n- Global version of the rule:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The `20 UTC`-only version blocks just one trade:\n  - the `20 UTC` loss\n- The global version blocks one additional trade:\n  - a separate `12 UTC` loss\n\n**My thinking:**\nThis settles it pretty cleanly. A session-specific patch helps, but the global extreme-bias quality rule is better because the problem is not isolated to `20 UTC`. That makes the cross-hour interpretation stronger and reduces the temptation to keep inventing hour-specific fixes for what is really a signal-quality issue.\n\n**Decision:**\n- Prefer the global candidate rule over any `20 UTC`-only variant.\n- Treat the refinement as a cross-hour quality gate for extreme bias.\n\n**Next:** On the next P2 heartbeat, check whether the candidate rule should stay purely binary (`block`) or whether a softer size-reduction version is worth considering for future shadow testing.\n\n## 2026-04-25 01:45 UTC \u2014 [P1: Copy Intelligence] Check Whether ABC Is Still Scaling the SOL>HYPE Thesis or Starting to Plateau, Because Persistence Matters More When Size Is Still Being Added\n\n**Task:** Compare ABC\u2019s recent sequence of `SOL LONG / HYPE SHORT` snapshots to see whether the thesis is still being actively scaled or has started flattening out.\n**Finding:**\n- Both bots are alive.\n- Recent ABC sequence shows the structure is persistent, but sizing is **not monotonic straight up**:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.77M | HYPE SHORT $852k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- Read-through on sizing:\n  - `HYPE SHORT` is still near recent highs and slightly above the prior `$852k` snapshot\n  - `SOL LONG` has come down from the local peak `$1.77M`, but remains far above the earlier `$570k` starter size\n- So ABC is **not exiting** the thesis, but it may be transitioning from aggressive scale-up into active size management.\n\n**My thinking:**\nThat is a healthy nuance. Persistence does not require straight-line growth forever. The important thing is that ABC has not abandoned the structure even after trimming from peak SOL size. If anything, this looks like thesis retention with tactical resizing, not conviction collapse.\n\n**Decision:**\n- Keep ABC\u2019s `SOL > HYPE` read classified as a persistent clean minority thesis.\n- Do not over-interpret the l",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:48 UTC \u2014 [P3: Strategy Development] Compare a Soft Size-Reduction Version of the Candidate Rule Against the Hard Block So We Know Whether Future Refinement Should Be Surgical or Decisive\n\n**Task:** Test whether a softer version of the leading candidate, modeled as half-sizing the flagged `65+ weak-MACD` trades, looks meaningfully competitive with the hard-block version.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- Flagged trades under the candidate condition:\n  - `2` trades\n  - `0%` WR\n  - `-1.000` EV\n- Thought experiment, half-size flagged trades instead of blocking them:\n  - still `9` trades, `66.7%` WR\n  - EV improves to only `+0.397`\n- Hard-block version remains materially better:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n\n**My thinking:**\nThis pushes me toward decisiveness. A softer size-reduction variant helps a bit, but it preserves the full structural problem because these flagged trades are not weak winners, they are pure losers in the current sample. When the bad bucket is `0%` WR, blocking is a much cleaner default than trimming.\n\n**Decision:**\n- Prefer the hard-block version over a soft size-reduction variant.\n- If this idea is ever promoted live, the default shape should be binary exclusion, not partial sizing.\n\n**Next:** On the next P3 heartbeat, check whether any other current shadow tag has a similarly clean `0% WR` loser bucket that could deserve the same kind of decisive treatment later.\n\n## 2026-04-25 01:46 UTC \u2014 [P2: Smart Entry] Compare a 20UTC-Only Version of the Candidate Rule Against the Global Version So We Know Whether the Better Logic Is Session-Specific or Truly Cross-Hour\n\n**Task:** Test whether applying the `65+ weak-MACD` rule only to `20 UTC` would capture most of the benefit, versus applying it across all surviving live hours.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- `20 UTC`-only version of the rule:\n  - `8` trades, `75.0%` WR, `+0.447` EV\n- Global version of the rule:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The `20 UTC`-only version blocks just one trade:\n  - the `20 UTC` loss\n- The global version blocks one additional trade:\n  - a separate `12 UTC` loss\n\n**My thinking:**\nThis settles it pretty cleanly. A session-specific patch helps, but the global extreme-bias quality rule is better because the problem is not isolated to `20 UTC`. That makes the cross-hour interpretation stronger and reduces the temptation to keep inventing hour-specific fixes for what is really a signal-quality issue.\n\n**Decision:**\n- Prefer the global candidate rule over any `20 UTC`-only variant.\n- Treat the refinement as a cross-hour quality gate for extreme bias.\n\n**Next:** On the next P2 heartbeat, check whether the candidate rule should stay purely binary (`block`) or whether a softer size-re",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
