@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:34:17.135890+00:00",
+  "timestamp": "2026-04-25T01:35:11.283147+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2391%",
-      "apr": "-262%",
+      "rate": "-0.2468%",
+      "apr": "-270%",
       "action": "LONG",
       "oi": "1,335,480"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0689%",
-      "apr": "+75%",
+      "rate": "+0.0700%",
+      "apr": "+77%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2391%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2468%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:33 UTC \u2014 [P3: Strategy Development] Inspect the Three Surviving 65+ Bias Trades So We Can Tell Whether the High-Bias Danger Zone Has a Common Failure Signature or Is Just Tiny-Sample Noise\n\n**Task:** Isolate the three surviving `|bias| >= 65` trades in the live `11/12/20` structure and check for shared hour, cooldown, OBI, or momentum patterns.\n**Finding:**\n- Both bots are alive.\n- The three surviving `65+` trades are:\n  - `2026-04-01 20:05 UTC` \u2014 **loss** at `hour 20`, `bias -65.8`, `cooldown BLOCK`, `obi -0.228`, `macd -7.77`\n  - `2026-04-03 12:40 UTC` \u2014 **win** at `hour 12`, `bias -69.8`, `cooldown BLOCK`, `obi -0.491`, `macd -18.62`\n  - `2026-04-06 12:10 UTC` \u2014 **loss** at `hour 12`, `bias -66.8`, `cooldown PASS`, `obi -0.614`, `macd -2.31`\n- There is **no clean cooldown explanation**:\n  - losses occurred once with `BLOCK` and once with `PASS`\n- There is also **no clean hour explanation**:\n  - one loss at `20`, one loss at `12`, one win at `12`\n- The best hint is indicator quality:\n  - the lone winner had the **strongest downside momentum** (`macd -18.62`) without the extreme OBI boost condition\n  - the losing `BOOST` case had the weakest MACD of the three (`-2.31`) despite the strongest bearish OBI\n\n**My thinking:**\nThis pushes me away from simple rule stories like \u201chigh bias fails because of hour X\u201d or \u201cbecause cooldown.\u201d The cleaner hypothesis is that extreme bias only works when momentum is truly forceful, and negative OBI by itself is not enough. That makes the high-bias band look more selective, not simply forbidden.\n\n**Decision:**\n- Keep treating `65+` as a danger zone.\n- If we revisit this band later, the likely path is a **stricter momentum-quality requirement**, not a blind hour or cooldown rule.\n\n**Next:** On the next P3 heartbeat, compare MACD strength inside the `65+` band versus the profitable `55-64.9` band to see whether momentum quality really separates the good extreme signals from the bad ones.\n\n## 2026-04-25 01:33 UTC \u2014 [P2: Smart Entry] Recheck the Upper Bias Band After the 19 UTC Cut, Because Very High Conviction May Still Be a Trap Even Inside the Cleaner Hour Set\n\n**Task:** Break the surviving `v5a_pass` trades in the live `11/12/20` structure into bias-strength bands to see whether the upper conviction range is still underperforming.\n**Finding:**\n- Both bots are alive.\n- Bias band performance in the current surviving set:\n  - `|bias| 45-54.9`: `8` trades, `75.0%` WR, `+0.452` EV\n  - `|bias| 55-64.9`: `6` trades, `83.3%` WR, `+0.602` EV\n  - `|bias| 65-80`: `3` trades, `33.3%` WR, `-0.346` EV\n- So the middle-high band (`55-64.9`) is actually the strongest slice, while the very high band (`65+`) remains weak even after removing `19 UTC`.\n- The current bot still allows trades up to `max_bias = 70.0`, with `70-80` treated as soft-cap no-trade data collection.\n\n**My thinking:**\nThis is useful. The problem is not \u201chig",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:34 UTC \u2014 [P4: Alpha Research] Test the Momentum-Quality Hypothesis Inside High-Bias Trades So We Can Tell Whether MACD, Not Bias Alone, Explains the Extreme-Band Failures\n\n**Task:** Compare MACD strength in the profitable `55-64.9` bias band versus the weaker `65+` band inside the surviving live hour set, using SolSt1ne\u2019s emphasis on signal quality rather than raw conviction alone.\n**Finding:**\n- Both bots are alive.\n- In the surviving `11/12/20` and `v5a_pass` sample:\n  - `55-64.9` band: `6` trades, MACD abs avg `9.697`\n    - winners MACD abs avg `11.238`\n    - loser MACD abs avg `1.994`\n  - `65-80` band: `3` trades, MACD abs avg `9.565`\n    - lone winner MACD abs `18.616`\n    - losers MACD abs avg `5.040`\n- So average MACD across the two bands is similar overall, but **the winners consistently have much stronger MACD than the losers**, especially in the extreme-bias bucket.\n- This matches SolSt1ne\u2019s broader lesson: signal quality matters more than raw score magnitude.\n\n**My thinking:**\nI\u2019m more convinced now that the high-bias issue is not \u201cextreme bias bad.\u201d It is \u201cextreme bias without strong momentum confirmation is dangerous.\u201d That is a much better research direction than fiddling with the bias cap alone. If we ever tighten this logic, MACD-strength gating inside the upper bias band is the more credible lever.\n\n**Decision:**\n- Keep the bias cap unchanged for now.\n- Treat **MACD quality as the leading candidate** for any future refinement of `65+` trades.\n\n**Next:** On the next P4 heartbeat, test a simple shadow rule like \u201crequire stronger MACD for `|bias| >= 65`\u201d against the tiny current sample and record whether it would have filtered both losers while preserving the winner.\n\n## 2026-04-25 01:33 UTC \u2014 [P3: Strategy Development] Inspect the Three Surviving 65+ Bias Trades So We Can Tell Whether the High-Bias Danger Zone Has a Common Failure Signature or Is Just Tiny-Sample Noise\n\n**Task:** Isolate the three surviving `|bias| >= 65` trades in the live `11/12/20` structure and check for shared hour, cooldown, OBI, or momentum patterns.\n**Finding:**\n- Both bots are alive.\n- The three surviving `65+` trades are:\n  - `2026-04-01 20:05 UTC` \u2014 **loss** at `hour 20`, `bias -65.8`, `cooldown BLOCK`, `obi -0.228`, `macd -7.77`\n  - `2026-04-03 12:40 UTC` \u2014 **win** at `hour 12`, `bias -69.8`, `cooldown BLOCK`, `obi -0.491`, `macd -18.62`\n  - `2026-04-06 12:10 UTC` \u2014 **loss** at `hour 12`, `bias -66.8`, `cooldown PASS`, `obi -0.614`, `macd -2.31`\n- There is **no clean cooldown explanation**:\n  - losses occurred once with `BLOCK` and once with `PASS`\n- There is also **no clean hour explanation**:\n  - one loss at `20`, one loss at `12`, one win at `12`\n- The best hint is indicator quality:\n  - the lone winner had the **strongest downside momentum** (`macd -18.62`) without the extreme OBI boost condition\n  - the losing `BOOST` case had the weakest MA",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
