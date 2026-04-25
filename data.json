@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:45:30.355736+00:00",
+  "timestamp": "2026-04-25T01:46:18.987660+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.3079%",
-      "apr": "-337%",
+      "rate": "-0.3159%",
+      "apr": "-346%",
       "action": "LONG",
-      "oi": "1,335,610"
+      "oi": "1,330,840"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0798%",
-      "apr": "+87%",
+      "rate": "+0.0803%",
+      "apr": "+88%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.3079%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3159%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:44 UTC \u2014 [P4: Alpha Research] Move the Leading Candidate Refinement and ABC Minority-Thesis Update Onto a Durable Research Surface So It Does Not Live Only in the Worklog\n\n**Task:** Check whether the leading high-bias refinement candidate and the strengthened ABC minority-thesis read are documented anywhere durable outside `WORKLOG.md`, and patch a research surface if needed.\n**Finding:**\n- Both bots are alive.\n- The repo already had the high-bias refinement candidate documented in `reports/weekly-review-2026-W13.md`, but the richer ABC follow-up and the current combined read were not captured in the main trader-analysis note.\n- Patched `research/trader-analysis-2026-04-24.md` to add a follow-up note that now records:\n  - `ABC` as a **persistent clean minority `SOL > HYPE` thesis**\n  - `max_bias=70` as the current preferred ceiling\n  - the shadow candidate rule `if |bias| >= 65 and |macd_h| < 10: block`\n\n**My thinking:**\nI\u2019m glad this is now on a durable research surface. Worklogs are great for flow, but decisions get lost there. The trader-analysis file is a much better place for future me to rediscover the actual state of play without replaying an entire heartbeat chain.\n\n**Decision:**\n- Treat the trader-analysis note as updated canonical context for this cluster of findings.\n- Keep the worklog for ongoing iteration, but do not let key conclusions stay trapped there.\n\n**Next:** On the next P4 heartbeat, check whether any daily or weekly report surface still needs the same ABC minority-thesis upgrade so cross-file narrative drift stays low.\n\n## 2026-04-25 01:43 UTC \u2014 [P3: Strategy Development] Check Whether the Leading Candidate Rule Is Secretly Just a 20 UTC Fix in Disguise, or Whether It Improves the Cleaner Core Hours Too\n\n**Task:** Break the leading `65+ weak-MACD` candidate rule down by hour to see where its benefit actually comes from.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) hour stats:\n  - `11 UTC`: `3` trades, `66.7%` WR, `+0.288` EV\n  - `12 UTC`: `5` trades, `80.0%` WR, `+0.542` EV\n  - `20 UTC`: `1` trade, `0.0%` WR, `-1.000` EV\n- With the candidate rule applied:\n  - `11 UTC`: unchanged at `3` trades, `66.7%` WR, `+0.288` EV\n  - `12 UTC`: improves to `4` trades, `100%` WR, `+0.927` EV\n  - `20 UTC`: disappears entirely because its only qualifying trade is blocked\n- Blocked trades are:\n  - `20 UTC` loss (`bias -65.8`, `macd -7.77`)\n  - `12 UTC` loss (`bias -66.8`, `macd -2.31`)\n\n**My thinking:**\nThis is better than I expected. The rule is not just a disguised way of cleaning up the probationary `20 UTC` hour. It also improves the strong `12 UTC` core by filtering a bad extreme-bias case there. That makes the candidate more credible, because its value is not dependent on a single fragile hour.\n\n**Decision:**\n- Keep the candidate rule at the top of the refinement shortlist.\n- Treat it as a cross-hour quality",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:45 UTC \u2014 [P1: Copy Intelligence] Check Whether ABC Is Still Scaling the SOL>HYPE Thesis or Starting to Plateau, Because Persistence Matters More When Size Is Still Being Added\n\n**Task:** Compare ABC\u2019s recent sequence of `SOL LONG / HYPE SHORT` snapshots to see whether the thesis is still being actively scaled or has started flattening out.\n**Finding:**\n- Both bots are alive.\n- Recent ABC sequence shows the structure is persistent, but sizing is **not monotonic straight up**:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.77M | HYPE SHORT $852k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- Read-through on sizing:\n  - `HYPE SHORT` is still near recent highs and slightly above the prior `$852k` snapshot\n  - `SOL LONG` has come down from the local peak `$1.77M`, but remains far above the earlier `$570k` starter size\n- So ABC is **not exiting** the thesis, but it may be transitioning from aggressive scale-up into active size management.\n\n**My thinking:**\nThat is a healthy nuance. Persistence does not require straight-line growth forever. The important thing is that ABC has not abandoned the structure even after trimming from peak SOL size. If anything, this looks like thesis retention with tactical resizing, not conviction collapse.\n\n**Decision:**\n- Keep ABC\u2019s `SOL > HYPE` read classified as a persistent clean minority thesis.\n- Do not over-interpret the lower current SOL notional as weakness unless the structure itself breaks.\n\n**Next:** On the next P1 heartbeat, check for structural break risk, specifically whether ABC reintroduces BTC/ETH exposure or drops one leg of the pair entirely.\n\n## 2026-04-25 01:44 UTC \u2014 [P4: Alpha Research] Move the Leading Candidate Refinement and ABC Minority-Thesis Update Onto a Durable Research Surface So It Does Not Live Only in the Worklog\n\n**Task:** Check whether the leading high-bias refinement candidate and the strengthened ABC minority-thesis read are documented anywhere durable outside `WORKLOG.md`, and patch a research surface if needed.\n**Finding:**\n- Both bots are alive.\n- The repo already had the high-bias refinement candidate documented in `reports/weekly-review-2026-W13.md`, but the richer ABC follow-up and the current combined read were not captured in the main trader-analysis note.\n- Patched `research/trader-analysis-2026-04-24.md` to add a follow-up note that now records:\n  - `ABC` as a **persistent clean minority `SOL > HYPE` thesis**\n  - `max_bias=70` as the current preferred ceiling\n  - the shadow candidate rule `if |bias| >= 65 and |macd_h| < 10: block`\n\n**My thinking:**\nI\u2019m glad this is now on a durable research surface. Worklogs are great for flow, but decisions get lost there. The trader-analysis file is a much better place for future me to rediscover the actual state of play without replaying an entire heartbeat chain.\n\n**Decision:",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
