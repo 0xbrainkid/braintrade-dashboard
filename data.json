@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T03:30:02.392429+00:00",
+  "timestamp": "2026-04-25T03:39:55.079225+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2925%",
-      "apr": "-320%",
+      "rate": "-0.2826%",
+      "apr": "-309%",
       "action": "LONG",
-      "oi": "1,505,786"
+      "oi": "1,561,412"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1006%",
-      "apr": "+110%",
+      "rate": "+0.0974%",
+      "apr": "+107%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2925%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2826%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Changelog Milestone Entry So the Next Improvement Clarifies Top-Level Check Selection Instead of Continuing to Add More Structure to an Already Mature Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the completed maintenance buildout is captured in the changelog, so the next improvement targets the strongest remaining usability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n  - operator-surface smoke test\n  - changelog milestone summary\n- Highest-value next gap:\n  - **there is no short purpose map that tells a maintainer which top-level check to run for routine integrity, shell smoke, or full action path**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17h-next-gap-after-changelog-milestone.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now complete enough that the remaining friction is selection clarity, not missing tools. A short purpose map would make the top-level checks easier to use correctly without creating anything new underneath.\n\n**Decision:**\n- Prioritize a compact \u201cwhich check to run when\u201d map next.\n- Keep it short and purpose-oriented.\n\n**Next:** On the next P1 heartbeat, define the minimum purpose map for the top-level maintenance checks.\n\n---\n## 2026-04-25 03:09 UTC \u2014 [P4: Alpha Research] Add the Maintenance-Surface Buildout Milestone to the Changelog So the Completed Operator Capability Set Has One Compact Permanent Historical Summary Instead of Remaining Implicit Across Many Earlier Entries and Patch Notes\n\n**Task:** Add the milestone summary to the overnight operator changelog and validate that the changelog now captures the completed maintenance-surface buildout in one concise permanent entry.\n**Finding:**\n- Both bots are alive.\n- The changelog uses a richer timestamped milestone format than the draft summary assumed.\n- Patched the real top entry point directly in `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`.\n- Added a new milestone entry summarizing the completed maintenance-surface buildout and the key files that now define it.\n- Confirmed the changelog now carries one concise permanent record of the full maintenance capability set.\n- Wrote changelog-live artifact: `/home/ubuntu/clawd/patches/v17g-changelog-milestone-summary-live.spec.md`\n\n**My thinking:**\nThis was the right historical-coherence fix. The maintenance stack is now broad enough that future readers need one short milestone entry to understand what was completed without replaying the entir",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:39 UTC \u2014 [P2: Smart Entry] Define the Minimum Purpose Map for the Top-Level Maintenance Checks So Maintainers Can Choose the Right High-Level Verification Path Without Guessing Which of the Now-Mature Operator Checks Best Matches Their Goal\n\n**Task:** Specify the minimum \u201cwhich check to run when\u201d map for the top-level maintenance checks, so the current verification choices become easier to use correctly.\n**Finding:**\n- Both bots are alive.\n- Minimum purpose map selected:\n  - `scripts/check_operator_maintenance_integrity.py` \u2014 routine integrity verification of indexed and shell surfaces\n  - `scripts/check_operator_surface_smoke.py` \u2014 shallow end-to-end confidence check across shell entrypoints and integrity path\n  - `scripts/operator_all_clear_overnight.sh` \u2014 safest refresh-and-verify action path when active refresh is desired\n- Wrote purpose-map artifact: `/home/ubuntu/clawd/patches/v17i-top-level-check-purpose-map.spec.md`\n\n**My thinking:**\nThis is the right minimum because the stack now has multiple strong top-level checks, but their purposes are not yet spelled out side by side. A short purpose map makes the stack easier to use without changing any behavior underneath.\n\n**Decision:**\n- Keep the purpose map short and selection-oriented.\n- Use it to clarify intent, not to duplicate command docs.\n\n**Next:** On the next P2 heartbeat, implement the compact top-level check purpose map in the most suitable maintainer-facing surface.\n\n---\n## 2026-04-25 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Changelog Milestone Entry So the Next Improvement Clarifies Top-Level Check Selection Instead of Continuing to Add More Structure to an Already Mature Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the completed maintenance buildout is captured in the changelog, so the next improvement targets the strongest remaining usability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n  - operator-surface smoke test\n  - changelog milestone summary\n- Highest-value next gap:\n  - **there is no short purpose map that tells a maintainer which top-level check to run for routine integrity, shell smoke, or full action path**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17h-next-gap-after-changelog-milestone.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now complete enough that the remaining friction is selection clarity, not missing tools. A short purpose map would make the top-level checks easier to use correctly without creating anything new underneath.",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
