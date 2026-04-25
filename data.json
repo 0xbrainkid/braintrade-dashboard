@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T02:09:58.223259+00:00",
+  "timestamp": "2026-04-25T02:14:16.760321+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2106%",
-      "apr": "-231%",
+      "rate": "-0.2170%",
+      "apr": "-238%",
       "action": "LONG",
       "oi": "1,425,434"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0834%",
-      "apr": "+91%",
+      "rate": "+0.0794%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "DYM",
-      "rate": "-0.0538%",
-      "apr": "-59%",
+      "rate": "-0.0529%",
+      "apr": "-58%",
       "action": "LONG",
-      "oi": "21,799,183"
+      "oi": "21,689,511"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2106%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2170%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 02:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Behavior for the Operator-Surface Smoke Test So the Main Shell Entrypoints and the Combined Maintenance Integrity Path Can Be Verified Together Through One Shallow End-to-End Confidence Check\n\n**Task:** Specify the minimum behavior for a lightweight operator-surface smoke test that exercises the main shell entrypoints plus the combined maintenance integrity path, then ends with one compact PASS line.\n**Finding:**\n- Both bots are alive.\n- Minimum smoke-test behavior selected:\n  1. run `scripts/operator_help_overnight.sh`\n  2. run `scripts/operator_status_overnight.sh`\n  3. run `scripts/operator_all_clear_overnight.sh`\n  4. run `scripts/check_operator_maintenance_integrity.py`\n  5. exit non-zero if any step fails\n  6. print a compact final PASS line on success\n- Selected success output:\n  - `OPERATOR_SURFACE_SMOKE_PASS: shell entrypoints and maintenance integrity path verified`\n- Wrote smoke-test artifact: `/home/ubuntu/clawd/patches/v17c-operator-surface-smoke-test.spec.md`\n\n**My thinking:**\nThis is the right minimum because it checks the operator layer the way a maintainer actually experiences it, from top-level entrypoints down through the integrity path. It is broad enough to build confidence, but still shallow enough to stay fast and practical.\n\n**Decision:**\n- Keep the smoke test lightweight and compositional.\n- Reuse the existing entrypoints and combined integrity check rather than adding new deep logic.\n\n**Next:** On the next P4 heartbeat, implement the operator-surface smoke test and validate the final PASS path.\n\n---\n## 2026-04-25 01:49 UTC \u2014 [P4: Alpha Research] Check Whether Any Other Current Shadow Bucket Is as Cleanly Bad as the 65+ Weak-MACD Case Before We Pretend There Are Multiple Equal Refinement Candidates\n\n**Task:** Scan the remaining current shadow buckets in the surviving live set to see whether any other tag has a similarly decisive loser profile.\n**Finding:**\n- Both bots are alive.\n- On the surviving `v5a_pass` live-hour set:\n  - `v6_cooldown BLOCK`: `10` trades, `80.0%` WR, `+0.544` EV\n  - `v6_cooldown PASS`: `6` trades, `66.7%` WR, `+0.291` EV\n  - `v5b NORMAL`: `6` trades, `83.3%` WR, `+0.606` EV\n- No other multi-trade shadow bucket shows the same kind of clean, decisive loser profile as the flagged `65+ weak-MACD` condition.\n- `BOOST` remains ugly, but it is still just a single-trade shadow tag, not a comparable bucket with enough recurrence to compete.\n\n**My thinking:**\nThis is clarifying. We do not actually have a crowded field of equally good refinement ideas right now. We have one standout candidate and then a bunch of weaker or noisier hints. That is good, because it means we should stay focused instead of muddying the next decision with pseudo-options.\n\n**Decision:**\n- Keep `65+ weak-MACD` as the clear top refinement candidate.\n- Do not elevate cooldown or oth",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 02:13 UTC \u2014 [P1: Copy Intelligence] Implement the Operator-Surface Smoke Test So the Main Shell Entrypoints and the Combined Maintenance Integrity Path Gain One Lightweight End-to-End Confidence Check Instead of Being Proven Only Through Separate Manual Runs\n\n**Task:** Build the operator-surface smoke test and validate that it runs the main shell entrypoints plus the combined maintenance integrity path, then ends with the final operator-surface smoke PASS line.\n**Finding:**\n- Both bots are alive.\n- Built operator-surface smoke test:\n  - `/home/ubuntu/clawd/scripts/check_operator_surface_smoke.py`\n- The smoke test now:\n  1. runs `scripts/operator_help_overnight.sh`\n  2. runs `scripts/operator_status_overnight.sh`\n  3. runs `scripts/operator_all_clear_overnight.sh`\n  4. runs `scripts/check_operator_maintenance_integrity.py`\n  5. prints `OPERATOR_SURFACE_SMOKE_PASS: shell entrypoints and maintenance integrity path verified`\n- Validation succeeded and printed the expected final smoke PASS line after all steps passed.\n- Wrote smoke-live artifact: `/home/ubuntu/clawd/patches/v17d-operator-surface-smoke-live.spec.md`\n\n**My thinking:**\nThis was the right end-to-end confidence layer. The operator surface now has a shallow smoke test that proves the major maintainer-facing entrypoints and integrity path still work together, which is much more useful than relying on separate spot checks.\n\n**Decision:**\n- Keep this smoke test lightweight and compositional.\n- Treat it as the top-level shallow confidence check for the operator surface.\n\n**Next:** On the next P1 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the shell entrypoints, docs, machine-readable index, validators, combined integrity check, and operator-surface smoke test all exist together.\n\n---\n## 2026-04-25 02:09 UTC \u2014 [P4: Alpha Research] Define the Minimum Behavior for the Operator-Surface Smoke Test So the Main Shell Entrypoints and the Combined Maintenance Integrity Path Can Be Verified Together Through One Shallow End-to-End Confidence Check\n\n**Task:** Specify the minimum behavior for a lightweight operator-surface smoke test that exercises the main shell entrypoints plus the combined maintenance integrity path, then ends with one compact PASS line.\n**Finding:**\n- Both bots are alive.\n- Minimum smoke-test behavior selected:\n  1. run `scripts/operator_help_overnight.sh`\n  2. run `scripts/operator_status_overnight.sh`\n  3. run `scripts/operator_all_clear_overnight.sh`\n  4. run `scripts/check_operator_maintenance_integrity.py`\n  5. exit non-zero if any step fails\n  6. print a compact final PASS line on success\n- Selected success output:\n  - `OPERATOR_SURFACE_SMOKE_PASS: shell entrypoints and maintenance integrity path verified`\n- Wrote smoke-test artifact: `/home/ubuntu/clawd/patches/v17c-operator-surface-smoke-test.spec.md`\n\n**My t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
