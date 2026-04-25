@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:36:47.798055+00:00",
+  "timestamp": "2026-04-25T01:37:34.472692+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2591%",
-      "apr": "-284%",
+      "rate": "-0.2665%",
+      "apr": "-292%",
       "action": "LONG",
-      "oi": "1,335,480"
+      "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0717%",
-      "apr": "+78%",
+      "rate": "+0.0727%",
+      "apr": "+80%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2591%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2665%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:36 UTC \u2014 [P2: Smart Entry] Shadow-Test a Simple MACD Gate for 65+ Bias Trades So We Can See Whether Momentum Quality Could Clean the Extreme Band Without Touching Stronger Mid-High Signals\n\n**Task:** Run a tiny shadow test on the surviving `|bias| >= 65` trades to see whether a simple MACD-strength threshold would have filtered the two losers while preserving the lone winner.\n**Finding:**\n- Both bots are alive.\n- Current `65+` trades and MACD abs:\n  - loss: `7.77`\n  - win: `18.62`\n  - loss: `2.31`\n- Shadow threshold results:\n  - `MACD abs >= 5`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 7`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 10`: keeps only `1` trade, and it is the **winner** (`100%` WR)\n  - `>=12` and `>=15` behave the same on this tiny sample\n- So a simple `|MACD| >= 10` rule would have removed both current `65+` losers while preserving the only win.\n\n**My thinking:**\nThis is exactly the kind of relationship worth respecting, even if the sample is tiny. I\u2019m not calling it deployable yet, but it is much cleaner than the other stories we tested. It does not rely on stale 19h contamination, and it lines up with the intuition that extreme bias needs extreme momentum quality.\n\n**Decision:**\n- Keep this as a shadow-only candidate, not a live rule yet.\n- Promote `65+ bias requires stronger MACD` to the top of the future refinement shortlist.\n\n**Next:** On the next P2 heartbeat, test whether a `|MACD| >= 10` requirement for `65+` would leave the stronger `55-64.9` band untouched enough to avoid over-pruning good trades.\n\n## 2026-04-25 01:35 UTC \u2014 [P1: Copy Intelligence] Verify Whether ABC Is Still Running a Clean Relative-Value Book, Because Isolation From BTC/ETH Is What Makes This Minority Signal Worth Respecting\n\n**Task:** Recheck whether `ABC` still holds the `SOL LONG / HYPE SHORT` trade without BTC or ETH exposure, and see whether any other leaderboard account now matches that cleaner profile.\n**Finding:**\n- Both bots are alive.\n- `ABC` still has:\n  - no `BTC` exposure\n  - no `ETH` exposure\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n- `anon-0x57dd` still carries the pair, but also has large `BTC SHORT` and `ETH SHORT` exposure, so it is not a clean pure-expression read.\n- On the current board, `ABC` is the **only** meaningful account holding `SOL LONG` with **no BTC/ETH exposure**.\n\n**My thinking:**\nThat makes ABC more valuable, not less. The whole point of copy intelligence is to separate deliberate thesis expression from portfolio clutter. ABC is still the cleanest read on the board for `SOL relative strength vs HYPE`, while 57dd looks more like a mixed macro-plus-relative-value book. So if we want one account to keep watching for confirmation or failure, ABC is the right one.\n\n**Decision:**\n- Keep treating `ABC` as the highest-signal wallet for the minority `SOL > HYPE` thesis.\n- Do not generalize 57dd\u2019s broader book into t",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:37 UTC \u2014 [P3: Strategy Development] Check Whether a Strong-MACD Rule Would Accidentally Over-Prune the Good 55-64.9 Bias Band Before Treating It as a Viable High-Bias Refinement\n\n**Task:** Test the proposed `|MACD| >= 10` idea against the profitable `55-64.9` band to see how much good flow it would discard.\n**Finding:**\n- Both bots are alive.\n- In the surviving `55-64.9` band:\n  - all trades: `6` trades, `83.3%` WR, `+0.602` EV\n  - with `|MACD| >= 10`: `4` trades, `100%` WR, `+0.913` EV\n- What gets removed:\n  - one **loss** with MACD abs `1.99`\n  - one **win** with MACD abs `9.45`\n- So the rule improves purity, but it also trims a legitimate winner from the already-strong mid-high band.\n\n**My thinking:**\nThat is the tradeoff. A flat `|MACD| >= 10` gate looks promising for the `65+` danger zone, but it becomes too blunt if applied across the whole upper-conviction region. The better shape is conditional logic: only tighten MACD requirements when bias is extreme, and leave the productive `55-64.9` band mostly alone.\n\n**Decision:**\n- Do not use a blanket upper-band MACD gate.\n- If we ever implement this, scope it narrowly to `|bias| >= 65` only.\n\n**Next:** On the next P3 heartbeat, turn this into a concrete shadow rule definition for documentation, e.g. `if |bias| >= 65 and |macd_h| < 10: block`, and check whether any existing report text should reflect that as the leading candidate refinement.\n\n## 2026-04-25 01:36 UTC \u2014 [P2: Smart Entry] Shadow-Test a Simple MACD Gate for 65+ Bias Trades So We Can See Whether Momentum Quality Could Clean the Extreme Band Without Touching Stronger Mid-High Signals\n\n**Task:** Run a tiny shadow test on the surviving `|bias| >= 65` trades to see whether a simple MACD-strength threshold would have filtered the two losers while preserving the lone winner.\n**Finding:**\n- Both bots are alive.\n- Current `65+` trades and MACD abs:\n  - loss: `7.77`\n  - win: `18.62`\n  - loss: `2.31`\n- Shadow threshold results:\n  - `MACD abs >= 5`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 7`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 10`: keeps only `1` trade, and it is the **winner** (`100%` WR)\n  - `>=12` and `>=15` behave the same on this tiny sample\n- So a simple `|MACD| >= 10` rule would have removed both current `65+` losers while preserving the only win.\n\n**My thinking:**\nThis is exactly the kind of relationship worth respecting, even if the sample is tiny. I\u2019m not calling it deployable yet, but it is much cleaner than the other stories we tested. It does not rely on stale 19h contamination, and it lines up with the intuition that extreme bias needs extreme momentum quality.\n\n**Decision:**\n- Keep this as a shadow-only candidate, not a live rule yet.\n- Promote `65+ bias requires stronger MACD` to the top of the future refinement shortlist.\n\n**Next:** On the next P2 heartbeat, test whether a `|MACD| >= 10` requirement for `65+`",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
