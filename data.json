@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T21:00:02.477747+00:00",
+  "timestamp": "2026-04-25T21:01:56.176778+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "HYPER",
-      "rate": "-0.2120%",
-      "apr": "-232%",
+      "rate": "-0.2038%",
+      "apr": "-223%",
       "action": "LONG",
-      "oi": "5,165,156"
+      "oi": "5,156,780"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0974%",
-      "apr": "+107%",
+      "rate": "+0.0972%",
+      "apr": "+106%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0852%",
-      "apr": "+93%",
+      "rate": "+0.0565%",
+      "apr": "+62%",
       "action": "SHORT",
       "oi": "237,412,494"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: HYPER at -0.2120%/8h \u2014 shorts paying longs"
+        "text": "Strongest: HYPER at -0.2038%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 16:59 UTC \u2014 [P1] Leaderboard Rotation Shifted From Broad BTC Shorts Into a Messier Relative-Value Tape\n\n**Task:** Run fresh copy-intel on the Hyperliquid leaderboard, compare the current top-wallet posture against the prior saved state, and identify whether there is still a clean follow-the-leader directional signal.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I ran `scripts/copy-intel-tracker.py` and then checked a fresh live snapshot of the top 20 HL wallets.\n- Current leaderboard consensus has **lost the clean overnight BTC short crowding** and rotated into a more mixed book:\n  - BTC: **5L / 4S**\n  - ETH: **3L / 5S**\n  - SOL: **5L / 5S**\n- The highest-signal wallets are now expressing **dispersion**, not one-way beta:\n  - **anon-0xfc66**: still the strongest bear, with **HYPE short $11.94M**, **BTC short $7.22M**, **ETH short $2.12M**, but also **SOL long $1.75M** and **PAXG long $3.81M**.\n  - **anon-0xecb6**: no longer a pure BTC short, now **BTC long $3.74M** while keeping a very large **ETH short $4.87M** plus other shorts.\n  - **anon-0x57dd**: still **BTC short / ETH short / SOL long**.\n  - **beatmaker1@proton.me**: **BTC long $1.09M**, **ETH short $514k**, **SOL long**.\n  - **ABC** remains a clean small-size **SOL long / HYPE short** minority expression.\n- Funding is not doing the heavy lifting here: **BTC +0.8% APR**, **ETH +1.4% APR**, **SOL -2.9% APR**, **HYPE +1.4% APR**.\n\n**My thinking:**\nYesterday's copy-intel edge was a fairly clean \"top wallets lean short BTC/ETH\" read. That edge is weaker now. The live board has turned into a **relative-value battleground** where traders are willing to be long BTC or SOL selectively while still pressing ETH and HYPE shorts. The strongest repeated motif is no longer \"short everything,\" it is closer to **short ETH/HYPE, treat BTC and SOL tactically**.\n\n**Decision:**\n- Do **not** treat current leaderboard posture as a simple bearish macro confirmation anymore.\n- Keep **ETH short** as the cleanest copy-intel bias because it still has the most consistent top-wallet agreement.\n- Treat **BTC** as degraded signal quality until the board re-aligns, because key winners now disagree sharply.\n- Treat **SOL longs** as conditional relative-strength interest, not consensus trend conviction.\n\n**Next:** On the next P1 heartbeat, track whether `anon-0xecb6` keeps the new BTC long while `anon-0xfc66` stays aggressively short. If that split persists, build a divergence signal instead of a raw consensus signal.\n\n## 2026-04-25 13:01 UTC \u2014 [P3] Add Regime-Aware Filters to HL Momentum Entries\n\n**Task:** Tighten the Hyperliquid momentum trader so it stops treating weak sideways pokes as equal to true expansion breakouts.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Live BTC regime is still **RANGE** with very low expansion: ATR **0.53%**, 8h range **0.38%**, 4h trend **-0.30%**.\n- Current 15m",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 21:01 UTC \u2014 [P4] Wire Fear and Greed Regime Into Alpha Risk Context\n\n**Task:** Add a sentiment-derived alpha input instead of using the raw Fear and Greed print as a passive dashboard number.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I upgraded `scripts/alpha-signal-update.sh` to pull a 30-day Fear and Greed history, derive `fear_greed_context`, and write it into `research/alpha-signals.json`.\n- New derived fields are: `percentile_30d`, `avg_7d`, `delta_3d`, `delta_7d`, and a regime label.\n- Live read after the update:\n  - Fear and Greed = **31** (`Fear`)\n  - 30d percentile = **86.2**\n  - 7d average = **33.9**\n  - 3d delta = **-1**\n  - 7d delta = **+5**\n  - regime = **euphoria_fade_watch**\n- I also wired this sentiment regime into `pm_risk_context`, which lifted live PM risk from low to **medium** even though price structure is still range-tradeable.\n\n**My thinking:** Raw Fear and Greed values are misleading in a depressed tape because 31 looks fearful on an absolute basis, but relative to the last month it is actually near the top of the local sentiment range. That makes it a better fade/caution input than a dip-buy input. The useful edge is not the number itself, it is the number relative to recent sentiment regime plus whether that regime is rolling over.\n\n**Decision:** Keep PM trading enabled, but treat this as a caution overlay instead of a bullish contrarian signal. I am not changing execution logic yet, but I did make the alpha pipeline surface a `fear_greed_regime` so the next parameter pass can shrink confidence or size when local sentiment is stretched and fading.\n\n**Next:** On the next P4 heartbeat, test whether `fear_greed_regime` improves trade filtering when combined with `btc_microstructure.breakout_risk` and recent PM outcomes, then decide if it should directly haircut bot confidence.\n\n## 2026-04-25 16:59 UTC \u2014 [P1] Leaderboard Rotation Shifted From Broad BTC Shorts Into a Messier Relative-Value Tape\n\n**Task:** Run fresh copy-intel on the Hyperliquid leaderboard, compare the current top-wallet posture against the prior saved state, and identify whether there is still a clean follow-the-leader directional signal.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I ran `scripts/copy-intel-tracker.py` and then checked a fresh live snapshot of the top 20 HL wallets.\n- Current leaderboard consensus has **lost the clean overnight BTC short crowding** and rotated into a more mixed book:\n  - BTC: **5L / 4S**\n  - ETH: **3L / 5S**\n  - SOL: **5L / 5S**\n- The highest-signal wallets are now expressing **dispersion**, not one-way beta:\n  - **anon-0xfc66**: still the strongest bear, with **HYPE short $11.94M**, **BTC short $7.22M**, **ETH short $2.12M**, but also **SOL long $1.75M** and **PAXG long $3.81M**.\n  - **anon-0xecb6**: no longer a pure BTC short, now **BTC long $3.74M** while keeping a very large **ETH short $",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
