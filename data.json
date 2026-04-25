@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T00:00:02.416176+00:00",
+  "timestamp": "2026-04-25T00:09:54.499564+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1102%",
-      "apr": "+121%",
+      "rate": "+0.1021%",
+      "apr": "+112%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
-      "coin": "STABLE",
-      "rate": "-0.0643%",
-      "apr": "-70%",
+      "coin": "APE",
+      "rate": "-0.0609%",
+      "apr": "-67%",
       "action": "LONG",
-      "oi": "75,920,040"
+      "oi": "36,752,250"
     },
     {
-      "coin": "APE",
-      "rate": "-0.0532%",
-      "apr": "-58%",
+      "coin": "STABLE",
+      "rate": "-0.0604%",
+      "apr": "-66%",
       "action": "LONG",
-      "oi": "37,676,229"
+      "oi": "75,766,188"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1102%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1021%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-24 23:43 UTC \u2014 [P3: Strategy Development] Implement the Integrity Workflow Section in the Maintenance Runbook So the Human Guidance Layer Finally Mirrors the Real Hierarchy Between the Combined Integrity Check and the Lower-Level Debugging Checks\n\n**Task:** Add the integrity workflow section to the overnight operator maintenance runbook and validate that the runbook now starts maintainers with the combined integrity check, then routes them to the lower-level checks only when needed.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md`.\n- Added `## Integrity workflow` to the runbook.\n- Initial full readback returned before the new tail section, so I verified the file tail directly.\n- Confirmed the runbook now tells maintainers to:\n  1. start with `scripts/check_operator_maintenance_integrity.py`\n  2. then fall back to `scripts/validate_overnight_operator_index.py`\n  3. then `scripts/check_operator_shell_surface.py`\n  4. use lower-level failures to localize the issue\n- Wrote runbook-integrity-live artifact: `/home/ubuntu/clawd/patches/v16x-runbook-integrity-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The maintenance runbook now reflects the actual integrity hierarchy instead of leaving the maintainer to infer it from the tool names alone. That makes the maintenance guidance much more honest and usable.\n\n**Decision:**\n- Keep the runbook integrity workflow short and hierarchical.\n- Treat it as the canonical human-facing explanation of the integrity-check stack.\n\n**Next:** On the next P3 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the runbook also reflects the combined integrity path.\n\n---\n## 2026-04-24 23:39 UTC \u2014 [P2: Smart Entry] Define the Minimum Integrity Workflow Section for the Maintenance Runbook So the Human Guidance Layer Finally Mirrors the Real Integrity Hierarchy Instead of Leaving Maintainers to Infer It from the Scripts Alone\n\n**Task:** Specify the minimum integrity workflow section that should be added to `docs/overnight-operator-maintenance-runbook.md`, so the runbook clearly tells maintainers which integrity check to start with and when to fall back to lower-level checks.\n**Finding:**\n- Both bots are alive.\n- Minimum integrity workflow section selected:\n  1. start with `scripts/check_operator_maintenance_integrity.py`\n  2. if that fails, run `scripts/validate_overnight_operator_index.py`\n  3. then run `scripts/check_operator_shell_surface.py`\n  4. use the lower-level failures to locate whether the problem is in the machine-readable index or the shell entrypoints\n- Wrote runbook-integrity artifact: `/home/ubuntu/clawd/patches/v16w-runbook-integrity-workflow-section.spec.md`\n\n**My thinking:**\nThis is the right minimum because it makes the maintenance hierarchy explicit without ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 00:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After the Runbook Integrity Workflow Addition So the Next Improvement Tightens Machine-Surface Completeness Instead of Adding Yet Another Human-Facing Explanation Layer\n\n**Task:** Reassess the overnight operator stack now that the maintenance runbook mirrors the real integrity hierarchy, so the next improvement targets the strongest remaining completeness gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly reflect the newer integrity-check scripts as a coherent set**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16y-next-gap-after-runbook-integrity-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the human guidance layer is now in strong shape. The next coherence gain is making sure the machine-readable surface fully reflects the current maintenance stack, including the newer integrity-check entrypoints.\n\n**Decision:**\n- Prioritize machine-readable index completeness for the integrity-check scripts next.\n- Keep the change limited to indexing, not new behavior.\n\n**Next:** On the next P4 heartbeat, define the minimum index additions needed to represent the current integrity-check stack.\n\n---\n## 2026-04-24 23:43 UTC \u2014 [P3: Strategy Development] Implement the Integrity Workflow Section in the Maintenance Runbook So the Human Guidance Layer Finally Mirrors the Real Hierarchy Between the Combined Integrity Check and the Lower-Level Debugging Checks\n\n**Task:** Add the integrity workflow section to the overnight operator maintenance runbook and validate that the runbook now starts maintainers with the combined integrity check, then routes them to the lower-level checks only when needed.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md`.\n- Added `## Integrity workflow` to the runbook.\n- Initial full readback returned before the new tail section, so I verified the file tail directly.\n- Confirmed the runbook now tells maintainers to:\n  1. start with `scripts/check_operator_maintenance_integrity.py`\n  2. then fall back to `scripts/validate_overnight_operator_index.py`\n  3. then `scripts/check_operator_shell_surface.py`\n  4. use lower-level failures to localize the issue\n- Wrote runbook-integrity-live artifact: `/home/ubuntu/clawd/patches/v16x-runbook-integrity-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The maintenance runbook now reflects the actual integrity hierarchy instea",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
