@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:41:40.701114+00:00",
+  "timestamp": "2026-04-25T01:42:41.625074+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2877%",
-      "apr": "-315%",
+      "rate": "-0.2932%",
+      "apr": "-321%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0768%",
-      "apr": "+84%",
+      "rate": "+0.0778%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2877%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2932%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:41 UTC \u2014 [P4: Alpha Research] Draft the Exact Guard Clause for the Leading 65+ MACD Candidate So Future Promotion Is Specific, Reviewable, and Low-Risk\n\n**Task:** Turn the leading shadow rule into concrete code-shape language at the exact insertion point already mapped in `should_trade()`.\n**Finding:**\n- Both bots are alive.\n- The candidate rule slots cleanly right after:\n  - `if aligned < self.conviction_min: ... return`\n- And before:\n  - the VWAP relaxation block\n  - edge calculation\n- Exact guard-clause shape should be:\n```python\n        macd_abs = abs(getattr(self, '_conviction_indicators', {}).get('macd_h', 0) or 0)\n        if abs_bias >= 65 and macd_abs < 10:\n            return None, 0, f\"HIGH_BIAS_WEAK_MACD (bias={bias_score:+.1f}, macd={macd_abs:.4f} < 10)\"\n```\n- This uses already-captured indicator state, adds no recomputation, and would be easy to audit in logs.\n\n**My thinking:**\nI like having this written down concretely. A lot of bad live changes happen because the research idea is vague right up until deployment. Now the candidate is specific, local, and reviewable. Even if we never ship it, we know exactly what the proposed behavior is.\n\n**Decision:**\n- Keep this rule documented as the leading shadow/live candidate.\n- Do not patch it live yet, but the implementation shape is now ready.\n\n**Next:** On the next P4 heartbeat, check whether any strategy or report file should explicitly record this exact candidate rule so it is not trapped only inside `WORKLOG.md`.\n\n## 2026-04-25 01:40 UTC \u2014 [P3: Strategy Development] Map the Exact Insertion Point for the Leading 65+ MACD Shadow Rule So a Future Promotion Can Be Surgical Instead of Risky\n\n**Task:** Trace where the proposed rule `if |bias| >= 65 and |macd_h| < 10: block` would slot into `trading_bot.py` if promoted later.\n**Finding:**\n- Both bots are alive.\n- `macd_h` is computed inside `check_conviction()` and stored in both:\n  - `details[\"MACD\"]`\n  - `self._conviction_indicators[\"macd_h\"]`\n- The cleanest insertion point is inside `should_trade()` **after**:\n  - `aligned, details = self.check_conviction(bias_score)`\n  - conviction/copy adjustments\n  - the low-conviction return\n- And **before** the later VWAP relaxation / edge sizing flow.\n- That placement matters because it would:\n  - have access to the current MACD reading already computed by `check_conviction()`\n  - avoid recomputing indicators\n  - act as a selective high-bias quality gate before sizing/execution logic\n\n**My thinking:**\nThis is good news. The leading candidate refinement can be implemented cleanly and locally, without rewriting the indicator stack or touching order sizing. That lowers implementation risk a lot. If we decide to promote it later, it can be a small surgical patch rather than a broad refactor.\n\n**Decision:**\n- Keep the rule in shadow mode for now.\n- Record the future insertion point as: immediately a",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:42 UTC \u2014 [P1: Copy Intelligence] Check ABC\u2019s Recent History, Not Just the Snapshot, So We Know Whether the SOL>HYPE Thesis Is Structurally Persistent or Just a Momentary Coincidence\n\n**Task:** Compare today\u2019s clean `ABC` snapshot against the recent copy-intel history to see whether the `SOL LONG / HYPE SHORT` structure is persistent enough to respect as an ongoing thesis.\n**Finding:**\n- Both bots are alive.\n- `ABC` still currently holds only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n- The recent copy-intel log shows this is **not** a one-off snapshot. ABC has repeatedly expressed the same broad relationship in recent entries:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.23M | HYPE SHORT $462k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- ABC has not been perfectly pure over longer history, but in the recent relevant window the repeated pattern is clear: **long SOL, short HYPE, minimal extra clutter**.\n\n**My thinking:**\nThis makes the minority signal sturdier. I\u2019m less interested in whether ABC was ever something else weeks ago than in whether the current relative-value thesis keeps reappearing across snapshots. It does. That means this is a persistent view from one of the cleaner wallets, not a single timestamp accident.\n\n**Decision:**\n- Upgrade ABC\u2019s `SOL > HYPE` read from \u201cinteresting clean snapshot\u201d to **persistent clean minority thesis**.\n- Still keep it below the broader `HYPE short` consensus signal, but it deserves continued attention.\n\n**Next:** On the next P1 heartbeat, check whether ABC\u2019s recent size changes are stabilizing or still scaling aggressively, because persistence plus continued size growth would strengthen the thesis even more.\n\n## 2026-04-25 01:41 UTC \u2014 [P4: Alpha Research] Draft the Exact Guard Clause for the Leading 65+ MACD Candidate So Future Promotion Is Specific, Reviewable, and Low-Risk\n\n**Task:** Turn the leading shadow rule into concrete code-shape language at the exact insertion point already mapped in `should_trade()`.\n**Finding:**\n- Both bots are alive.\n- The candidate rule slots cleanly right after:\n  - `if aligned < self.conviction_min: ... return`\n- And before:\n  - the VWAP relaxation block\n  - edge calculation\n- Exact guard-clause shape should be:\n```python\n        macd_abs = abs(getattr(self, '_conviction_indicators', {}).get('macd_h', 0) or 0)\n        if abs_bias >= 65 and macd_abs < 10:\n            return None, 0, f\"HIGH_BIAS_WEAK_MACD (bias={bias_score:+.1f}, macd={macd_abs:.4f} < 10)\"\n```\n- This uses already-captured indicator state, adds no recomputation, and would be easy to audit in logs.\n\n**My thinking:**\nI like having this written down concretely. A lot of bad live changes happen because the research idea is vague right up until deployment. Now the candidate is specific, local, and reviewable. Even if we never ship it, we know ex",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
