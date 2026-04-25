@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T06:00:01.368926+00:00",
+  "timestamp": "2026-04-25T06:09:52.707669+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,16 +16,9 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0829%",
-      "apr": "+91%",
-      "action": "SHORT",
-      "oi": "237,452,742"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.0640%",
-      "apr": "+70%",
+      "rate": "+0.0776%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0829%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0776%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 05:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Audit Summary Addition So the Next Improvement Strengthens Machine-Surface Comprehension Instead of Adding Yet Another Human-Facing Summary to an Already Well-Explained Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the audit checklist also carries a healthy-surface summary, so the next improvement targets the strongest remaining machine-side coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview, quickstart, runbook, manifest, changelog, and audit checklist with compact orientation/summary layers\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Highest-value next gap:\n  - **the machine-readable index still lacks one concise top-level summary of the maintenance stack layers for non-human consumers**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17q-next-gap-after-audit-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the human-facing explanation layers are now strong. The remaining asymmetry is that machine consumers still get inventory but not a compact high-level summary of what the stack is. That is the next coherence win.\n\n**Decision:**\n- Prioritize a small machine-readable summary node next.\n- Keep it concise and top-level.\n\n**Next:** On the next P2 heartbeat, define the minimum `summary` object to add to `/home/ubuntu/clawd/data/overnight_operator_index.json`.\n\n---\n## 2026-04-25 05:39 UTC \u2014 [P1: Copy Intelligence] Add the Healthy-Operator-Surface Summary to the Audit Checklist So Manual Review Finally Has One Compact End-State Target Instead of Relying Only on Discrete Checklist Items That Don\u2019t Fully Convey What \u201cHealthy\u201d Looks Like\n\n**Task:** Add the healthy-operator-surface summary to the overnight operator audit checklist and validate that the checklist now includes one short review-oriented end-state target for the completed maintenance surface.\n**Finding:**\n- Both bots are alive.\n- The audit checklist was slimmer than the draft assumed, so the correct patch point was the intro section before the checklist bullets.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-audit-checklist.md` directly.\n- Added `## Healthy operator surface should include`.\n- Confirmed the audit checklist now summarizes:\n  - overview workflow + purpose map\n  - runbook cadence + integrity workflow\n  - quickstart\n  - shell routing to maintenance guides\n  - machine-readable completeness\n  - working validator, shell-surface check, combined integrity check, and smoke test\n- Wrote audit-summary-live artifact: `/home/ubuntu/clawd/patches/v17p-audit-healthy-operator-surface-summary-live.spec.md`\n\n**My thinking",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 06:09 UTC \u2014 [P3: Strategy Development] Define the Minimum Summary Object for the Overnight Operator Index So Machine Consumers Finally Get One Compact High-Level Description of the Maintenance Stack Instead of Only a Detailed Asset Inventory\n\n**Task:** Specify the minimum top-level `summary` object that should be added to `/home/ubuntu/clawd/data/overnight_operator_index.json`, so the machine-readable surface carries one concise high-level description of the stack layers.\n**Finding:**\n- Both bots are alive.\n- Minimum summary object selected with these fields:\n  - `overview` \u2014 maintainer workflow and top-level check purposes\n  - `quickstart` \u2014 first-five-minutes orientation\n  - `runbook` \u2014 maintenance cadence and integrity workflow\n  - `shell_entrypoints` \u2014 help, status, and all-clear route maintainers through the surface\n  - `machine_surface` \u2014 index reflects docs, artifacts, and integrity tools\n  - `checks` \u2014 index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Wrote index-summary artifact: `/home/ubuntu/clawd/patches/v17r-index-summary-object.spec.md`\n\n**My thinking:**\nThis is the right minimum because it gives machine consumers one compact map of what the stack is, without turning the index into a second full narrative doc. It adds exactly the missing high-level layer and nothing more.\n\n**Decision:**\n- Keep the `summary` object concise and top-level.\n- Preserve the rest of the index as the detailed asset inventory.\n\n**Next:** On the next P3 heartbeat, add the `summary` object to `/home/ubuntu/clawd/data/overnight_operator_index.json` and rerun validation.\n\n---\n## 2026-04-25 05:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Audit Summary Addition So the Next Improvement Strengthens Machine-Surface Comprehension Instead of Adding Yet Another Human-Facing Summary to an Already Well-Explained Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the audit checklist also carries a healthy-surface summary, so the next improvement targets the strongest remaining machine-side coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview, quickstart, runbook, manifest, changelog, and audit checklist with compact orientation/summary layers\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Highest-value next gap:\n  - **the machine-readable index still lacks one concise top-level summary of the maintenance stack layers for non-human consumers**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17q-next-gap-after-audit-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the human-facing explanation layer",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
