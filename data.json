@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:43:34.536694+00:00",
+  "timestamp": "2026-04-25T01:44:32.440394+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2972%",
-      "apr": "-325%",
+      "rate": "-0.3021%",
+      "apr": "-331%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0785%",
-      "apr": "+86%",
+      "rate": "+0.0792%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2972%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3021%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:42 UTC \u2014 [P2: Smart Entry] Check Whether Adding the Old FIRST Suspicion on Top of the 65+ MACD Candidate Actually Improves Anything, or Just Adds Complexity for No Gain\n\n**Task:** Stress-test whether layering a `FIRST` exclusion on top of the leading `65+ weak-MACD` shadow rule improves the surviving `55+` set further.\n**Finding:**\n- Both bots are alive.\n- Baseline `55+` surviving live set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- Leading candidate only (`block if |bias| >= 65 and |MACD| < 10`):\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- Adding `no FIRST` on top changes **nothing**:\n  - still `7` trades, `85.7%` WR, `+0.653` EV\n- There are no `FIRST` trades left in the current `55+` set after the candidate rule is applied.\n\n**My thinking:**\nThis is useful because it keeps us honest. It is tempting to pile on every suspicious pattern we found tonight, but the cleaner answer is better: `FIRST` does not add value here once the targeted high-bias/MACD rule is in place. That means more complexity would just be decorative.\n\n**Decision:**\n- Keep the candidate rule simple.\n- Do **not** bundle a `FIRST` filter into the same refinement package.\n\n**Next:** On the next P2 heartbeat, see whether the candidate rule has any interaction with the still-probationary `20 UTC` hour specifically, or whether its benefit is already distributed cleanly across hours.\n\n## 2026-04-25 01:42 UTC \u2014 [P1: Copy Intelligence] Check ABC\u2019s Recent History, Not Just the Snapshot, So We Know Whether the SOL>HYPE Thesis Is Structurally Persistent or Just a Momentary Coincidence\n\n**Task:** Compare today\u2019s clean `ABC` snapshot against the recent copy-intel history to see whether the `SOL LONG / HYPE SHORT` structure is persistent enough to respect as an ongoing thesis.\n**Finding:**\n- Both bots are alive.\n- `ABC` still currently holds only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n- The recent copy-intel log shows this is **not** a one-off snapshot. ABC has repeatedly expressed the same broad relationship in recent entries:\n  - `SOL LONG $570k | HYPE SHORT $303k`\n  - `SOL LONG $1.58M | HYPE SHORT $590k`\n  - `SOL LONG $1.23M | HYPE SHORT $462k`\n  - current: `SOL LONG $1.14M | HYPE SHORT $866k`\n- ABC has not been perfectly pure over longer history, but in the recent relevant window the repeated pattern is clear: **long SOL, short HYPE, minimal extra clutter**.\n\n**My thinking:**\nThis makes the minority signal sturdier. I\u2019m less interested in whether ABC was ever something else weeks ago than in whether the current relative-value thesis keeps reappearing across snapshots. It does. That means this is a persistent view from one of the cleaner wallets, not a single timestamp accident.\n\n**Decision:**\n- Upgrade ABC\u2019s `SOL > HYPE` read from \u201cinteresting clean snapshot\u201d to **persistent clean minority thesis**.\n- Still keep it below the broader `HYPE short` consensus signal, but it deserve",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:43 UTC \u2014 [P3: Strategy Development] Check Whether the Leading Candidate Rule Is Secretly Just a 20 UTC Fix in Disguise, or Whether It Improves the Cleaner Core Hours Too\n\n**Task:** Break the leading `65+ weak-MACD` candidate rule down by hour to see where its benefit actually comes from.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) hour stats:\n  - `11 UTC`: `3` trades, `66.7%` WR, `+0.288` EV\n  - `12 UTC`: `5` trades, `80.0%` WR, `+0.542` EV\n  - `20 UTC`: `1` trade, `0.0%` WR, `-1.000` EV\n- With the candidate rule applied:\n  - `11 UTC`: unchanged at `3` trades, `66.7%` WR, `+0.288` EV\n  - `12 UTC`: improves to `4` trades, `100%` WR, `+0.927` EV\n  - `20 UTC`: disappears entirely because its only qualifying trade is blocked\n- Blocked trades are:\n  - `20 UTC` loss (`bias -65.8`, `macd -7.77`)\n  - `12 UTC` loss (`bias -66.8`, `macd -2.31`)\n\n**My thinking:**\nThis is better than I expected. The rule is not just a disguised way of cleaning up the probationary `20 UTC` hour. It also improves the strong `12 UTC` core by filtering a bad extreme-bias case there. That makes the candidate more credible, because its value is not dependent on a single fragile hour.\n\n**Decision:**\n- Keep the candidate rule at the top of the refinement shortlist.\n- Treat it as a cross-hour quality gate for extreme bias, not merely a `20 UTC` patch.\n\n**Next:** On the next P3 heartbeat, write this rule into a strategy note or report file outside `WORKLOG.md` so the leading refinement candidate is documented in a durable decision surface.\n\n## 2026-04-25 01:42 UTC \u2014 [P2: Smart Entry] Check Whether Adding the Old FIRST Suspicion on Top of the 65+ MACD Candidate Actually Improves Anything, or Just Adds Complexity for No Gain\n\n**Task:** Stress-test whether layering a `FIRST` exclusion on top of the leading `65+ weak-MACD` shadow rule improves the surviving `55+` set further.\n**Finding:**\n- Both bots are alive.\n- Baseline `55+` surviving live set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- Leading candidate only (`block if |bias| >= 65 and |MACD| < 10`):\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- Adding `no FIRST` on top changes **nothing**:\n  - still `7` trades, `85.7%` WR, `+0.653` EV\n- There are no `FIRST` trades left in the current `55+` set after the candidate rule is applied.\n\n**My thinking:**\nThis is useful because it keeps us honest. It is tempting to pile on every suspicious pattern we found tonight, but the cleaner answer is better: `FIRST` does not add value here once the targeted high-bias/MACD rule is in place. That means more complexity would just be decorative.\n\n**Decision:**\n- Keep the candidate rule simple.\n- Do **not** bundle a `FIRST` filter into the same refinement package.\n\n**Next:** On the next P2 heartbeat, see whether the candidate rule has any interaction with the still-probationary `20 UTC` hour specifically, or whether its benefit is a",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
