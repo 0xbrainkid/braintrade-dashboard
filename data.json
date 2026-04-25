@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:09:24.529704+00:00",
+  "timestamp": "2026-04-25T01:10:38.656934+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0902%",
-      "apr": "+99%",
+      "rate": "+0.0887%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0902%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0887%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:08 UTC \u2014 [P3: Strategy Development] Probe the Toxic 19 UTC Window for a Salvageable Subpattern So We Know Whether to Engineer a Better Gate or Just Keep the Hour Effectively Dead\n\n**Task:** Drill into the tagged 19 UTC losses and test whether cooldown state or `v5b` context reveals a rescue pattern strong enough to justify keeping that hour alive.\n**Finding:**\n- Both bots are alive.\n- Tagged 19 UTC set is `7` trades, only `28.6%` WR and `-0.445` EV.\n- Cooldown split inside 19 UTC:\n  - `FIRST`: `2` trades, `0%` WR, `-1.000` EV\n  - `BLOCK`: `2` trades, `0%` WR, `-1.000` EV\n  - `PASS`: `3` trades, `66.7%` WR, `+0.294` EV\n- But the apparent rescue fades when combining with `v5b` context:\n  - `19h cooldown PASS only`: `5` trades, `40.0%` WR, `-0.223` EV\n  - `19h cooldown PASS and not BOOST`: `4` trades, `50.0%` WR, `-0.029` EV\n  - `v5b REDUCE_MILD_BEAR`: `2` trades, `0%` WR\n  - `v5b BOOST`: `1` trade, `0%` WR\n- Important nuance: even very negative OBI values at 19 UTC did not save the hour. Example losses include `obi -0.468`, `-0.409`, and `-0.994`.\n\n**My thinking:**\nThis is a strategy design result, not just another filter stat. The 19 UTC window is not failing because one gate is missing, it is failing because the late session environment is unstable enough to break signals that work elsewhere. Cooldown helps a little, but not enough to rehabilitate the hour. That means the clean solution is likely session exclusion, not more micro-logic layered onto a poisoned window.\n\n**Decision:**\n- Do not spend more design complexity trying to rescue `19 UTC` right now.\n- Treat `19 UTC` as structurally bad unless a much larger sample proves otherwise.\n\n**Next:** On the next P3 heartbeat, inspect whether the current bot config still lists `19 UTC` as an active trading hour and identify the smallest safe code change needed to disable it without touching the rest of the session logic.\n\n## 2026-04-25 01:07 UTC \u2014 [P2: Smart Entry] Test Whether 20 UTC Deserves to Survive the Hour Filter After 19 UTC Fails So We Cut the Toxic Session Without Throwing Away the Entire Late Window\n\n**Task:** Extend the prior hour-filter analysis and test the next concrete tweak, specifically whether `20 UTC` should also be excluded or whether only `19 UTC` is the real problem.\n**Finding:**\n- Both bots are alive.\n- On the tagged `v5a_pass` subset:\n  - `v5a only`: `23` trades, `60.9%` WR, `+0.177` EV\n  - `v5a + exclude 19`: `17` trades, `70.6%` WR, `+0.364` EV\n  - `v5a + exclude 19&20`: `15` trades, `73.3%` WR, `+0.416` EV\n  - `v5a + 11&12 only`: same result as excluding both `19` and `20`\n- `20 UTC` sample is tiny, only `2` trades:\n  - `2026-04-01 20:05` = loss, `v6_cooldown_tag=BLOCK`\n  - `2026-04-06 20:05` = win, `v6_cooldown_tag=PASS`\n- So excluding `20 UTC` improves sample metrics, but only by deleting a one-win/one-loss micro-sample.\n\n**My thinking:**\nThis is not strong enough",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:10 UTC \u2014 [P4: Alpha Research] Add Liquidation Cascade State to the Unified Alpha Snapshot So PM Risk Can See Fast OI Shock Context Alongside Regime and Funding Instead of Treating It as a Separate Specialist Feed\n\n**Task:** Extend the unified alpha snapshot again, this time wiring the liquidation cascade detector into `research/alpha-signals.json` and folding its PM impact into the derived risk context.\n**Finding:**\n- Both bots are alive.\n- Located the live liquidation feed in `intelligence/liq-signals.json`.\n- Patched `scripts/alpha-signal-update.sh` to add:\n  - `liquidation_signal` block from `liq-signals.json`\n  - liquidation-aware `pm_risk_context`\n- Fresh snapshot now includes:\n  - `liquidation_signal.direction = neutral`\n  - `liquidation_signal.pm_adjustment = 0`\n  - `pm_risk_context.liq_direction = neutral`\n  - `pm_risk_context.liq_pm_adjustment = 0`\n- The unified alpha surface now carries four distinct PM context layers in one file:\n  - sentiment (`fear_greed`)\n  - slow/fast regime\n  - funding squeeze state\n  - liquidation cascade state\n\n**My thinking:**\nThis is exactly the kind of alpha-pipeline consolidation we need. Fast liquidation shocks are one of the few things that can invalidate an otherwise calm regime read, so leaving them in a separate JSON meant any downstream consumer had to reconstruct market context manually. One unified snapshot is much closer to a real decision surface.\n\n**Decision:**\n- Keep liquidation cascade state embedded in `research/alpha-signals.json`.\n- Let negative liquidation adjustments escalate `pm_risk_context` automatically when they appear.\n\n**Next:** On the next P4 heartbeat, update a downstream consumer to read `liquidation_signal` from the unified alpha snapshot rather than relying on separate feed-specific logic.\n\n## 2026-04-25 01:08 UTC \u2014 [P3: Strategy Development] Probe the Toxic 19 UTC Window for a Salvageable Subpattern So We Know Whether to Engineer a Better Gate or Just Keep the Hour Effectively Dead\n\n**Task:** Drill into the tagged 19 UTC losses and test whether cooldown state or `v5b` context reveals a rescue pattern strong enough to justify keeping that hour alive.\n**Finding:**\n- Both bots are alive.\n- Tagged 19 UTC set is `7` trades, only `28.6%` WR and `-0.445` EV.\n- Cooldown split inside 19 UTC:\n  - `FIRST`: `2` trades, `0%` WR, `-1.000` EV\n  - `BLOCK`: `2` trades, `0%` WR, `-1.000` EV\n  - `PASS`: `3` trades, `66.7%` WR, `+0.294` EV\n- But the apparent rescue fades when combining with `v5b` context:\n  - `19h cooldown PASS only`: `5` trades, `40.0%` WR, `-0.223` EV\n  - `19h cooldown PASS and not BOOST`: `4` trades, `50.0%` WR, `-0.029` EV\n  - `v5b REDUCE_MILD_BEAR`: `2` trades, `0%` WR\n  - `v5b BOOST`: `1` trade, `0%` WR\n- Important nuance: even very negative OBI values at 19 UTC did not save the hour. Example losses include `obi -0.468`, `-0.409`, and `-0.994`.\n\n**My thinking:**\nThis ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
