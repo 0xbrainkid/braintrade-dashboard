@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:39:19.562935+00:00",
+  "timestamp": "2026-04-25T01:40:11.164385+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2760%",
-      "apr": "-302%",
+      "rate": "-0.2778%",
+      "apr": "-304%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0748%",
-      "apr": "+82%",
+      "rate": "+0.0759%",
+      "apr": "+83%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2760%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2778%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:38 UTC \u2014 [P1: Copy Intelligence] Patch the Stale Weekly Narrative and Keep ABC Flagged as the Cleanest Minority SOL>HYPE Read So Old Research Does Not Override Better Current Reads\n\n**Task:** Update the stale weekly review that still recommended `max_bias 80`, and re-confirm the single clean account expressing the minority `SOL > HYPE` thesis.\n**Finding:**\n- Both bots are alive.\n- Patched `reports/weekly-review-2026-W13.md` so the old `raise max_bias to 80` idea is explicitly marked as historical and superseded.\n- The report now reflects the newer April read:\n  - keep `max_bias=70`\n  - treat `65+` as needing stronger momentum quality\n  - leading candidate refinement is a shadow rule like `if |bias| >= 65 and |macd_h| < 10: block`\n- Reconfirmed `ABC` still holds the clean minority expression with only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n  - no BTC or ETH book clutter\n\n**My thinking:**\nI\u2019m glad this is now cleaner. Research only compounds if stale conclusions stop masquerading as live direction. At the same time, ABC remains the best pure read on the board for the minority relative-strength thesis, so both the strategy side and the copy-intel side are now a bit less ambiguous.\n\n**Decision:**\n- Treat the old max-bias expansion plan as retired.\n- Keep watching `ABC` as the highest-signal wallet for `SOL > HYPE`.\n\n**Next:** On the next P1 heartbeat, check whether ABC changes structure at all, because the moment BTC or ETH reappears the minority-signal purity drops.\n\n## 2026-04-25 01:38 UTC \u2014 [P4: Alpha Research] Audit the Repo for Stale Max-Bias Narratives So Old \u201cRaise the Ceiling\u201d Notes Do Not Quietly Fight the Newer High-Bias Evidence\n\n**Task:** Search the workspace for older max-bias and high-bias notes that could conflict with the current finding that `65+` needs stronger momentum quality rather than a wider ceiling.\n**Finding:**\n- Both bots are alive.\n- I found stale historical guidance in `reports/weekly-review-2026-W13.md` still saying:\n  - raise `max_bias` `55\u219280`\n  - deploy the wider ceiling after Sunday review\n- That older note predates the current cleaner-hour analysis.\n- Current evidence now points the opposite direction:\n  - `55-64.9` is strong\n  - `65+` is weak on raw results unless momentum is unusually strong\n  - the leading candidate refinement is **conditional MACD gating for `65+`**, not broad ceiling expansion\n\n**My thinking:**\nThis is exactly the kind of stale narrative that can cause future self-sabotage. Old research is fine, but only if it is clearly historical. Right now there is a real risk that someone scanning the repo could see \u201craise max_bias to 80\u201d and mistake it for still-live direction when the newer evidence says otherwise.\n\n**Decision:**\n- Treat the old \u201craise max_bias to 80\u201d idea as superseded by newer evidence.\n- Next useful step is to mark that report as historically outdated or add a newer count",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:39 UTC \u2014 [P2: Smart Entry] Test the Exact Conditional Shadow Rule on the Whole 55+ Upper Range So We Know Whether the Proposed 65+ MACD Gate Improves Results Without Damaging the Good Mid-High Trades\n\n**Task:** Apply the concrete shadow rule `block if |bias| >= 65 and |macd_h| < 10` to the surviving `55+` live trades and compare results against the current baseline.\n**Finding:**\n- Both bots are alive.\n- Baseline surviving `55+` set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- With shadow rule `|bias| >= 65 and |MACD| < 10 => block`:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The rule blocks exactly **2** trades, and both are losers:\n  - `2026-04-01 20:05 UTC`, `bias -65.8`, `MACD abs 7.77`, `hour 20`\n  - `2026-04-06 12:10 UTC`, `bias -66.8`, `MACD abs 2.31`, `hour 12`\n- It preserves the lone `65+` winner and all profitable `55-64.9` trades.\n\n**My thinking:**\nThis is the cleanest candidate refinement we have surfaced tonight. I\u2019m still cautious because the sample is tiny, but unlike the earlier broader filters, this one does exactly what we want: it removes only bad extreme-bias cases without cutting into the productive middle-high band. That is a much stronger shape than any blanket bias-cap change.\n\n**Decision:**\n- Keep the rule in shadow mode for now, but treat it as the leading next live-candidate refinement.\n- Current best candidate definition: `if |bias| >= 65 and |macd_h| < 10: block`.\n\n**Next:** On the next P2 heartbeat, identify where this rule would slot into `trading_bot.py` if promoted later, so implementation risk is already mapped before any live decision.\n\n## 2026-04-25 01:38 UTC \u2014 [P1: Copy Intelligence] Patch the Stale Weekly Narrative and Keep ABC Flagged as the Cleanest Minority SOL>HYPE Read So Old Research Does Not Override Better Current Reads\n\n**Task:** Update the stale weekly review that still recommended `max_bias 80`, and re-confirm the single clean account expressing the minority `SOL > HYPE` thesis.\n**Finding:**\n- Both bots are alive.\n- Patched `reports/weekly-review-2026-W13.md` so the old `raise max_bias to 80` idea is explicitly marked as historical and superseded.\n- The report now reflects the newer April read:\n  - keep `max_bias=70`\n  - treat `65+` as needing stronger momentum quality\n  - leading candidate refinement is a shadow rule like `if |bias| >= 65 and |macd_h| < 10: block`\n- Reconfirmed `ABC` still holds the clean minority expression with only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n  - no BTC or ETH book clutter\n\n**My thinking:**\nI\u2019m glad this is now cleaner. Research only compounds if stale conclusions stop masquerading as live direction. At the same time, ABC remains the best pure read on the board for the minority relative-strength thesis, so both the strategy side and the copy-intel side are now a bit less ambiguous.\n\n**Decision:**\n- Treat the old max-bias expansion plan as retired.\n- Keep wa",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
