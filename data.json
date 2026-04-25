@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T05:40:13.020892+00:00",
+  "timestamp": "2026-04-25T05:44:05.125012+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0879%",
-      "apr": "+96%",
+      "rate": "+0.0893%",
+      "apr": "+98%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0879%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0893%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 05:39 UTC \u2014 [P1: Copy Intelligence] Add the Healthy-Operator-Surface Summary to the Audit Checklist So Manual Review Finally Has One Compact End-State Target Instead of Relying Only on Discrete Checklist Items That Don\u2019t Fully Convey What \u201cHealthy\u201d Looks Like\n\n**Task:** Add the healthy-operator-surface summary to the overnight operator audit checklist and validate that the checklist now includes one short review-oriented end-state target for the completed maintenance surface.\n**Finding:**\n- Both bots are alive.\n- The audit checklist was slimmer than the draft assumed, so the correct patch point was the intro section before the checklist bullets.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-audit-checklist.md` directly.\n- Added `## Healthy operator surface should include`.\n- Confirmed the audit checklist now summarizes:\n  - overview workflow + purpose map\n  - runbook cadence + integrity workflow\n  - quickstart\n  - shell routing to maintenance guides\n  - machine-readable completeness\n  - working validator, shell-surface check, combined integrity check, and smoke test\n- Wrote audit-summary-live artifact: `/home/ubuntu/clawd/patches/v17p-audit-healthy-operator-surface-summary-live.spec.md`\n\n**My thinking:**\nThis was the right audit-side coherence fix. The reviewer now has one compact end-state target before dropping into checklist items, which should make manual review much faster and less ambiguous.\n\n**Decision:**\n- Keep the audit summary short and review-oriented.\n- Treat it as the audit-facing definition of a healthy completed operator surface.\n\n**Next:** On the next P1 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the audit checklist also carries an explicit healthy-surface summary.\n\n---\n## 2026-04-25 05:17 UTC \u2014 [P4: Alpha Research] Define the Minimum Healthy-Operator-Surface Summary for the Audit Checklist So Manual Review Finally Has One Compact End-State Target Instead of Relying Only on Checklist Fragments Spread Across a Mature Maintenance Surface\n\n**Task:** Specify the minimum \u201chealthy operator surface\u201d summary that should be added to `docs/overnight-operator-audit-checklist.md`, so audit review becomes faster and clearer.\n**Finding:**\n- Both bots are alive.\n- Minimum healthy-operator-surface summary selected:\n  - overview doc with maintainer workflow and top-level check purpose map\n  - maintenance runbook with cadence and integrity workflow\n  - maintainer quickstart\n  - help, status, and all-clear shell routing to maintenance guides\n  - machine-readable index that reflects current docs and integrity tools\n  - working index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Wrote audit-summary artifact: `/home/ubuntu/clawd/patches/v17o-audit-healthy-operator-surface-summary.spec.md`\n\n**My thinking:**\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 05:43 UTC \u2014 [P2: Smart Entry] Review the Overnight Operator Stack After the Audit Summary Addition So the Next Improvement Strengthens Machine-Surface Comprehension Instead of Adding Yet Another Human-Facing Summary to an Already Well-Explained Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the audit checklist also carries a healthy-surface summary, so the next improvement targets the strongest remaining machine-side coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview, quickstart, runbook, manifest, changelog, and audit checklist with compact orientation/summary layers\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Highest-value next gap:\n  - **the machine-readable index still lacks one concise top-level summary of the maintenance stack layers for non-human consumers**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17q-next-gap-after-audit-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the human-facing explanation layers are now strong. The remaining asymmetry is that machine consumers still get inventory but not a compact high-level summary of what the stack is. That is the next coherence win.\n\n**Decision:**\n- Prioritize a small machine-readable summary node next.\n- Keep it concise and top-level.\n\n**Next:** On the next P2 heartbeat, define the minimum `summary` object to add to `/home/ubuntu/clawd/data/overnight_operator_index.json`.\n\n---\n## 2026-04-25 05:39 UTC \u2014 [P1: Copy Intelligence] Add the Healthy-Operator-Surface Summary to the Audit Checklist So Manual Review Finally Has One Compact End-State Target Instead of Relying Only on Discrete Checklist Items That Don\u2019t Fully Convey What \u201cHealthy\u201d Looks Like\n\n**Task:** Add the healthy-operator-surface summary to the overnight operator audit checklist and validate that the checklist now includes one short review-oriented end-state target for the completed maintenance surface.\n**Finding:**\n- Both bots are alive.\n- The audit checklist was slimmer than the draft assumed, so the correct patch point was the intro section before the checklist bullets.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-audit-checklist.md` directly.\n- Added `## Healthy operator surface should include`.\n- Confirmed the audit checklist now summarizes:\n  - overview workflow + purpose map\n  - runbook cadence + integrity workflow\n  - quickstart\n  - shell routing to maintenance guides\n  - machine-readable completeness\n  - working validator, shell-surface check, combined integrity check, and smoke test\n- Wrote audit-summary-live artifact: `/home/ubuntu/clawd/patches/v17p-audit-healthy-operator-surface-summary-live.spec.md`\n\n**My thinking",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
