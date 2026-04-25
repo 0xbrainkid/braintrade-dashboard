@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T03:39:55.079225+00:00",
+  "timestamp": "2026-04-25T03:44:18.480414+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,14 +17,14 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2826%",
-      "apr": "-309%",
+      "rate": "-0.2693%",
+      "apr": "-295%",
       "action": "LONG",
-      "oi": "1,561,412"
+      "oi": "1,567,938"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0974%",
+      "rate": "+0.0977%",
       "apr": "+107%",
       "action": "SHORT",
       "oi": "69,667,759"
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2826%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2693%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:39 UTC \u2014 [P2: Smart Entry] Define the Minimum Purpose Map for the Top-Level Maintenance Checks So Maintainers Can Choose the Right High-Level Verification Path Without Guessing Which of the Now-Mature Operator Checks Best Matches Their Goal\n\n**Task:** Specify the minimum \u201cwhich check to run when\u201d map for the top-level maintenance checks, so the current verification choices become easier to use correctly.\n**Finding:**\n- Both bots are alive.\n- Minimum purpose map selected:\n  - `scripts/check_operator_maintenance_integrity.py` \u2014 routine integrity verification of indexed and shell surfaces\n  - `scripts/check_operator_surface_smoke.py` \u2014 shallow end-to-end confidence check across shell entrypoints and integrity path\n  - `scripts/operator_all_clear_overnight.sh` \u2014 safest refresh-and-verify action path when active refresh is desired\n- Wrote purpose-map artifact: `/home/ubuntu/clawd/patches/v17i-top-level-check-purpose-map.spec.md`\n\n**My thinking:**\nThis is the right minimum because the stack now has multiple strong top-level checks, but their purposes are not yet spelled out side by side. A short purpose map makes the stack easier to use without changing any behavior underneath.\n\n**Decision:**\n- Keep the purpose map short and selection-oriented.\n- Use it to clarify intent, not to duplicate command docs.\n\n**Next:** On the next P2 heartbeat, implement the compact top-level check purpose map in the most suitable maintainer-facing surface.\n\n---\n## 2026-04-25 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Changelog Milestone Entry So the Next Improvement Clarifies Top-Level Check Selection Instead of Continuing to Add More Structure to an Already Mature Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the completed maintenance buildout is captured in the changelog, so the next improvement targets the strongest remaining usability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n  - operator-surface smoke test\n  - changelog milestone summary\n- Highest-value next gap:\n  - **there is no short purpose map that tells a maintainer which top-level check to run for routine integrity, shell smoke, or full action path**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17h-next-gap-after-changelog-milestone.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now complete enough that the remaining friction is selection clarity, not missing tools. A short purpose map would make the top-level checks easier to use correctly without creating anything new underneath.",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:43 UTC \u2014 [P3: Strategy Development] Implement the Top-Level Check Purpose Map in the Overview So Maintainers Can Choose Between Routine Integrity Verification, Shallow Smoke Testing, and the Safest Action Path Without Guessing from Similar-Sounding Script Names Alone\n\n**Task:** Add the compact top-level check purpose map to the overnight operator overview doc and validate that the main human-facing surface now explains which high-level check to run for which purpose.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-overview.md`.\n- Added `## Which top-level check to run when` to the overview.\n- Initial full readback stopped before the new tail section, so I verified the file tail directly.\n- Confirmed the overview now maps:\n  - `scripts/check_operator_maintenance_integrity.py` to routine integrity verification\n  - `scripts/check_operator_surface_smoke.py` to shallow end-to-end confidence checking\n  - `scripts/operator_all_clear_overnight.sh` to the safest refresh-and-verify action path\n- Wrote purpose-map-live artifact: `/home/ubuntu/clawd/patches/v17j-top-level-check-purpose-map-live.spec.md`\n\n**My thinking:**\nThis was the right usability fix. The top-level maintenance checks were already strong, but now the main entry surface explains why each one exists. That should reduce the last obvious source of operator confusion.\n\n**Decision:**\n- Keep the purpose map short and selection-oriented.\n- Treat the overview as the main place to clarify which top-level check to use when.\n\n**Next:** On the next P3 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the top-level check purposes are also explicit in the overview.\n\n---\n## 2026-04-25 03:39 UTC \u2014 [P2: Smart Entry] Define the Minimum Purpose Map for the Top-Level Maintenance Checks So Maintainers Can Choose the Right High-Level Verification Path Without Guessing Which of the Now-Mature Operator Checks Best Matches Their Goal\n\n**Task:** Specify the minimum \u201cwhich check to run when\u201d map for the top-level maintenance checks, so the current verification choices become easier to use correctly.\n**Finding:**\n- Both bots are alive.\n- Minimum purpose map selected:\n  - `scripts/check_operator_maintenance_integrity.py` \u2014 routine integrity verification of indexed and shell surfaces\n  - `scripts/check_operator_surface_smoke.py` \u2014 shallow end-to-end confidence check across shell entrypoints and integrity path\n  - `scripts/operator_all_clear_overnight.sh` \u2014 safest refresh-and-verify action path when active refresh is desired\n- Wrote purpose-map artifact: `/home/ubuntu/clawd/patches/v17i-top-level-check-purpose-map.spec.md`\n\n**My thinking:**\nThis is the right minimum because the stack now has multiple strong top-level checks, but their purposes are not yet spelled out side by side. A short purpose map makes the st",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
