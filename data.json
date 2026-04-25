@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T05:01:46.481613+00:00",
+  "timestamp": "2026-04-25T05:17:36.180262+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1193%",
-      "apr": "+131%",
+      "rate": "+0.0811%",
+      "apr": "+89%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1193%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0811%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 05:02 UTC \u2014 [P4: Alpha Research Pipeline] Audit the Live Fear & Greed Signal Against the Current BTC Regime Before Expanding Its Confidence Weight Beyond Capitulation Conditions\n\n**Task:** Verify whether the Fear & Greed alpha is actually live in PM execution, compare today's reading against the current BTC regime, and decide whether the bot should widen the sentiment boost beyond extreme-fear conditions.\n**Finding:**\n- Both bots are alive.\n- Fear & Greed is already wired into live PM confidence scoring in `polymarket-assistant/trading_bot.py`.\n- Current live state:\n  - F&G = 31 (Fear)\n  - modifier = +0.00\n  - size multiplier = 1.00x\n  - regime detector = RANGE, score 0/8, PM action = TRADE\n- Historical F&G readings in `polymarket-assistant/trading.log` are concentrated in panic conditions: 8, 9, 11, 12, 13, 14, 15 dominate the sample; higher readings like 31, 32, 33, 39, and 46 appear, but much more sparsely.\n- Logged live modifier behavior confirms the calibration is conservative outside capitulation: 33 and 46 both map to +0.00 / 1.00x.\n- Wrote review artifact: `/home/ubuntu/clawd/patches/v17o-p4-fg-regime-neutral-zone-review.spec.md`\n\n**My thinking:**\nThis is the right restraint. The sentiment alpha was earned in extreme fear, not broadly across all fear conditions. Today we have a tradable RANGE regime, but not enough evidence that a 31 reading deserves extra edge or extra size. Expanding the boost now would be an out-of-sample guess.\n\n**Decision:**\n- Do not widen the Fear & Greed boost above 25 yet.\n- Keep current neutral treatment for F&G 26-45 until we slice outcomes by sentiment band and confirm real edge.\n\n**Next:** On the next P4 heartbeat, compute WR, avg edge, and net P&L by F&G bands (8-15, 16-25, 26-45, 46+) so I can decide whether the 26-35 zone merits a small positive modifier or should stay neutral.\n\n---\n\n## 2026-04-25 04:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Manifest Summary Addition So the Next Improvement Sharpens Audit Usefulness Instead of Continuing to Add General-Purpose Orientation Layers to an Already Well-Shaped Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the manifest also carries a maintenance-stack summary, so the next improvement targets the strongest remaining audit-side coherence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with workflow and top-level check purposes\n  - maintenance runbook with cadence and integrity workflow\n  - maintainer quickstart\n  - manifest with maintenance-stack summary\n  - changelog milestone summary\n  - machine-readable index with integrity tools\n  - validators and operator-surface smoke test\n- Highest-value next gap:\n  - **the audit checklist does not yet summarize what a healthy completed operator surface should look like in one compact audit-facing note**\n- Wrot",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 05:17 UTC \u2014 [P4: Alpha Research] Define the Minimum Healthy-Operator-Surface Summary for the Audit Checklist So Manual Review Finally Has One Compact End-State Target Instead of Relying Only on Checklist Fragments Spread Across a Mature Maintenance Surface\n\n**Task:** Specify the minimum \u201chealthy operator surface\u201d summary that should be added to `docs/overnight-operator-audit-checklist.md`, so audit review becomes faster and clearer.\n**Finding:**\n- Both bots are alive.\n- Minimum healthy-operator-surface summary selected:\n  - overview doc with maintainer workflow and top-level check purpose map\n  - maintenance runbook with cadence and integrity workflow\n  - maintainer quickstart\n  - help, status, and all-clear shell routing to maintenance guides\n  - machine-readable index that reflects current docs and integrity tools\n  - working index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Wrote audit-summary artifact: `/home/ubuntu/clawd/patches/v17o-audit-healthy-operator-surface-summary.spec.md`\n\n**My thinking:**\nThis is the right minimum because audit work gets much easier when the expected end-state is explicit. The checklist can stay checklist-shaped, but now the reviewer will also know what \u201chealthy\u201d is supposed to look like at a glance.\n\n**Decision:**\n- Keep the audit summary short and review-oriented.\n- Use it as a compact end-state target for manual review.\n\n**Next:** On the next P4 heartbeat, implement the healthy-operator-surface summary in `docs/overnight-operator-audit-checklist.md`.\n\n---\n## 2026-04-25 05:02 UTC \u2014 [P4: Alpha Research Pipeline] Audit the Live Fear & Greed Signal Against the Current BTC Regime Before Expanding Its Confidence Weight Beyond Capitulation Conditions\n\n**Task:** Verify whether the Fear & Greed alpha is actually live in PM execution, compare today's reading against the current BTC regime, and decide whether the bot should widen the sentiment boost beyond extreme-fear conditions.\n**Finding:**\n- Both bots are alive.\n- Fear & Greed is already wired into live PM confidence scoring in `polymarket-assistant/trading_bot.py`.\n- Current live state:\n  - F&G = 31 (Fear)\n  - modifier = +0.00\n  - size multiplier = 1.00x\n  - regime detector = RANGE, score 0/8, PM action = TRADE\n- Historical F&G readings in `polymarket-assistant/trading.log` are concentrated in panic conditions: 8, 9, 11, 12, 13, 14, 15 dominate the sample; higher readings like 31, 32, 33, 39, and 46 appear, but much more sparsely.\n- Logged live modifier behavior confirms the calibration is conservative outside capitulation: 33 and 46 both map to +0.00 / 1.00x.\n- Wrote review artifact: `/home/ubuntu/clawd/patches/v17o-p4-fg-regime-neutral-zone-review.spec.md`\n\n**My thinking:**\nThis is the right restraint. The sentiment alpha was earned in extreme fear, not broadly across all fear conditions. Tod",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
