@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T07:00:02.128969+00:00",
+  "timestamp": "2026-04-25T07:10:12.473810+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,15 +14,7 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [
-    {
-      "coin": "MAVIA",
-      "rate": "+0.1269%",
-      "apr": "+139%",
-      "action": "SHORT",
-      "oi": "69,667,759"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -91,14 +83,6 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.990"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1269%/8h \u2014 longs paying shorts"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +320,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 06:43 UTC \u2014 [P2: Smart Entry] Define the Minimum Docs-Summary Integrity Check So the New Human-Facing Summary and Orientation Sections Across the Main Operator Docs Gain a Lightweight Guardrail Instead of Relying on Manual Drift Detection\n\n**Task:** Specify the minimum docs-summary integrity check needed to verify that the key human-facing summary/orientation sections remain present across the main operator docs.\n**Finding:**\n- Both bots are alive.\n- Minimum docs-summary check selected:\n  - `docs/overnight-operator-overview.md`\n    - `## Maintenance view`\n    - `## Maintainer workflow`\n    - `## Which top-level check to run when`\n  - `docs/overnight-operator-maintenance-runbook.md`\n    - `## Integrity workflow`\n  - `docs/overnight-operator-manifest.md`\n    - `## Maintenance stack at a glance`\n  - `docs/overnight-operator-audit-checklist.md`\n    - `## Healthy operator surface should include`\n- Expected behavior selected:\n  - fail if any file is missing\n  - fail if any required section header is missing\n  - print clear PASS/FAIL per file\n- Wrote docs-summary artifact: `/home/ubuntu/clawd/patches/v17u-docs-summary-integrity-check.spec.md`\n\n**My thinking:**\nThis is the right minimum because it protects the exact summary sections that now make the surface usable, without turning the docs into rigid templates. It is just enough guardrail to catch high-value drift.\n\n**Decision:**\n- Keep the docs-summary check narrow and header-presence oriented.\n- Treat it as the human-facing counterpart to the machine and shell integrity layers.\n\n**Next:** On the next P2 heartbeat, implement the docs-summary integrity check and validate it against the current docs surface.\n\n---\n## 2026-04-25 06:39 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Machine-Readable Summary Addition So the Next Improvement Protects the New Human-Facing Summary Layers Instead of Continuing to Expand Structure Without Guardrails\n\n**Task:** Reassess the overnight operator stack now that the machine-readable index also carries a compact top-level summary, so the next improvement targets the strongest remaining coherence risk.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-facing docs with summary/orientation layers\n  - machine-readable index with a top-level summary object\n  - validators, integrity checks, combined integrity check, and smoke test\n- Highest-value next gap:\n  - **there is no lightweight integrity check that verifies the expected summary sections remain present across the key human-facing docs**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17t-next-gap-after-index-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the summary layers are now part of the usability contract, but they are not protected directly yet. A small docs-summary check would close that gap without turning the docs int",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 07:09 UTC \u2014 [P3: Strategy Development] Implement the Docs-Summary Integrity Check So the Key Human-Facing Summary and Orientation Sections Across the Main Operator Docs Gain a Lightweight Guardrail Instead of Depending on Manual Drift Detection Alone\n\n**Task:** Build the docs-summary integrity check and validate it against the current human-facing operator docs so the summary/orientation layer becomes directly testable.\n**Finding:**\n- Both bots are alive.\n- Built docs-summary integrity checker:\n  - `/home/ubuntu/clawd/scripts/check_operator_doc_summaries.py`\n- Check now:\n  - verifies `## Maintenance view`, `## Maintainer workflow`, and `## Which top-level check to run when` in the overview\n  - verifies `## Integrity workflow` in the maintenance runbook\n  - verifies `## Maintenance stack at a glance` in the manifest\n  - verifies `## Healthy operator surface should include` in the audit checklist\n  - fails on missing files or missing headers\n  - prints PASS/FAIL per file plus overall result\n- Validation result:\n  - `PASS overnight-operator-overview.md`\n  - `PASS overnight-operator-maintenance-runbook.md`\n  - `PASS overnight-operator-manifest.md`\n  - `PASS overnight-operator-audit-checklist.md`\n  - `OVERALL PASS`\n- Wrote docs-summary-live artifact: `/home/ubuntu/clawd/patches/v17v-docs-summary-integrity-live.spec.md`\n\n**My thinking:**\nThis is the right human-facing guardrail. The docs now carry important summary and orientation layers, and this check makes those layers part of the maintained surface instead of letting them drift silently.\n\n**Decision:**\n- Keep the docs-summary check narrow and header-presence oriented.\n- Treat it as the human-facing counterpart to the machine, shell, and smoke integrity layers.\n\n**Next:** On the next P3 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the docs-summary layer also has direct integrity coverage.\n\n---\n## 2026-04-25 06:43 UTC \u2014 [P2: Smart Entry] Define the Minimum Docs-Summary Integrity Check So the New Human-Facing Summary and Orientation Sections Across the Main Operator Docs Gain a Lightweight Guardrail Instead of Relying on Manual Drift Detection\n\n**Task:** Specify the minimum docs-summary integrity check needed to verify that the key human-facing summary/orientation sections remain present across the main operator docs.\n**Finding:**\n- Both bots are alive.\n- Minimum docs-summary check selected:\n  - `docs/overnight-operator-overview.md`\n    - `## Maintenance view`\n    - `## Maintainer workflow`\n    - `## Which top-level check to run when`\n  - `docs/overnight-operator-maintenance-runbook.md`\n    - `## Integrity workflow`\n  - `docs/overnight-operator-manifest.md`\n    - `## Maintenance stack at a glance`\n  - `docs/overnight-operator-audit-checklist.md`\n    - `## Healthy operator surface should include`\n- Expected behavior selected:\n  - fai",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +340,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
