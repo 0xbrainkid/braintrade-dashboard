@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T07:44:17.216909+00:00",
+  "timestamp": "2026-04-25T07:50:11.270256+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0730%",
-      "apr": "+80%",
+      "rate": "+0.0766%",
+      "apr": "+84%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0730%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0766%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 07:43 UTC \u2014 [P2: Smart Entry] Implement the Full Operator-Surface Verification Sweep So the Machine, Shell, Docs, and Smoke Integrity Layers Collapse Into One Top-Level Confidence Path Instead of Requiring Several Separate Runs After Broader Maintenance Changes\n\n**Task:** Build the full operator-surface verification sweep and validate that it runs the machine, shell, docs, and smoke integrity layers together, then ends with the final full-surface PASS line.\n**Finding:**\n- Both bots are alive.\n- Built full operator-surface verification sweep:\n  - `/home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- The full sweep now:\n  1. runs `scripts/validate_overnight_operator_index.py`\n  2. runs `scripts/check_operator_shell_surface.py`\n  3. runs `scripts/check_operator_doc_summaries.py`\n  4. runs `scripts/check_operator_surface_smoke.py`\n  5. prints `OPERATOR_SURFACE_FULL_PASS: machine, shell, docs, and smoke layers verified`\n- Validation succeeded and printed the expected final full-surface PASS line after all layers passed.\n- Wrote full-surface-live artifact: `/home/ubuntu/clawd/patches/v17y-full-operator-surface-verification-live.spec.md`\n\n**My thinking:**\nThis was the right top-level consolidation move. The maintenance stack now has a real full-surface verification path, which means broad changes can be validated confidently without stitching together several separate checks by hand.\n\n**Decision:**\n- Keep the full verification sweep compositional and shallow.\n- Treat it as the top-level confidence path across the whole operator surface.\n\n**Next:** On the next P2 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the full operator-surface verification sweep also exists.\n\n---\n## 2026-04-25 07:39 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Behavior for the Full Operator-Surface Verification Sweep So the Machine, Shell, Docs, and Smoke Integrity Layers Can Be Run Together Through One Top-Level Confidence Path Instead of Several Separate Commands\n\n**Task:** Specify the minimum behavior for a compact full operator-surface verification sweep that composes the current machine, shell, docs, and smoke integrity layers, then ends with one final PASS line.\n**Finding:**\n- Both bots are alive.\n- Minimum full-surface sweep behavior selected:\n  1. run `scripts/validate_overnight_operator_index.py`\n  2. run `scripts/check_operator_shell_surface.py`\n  3. run `scripts/check_operator_doc_summaries.py`\n  4. run `scripts/check_operator_surface_smoke.py`\n  5. exit non-zero if any step fails\n  6. print a compact final PASS line on success\n- Selected success output:\n  - `OPERATOR_SURFACE_FULL_PASS: machine, shell, docs, and smoke layers verified`\n- Wrote full-surface artifact: `/home/ubuntu/clawd/patches/v17x-full-operator-surface-verification-sweep.spec.md`\n\n**My thinking:**\nThis is the right consolid",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 07:43 UTC \u2014 [P3: Strategy Development] Reassess the Overnight Operator Stack After the Full Verification Sweep Landed So the Next Improvement Closes the Discoverability Gap Between the Strongest New Maintenance Capability and the Top-Level Guidance Surfaces Operators Actually Use First\n\n**Task:** Review the overnight operator maintenance surface after the full operator-surface verification sweep was implemented, then identify the next highest-value improvement.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-facing docs with summary/orientation layers\n  - machine-readable index with validated summary\n  - shell-surface integrity, docs-summary integrity, smoke coverage, and full operator-surface verification sweep\n- Highest-value next gap:\n  - **the new full operator-surface verification sweep is not yet surfaced through the main maintainer guidance/discovery paths**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17z-next-gap-after-full-surface-sweep.spec.md`\n\n**My thinking:**\nThe remaining gap is no longer technical depth, it is discoverability. The strongest verification path now exists, but it is still too implicit. Surfacing it through the operator help and overview layers is the cleanest next move.\n\n**Decision:**\n- Prioritize exposing the full verification sweep through the main maintainer guidance surfaces.\n- Keep the next change focused on discoverability, not more validation depth.\n\n**Next:** On the next P3 heartbeat, add the full verification sweep to the top-level maintainer guidance surfaces and validate that operators can discover it from the main help path.\n\n---\n## 2026-04-25 07:43 UTC \u2014 [P2: Smart Entry] Implement the Full Operator-Surface Verification Sweep So the Machine, Shell, Docs, and Smoke Integrity Layers Collapse Into One Top-Level Confidence Path Instead of Requiring Several Separate Runs After Broader Maintenance Changes\n\n**Task:** Build the full operator-surface verification sweep and validate that it runs the machine, shell, docs, and smoke integrity layers together, then ends with the final full-surface PASS line.\n**Finding:**\n- Both bots are alive.\n- Built full operator-surface verification sweep:\n  - `/home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- The full sweep now:\n  1. runs `scripts/validate_overnight_operator_index.py`\n  2. runs `scripts/check_operator_shell_surface.py`\n  3. runs `scripts/check_operator_doc_summaries.py`\n  4. runs `scripts/check_operator_surface_smoke.py`\n  5. prints `OPERATOR_SURFACE_FULL_PASS: machine, shell, docs, and smoke layers verified`\n- Validation succeeded and printed the expected final full-surface PASS line after all layers passed.\n- Wrote full-surface-live artifact: `/home/ubuntu/clawd/patches/v17y-full-operator-surface-verification-live.spec.md`\n\n**My thinking:**\nThis was the right top-level consolidation move. The maintenance ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
