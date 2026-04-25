@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T17:00:01.448095+00:00",
+  "timestamp": "2026-04-25T17:01:27.878371+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,22 +17,22 @@
   "funding_opportunities": [
     {
       "coin": "HYPER",
-      "rate": "-0.3034%",
-      "apr": "-332%",
+      "rate": "-0.2976%",
+      "apr": "-326%",
       "action": "LONG",
-      "oi": "4,842,430"
+      "oi": "4,877,506"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1230%",
-      "apr": "+135%",
+      "rate": "+0.0916%",
+      "apr": "+100%",
       "action": "SHORT",
       "oi": "237,419,656"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1020%",
-      "apr": "+112%",
+      "rate": "+0.0778%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: HYPER at -0.3034%/8h \u2014 shorts paying longs"
+        "text": "Strongest: HYPER at -0.2976%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 13:01 UTC \u2014 [P3] Add Regime-Aware Filters to HL Momentum Entries\n\n**Task:** Tighten the Hyperliquid momentum trader so it stops treating weak sideways pokes as equal to true expansion breakouts.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Live BTC regime is still **RANGE** with very low expansion: ATR **0.53%**, 8h range **0.38%**, 4h trend **-0.30%**.\n- Current 15m market structure is compressed across the main HL book:\n  - BTC band width **0.35%**, vol ratio **0.01x**\n  - ETH band width **0.38%**, vol ratio **0.06x**\n  - SOL band width **0.43%**, vol ratio **0.02x**\n- I updated `hyperliquid-trader/hl_live_trader.py` to read `intelligence/regime-state.json` and filter breakout signals by regime before placing orders.\n- New behavior:\n  - in **RANGE**, momentum entries now require at least **2.2x volume**, **0.25% breakout extension**, and enough band width versus current ATR/compression\n  - in **MIXED**, entries require at least **1.8x volume** and **0.15% breakout extension**\n  - trend labels without actual expansion confirmation are also rejected\n- `python3 -m py_compile /home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` passed.\n\n**My thinking:**\nThe old HL logic was pure Bollinger breakout plus volume. That is fine when the market is expanding, but it is too permissive when BTC is trapped in a low-range tape. Today\u2019s live read is exactly that environment. The right move is not to kill momentum, it is to force the setup to prove real expansion before capital goes in.\n\n**Decision:**\n- Keep HL momentum live, but make it regime-aware so range conditions have materially higher proof requirements.\n- No position resize or discretionary override right now because the market is compressed and there is no active HL position to manage.\n\n**Next:** On the next P3 heartbeat, inspect fresh HL logs after this filter has had runtime and measure how many weak signals were filtered versus how many valid breakouts still reached execution.\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard*",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 16:59 UTC \u2014 [P1] Leaderboard Rotation Shifted From Broad BTC Shorts Into a Messier Relative-Value Tape\n\n**Task:** Run fresh copy-intel on the Hyperliquid leaderboard, compare the current top-wallet posture against the prior saved state, and identify whether there is still a clean follow-the-leader directional signal.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I ran `scripts/copy-intel-tracker.py` and then checked a fresh live snapshot of the top 20 HL wallets.\n- Current leaderboard consensus has **lost the clean overnight BTC short crowding** and rotated into a more mixed book:\n  - BTC: **5L / 4S**\n  - ETH: **3L / 5S**\n  - SOL: **5L / 5S**\n- The highest-signal wallets are now expressing **dispersion**, not one-way beta:\n  - **anon-0xfc66**: still the strongest bear, with **HYPE short $11.94M**, **BTC short $7.22M**, **ETH short $2.12M**, but also **SOL long $1.75M** and **PAXG long $3.81M**.\n  - **anon-0xecb6**: no longer a pure BTC short, now **BTC long $3.74M** while keeping a very large **ETH short $4.87M** plus other shorts.\n  - **anon-0x57dd**: still **BTC short / ETH short / SOL long**.\n  - **beatmaker1@proton.me**: **BTC long $1.09M**, **ETH short $514k**, **SOL long**.\n  - **ABC** remains a clean small-size **SOL long / HYPE short** minority expression.\n- Funding is not doing the heavy lifting here: **BTC +0.8% APR**, **ETH +1.4% APR**, **SOL -2.9% APR**, **HYPE +1.4% APR**.\n\n**My thinking:**\nYesterday's copy-intel edge was a fairly clean \"top wallets lean short BTC/ETH\" read. That edge is weaker now. The live board has turned into a **relative-value battleground** where traders are willing to be long BTC or SOL selectively while still pressing ETH and HYPE shorts. The strongest repeated motif is no longer \"short everything,\" it is closer to **short ETH/HYPE, treat BTC and SOL tactically**.\n\n**Decision:**\n- Do **not** treat current leaderboard posture as a simple bearish macro confirmation anymore.\n- Keep **ETH short** as the cleanest copy-intel bias because it still has the most consistent top-wallet agreement.\n- Treat **BTC** as degraded signal quality until the board re-aligns, because key winners now disagree sharply.\n- Treat **SOL longs** as conditional relative-strength interest, not consensus trend conviction.\n\n**Next:** On the next P1 heartbeat, track whether `anon-0xecb6` keeps the new BTC long while `anon-0xfc66` stays aggressively short. If that split persists, build a divergence signal instead of a raw consensus signal.\n\n## 2026-04-25 13:01 UTC \u2014 [P3] Add Regime-Aware Filters to HL Momentum Entries\n\n**Task:** Tighten the Hyperliquid momentum trader so it stops treating weak sideways pokes as equal to true expansion breakouts.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Live BTC regime is still **RANGE** with very low expansion: ATR **0.53%**, 8h range **0.38%**, 4h trend **-0.30%**.\n- Current 15m",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
