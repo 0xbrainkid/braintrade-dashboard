@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:02:59.578615+00:00",
+  "timestamp": "2026-04-25T01:04:03.665920+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0603%",
-      "apr": "+66%",
+      "rate": "+0.0685%",
+      "apr": "+75%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0603%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0685%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:02 UTC \u2014 [P1: Copy Intelligence] Run the Leaderboard Tracker and Extract the Biggest Position Flips So Copy Intel Focuses on What Elite Traders Actually Changed Tonight Instead of Static Top-Wallet Lists\n\n**Task:** Run `scripts/copy-intel-tracker.py`, compare the refreshed leaderboard state against the previous snapshot, and isolate the most meaningful top-trader flips and size changes.\n**Finding:**\n- Both bots are alive.\n- Fresh leaderboard scan came back: `BTC 3L/6S | ETH 3L/5S | SOL 5L/5S`.\n- Biggest actionable positioning changes from top accounts:\n  - `anon-0xecb6` ($26.6M acct) **flipped BTC LONG\u2192SHORT** and cut ETH/SOL shorts materially while still keeping large broad alt shorts, especially `DOGE`, `XRP`, `XPL`, `PUMP`, `ZEC`.\n  - `anon-0xfc66` ($17.2M acct) **flipped BTC LONG\u2192SHORT** and **SOL LONG\u2192SHORT**, while massively increasing `HYPE` short to `$9.7M`.\n  - `anon-0x57dd` ($13.7M acct) rotated the other way, **adding BTC short** but flipping a wide alt basket from short to long, including `SOL`, `DOGE`, `XRP`, `ADA`, `TRUMP`, and `WIF`.\n  - `anon-0x3bca` ($4.6M acct) **flipped BTC and ETH from SHORT\u2192LONG** while opening a new `SOL` short.\n  - `ABC` ($2.23M acct) **flipped SOL from SHORT\u2192LONG** and fully closed prior `BTC` long and `ETH` short exposure.\n- Net read from the tracker: elite positioning is still **BTC/ETH bearish on balance**, but the alt book is no longer one-way risk-off. There is real dispersion and selective rotation into alt longs.\n\n**My thinking:**\nThis is useful copy intel because the highest-signal move was not simple market-wide consensus, it was **rotation**. The top tier is leaning bearish on majors while splitting aggressively on alts. That argues against blunt directional copying and in favor of watching for divergence signals, especially when BTC shorts rise while alt longs start reappearing.\n\n**Decision:**\n- Keep using leaderboard change detection as the core P1 workflow.\n- Treat renewed major-coin shorting by the largest accounts as the dominant macro read, but do **not** generalize that into blanket alt bearishness.\n\n**Next:** On the next P1 heartbeat, track whether this BTC-short / selective-alt-rotation pattern persists or mean-reverts, and identify which alt flips are repeating across multiple top accounts.\n\n## 2026-04-25 01:01 UTC \u2014 [P4: Alpha Research] Wire a Fast 5-Minute Regime Layer Into the Alpha Signal Snapshot So PM Risk Can See Both Slow and Fast Market State Instead of Flying Blind Between Hourly Detector Updates\n\n**Task:** Extend the alpha research pipeline so `research/alpha-signals.json` stops being just sentiment plus price, and starts carrying live regime context from both the slow 1h/4h detector and the fast 5m PM-specific classifier.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/scripts/alpha-signal-update.sh` to enrich `research/alpha-signals.json` with:\n  - ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:03 UTC \u2014 [P2: Smart Entry] Recheck the Tagged PM Outcome Set to See Whether the Time Filter Is Carrying More Edge Than the Cooldown Gate and Whether 19 UTC Should Be Cut Instead of Trusted\n\n**Task:** Analyze the richer tagged segment of `polymarket-assistant/confidence_outcomes.jsonl` and test a concrete parameter idea using real outcomes, specifically whether `v5a` and the active hour filter are doing more work than the `v6` cooldown gate.\n**Finding:**\n- Both bots are alive.\n- The tagged April subset contains `28` trades with `v5a` and `v6` fields.\n- `v5a_pass=true`: `23` trades, `60.9%` WR, `+0.177` EV/trade.\n- `v5a_pass=false`: `5` trades, `40.0%` WR, `-0.229` EV/trade.\n- `v6_cooldown_pass=true`: `15` trades, `53.3%` WR, `+0.032` EV/trade.\n- `v6_cooldown_pass=false`: `13` trades, `61.5%` WR, `+0.188` EV/trade.\n- Hour split is the loudest signal:\n  - `11 UTC`: `57.1%` WR, `+0.107` EV\n  - `12 UTC`: `75.0%` WR, `+0.446` EV\n  - `19 UTC`: `28.6%` WR, `-0.445` EV\n  - `20 UTC`: `50.0%` WR, `-0.029` EV\n- Tested concrete tweak on the tagged sample:\n  - baseline tagged set: `57.1%` WR, `+0.104` EV\n  - **require `v5a_pass` and exclude `19 UTC`**: `17` trades, `70.6%` WR, `+0.364` EV\n\n**My thinking:**\nThe cooldown gate is not the hero here. In this sample it is actually blocking some of the better trades, while the 19 UTC hour is outright toxic. The data says our real edge is coming from structural session timing plus the stronger `v5a` quality gate, not from spacing trades out mechanically.\n\n**Decision:**\n- Do not tighten around `v6` cooldown based on current data.\n- Prioritize the next parameter change around **excluding 19 UTC** while keeping `v5a` as a core quality filter.\n\n**Next:** On the next P2 heartbeat, test whether excluding both `19 UTC` and `20 UTC` is too restrictive or if `20 UTC` can stay as a smaller but acceptable window.\n\n## 2026-04-25 01:02 UTC \u2014 [P1: Copy Intelligence] Run the Leaderboard Tracker and Extract the Biggest Position Flips So Copy Intel Focuses on What Elite Traders Actually Changed Tonight Instead of Static Top-Wallet Lists\n\n**Task:** Run `scripts/copy-intel-tracker.py`, compare the refreshed leaderboard state against the previous snapshot, and isolate the most meaningful top-trader flips and size changes.\n**Finding:**\n- Both bots are alive.\n- Fresh leaderboard scan came back: `BTC 3L/6S | ETH 3L/5S | SOL 5L/5S`.\n- Biggest actionable positioning changes from top accounts:\n  - `anon-0xecb6` ($26.6M acct) **flipped BTC LONG\u2192SHORT** and cut ETH/SOL shorts materially while still keeping large broad alt shorts, especially `DOGE`, `XRP`, `XPL`, `PUMP`, `ZEC`.\n  - `anon-0xfc66` ($17.2M acct) **flipped BTC LONG\u2192SHORT** and **SOL LONG\u2192SHORT**, while massively increasing `HYPE` short to `$9.7M`.\n  - `anon-0x57dd` ($13.7M acct) rotated the other way, **adding BTC short** but flipping a wide alt basket from short to long, incl",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
