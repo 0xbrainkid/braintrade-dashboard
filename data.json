@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:37:34.472692+00:00",
+  "timestamp": "2026-04-25T01:38:20.633626+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2665%",
-      "apr": "-292%",
+      "rate": "-0.2712%",
+      "apr": "-297%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0727%",
-      "apr": "+80%",
+      "rate": "+0.0737%",
+      "apr": "+81%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2665%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2712%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:37 UTC \u2014 [P3: Strategy Development] Check Whether a Strong-MACD Rule Would Accidentally Over-Prune the Good 55-64.9 Bias Band Before Treating It as a Viable High-Bias Refinement\n\n**Task:** Test the proposed `|MACD| >= 10` idea against the profitable `55-64.9` band to see how much good flow it would discard.\n**Finding:**\n- Both bots are alive.\n- In the surviving `55-64.9` band:\n  - all trades: `6` trades, `83.3%` WR, `+0.602` EV\n  - with `|MACD| >= 10`: `4` trades, `100%` WR, `+0.913` EV\n- What gets removed:\n  - one **loss** with MACD abs `1.99`\n  - one **win** with MACD abs `9.45`\n- So the rule improves purity, but it also trims a legitimate winner from the already-strong mid-high band.\n\n**My thinking:**\nThat is the tradeoff. A flat `|MACD| >= 10` gate looks promising for the `65+` danger zone, but it becomes too blunt if applied across the whole upper-conviction region. The better shape is conditional logic: only tighten MACD requirements when bias is extreme, and leave the productive `55-64.9` band mostly alone.\n\n**Decision:**\n- Do not use a blanket upper-band MACD gate.\n- If we ever implement this, scope it narrowly to `|bias| >= 65` only.\n\n**Next:** On the next P3 heartbeat, turn this into a concrete shadow rule definition for documentation, e.g. `if |bias| >= 65 and |macd_h| < 10: block`, and check whether any existing report text should reflect that as the leading candidate refinement.\n\n## 2026-04-25 01:36 UTC \u2014 [P2: Smart Entry] Shadow-Test a Simple MACD Gate for 65+ Bias Trades So We Can See Whether Momentum Quality Could Clean the Extreme Band Without Touching Stronger Mid-High Signals\n\n**Task:** Run a tiny shadow test on the surviving `|bias| >= 65` trades to see whether a simple MACD-strength threshold would have filtered the two losers while preserving the lone winner.\n**Finding:**\n- Both bots are alive.\n- Current `65+` trades and MACD abs:\n  - loss: `7.77`\n  - win: `18.62`\n  - loss: `2.31`\n- Shadow threshold results:\n  - `MACD abs >= 5`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 7`: keeps `2` trades, `50%` WR\n  - `MACD abs >= 10`: keeps only `1` trade, and it is the **winner** (`100%` WR)\n  - `>=12` and `>=15` behave the same on this tiny sample\n- So a simple `|MACD| >= 10` rule would have removed both current `65+` losers while preserving the only win.\n\n**My thinking:**\nThis is exactly the kind of relationship worth respecting, even if the sample is tiny. I\u2019m not calling it deployable yet, but it is much cleaner than the other stories we tested. It does not rely on stale 19h contamination, and it lines up with the intuition that extreme bias needs extreme momentum quality.\n\n**Decision:**\n- Keep this as a shadow-only candidate, not a live rule yet.\n- Promote `65+ bias requires stronger MACD` to the top of the future refinement shortlist.\n\n**Next:** On the next P2 heartbeat, test whether a `|MACD| >= 10` requirement for `65+`",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:38 UTC \u2014 [P4: Alpha Research] Audit the Repo for Stale Max-Bias Narratives So Old \u201cRaise the Ceiling\u201d Notes Do Not Quietly Fight the Newer High-Bias Evidence\n\n**Task:** Search the workspace for older max-bias and high-bias notes that could conflict with the current finding that `65+` needs stronger momentum quality rather than a wider ceiling.\n**Finding:**\n- Both bots are alive.\n- I found stale historical guidance in `reports/weekly-review-2026-W13.md` still saying:\n  - raise `max_bias` `55\u219280`\n  - deploy the wider ceiling after Sunday review\n- That older note predates the current cleaner-hour analysis.\n- Current evidence now points the opposite direction:\n  - `55-64.9` is strong\n  - `65+` is weak on raw results unless momentum is unusually strong\n  - the leading candidate refinement is **conditional MACD gating for `65+`**, not broad ceiling expansion\n\n**My thinking:**\nThis is exactly the kind of stale narrative that can cause future self-sabotage. Old research is fine, but only if it is clearly historical. Right now there is a real risk that someone scanning the repo could see \u201craise max_bias to 80\u201d and mistake it for still-live direction when the newer evidence says otherwise.\n\n**Decision:**\n- Treat the old \u201craise max_bias to 80\u201d idea as superseded by newer evidence.\n- Next useful step is to mark that report as historically outdated or add a newer counter-note where decisions are likely to be read.\n\n**Next:** On the next P4 heartbeat, patch the stale weekly review with a short note that the newer April analysis favors keeping `max_bias=70` and exploring `65+` MACD quality gating instead.\n\n## 2026-04-25 01:37 UTC \u2014 [P3: Strategy Development] Check Whether a Strong-MACD Rule Would Accidentally Over-Prune the Good 55-64.9 Bias Band Before Treating It as a Viable High-Bias Refinement\n\n**Task:** Test the proposed `|MACD| >= 10` idea against the profitable `55-64.9` band to see how much good flow it would discard.\n**Finding:**\n- Both bots are alive.\n- In the surviving `55-64.9` band:\n  - all trades: `6` trades, `83.3%` WR, `+0.602` EV\n  - with `|MACD| >= 10`: `4` trades, `100%` WR, `+0.913` EV\n- What gets removed:\n  - one **loss** with MACD abs `1.99`\n  - one **win** with MACD abs `9.45`\n- So the rule improves purity, but it also trims a legitimate winner from the already-strong mid-high band.\n\n**My thinking:**\nThat is the tradeoff. A flat `|MACD| >= 10` gate looks promising for the `65+` danger zone, but it becomes too blunt if applied across the whole upper-conviction region. The better shape is conditional logic: only tighten MACD requirements when bias is extreme, and leave the productive `55-64.9` band mostly alone.\n\n**Decision:**\n- Do not use a blanket upper-band MACD gate.\n- If we ever implement this, scope it narrowly to `|bias| >= 65` only.\n\n**Next:** On the next P3 heartbeat, turn this into a concrete shadow rule definition for docu",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
