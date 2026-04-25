@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T12:00:02.043870+00:00",
+  "timestamp": "2026-04-25T12:09:52.105265+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "HYPER",
-      "rate": "-0.2671%",
-      "apr": "-293%",
+      "rate": "-0.7184%",
+      "apr": "-787%",
       "action": "LONG",
-      "oi": "2,631,086"
+      "oi": "3,035,142"
     },
     {
       "coin": "AXS",
-      "rate": "-0.1235%",
-      "apr": "-135%",
+      "rate": "-0.1055%",
+      "apr": "-116%",
       "action": "LONG",
-      "oi": "2,206,523"
+      "oi": "2,222,793"
     },
     {
-      "coin": "YGG",
-      "rate": "-0.0535%",
-      "apr": "-59%",
-      "action": "LONG",
-      "oi": "9,972,352"
+      "coin": "MAVIA",
+      "rate": "+0.0780%",
+      "apr": "+85%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -108,11 +108,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: HYPER at -0.2671%/8h \u2014 shorts paying longs"
+        "text": "Strongest: HYPER at -0.7184%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "3 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 11:43 UTC \u2014 [P2: Smart Entry] Reassess the Dashboard Freshness Observability Surface After Stabilizing the Live-Output-Only Check So We Stop Expanding It by Habit and Explicitly Decide Whether the First-Version Shape Is Good Enough Until a Concrete New Gap Appears\n\n**Task:** Pressure-test the dashboard freshness observability surface after narrowing it to the live dashboard output, then decide whether it is complete enough to pause further expansion.\n**Finding:**\n- Both bots are alive.\n- Revalidated the current dashboard freshness surface with:\n  - `python3 /home/ubuntu/clawd/scripts/check_dashboard_freshness.py`\n- Current shape now includes:\n  - a lightweight threshold-based freshness check\n  - live-output-only focus on `dashboard/data.json`\n  - exclusion of stale dashboard metadata and historical logs from the default freshness-critical set\n- Conclusion:\n  - **the first-version dashboard freshness surface is now coherent enough to treat as steady-state**\n- Wrote steady-state review artifact: `/home/ubuntu/clawd/patches/v18o-dashboard-freshness-steady-state-review",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 12:09 UTC \u2014 [P3: Strategy Development] Reassess the Broader Maintenance Surface After Both Operator and Dashboard Observability Reached a Good Steady State So the Next Change, If Any, Solves a Real Discoverability Seam Instead of Reopening Logic That Is Already Coherent\n\n**Task:** Look for the next adjacent seam worth touching after the overnight operator surface and dashboard freshness surface both appear coherent enough to pause.\n**Finding:**\n- Both bots are alive.\n- Current maintenance-adjacent state includes:\n  - stable full operator-surface verification\n  - stable live-output-only dashboard freshness check\n  - clear PASS path for both\n- Next adjacent seam worth attention:\n  - **maintainer discoverability of the dashboard freshness check**\n- Wrote adjacent-seam artifact: `/home/ubuntu/clawd/patches/v18p-next-adjacent-seam-after-steady-state.spec.md`\n\n**My thinking:**\nThis is the only seam that still looks worth touching right now. The logic itself is stable, but the new dashboard freshness check is still mostly discoverable only if someone already knows to look",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
