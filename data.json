@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:30:02.536557+00:00",
+  "timestamp": "2026-04-25T01:31:01.809422+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.1892%",
-      "apr": "-207%",
+      "rate": "-0.2035%",
+      "apr": "-223%",
       "action": "LONG",
-      "oi": "1,259,772"
+      "oi": "1,288,360"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0756%",
-      "apr": "+83%",
+      "rate": "+0.0734%",
+      "apr": "+80%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.1892%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2035%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:25 UTC \u2014 [P2: Smart Entry] Test Whether the Surviving Hour Set Is Really Being Dragged by Just Two Toxic Contexts So We Know What to Watch Next Without Prematurely Adding More Live Filters\n\n**Task:** Check whether the remaining weak spots in the new `11/12/20` active-hour set are concentrated in a tiny number of bad contexts rather than being spread broadly across the session set.\n**Finding:**\n- Both bots are alive.\n- In the surviving active-hour sample:\n  - `BOOST or FIRST` contexts = `2` trades, `0%` WR, `-1.000` EV\n  - excluding both of those contexts leaves `15` trades at `80.0%` WR and `+0.546` EV\n  - excluding only `FIRST` leaves `16` trades at `75.0%` WR and `+0.449` EV\n  - excluding only `BOOST` leaves `16` trades at `75.0%` WR and `+0.449` EV\n- The two toxic examples are exactly:\n  - `2026-04-06 12:10 UTC` \u2014 loss, `v5b=BOOST`, `cooldown=PASS`\n  - `2026-04-07 11:55 UTC` \u2014 loss, `v6_cooldown_tag=FIRST`, `v5b=NORMAL`\n\n**My thinking:**\nThis is encouraging. After removing `19 UTC`, the remaining weakness in the live hour set is not broad decay, it is concentrated in two edge-case contexts. That means the strategy is cleaner now, and we should be careful not to overreact with more live filters based on tiny residual noise. The right move is to monitor these contexts, not immediately hard-code around them.\n\n**Decision:**\n- Keep the new `11/12/20` hour set intact.\n- Track `FIRST` trades and `BOOST` shadows as caution flags, but do not add new live gating off two trades.\n\n**Next:** On the next P2 heartbeat, compare `FIRST` trades against non-`FIRST` trades across the broader tagged set to see whether first-trade-of-session is consistently weak or just incidental here.\n\n## 2026-04-25 01:24 UTC \u2014 [P1: Copy Intelligence] Verify Whether a Third Meaningful Account Has Joined the SOL-LONG/HYPE-SHORT Camp So We Do Not Overstate a Pair Trade That Still Might Be Just Two Traders\n\n**Task:** Recheck the current leaderboard for any additional meaningful account expressing `SOL LONG / HYPE SHORT`, and compare that niche camp against the broader HYPE-short crowd.\n**Finding:**\n- Both bots are alive.\n- There are still only **2** meaningful `SOL LONG / HYPE SHORT` accounts above the $50k threshold on both legs:\n  - `anon-0x57dd`\n  - `ABC`\n- No third account has joined the setup yet.\n- Meanwhile, the broader HYPE-short crowd remains much wider and heavier:\n  - `anon-0xfc66`: `HYPE SHORT $9.74M`, `SOL SHORT`\n  - `anon-0xdf9e`: `HYPE SHORT $2.85M`, no SOL leg\n  - `anon-0xecb6`: `HYPE SHORT $2.61M`, `SOL SHORT`\n  - plus the two niche pair-trade accounts\n- This keeps the hierarchy clear:\n  - **primary signal:** HYPE short pressure\n  - **secondary nuance:** a tiny but intentional subgroup prefers `SOL > HYPE`\n\n**My thinking:**\nI\u2019m glad we checked again instead of letting the story drift. The pair trade is real, but it is still not broad enough to promote into co",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:26 UTC \u2014 [P3: Strategy Development] Stress-Test Whether First-Trade-of-Session Is a Real Structural Weakness Before We Ever Consider Promoting the Cooldown Logic Beyond Shadow Analysis\n\n**Task:** Compare `FIRST` trades against non-`FIRST` trades across the broader tagged sample, with special focus on the stronger `v5a_pass` subset, to see whether first-trade-of-session weakness is persistent.\n**Finding:**\n- Both bots are alive.\n- Across all tagged trades:\n  - `FIRST`: `4` trades, `25.0%` WR, `-0.495` EV\n  - non-`FIRST`: `24` trades, `62.5%` WR, `+0.204` EV\n- Inside the stronger `v5a_pass` subset:\n  - `FIRST`: `3` trades, `0.0%` WR, `-1.000` EV\n  - non-`FIRST`: `20` trades, `70.0%` WR, `+0.354` EV\n- The four `FIRST` trades were:\n  - `2026-04-01 19:15 UTC` loss, `v5a PASS`\n  - `2026-04-03 12:15 UTC` win, `v5a BLOCK`\n  - `2026-04-06 19:05 UTC` loss, `v5a PASS`\n  - `2026-04-07 11:55 UTC` loss, `v5a PASS`\n\n**My thinking:**\nThis is the strongest evidence yet that first-trade-of-session deserves real suspicion. I still do not want to hard-code from only four total examples, but the pattern is now consistent enough to matter, especially because the stronger `v5a_pass` cases went `0 for 3`. That is exactly the kind of concentrated weakness worth keeping on the shortlist for future live promotion.\n\n**Decision:**\n- Keep `FIRST` as a high-priority candidate for future live gating or size reduction.\n- Still leave it in shadow mode until more sample arrives, because four trades is too little for an irreversible ruleset change.\n\n**Next:** On the next P3 heartbeat, inspect whether these `FIRST` losses cluster around the removed `19 UTC` hour or remain weak even in the surviving `11/12/20` structure.\n\n## 2026-04-25 01:25 UTC \u2014 [P2: Smart Entry] Test Whether the Surviving Hour Set Is Really Being Dragged by Just Two Toxic Contexts So We Know What to Watch Next Without Prematurely Adding More Live Filters\n\n**Task:** Check whether the remaining weak spots in the new `11/12/20` active-hour set are concentrated in a tiny number of bad contexts rather than being spread broadly across the session set.\n**Finding:**\n- Both bots are alive.\n- In the surviving active-hour sample:\n  - `BOOST or FIRST` contexts = `2` trades, `0%` WR, `-1.000` EV\n  - excluding both of those contexts leaves `15` trades at `80.0%` WR and `+0.546` EV\n  - excluding only `FIRST` leaves `16` trades at `75.0%` WR and `+0.449` EV\n  - excluding only `BOOST` leaves `16` trades at `75.0%` WR and `+0.449` EV\n- The two toxic examples are exactly:\n  - `2026-04-06 12:10 UTC` \u2014 loss, `v5b=BOOST`, `cooldown=PASS`\n  - `2026-04-07 11:55 UTC` \u2014 loss, `v6_cooldown_tag=FIRST`, `v5b=NORMAL`\n\n**My thinking:**\nThis is encouraging. After removing `19 UTC`, the remaining weakness in the live hour set is not broad decay, it is concentrated in two edge-case contexts. That means the strategy is cleaner now, and we sh",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
