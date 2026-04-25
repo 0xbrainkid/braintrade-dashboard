@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T06:30:01.600579+00:00",
+  "timestamp": "2026-04-25T06:39:55.557378+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0923%",
-      "apr": "+101%",
+      "rate": "+0.0862%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0923%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0862%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 06:13 UTC \u2014 [P4: Alpha Research] Add the Top-Level Summary Object to the Overnight Operator Index and Expand the Validator So the Machine-Readable Surface Gains One Compact High-Level Layer Without Breaking the Existing Integrity Contract\n\n**Task:** Add the `summary` object to `/home/ubuntu/clawd/data/overnight_operator_index.json`, then update the validator so the new top-level machine-readable summary layer is treated as part of the index contract.\n**Finding:**\n- Both bots are alive.\n- Added the top-level `summary` object to `/home/ubuntu/clawd/data/overnight_operator_index.json`.\n- Initial validation failed because `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` still enforced the old top-level key set.\n- Expanded the validator to:\n  - require the `summary` top-level key\n  - require `summary` to be an object\n  - require summary keys:\n    - `overview`\n    - `quickstart`\n    - `runbook`\n    - `shell_entrypoints`\n    - `machine_surface`\n    - `checks`\n- Reran the validator successfully after the update.\n- Wrote index-summary-live artifact: `/home/ubuntu/clawd/patches/v17s-index-summary-object-live.spec.md`\n\n**My thinking:**\nThis was the right machine-surface evolution. The summary node makes the index much easier for non-human consumers to reason about, and updating the validator at the same time keeps the contract honest instead of letting the new layer drift into being undocumented metadata.\n\n**Decision:**\n- Keep the `summary` object as part of the validated machine-readable contract.\n- Treat the index as both inventory and compact machine-readable stack summary.\n\n**Next:** On the next P4 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the machine-readable surface also has a compact top-level summary layer.\n\n---\n## 2026-04-25 06:09 UTC \u2014 [P3: Strategy Development] Define the Minimum Summary Object for the Overnight Operator Index So Machine Consumers Finally Get One Compact High-Level Description of the Maintenance Stack Instead of Only a Detailed Asset Inventory\n\n**Task:** Specify the minimum top-level `summary` object that should be added to `/home/ubuntu/clawd/data/overnight_operator_index.json`, so the machine-readable surface carries one concise high-level description of the stack layers.\n**Finding:**\n- Both bots are alive.\n- Minimum summary object selected with these fields:\n  - `overview` \u2014 maintainer workflow and top-level check purposes\n  - `quickstart` \u2014 first-five-minutes orientation\n  - `runbook` \u2014 maintenance cadence and integrity workflow\n  - `shell_entrypoints` \u2014 help, status, and all-clear route maintainers through the surface\n  - `machine_surface` \u2014 index reflects docs, artifacts, and integrity tools\n  - `checks` \u2014 index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test\n- Wrote index",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 06:39 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Machine-Readable Summary Addition So the Next Improvement Protects the New Human-Facing Summary Layers Instead of Continuing to Expand Structure Without Guardrails\n\n**Task:** Reassess the overnight operator stack now that the machine-readable index also carries a compact top-level summary, so the next improvement targets the strongest remaining coherence risk.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-facing docs with summary/orientation layers\n  - machine-readable index with a top-level summary object\n  - validators, integrity checks, combined integrity check, and smoke test\n- Highest-value next gap:\n  - **there is no lightweight integrity check that verifies the expected summary sections remain present across the key human-facing docs**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17t-next-gap-after-index-summary.spec.md`\n\n**My thinking:**\nThis is the right next move because the summary layers are now part of the usability contract, but they are not protected directly yet. A small docs-summary check would close that gap without turning the docs into a rigid system.\n\n**Decision:**\n- Prioritize a lightweight docs-summary integrity check next.\n- Keep it narrow and section-presence oriented.\n\n**Next:** On the next P1 heartbeat, define the minimum docs-summary integrity check.\n\n---\n## 2026-04-25 06:13 UTC \u2014 [P4: Alpha Research] Add the Top-Level Summary Object to the Overnight Operator Index and Expand the Validator So the Machine-Readable Surface Gains One Compact High-Level Layer Without Breaking the Existing Integrity Contract\n\n**Task:** Add the `summary` object to `/home/ubuntu/clawd/data/overnight_operator_index.json`, then update the validator so the new top-level machine-readable summary layer is treated as part of the index contract.\n**Finding:**\n- Both bots are alive.\n- Added the top-level `summary` object to `/home/ubuntu/clawd/data/overnight_operator_index.json`.\n- Initial validation failed because `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` still enforced the old top-level key set.\n- Expanded the validator to:\n  - require the `summary` top-level key\n  - require `summary` to be an object\n  - require summary keys:\n    - `overview`\n    - `quickstart`\n    - `runbook`\n    - `shell_entrypoints`\n    - `machine_surface`\n    - `checks`\n- Reran the validator successfully after the update.\n- Wrote index-summary-live artifact: `/home/ubuntu/clawd/patches/v17s-index-summary-object-live.spec.md`\n\n**My thinking:**\nThis was the right machine-surface evolution. The summary node makes the index much easier for non-human consumers to reason about, and updating the validator at the same time keeps the contract honest instead of letting the new layer drift into being undocumented metadata.\n\n**Decision:**\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
