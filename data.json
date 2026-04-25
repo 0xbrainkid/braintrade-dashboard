@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:19:41.024861+00:00",
+  "timestamp": "2026-04-25T01:20:37.589936+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0714%",
-      "apr": "+78%",
-      "action": "SHORT",
-      "oi": "69,667,759"
-    },
-    {
       "coin": "YZY",
-      "rate": "-0.0622%",
-      "apr": "-68%",
+      "rate": "-0.0730%",
+      "apr": "-80%",
       "action": "LONG",
       "oi": "1,204,486"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0729%",
+      "apr": "+80%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0714%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at -0.0730%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:19 UTC \u2014 [P1: Copy Intelligence] Clean Up Stale Active-Hour Documentation in Reporting Surfaces So the Written Record Stops Contradicting the New Strategy State After the 19 UTC Removal\n\n**Task:** Follow the stale-reference trail from the last audit and update reporting surfaces that still documented the old active-hour set.\n**Finding:**\n- Both bots are alive.\n- Confirmed the live bot now uses `active_hours = [11, 12, 20]` in `trading_bot.py`.\n- Patched stale report generators that still advertised the removed `19 UTC` hour:\n  - `scripts/daily-pnl-report.sh`\n  - `scripts/generate-daily-report.py`\n- Both now document:\n  - `Active Hours: [11, 12, 20] UTC`\n\n**My thinking:**\nThis is small but important hygiene. Once research turns into a live parameter change, written reports become part of the operational truth. If they keep publishing the old hour set, they quietly corrupt future analysis and make it harder to trust our own documentation.\n\n**Decision:**\n- Keep report generators aligned with the live bot hour map.\n- Treat stale strategy metadata as a real quality problem, not just cosmetic drift.\n\n**Next:** On the next P1 heartbeat, return to copy-intel work and check whether any new top account has joined the `SOL LONG / HYPE SHORT` niche camp after we quantified how small it currently is.\n\n## 2026-04-25 01:18 UTC \u2014 [P4: Alpha Research] Update the Pre-Session Surface to Match the New 20 UTC-Only Late Window So Operator Guidance Stops Pointing at a Disabled 19 UTC Session\n\n**Task:** Verify whether any downstream operational surface still assumes `19 UTC` is active after the trading-hour patch, and fix one real inconsistency.\n**Finding:**\n- Both bots are alive.\n- Audit found `scripts/pre-session-check.sh` still telling operators:\n  - next window until `19:00 UTC`\n  - active window for the full `19-20` block\n- Patched the pre-session window logic so it now points to the actual remaining late session:\n  - next window until `20:00 UTC`\n  - active only during the `20 UTC` hour\n- Also confirmed the broader consistency gap list includes stale `[11, 12, 19, 20]` references in report-generation scripts, which should be cleaned next.\n\n**My thinking:**\nThis is exactly the kind of alpha-pipeline follow-through that keeps ops clean. A strategy patch is not really done if operator-facing surfaces still announce the old schedule. The pre-session check is effectively a control panel, so stale hour guidance there would quietly create confusion and misread the new deployment state.\n\n**Decision:**\n- Keep pre-session messaging aligned with the new hour map.\n- Treat stale `19 UTC` references in reporting scripts as next cleanup targets.\n\n**Next:** On the next P4 heartbeat, patch `scripts/daily-pnl-report.sh` and/or `scripts/generate-daily-report.py` so written reports no longer document the removed 19 UTC window.\n\n## 2026-04-25 01:16 UTC \u2014 [P3: Strategy Developme",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:20 UTC \u2014 [P1: Copy Intelligence] Check Whether the Tiny SOL-LONG/HYPE-SHORT Cohort Is Strengthening or Just Sitting There So We Know if the Relative-Value Read Is Gaining Real Support\n\n**Task:** Revisit the small `SOL LONG / HYPE SHORT` cohort and compare current positions to the previous saved leaderboard state to see whether the trade is attracting conviction or stagnating.\n**Finding:**\n- Both bots are alive.\n- The cohort is still only `2` accounts, but both have become more explicit and more concentrated in the theme:\n  - `ABC` flipped `SOL` from **SHORT \u2192 LONG**, kept `HYPE SHORT`, and fully exited prior `BTC` and `ETH` exposure.\n  - `anon-0x57dd` flipped `SOL` from **SHORT \u2192 LONG** and `HYPE` from **LONG \u2192 SHORT**, while also adding much larger `BTC` and `ETH` shorts.\n- Current cohort expression:\n  - `ABC`: almost pure pair trade, `SOL LONG $1.14M` vs `HYPE SHORT $866k`\n  - `anon-0x57dd`: hybrid book, `SOL LONG $1.28M` vs `HYPE SHORT $201k`, alongside large `BTC/ETH` shorts\n- This means the niche camp did **not** gain breadth, but it did gain **clarity**. Both members rotated into the pair more decisively versus the previous snapshot.\n\n**My thinking:**\nThat is a subtle but valuable read. The trade still lacks consensus breadth, so I would not treat it as a broad market call. But the fact that both members moved toward the same pair structure instead of away from it tells me the idea is becoming more intentional inside that subgroup. In copy-intel terms, that upgrades it from random noise to a credible niche relative-value signal.\n\n**Decision:**\n- Keep `SOL LONG / HYPE SHORT` classified as a niche but strengthening subgroup trade.\n- Continue treating `HYPE short` as the dominant broad signal, with the pair trade as a secondary nuance layer.\n\n**Next:** On the next P1 heartbeat, watch whether a third meaningful account joins the `SOL LONG / HYPE SHORT` setup; that would materially raise confidence in the pair signal.\n\n## 2026-04-25 01:19 UTC \u2014 [P1: Copy Intelligence] Clean Up Stale Active-Hour Documentation in Reporting Surfaces So the Written Record Stops Contradicting the New Strategy State After the 19 UTC Removal\n\n**Task:** Follow the stale-reference trail from the last audit and update reporting surfaces that still documented the old active-hour set.\n**Finding:**\n- Both bots are alive.\n- Confirmed the live bot now uses `active_hours = [11, 12, 20]` in `trading_bot.py`.\n- Patched stale report generators that still advertised the removed `19 UTC` hour:\n  - `scripts/daily-pnl-report.sh`\n  - `scripts/generate-daily-report.py`\n- Both now document:\n  - `Active Hours: [11, 12, 20] UTC`\n\n**My thinking:**\nThis is small but important hygiene. Once research turns into a live parameter change, written reports become part of the operational truth. If they keep publishing the old hour set, they quietly corrupt future analysis and make it harder t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
