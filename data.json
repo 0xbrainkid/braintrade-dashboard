@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:10:38.656934+00:00",
+  "timestamp": "2026-04-25T01:11:32.384622+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0887%",
-      "apr": "+97%",
+      "rate": "+0.0857%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0887%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0857%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:10 UTC \u2014 [P4: Alpha Research] Add Liquidation Cascade State to the Unified Alpha Snapshot So PM Risk Can See Fast OI Shock Context Alongside Regime and Funding Instead of Treating It as a Separate Specialist Feed\n\n**Task:** Extend the unified alpha snapshot again, this time wiring the liquidation cascade detector into `research/alpha-signals.json` and folding its PM impact into the derived risk context.\n**Finding:**\n- Both bots are alive.\n- Located the live liquidation feed in `intelligence/liq-signals.json`.\n- Patched `scripts/alpha-signal-update.sh` to add:\n  - `liquidation_signal` block from `liq-signals.json`\n  - liquidation-aware `pm_risk_context`\n- Fresh snapshot now includes:\n  - `liquidation_signal.direction = neutral`\n  - `liquidation_signal.pm_adjustment = 0`\n  - `pm_risk_context.liq_direction = neutral`\n  - `pm_risk_context.liq_pm_adjustment = 0`\n- The unified alpha surface now carries four distinct PM context layers in one file:\n  - sentiment (`fear_greed`)\n  - slow/fast regime\n  - funding squeeze state\n  - liquidation cascade state\n\n**My thinking:**\nThis is exactly the kind of alpha-pipeline consolidation we need. Fast liquidation shocks are one of the few things that can invalidate an otherwise calm regime read, so leaving them in a separate JSON meant any downstream consumer had to reconstruct market context manually. One unified snapshot is much closer to a real decision surface.\n\n**Decision:**\n- Keep liquidation cascade state embedded in `research/alpha-signals.json`.\n- Let negative liquidation adjustments escalate `pm_risk_context` automatically when they appear.\n\n**Next:** On the next P4 heartbeat, update a downstream consumer to read `liquidation_signal` from the unified alpha snapshot rather than relying on separate feed-specific logic.\n\n## 2026-04-25 01:08 UTC \u2014 [P3: Strategy Development] Probe the Toxic 19 UTC Window for a Salvageable Subpattern So We Know Whether to Engineer a Better Gate or Just Keep the Hour Effectively Dead\n\n**Task:** Drill into the tagged 19 UTC losses and test whether cooldown state or `v5b` context reveals a rescue pattern strong enough to justify keeping that hour alive.\n**Finding:**\n- Both bots are alive.\n- Tagged 19 UTC set is `7` trades, only `28.6%` WR and `-0.445` EV.\n- Cooldown split inside 19 UTC:\n  - `FIRST`: `2` trades, `0%` WR, `-1.000` EV\n  - `BLOCK`: `2` trades, `0%` WR, `-1.000` EV\n  - `PASS`: `3` trades, `66.7%` WR, `+0.294` EV\n- But the apparent rescue fades when combining with `v5b` context:\n  - `19h cooldown PASS only`: `5` trades, `40.0%` WR, `-0.223` EV\n  - `19h cooldown PASS and not BOOST`: `4` trades, `50.0%` WR, `-0.029` EV\n  - `v5b REDUCE_MILD_BEAR`: `2` trades, `0%` WR\n  - `v5b BOOST`: `1` trade, `0%` WR\n- Important nuance: even very negative OBI values at 19 UTC did not save the hour. Example losses include `obi -0.468`, `-0.409`, and `-0.994`.\n\n**My thinking:**\nThis ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:11 UTC \u2014 [P1: Copy Intelligence] Test the HYPE-SOL Pair Hypothesis Across Current Leaderboard Winners So We Know Whether That Relative-Value Read Is Real or Just a Few Eye-Catching Anecdotes\n\n**Task:** Examine current top-trader positioning specifically on `HYPE` versus `SOL` to see whether the pair-trade pattern identified earlier is broad enough to count as real copy intelligence.\n**Finding:**\n- Both bots are alive.\n- Current account-level HYPE/SOL structure among the largest relevant traders:\n  - `anon-0xecb6`: `HYPE SHORT $2.61M` and `SOL SHORT $1.36M`\n  - `anon-0xfc66`: `HYPE SHORT $9.74M` and `SOL SHORT $1.92M`\n  - `anon-0x57dd`: `HYPE SHORT $201k` and `SOL LONG $1.28M`\n  - `anon-0xc926`: `HYPE LONG $1.41M` and `SOL LONG $195k`\n  - `ABC`: `HYPE SHORT $866k` and `SOL LONG $1.14M`\n- Cross-board counts:\n  - `HYPE`: `3` long / `6` short\n  - `SOL`: `5` long / `5` short\n  - Accounts holding both: `5` same-direction, `3` opposite-direction\n- Interpretation of the pair signal:\n  - `HYPE` has a clearer bearish lean than `SOL`\n  - The strongest repeated **opposite-direction** expression is still `SOL LONG / HYPE SHORT`\n  - But the board is not unified on that pair, because the two biggest accounts (`anon-0xecb6`, `anon-0xfc66`) are simply short both legs\n\n**My thinking:**\nThis means the pair idea is real, but narrower than a full-market consensus. The leaderboard is giving two overlapping messages at once: broad de-risking via HYPE shorts, and a smaller relative-strength camp that prefers SOL over HYPE. That is useful, but only if we treat it as a secondary signal layered beneath the larger risk-off posture.\n\n**Decision:**\n- Keep `HYPE short` as the stronger copy-intel consensus.\n- Treat `SOL > HYPE` as a conditional relative-value signal, not a standalone market call.\n\n**Next:** On the next P1 heartbeat, track whether the `SOL LONG / HYPE SHORT` cohort adds size or fades, because persistence there would make it much more actionable.\n\n## 2026-04-25 01:10 UTC \u2014 [P4: Alpha Research] Add Liquidation Cascade State to the Unified Alpha Snapshot So PM Risk Can See Fast OI Shock Context Alongside Regime and Funding Instead of Treating It as a Separate Specialist Feed\n\n**Task:** Extend the unified alpha snapshot again, this time wiring the liquidation cascade detector into `research/alpha-signals.json` and folding its PM impact into the derived risk context.\n**Finding:**\n- Both bots are alive.\n- Located the live liquidation feed in `intelligence/liq-signals.json`.\n- Patched `scripts/alpha-signal-update.sh` to add:\n  - `liquidation_signal` block from `liq-signals.json`\n  - liquidation-aware `pm_risk_context`\n- Fresh snapshot now includes:\n  - `liquidation_signal.direction = neutral`\n  - `liquidation_signal.pm_adjustment = 0`\n  - `pm_risk_context.liq_direction = neutral`\n  - `pm_risk_context.liq_pm_adjustment = 0`\n- The unified alpha surface now carries",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
