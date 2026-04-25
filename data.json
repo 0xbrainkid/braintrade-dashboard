@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:40:11.164385+00:00",
+  "timestamp": "2026-04-25T01:40:54.467334+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2778%",
-      "apr": "-304%",
+      "rate": "-0.2823%",
+      "apr": "-309%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0759%",
-      "apr": "+83%",
+      "rate": "+0.0763%",
+      "apr": "+84%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2778%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2823%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:39 UTC \u2014 [P2: Smart Entry] Test the Exact Conditional Shadow Rule on the Whole 55+ Upper Range So We Know Whether the Proposed 65+ MACD Gate Improves Results Without Damaging the Good Mid-High Trades\n\n**Task:** Apply the concrete shadow rule `block if |bias| >= 65 and |macd_h| < 10` to the surviving `55+` live trades and compare results against the current baseline.\n**Finding:**\n- Both bots are alive.\n- Baseline surviving `55+` set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- With shadow rule `|bias| >= 65 and |MACD| < 10 => block`:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The rule blocks exactly **2** trades, and both are losers:\n  - `2026-04-01 20:05 UTC`, `bias -65.8`, `MACD abs 7.77`, `hour 20`\n  - `2026-04-06 12:10 UTC`, `bias -66.8`, `MACD abs 2.31`, `hour 12`\n- It preserves the lone `65+` winner and all profitable `55-64.9` trades.\n\n**My thinking:**\nThis is the cleanest candidate refinement we have surfaced tonight. I\u2019m still cautious because the sample is tiny, but unlike the earlier broader filters, this one does exactly what we want: it removes only bad extreme-bias cases without cutting into the productive middle-high band. That is a much stronger shape than any blanket bias-cap change.\n\n**Decision:**\n- Keep the rule in shadow mode for now, but treat it as the leading next live-candidate refinement.\n- Current best candidate definition: `if |bias| >= 65 and |macd_h| < 10: block`.\n\n**Next:** On the next P2 heartbeat, identify where this rule would slot into `trading_bot.py` if promoted later, so implementation risk is already mapped before any live decision.\n\n## 2026-04-25 01:38 UTC \u2014 [P1: Copy Intelligence] Patch the Stale Weekly Narrative and Keep ABC Flagged as the Cleanest Minority SOL>HYPE Read So Old Research Does Not Override Better Current Reads\n\n**Task:** Update the stale weekly review that still recommended `max_bias 80`, and re-confirm the single clean account expressing the minority `SOL > HYPE` thesis.\n**Finding:**\n- Both bots are alive.\n- Patched `reports/weekly-review-2026-W13.md` so the old `raise max_bias to 80` idea is explicitly marked as historical and superseded.\n- The report now reflects the newer April read:\n  - keep `max_bias=70`\n  - treat `65+` as needing stronger momentum quality\n  - leading candidate refinement is a shadow rule like `if |bias| >= 65 and |macd_h| < 10: block`\n- Reconfirmed `ABC` still holds the clean minority expression with only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n  - no BTC or ETH book clutter\n\n**My thinking:**\nI\u2019m glad this is now cleaner. Research only compounds if stale conclusions stop masquerading as live direction. At the same time, ABC remains the best pure read on the board for the minority relative-strength thesis, so both the strategy side and the copy-intel side are now a bit less ambiguous.\n\n**Decision:**\n- Treat the old max-bias expansion plan as retired.\n- Keep wa",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:40 UTC \u2014 [P3: Strategy Development] Map the Exact Insertion Point for the Leading 65+ MACD Shadow Rule So a Future Promotion Can Be Surgical Instead of Risky\n\n**Task:** Trace where the proposed rule `if |bias| >= 65 and |macd_h| < 10: block` would slot into `trading_bot.py` if promoted later.\n**Finding:**\n- Both bots are alive.\n- `macd_h` is computed inside `check_conviction()` and stored in both:\n  - `details[\"MACD\"]`\n  - `self._conviction_indicators[\"macd_h\"]`\n- The cleanest insertion point is inside `should_trade()` **after**:\n  - `aligned, details = self.check_conviction(bias_score)`\n  - conviction/copy adjustments\n  - the low-conviction return\n- And **before** the later VWAP relaxation / edge sizing flow.\n- That placement matters because it would:\n  - have access to the current MACD reading already computed by `check_conviction()`\n  - avoid recomputing indicators\n  - act as a selective high-bias quality gate before sizing/execution logic\n\n**My thinking:**\nThis is good news. The leading candidate refinement can be implemented cleanly and locally, without rewriting the indicator stack or touching order sizing. That lowers implementation risk a lot. If we decide to promote it later, it can be a small surgical patch rather than a broad refactor.\n\n**Decision:**\n- Keep the rule in shadow mode for now.\n- Record the future insertion point as: immediately after conviction passes in `should_trade()`, before VWAP and edge logic continue.\n\n**Next:** On the next P3 heartbeat, draft the exact guard clause text for that location so the live candidate is already specified precisely before any deployment decision.\n\n## 2026-04-25 01:39 UTC \u2014 [P2: Smart Entry] Test the Exact Conditional Shadow Rule on the Whole 55+ Upper Range So We Know Whether the Proposed 65+ MACD Gate Improves Results Without Damaging the Good Mid-High Trades\n\n**Task:** Apply the concrete shadow rule `block if |bias| >= 65 and |macd_h| < 10` to the surviving `55+` live trades and compare results against the current baseline.\n**Finding:**\n- Both bots are alive.\n- Baseline surviving `55+` set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- With shadow rule `|bias| >= 65 and |MACD| < 10 => block`:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The rule blocks exactly **2** trades, and both are losers:\n  - `2026-04-01 20:05 UTC`, `bias -65.8`, `MACD abs 7.77`, `hour 20`\n  - `2026-04-06 12:10 UTC`, `bias -66.8`, `MACD abs 2.31`, `hour 12`\n- It preserves the lone `65+` winner and all profitable `55-64.9` trades.\n\n**My thinking:**\nThis is the cleanest candidate refinement we have surfaced tonight. I\u2019m still cautious because the sample is tiny, but unlike the earlier broader filters, this one does exactly what we want: it removes only bad extreme-bias cases without cutting into the productive middle-high band. That is a much stronger shape than any blanket bias-cap change.\n\n**Decision:**\n- Keep the r",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
