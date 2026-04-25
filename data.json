@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:00:02.126555+00:00",
+  "timestamp": "2026-04-25T01:01:47.578934+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,22 +14,7 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [
-    {
-      "coin": "MAVIA",
-      "rate": "+0.0666%",
-      "apr": "+73%",
-      "action": "SHORT",
-      "oi": "69,667,759"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0504%",
-      "apr": "+55%",
-      "action": "SHORT",
-      "oi": "237,457,452"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -98,14 +83,6 @@
       {
         "source": "Copy Scanner",
         "text": "Top traders: 35 buys, 15 sells \u2014 avg price $0.846"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0666%/8h \u2014 longs paying shorts"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +320,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 00:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Index Integrity-Stack Update So the Next Improvement Strengthens End-to-End Operator Confidence Instead of Creating More Piecewise Documentation or Index Entries\n\n**Task:** Reassess the overnight operator stack now that the machine-readable surface reflects the newer integrity-check scripts, so the next improvement targets the strongest remaining end-to-end confidence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index that reflects the integrity-check stack\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **there is no single compact operator-surface smoke test that proves the top-level shell entrypoints and the combined integrity path all still work together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17b-next-gap-after-index-integrity-stack-update.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now rich enough that confidence depends on the surfaces working together, not just existing individually. A small smoke test would give that confidence without layering on new complex validation logic.\n\n**Decision:**\n- Prioritize a lightweight operator-surface smoke test next.\n- Keep it shallow and end-to-end.\n\n**Next:** On the next P3 heartbeat, define the minimum behavior for the operator-surface smoke test.\n\n---\n## 2026-04-25 00:39 UTC \u2014 [P2: Smart Entry] Update the Overnight Operator Index With the Integrity-Check Scripts So the Machine-Readable Surface Finally Reflects the Current Maintenance Verification Stack Instead of Lagging Behind the Real Tools\n\n**Task:** Add the newer integrity-check scripts to `/home/ubuntu/clawd/data/overnight_operator_index.json` and rerun the index validator so the machine-readable operator surface matches the actual maintenance stack.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/data/overnight_operator_index.json`.\n- Added to `integrity_tools`:\n  - `scripts/check_operator_shell_surface.py`\n  - `scripts/check_operator_maintenance_integrity.py`\n- Reran `/home/ubuntu/clawd/scripts/validate_overnight_operator_index.py` successfully after the update.\n- Wrote index-integrity-live artifact: `/home/ubuntu/clawd/patches/v17a-index-integrity-stack-live.spec.md`\n\n**My thinking:**\nThis was the right completeness fix. The machine-readable surface now reflects the newer integrity-check stack instead of pretending the older integrity tools are the whole story. That keeps discovery and maintenance automation grounded in the real operator surface.\n\n**Decision:**\n- Keep both newer integrity-check scripts indexed under `in",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:01 UTC \u2014 [P4: Alpha Research] Wire a Fast 5-Minute Regime Layer Into the Alpha Signal Snapshot So PM Risk Can See Both Slow and Fast Market State Instead of Flying Blind Between Hourly Detector Updates\n\n**Task:** Extend the alpha research pipeline so `research/alpha-signals.json` stops being just sentiment plus price, and starts carrying live regime context from both the slow 1h/4h detector and the fast 5m PM-specific classifier.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/scripts/alpha-signal-update.sh` to enrich `research/alpha-signals.json` with:\n  - `regime_state` from `intelligence/regime-state.json`\n  - `fast_regime` from `polymarket-assistant/regime_classifier.py`\n  - derived `pm_risk_context`\n- Fresh output now shows alignment across timeframes:\n  - Fear & Greed = 31 (`Fear`)\n  - Slow regime = `RANGE`, pm_action = `TRADE`\n  - Fast regime = `RANGE`, confidence = `85`, avg_range = `0.0593%`\n  - Derived PM risk = `low`\n\n**My thinking:**\nThe gap in the alpha pipeline was speed. We already had a slower regime detector, but the alpha snapshot did not expose that context and it ignored the 5-minute structure the PM bot actually lives in. Getting both layers into one file makes the dashboard and any future confidence logic much more useful, especially around fast regime flips.\n\n**Decision:**\n- Keep the new dual-timeframe regime fields in `research/alpha-signals.json`.\n- Treat aligned slow `RANGE` plus fast `RANGE` as a strong green-light research signal, not a standalone reason to force trades.\n\n**Next:** On the next P4 heartbeat, compare this enriched alpha snapshot against recent PM outcomes and test whether `pm_risk_context` would have filtered any losing windows.\n\n\n## 2026-04-25 00:43 UTC \u2014 [P3: Strategy Development] Review the Overnight Operator Stack After the Index Integrity-Stack Update So the Next Improvement Strengthens End-to-End Operator Confidence Instead of Creating More Piecewise Documentation or Index Entries\n\n**Task:** Reassess the overnight operator stack now that the machine-readable surface reflects the newer integrity-check scripts, so the next improvement targets the strongest remaining end-to-end confidence gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index that reflects the integrity-check stack\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **there is no single compact operator-surface smoke test that proves the top-level shell entrypoints and the combined integrity path all still work together**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17b-next-gap-after-index-integrity-stack-update.spec.md`\n\n**My thinking:**\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +340,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
