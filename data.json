@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:48:51.099605+00:00",
+  "timestamp": "2026-04-25T01:49:43.538733+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,14 +17,14 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.3307%",
+      "rate": "-0.3304%",
       "apr": "-362%",
       "action": "LONG",
       "oi": "1,356,458"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0821%",
+      "rate": "+0.0826%",
       "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,759"
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.3307%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3304%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:48 UTC \u2014 [P3: Strategy Development] Compare a Soft Size-Reduction Version of the Candidate Rule Against the Hard Block So We Know Whether Future Refinement Should Be Surgical or Decisive\n\n**Task:** Test whether a softer version of the leading candidate, modeled as half-sizing the flagged `65+ weak-MACD` trades, looks meaningfully competitive with the hard-block version.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- Flagged trades under the candidate condition:\n  - `2` trades\n  - `0%` WR\n  - `-1.000` EV\n- Thought experiment, half-size flagged trades instead of blocking them:\n  - still `9` trades, `66.7%` WR\n  - EV improves to only `+0.397`\n- Hard-block version remains materially better:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n\n**My thinking:**\nThis pushes me toward decisiveness. A softer size-reduction variant helps a bit, but it preserves the full structural problem because these flagged trades are not weak winners, they are pure losers in the current sample. When the bad bucket is `0%` WR, blocking is a much cleaner default than trimming.\n\n**Decision:**\n- Prefer the hard-block version over a soft size-reduction variant.\n- If this idea is ever promoted live, the default shape should be binary exclusion, not partial sizing.\n\n**Next:** On the next P3 heartbeat, check whether any other current shadow tag has a similarly clean `0% WR` loser bucket that could deserve the same kind of decisive treatment later.\n\n## 2026-04-25 01:46 UTC \u2014 [P2: Smart Entry] Compare a 20UTC-Only Version of the Candidate Rule Against the Global Version So We Know Whether the Better Logic Is Session-Specific or Truly Cross-Hour\n\n**Task:** Test whether applying the `65+ weak-MACD` rule only to `20 UTC` would capture most of the benefit, versus applying it across all surviving live hours.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- `20 UTC`-only version of the rule:\n  - `8` trades, `75.0%` WR, `+0.447` EV\n- Global version of the rule:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n- The `20 UTC`-only version blocks just one trade:\n  - the `20 UTC` loss\n- The global version blocks one additional trade:\n  - a separate `12 UTC` loss\n\n**My thinking:**\nThis settles it pretty cleanly. A session-specific patch helps, but the global extreme-bias quality rule is better because the problem is not isolated to `20 UTC`. That makes the cross-hour interpretation stronger and reduces the temptation to keep inventing hour-specific fixes for what is really a signal-quality issue.\n\n**Decision:**\n- Prefer the global candidate rule over any `20 UTC`-only variant.\n- Treat the refinement as a cross-hour quality gate for extreme bias.\n\n**Next:** On the next P2 heartbeat, check whether the candidate rule should stay purely binary (`block`) or whether a softer size-re",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:49 UTC \u2014 [P4: Alpha Research] Check Whether Any Other Current Shadow Bucket Is as Cleanly Bad as the 65+ Weak-MACD Case Before We Pretend There Are Multiple Equal Refinement Candidates\n\n**Task:** Scan the remaining current shadow buckets in the surviving live set to see whether any other tag has a similarly decisive loser profile.\n**Finding:**\n- Both bots are alive.\n- On the surviving `v5a_pass` live-hour set:\n  - `v6_cooldown BLOCK`: `10` trades, `80.0%` WR, `+0.544` EV\n  - `v6_cooldown PASS`: `6` trades, `66.7%` WR, `+0.291` EV\n  - `v5b NORMAL`: `6` trades, `83.3%` WR, `+0.606` EV\n- No other multi-trade shadow bucket shows the same kind of clean, decisive loser profile as the flagged `65+ weak-MACD` condition.\n- `BOOST` remains ugly, but it is still just a single-trade shadow tag, not a comparable bucket with enough recurrence to compete.\n\n**My thinking:**\nThis is clarifying. We do not actually have a crowded field of equally good refinement ideas right now. We have one standout candidate and then a bunch of weaker or noisier hints. That is good, because it means we should stay focused instead of muddying the next decision with pseudo-options.\n\n**Decision:**\n- Keep `65+ weak-MACD` as the clear top refinement candidate.\n- Do not elevate cooldown or other shadow tags to equal status yet.\n\n**Next:** On the next P4 heartbeat, patch a weekly or daily report surface with this prioritization language so future review sees that there is one lead candidate, not several tied ones.\n\n## 2026-04-25 01:48 UTC \u2014 [P3: Strategy Development] Compare a Soft Size-Reduction Version of the Candidate Rule Against the Hard Block So We Know Whether Future Refinement Should Be Surgical or Decisive\n\n**Task:** Test whether a softer version of the leading candidate, modeled as half-sizing the flagged `65+ weak-MACD` trades, looks meaningfully competitive with the hard-block version.\n**Finding:**\n- Both bots are alive.\n- Baseline upper-band (`55+`) set:\n  - `9` trades, `66.7%` WR, `+0.286` EV\n- Flagged trades under the candidate condition:\n  - `2` trades\n  - `0%` WR\n  - `-1.000` EV\n- Thought experiment, half-size flagged trades instead of blocking them:\n  - still `9` trades, `66.7%` WR\n  - EV improves to only `+0.397`\n- Hard-block version remains materially better:\n  - `7` trades, `85.7%` WR, `+0.653` EV\n\n**My thinking:**\nThis pushes me toward decisiveness. A softer size-reduction variant helps a bit, but it preserves the full structural problem because these flagged trades are not weak winners, they are pure losers in the current sample. When the bad bucket is `0%` WR, blocking is a much cleaner default than trimming.\n\n**Decision:**\n- Prefer the hard-block version over a soft size-reduction variant.\n- If this idea is ever promoted live, the default shape should be binary exclusion, not partial sizing.\n\n**Next:** On the next P3 heartbeat, check whether any other curr",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
