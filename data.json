@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:06:31.294859+00:00",
+  "timestamp": "2026-04-25T01:07:35.364293+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0814%",
-      "apr": "+89%",
+      "rate": "+0.0840%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "APE",
-      "rate": "-0.0525%",
-      "apr": "-57%",
+      "rate": "-0.0503%",
+      "apr": "-55%",
       "action": "LONG",
-      "oi": "34,912,477"
+      "oi": "34,414,425"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0814%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0840%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:06 UTC \u2014 [P4: Alpha Research] Push the Funding Squeeze Guardrail Into the Unified Alpha Snapshot So Downstream Consumers Can See Whether a High Squeeze Score Is Confirmed or Just Loud\n\n**Task:** Trace the newly patched funding squeeze signal into the broader alpha research surface and make sure the unified market snapshot exposes both the squeeze state and whether it is actually confirmed.\n**Finding:**\n- Both bots are alive.\n- Traced downstream references and found `squeeze-funding.json` was mainly visible in `pre-session-check.sh`, but the unified `research/alpha-signals.json` still did not carry that context.\n- Patched `scripts/alpha-signal-update.sh` to add a new `funding_squeeze` block plus richer `pm_risk_context` fields.\n- Fresh alpha snapshot now exposes:\n  - `funding_squeeze.direction = SHORT_SQUEEZE`\n  - `funding_squeeze.score = 96`\n  - `funding_squeeze.pm_adjustment = 0`\n  - `funding_squeeze.ratio_confirms = false`\n  - `pm_risk_context.squeeze_confirmed = false`\n- This means downstream dashboards/reports can now distinguish between a strong-looking funding streak and a truly confirmed crowding signal.\n\n**My thinking:**\nThis was the missing P4 follow-through. Fixing a detector is good, but the alpha pipeline still hides too much if it only surfaces sentiment and regime while leaving the latest squeeze-state nuance stranded in a separate JSON file. The research layer should make disagreement visible, not just strength.\n\n**Decision:**\n- Keep funding squeeze state embedded inside `research/alpha-signals.json`.\n- Treat `ratio_confirms=false` as a first-class caution flag for any downstream confidence logic or reporting layer.\n\n**Next:** On the next P4 heartbeat, update one downstream consumer or report surface to read the enriched alpha snapshot directly instead of reconstructing partial context from separate files.\n\n## 2026-04-25 01:05 UTC \u2014 [P3: Strategy Development] Add a Confirmation Guardrail to the Funding Squeeze Detector So It Stops Boosting PM Confidence on Mixed Crowding Signals That Look Strong by Score but Conflict Internally\n\n**Task:** Review the live funding squeeze logic, compare its current output against the actual crowding inputs, and patch the detector if it is over-trusting single-source strength.\n**Finding:**\n- Both bots are alive.\n- Live detector snapshot before patch showed `SHORT_SQUEEZE`, score `96`, and `pm_adjustment=+0.10`.\n- But the internals were mixed, not confirmed:\n  - funding streak was strongly negative (`8` periods)\n  - long/short ratio trend was **rising** `+16.1%`, not falling\n- That means the detector was trying to boost PM bullish confidence from funding alone even while the crowding confirmation leg disagreed.\n- Patched `intelligence/funding-squeeze-detector.py` so PM adjustment only fires when funding direction and long/short ratio trend **confirm each other**.\n- Post-patch live output kept th",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:07 UTC \u2014 [P1: Copy Intelligence] Break Down Whether the Current Top-Trader Split Is Really About BTC Direction or Whether the Biggest Winners Are Actually Expressing a Broader Alt Book View Behind the Major-Coin Headlines\n\n**Task:** Go beyond simple major-coin counts in the leaderboard snapshot and measure how much of the key top traders\u2019 exposure is actually concentrated in BTC/ETH/SOL versus a wider alt basket.\n**Finding:**\n- Both bots are alive.\n- Major-coin headline view still looks split-bearish overall:\n  - `anon-0xecb6`: BTC/ETH/SOL all short\n  - `anon-0xfc66`: BTC/ETH/SOL all short\n  - `anon-0x57dd`: BTC+ETH short, SOL long\n  - `anon-0x3bca`: BTC+ETH long, SOL short\n- But exposure composition shows the real story is broader than majors:\n  - `anon-0xecb6`: only **19.7%** of exposure in majors, with the bigger book in alt shorts like `DOGE`, `XRP`, `HYPE`, `XPL`, `LINK`, `ENA`\n  - `anon-0xfc66`: **38.2%** in majors, but the dominant bet is still `HYPE` short `$9.7M`, plus a large `PAXG` long `$3.8M`\n  - `anon-0x57dd`: **65.9%** in majors, expressing a mixed book, `BTC/ETH` short but `SOL/XRP/DOGE/AVAX` long\n  - `anon-0x3bca`: **96.5%** in majors, a clean dispersion trade: `BTC/ETH` long against `SOL` short\n  - `ABC`: effectively a 2-leg book, `SOL` long versus `HYPE` short\n  - `anon-0xc926`: only **13.6%** in majors, with `HYPE` long as the dominant risk and `XRP` short as the main hedge\n- Conclusion: the current leaderboard is **not** just calling BTC direction. The biggest winners are expressing cross-asset relative-value views, especially `HYPE`, `XRP`, `DOGE`, `SOL`, and `PAXG`.\n\n**My thinking:**\nThis matters because naive copy logic would over-read the BTC short consensus and miss that several elite traders are really trading dispersion, not pure macro direction. The sharper signal is not \u201ctop traders bearish BTC,\u201d it is \u201ctop traders are comfortable shorting crowded majors while rotating selectively across alt and relative-value pairs.\u201d\n\n**Decision:**\n- Keep P1 analysis centered on position structure, not just L/S counts.\n- Treat `HYPE` and `SOL` as the most informative relative-value axis in the current leaderboard set.\n\n**Next:** On the next P1 heartbeat, compare current `HYPE` and `SOL` positioning across the biggest accounts and see whether there is a repeatable pair-trade pattern we can formalize as copy intelligence.\n\n## 2026-04-25 01:06 UTC \u2014 [P4: Alpha Research] Push the Funding Squeeze Guardrail Into the Unified Alpha Snapshot So Downstream Consumers Can See Whether a High Squeeze Score Is Confirmed or Just Loud\n\n**Task:** Trace the newly patched funding squeeze signal into the broader alpha research surface and make sure the unified market snapshot exposes both the squeeze state and whether it is actually confirmed.\n**Finding:**\n- Both bots are alive.\n- Traced downstream references and found `squeeze-funding.json` was ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
