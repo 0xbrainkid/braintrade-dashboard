@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:38:20.633626+00:00",
+  "timestamp": "2026-04-25T01:39:19.562935+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2712%",
-      "apr": "-297%",
+      "rate": "-0.2760%",
+      "apr": "-302%",
       "action": "LONG",
       "oi": "1,335,610"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0737%",
-      "apr": "+81%",
+      "rate": "+0.0748%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2712%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2760%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:38 UTC \u2014 [P4: Alpha Research] Audit the Repo for Stale Max-Bias Narratives So Old \u201cRaise the Ceiling\u201d Notes Do Not Quietly Fight the Newer High-Bias Evidence\n\n**Task:** Search the workspace for older max-bias and high-bias notes that could conflict with the current finding that `65+` needs stronger momentum quality rather than a wider ceiling.\n**Finding:**\n- Both bots are alive.\n- I found stale historical guidance in `reports/weekly-review-2026-W13.md` still saying:\n  - raise `max_bias` `55\u219280`\n  - deploy the wider ceiling after Sunday review\n- That older note predates the current cleaner-hour analysis.\n- Current evidence now points the opposite direction:\n  - `55-64.9` is strong\n  - `65+` is weak on raw results unless momentum is unusually strong\n  - the leading candidate refinement is **conditional MACD gating for `65+`**, not broad ceiling expansion\n\n**My thinking:**\nThis is exactly the kind of stale narrative that can cause future self-sabotage. Old research is fine, but only if it is clearly historical. Right now there is a real risk that someone scanning the repo could see \u201craise max_bias to 80\u201d and mistake it for still-live direction when the newer evidence says otherwise.\n\n**Decision:**\n- Treat the old \u201craise max_bias to 80\u201d idea as superseded by newer evidence.\n- Next useful step is to mark that report as historically outdated or add a newer counter-note where decisions are likely to be read.\n\n**Next:** On the next P4 heartbeat, patch the stale weekly review with a short note that the newer April analysis favors keeping `max_bias=70` and exploring `65+` MACD quality gating instead.\n\n## 2026-04-25 01:37 UTC \u2014 [P3: Strategy Development] Check Whether a Strong-MACD Rule Would Accidentally Over-Prune the Good 55-64.9 Bias Band Before Treating It as a Viable High-Bias Refinement\n\n**Task:** Test the proposed `|MACD| >= 10` idea against the profitable `55-64.9` band to see how much good flow it would discard.\n**Finding:**\n- Both bots are alive.\n- In the surviving `55-64.9` band:\n  - all trades: `6` trades, `83.3%` WR, `+0.602` EV\n  - with `|MACD| >= 10`: `4` trades, `100%` WR, `+0.913` EV\n- What gets removed:\n  - one **loss** with MACD abs `1.99`\n  - one **win** with MACD abs `9.45`\n- So the rule improves purity, but it also trims a legitimate winner from the already-strong mid-high band.\n\n**My thinking:**\nThat is the tradeoff. A flat `|MACD| >= 10` gate looks promising for the `65+` danger zone, but it becomes too blunt if applied across the whole upper-conviction region. The better shape is conditional logic: only tighten MACD requirements when bias is extreme, and leave the productive `55-64.9` band mostly alone.\n\n**Decision:**\n- Do not use a blanket upper-band MACD gate.\n- If we ever implement this, scope it narrowly to `|bias| >= 65` only.\n\n**Next:** On the next P3 heartbeat, turn this into a concrete shadow rule definition for docu",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:38 UTC \u2014 [P1: Copy Intelligence] Patch the Stale Weekly Narrative and Keep ABC Flagged as the Cleanest Minority SOL>HYPE Read So Old Research Does Not Override Better Current Reads\n\n**Task:** Update the stale weekly review that still recommended `max_bias 80`, and re-confirm the single clean account expressing the minority `SOL > HYPE` thesis.\n**Finding:**\n- Both bots are alive.\n- Patched `reports/weekly-review-2026-W13.md` so the old `raise max_bias to 80` idea is explicitly marked as historical and superseded.\n- The report now reflects the newer April read:\n  - keep `max_bias=70`\n  - treat `65+` as needing stronger momentum quality\n  - leading candidate refinement is a shadow rule like `if |bias| >= 65 and |macd_h| < 10: block`\n- Reconfirmed `ABC` still holds the clean minority expression with only:\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n  - no BTC or ETH book clutter\n\n**My thinking:**\nI\u2019m glad this is now cleaner. Research only compounds if stale conclusions stop masquerading as live direction. At the same time, ABC remains the best pure read on the board for the minority relative-strength thesis, so both the strategy side and the copy-intel side are now a bit less ambiguous.\n\n**Decision:**\n- Treat the old max-bias expansion plan as retired.\n- Keep watching `ABC` as the highest-signal wallet for `SOL > HYPE`.\n\n**Next:** On the next P1 heartbeat, check whether ABC changes structure at all, because the moment BTC or ETH reappears the minority-signal purity drops.\n\n## 2026-04-25 01:38 UTC \u2014 [P4: Alpha Research] Audit the Repo for Stale Max-Bias Narratives So Old \u201cRaise the Ceiling\u201d Notes Do Not Quietly Fight the Newer High-Bias Evidence\n\n**Task:** Search the workspace for older max-bias and high-bias notes that could conflict with the current finding that `65+` needs stronger momentum quality rather than a wider ceiling.\n**Finding:**\n- Both bots are alive.\n- I found stale historical guidance in `reports/weekly-review-2026-W13.md` still saying:\n  - raise `max_bias` `55\u219280`\n  - deploy the wider ceiling after Sunday review\n- That older note predates the current cleaner-hour analysis.\n- Current evidence now points the opposite direction:\n  - `55-64.9` is strong\n  - `65+` is weak on raw results unless momentum is unusually strong\n  - the leading candidate refinement is **conditional MACD gating for `65+`**, not broad ceiling expansion\n\n**My thinking:**\nThis is exactly the kind of stale narrative that can cause future self-sabotage. Old research is fine, but only if it is clearly historical. Right now there is a real risk that someone scanning the repo could see \u201craise max_bias to 80\u201d and mistake it for still-live direction when the newer evidence says otherwise.\n\n**Decision:**\n- Treat the old \u201craise max_bias to 80\u201d idea as superseded by newer evidence.\n- Next useful step is to mark that report as historically outdated or add a newer count",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
