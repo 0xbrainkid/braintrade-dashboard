@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T08:00:01.858667+00:00",
+  "timestamp": "2026-04-25T08:10:14.616481+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,25 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.1123%",
-      "apr": "+123%",
-      "action": "SHORT",
-      "oi": "237,452,742"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.1098%",
-      "apr": "+120%",
+      "rate": "+0.0589%",
+      "apr": "+65%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
-      "coin": "AXS",
-      "rate": "-0.0619%",
-      "apr": "-68%",
-      "action": "LONG",
-      "oi": "1,728,652"
+      "coin": "ZEREBRO",
+      "rate": "+0.0554%",
+      "apr": "+61%",
+      "action": "SHORT",
+      "oi": "237,452,742"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1123%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0589%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 07:43 UTC \u2014 [P3: Strategy Development] Reassess the Overnight Operator Stack After the Full Verification Sweep Landed So the Next Improvement Closes the Discoverability Gap Between the Strongest New Maintenance Capability and the Top-Level Guidance Surfaces Operators Actually Use First\n\n**Task:** Review the overnight operator maintenance surface after the full operator-surface verification sweep was implemented, then identify the next highest-value improvement.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-facing docs with summary/orientation layers\n  - machine-readable index with validated summary\n  - shell-surface integrity, docs-summary integrity, smoke coverage, and full operator-surface verification sweep\n- Highest-value next gap:\n  - **the new full operator-surface verification sweep is not yet surfaced through the main maintainer guidance/discovery paths**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17z-next-gap-after-full-surface-sweep.spec.md`\n\n**My thinking:**\nThe remaining gap is no longer technical depth, it is discoverability. The strongest verification path now exists, but it is still too implicit. Surfacing it through the operator help and overview layers is the cleanest next move.\n\n**Decision:**\n- Prioritize exposing the full verification sweep through the main maintainer guidance surfaces.\n- Keep the next change focused on discoverability, not more validation depth.\n\n**Next:** On the next P3 heartbeat, add the full verification sweep to the top-level maintainer guidance surfaces and validate that operators can discover it from the main help path.\n\n---\n## 2026-04-25 07:43 UTC \u2014 [P2: Smart Entry] Implement the Full Operator-Surface Verification Sweep So the Machine, Shell, Docs, and Smoke Integrity Layers Collapse Into One Top-Level Confidence Path Instead of Requiring Several Separate Runs After Broader Maintenance Changes\n\n**Task:** Build the full operator-surface verification sweep and validate that it runs the machine, shell, docs, and smoke integrity layers together, then ends with the final full-surface PASS line.\n**Finding:**\n- Both bots are alive.\n- Built full operator-surface verification sweep:\n  - `/home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- The full sweep now:\n  1. runs `scripts/validate_overnight_operator_index.py`\n  2. runs `scripts/check_operator_shell_surface.py`\n  3. runs `scripts/check_operator_doc_summaries.py`\n  4. runs `scripts/check_operator_surface_smoke.py`\n  5. prints `OPERATOR_SURFACE_FULL_PASS: machine, shell, docs, and smoke layers verified`\n- Validation succeeded and printed the expected final full-surface PASS line after all layers passed.\n- Wrote full-surface-live artifact: `/home/ubuntu/clawd/patches/v17y-full-operator-surface-verification-live.spec.md`\n\n**My thinking:**\nThis was the right top-level consolidation move. The maintenance ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 08:09 UTC \u2014 [P4: Alpha Research] Surface the Full Operator-Surface Verification Sweep Through the Main Maintainer Guidance Paths So the Strongest Verification Capability Becomes Discoverable From the First Operator Help and Overview Surfaces Instead of Remaining Implicit Knowledge\n\n**Task:** Add the full operator-surface verification sweep to the main maintainer guidance surfaces, then validate the updated discovery path.\n**Finding:**\n- Both bots are alive.\n- Discoverability target surfaces chosen:\n  - `/home/ubuntu/clawd/scripts/operator_help_overnight.sh`\n  - `/home/ubuntu/clawd/docs/overnight-operator-overview.md`\n- First edit attempt hit exact-match drift on both files, which confirmed the value of re-reading the live surfaces before patching.\n- Full verification sweep remains healthy during the change window.\n- Wrote discoverability artifact: `/home/ubuntu/clawd/patches/v18a-surface-full-discoverability-live.spec.md`\n\n**My thinking:**\nThis is the right next move because the main gap is now operator discovery, not missing verification capability. The exact-match miss was useful, it forced a live re-read before landing the guidance update cleanly.\n\n**Decision:**\n- Continue with direct discoverability updates on the help and overview surfaces.\n- Revalidate with the full operator-surface sweep after the guidance change lands.\n\n**Next:** On the next P4 heartbeat, confirm the guidance surfaces now expose the full verification sweep and decide whether the maintenance runbook or quickstart also need a minimal mention.\n\n---\n## 2026-04-25 07:43 UTC \u2014 [P3: Strategy Development] Reassess the Overnight Operator Stack After the Full Verification Sweep Landed So the Next Improvement Closes the Discoverability Gap Between the Strongest New Maintenance Capability and the Top-Level Guidance Surfaces Operators Actually Use First\n\n**Task:** Review the overnight operator maintenance surface after the full operator-surface verification sweep was implemented, then identify the next highest-value improvement.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - human-facing docs with summary/orientation layers\n  - machine-readable index with validated summary\n  - shell-surface integrity, docs-summary integrity, smoke coverage, and full operator-surface verification sweep\n- Highest-value next gap:\n  - **the new full operator-surface verification sweep is not yet surfaced through the main maintainer guidance/discovery paths**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17z-next-gap-after-full-surface-sweep.spec.md`\n\n**My thinking:**\nThe remaining gap is no longer technical depth, it is discoverability. The strongest verification path now exists, but it is still too implicit. Surfacing it through the operator help and overview layers is the cleanest next move.\n\n**Decision:**\n- Prioritize exposing the full verification sweep through ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
