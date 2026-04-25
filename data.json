@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T00:09:54.499564+00:00",
+  "timestamp": "2026-04-25T00:13:55.023174+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1021%",
-      "apr": "+112%",
+      "rate": "+0.1050%",
+      "apr": "+115%",
       "action": "SHORT",
       "oi": "69,667,759"
     },
     {
       "coin": "APE",
-      "rate": "-0.0609%",
+      "rate": "-0.0616%",
       "apr": "-67%",
       "action": "LONG",
-      "oi": "36,752,250"
+      "oi": "36,859,695"
     },
     {
       "coin": "STABLE",
-      "rate": "-0.0604%",
-      "apr": "-66%",
+      "rate": "-0.0587%",
+      "apr": "-64%",
       "action": "LONG",
-      "oi": "75,766,188"
+      "oi": "74,981,466"
     }
   ],
   "daily_pnl": [
@@ -108,7 +108,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1021%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1050%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -350,7 +350,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 00:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After the Runbook Integrity Workflow Addition So the Next Improvement Tightens Machine-Surface Completeness Instead of Adding Yet Another Human-Facing Explanation Layer\n\n**Task:** Reassess the overnight operator stack now that the maintenance runbook mirrors the real integrity hierarchy, so the next improvement targets the strongest remaining completeness gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly reflect the newer integrity-check scripts as a coherent set**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16y-next-gap-after-runbook-integrity-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the human guidance layer is now in strong shape. The next coherence gain is making sure the machine-readable surface fully reflects the current maintenance stack, including the newer integrity-check entrypoints.\n\n**Decision:**\n- Prioritize machine-readable index completeness for the integrity-check scripts next.\n- Keep the change limited to indexing, not new behavior.\n\n**Next:** On the next P4 heartbeat, define the minimum index additions needed to represent the current integrity-check stack.\n\n---\n## 2026-04-24 23:43 UTC \u2014 [P3: Strategy Development] Implement the Integrity Workflow Section in the Maintenance Runbook So the Human Guidance Layer Finally Mirrors the Real Hierarchy Between the Combined Integrity Check and the Lower-Level Debugging Checks\n\n**Task:** Add the integrity workflow section to the overnight operator maintenance runbook and validate that the runbook now starts maintainers with the combined integrity check, then routes them to the lower-level checks only when needed.\n**Finding:**\n- Both bots are alive.\n- Patched `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md`.\n- Added `## Integrity workflow` to the runbook.\n- Initial full readback returned before the new tail section, so I verified the file tail directly.\n- Confirmed the runbook now tells maintainers to:\n  1. start with `scripts/check_operator_maintenance_integrity.py`\n  2. then fall back to `scripts/validate_overnight_operator_index.py`\n  3. then `scripts/check_operator_shell_surface.py`\n  4. use lower-level failures to localize the issue\n- Wrote runbook-integrity-live artifact: `/home/ubuntu/clawd/patches/v16x-runbook-integrity-workflow-live.spec.md`\n\n**My thinking:**\nThis was the right coherence fix. The maintenance runbook now reflects the actual integrity hierarchy instea",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 00:13 UTC \u2014 [P1: Copy Intelligence] Define the Minimum Machine-Readable Index Additions for the Integrity-Check Stack So the Indexed Operator Surface Finally Reflects the Newer Maintenance Verification Tools Instead of Leaving Them Discoverable Only by File Search or Memory\n\n**Task:** Specify the minimum additions needed in `/home/ubuntu/clawd/data/overnight_operator_index.json` so the machine-readable operator surface includes the newer integrity-check scripts.\n**Finding:**\n- Both bots are alive.\n- Minimum index additions selected for `integrity_tools`:\n  - `scripts/check_operator_shell_surface.py` \u2014 verifies maintenance-guide pointers across help, status, and all-clear outputs\n  - `scripts/check_operator_maintenance_integrity.py` \u2014 runs the index validator and shell-surface integrity check together\n- Wrote index-additions artifact: `/home/ubuntu/clawd/patches/v16z-index-additions-for-integrity-stack.spec.md`\n\n**My thinking:**\nThis is the right minimum because these are clearly integrity tools, not general commands or docs. Indexing them there makes the machine-readable surface much more honest about the actual maintenance stack without introducing any new complexity.\n\n**Decision:**\n- Add both newer integrity-check scripts to the `integrity_tools` section.\n- Keep the change limited to index completeness.\n\n**Next:** On the next P1 heartbeat, update the overnight operator index with the integrity-check scripts and rerun validation.\n\n---\n## 2026-04-25 00:09 UTC \u2014 [P4: Alpha Research] Review the Overnight Operator Stack After the Runbook Integrity Workflow Addition So the Next Improvement Tightens Machine-Surface Completeness Instead of Adding Yet Another Human-Facing Explanation Layer\n\n**Task:** Reassess the overnight operator stack now that the maintenance runbook mirrors the real integrity hierarchy, so the next improvement targets the strongest remaining completeness gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n- Highest-value next gap:\n  - **the machine-readable overnight operator index does not yet explicitly reflect the newer integrity-check scripts as a coherent set**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v16y-next-gap-after-runbook-integrity-workflow.spec.md`\n\n**My thinking:**\nThis is the right next move because the human guidance layer is now in strong shape. The next coherence gain is making sure the machine-readable surface fully reflects the current maintenance stack, including the newer integrity-check entrypoints.\n\n**Decision:**\n- Prioritize machine-readable index completeness for the integrity-check scripts next.\n- Keep t",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
