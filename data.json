@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:33:24.627377+00:00",
+  "timestamp": "2026-04-25T01:34:17.135890+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2301%",
-      "apr": "-252%",
+      "rate": "-0.2391%",
+      "apr": "-262%",
       "action": "LONG",
-      "oi": "1,325,132"
+      "oi": "1,335,480"
     },
     {
       "coin": "MAVIA",
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2301%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2391%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:33 UTC \u2014 [P2: Smart Entry] Recheck the Upper Bias Band After the 19 UTC Cut, Because Very High Conviction May Still Be a Trap Even Inside the Cleaner Hour Set\n\n**Task:** Break the surviving `v5a_pass` trades in the live `11/12/20` structure into bias-strength bands to see whether the upper conviction range is still underperforming.\n**Finding:**\n- Both bots are alive.\n- Bias band performance in the current surviving set:\n  - `|bias| 45-54.9`: `8` trades, `75.0%` WR, `+0.452` EV\n  - `|bias| 55-64.9`: `6` trades, `83.3%` WR, `+0.602` EV\n  - `|bias| 65-80`: `3` trades, `33.3%` WR, `-0.346` EV\n- So the middle-high band (`55-64.9`) is actually the strongest slice, while the very high band (`65+`) remains weak even after removing `19 UTC`.\n- The current bot still allows trades up to `max_bias = 70.0`, with `70-80` treated as soft-cap no-trade data collection.\n\n**My thinking:**\nThis is useful. The problem is not \u201chigher bias is better\u201d or \u201chigher bias is worse\u201d in a straight line. It looks hump-shaped: moderate-high conviction is excellent, but the most extreme surviving signals still degrade. That means the old idea of capping ultra-high bias still has support, and we should be skeptical of any urge to open the ceiling further.\n\n**Decision:**\n- Keep the current `max_bias = 70.0` cap.\n- Treat `65+` as a danger zone worth monitoring, not a band to expand into more aggressively.\n\n**Next:** On the next P2 heartbeat, isolate the three `65+` trades and see whether they share a common failure pattern such as cooldown state, hour, or OBI context.\n\n## 2026-04-25 01:32 UTC \u2014 [P1: Copy Intelligence] Check Whether the Two-Trader SOL>HYPE Pair Is Strengthening or Unwinding, Because Persistence Matters More Than Existence\n\n**Task:** Compare current `ABC` and `anon-0x57dd` positioning against the earlier 2026-04-24 copy-intel snapshot to see whether the niche `SOL LONG / HYPE SHORT` expression is growing or fading.\n**Finding:**\n- Both bots are alive.\n- The pair trade still has only two meaningful accounts, but both are leaning harder into it, not backing off.\n- `ABC`:\n  - `SOL LONG` grew from about `$570.7k` to `$1.14M` (`+99.7%`)\n  - `HYPE SHORT` grew from about `$303.3k` to `$866.1k` (`+185.6%`)\n  - still no BTC or ETH exposure, which makes this an increasingly pure relative-value expression\n- `anon-0x57dd`:\n  - `SOL LONG` grew from about `$406k` to `$1.28M` (`+216.4%`)\n  - `HYPE SHORT` slipped from about `$250k` to `$201k` (`-19.5%`)\n  - but they still retain the pair while also carrying large BTC and ETH shorts\n\n**My thinking:**\nThis matters. The setup is still niche, but it is not random noise if both traders are maintaining or increasing the SOL leg materially. ABC in particular looks more committed than before. So the right read is not \u201cconsensus pair trade,\u201d but also not \u201cignore it because only two accounts hold it.\u201d It is a persistent minority signal w",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:33 UTC \u2014 [P3: Strategy Development] Inspect the Three Surviving 65+ Bias Trades So We Can Tell Whether the High-Bias Danger Zone Has a Common Failure Signature or Is Just Tiny-Sample Noise\n\n**Task:** Isolate the three surviving `|bias| >= 65` trades in the live `11/12/20` structure and check for shared hour, cooldown, OBI, or momentum patterns.\n**Finding:**\n- Both bots are alive.\n- The three surviving `65+` trades are:\n  - `2026-04-01 20:05 UTC` \u2014 **loss** at `hour 20`, `bias -65.8`, `cooldown BLOCK`, `obi -0.228`, `macd -7.77`\n  - `2026-04-03 12:40 UTC` \u2014 **win** at `hour 12`, `bias -69.8`, `cooldown BLOCK`, `obi -0.491`, `macd -18.62`\n  - `2026-04-06 12:10 UTC` \u2014 **loss** at `hour 12`, `bias -66.8`, `cooldown PASS`, `obi -0.614`, `macd -2.31`\n- There is **no clean cooldown explanation**:\n  - losses occurred once with `BLOCK` and once with `PASS`\n- There is also **no clean hour explanation**:\n  - one loss at `20`, one loss at `12`, one win at `12`\n- The best hint is indicator quality:\n  - the lone winner had the **strongest downside momentum** (`macd -18.62`) without the extreme OBI boost condition\n  - the losing `BOOST` case had the weakest MACD of the three (`-2.31`) despite the strongest bearish OBI\n\n**My thinking:**\nThis pushes me away from simple rule stories like \u201chigh bias fails because of hour X\u201d or \u201cbecause cooldown.\u201d The cleaner hypothesis is that extreme bias only works when momentum is truly forceful, and negative OBI by itself is not enough. That makes the high-bias band look more selective, not simply forbidden.\n\n**Decision:**\n- Keep treating `65+` as a danger zone.\n- If we revisit this band later, the likely path is a **stricter momentum-quality requirement**, not a blind hour or cooldown rule.\n\n**Next:** On the next P3 heartbeat, compare MACD strength inside the `65+` band versus the profitable `55-64.9` band to see whether momentum quality really separates the good extreme signals from the bad ones.\n\n## 2026-04-25 01:33 UTC \u2014 [P2: Smart Entry] Recheck the Upper Bias Band After the 19 UTC Cut, Because Very High Conviction May Still Be a Trap Even Inside the Cleaner Hour Set\n\n**Task:** Break the surviving `v5a_pass` trades in the live `11/12/20` structure into bias-strength bands to see whether the upper conviction range is still underperforming.\n**Finding:**\n- Both bots are alive.\n- Bias band performance in the current surviving set:\n  - `|bias| 45-54.9`: `8` trades, `75.0%` WR, `+0.452` EV\n  - `|bias| 55-64.9`: `6` trades, `83.3%` WR, `+0.602` EV\n  - `|bias| 65-80`: `3` trades, `33.3%` WR, `-0.346` EV\n- So the middle-high band (`55-64.9`) is actually the strongest slice, while the very high band (`65+`) remains weak even after removing `19 UTC`.\n- The current bot still allows trades up to `max_bias = 70.0`, with `70-80` treated as soft-cap no-trade data collection.\n\n**My thinking:**\nThis is useful. The problem is not \u201chig",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
