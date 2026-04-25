@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T08:40:07.176792+00:00",
+  "timestamp": "2026-04-25T08:43:53.958689+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "AXS",
-      "rate": "-0.0644%",
-      "apr": "-71%",
+      "rate": "-0.0722%",
+      "apr": "-79%",
       "action": "LONG",
-      "oi": "1,625,553"
+      "oi": "1,598,871"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0585%",
-      "apr": "+64%",
+      "rate": "+0.0600%",
+      "apr": "+66%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: AXS at -0.0644%/8h \u2014 shorts paying longs"
+        "text": "Strongest: AXS at -0.0722%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 08:39 UTC \u2014 [P2: Smart Entry] Add the Runbook and Quickstart Selection Hint So Operators Starting Deeper in the Maintenance Docs Can Choose Routine Integrity Validation Versus the Full Operator-Surface Verification Sweep Without Guesswork or Extra Discovery Hops\n\n**Task:** Add the smallest useful guidance line that distinguishes the routine maintenance integrity path from the full operator-surface verification sweep inside the maintenance runbook and maintainer quickstart, then validate the updated guidance surface.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md` so `## Integrity workflow` now distinguishes:\n  - routine maintenance integrity validation via `scripts/check_operator_maintenance_integrity.py`\n  - broader operator-surface verification via `scripts/check_operator_surface_full.py`\n- Updated `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md` with a concise note to run `python3 scripts/check_operator_surface_full.py` after broader operator-surface changes when the strongest verification path is needed.\n- Revalidated successfully with:\n  - `python3 /home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- Final validation result still ends with:\n  - `OPERATOR_SURFACE_FULL_PASS: machine, shell, docs, and smoke layers verified`\n- Wrote selection-hint artifact: `/home/ubuntu/clawd/patches/v18c-runbook-quickstart-selection-hint-live.spec.md`\n\n**My thinking:**\nThis was the right minimal refinement. The stack already had the capability and top-level discoverability, but operators entering through the runbook or quickstart still needed one clear decision hint. Now the path selection is explicit without bloating the docs.\n\n**Decision:**\n- Keep the runbook/quickstart guidance minimal and decision-oriented.\n- Treat the current maintenance surface as coherent unless a new real usability gap appears.\n\n**Next:** On the next P2 heartbeat, review the operator stack again and identify whether any remaining gap is actually worth changing, rather than adding more guidance by default.\n\n---\n## 2026-04-25 08:13 UTC \u2014 [P1: Copy Intelligence] Reassess the Maintainer Guidance Path After Full-Sweep Discoverability Landed So the Next Improvement Clarifies When to Choose the Routine Integrity Check Versus the Full Verification Sweep Without Adding New Structural Weight to the Operator Stack\n\n**Task:** Review the maintenance runbook and maintainer quickstart after the full verification sweep became discoverable from the help and overview surfaces, then identify the next highest-value improvement.\n**Finding:**\n- Both bots are alive.\n- Help and overview now expose the full verification sweep clearly.\n- The runbook and quickstart still focus on cadence and first-five-minutes orientation.\n- Highest-value next gap:\n  - **there is no lightweight line in the runbook/quickstart path ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 08:43 UTC \u2014 [P3: Strategy Development] Reassess the Overnight Operator Maintenance Surface After the Selection Hint Landed So We Stop Adding Structure by Habit and Explicitly Test Whether Any Remaining Gap Is Actually Worth Changing\n\n**Task:** Pressure-test the current overnight operator maintenance surface after the runbook/quickstart selection hint landed, then decide whether any remaining gap is actually worth changing.\n**Finding:**\n- Both bots are alive.\n- Revalidated the full operator surface successfully with:\n  - `python3 /home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- Current stack now includes:\n  - overview, runbook, quickstart, manifest, audit checklist, and changelog guidance layers\n  - machine-readable index with validated summary and asset inventory\n  - shell, docs, machine, smoke, and full-surface verification layers\n  - discoverability of the strongest verification path from both top-level help and deeper maintainer docs\n- Conclusion:\n  - **no clear high-value gap remains right now**\n- Wrote stack-review artifact: `/home/ubuntu/clawd/patches/v18d-post-selection-hint-stack-review.spec.md`\n\n**My thinking:**\nThis was the right check to make. The stack now looks coherent enough that adding more structure would be polish without pressure. It is better to stop here until a real failure mode, friction point, or new workflow requirement appears.\n\n**Decision:**\n- Pause further structural/operator-surface expansion unless a real maintenance gap appears.\n- Prefer preserving coherence over adding more layers by default.\n\n**Next:** On the next P3 heartbeat, only reopen operator-surface work if a real new gap appears; otherwise shift attention to a different worthwhile maintenance or trading-adjacent problem.\n\n---\n## 2026-04-25 08:39 UTC \u2014 [P2: Smart Entry] Add the Runbook and Quickstart Selection Hint So Operators Starting Deeper in the Maintenance Docs Can Choose Routine Integrity Validation Versus the Full Operator-Surface Verification Sweep Without Guesswork or Extra Discovery Hops\n\n**Task:** Add the smallest useful guidance line that distinguishes the routine maintenance integrity path from the full operator-surface verification sweep inside the maintenance runbook and maintainer quickstart, then validate the updated guidance surface.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/docs/overnight-operator-maintenance-runbook.md` so `## Integrity workflow` now distinguishes:\n  - routine maintenance integrity validation via `scripts/check_operator_maintenance_integrity.py`\n  - broader operator-surface verification via `scripts/check_operator_surface_full.py`\n- Updated `/home/ubuntu/clawd/docs/overnight-operator-maintainer-quickstart.md` with a concise note to run `python3 scripts/check_operator_surface_full.py` after broader operator-surface changes when the strongest verification path is needed.\n- Revalida",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
