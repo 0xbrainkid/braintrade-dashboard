@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:04:03.665920+00:00",
+  "timestamp": "2026-04-25T01:05:16.129482+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0685%",
-      "apr": "+75%",
+      "rate": "+0.0753%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0685%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0753%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:03 UTC \u2014 [P2: Smart Entry] Recheck the Tagged PM Outcome Set to See Whether the Time Filter Is Carrying More Edge Than the Cooldown Gate and Whether 19 UTC Should Be Cut Instead of Trusted\n\n**Task:** Analyze the richer tagged segment of `polymarket-assistant/confidence_outcomes.jsonl` and test a concrete parameter idea using real outcomes, specifically whether `v5a` and the active hour filter are doing more work than the `v6` cooldown gate.\n**Finding:**\n- Both bots are alive.\n- The tagged April subset contains `28` trades with `v5a` and `v6` fields.\n- `v5a_pass=true`: `23` trades, `60.9%` WR, `+0.177` EV/trade.\n- `v5a_pass=false`: `5` trades, `40.0%` WR, `-0.229` EV/trade.\n- `v6_cooldown_pass=true`: `15` trades, `53.3%` WR, `+0.032` EV/trade.\n- `v6_cooldown_pass=false`: `13` trades, `61.5%` WR, `+0.188` EV/trade.\n- Hour split is the loudest signal:\n  - `11 UTC`: `57.1%` WR, `+0.107` EV\n  - `12 UTC`: `75.0%` WR, `+0.446` EV\n  - `19 UTC`: `28.6%` WR, `-0.445` EV\n  - `20 UTC`: `50.0%` WR, `-0.029` EV\n- Tested concrete tweak on the tagged sample:\n  - baseline tagged set: `57.1%` WR, `+0.104` EV\n  - **require `v5a_pass` and exclude `19 UTC`**: `17` trades, `70.6%` WR, `+0.364` EV\n\n**My thinking:**\nThe cooldown gate is not the hero here. In this sample it is actually blocking some of the better trades, while the 19 UTC hour is outright toxic. The data says our real edge is coming from structural session timing plus the stronger `v5a` quality gate, not from spacing trades out mechanically.\n\n**Decision:**\n- Do not tighten around `v6` cooldown based on current data.\n- Prioritize the next parameter change around **excluding 19 UTC** while keeping `v5a` as a core quality filter.\n\n**Next:** On the next P2 heartbeat, test whether excluding both `19 UTC` and `20 UTC` is too restrictive or if `20 UTC` can stay as a smaller but acceptable window.\n\n## 2026-04-25 01:02 UTC \u2014 [P1: Copy Intelligence] Run the Leaderboard Tracker and Extract the Biggest Position Flips So Copy Intel Focuses on What Elite Traders Actually Changed Tonight Instead of Static Top-Wallet Lists\n\n**Task:** Run `scripts/copy-intel-tracker.py`, compare the refreshed leaderboard state against the previous snapshot, and isolate the most meaningful top-trader flips and size changes.\n**Finding:**\n- Both bots are alive.\n- Fresh leaderboard scan came back: `BTC 3L/6S | ETH 3L/5S | SOL 5L/5S`.\n- Biggest actionable positioning changes from top accounts:\n  - `anon-0xecb6` ($26.6M acct) **flipped BTC LONG\u2192SHORT** and cut ETH/SOL shorts materially while still keeping large broad alt shorts, especially `DOGE`, `XRP`, `XPL`, `PUMP`, `ZEC`.\n  - `anon-0xfc66` ($17.2M acct) **flipped BTC LONG\u2192SHORT** and **SOL LONG\u2192SHORT**, while massively increasing `HYPE` short to `$9.7M`.\n  - `anon-0x57dd` ($13.7M acct) rotated the other way, **adding BTC short** but flipping a wide alt basket from short to long, incl",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:05 UTC \u2014 [P3: Strategy Development] Add a Confirmation Guardrail to the Funding Squeeze Detector So It Stops Boosting PM Confidence on Mixed Crowding Signals That Look Strong by Score but Conflict Internally\n\n**Task:** Review the live funding squeeze logic, compare its current output against the actual crowding inputs, and patch the detector if it is over-trusting single-source strength.\n**Finding:**\n- Both bots are alive.\n- Live detector snapshot before patch showed `SHORT_SQUEEZE`, score `96`, and `pm_adjustment=+0.10`.\n- But the internals were mixed, not confirmed:\n  - funding streak was strongly negative (`8` periods)\n  - long/short ratio trend was **rising** `+16.1%`, not falling\n- That means the detector was trying to boost PM bullish confidence from funding alone even while the crowding confirmation leg disagreed.\n- Patched `intelligence/funding-squeeze-detector.py` so PM adjustment only fires when funding direction and long/short ratio trend **confirm each other**.\n- Post-patch live output kept the high raw score but correctly zeroed PM influence:\n  - `direction=SHORT_SQUEEZE`\n  - `score=96`\n  - `ratio_confirms=false`\n  - `pm_adjustment=0`\n\n**My thinking:**\nThis is the right P3 fix because the bug was architectural, not just analytical. A high score looked impressive, but the model was mixing strong funding with contradictory crowd positioning and still pushing PM confidence around. That is exactly how strategy layers become noisy and overfit. Raw signal strength should not automatically become trading influence when confirmation breaks.\n\n**Decision:**\n- Keep the new confirmation guardrail in the funding squeeze detector.\n- Treat unconfirmed squeeze states as research-only context, not conviction input for PM.\n\n**Next:** On the next P3 heartbeat, trace where `squeeze-funding.json` is consumed and verify no downstream component assumes every high squeeze score deserves a PM confidence adjustment.\n\n## 2026-04-25 01:03 UTC \u2014 [P2: Smart Entry] Recheck the Tagged PM Outcome Set to See Whether the Time Filter Is Carrying More Edge Than the Cooldown Gate and Whether 19 UTC Should Be Cut Instead of Trusted\n\n**Task:** Analyze the richer tagged segment of `polymarket-assistant/confidence_outcomes.jsonl` and test a concrete parameter idea using real outcomes, specifically whether `v5a` and the active hour filter are doing more work than the `v6` cooldown gate.\n**Finding:**\n- Both bots are alive.\n- The tagged April subset contains `28` trades with `v5a` and `v6` fields.\n- `v5a_pass=true`: `23` trades, `60.9%` WR, `+0.177` EV/trade.\n- `v5a_pass=false`: `5` trades, `40.0%` WR, `-0.229` EV/trade.\n- `v6_cooldown_pass=true`: `15` trades, `53.3%` WR, `+0.032` EV/trade.\n- `v6_cooldown_pass=false`: `13` trades, `61.5%` WR, `+0.188` EV/trade.\n- Hour split is the loudest signal:\n  - `11 UTC`: `57.1%` WR, `+0.107` EV\n  - `12 UTC`: `75.0%` WR, `+0.446` EV",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
