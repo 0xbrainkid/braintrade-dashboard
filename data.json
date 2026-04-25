@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:35:11.283147+00:00",
+  "timestamp": "2026-04-25T01:35:56.399377+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2468%",
-      "apr": "-270%",
+      "rate": "-0.2526%",
+      "apr": "-277%",
       "action": "LONG",
       "oi": "1,335,480"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0700%",
-      "apr": "+77%",
+      "rate": "+0.0709%",
+      "apr": "+78%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2468%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.2526%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:34 UTC \u2014 [P4: Alpha Research] Test the Momentum-Quality Hypothesis Inside High-Bias Trades So We Can Tell Whether MACD, Not Bias Alone, Explains the Extreme-Band Failures\n\n**Task:** Compare MACD strength in the profitable `55-64.9` bias band versus the weaker `65+` band inside the surviving live hour set, using SolSt1ne\u2019s emphasis on signal quality rather than raw conviction alone.\n**Finding:**\n- Both bots are alive.\n- In the surviving `11/12/20` and `v5a_pass` sample:\n  - `55-64.9` band: `6` trades, MACD abs avg `9.697`\n    - winners MACD abs avg `11.238`\n    - loser MACD abs avg `1.994`\n  - `65-80` band: `3` trades, MACD abs avg `9.565`\n    - lone winner MACD abs `18.616`\n    - losers MACD abs avg `5.040`\n- So average MACD across the two bands is similar overall, but **the winners consistently have much stronger MACD than the losers**, especially in the extreme-bias bucket.\n- This matches SolSt1ne\u2019s broader lesson: signal quality matters more than raw score magnitude.\n\n**My thinking:**\nI\u2019m more convinced now that the high-bias issue is not \u201cextreme bias bad.\u201d It is \u201cextreme bias without strong momentum confirmation is dangerous.\u201d That is a much better research direction than fiddling with the bias cap alone. If we ever tighten this logic, MACD-strength gating inside the upper bias band is the more credible lever.\n\n**Decision:**\n- Keep the bias cap unchanged for now.\n- Treat **MACD quality as the leading candidate** for any future refinement of `65+` trades.\n\n**Next:** On the next P4 heartbeat, test a simple shadow rule like \u201crequire stronger MACD for `|bias| >= 65`\u201d against the tiny current sample and record whether it would have filtered both losers while preserving the winner.\n\n## 2026-04-25 01:33 UTC \u2014 [P3: Strategy Development] Inspect the Three Surviving 65+ Bias Trades So We Can Tell Whether the High-Bias Danger Zone Has a Common Failure Signature or Is Just Tiny-Sample Noise\n\n**Task:** Isolate the three surviving `|bias| >= 65` trades in the live `11/12/20` structure and check for shared hour, cooldown, OBI, or momentum patterns.\n**Finding:**\n- Both bots are alive.\n- The three surviving `65+` trades are:\n  - `2026-04-01 20:05 UTC` \u2014 **loss** at `hour 20`, `bias -65.8`, `cooldown BLOCK`, `obi -0.228`, `macd -7.77`\n  - `2026-04-03 12:40 UTC` \u2014 **win** at `hour 12`, `bias -69.8`, `cooldown BLOCK`, `obi -0.491`, `macd -18.62`\n  - `2026-04-06 12:10 UTC` \u2014 **loss** at `hour 12`, `bias -66.8`, `cooldown PASS`, `obi -0.614`, `macd -2.31`\n- There is **no clean cooldown explanation**:\n  - losses occurred once with `BLOCK` and once with `PASS`\n- There is also **no clean hour explanation**:\n  - one loss at `20`, one loss at `12`, one win at `12`\n- The best hint is indicator quality:\n  - the lone winner had the **strongest downside momentum** (`macd -18.62`) without the extreme OBI boost condition\n  - the losing `BOOST` case had the weakest MA",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:35 UTC \u2014 [P1: Copy Intelligence] Verify Whether ABC Is Still Running a Clean Relative-Value Book, Because Isolation From BTC/ETH Is What Makes This Minority Signal Worth Respecting\n\n**Task:** Recheck whether `ABC` still holds the `SOL LONG / HYPE SHORT` trade without BTC or ETH exposure, and see whether any other leaderboard account now matches that cleaner profile.\n**Finding:**\n- Both bots are alive.\n- `ABC` still has:\n  - no `BTC` exposure\n  - no `ETH` exposure\n  - `SOL LONG $1.14M`\n  - `HYPE SHORT $866k`\n- `anon-0x57dd` still carries the pair, but also has large `BTC SHORT` and `ETH SHORT` exposure, so it is not a clean pure-expression read.\n- On the current board, `ABC` is the **only** meaningful account holding `SOL LONG` with **no BTC/ETH exposure**.\n\n**My thinking:**\nThat makes ABC more valuable, not less. The whole point of copy intelligence is to separate deliberate thesis expression from portfolio clutter. ABC is still the cleanest read on the board for `SOL relative strength vs HYPE`, while 57dd looks more like a mixed macro-plus-relative-value book. So if we want one account to keep watching for confirmation or failure, ABC is the right one.\n\n**Decision:**\n- Keep treating `ABC` as the highest-signal wallet for the minority `SOL > HYPE` thesis.\n- Do not generalize 57dd\u2019s broader book into the same clean read.\n\n**Next:** On the next P1 heartbeat, check whether ABC changes only size or actually changes structure, because a new BTC/ETH leg would weaken the purity of this signal materially.\n\n## 2026-04-25 01:34 UTC \u2014 [P4: Alpha Research] Test the Momentum-Quality Hypothesis Inside High-Bias Trades So We Can Tell Whether MACD, Not Bias Alone, Explains the Extreme-Band Failures\n\n**Task:** Compare MACD strength in the profitable `55-64.9` bias band versus the weaker `65+` band inside the surviving live hour set, using SolSt1ne\u2019s emphasis on signal quality rather than raw conviction alone.\n**Finding:**\n- Both bots are alive.\n- In the surviving `11/12/20` and `v5a_pass` sample:\n  - `55-64.9` band: `6` trades, MACD abs avg `9.697`\n    - winners MACD abs avg `11.238`\n    - loser MACD abs avg `1.994`\n  - `65-80` band: `3` trades, MACD abs avg `9.565`\n    - lone winner MACD abs `18.616`\n    - losers MACD abs avg `5.040`\n- So average MACD across the two bands is similar overall, but **the winners consistently have much stronger MACD than the losers**, especially in the extreme-bias bucket.\n- This matches SolSt1ne\u2019s broader lesson: signal quality matters more than raw score magnitude.\n\n**My thinking:**\nI\u2019m more convinced now that the high-bias issue is not \u201cextreme bias bad.\u201d It is \u201cextreme bias without strong momentum confirmation is dangerous.\u201d That is a much better research direction than fiddling with the bias cap alone. If we ever tighten this logic, MACD-strength gating inside the upper bias band is the more credible lever.\n\n**Decision:*",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
