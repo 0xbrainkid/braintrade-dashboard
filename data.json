@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:08:29.091742+00:00",
+  "timestamp": "2026-04-25T01:09:24.529704+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0874%",
-      "apr": "+96%",
+      "rate": "+0.0902%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0874%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0902%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:07 UTC \u2014 [P2: Smart Entry] Test Whether 20 UTC Deserves to Survive the Hour Filter After 19 UTC Fails So We Cut the Toxic Session Without Throwing Away the Entire Late Window\n\n**Task:** Extend the prior hour-filter analysis and test the next concrete tweak, specifically whether `20 UTC` should also be excluded or whether only `19 UTC` is the real problem.\n**Finding:**\n- Both bots are alive.\n- On the tagged `v5a_pass` subset:\n  - `v5a only`: `23` trades, `60.9%` WR, `+0.177` EV\n  - `v5a + exclude 19`: `17` trades, `70.6%` WR, `+0.364` EV\n  - `v5a + exclude 19&20`: `15` trades, `73.3%` WR, `+0.416` EV\n  - `v5a + 11&12 only`: same result as excluding both `19` and `20`\n- `20 UTC` sample is tiny, only `2` trades:\n  - `2026-04-01 20:05` = loss, `v6_cooldown_tag=BLOCK`\n  - `2026-04-06 20:05` = win, `v6_cooldown_tag=PASS`\n- So excluding `20 UTC` improves sample metrics, but only by deleting a one-win/one-loss micro-sample.\n\n**My thinking:**\nThis is not strong enough evidence to kill `20 UTC`. The real toxic hour is still `19 UTC`. The lift from cutting `20 UTC` looks nice, but it is coming from tiny sample compression, not a robust edge signal. If we hard-cut `20 UTC` now, we risk overfitting the clock instead of fixing the actual bad session.\n\n**Decision:**\n- Prioritize excluding `19 UTC` first.\n- Keep `20 UTC` alive for now, but mark it as probationary and keep tracking it separately.\n\n**Next:** On the next P2 heartbeat, isolate the `19 UTC` trades and compare their regime/OBI/cooldown patterns to see whether one additional gate can rescue that hour or whether it should simply stay banned.\n\n## 2026-04-25 01:07 UTC \u2014 [P1: Copy Intelligence] Break Down Whether the Current Top-Trader Split Is Really About BTC Direction or Whether the Biggest Winners Are Actually Expressing a Broader Alt Book View Behind the Major-Coin Headlines\n\n**Task:** Go beyond simple major-coin counts in the leaderboard snapshot and measure how much of the key top traders\u2019 exposure is actually concentrated in BTC/ETH/SOL versus a wider alt basket.\n**Finding:**\n- Both bots are alive.\n- Major-coin headline view still looks split-bearish overall:\n  - `anon-0xecb6`: BTC/ETH/SOL all short\n  - `anon-0xfc66`: BTC/ETH/SOL all short\n  - `anon-0x57dd`: BTC+ETH short, SOL long\n  - `anon-0x3bca`: BTC+ETH long, SOL short\n- But exposure composition shows the real story is broader than majors:\n  - `anon-0xecb6`: only **19.7%** of exposure in majors, with the bigger book in alt shorts like `DOGE`, `XRP`, `HYPE`, `XPL`, `LINK`, `ENA`\n  - `anon-0xfc66`: **38.2%** in majors, but the dominant bet is still `HYPE` short `$9.7M`, plus a large `PAXG` long `$3.8M`\n  - `anon-0x57dd`: **65.9%** in majors, expressing a mixed book, `BTC/ETH` short but `SOL/XRP/DOGE/AVAX` long\n  - `anon-0x3bca`: **96.5%** in majors, a clean dispersion trade: `BTC/ETH` long against `SOL` short\n  - `ABC`: effectively a 2-le",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:08 UTC \u2014 [P3: Strategy Development] Probe the Toxic 19 UTC Window for a Salvageable Subpattern So We Know Whether to Engineer a Better Gate or Just Keep the Hour Effectively Dead\n\n**Task:** Drill into the tagged 19 UTC losses and test whether cooldown state or `v5b` context reveals a rescue pattern strong enough to justify keeping that hour alive.\n**Finding:**\n- Both bots are alive.\n- Tagged 19 UTC set is `7` trades, only `28.6%` WR and `-0.445` EV.\n- Cooldown split inside 19 UTC:\n  - `FIRST`: `2` trades, `0%` WR, `-1.000` EV\n  - `BLOCK`: `2` trades, `0%` WR, `-1.000` EV\n  - `PASS`: `3` trades, `66.7%` WR, `+0.294` EV\n- But the apparent rescue fades when combining with `v5b` context:\n  - `19h cooldown PASS only`: `5` trades, `40.0%` WR, `-0.223` EV\n  - `19h cooldown PASS and not BOOST`: `4` trades, `50.0%` WR, `-0.029` EV\n  - `v5b REDUCE_MILD_BEAR`: `2` trades, `0%` WR\n  - `v5b BOOST`: `1` trade, `0%` WR\n- Important nuance: even very negative OBI values at 19 UTC did not save the hour. Example losses include `obi -0.468`, `-0.409`, and `-0.994`.\n\n**My thinking:**\nThis is a strategy design result, not just another filter stat. The 19 UTC window is not failing because one gate is missing, it is failing because the late session environment is unstable enough to break signals that work elsewhere. Cooldown helps a little, but not enough to rehabilitate the hour. That means the clean solution is likely session exclusion, not more micro-logic layered onto a poisoned window.\n\n**Decision:**\n- Do not spend more design complexity trying to rescue `19 UTC` right now.\n- Treat `19 UTC` as structurally bad unless a much larger sample proves otherwise.\n\n**Next:** On the next P3 heartbeat, inspect whether the current bot config still lists `19 UTC` as an active trading hour and identify the smallest safe code change needed to disable it without touching the rest of the session logic.\n\n## 2026-04-25 01:07 UTC \u2014 [P2: Smart Entry] Test Whether 20 UTC Deserves to Survive the Hour Filter After 19 UTC Fails So We Cut the Toxic Session Without Throwing Away the Entire Late Window\n\n**Task:** Extend the prior hour-filter analysis and test the next concrete tweak, specifically whether `20 UTC` should also be excluded or whether only `19 UTC` is the real problem.\n**Finding:**\n- Both bots are alive.\n- On the tagged `v5a_pass` subset:\n  - `v5a only`: `23` trades, `60.9%` WR, `+0.177` EV\n  - `v5a + exclude 19`: `17` trades, `70.6%` WR, `+0.364` EV\n  - `v5a + exclude 19&20`: `15` trades, `73.3%` WR, `+0.416` EV\n  - `v5a + 11&12 only`: same result as excluding both `19` and `20`\n- `20 UTC` sample is tiny, only `2` trades:\n  - `2026-04-01 20:05` = loss, `v6_cooldown_tag=BLOCK`\n  - `2026-04-06 20:05` = win, `v6_cooldown_tag=PASS`\n- So excluding `20 UTC` improves sample metrics, but only by deleting a one-win/one-loss micro-sample.\n\n**My thinking:**\nThis is not strong enough",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
