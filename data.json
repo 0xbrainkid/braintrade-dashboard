@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T11:13:47.518956+00:00",
+  "timestamp": "2026-04-25T11:30:01.796862+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "AXS",
-      "rate": "-0.1961%",
-      "apr": "-215%",
+      "rate": "-0.1919%",
+      "apr": "-210%",
       "action": "LONG",
-      "oi": "2,209,025"
+      "oi": "2,264,090"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0801%",
-      "apr": "+88%",
+      "rate": "+0.0858%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -91,17 +91,17 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 4,
+    "current_bias": "bearish",
+    "signal_confidence": 80,
     "signals_today": 50,
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 29 buys, 21 sells \u2014 avg price $0.947"
+        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.999"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: AXS at -0.1961%/8h \u2014 shorts paying longs"
+        "text": "Strongest: AXS at -0.1919%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 11:09 UTC \u2014 [P3: Strategy Development] Debug the Stale `pillar-scores.json` Freshness Signal So the Dashboard Freshness-Critical Set Reflects Truly Live Outputs Instead of Inheriting a WARN From Static or Slow-Changing Metadata That the Refresh Script Only Reads\n\n**Task:** Determine whether `dashboard/pillar-scores.json` should remain in the dashboard freshness-critical set after the retargeted freshness check showed it as stale.\n**Finding:**\n- Both bots are alive.\n- `dashboard/update-dashboard.sh`:\n  - reads `dashboard/pillar-scores.json`\n  - reads `dashboard/pillar-log.jsonl`\n  - writes `dashboard/data.json`\n  - does **not** rewrite `dashboard/pillar-scores.json`\n- `dashboard/pillar-scores.json` currently contains:\n  - static-looking pillar scores\n  - embedded timestamp `2026-04-02T08:00:03.391033+00:00`\n- Conclusion:\n  - **`pillar-scores.json` currently behaves like static or slow-changing metadata, not a freshness-critical live dashboard output**\n- Wrote freshness-seam artifact: `/home/ubuntu/clawd/patches/v18l-pillar-scores-freshness-seam.spec.md`\n\n**My thinki",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 11:13 UTC \u2014 [P4: Alpha Research] Narrow the Dashboard Freshness Check to Live Outputs Only So the Recency Signal Measures What the Refresh Path Actually Rewrites and Stops Inheriting False WARNs From Static Dashboard Metadata\n\n**Task:** Update the dashboard freshness check so it only uses freshness-critical live outputs, then validate the PASS path after a dashboard refresh.\n**Finding:**\n- Both bots are alive.\n- Updated `/home/ubuntu/clawd/scripts/check_dashboard_freshness.py` to remove `dashboard/pillar-scores.json` from the freshness-critical set.\n- Freshness-critical input is now:\n  - `/home/ubuntu/clawd/dashboard/data.json`\n- After running `bash /home/ubuntu/clawd/dashboard/update-dashboard.sh`, the corrected freshness check returned:\n  - `data.json: age_seconds=228 age_minutes=3.8`\n  - `DASHBOARD_FRESHNESS_PASS: artifacts updated within threshold`\n- Wrote live-output-only artifact: `/home/ubuntu/clawd/patches/v18m-dashboard-freshness-check-live-outputs-only.spec.md`\n\n**My thinking:**\nThis is the right end state for the first version. The freshness signal is no",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -353,7 +353,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
