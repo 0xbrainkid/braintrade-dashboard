@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:14:33.256639+00:00",
+  "timestamp": "2026-04-25T01:15:33.666368+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0787%",
-      "apr": "+86%",
+      "rate": "+0.0779%",
+      "apr": "+85%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0787%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0779%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:14 UTC \u2014 [P4: Alpha Research] Upgrade the Hourly Report to Read the Unified Alpha Snapshot So Reporting Stops Reassembling Partial Market Context by Hand\n\n**Task:** Take one real downstream consumer and switch it from narrow ad hoc reads toward the enriched unified alpha snapshot we have been building.\n**Finding:**\n- Both bots are alive.\n- Chose `scripts/hourly-report.sh` as the downstream consumer.\n- Patched it to read from `research/alpha-signals.json` not just for Fear & Greed, but also for:\n  - `pm_risk_context.pm_risk`\n  - `funding_squeeze.direction`\n  - `liquidation_signal.direction`\n- Verified the rendered report snippet now includes the enriched context:\n  - `PM risk: LOW`\n  - `Signals: squeeze=SHORT_SQUEEZE | liq=neutral`\n- This means the reporting layer now reflects the consolidated alpha surface instead of forcing each consumer to manually rediscover signal state.\n\n**My thinking:**\nThis is the right next P4 move because pipeline work is only real once something downstream actually consumes it. The hourly report was still acting like alpha-signals was just a Fear & Greed cache. Now it behaves more like a proper market-state summary that can carry research forward into operations.\n\n**Decision:**\n- Keep hourly reporting wired to the unified alpha snapshot.\n- Use this as the pattern for future downstream consumers: read the consolidated surface first, then fall back only if needed.\n\n**Next:** On the next P4 heartbeat, update `pre-session-check.sh` to consume the same unified alpha snapshot for squeeze/risk context instead of querying or reconstructing those signals separately.\n\n## 2026-04-25 01:12 UTC \u2014 [P3: Strategy Development] Locate the Real Active-Hour Control in Code So the 19 UTC Ban Can Become a Minimal Safe Patch Instead of an Abstract Research Note\n\n**Task:** Trace where trading hours are actually enforced in the PM bot and identify the smallest code surface that would safely remove `19 UTC` without disturbing the rest of the strategy stack.\n**Finding:**\n- Both bots are alive.\n- The active trading hours are set directly inside `polymarket-assistant/trading_bot.py`, not in shared `src/config.py`.\n- Current live setting is:\n  - `self.active_hours = [11, 12, 19, 20]`\n- `src/config.py` contains market/indicator constants only, so the hour control is localized and low-risk to edit.\n- That means the smallest safe production change would be a one-line patch in `TradingBot.__init__`, changing the active hours from `[11, 12, 19, 20]` to `[11, 12, 20]`.\n\n**My thinking:**\nThis is good architecture news for once. The 19 UTC exclusion does not require a multi-file refactor or a new conditional branch. The control point is narrow and explicit, which means we can translate the research into a very small strategy patch when ready. That lowers implementation risk and makes the eventual change easy to reason about and revert.\n\n**Decision:**",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:15 UTC \u2014 [P1: Copy Intelligence] Measure the Size Behind the SOL-LONG/HYPE-SHORT Relative-Value Camp So We Know Whether It Is Strong Enough to Matter Against the Broader HYPE-SHORT Consensus\n\n**Task:** Quantify the actual notional behind the `SOL LONG / HYPE SHORT` cohort and compare it against the larger `SOL SHORT / HYPE SHORT` camp.\n**Finding:**\n- Both bots are alive.\n- `SOL LONG / HYPE SHORT` cohort currently has only `2` meaningful accounts:\n  - `anon-0x57dd`: `SOL LONG $1.28M` vs `HYPE SHORT $201k`\n  - `ABC`: `SOL LONG $1.14M` vs `HYPE SHORT $866k`\n- Combined notional for that relative-value cohort:\n  - `SOL LONG = $2.42M`\n  - `HYPE SHORT = $1.07M`\n- The broader `SOL SHORT / HYPE SHORT` de-risking camp is larger and heavier:\n  - `anon-0xecb6`: `SOL SHORT $1.36M`, `HYPE SHORT $2.61M`\n  - `anon-0xfc66`: `SOL SHORT $1.92M`, `HYPE SHORT $9.74M`\n  - `anon-0x61ce`: `SOL SHORT $170k`, `HYPE SHORT $43k`\n- Combined notional for that same-direction short cohort:\n  - `SOL SHORT = $3.45M`\n  - `HYPE SHORT = $12.39M`\n\n**My thinking:**\nThis sharpens the copy-intel read a lot. The `SOL LONG / HYPE SHORT` trade is real, but it is still a minority expression. The dominant board signal is much more aggressive: heavy `HYPE` shorting with a meaningful `SOL` short component as well. So if we borrow anything from the board right now, the safer takeaway is still \u201crespect HYPE downside pressure,\u201d not \u201cSOL is broadly preferred.\u201d\n\n**Decision:**\n- Keep the relative-value `SOL > HYPE` idea marked as niche, not consensus.\n- Upgrade `HYPE short` from interesting pattern to primary copy-intel signal.\n\n**Next:** On the next P1 heartbeat, check whether any additional top accounts rotate into `SOL LONG / HYPE SHORT`; if not, treat the pair as too narrow to generalize.\n\n## 2026-04-25 01:14 UTC \u2014 [P4: Alpha Research] Upgrade the Hourly Report to Read the Unified Alpha Snapshot So Reporting Stops Reassembling Partial Market Context by Hand\n\n**Task:** Take one real downstream consumer and switch it from narrow ad hoc reads toward the enriched unified alpha snapshot we have been building.\n**Finding:**\n- Both bots are alive.\n- Chose `scripts/hourly-report.sh` as the downstream consumer.\n- Patched it to read from `research/alpha-signals.json` not just for Fear & Greed, but also for:\n  - `pm_risk_context.pm_risk`\n  - `funding_squeeze.direction`\n  - `liquidation_signal.direction`\n- Verified the rendered report snippet now includes the enriched context:\n  - `PM risk: LOW`\n  - `Signals: squeeze=SHORT_SQUEEZE | liq=neutral`\n- This means the reporting layer now reflects the consolidated alpha surface instead of forcing each consumer to manually rediscover signal state.\n\n**My thinking:**\nThis is the right next P4 move because pipeline work is only real once something downstream actually consumes it. The hourly report was still acting like alpha-signals was just a Fear & Greed cache",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
