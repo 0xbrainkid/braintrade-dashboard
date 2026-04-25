@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:12:25.383746+00:00",
+  "timestamp": "2026-04-25T01:13:21.531291+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0838%",
-      "apr": "+92%",
+      "rate": "+0.0818%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0838%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0818%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:11 UTC \u2014 [P2: Smart Entry] Reconcile the Bias-Bucket Theory With the New Tagged Sample So We Do Not Carry an Outdated Dead-Zone Assumption Into the Current Hour-Filter Decision\n\n**Task:** Compare the older bias-bucket research against the newer tagged `v5a_pass` sample and see whether the current improvement is really about bias magnitude or still mostly about session timing.\n**Finding:**\n- Both bots are alive.\n- Under current tagged `v5a_pass` data:\n  - hours `11/12` only: `15` trades, `73.3%` WR, `+0.416` EV\n  - hours `19/20` only: `8` trades, `37.5%` WR, `-0.272` EV\n  - hours `11/12/20`: `17` trades, `70.6%` WR, `+0.364` EV\n- Bias buckets in the same tagged set do **not** show a fresh dead-zone problem:\n  - `|bias| 45-60`: `15` trades, `60.0%` WR, `+0.157` EV\n  - `|bias| 60+`: `8` trades, `62.5%` WR, `+0.214` EV\n  - there were no material tagged `30-45` survivors left after current gating\n- So the newer sample says the strongest active edge remains **time-window selection**, not another immediate bias-bucket rewrite.\n\n**My thinking:**\nThis is a useful correction. The older research about widening the dead zone may still be valid historically, but the current tagged trade set is already dominated by stronger filters. Right now the bigger mistake would be optimizing around a stale bias hypothesis while the live data is screaming that session timing matters more.\n\n**Decision:**\n- Keep the dead-zone idea in reserve, not as the next live priority.\n- Focus the next parameter change on session-hour control, especially cutting `19 UTC` while preserving the productive `11/12` core.\n\n**Next:** On the next P2 heartbeat, verify where active trading hours are configured so the 19 UTC exclusion can be translated from research into an actual controlled code change.\n\n## 2026-04-25 01:11 UTC \u2014 [P1: Copy Intelligence] Test the HYPE-SOL Pair Hypothesis Across Current Leaderboard Winners So We Know Whether That Relative-Value Read Is Real or Just a Few Eye-Catching Anecdotes\n\n**Task:** Examine current top-trader positioning specifically on `HYPE` versus `SOL` to see whether the pair-trade pattern identified earlier is broad enough to count as real copy intelligence.\n**Finding:**\n- Both bots are alive.\n- Current account-level HYPE/SOL structure among the largest relevant traders:\n  - `anon-0xecb6`: `HYPE SHORT $2.61M` and `SOL SHORT $1.36M`\n  - `anon-0xfc66`: `HYPE SHORT $9.74M` and `SOL SHORT $1.92M`\n  - `anon-0x57dd`: `HYPE SHORT $201k` and `SOL LONG $1.28M`\n  - `anon-0xc926`: `HYPE LONG $1.41M` and `SOL LONG $195k`\n  - `ABC`: `HYPE SHORT $866k` and `SOL LONG $1.14M`\n- Cross-board counts:\n  - `HYPE`: `3` long / `6` short\n  - `SOL`: `5` long / `5` short\n  - Accounts holding both: `5` same-direction, `3` opposite-direction\n- Interpretation of the pair signal:\n  - `HYPE` has a clearer bearish lean than `SOL`\n  - The strongest repeated **opposite-direction** ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:12 UTC \u2014 [P3: Strategy Development] Locate the Real Active-Hour Control in Code So the 19 UTC Ban Can Become a Minimal Safe Patch Instead of an Abstract Research Note\n\n**Task:** Trace where trading hours are actually enforced in the PM bot and identify the smallest code surface that would safely remove `19 UTC` without disturbing the rest of the strategy stack.\n**Finding:**\n- Both bots are alive.\n- The active trading hours are set directly inside `polymarket-assistant/trading_bot.py`, not in shared `src/config.py`.\n- Current live setting is:\n  - `self.active_hours = [11, 12, 19, 20]`\n- `src/config.py` contains market/indicator constants only, so the hour control is localized and low-risk to edit.\n- That means the smallest safe production change would be a one-line patch in `TradingBot.__init__`, changing the active hours from `[11, 12, 19, 20]` to `[11, 12, 20]`.\n\n**My thinking:**\nThis is good architecture news for once. The 19 UTC exclusion does not require a multi-file refactor or a new conditional branch. The control point is narrow and explicit, which means we can translate the research into a very small strategy patch when ready. That lowers implementation risk and makes the eventual change easy to reason about and revert.\n\n**Decision:**\n- Treat the active-hour list in `trading_bot.py` as the correct lever for the 19 UTC shutdown.\n- Do not patch it yet on this heartbeat, but the path to implementation is now clear and minimal.\n\n**Next:** On the next P3 heartbeat, make the one-line hour-list patch and update the inline comment so the code reflects the newer evidence that 19 UTC is toxic while 20 UTC remains probationary.\n\n## 2026-04-25 01:11 UTC \u2014 [P2: Smart Entry] Reconcile the Bias-Bucket Theory With the New Tagged Sample So We Do Not Carry an Outdated Dead-Zone Assumption Into the Current Hour-Filter Decision\n\n**Task:** Compare the older bias-bucket research against the newer tagged `v5a_pass` sample and see whether the current improvement is really about bias magnitude or still mostly about session timing.\n**Finding:**\n- Both bots are alive.\n- Under current tagged `v5a_pass` data:\n  - hours `11/12` only: `15` trades, `73.3%` WR, `+0.416` EV\n  - hours `19/20` only: `8` trades, `37.5%` WR, `-0.272` EV\n  - hours `11/12/20`: `17` trades, `70.6%` WR, `+0.364` EV\n- Bias buckets in the same tagged set do **not** show a fresh dead-zone problem:\n  - `|bias| 45-60`: `15` trades, `60.0%` WR, `+0.157` EV\n  - `|bias| 60+`: `8` trades, `62.5%` WR, `+0.214` EV\n  - there were no material tagged `30-45` survivors left after current gating\n- So the newer sample says the strongest active edge remains **time-window selection**, not another immediate bias-bucket rewrite.\n\n**My thinking:**\nThis is a useful correction. The older research about widening the dead zone may still be valid historically, but the current tagged trade set is already dominated by",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
