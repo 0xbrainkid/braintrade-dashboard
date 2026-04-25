@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T01:22:42.681058+00:00",
+  "timestamp": "2026-04-25T01:23:39.473659+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.0956%",
-      "apr": "-105%",
+      "rate": "-0.1031%",
+      "apr": "-113%",
       "action": "LONG",
       "oi": "1,204,486"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0731%",
-      "apr": "+80%",
+      "rate": "+0.0745%",
+      "apr": "+82%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.0956%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.1031%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:22 UTC \u2014 [P3: Strategy Development] Audit the Lone BOOST Case in the Cleaner Hour Set So We Know Whether the OBI-Based Sizing Boost Is Still Worth Keeping Alive at All\n\n**Task:** Inspect the surviving tagged trades under the new active-hour set and isolate the single `BOOST`-tagged case to see whether the OBI-based boost rule still has a credible role.\n**Finding:**\n- Both bots are alive.\n- On the current surviving `11/12/20` tagged set:\n  - `v5b NORMAL`: `6` trades, `83.3%` WR\n  - `v5b BOOST`: only `1` trade, and it **lost**\n- The lone surviving `BOOST` case was:\n  - `2026-04-06 12:10 UTC`\n  - loss\n  - `hour=12`\n  - `obi=-0.614`\n  - `macd_h=-2.313`\n  - `cooldown=PASS`\n  - `bias=-66.8`\n- Current V5b logic in `trading_bot.py` still awards:\n  - `BOOST` when `obi < -0.5`\n  - size reduction when OBI is only mildly bearish or strongly bullish\n- So the strongest OBI-based sizing boost is being justified by a single surviving example, and that example failed.\n\n**My thinking:**\nI\u2019m not ready to rip the rule out on one sample, but this is a warning sign. The boost logic reflects an older belief that very negative OBI is premium edge. Our newer work keeps finding that session quality matters more, and the one remaining boosted trade in the cleaner regime did not validate the idea. That makes the boost rule look more speculative than earned.\n\n**Decision:**\n- Do not expand or trust the `BOOST` rule based on current evidence.\n- Keep it under active skepticism until a larger post-filter sample proves it adds value.\n\n**Next:** On the next P3 heartbeat, locate where `v5b_multiplier` actually affects position sizing or decision flow and decide whether the safest move is to neutralize the boost while leaving reduction tags intact.\n\n## 2026-04-25 01:21 UTC \u2014 [P2: Smart Entry] Recheck the Post-Patch Active-Hour Mix So We Know Whether 20 UTC Still Deserves Probation or Is Quietly Dragging the New Hour Set\n\n**Task:** Evaluate the new live active-hour set after removing `19 UTC` and see whether the remaining `20 UTC` hour adds enough value to keep.\n**Finding:**\n- Both bots are alive.\n- Current tagged `v5a_pass` performance by remaining hour set:\n  - active hours `11/12/20`: `17` trades, `70.6%` WR, `+0.364` EV\n  - `11/12` only: `15` trades, `73.3%` WR, `+0.416` EV\n  - `20` only: `2` trades, `50.0%` WR, `-0.029` EV\n- This means `20 UTC` is still slightly dilutive versus the stronger `11/12` core, but the sample is too small to justify another live cut yet.\n- Supporting filter context on the surviving hour set:\n  - `v6_cooldown_tag=BLOCK`: `80.0%` WR, `+0.544` EV\n  - `v6_cooldown_tag=PASS`: `66.7%` WR, `+0.291` EV\n  - `v5b_tag=NORMAL`: `83.3%` WR, `+0.606` EV\n  - `v5b_tag=BOOST`: `0%` WR on the lone trade\n\n**My thinking:**\nThe hour patch did its job, the new active set is materially healthier. But this also reinforces that `20 UTC` is not a proven profit center, it",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n## 2026-04-25 01:23 UTC \u2014 [P4: Alpha Research] Verify Whether the OBI-Based V5b Boost Still Touches Live Decision Flow or Has Quietly Degraded Into Shadow Metadata Only\n\n**Task:** Trace the current `v5b` boost/reduction tags through the PM bot code and determine whether they still influence live sizing or just outcome logging.\n**Finding:**\n- Both bots are alive.\n- `v5b_multiplier` appears in `trading_bot.py` only inside the outcome logger block around lines `240-249`.\n- There are **no live uses** of `v5b_multiplier` in trade sizing or trade execution logic.\n- Real live sizing currently flows through:\n  - Kelly sizing\n  - `max_position_pct`\n  - Fear & Greed size multiplier (`fg_size_mult`)\n- Tagged results on the surviving `11/12/20` sample still show:\n  - `BOOST`: `1` trade, `0%` WR\n  - `NORMAL`: `6` trades, `83.3%` WR\n  - both reduction tags happened to win in single-trade samples, but they are still only shadow labels\n\n**My thinking:**\nThis is actually a relief. The suspicious `BOOST` rule is not currently changing live size, so it is not an urgent production risk. What we have is a stale shadow-analysis label, not a live execution lever. That means we can treat the v5b workstream as research cleanup rather than emergency bot surgery.\n\n**Decision:**\n- Leave live execution untouched for now, because `v5b` is shadow metadata only.\n- Treat any future removal or redesign of `BOOST` as a cleanup/refinement task, not a hotfix.\n\n**Next:** On the next P4 heartbeat, update one analysis/report surface to stop implying that `v5b` is an active sizing rule if it is only being logged post-trade.\n\n## 2026-04-25 01:22 UTC \u2014 [P3: Strategy Development] Audit the Lone BOOST Case in the Cleaner Hour Set So We Know Whether the OBI-Based Sizing Boost Is Still Worth Keeping Alive at All\n\n**Task:** Inspect the surviving tagged trades under the new active-hour set and isolate the single `BOOST`-tagged case to see whether the OBI-based boost rule still has a credible role.\n**Finding:**\n- Both bots are alive.\n- On the current surviving `11/12/20` tagged set:\n  - `v5b NORMAL`: `6` trades, `83.3%` WR\n  - `v5b BOOST`: only `1` trade, and it **lost**\n- The lone surviving `BOOST` case was:\n  - `2026-04-06 12:10 UTC`\n  - loss\n  - `hour=12`\n  - `obi=-0.614`\n  - `macd_h=-2.313`\n  - `cooldown=PASS`\n  - `bias=-66.8`\n- Current V5b logic in `trading_bot.py` still awards:\n  - `BOOST` when `obi < -0.5`\n  - size reduction when OBI is only mildly bearish or strongly bullish\n- So the strongest OBI-based sizing boost is being justified by a single surviving example, and that example failed.\n\n**My thinking:**\nI\u2019m not ready to rip the rule out on one sample, but this is a warning sign. The boost logic reflects an older belief that very negative OBI is premium edge. Our newer work keeps finding that session quality matters more, and the one remaining boosted trade in the cleaner regime did not validat",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
