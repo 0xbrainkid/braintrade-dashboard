@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T03:10:07.553470+00:00",
+  "timestamp": "2026-04-25T03:14:08.887712+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.3250%",
-      "apr": "-356%",
+      "rate": "-0.3035%",
+      "apr": "-332%",
       "action": "LONG",
       "oi": "1,431,250"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1040%",
-      "apr": "+114%",
+      "rate": "+0.1048%",
+      "apr": "+115%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.3250%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3035%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:09 UTC \u2014 [P4: Alpha Research] Add the Maintenance-Surface Buildout Milestone to the Changelog So the Completed Operator Capability Set Has One Compact Permanent Historical Summary Instead of Remaining Implicit Across Many Earlier Entries and Patch Notes\n\n**Task:** Add the milestone summary to the overnight operator changelog and validate that the changelog now captures the completed maintenance-surface buildout in one concise permanent entry.\n**Finding:**\n- Both bots are alive.\n- The changelog uses a richer timestamped milestone format than the draft summary assumed.\n- Patched the real top entry point directly in `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`.\n- Added a new milestone entry summarizing the completed maintenance-surface buildout and the key files that now define it.\n- Confirmed the changelog now carries one concise permanent record of the full maintenance capability set.\n- Wrote changelog-live artifact: `/home/ubuntu/clawd/patches/v17g-changelog-milestone-summary-live.spec.md`\n\n**My thinking:**\nThis was the right historical-coherence fix. The maintenance stack is now broad enough that future readers need one short milestone entry to understand what was completed without replaying the entire build sequence.\n\n**Decision:**\n- Keep the milestone entry concise and capability-oriented.\n- Treat the changelog as the durable human-facing history of the operator surface.\n\n**Next:** On the next P4 heartbeat, review the overnight operator stack again and identify the next highest-value improvement now that the completed maintenance-surface buildout is also captured in the changelog.\n\n---\n## 2026-04-25 02:43 UTC \u2014 [P3: Strategy Development] Define the Minimum Changelog Milestone Summary So the Completed Maintenance-Surface Buildout Gets One Short Permanent Historical Record Instead of Remaining Scattered Across Many Incremental Worklog Entries and Patch Specs\n\n**Task:** Specify the minimum milestone summary that should be added to `docs/overnight-operator-changelog.md`, so the completed overnight operator maintenance-surface buildout is captured in one concise permanent entry.\n**Finding:**\n- Both bots are alive.\n- Minimum milestone points selected:\n  - overview doc now includes maintainer workflow\n  - maintenance runbook now includes integrity workflow\n  - maintainer quickstart and maintenance runbook exist\n  - help, status, and all-clear surfaces route to maintenance guides\n  - machine-readable index reflects current docs and integrity tools\n  - index validator, shell-surface integrity check, combined maintenance integrity check, and operator-surface smoke test exist\n- Wrote changelog-summary artifact: `/home/ubuntu/clawd/patches/v17f-changelog-milestone-summary.spec.md`\n\n**My thinking:**\nThis is the right minimum because the maintenance buildout is now broad enough that it deserves one short durable summary. That makes late",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n---\n\n## 2026-04-25 03:13 UTC \u2014 [P1: Copy Intelligence] Review the Overnight Operator Stack After the Changelog Milestone Entry So the Next Improvement Clarifies Top-Level Check Selection Instead of Continuing to Add More Structure to an Already Mature Maintenance Surface\n\n**Task:** Reassess the overnight operator stack now that the completed maintenance buildout is captured in the changelog, so the next improvement targets the strongest remaining usability gap.\n**Finding:**\n- Both bots are alive.\n- Current stack now includes:\n  - overview doc with maintainer workflow\n  - maintenance runbook with integrity workflow\n  - help/status/all-clear routing to maintenance guides\n  - machine-readable index with integrity tools\n  - index validator\n  - shell-surface integrity check\n  - combined maintenance integrity check\n  - operator-surface smoke test\n  - changelog milestone summary\n- Highest-value next gap:\n  - **there is no short purpose map that tells a maintainer which top-level check to run for routine integrity, shell smoke, or full action path**\n- Wrote gap-review artifact: `/home/ubuntu/clawd/patches/v17h-next-gap-after-changelog-milestone.spec.md`\n\n**My thinking:**\nThis is the right next move because the stack is now complete enough that the remaining friction is selection clarity, not missing tools. A short purpose map would make the top-level checks easier to use correctly without creating anything new underneath.\n\n**Decision:**\n- Prioritize a compact \u201cwhich check to run when\u201d map next.\n- Keep it short and purpose-oriented.\n\n**Next:** On the next P1 heartbeat, define the minimum purpose map for the top-level maintenance checks.\n\n---\n## 2026-04-25 03:09 UTC \u2014 [P4: Alpha Research] Add the Maintenance-Surface Buildout Milestone to the Changelog So the Completed Operator Capability Set Has One Compact Permanent Historical Summary Instead of Remaining Implicit Across Many Earlier Entries and Patch Notes\n\n**Task:** Add the milestone summary to the overnight operator changelog and validate that the changelog now captures the completed maintenance-surface buildout in one concise permanent entry.\n**Finding:**\n- Both bots are alive.\n- The changelog uses a richer timestamped milestone format than the draft summary assumed.\n- Patched the real top entry point directly in `/home/ubuntu/clawd/docs/overnight-operator-changelog.md`.\n- Added a new milestone entry summarizing the completed maintenance-surface buildout and the key files that now define it.\n- Confirmed the changelog now carries one concise permanent record of the full maintenance capability set.\n- Wrote changelog-live artifact: `/home/ubuntu/clawd/patches/v17g-changelog-milestone-summary-live.spec.md`\n\n**My thinking:**\nThis was the right historical-coherence fix. The maintenance stack is now broad enough that future readers need one short milestone entry to understand what was completed without replaying the entir",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
