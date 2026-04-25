@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-25T09:01:18.579742+00:00",
+  "timestamp": "2026-04-25T09:15:19.616211+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,25 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "AXS",
+      "rate": "-0.1197%",
+      "apr": "-131%",
+      "action": "LONG",
+      "oi": "1,626,582"
+    },
+    {
       "coin": "MAVIA",
-      "rate": "+0.0965%",
-      "apr": "+106%",
+      "rate": "+0.0928%",
+      "apr": "+102%",
       "action": "SHORT",
       "oi": "69,667,759"
-    },
-    {
-      "coin": "AXS",
-      "rate": "-0.0692%",
-      "apr": "-76%",
-      "action": "LONG",
-      "oi": "1,627,465"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0585%",
-      "apr": "+64%",
-      "action": "SHORT",
-      "oi": "237,452,742"
     }
   ],
   "daily_pnl": [
@@ -108,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0965%/8h \u2014 longs paying shorts"
+        "text": "Strongest: AXS at -0.1197%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -350,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 08:43 UTC \u2014 [P3: Strategy Development] Reassess the Overnight Operator Maintenance Surface After the Selection Hint Landed So We Stop Adding Structure by Habit and Explicitly Test Whether Any Remaining Gap Is Actually Worth Changing\n\n**Task:** Pressure-test the current overnight operator maintenance surface after the runbook/quickstart selection hint landed, then decide whether any remaining gap is actually worth changing.\n**Finding:**\n- Both bots are alive.\n- Revalidated the full operator surface successfully with:\n  - `python3 /home/ubuntu/clawd/scripts/check_operator_surface_full.py`\n- Current stack now includes:\n  - overview, runbook, quickstart, manifest, audit checklist, and changelog guidance layers\n  - machine-readable index with validated summary and asset inventory\n  - shell, docs, machine, smoke, and full-surface verification layers\n  - discoverability of the strongest verification path from both top-level help and deeper maintainer docs\n- Conclusion:\n  - **no clear high-value gap remains right now**\n- Wrote stack-review artifact: `/home/ubuntu/clawd/pat",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 08:59 UTC \u2014 [P4] Add BTC Microstructure Compression Signal to the Alpha Pipeline\n\n**Task:** Add a fresh alpha input to the hourly signal pipeline so we can see when BTC is compressing versus expanding before PM conditions shift.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Added a new `btc_microstructure` block to `scripts/alpha-signal-update.sh` using Binance 1h candles.\n- Fresh live read after the update:\n  - realized 1h volatility: **0.1906%**\n  - last 6h average range: **0.1341%**\n  - prior 18h average range: **0.4261%**\n  - compression ratio: **0.3147**\n  - 6h BTC trend: **-0.0546%**\n  - breakout risk: **coiled**\n- Current broader context still reads PM risk **low**, with slow regime `TRADE` and fast regime `RANGE`.\n\n**My thinking:**\nThe regime stack already says range/low risk, but this new read adds something important: the market is not just calm, it is **compressed hard**. A 0.31 compression ratio means recent hourly ranges are about one-third of the prior baseline, which is exactly the kind of setup that can snap into expansion fast. That is useful because range-friendly conditions can stay good for PM until the breakout actually starts, then decay quickly.\n\n**Decision:**\n- Keep the current PM risk view unchanged for now because the live regime stack is still tradeable.\n- Treat `btc_microstructure.breakout_risk = coiled` as an early-warning context signal for the next alpha/dashboard pass, not a hard stop by itself.\n- Next useful step is to wire this into PM confidence or size reduction rules only when compression flips into expansion or directional follow-through.\n\n**Next:** On the next P4 heartbeat, test whether coiled-to-expanding transitions line up with PM drawdown windows well enough to justify an automatic size haircut or stop trigger.\n\n---\n\n## 2026-04-25 09:14 UTC \u2014 [P4: Alpha Research] Shift From Operator-Surface Expansion to Identifying the Next Worthwhile Adjacent Maintenance Target So We Do Not Keep Polishing a Now-Coherent Stack While a More Useful Observability Gap May Sit One Layer Out in the Dashboard Refresh Path\n\n**Task:** Reassess the broader maintenance area after deciding the overnight operator surface no longer has a clear high-value gap, then identify the next adjacent target worth attention.\n**Finding:**\n- Both bots are alive.\n- The overnight operator surface remains coherent and no new high-value gap appeared there.\n- Reviewed adjacent maintenance surfaces around:\n  - `scripts/operator_maintenance_check_overnight.sh`\n  - `scripts/check_operator_surface_full.py`\n  - `scripts/operator_status_overnight.sh`\n  - `dashboard/update-dashboard.sh`\n  - `data/overnight_report.json`\n  - `logs/operator-refresh-summary.log`\n- Conclusion:\n  - **the next adjacent maintenance target worth attention is dashboard freshness observability, not more operator-surface structure**\n- Wrote adjacent-target artifact: `/home/u",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -370,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
