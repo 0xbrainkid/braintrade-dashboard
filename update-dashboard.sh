@@ -138,6 +138,7 @@ p1_confidence = 0
 p1_signals_today = 0
 p1_directional_skew = 0.0
 p1_order_flow_skew = 0.0
+p1_directional_gap = 0.0
 p1_avg_signal_price = 0.0
 p1_structure_note = ""
 p1_disagreement = False
@@ -172,6 +173,7 @@ try:
     p1_signals_today = sa.get("signal_count", 0)
     p1_directional_skew = sa.get("directional_skew", 0.0) or 0.0
     p1_order_flow_skew = sa.get("order_flow_skew", 0.0) or 0.0
+    p1_directional_gap = abs(p1_order_flow_skew - p1_directional_skew)
     p1_avg_signal_price = sa.get("avg_signal_price", 0.0) or 0.0
     p1_disagreement = bool(p1_structure_note)
     p1_bearish_disagreement = p1_disagreement and p1_directional_skew <= -0.50
@@ -213,12 +215,12 @@ try:
     if p1_bearish_disagreement:
         p1_insights.append({
             "source": "Copy Structure",
-            "text": f"🧩 bearish disagreement: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
+            "text": f"🧩 bearish disagreement: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f} (gap {p1_directional_gap:.2f})"
         })
     elif p1_disagreement:
         p1_insights.append({
             "source": "Copy Structure",
-            "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
+            "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f} (gap {p1_directional_gap:.2f})"
         })
     if p1_source_age_minutes is not None:
         p1_insights.append({
@@ -474,6 +476,7 @@ data = {
         "signals_today": p1_signals_today,
         "directional_skew": round(p1_directional_skew, 3),
         "order_flow_skew": round(p1_order_flow_skew, 3),
+        "directional_order_gap": round(p1_directional_gap, 3),
         "avg_signal_price": round(p1_avg_signal_price, 3),
         "alignment_regime": p1_alignment_regime,
         "summary_state": p1_summary_state,
