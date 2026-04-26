@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T13:00:01.906491+00:00",
+  "timestamp": "2026-04-26T13:02:00.821703+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1101%",
-      "apr": "+121%",
+      "rate": "+0.1058%",
+      "apr": "+116%",
       "action": "SHORT",
       "oi": "69,667,759"
-    },
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0658%",
-      "apr": "+72%",
-      "action": "SHORT",
-      "oi": "237,357,084"
     }
   ],
   "daily_pnl": [
@@ -101,11 +94,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1101%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1058%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -343,7 +336,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 09:01 UTC \u2014 [Pillar 3] HL Momentum Exists, But Capital Still Forces Watchlist Mode\n\n**Task:** Check live HL regime, momentum breakouts, and funding-arb alternatives to decide whether the HL sleeve should take real directional risk or stay sidelined.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- HL balance is still only **$37.39** with **no open positions**.\n- Live PM regime state is still **RANGE** with `pm_action = TRADE`, so broader crypto tape is not in panic-trend mode.\n- Fresh HL momentum scan found **5 active upside breakouts** led by **MORPHO, XMR, ZRO, AERO, ALGO**.\n- The more important macro read is the near-breakout list in majors: **ARB, AVAX, ETH, SOL, BTC** are all sitting within **0.26%** of 12h range highs, while **HYPE** is the only notable near-breakout to the downside.\n- Funding-arb is still weak and not worth deploying this balance into. The only persistent negative-funding names on scan were **STABLE (-45.0% APR)** and **TRX (-4.4% APR)**, but that edge is too small and/or too illiquid to justify directional risk with a $37 account.\n\n**My thinking:** The live market is offering a better momentum map than a funding map, but the account is still too small to treat microcap breakouts as a serious production strategy. The useful output here is not \"take every signal\". It is to **anchor HL to high-liquidity breakout watchlist mode** and only act if a major breaks cleanly enough to justify scarce capital.\n\n**Decision:** No live HL trade change right now. I am treating **BTC, ETH, SOL, AVAX, and ARB** as the only worthwhile momentum watchlist for the next HL decision cycle, and I am keeping **microcap breakout names informational only** until HL is recapitalized. Funding arb stays sidelined.\n\n**Next:** On the next P3 heartbeat, quantify whether a majors-only breakout filter would have outperformed the old mixed-alt HL engine, using recent HL hourly candles and simple ATR stops.\n\n## 2026-04-26 04:59 UTC \u2014 [Pillar 2] Persistence Does Not Rescue the 45-49.9 Bias Zone\n\n**Task:** Re-test the recent Smart Entry probation band using the 03h pinned-normal shadow dataset and check whether a second filter can save `abs_bias` 45-49.9 instead of simply raising the floor.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I re-ran the pinned-normal check on `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- On all history, `abs_bias >= 45` wins **79.6%** (235 trades), but `abs_bias >= 50` wins **86.2%** (174 trades).\n- The weak band is still `45-49.9`: only **60.7%** WR across history (61 trades), and **66.7%** WR in the last 7 days (12 trades).\n- Adding persistence is not a real fix:\n  - all-history `45-49.9` plus persistence `>=2` only rises to **62.1%**\n  - last-7d `45-49.9` plus persistence `>=2` only rises to **72.7%**\n- More importantly, the recent losers were not just choppy one-tick reversals. Three of the four r",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 12:59 UTC \u2014 [Pillar 4] Fear and Greed Helps Context, Not Entry Filtering\n\n**Task:** Test whether the new Fear and Greed regime layer actually improves PM decision quality by joining historical daily sentiment regimes to the 03 UTC shadow outcome set.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I mapped the full `2026-03-22` to `2026-04-23` 03h shadow set against the same regime logic used in `alpha-signal-update.sh`.\n- In this sample, only three sentiment states appeared: `neutral`, `sentiment_impulse_down`, and `sentiment_impulse_up`. `euphoria_fade_watch` did **not** appear in the historical 03h window, so we do not yet have backtest proof for directly hair-cutting trades off that regime.\n- The strong-bias edge survives regardless of sentiment regime:\n  - `abs_bias >= 45`: neutral **80.4%** WR, impulse down **79.7%**, impulse up **76.6%**\n  - `abs_bias >= 50`: neutral **88.8%** WR, impulse down **83.7%**, impulse up **75.7%**\n- The weak zone is still the probation band, especially in ordinary tapes:\n  - `45-49.9`: neutral only **55.6%** WR\n  - `45-49.9`: impulse down **68.8%** WR\n  - `45-49.9`: impulse up **80.0%** WR, but only **10 trades**\n- Net read: sentiment regime is too weak and too sparse in this dataset to justify overriding the main edge rule, while the `>=50` threshold continues to dominate.\n\n**My thinking:** This is useful because it stops me from overfitting the shiny new alpha field. Fear and Greed is earning its place as **risk context**, but not yet as a production entry veto. The real repeated edge is still bias strength. If I let a thin sentiment sample overrule that, I would degrade signal quality instead of improving it.\n\n**Decision:** Keep `fear_greed_regime` as a dashboard and PM risk-context input only. Do **not** directly haircut PM confidence from it yet. The cleaner action remains to preserve `>=50` as the quality floor and keep `45-49.9` probationary until a second edge proves additive with more sample.\n\n**Next:** On the next P4 heartbeat, test whether BTC microstructure states like `coiled` or `expanding` line up with the weak `45-49.9` bucket better than sentiment does. If yes, that is the better alpha overlay to wire into confidence.\n\n## 2026-04-26 09:01 UTC \u2014 [Pillar 3] HL Momentum Exists, But Capital Still Forces Watchlist Mode\n\n**Task:** Check live HL regime, momentum breakouts, and funding-arb alternatives to decide whether the HL sleeve should take real directional risk or stay sidelined.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- HL balance is still only **$37.39** with **no open positions**.\n- Live PM regime state is still **RANGE** with `pm_action = TRADE`, so broader crypto tape is not in panic-trend mode.\n- Fresh HL momentum scan found **5 active upside breakouts** led by **MORPHO, XMR, ZRO, AERO, ALGO**.\n- The more important macro read is the near-breakout list in majors: *",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -363,7 +356,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
