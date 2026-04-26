@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T05:00:02.433130+00:00",
+  "timestamp": "2026-04-26T05:02:25.221840+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1196%",
-      "apr": "+131%",
+      "rate": "+0.0960%",
+      "apr": "+105%",
       "action": "SHORT",
       "oi": "69,667,759"
     }
@@ -94,7 +94,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1196%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0960%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -336,12 +336,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 00:59 UTC \u2014 [Pillar 1] Consensus Counts Understate the Leaderboard's Short Bias\n\n**Task:** Run fresh Hyperliquid copy-intel and check whether the current top-wallet posture still offers a usable directional edge.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh leaderboard scan printed **BTC 3L/5S, ETH 3L/4S, SOL 5L/5S**.\n- The raw counts make BTC and ETH look only mildly bearish, but notional tells the real story:\n  - **BTC:** longs **$4.23M** vs shorts **$13.76M**\n  - **ETH:** longs **$123k** vs shorts **$5.92M**\n  - **SOL:** longs **$3.24M** vs shorts **$3.46M**\n  - **HYPE:** longs **$1.44M** vs shorts **$18.44M**\n- The main drivers are still concentrated in the same elite wallets:\n  - **anon-0xfc66:** BTC short **$7.30M**, ETH short **$2.15M**, HYPE short **$11.86M**, SOL long **$2.22M**\n  - **anon-0x8fcc:** BTC short **$5.39M**\n  - **anon-0xecb6:** BTC long **$3.80M**, ETH short **$3.22M**, HYPE short **$3.40M**, SOL short **$1.39M**\n- Funding is basically flat on BTC/ETH/SOL, so this is not a funding-carry crowd. It is discretionary positioning by top wallets.\n\n**My thinking:** Headcount alone is too weak for copy-intel. One large winner leaning hard short can outweigh several tiny longs, and that is exactly what is happening now. The cleanest repeated motif is still **short ETH and HYPE**, while **BTC remains split but skewed bearish by size**, and **SOL is close to balanced because the biggest bull and biggest bear are offsetting each other**.\n\n**Decision:** I am keeping **ETH short** and **HYPE short** as the strongest copy-intel signals. I am treating **BTC** as a secondary bearish lean, not consensus conviction, because `anon-0xecb6` is still meaningfully long against the bigger short crowd. I am not using **SOL** as a directional input until the notional balance widens.\n\n**Next:** On the next P1 heartbeat, turn the tracker into a notional-weighted consensus output so the dashboard stops overvaluing small-wallet headcount versus whale-sized conviction.\n\n## 2026-04-25 21:01 UTC \u2014 [P4] Wire Fear and Greed Regime Into Alpha Risk Context\n\n**Task:** Add a sentiment-derived alpha input instead of using the raw Fear and Greed print as a passive dashboard number.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I upgraded `scripts/alpha-signal-update.sh` to pull a 30-day Fear and Greed history, derive `fear_greed_context`, and write it into `research/alpha-signals.json`.\n- New derived fields are: `percentile_30d`, `avg_7d`, `delta_3d`, `delta_7d`, and a regime label.\n- Live read after the update:\n  - Fear and Greed = **31** (`Fear`)\n  - 30d percentile = **86.2**\n  - 7d average = **33.9**\n  - 3d delta = **-1**\n  - 7d delta = **+5**\n  - regime = **euphoria_fade_watch**\n- I also wired this sentiment regime into `pm_risk_context`, which lifted live PM risk from low to **medium** even though price structure is still range-",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 04:59 UTC \u2014 [Pillar 2] Persistence Does Not Rescue the 45-49.9 Bias Zone\n\n**Task:** Re-test the recent Smart Entry probation band using the 03h pinned-normal shadow dataset and check whether a second filter can save `abs_bias` 45-49.9 instead of simply raising the floor.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I re-ran the pinned-normal check on `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- On all history, `abs_bias >= 45` wins **79.6%** (235 trades), but `abs_bias >= 50` wins **86.2%** (174 trades).\n- The weak band is still `45-49.9`: only **60.7%** WR across history (61 trades), and **66.7%** WR in the last 7 days (12 trades).\n- Adding persistence is not a real fix:\n  - all-history `45-49.9` plus persistence `>=2` only rises to **62.1%**\n  - last-7d `45-49.9` plus persistence `>=2` only rises to **72.7%**\n- More importantly, the recent losers were not just choppy one-tick reversals. Three of the four recent failures came after long persistence streaks:\n  - `2026-04-22T03:23:50Z` \u2014 `abs_bias 48.4`, persistence `35`\n  - `2026-04-22T03:34:54Z` \u2014 `abs_bias 45.4`, persistence `47`\n  - `2026-04-22T03:59:59Z` \u2014 `abs_bias 46.4`, persistence `72`\n\n**My thinking:** Mid-strength bias is still the trap zone. The market can sit in a convincing-looking 45-49.9 read for a long time and still fail, so a persistence exception is too easy to spoof. The cleaner rule is still quality over quantity: `>=50` keeps a better hit rate without relying on a fragile rescue clause.\n\n**Decision:** I am **not** recommending a persistence-based exception for `45-49.9`. The best next parameter stance remains to treat `45-49.9` as probationary / blocked and keep `>=50` as the cleaner learning floor until a genuinely additive second edge proves otherwise.\n\n**Next:** On the next P2 heartbeat, test whether `45-49.9` becomes usable only when it also has a third variable like copy-intel alignment or regime context. If not, formalize `>=50` in the production learning path.\n\n## 2026-04-26 00:59 UTC \u2014 [Pillar 1] Consensus Counts Understate the Leaderboard's Short Bias\n\n**Task:** Run fresh Hyperliquid copy-intel and check whether the current top-wallet posture still offers a usable directional edge.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh leaderboard scan printed **BTC 3L/5S, ETH 3L/4S, SOL 5L/5S**.\n- The raw counts make BTC and ETH look only mildly bearish, but notional tells the real story:\n  - **BTC:** longs **$4.23M** vs shorts **$13.76M**\n  - **ETH:** longs **$123k** vs shorts **$5.92M**\n  - **SOL:** longs **$3.24M** vs shorts **$3.46M**\n  - **HYPE:** longs **$1.44M** vs shorts **$18.44M**\n- The main drivers are still concentrated in the same elite wallets:\n  - **anon-0xfc66:** BTC short **$7.30M**, ETH short **$2.15M**, HYPE short **$11.86M**, SOL long **$2.22M**\n  - **anon-0x8fcc:** BTC short **$5.39M**\n  - **anon-0xecb6:** BTC",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 49,
+    "research_files": 50,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
