@@ -142,6 +142,7 @@ p1_avg_signal_price = 0.0
 p1_structure_note = ""
 p1_disagreement = False
 p1_crowded_expensive = False
+p1_alignment_regime = "mixed"
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
@@ -158,6 +159,14 @@ try:
     p1_avg_signal_price = sa.get("avg_signal_price", 0.0) or 0.0
     p1_disagreement = bool(p1_structure_note)
     p1_crowded_expensive = p1_avg_signal_price >= 0.95 and abs(p1_directional_skew) >= 0.75
+    if not p1_disagreement and not p1_crowded_expensive and abs(p1_directional_skew) >= 0.75 and abs(p1_order_flow_skew - p1_directional_skew) <= 0.10:
+        p1_alignment_regime = "aligned_high_conviction"
+    elif p1_disagreement:
+        p1_alignment_regime = "disagreement"
+    elif p1_crowded_expensive:
+        p1_alignment_regime = "crowded_expensive"
+    else:
+        p1_alignment_regime = "mixed"
     if sa.get("buy_count", 0) + sa.get("sell_count", 0) > 0:
         p1_insights.append({
             "source": "Copy Scanner",
@@ -172,6 +181,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"💸 crowded regime: directional skew {p1_directional_skew:+.2f} at avg price ${p1_avg_signal_price:.3f}"
+        })
+    if p1_alignment_regime == "aligned_high_conviction":
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"✅ aligned regime: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
         })
 except: pass
 
@@ -413,6 +427,7 @@ data = {
         "directional_skew": round(p1_directional_skew, 3),
         "order_flow_skew": round(p1_order_flow_skew, 3),
         "avg_signal_price": round(p1_avg_signal_price, 3),
+        "alignment_regime": p1_alignment_regime,
         "disagreement_regime": p1_disagreement,
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
