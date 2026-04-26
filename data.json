@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T09:00:02.830351+00:00",
+  "timestamp": "2026-04-26T09:01:56.332366+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0536%",
-      "apr": "+59%",
+      "rate": "+0.0719%",
+      "apr": "+79%",
       "action": "SHORT",
       "oi": "237,412,494"
+    },
+    {
+      "coin": "YZY",
+      "rate": "-0.0520%",
+      "apr": "-57%",
+      "action": "LONG",
+      "oi": "1,198,304"
     }
   ],
   "daily_pnl": [
@@ -94,11 +101,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0536%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.0719%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -336,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 04:59 UTC \u2014 [Pillar 2] Persistence Does Not Rescue the 45-49.9 Bias Zone\n\n**Task:** Re-test the recent Smart Entry probation band using the 03h pinned-normal shadow dataset and check whether a second filter can save `abs_bias` 45-49.9 instead of simply raising the floor.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I re-ran the pinned-normal check on `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- On all history, `abs_bias >= 45` wins **79.6%** (235 trades), but `abs_bias >= 50` wins **86.2%** (174 trades).\n- The weak band is still `45-49.9`: only **60.7%** WR across history (61 trades), and **66.7%** WR in the last 7 days (12 trades).\n- Adding persistence is not a real fix:\n  - all-history `45-49.9` plus persistence `>=2` only rises to **62.1%**\n  - last-7d `45-49.9` plus persistence `>=2` only rises to **72.7%**\n- More importantly, the recent losers were not just choppy one-tick reversals. Three of the four recent failures came after long persistence streaks:\n  - `2026-04-22T03:23:50Z` \u2014 `abs_bias 48.4`, persistence `35`\n  - `2026-04-22T03:34:54Z` \u2014 `abs_bias 45.4`, persistence `47`\n  - `2026-04-22T03:59:59Z` \u2014 `abs_bias 46.4`, persistence `72`\n\n**My thinking:** Mid-strength bias is still the trap zone. The market can sit in a convincing-looking 45-49.9 read for a long time and still fail, so a persistence exception is too easy to spoof. The cleaner rule is still quality over quantity: `>=50` keeps a better hit rate without relying on a fragile rescue clause.\n\n**Decision:** I am **not** recommending a persistence-based exception for `45-49.9`. The best next parameter stance remains to treat `45-49.9` as probationary / blocked and keep `>=50` as the cleaner learning floor until a genuinely additive second edge proves otherwise.\n\n**Next:** On the next P2 heartbeat, test whether `45-49.9` becomes usable only when it also has a third variable like copy-intel alignment or regime context. If not, formalize `>=50` in the production learning path.\n\n## 2026-04-26 00:59 UTC \u2014 [Pillar 1] Consensus Counts Understate the Leaderboard's Short Bias\n\n**Task:** Run fresh Hyperliquid copy-intel and check whether the current top-wallet posture still offers a usable directional edge.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh leaderboard scan printed **BTC 3L/5S, ETH 3L/4S, SOL 5L/5S**.\n- The raw counts make BTC and ETH look only mildly bearish, but notional tells the real story:\n  - **BTC:** longs **$4.23M** vs shorts **$13.76M**\n  - **ETH:** longs **$123k** vs shorts **$5.92M**\n  - **SOL:** longs **$3.24M** vs shorts **$3.46M**\n  - **HYPE:** longs **$1.44M** vs shorts **$18.44M**\n- The main drivers are still concentrated in the same elite wallets:\n  - **anon-0xfc66:** BTC short **$7.30M**, ETH short **$2.15M**, HYPE short **$11.86M**, SOL long **$2.22M**\n  - **anon-0x8fcc:** BTC short **$5.39M**\n  - **anon-0xecb6:** BTC",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 09:01 UTC \u2014 [Pillar 3] HL Momentum Exists, But Capital Still Forces Watchlist Mode\n\n**Task:** Check live HL regime, momentum breakouts, and funding-arb alternatives to decide whether the HL sleeve should take real directional risk or stay sidelined.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- HL balance is still only **$37.39** with **no open positions**.\n- Live PM regime state is still **RANGE** with `pm_action = TRADE`, so broader crypto tape is not in panic-trend mode.\n- Fresh HL momentum scan found **5 active upside breakouts** led by **MORPHO, XMR, ZRO, AERO, ALGO**.\n- The more important macro read is the near-breakout list in majors: **ARB, AVAX, ETH, SOL, BTC** are all sitting within **0.26%** of 12h range highs, while **HYPE** is the only notable near-breakout to the downside.\n- Funding-arb is still weak and not worth deploying this balance into. The only persistent negative-funding names on scan were **STABLE (-45.0% APR)** and **TRX (-4.4% APR)**, but that edge is too small and/or too illiquid to justify directional risk with a $37 account.\n\n**My thinking:** The live market is offering a better momentum map than a funding map, but the account is still too small to treat microcap breakouts as a serious production strategy. The useful output here is not \"take every signal\". It is to **anchor HL to high-liquidity breakout watchlist mode** and only act if a major breaks cleanly enough to justify scarce capital.\n\n**Decision:** No live HL trade change right now. I am treating **BTC, ETH, SOL, AVAX, and ARB** as the only worthwhile momentum watchlist for the next HL decision cycle, and I am keeping **microcap breakout names informational only** until HL is recapitalized. Funding arb stays sidelined.\n\n**Next:** On the next P3 heartbeat, quantify whether a majors-only breakout filter would have outperformed the old mixed-alt HL engine, using recent HL hourly candles and simple ATR stops.\n\n## 2026-04-26 04:59 UTC \u2014 [Pillar 2] Persistence Does Not Rescue the 45-49.9 Bias Zone\n\n**Task:** Re-test the recent Smart Entry probation band using the 03h pinned-normal shadow dataset and check whether a second filter can save `abs_bias` 45-49.9 instead of simply raising the floor.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I re-ran the pinned-normal check on `/home/ubuntu/clawd/data/03h-shadow-sim-results.csv`.\n- On all history, `abs_bias >= 45` wins **79.6%** (235 trades), but `abs_bias >= 50` wins **86.2%** (174 trades).\n- The weak band is still `45-49.9`: only **60.7%** WR across history (61 trades), and **66.7%** WR in the last 7 days (12 trades).\n- Adding persistence is not a real fix:\n  - all-history `45-49.9` plus persistence `>=2` only rises to **62.1%**\n  - last-7d `45-49.9` plus persistence `>=2` only rises to **72.7%**\n- More importantly, the recent losers were not just choppy one-tick reversals. Three of the four r",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -356,7 +363,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
