@@ -138,8 +138,10 @@ p1_confidence = 0
 p1_signals_today = 0
 p1_directional_skew = 0.0
 p1_order_flow_skew = 0.0
+p1_avg_signal_price = 0.0
 p1_structure_note = ""
 p1_disagreement = False
+p1_crowded_expensive = False
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
@@ -153,7 +155,9 @@ try:
     p1_signals_today = sa.get("signal_count", 0)
     p1_directional_skew = sa.get("directional_skew", 0.0) or 0.0
     p1_order_flow_skew = sa.get("order_flow_skew", 0.0) or 0.0
+    p1_avg_signal_price = sa.get("avg_signal_price", 0.0) or 0.0
     p1_disagreement = bool(p1_structure_note)
+    p1_crowded_expensive = p1_avg_signal_price >= 0.95 and abs(p1_directional_skew) >= 0.75
     if sa.get("buy_count", 0) + sa.get("sell_count", 0) > 0:
         p1_insights.append({
             "source": "Copy Scanner",
@@ -163,6 +167,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
+        })
+    if p1_crowded_expensive:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"💸 crowded regime: directional skew {p1_directional_skew:+.2f} at avg price ${p1_avg_signal_price:.3f}"
         })
 except: pass
 
@@ -403,7 +412,9 @@ data = {
         "signals_today": p1_signals_today,
         "directional_skew": round(p1_directional_skew, 3),
         "order_flow_skew": round(p1_order_flow_skew, 3),
+        "avg_signal_price": round(p1_avg_signal_price, 3),
         "disagreement_regime": p1_disagreement,
+        "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
         "insights": p1_insights,
         "evolution": _pevents.get("1", []),
