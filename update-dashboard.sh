@@ -145,6 +145,9 @@ p1_crowded_expensive = False
 p1_alignment_regime = "mixed"
 p1_summary_state = "mixed_bullish"
 p1_summary_text = "Mixed bullish copy flow"
+p1_source_scan_time = None
+p1_source_age_minutes = None
+p1_lag_risk = False
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
@@ -153,6 +156,16 @@ try:
     p1_confidence = sig.get("confidence", 0)
     suggested_adjustments = sig.get("suggested_adjustments", {}) or {}
     p1_structure_note = suggested_adjustments.get("structure_note", "")
+    sources = sig.get("sources", {}) or {}
+    p1_source_scan_time = sources.get("copy_signals_scan_time")
+    if p1_source_scan_time:
+        try:
+            scan_dt = datetime.datetime.fromisoformat(p1_source_scan_time)
+            p1_source_age_minutes = round((now - scan_dt).total_seconds() / 60, 1)
+            p1_lag_risk = p1_source_age_minutes >= 15
+        except Exception:
+            p1_source_age_minutes = None
+            p1_lag_risk = False
     details = sig.get("details", {})
     sa = details.get("signal_analysis", {})
     p1_signals_today = sa.get("signal_count", 0)
@@ -191,6 +204,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
+        })
+    if p1_source_age_minutes is not None:
+        p1_insights.append({
+            "source": "Copy Freshness",
+            "text": f"⏱️ source scan age: {p1_source_age_minutes:.1f}m" + (" — lag risk" if p1_lag_risk else "")
         })
     if p1_crowded_expensive:
         p1_insights.append({
@@ -445,6 +463,9 @@ data = {
         "alignment_regime": p1_alignment_regime,
         "summary_state": p1_summary_state,
         "summary_text": p1_summary_text,
+        "source_scan_time": p1_source_scan_time,
+        "source_age_minutes": p1_source_age_minutes,
+        "lag_risk": p1_lag_risk,
         "disagreement_regime": p1_disagreement,
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
@@ -496,7 +517,8 @@ data = {
 with open("/home/ubuntu/clawd/dashboard/data.json", 'w') as f:
     json.dump(data, f, indent=2)
 
-print(f"Dashboard: PM=${pm_balance:.2f} HL=${hl_balance:.2f} | {total_trades} trades | WR={pm_win_rate:.0f}% | P1:{p1_summary_state} P2:{len(strategies)} strats P3:{params_changed} changes")
+p1_headline = p1_summary_state + ("!lag" if p1_lag_risk else "")
+print(f"Dashboard: PM=${pm_balance:.2f} HL=${hl_balance:.2f} | {total_trades} trades | WR={pm_win_rate:.0f}% | P1:{p1_headline} P2:{len(strategies)} strats P3:{params_changed} changes")
 PYEOF
 
 # Push to GitHub
