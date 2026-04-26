@@ -143,6 +143,8 @@ p1_structure_note = ""
 p1_disagreement = False
 p1_crowded_expensive = False
 p1_alignment_regime = "mixed"
+p1_summary_state = "mixed_bullish"
+p1_summary_text = "Mixed bullish copy flow"
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
@@ -167,6 +169,19 @@ try:
         p1_alignment_regime = "crowded_expensive"
     else:
         p1_alignment_regime = "mixed"
+    if p1_alignment_regime == "aligned_high_conviction":
+        p1_summary_state = f"aligned_{p1_bias}"
+        p1_summary_text = f"Aligned {p1_bias} copy flow"
+    elif p1_alignment_regime == "crowded_expensive":
+        p1_summary_state = f"crowded_{p1_bias}"
+        p1_summary_text = f"Crowded expensive {p1_bias} copy flow"
+    elif p1_alignment_regime == "disagreement":
+        p1_summary_state = "disagreement"
+        p1_summary_text = "Disagreement regime in copy flow"
+    else:
+        p1_summary_state = f"mixed_{p1_bias}"
+        p1_summary_text = f"Mixed {p1_bias} copy flow"
+
     if sa.get("buy_count", 0) + sa.get("sell_count", 0) > 0:
         p1_insights.append({
             "source": "Copy Scanner",
@@ -428,6 +443,8 @@ data = {
         "order_flow_skew": round(p1_order_flow_skew, 3),
         "avg_signal_price": round(p1_avg_signal_price, 3),
         "alignment_regime": p1_alignment_regime,
+        "summary_state": p1_summary_state,
+        "summary_text": p1_summary_text,
         "disagreement_regime": p1_disagreement,
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
