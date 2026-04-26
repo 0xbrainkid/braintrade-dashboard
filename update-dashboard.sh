@@ -195,6 +195,9 @@ try:
         p1_summary_state = f"mixed_{p1_bias}"
         p1_summary_text = f"Mixed {p1_bias} copy flow"
 
+    if p1_lag_risk:
+        p1_summary_text += " — lagging source"
+
     if sa.get("buy_count", 0) + sa.get("sell_count", 0) > 0:
         p1_insights.append({
             "source": "Copy Scanner",
