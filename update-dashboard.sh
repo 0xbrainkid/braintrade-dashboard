@@ -136,19 +136,33 @@ p1_traders = 0
 p1_bias = "neutral"
 p1_confidence = 0
 p1_signals_today = 0
+p1_directional_skew = 0.0
+p1_order_flow_skew = 0.0
+p1_structure_note = ""
+p1_disagreement = False
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
         sig = json.load(f)
     p1_bias = sig.get("market_bias", "neutral")
     p1_confidence = sig.get("confidence", 0)
+    suggested_adjustments = sig.get("suggested_adjustments", {}) or {}
+    p1_structure_note = suggested_adjustments.get("structure_note", "")
     details = sig.get("details", {})
     sa = details.get("signal_analysis", {})
     p1_signals_today = sa.get("signal_count", 0)
+    p1_directional_skew = sa.get("directional_skew", 0.0) or 0.0
+    p1_order_flow_skew = sa.get("order_flow_skew", 0.0) or 0.0
+    p1_disagreement = bool(p1_structure_note)
     if sa.get("buy_count", 0) + sa.get("sell_count", 0) > 0:
         p1_insights.append({
             "source": "Copy Scanner",
             "text": f"Top traders: {sa.get('buy_count',0)} buys, {sa.get('sell_count',0)} sells — avg price ${sa.get('avg_signal_price',0):.3f}"
+        })
+    if p1_disagreement:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
         })
 except: pass
 
@@ -387,6 +401,10 @@ data = {
         "current_bias": p1_bias,
         "signal_confidence": p1_confidence,
         "signals_today": p1_signals_today,
+        "directional_skew": round(p1_directional_skew, 3),
+        "order_flow_skew": round(p1_order_flow_skew, 3),
+        "disagreement_regime": p1_disagreement,
+        "structure_note": p1_structure_note,
         "insights": p1_insights,
         "evolution": _pevents.get("1", []),
     },
