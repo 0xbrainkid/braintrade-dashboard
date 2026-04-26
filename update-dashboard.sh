@@ -141,6 +141,7 @@ p1_order_flow_skew = 0.0
 p1_avg_signal_price = 0.0
 p1_structure_note = ""
 p1_disagreement = False
+p1_bearish_disagreement = False
 p1_crowded_expensive = False
 p1_alignment_regime = "mixed"
 p1_summary_state = "mixed_bullish"
@@ -173,9 +174,12 @@ try:
     p1_order_flow_skew = sa.get("order_flow_skew", 0.0) or 0.0
     p1_avg_signal_price = sa.get("avg_signal_price", 0.0) or 0.0
     p1_disagreement = bool(p1_structure_note)
+    p1_bearish_disagreement = p1_disagreement and p1_directional_skew <= -0.50
     p1_crowded_expensive = p1_avg_signal_price >= 0.95 and abs(p1_directional_skew) >= 0.75
     if not p1_disagreement and not p1_crowded_expensive and abs(p1_directional_skew) >= 0.75 and abs(p1_order_flow_skew - p1_directional_skew) <= 0.10:
         p1_alignment_regime = "aligned_high_conviction"
+    elif p1_bearish_disagreement:
+        p1_alignment_regime = "bearish_disagreement"
     elif p1_disagreement:
         p1_alignment_regime = "disagreement"
     elif p1_crowded_expensive:
@@ -188,6 +192,9 @@ try:
     elif p1_alignment_regime == "crowded_expensive":
         p1_summary_state = f"crowded_{p1_bias}"
         p1_summary_text = f"Crowded expensive {p1_bias} copy flow"
+    elif p1_alignment_regime == "bearish_disagreement":
+        p1_summary_state = "bearish_disagreement"
+        p1_summary_text = "Bearish disagreement regime in copy flow"
     elif p1_alignment_regime == "disagreement":
         p1_summary_state = "disagreement"
         p1_summary_text = "Disagreement regime in copy flow"
@@ -203,7 +210,12 @@ try:
             "source": "Copy Scanner",
             "text": f"Top traders: {sa.get('buy_count',0)} buys, {sa.get('sell_count',0)} sells — avg price ${sa.get('avg_signal_price',0):.3f}"
         })
-    if p1_disagreement:
+    if p1_bearish_disagreement:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 bearish disagreement: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
+        })
+    elif p1_disagreement:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 disagreement regime: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f}"
@@ -470,6 +482,7 @@ data = {
         "source_age_minutes": p1_source_age_minutes,
         "lag_risk": p1_lag_risk,
         "disagreement_regime": p1_disagreement,
+        "bearish_disagreement_regime": p1_bearish_disagreement,
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
         "insights": p1_insights,
