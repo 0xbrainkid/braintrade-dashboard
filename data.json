@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T01:00:01.754689+00:00",
+  "timestamp": "2026-04-26T01:01:51.637811+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.1035%",
-      "apr": "+113%",
-      "action": "SHORT",
-      "oi": "69,667,759"
+      "coin": "HYPER",
+      "rate": "-0.1162%",
+      "apr": "-127%",
+      "action": "LONG",
+      "oi": "5,303,950"
     },
     {
-      "coin": "HYPER",
-      "rate": "-0.0811%",
-      "apr": "-89%",
-      "action": "LONG",
-      "oi": "5,308,872"
+      "coin": "MAVIA",
+      "rate": "+0.0799%",
+      "apr": "+87%",
+      "action": "SHORT",
+      "oi": "69,667,759"
     }
   ],
   "daily_pnl": [
@@ -101,7 +101,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1035%/8h \u2014 longs paying shorts"
+        "text": "Strongest: HYPER at -0.1162%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -343,7 +343,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-25 21:01 UTC \u2014 [P4] Wire Fear and Greed Regime Into Alpha Risk Context\n\n**Task:** Add a sentiment-derived alpha input instead of using the raw Fear and Greed print as a passive dashboard number.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I upgraded `scripts/alpha-signal-update.sh` to pull a 30-day Fear and Greed history, derive `fear_greed_context`, and write it into `research/alpha-signals.json`.\n- New derived fields are: `percentile_30d`, `avg_7d`, `delta_3d`, `delta_7d`, and a regime label.\n- Live read after the update:\n  - Fear and Greed = **31** (`Fear`)\n  - 30d percentile = **86.2**\n  - 7d average = **33.9**\n  - 3d delta = **-1**\n  - 7d delta = **+5**\n  - regime = **euphoria_fade_watch**\n- I also wired this sentiment regime into `pm_risk_context`, which lifted live PM risk from low to **medium** even though price structure is still range-tradeable.\n\n**My thinking:** Raw Fear and Greed values are misleading in a depressed tape because 31 looks fearful on an absolute basis, but relative to the last month it is actually near the top of the local sentiment range. That makes it a better fade/caution input than a dip-buy input. The useful edge is not the number itself, it is the number relative to recent sentiment regime plus whether that regime is rolling over.\n\n**Decision:** Keep PM trading enabled, but treat this as a caution overlay instead of a bullish contrarian signal. I am not changing execution logic yet, but I did make the alpha pipeline surface a `fear_greed_regime` so the next parameter pass can shrink confidence or size when local sentiment is stretched and fading.\n\n**Next:** On the next P4 heartbeat, test whether `fear_greed_regime` improves trade filtering when combined with `btc_microstructure.breakout_risk` and recent PM outcomes, then decide if it should directly haircut bot confidence.\n\n## 2026-04-25 16:59 UTC \u2014 [P1] Leaderboard Rotation Shifted From Broad BTC Shorts Into a Messier Relative-Value Tape\n\n**Task:** Run fresh copy-intel on the Hyperliquid leaderboard, compare the current top-wallet posture against the prior saved state, and identify whether there is still a clean follow-the-leader directional signal.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I ran `scripts/copy-intel-tracker.py` and then checked a fresh live snapshot of the top 20 HL wallets.\n- Current leaderboard consensus has **lost the clean overnight BTC short crowding** and rotated into a more mixed book:\n  - BTC: **5L / 4S**\n  - ETH: **3L / 5S**\n  - SOL: **5L / 5S**\n- The highest-signal wallets are now expressing **dispersion**, not one-way beta:\n  - **anon-0xfc66**: still the strongest bear, with **HYPE short $11.94M**, **BTC short $7.22M**, **ETH short $2.12M**, but also **SOL long $1.75M** and **PAXG long $3.81M**.\n  - **anon-0xecb6**: no longer a pure BTC short, now **BTC long $3.74M** while keeping a very large **ETH short $",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 00:59 UTC \u2014 [Pillar 1] Consensus Counts Understate the Leaderboard's Short Bias\n\n**Task:** Run fresh Hyperliquid copy-intel and check whether the current top-wallet posture still offers a usable directional edge.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh leaderboard scan printed **BTC 3L/5S, ETH 3L/4S, SOL 5L/5S**.\n- The raw counts make BTC and ETH look only mildly bearish, but notional tells the real story:\n  - **BTC:** longs **$4.23M** vs shorts **$13.76M**\n  - **ETH:** longs **$123k** vs shorts **$5.92M**\n  - **SOL:** longs **$3.24M** vs shorts **$3.46M**\n  - **HYPE:** longs **$1.44M** vs shorts **$18.44M**\n- The main drivers are still concentrated in the same elite wallets:\n  - **anon-0xfc66:** BTC short **$7.30M**, ETH short **$2.15M**, HYPE short **$11.86M**, SOL long **$2.22M**\n  - **anon-0x8fcc:** BTC short **$5.39M**\n  - **anon-0xecb6:** BTC long **$3.80M**, ETH short **$3.22M**, HYPE short **$3.40M**, SOL short **$1.39M**\n- Funding is basically flat on BTC/ETH/SOL, so this is not a funding-carry crowd. It is discretionary positioning by top wallets.\n\n**My thinking:** Headcount alone is too weak for copy-intel. One large winner leaning hard short can outweigh several tiny longs, and that is exactly what is happening now. The cleanest repeated motif is still **short ETH and HYPE**, while **BTC remains split but skewed bearish by size**, and **SOL is close to balanced because the biggest bull and biggest bear are offsetting each other**.\n\n**Decision:** I am keeping **ETH short** and **HYPE short** as the strongest copy-intel signals. I am treating **BTC** as a secondary bearish lean, not consensus conviction, because `anon-0xecb6` is still meaningfully long against the bigger short crowd. I am not using **SOL** as a directional input until the notional balance widens.\n\n**Next:** On the next P1 heartbeat, turn the tracker into a notional-weighted consensus output so the dashboard stops overvaluing small-wallet headcount versus whale-sized conviction.\n\n## 2026-04-25 21:01 UTC \u2014 [P4] Wire Fear and Greed Regime Into Alpha Risk Context\n\n**Task:** Add a sentiment-derived alpha input instead of using the raw Fear and Greed print as a passive dashboard number.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I upgraded `scripts/alpha-signal-update.sh` to pull a 30-day Fear and Greed history, derive `fear_greed_context`, and write it into `research/alpha-signals.json`.\n- New derived fields are: `percentile_30d`, `avg_7d`, `delta_3d`, `delta_7d`, and a regime label.\n- Live read after the update:\n  - Fear and Greed = **31** (`Fear`)\n  - 30d percentile = **86.2**\n  - 7d average = **33.9**\n  - 3d delta = **-1**\n  - 7d delta = **+5**\n  - regime = **euphoria_fade_watch**\n- I also wired this sentiment regime into `pm_risk_context`, which lifted live PM risk from low to **medium** even though price structure is still range-",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
