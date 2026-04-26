@@ -496,7 +496,7 @@ data = {
 with open("/home/ubuntu/clawd/dashboard/data.json", 'w') as f:
     json.dump(data, f, indent=2)
 
-print(f"Dashboard: PM=${pm_balance:.2f} HL=${hl_balance:.2f} | {total_trades} trades | WR={pm_win_rate:.0f}% | P1:{p1_bias} P2:{len(strategies)} strats P3:{params_changed} changes")
+print(f"Dashboard: PM=${pm_balance:.2f} HL=${hl_balance:.2f} | {total_trades} trades | WR={pm_win_rate:.0f}% | P1:{p1_summary_state} P2:{len(strategies)} strats P3:{params_changed} changes")
 PYEOF
 
 # Push to GitHub
