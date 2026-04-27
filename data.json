@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T15:25:43.319815+00:00",
+  "timestamp": "2026-04-27T15:30:02.851764+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,24 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "0G",
-      "rate": "-0.2731%",
-      "apr": "-299%",
+      "rate": "-0.2620%",
+      "apr": "-287%",
       "action": "LONG",
-      "oi": "975,400"
+      "oi": "975,654"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0930%",
-      "apr": "+102%",
+      "rate": "+0.0823%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "69,667,754"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0721%",
-      "apr": "-79%",
+      "rate": "-0.0680%",
+      "apr": "-74%",
       "action": "LONG",
-      "oi": "2,190,728,528"
+      "oi": "2,190,640,510"
     }
   ],
   "daily_pnl": [
@@ -99,23 +99,23 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 28,
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": -0.28,
-    "order_flow_skew": -0.04,
-    "directional_order_gap": 0.24,
-    "avg_signal_price": 0.869,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bearish",
-    "summary_text": "Mixed bearish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-27T14:30:18.073434+00:00",
-    "source_age_minutes": 55.4,
+    "directional_skew": -1.0,
+    "order_flow_skew": 1.0,
+    "directional_order_gap": 2.0,
+    "avg_signal_price": 0.99,
+    "alignment_regime": "max_gap_all_buy_bearish_disagreement",
+    "summary_state": "max_gap_all_buy_bearish_disagreement",
+    "summary_text": "Max-gap all-buy bearish disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-27T15:00:19.366483+00:00",
+    "source_age_minutes": 29.7,
     "lag_risk": true,
-    "disagreement_regime": false,
-    "bearish_disagreement_regime": false,
-    "all_buy_bearish_disagreement_regime": false,
+    "disagreement_regime": true,
+    "bearish_disagreement_regime": true,
+    "all_buy_bearish_disagreement_regime": true,
     "all_buy_bearish_inversion_regime": false,
-    "max_gap_all_buy_bearish_disagreement_regime": false,
+    "max_gap_all_buy_bearish_disagreement_regime": true,
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
@@ -126,20 +126,28 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "",
+    "crowded_expensive_regime": true,
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 24 buys, 26 sells \u2014 avg price $0.869"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.990"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83e\udde9 max-gap all-buy bearish disagreement: directional skew -1.00, order-flow skew +1.00, avg price $0.990, gap 2.00"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 55.4m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: 0G at -0.2731%/8h \u2014 shorts paying longs"
+        "text": "Strongest: 0G at -0.2620%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
