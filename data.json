@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T14:00:02.247436+00:00",
+  "timestamp": "2026-04-27T14:30:03.131305+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,25 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0540%",
-      "apr": "+59%",
-      "action": "SHORT",
-      "oi": "237,354,180"
+      "coin": "0G",
+      "rate": "-0.0555%",
+      "apr": "-61%",
+      "action": "LONG",
+      "oi": "910,960"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0532%",
-      "apr": "+58%",
+      "rate": "+0.0541%",
+      "apr": "+59%",
       "action": "SHORT",
       "oi": "69,667,754"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0523%",
+      "apr": "-57%",
+      "action": "LONG",
+      "oi": "2,194,876,862"
     }
   ],
   "daily_pnl": [
@@ -92,20 +99,20 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 40,
+    "signal_confidence": 38,
     "signals_today": 50,
-    "directional_skew": -0.4,
-    "order_flow_skew": -0.08,
-    "directional_order_gap": 0.32,
-    "avg_signal_price": 0.915,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bearish",
-    "summary_text": "Mixed bearish copy flow",
-    "source_scan_time": "2026-04-27T13:45:12.824525+00:00",
-    "source_age_minutes": 14.8,
-    "lag_risk": false,
-    "disagreement_regime": false,
-    "bearish_disagreement_regime": false,
+    "directional_skew": -0.64,
+    "order_flow_skew": -0.12,
+    "directional_order_gap": 0.52,
+    "avg_signal_price": 0.961,
+    "alignment_regime": "soft_flat_order_bearish_disagreement",
+    "summary_state": "soft_flat_order_bearish_disagreement",
+    "summary_text": "Soft flat-order bearish disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-27T14:00:19.809415+00:00",
+    "source_age_minutes": 29.7,
+    "lag_risk": true,
+    "disagreement_regime": true,
+    "bearish_disagreement_regime": true,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
@@ -113,29 +120,33 @@
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
-    "soft_flat_order_bearish_disagreement_regime": false,
+    "soft_flat_order_bearish_disagreement_regime": true,
     "flat_order_bearish_disagreement_regime": false,
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": false,
-    "structure_note": "",
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 23 buys, 27 sells \u2014 avg price $0.915"
+        "text": "Top traders: 22 buys, 28 sells \u2014 avg price $0.961"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83e\udde9 bearish disagreement: directional skew -0.64 vs order-flow skew -0.12 (gap 0.52)"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 14.8m"
+        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0540%/8h \u2014 longs paying shorts"
+        "text": "Strongest: 0G at -0.0555%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "2 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -393,7 +404,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "3 opportunities"
       },
       {
         "name": "SolSt1ne Content",
