@@ -148,6 +148,7 @@ p1_all_buy_bearish_inversion = False
 p1_max_gap_all_buy_bearish_disagreement = False
 p1_max_gap_all_buy_bearish_inversion = False
 p1_weak_directional_disagreement = False
+p1_sell_heavy_bullish_disagreement = False
 p1_flat_order_bearish_disagreement = False
 p1_expensive_mixed_bearish = False
 p1_aligned_bearish_crowded = False
@@ -222,6 +223,14 @@ try:
         and p1_directional_gap >= 0.90
         and sa.get("signal_count", 0) >= 20
     )
+    p1_sell_heavy_bullish_disagreement = (
+        p1_disagreement
+        and p1_directional_skew >= 0.60
+        and p1_order_flow_skew <= -0.40
+        and p1_directional_gap >= 1.00
+        and p1_confidence < 50
+        and sa.get("signal_count", 0) >= 20
+    )
     p1_flat_order_bearish_disagreement = (
         p1_disagreement
         and p1_directional_skew <= -0.60
@@ -247,6 +256,8 @@ try:
         p1_alignment_regime = "all_buy_bearish_disagreement"
     elif p1_weak_directional_disagreement:
         p1_alignment_regime = "weak_directional_disagreement"
+    elif p1_sell_heavy_bullish_disagreement:
+        p1_alignment_regime = "sell_heavy_bullish_disagreement"
     elif p1_flat_order_bearish_disagreement:
         p1_alignment_regime = "flat_order_bearish_disagreement"
     elif p1_aligned_bearish_crowded:
@@ -292,6 +303,9 @@ try:
     elif p1_alignment_regime == "weak_directional_disagreement":
         p1_summary_state = "weak_directional_disagreement"
         p1_summary_text = "Weak-direction disagreement in copy flow"
+    elif p1_alignment_regime == "sell_heavy_bullish_disagreement":
+        p1_summary_state = "sell_heavy_bullish_disagreement"
+        p1_summary_text = "Sell-heavy bullish disagreement in copy flow"
     elif p1_alignment_regime == "flat_order_bearish_disagreement":
         p1_summary_state = "flat_order_bearish_disagreement"
         p1_summary_text = "Flat-order bearish disagreement in copy flow"
@@ -360,6 +374,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 weak-direction disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, gap {p1_directional_gap:.2f}"
+        })
+    elif p1_sell_heavy_bullish_disagreement:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 sell-heavy bullish disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, gap {p1_directional_gap:.2f}, confidence {p1_confidence}"
         })
     elif p1_expensive_mixed_bearish:
         p1_insights.append({
@@ -640,6 +659,7 @@ data = {
         "max_gap_all_buy_bearish_disagreement_regime": p1_max_gap_all_buy_bearish_disagreement,
         "max_gap_all_buy_bearish_inversion_regime": p1_max_gap_all_buy_bearish_inversion,
         "weak_directional_disagreement_regime": p1_weak_directional_disagreement,
+        "sell_heavy_bullish_disagreement_regime": p1_sell_heavy_bullish_disagreement,
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
         "expensive_mixed_bearish_regime": p1_expensive_mixed_bearish,
         "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,
