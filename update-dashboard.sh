@@ -178,6 +178,10 @@ p1_source_alignment_regime = None
 p1_source_scan_time = None
 p1_source_age_minutes = None
 p1_lag_risk = False
+p1_recent_strong_regime = prev_p1.get("recent_strong_regime")
+p1_recent_strong_regime_seen_at = prev_p1.get("recent_strong_regime_seen_at")
+p1_recent_strong_regime_age_minutes = prev_p1.get("recent_strong_regime_age_minutes")
+p1_recent_strong_regime_source_scan_time = prev_p1.get("recent_strong_regime_source_scan_time")
 p1_insights = []
 try:
     with open("/home/ubuntu/clawd/intelligence/live-signals.json") as f:
@@ -197,6 +201,8 @@ try:
         except Exception:
             p1_source_age_minutes = None
             p1_lag_risk = False
+    prev_recent_seen_at = prev_p1.get("recent_strong_regime_seen_at")
+    prev_recent_scan_time = prev_p1.get("recent_strong_regime_source_scan_time")
     details = sig.get("details", {})
     sa = details.get("signal_analysis", {})
     p1_signals_today = sa.get("signal_count", 0)
@@ -438,6 +444,24 @@ try:
         p1_summary_state = f"mixed_{p1_bias}"
         p1_summary_text = f"Mixed {p1_bias} copy flow"
 
+    strong_transition_regimes = {
+        "anonymous_zero_spend_bearish_crowded_expensive",
+        "flip_flop_extreme_copy_instability",
+        "persistent_sell_heavy_bullish_disagreement",
+        "persistent_soft_flat_order_bearish_disagreement",
+        "bearish_crowded_expensive",
+    }
+    if p1_alignment_regime in strong_transition_regimes and p1_source_scan_time:
+        p1_recent_strong_regime = p1_alignment_regime
+        p1_recent_strong_regime_source_scan_time = p1_source_scan_time
+        p1_recent_strong_regime_seen_at = now.isoformat()
+        p1_recent_strong_regime_age_minutes = 0.0
+    elif p1_recent_strong_regime_seen_at:
+        try:
+            recent_seen_dt = datetime.datetime.fromisoformat(p1_recent_strong_regime_seen_at)
+            p1_recent_strong_regime_age_minutes = round((now - recent_seen_dt).total_seconds() / 60, 1)
+        except Exception:
+            p1_recent_strong_regime_age_minutes = None
     if p1_lag_risk:
         p1_summary_text += " — lagging source"
 
@@ -477,6 +501,20 @@ try:
             "text": f"🧩 flip-flop extreme instability: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
         })
     elif p1_aligned_bearish_crowded:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"💸 aligned bearish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
+        })
+    if p1_recent_strong_regime and p1_recent_strong_regime != p1_alignment_regime and p1_recent_strong_regime_age_minutes is not None:
+        p1_insights.append({
+            "source": "Copy Transition",
+            "text": f"🕘 last stronger regime {p1_recent_strong_regime} seen {p1_recent_strong_regime_age_minutes}m ago"
+        })
+    elif p1_recent_strong_regime and p1_recent_strong_regime == p1_alignment_regime and p1_recent_strong_regime_source_scan_time:
+        p1_insights.append({
+            "source": "Copy Transition",
+            "text": f"🕘 stronger regime active since scan {p1_recent_strong_regime_source_scan_time}"
+        })
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"💸 aligned bearish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
@@ -788,6 +826,10 @@ data = {
         "source_scan_time": p1_source_scan_time,
         "source_age_minutes": p1_source_age_minutes,
         "lag_risk": p1_lag_risk,
+        "recent_strong_regime": p1_recent_strong_regime,
+        "recent_strong_regime_seen_at": p1_recent_strong_regime_seen_at,
+        "recent_strong_regime_age_minutes": p1_recent_strong_regime_age_minutes,
+        "recent_strong_regime_source_scan_time": p1_recent_strong_regime_source_scan_time,
         "disagreement_regime": p1_disagreement,
         "bearish_disagreement_regime": p1_bearish_disagreement,
         "all_buy_bearish_disagreement_regime": p1_all_buy_bearish_disagreement,
