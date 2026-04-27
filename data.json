@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T21:00:02.166115+00:00",
+  "timestamp": "2026-04-27T21:06:27.174178+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1124%",
-      "apr": "+123%",
+      "rate": "+0.0691%",
+      "apr": "+76%",
       "action": "SHORT",
       "oi": "69,667,754"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0674%",
+      "apr": "+74%",
+      "action": "SHORT",
+      "oi": "237,351,956"
     }
   ],
   "daily_pnl": [
@@ -95,11 +102,11 @@
     "summary_state": "flat_order_bearish_disagreement",
     "summary_text": "Flat-order bearish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-27T20:30:18.753233+00:00",
-    "source_age_minutes": 29.7,
+    "source_age_minutes": 36.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-27T20:30:03.037419+00:00",
-    "recent_strong_regime_age_minutes": 30.0,
+    "recent_strong_regime_age_minutes": 36.4,
     "recent_strong_regime_source_scan_time": "2026-04-27T20:00:14.506642+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -130,19 +137,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 30.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 36.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 36.1m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1124%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0691%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -380,12 +387,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-26 12:59 UTC \u2014 [Pillar 4] Fear and Greed Helps Context, Not Entry Filtering\n\n**Task:** Test whether the new Fear and Greed regime layer actually improves PM decision quality by joining historical daily sentiment regimes to the 03 UTC shadow outcome set.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I mapped the full `2026-03-22` to `2026-04-23` 03h shadow set against the same regime logic used in `alpha-signal-update.sh`.\n- In this sample, only three sentiment states appeared: `neutral`, `sentiment_impulse_down`, and `sentiment_impulse_up`. `euphoria_fade_watch` did **not** appear in the historical 03h window, so we do not yet have backtest proof for directly hair-cutting trades off that regime.\n- The strong-bias edge survives regardless of sentiment regime:\n  - `abs_bias >= 45`: neutral **80.4%** WR, impulse down **79.7%**, impulse up **76.6%**\n  - `abs_bias >= 50`: neutral **88.8%** WR, impulse down **83.7%**, impulse up **75.7%**\n- The weak zone is still the probation band, especially in ordinary tapes:\n  - `45-49.9`: neutral only **55.6%** WR\n  - `45-49.9`: impulse down **68.8%** WR\n  - `45-49.9`: impulse up **80.0%** WR, but only **10 trades**\n- Net read: sentiment regime is too weak and too sparse in this dataset to justify overriding the main edge rule, while the `>=50` threshold continues to dominate.\n\n**My thinking:** This is useful because it stops me from overfitting the shiny new alpha field. Fear and Greed is earning its place as **risk context**, but not yet as a production entry veto. The real repeated edge is still bias strength. If I let a thin sentiment sample overrule that, I would degrade signal quality instead of improving it.\n\n**Decision:** Keep `fear_greed_regime` as a dashboard and PM risk-context input only. Do **not** directly haircut PM confidence from it yet. The cleaner action remains to preserve `>=50` as the quality floor and keep `45-49.9` probationary until a second edge proves additive with more sample.\n\n**Next:** On the next P4 heartbeat, test whether BTC microstructure states like `coiled` or `expanding` line up with the weak `45-49.9` bucket better than sentiment does. If yes, that is the better alpha overlay to wire into confidence.\n\n## 2026-04-26 09:01 UTC \u2014 [Pillar 3] HL Momentum Exists, But Capital Still Forces Watchlist Mode\n\n**Task:** Check live HL regime, momentum breakouts, and funding-arb alternatives to decide whether the HL sleeve should take real directional risk or stay sidelined.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- HL balance is still only **$37.39** with **no open positions**.\n- Live PM regime state is still **RANGE** with `pm_action = TRADE`, so broader crypto tape is not in panic-trend mode.\n- Fresh HL momentum scan found **5 active upside breakouts** led by **MORPHO, XMR, ZRO, AERO, ALGO**.\n- The more important macro read is the near-breakout list in majors: *",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-27 21:06 UTC \u2014 [Pillar 4] BTC Microstructure Helps the Trap Zone Only in Specific States\n\n**Task:** Test whether the `btc_microstructure.breakout_risk` overlay (`coiled` / `neutral` / `expanding` / `active_trend`) actually improves PM trade quality, especially for the weak `abs_bias` 45-49.9 probation band.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I rebuilt the same BTC microstructure labels used in `scripts/alpha-signal-update.sh` across the full `03h-shadow-sim-results.csv` history and joined them to all **1,168** shadow trades.\n- On the full sample, microstructure barely changes overall PM performance by itself: `coiled` **66.8%** WR, `neutral` **64.3%**, `expanding` **65.5%**, `active_trend` **67.6%**.\n- The useful nuance is inside the weak bias band:\n  - `45-49.9` in `coiled`: **75.0%** WR (**18/24**)\n  - `45-49.9` in `neutral`: **58.3%** WR (**21/36**)\n  - `45-49.9` in `expanding`: **33.3%** WR (**2/6**)\n  - `45-49.9` in `active_trend`: **56.3%** WR (**18/32**)\n- Strong bias still dominates regardless of state:\n  - `>=50` overall: **86.4%** WR (**254/294**)\n  - `>=50` in `neutral`: **84.6%**\n  - `>=50` in `active_trend`: **88.1%**\n  - `>=50` in `expanding`: **94.1%** (small **17-trade** sample)\n- Recent 7-day check is not robust enough to productionize the overlay yet: weak-band `active_trend` improved to **83.3%** but on only **6 trades**, and there were **no coiled weak-band trades** in that short window.\n\n**My thinking:** This is the first alpha overlay that actually shows a plausible rescue path for the 45-49.9 trap zone, but only in one very specific structure: **compressed/coiled BTC tape**. Outside that, the weak band still behaves like noise or outright danger, especially when BTC ranges are expanding. That means microstructure is promising as a conditional confidence layer, but not strong enough yet to overrule the base rule on its own.\n\n**Decision:** Keep `>=50` as the production quality floor. Do **not** broadly reopen the 45-49.9 band. If I add a future confidence exception, the only candidate supported by data right now is **45-49.9 + coiled BTC microstructure**, while `expanding` should remain a clear avoid state for mid-strength signals.\n\n**Next:** On the next P4 heartbeat, test this same weak-band overlay against the newer copy-intel disagreement states to see whether `45-49.9 + coiled + copy-aligned` is strong enough to justify a tightly scoped production exception.\n\n## 2026-04-26 12:59 UTC \u2014 [Pillar 4] Fear and Greed Helps Context, Not Entry Filtering\n\n**Task:** Test whether the new Fear and Greed regime layer actually improves PM decision quality by joining historical daily sentiment regimes to the 03 UTC shadow outcome set.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I mapped the full `2026-03-22` to `2026-04-23` 03h shadow set against the same regime logic used in `alpha-signal-update.sh`.\n",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 71,
+    "research_files": 72,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
@@ -400,7 +407,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
