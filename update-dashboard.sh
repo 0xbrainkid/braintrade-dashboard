@@ -143,6 +143,8 @@ p1_avg_signal_price = 0.0
 p1_structure_note = ""
 p1_disagreement = False
 p1_bearish_disagreement = False
+p1_aligned_bearish_crowded = False
+p1_aligned_bullish_crowded = False
 p1_crowded_expensive = False
 p1_alignment_regime = "mixed"
 p1_summary_state = "mixed_bullish"
@@ -178,7 +180,13 @@ try:
     p1_disagreement = bool(p1_structure_note)
     p1_bearish_disagreement = p1_disagreement and p1_directional_skew <= -0.50
     p1_crowded_expensive = p1_avg_signal_price >= 0.95 and abs(p1_directional_skew) >= 0.75
-    if not p1_disagreement and not p1_crowded_expensive and abs(p1_directional_skew) >= 0.75 and abs(p1_order_flow_skew - p1_directional_skew) <= 0.10:
+    p1_aligned_bearish_crowded = p1_crowded_expensive and p1_directional_skew <= -0.75 and p1_order_flow_skew <= -0.75
+    p1_aligned_bullish_crowded = p1_crowded_expensive and p1_directional_skew >= 0.75 and p1_order_flow_skew >= 0.75
+    if p1_aligned_bearish_crowded:
+        p1_alignment_regime = "aligned_bearish_crowded"
+    elif p1_aligned_bullish_crowded:
+        p1_alignment_regime = "aligned_bullish_crowded"
+    elif not p1_disagreement and not p1_crowded_expensive and abs(p1_directional_skew) >= 0.75 and abs(p1_order_flow_skew - p1_directional_skew) <= 0.10:
         p1_alignment_regime = "aligned_high_conviction"
     elif p1_bearish_disagreement:
         p1_alignment_regime = "bearish_disagreement"
@@ -188,7 +196,13 @@ try:
         p1_alignment_regime = "crowded_expensive"
     else:
         p1_alignment_regime = "mixed"
-    if p1_alignment_regime == "aligned_high_conviction":
+    if p1_alignment_regime == "aligned_bearish_crowded":
+        p1_summary_state = "aligned_bearish_crowded"
+        p1_summary_text = "Aligned bearish crowded copy flow"
+    elif p1_alignment_regime == "aligned_bullish_crowded":
+        p1_summary_state = "aligned_bullish_crowded"
+        p1_summary_text = "Aligned bullish crowded copy flow"
+    elif p1_alignment_regime == "aligned_high_conviction":
         p1_summary_state = f"aligned_{p1_bias}"
         p1_summary_text = f"Aligned {p1_bias} copy flow"
     elif p1_alignment_regime == "crowded_expensive":
@@ -212,7 +226,17 @@ try:
             "source": "Copy Scanner",
             "text": f"Top traders: {sa.get('buy_count',0)} buys, {sa.get('sell_count',0)} sells — avg price ${sa.get('avg_signal_price',0):.3f}"
         })
-    if p1_bearish_disagreement:
+    if p1_aligned_bearish_crowded:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"💸 aligned bearish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
+        })
+    elif p1_aligned_bullish_crowded:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"💸 aligned bullish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
+        })
+    elif p1_bearish_disagreement:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 bearish disagreement: directional skew {p1_directional_skew:+.2f} vs order-flow skew {p1_order_flow_skew:+.2f} (gap {p1_directional_gap:.2f})"
@@ -486,6 +510,8 @@ data = {
         "lag_risk": p1_lag_risk,
         "disagreement_regime": p1_disagreement,
         "bearish_disagreement_regime": p1_bearish_disagreement,
+        "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,
+        "aligned_bullish_crowded_regime": p1_aligned_bullish_crowded,
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
         "insights": p1_insights,
