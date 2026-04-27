@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T21:30:02.160496+00:00",
+  "timestamp": "2026-04-27T22:00:01.609881+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0678%",
-      "apr": "+74%",
+      "rate": "+0.0681%",
+      "apr": "+75%",
       "action": "SHORT",
       "oi": "69,667,754"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0610%",
+      "apr": "+67%",
+      "action": "SHORT",
+      "oi": "237,299,044"
     }
   ],
   "daily_pnl": [
@@ -85,21 +92,21 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 48,
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": 0.8,
-    "order_flow_skew": -0.8,
-    "directional_order_gap": 1.6,
-    "avg_signal_price": 0.955,
-    "alignment_regime": "sell_heavy_bullish_disagreement",
-    "summary_state": "sell_heavy_bullish_disagreement",
-    "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-27T21:00:15.915987+00:00",
+    "directional_skew": 1.0,
+    "order_flow_skew": -0.36,
+    "directional_order_gap": 1.36,
+    "avg_signal_price": 0.831,
+    "alignment_regime": "disagreement",
+    "summary_state": "disagreement",
+    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-27T21:30:12.824009+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-27T20:30:03.037419+00:00",
-    "recent_strong_regime_age_minutes": 60.0,
+    "recent_strong_regime_age_minutes": 90.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T20:00:14.506642+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -109,7 +116,7 @@
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
-    "sell_heavy_bullish_disagreement_regime": true,
+    "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
@@ -121,32 +128,28 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": true,
+    "crowded_expensive_regime": false,
     "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.955"
+        "text": "Top traders: 16 buys, 34 sells \u2014 avg price $0.831"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 60.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 90.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
-        "source": "Copy Structure",
-        "text": "\ud83d\udcb8 crowded regime: directional skew +0.80 at avg price $0.955"
-      },
-      {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0678%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0681%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -404,7 +407,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
