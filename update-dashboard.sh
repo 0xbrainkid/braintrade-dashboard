@@ -243,6 +243,8 @@ try:
         p1_alignment_regime = "aligned_bullish_crowded"
     elif not p1_disagreement and not p1_crowded_expensive and abs(p1_directional_skew) >= 0.75 and abs(p1_order_flow_skew - p1_directional_skew) <= 0.10:
         p1_alignment_regime = "aligned_high_conviction"
+    elif p1_flat_order_bearish_disagreement:
+        p1_alignment_regime = "flat_order_bearish_disagreement"
     elif p1_bearish_disagreement:
         p1_alignment_regime = "bearish_disagreement"
     elif p1_disagreement:
@@ -325,6 +327,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"💸 aligned bullish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
+        })
+    elif p1_flat_order_bearish_disagreement:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 flat-order bearish disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, gap {p1_directional_gap:.2f}"
         })
     elif p1_bearish_disagreement:
         p1_insights.append({
