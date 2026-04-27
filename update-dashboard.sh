@@ -165,6 +165,8 @@ p1_soft_flat_order_bearish_disagreement = False
 p1_persistent_soft_flat_order_bearish_disagreement = False
 p1_flat_order_bearish_disagreement = False
 p1_bearish_crowded_expensive = False
+p1_anonymous_zero_spend_bearish_crowded_expensive = False
+p1_flip_flop_extreme_copy_instability = False
 p1_expensive_mixed_bearish = False
 p1_aligned_bearish_crowded = False
 p1_aligned_bullish_crowded = False
@@ -172,6 +174,7 @@ p1_crowded_expensive = False
 p1_alignment_regime = "mixed"
 p1_summary_state = "mixed_bullish"
 p1_summary_text = "Mixed bullish copy flow"
+p1_source_alignment_regime = None
 p1_source_scan_time = None
 p1_source_age_minutes = None
 p1_lag_risk = False
@@ -181,6 +184,7 @@ try:
         sig = json.load(f)
     p1_bias = sig.get("market_bias", "neutral")
     p1_confidence = sig.get("confidence", 0)
+    p1_source_alignment_regime = sig.get("alignment_regime")
     suggested_adjustments = sig.get("suggested_adjustments", {}) or {}
     p1_structure_note = suggested_adjustments.get("structure_note", "")
     sources = sig.get("sources", {}) or {}
@@ -310,9 +314,24 @@ try:
         and p1_order_flow_skew <= -0.50
         and sa.get("signal_count", 0) >= 20
     )
+    p1_anonymous_zero_spend_bearish_crowded_expensive = (
+        p1_source_alignment_regime == "anonymous_zero_spend_bearish_crowded_expensive"
+        or (
+            p1_bearish_crowded_expensive
+            and (sa.get("total_size", 0) or 0) <= 0
+        )
+    )
+    p1_flip_flop_extreme_copy_instability = (
+        p1_source_alignment_regime == "flip_flop_extreme_copy_instability"
+        or ((sig.get("persistence", {}) or {}).get("flip_flop_extreme_copy_instability") is True)
+    )
     p1_aligned_bearish_crowded = p1_crowded_expensive and p1_directional_skew <= -0.75 and p1_order_flow_skew <= -0.75
     p1_aligned_bullish_crowded = p1_crowded_expensive and p1_directional_skew >= 0.75 and p1_order_flow_skew >= 0.75
-    if p1_max_gap_all_buy_bearish_disagreement:
+    if p1_source_alignment_regime == "anonymous_zero_spend_bearish_crowded_expensive" or p1_anonymous_zero_spend_bearish_crowded_expensive:
+        p1_alignment_regime = "anonymous_zero_spend_bearish_crowded_expensive"
+    elif p1_source_alignment_regime == "flip_flop_extreme_copy_instability" or p1_flip_flop_extreme_copy_instability:
+        p1_alignment_regime = "flip_flop_extreme_copy_instability"
+    elif p1_max_gap_all_buy_bearish_disagreement:
         p1_alignment_regime = "max_gap_all_buy_bearish_disagreement"
     elif p1_max_gap_all_buy_bearish_inversion:
         p1_alignment_regime = "max_gap_all_buy_bearish_inversion"
@@ -352,7 +371,13 @@ try:
         p1_alignment_regime = "crowded_expensive"
     else:
         p1_alignment_regime = "mixed"
-    if p1_alignment_regime == "max_gap_all_buy_bearish_disagreement":
+    if p1_alignment_regime == "anonymous_zero_spend_bearish_crowded_expensive":
+        p1_summary_state = "anonymous_zero_spend_bearish_crowded_expensive"
+        p1_summary_text = "Anonymous zero-spend bearish crowded-expensive copy flow"
+    elif p1_alignment_regime == "flip_flop_extreme_copy_instability":
+        p1_summary_state = "flip_flop_extreme_copy_instability"
+        p1_summary_text = "Flip-flop extreme copy instability"
+    elif p1_alignment_regime == "max_gap_all_buy_bearish_disagreement":
         p1_summary_state = "max_gap_all_buy_bearish_disagreement"
         p1_summary_text = "Max-gap all-buy bearish disagreement in copy flow"
     elif p1_alignment_regime == "max_gap_all_buy_bearish_inversion":
@@ -440,6 +465,16 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 all-buy bearish disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}, gap {p1_directional_gap:.2f}"
+        })
+    elif p1_anonymous_zero_spend_bearish_crowded_expensive:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 anonymous zero-spend bearish crowded-expensive: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}, total size {(sa.get('total_size', 0) or 0):.0f}"
+        })
+    elif p1_flip_flop_extreme_copy_instability:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 flip-flop extreme instability: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}"
         })
     elif p1_aligned_bearish_crowded:
         p1_insights.append({
@@ -767,6 +802,8 @@ data = {
         "persistent_soft_flat_order_bearish_disagreement_regime": p1_persistent_soft_flat_order_bearish_disagreement,
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
         "bearish_crowded_expensive_regime": p1_bearish_crowded_expensive,
+        "anonymous_zero_spend_bearish_crowded_expensive_regime": p1_anonymous_zero_spend_bearish_crowded_expensive,
+        "flip_flop_extreme_copy_instability_regime": p1_flip_flop_extreme_copy_instability,
         "expensive_mixed_bearish_regime": p1_expensive_mixed_bearish,
         "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,
         "aligned_bullish_crowded_regime": p1_aligned_bullish_crowded,
