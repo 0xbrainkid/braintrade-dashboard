@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T18:30:01.958015+00:00",
+  "timestamp": "2026-04-27T18:30:59.183609+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,25 +16,25 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "0G",
+      "rate": "-0.0994%",
+      "apr": "-109%",
+      "action": "LONG",
+      "oi": "936,388"
+    },
+    {
       "coin": "MAVIA",
-      "rate": "+0.0981%",
-      "apr": "+107%",
+      "rate": "+0.0986%",
+      "apr": "+108%",
       "action": "SHORT",
       "oi": "69,667,754"
     },
     {
-      "coin": "0G",
-      "rate": "-0.0978%",
-      "apr": "-107%",
-      "action": "LONG",
-      "oi": "937,394"
-    },
-    {
       "coin": "CHIP",
-      "rate": "-0.0694%",
-      "apr": "-76%",
+      "rate": "-0.0689%",
+      "apr": "-75%",
       "action": "LONG",
-      "oi": "276,322,652"
+      "oi": "276,328,554"
     }
   ],
   "daily_pnl": [
@@ -98,20 +98,20 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 60,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
-    "directional_skew": 1.0,
+    "directional_skew": -1.0,
     "order_flow_skew": -1.0,
-    "directional_order_gap": 2.0,
+    "directional_order_gap": 0.0,
     "avg_signal_price": 0.99,
-    "alignment_regime": "sell_heavy_bullish_disagreement",
-    "summary_state": "sell_heavy_bullish_disagreement",
-    "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-27T18:00:14.119052+00:00",
-    "source_age_minutes": 29.8,
-    "lag_risk": true,
-    "disagreement_regime": true,
+    "alignment_regime": "bearish_crowded_expensive",
+    "summary_state": "bearish_crowded_expensive",
+    "summary_text": "Bearish crowded-expensive copy flow",
+    "source_scan_time": "2026-04-27T18:30:13.224277+00:00",
+    "source_age_minutes": 0.8,
+    "lag_risk": false,
+    "disagreement_regime": false,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
@@ -119,17 +119,17 @@
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
-    "sell_heavy_bullish_disagreement_regime": true,
+    "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
     "flat_order_bearish_disagreement_regime": false,
-    "bearish_crowded_expensive_regime": false,
-    "expensive_mixed_bearish_regime": false,
-    "aligned_bearish_crowded_regime": false,
+    "bearish_crowded_expensive_regime": true,
+    "expensive_mixed_bearish_regime": true,
+    "aligned_bearish_crowded_regime": true,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": true,
-    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
+    "structure_note": "",
     "insights": [
       {
         "source": "Copy Scanner",
@@ -137,19 +137,19 @@
       },
       {
         "source": "Copy Structure",
-        "text": "\ud83e\udde9 sell-heavy bullish disagreement: directional skew +1.00, order-flow skew -1.00, gap 2.00, confidence 60"
+        "text": "\ud83d\udcb8 aligned bearish crowding: directional skew -1.00, order-flow skew -1.00, avg price $0.990"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 0.8m"
       },
       {
         "source": "Copy Structure",
-        "text": "\ud83d\udcb8 crowded regime: directional skew +1.00 at avg price $0.990"
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0981%/8h \u2014 longs paying shorts"
+        "text": "Strongest: 0G at -0.0994%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -401,7 +401,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
