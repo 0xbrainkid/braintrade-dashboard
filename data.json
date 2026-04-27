@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T08:30:02.876687+00:00",
+  "timestamp": "2026-04-27T08:46:46.718593+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0994%",
-      "apr": "+109%",
+      "rate": "+0.0943%",
+      "apr": "+103%",
       "action": "SHORT",
       "oi": "69,667,754"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0577%",
-      "apr": "-63%",
+      "rate": "-0.0682%",
+      "apr": "-75%",
       "action": "LONG",
-      "oi": "2,183,548,282"
+      "oi": "2,183,472,230"
     }
   ],
   "daily_pnl": [
@@ -91,43 +91,47 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
+    "current_bias": "bearish",
     "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": 0.6,
-    "order_flow_skew": 0.8,
-    "directional_order_gap": 0.2,
-    "avg_signal_price": 0.937,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bullish",
-    "summary_text": "Mixed bullish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-27T08:00:17.800117+00:00",
-    "source_age_minutes": 29.8,
+    "directional_skew": -1.0,
+    "order_flow_skew": 1.0,
+    "directional_order_gap": 2.0,
+    "avg_signal_price": 0.945,
+    "alignment_regime": "max_gap_all_buy_bearish_inversion",
+    "summary_state": "max_gap_all_buy_bearish_inversion",
+    "summary_text": "Max-gap all-buy bearish inversion in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-27T08:30:03.069860+00:00",
+    "source_age_minutes": 16.7,
     "lag_risk": true,
-    "disagreement_regime": false,
-    "bearish_disagreement_regime": false,
+    "disagreement_regime": true,
+    "bearish_disagreement_regime": true,
     "all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
-    "max_gap_all_buy_bearish_inversion_regime": false,
+    "max_gap_all_buy_bearish_inversion_regime": true,
     "weak_directional_disagreement_regime": false,
     "flat_order_bearish_disagreement_regime": false,
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": false,
-    "structure_note": "",
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.937"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.945"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83e\udde9 max-gap all-buy bearish inversion: directional skew -1.00, order-flow skew +1.00, avg price $0.945, gap 2.00"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 16.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0994%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0943%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -374,12 +378,12 @@
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 61,
+    "research_files": 62,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
