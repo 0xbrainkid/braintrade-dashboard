@@ -160,6 +160,7 @@ p1_max_gap_all_buy_bearish_inversion = False
 p1_weak_directional_disagreement = False
 p1_persistent_neutral_disagreement = False
 p1_sell_heavy_bullish_disagreement = False
+p1_persistent_sell_heavy_bullish_disagreement = False
 p1_soft_flat_order_bearish_disagreement = False
 p1_persistent_soft_flat_order_bearish_disagreement = False
 p1_flat_order_bearish_disagreement = False
@@ -248,12 +249,21 @@ try:
         )
     )
     p1_sell_heavy_bullish_disagreement = (
-        p1_disagreement
-        and p1_directional_skew >= 0.60
-        and p1_order_flow_skew <= -0.40
-        and p1_directional_gap >= 1.00
-        and p1_confidence < 50
-        and sa.get("signal_count", 0) >= 20
+        (
+            sig.get("alignment_regime") == "sell_heavy_bullish_disagreement"
+            or sig.get("alignment_regime") == "persistent_sell_heavy_bullish_disagreement"
+        )
+        or (
+            p1_disagreement
+            and p1_directional_skew >= 0.60
+            and p1_order_flow_skew <= -0.40
+            and p1_directional_gap >= 1.00
+            and sa.get("signal_count", 0) >= 20
+        )
+    )
+    p1_persistent_sell_heavy_bullish_disagreement = (
+        sig.get("alignment_regime") == "persistent_sell_heavy_bullish_disagreement"
+        or ((sig.get("persistence", {}) or {}).get("persistent_sell_heavy_bullish_disagreement") is True)
     )
     p1_soft_flat_order_bearish_disagreement = (
         p1_directional_skew <= -0.35
@@ -314,6 +324,8 @@ try:
         p1_alignment_regime = "weak_directional_disagreement"
     elif p1_persistent_neutral_disagreement:
         p1_alignment_regime = "persistent_neutral_disagreement"
+    elif p1_persistent_sell_heavy_bullish_disagreement:
+        p1_alignment_regime = "persistent_sell_heavy_bullish_disagreement"
     elif p1_sell_heavy_bullish_disagreement:
         p1_alignment_regime = "sell_heavy_bullish_disagreement"
     elif p1_persistent_soft_flat_order_bearish_disagreement:
@@ -370,6 +382,9 @@ try:
     elif p1_alignment_regime == "persistent_neutral_disagreement":
         p1_summary_state = "persistent_neutral_disagreement"
         p1_summary_text = "Persistent neutral disagreement in copy flow"
+    elif p1_alignment_regime == "persistent_sell_heavy_bullish_disagreement":
+        p1_summary_state = "persistent_sell_heavy_bullish_disagreement"
+        p1_summary_text = "Persistent sell-heavy bullish disagreement in copy flow"
     elif p1_alignment_regime == "sell_heavy_bullish_disagreement":
         p1_summary_state = "sell_heavy_bullish_disagreement"
         p1_summary_text = "Sell-heavy bullish disagreement in copy flow"
@@ -747,6 +762,7 @@ data = {
         "weak_directional_disagreement_regime": p1_weak_directional_disagreement,
         "persistent_neutral_disagreement_regime": p1_persistent_neutral_disagreement,
         "sell_heavy_bullish_disagreement_regime": p1_sell_heavy_bullish_disagreement,
+        "persistent_sell_heavy_bullish_disagreement_regime": p1_persistent_sell_heavy_bullish_disagreement,
         "soft_flat_order_bearish_disagreement_regime": p1_soft_flat_order_bearish_disagreement,
         "persistent_soft_flat_order_bearish_disagreement_regime": p1_persistent_soft_flat_order_bearish_disagreement,
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
