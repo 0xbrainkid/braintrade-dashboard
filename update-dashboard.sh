@@ -12,6 +12,16 @@ import json, datetime, os, subprocess, re, glob
 
 now = datetime.datetime.now(datetime.timezone.utc)
 
+prev_dashboard = {}
+prev_p1 = {}
+try:
+    with open('/home/ubuntu/clawd/dashboard/data.json') as f:
+        prev_dashboard = json.load(f)
+        prev_p1 = prev_dashboard.get('pillar1', {}) or {}
+except Exception:
+    prev_dashboard = {}
+    prev_p1 = {}
+
 # ── PM Balance (from bot log) ──
 pm_balance = 0
 try:
@@ -151,6 +161,7 @@ p1_weak_directional_disagreement = False
 p1_persistent_neutral_disagreement = False
 p1_sell_heavy_bullish_disagreement = False
 p1_soft_flat_order_bearish_disagreement = False
+p1_persistent_soft_flat_order_bearish_disagreement = False
 p1_flat_order_bearish_disagreement = False
 p1_expensive_mixed_bearish = False
 p1_aligned_bearish_crowded = False
@@ -250,6 +261,25 @@ try:
         and p1_avg_signal_price >= 0.95
         and sa.get("signal_count", 0) >= 20
     )
+    prev_p1_summary_state = prev_p1.get("summary_state")
+    prev_p1_alignment_regime = prev_p1.get("alignment_regime")
+    prev_p1_source_scan_time = prev_p1.get("source_scan_time")
+    p1_persistent_soft_flat_order_bearish_disagreement = (
+        p1_soft_flat_order_bearish_disagreement
+        and p1_source_scan_time is not None
+        and prev_p1_source_scan_time is not None
+        and p1_source_scan_time != prev_p1_source_scan_time
+        and prev_p1_alignment_regime in (
+            "soft_flat_order_bearish_disagreement",
+            "persistent_soft_flat_order_bearish_disagreement",
+        )
+    ) or (
+        p1_soft_flat_order_bearish_disagreement
+        and p1_source_scan_time is not None
+        and prev_p1_source_scan_time is not None
+        and p1_source_scan_time != prev_p1_source_scan_time
+        and prev_p1_summary_state == "soft_flat_order_bearish_disagreement"
+    )
     p1_flat_order_bearish_disagreement = (
         p1_disagreement
         and p1_directional_skew <= -0.60
@@ -279,6 +309,8 @@ try:
         p1_alignment_regime = "persistent_neutral_disagreement"
     elif p1_sell_heavy_bullish_disagreement:
         p1_alignment_regime = "sell_heavy_bullish_disagreement"
+    elif p1_persistent_soft_flat_order_bearish_disagreement:
+        p1_alignment_regime = "persistent_soft_flat_order_bearish_disagreement"
     elif p1_soft_flat_order_bearish_disagreement:
         p1_alignment_regime = "soft_flat_order_bearish_disagreement"
     elif p1_flat_order_bearish_disagreement:
@@ -332,6 +364,9 @@ try:
     elif p1_alignment_regime == "sell_heavy_bullish_disagreement":
         p1_summary_state = "sell_heavy_bullish_disagreement"
         p1_summary_text = "Sell-heavy bullish disagreement in copy flow"
+    elif p1_alignment_regime == "persistent_soft_flat_order_bearish_disagreement":
+        p1_summary_state = "persistent_soft_flat_order_bearish_disagreement"
+        p1_summary_text = "Persistent soft flat-order bearish disagreement in copy flow"
     elif p1_alignment_regime == "soft_flat_order_bearish_disagreement":
         p1_summary_state = "soft_flat_order_bearish_disagreement"
         p1_summary_text = "Soft flat-order bearish disagreement in copy flow"
@@ -701,6 +736,7 @@ data = {
         "persistent_neutral_disagreement_regime": p1_persistent_neutral_disagreement,
         "sell_heavy_bullish_disagreement_regime": p1_sell_heavy_bullish_disagreement,
         "soft_flat_order_bearish_disagreement_regime": p1_soft_flat_order_bearish_disagreement,
+        "persistent_soft_flat_order_bearish_disagreement_regime": p1_persistent_soft_flat_order_bearish_disagreement,
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
         "expensive_mixed_bearish_regime": p1_expensive_mixed_bearish,
         "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,
