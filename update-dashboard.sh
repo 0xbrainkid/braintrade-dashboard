@@ -163,6 +163,7 @@ p1_sell_heavy_bullish_disagreement = False
 p1_soft_flat_order_bearish_disagreement = False
 p1_persistent_soft_flat_order_bearish_disagreement = False
 p1_flat_order_bearish_disagreement = False
+p1_bearish_crowded_expensive = False
 p1_expensive_mixed_bearish = False
 p1_aligned_bearish_crowded = False
 p1_aligned_bullish_crowded = False
@@ -293,6 +294,12 @@ try:
         and p1_directional_skew <= -0.35
         and sa.get("signal_count", 0) >= 20
     )
+    p1_bearish_crowded_expensive = (
+        p1_crowded_expensive
+        and p1_directional_skew <= -0.75
+        and p1_order_flow_skew <= -0.50
+        and sa.get("signal_count", 0) >= 20
+    )
     p1_aligned_bearish_crowded = p1_crowded_expensive and p1_directional_skew <= -0.75 and p1_order_flow_skew <= -0.75
     p1_aligned_bullish_crowded = p1_crowded_expensive and p1_directional_skew >= 0.75 and p1_order_flow_skew >= 0.75
     if p1_max_gap_all_buy_bearish_disagreement:
@@ -315,6 +322,8 @@ try:
         p1_alignment_regime = "soft_flat_order_bearish_disagreement"
     elif p1_flat_order_bearish_disagreement:
         p1_alignment_regime = "flat_order_bearish_disagreement"
+    elif p1_bearish_crowded_expensive:
+        p1_alignment_regime = "bearish_crowded_expensive"
     elif p1_aligned_bearish_crowded:
         p1_alignment_regime = "aligned_bearish_crowded"
     elif p1_aligned_bullish_crowded:
@@ -373,6 +382,9 @@ try:
     elif p1_alignment_regime == "flat_order_bearish_disagreement":
         p1_summary_state = "flat_order_bearish_disagreement"
         p1_summary_text = "Flat-order bearish disagreement in copy flow"
+    elif p1_alignment_regime == "bearish_crowded_expensive":
+        p1_summary_state = "bearish_crowded_expensive"
+        p1_summary_text = "Bearish crowded-expensive copy flow"
     elif p1_alignment_regime == "expensive_mixed_bearish":
         p1_summary_state = "expensive_mixed_bearish"
         p1_summary_text = "Expensive mixed bearish copy flow"
@@ -738,6 +750,7 @@ data = {
         "soft_flat_order_bearish_disagreement_regime": p1_soft_flat_order_bearish_disagreement,
         "persistent_soft_flat_order_bearish_disagreement_regime": p1_persistent_soft_flat_order_bearish_disagreement,
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
+        "bearish_crowded_expensive_regime": p1_bearish_crowded_expensive,
         "expensive_mixed_bearish_regime": p1_expensive_mixed_bearish,
         "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,
         "aligned_bullish_crowded_regime": p1_aligned_bullish_crowded,
