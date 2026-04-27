@@ -166,6 +166,7 @@ p1_persistent_soft_flat_order_bearish_disagreement = False
 p1_flat_order_bearish_disagreement = False
 p1_bearish_crowded_expensive = False
 p1_anonymous_zero_spend_bearish_crowded_expensive = False
+p1_mixed_transition_after_bearish_crowding = False
 p1_flip_flop_extreme_copy_instability = False
 p1_expensive_mixed_bearish = False
 p1_aligned_bearish_crowded = False
@@ -327,6 +328,9 @@ try:
             and (sa.get("total_size", 0) or 0) <= 0
         )
     )
+    p1_mixed_transition_after_bearish_crowding = (
+        p1_source_alignment_regime == "mixed_transition_after_bearish_crowding"
+    )
     p1_flip_flop_extreme_copy_instability = (
         p1_source_alignment_regime == "flip_flop_extreme_copy_instability"
         or ((sig.get("persistence", {}) or {}).get("flip_flop_extreme_copy_instability") is True)
@@ -335,6 +339,8 @@ try:
     p1_aligned_bullish_crowded = p1_crowded_expensive and p1_directional_skew >= 0.75 and p1_order_flow_skew >= 0.75
     if p1_source_alignment_regime == "anonymous_zero_spend_bearish_crowded_expensive" or p1_anonymous_zero_spend_bearish_crowded_expensive:
         p1_alignment_regime = "anonymous_zero_spend_bearish_crowded_expensive"
+    elif p1_source_alignment_regime == "mixed_transition_after_bearish_crowding" or p1_mixed_transition_after_bearish_crowding:
+        p1_alignment_regime = "mixed_transition_after_bearish_crowding"
     elif p1_source_alignment_regime == "flip_flop_extreme_copy_instability" or p1_flip_flop_extreme_copy_instability:
         p1_alignment_regime = "flip_flop_extreme_copy_instability"
     elif p1_max_gap_all_buy_bearish_disagreement:
@@ -380,6 +386,9 @@ try:
     if p1_alignment_regime == "anonymous_zero_spend_bearish_crowded_expensive":
         p1_summary_state = "anonymous_zero_spend_bearish_crowded_expensive"
         p1_summary_text = "Anonymous zero-spend bearish crowded-expensive copy flow"
+    elif p1_alignment_regime == "mixed_transition_after_bearish_crowding":
+        p1_summary_state = "mixed_transition_after_bearish_crowding"
+        p1_summary_text = "Mixed transition after bearish crowding"
     elif p1_alignment_regime == "flip_flop_extreme_copy_instability":
         p1_summary_state = "flip_flop_extreme_copy_instability"
         p1_summary_text = "Flip-flop extreme copy instability"
@@ -446,6 +455,7 @@ try:
 
     strong_transition_regimes = {
         "anonymous_zero_spend_bearish_crowded_expensive",
+        "mixed_transition_after_bearish_crowding",
         "flip_flop_extreme_copy_instability",
         "persistent_sell_heavy_bullish_disagreement",
         "persistent_soft_flat_order_bearish_disagreement",
@@ -494,6 +504,11 @@ try:
         p1_insights.append({
             "source": "Copy Structure",
             "text": f"🧩 anonymous zero-spend bearish crowded-expensive: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}, total size {(sa.get('total_size', 0) or 0):.0f}"
+        })
+    elif p1_mixed_transition_after_bearish_crowding:
+        p1_insights.append({
+            "source": "Copy Structure",
+            "text": f"🧩 mixed transition after bearish crowding: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, avg price ${p1_avg_signal_price:.3f}, total size {(sa.get('total_size', 0) or 0):.0f}"
         })
     elif p1_flip_flop_extreme_copy_instability:
         p1_insights.append({
@@ -845,6 +860,7 @@ data = {
         "flat_order_bearish_disagreement_regime": p1_flat_order_bearish_disagreement,
         "bearish_crowded_expensive_regime": p1_bearish_crowded_expensive,
         "anonymous_zero_spend_bearish_crowded_expensive_regime": p1_anonymous_zero_spend_bearish_crowded_expensive,
+        "mixed_transition_after_bearish_crowding_regime": p1_mixed_transition_after_bearish_crowding,
         "flip_flop_extreme_copy_instability_regime": p1_flip_flop_extreme_copy_instability,
         "expensive_mixed_bearish_regime": p1_expensive_mixed_bearish,
         "aligned_bearish_crowded_regime": p1_aligned_bearish_crowded,

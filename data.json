@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T20:04:33.863940+00:00",
+  "timestamp": "2026-04-27T20:19:06.979054+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "BLAST",
+      "rate": "-0.0545%",
+      "apr": "-60%",
+      "action": "LONG",
+      "oi": "2,187,715,824"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -85,12 +93,12 @@
     "avg_signal_price": 0.991,
     "alignment_regime": "bearish_crowded_expensive",
     "summary_state": "bearish_crowded_expensive",
-    "summary_text": "Bearish crowded-expensive copy flow",
+    "summary_text": "Bearish crowded-expensive copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-27T19:59:52.289345+00:00",
-    "source_age_minutes": 4.7,
-    "lag_risk": false,
+    "source_age_minutes": 19.2,
+    "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
-    "recent_strong_regime_seen_at": "2026-04-27T20:04:33.863940+00:00",
+    "recent_strong_regime_seen_at": "2026-04-27T20:19:06.979054+00:00",
     "recent_strong_regime_age_minutes": 0.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T19:59:52.289345+00:00",
     "disagreement_regime": false,
@@ -108,6 +116,7 @@
     "flat_order_bearish_disagreement_regime": false,
     "bearish_crowded_expensive_regime": true,
     "anonymous_zero_spend_bearish_crowded_expensive_regime": false,
+    "mixed_transition_after_bearish_crowding_regime": false,
     "flip_flop_extreme_copy_instability_regime": false,
     "expensive_mixed_bearish_regime": true,
     "aligned_bearish_crowded_regime": false,
@@ -129,11 +138,19 @@
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 4.7m"
+        "text": "\u23f1\ufe0f source scan age: 19.2m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
         "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.991"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: BLAST at -0.0545%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -391,7 +408,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
