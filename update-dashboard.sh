@@ -343,11 +343,6 @@ try:
             "source": "Copy Structure",
             "text": f"🧩 weak-direction disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, gap {p1_directional_gap:.2f}"
         })
-    elif p1_flat_order_bearish_disagreement:
-        p1_insights.append({
-            "source": "Copy Structure",
-            "text": f"🧩 flat-order bearish disagreement: directional skew {p1_directional_skew:+.2f}, order-flow skew {p1_order_flow_skew:+.2f}, gap {p1_directional_gap:.2f}"
-        })
     elif p1_expensive_mixed_bearish:
         p1_insights.append({
             "source": "Copy Structure",
