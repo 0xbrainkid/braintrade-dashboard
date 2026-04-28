@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T01:00:01.966399+00:00",
+  "timestamp": "2026-04-28T01:06:11.667042+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,15 +17,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1030%",
-      "apr": "+113%",
+      "rate": "+0.0842%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "69,667,754"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0599%",
-      "apr": "+66%",
+      "rate": "+0.0527%",
+      "apr": "+58%",
       "action": "SHORT",
       "oi": "237,299,044"
     }
@@ -102,11 +102,11 @@
     "summary_state": "sell_heavy_bullish_disagreement",
     "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-28T00:30:12.318900+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 36.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 60.0,
+    "recent_strong_regime_age_minutes": 66.1,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -137,15 +137,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 60.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 66.1m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 36.0m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1030%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0842%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -387,12 +387,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-27 21:06 UTC \u2014 [Pillar 4] BTC Microstructure Helps the Trap Zone Only in Specific States\n\n**Task:** Test whether the `btc_microstructure.breakout_risk` overlay (`coiled` / `neutral` / `expanding` / `active_trend`) actually improves PM trade quality, especially for the weak `abs_bias` 45-49.9 probation band.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I rebuilt the same BTC microstructure labels used in `scripts/alpha-signal-update.sh` across the full `03h-shadow-sim-results.csv` history and joined them to all **1,168** shadow trades.\n- On the full sample, microstructure barely changes overall PM performance by itself: `coiled` **66.8%** WR, `neutral` **64.3%**, `expanding` **65.5%**, `active_trend` **67.6%**.\n- The useful nuance is inside the weak bias band:\n  - `45-49.9` in `coiled`: **75.0%** WR (**18/24**)\n  - `45-49.9` in `neutral`: **58.3%** WR (**21/36**)\n  - `45-49.9` in `expanding`: **33.3%** WR (**2/6**)\n  - `45-49.9` in `active_trend`: **56.3%** WR (**18/32**)\n- Strong bias still dominates regardless of state:\n  - `>=50` overall: **86.4%** WR (**254/294**)\n  - `>=50` in `neutral`: **84.6%**\n  - `>=50` in `active_trend`: **88.1%**\n  - `>=50` in `expanding`: **94.1%** (small **17-trade** sample)\n- Recent 7-day check is not robust enough to productionize the overlay yet: weak-band `active_trend` improved to **83.3%** but on only **6 trades**, and there were **no coiled weak-band trades** in that short window.\n\n**My thinking:** This is the first alpha overlay that actually shows a plausible rescue path for the 45-49.9 trap zone, but only in one very specific structure: **compressed/coiled BTC tape**. Outside that, the weak band still behaves like noise or outright danger, especially when BTC ranges are expanding. That means microstructure is promising as a conditional confidence layer, but not strong enough yet to overrule the base rule on its own.\n\n**Decision:** Keep `>=50` as the production quality floor. Do **not** broadly reopen the 45-49.9 band. If I add a future confidence exception, the only candidate supported by data right now is **45-49.9 + coiled BTC microstructure**, while `expanding` should remain a clear avoid state for mid-strength signals.\n\n**Next:** On the next P4 heartbeat, test this same weak-band overlay against the newer copy-intel disagreement states to see whether `45-49.9 + coiled + copy-aligned` is strong enough to justify a tightly scoped production exception.\n\n## 2026-04-26 12:59 UTC \u2014 [Pillar 4] Fear and Greed Helps Context, Not Entry Filtering\n\n**Task:** Test whether the new Fear and Greed regime layer actually improves PM decision quality by joining historical daily sentiment regimes to the 03 UTC shadow outcome set.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I mapped the full `2026-03-22` to `2026-04-23` 03h shadow set against the same regime logic used in `alpha-signal-update.sh`.\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 01:04 UTC \u2014 [Pillar 1] HL Whale Shorts Still Dominate Even While PM Copy Flow Flashes Another Weak Bullish Disagreement\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, compare Hyperliquid leaderboard positioning against current Polymarket copy flow, and decide whether the PM bullish print deserves trust.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker printed **BTC 5L/3S, ETH 4L/3S, SOL 1L/7S**.\n- Headcount is misleading again. Notional-weighted leaderboard state is still decisively bearish:\n  - **BTC:** longs **$9.20M** vs shorts **$11.67M** \u2192 still net bearish by **$2.47M**\n  - **ETH:** longs **$0.18M** vs shorts **$16.27M** \u2192 **98.9%** short by notional\n  - **SOL:** longs **$0.20M** vs shorts **$10.03M** \u2192 **98.1%** short by notional\n  - **HYPE:** longs **$1.42M** vs shorts **$12.67M** \u2192 **89.9%** short by notional\n- The major driver of the BTC headcount illusion is still concentration: `anon-0xecb6` is long **$8.87M BTC**, but that is being opposed by `anon-0xfc66` short **$7.43M BTC** plus `anon-0x57dd` short **$4.01M BTC**.\n- Current PM copy layer is **not** confirming that bullishly. `live-signals.json` is only:\n  - `market_bias: bullish`\n  - `confidence: 45`\n  - `alignment_regime: sell_heavy_bullish_disagreement`\n  - `directional_skew: +0.76`\n  - `order_flow_skew: -0.56`\n  - funded size only **$198.23**\n- So PM is still another conflicted bullish-disagreement print, while the HL whale book remains cleanly short **ETH / SOL / HYPE** and mildly short **BTC** by notional.\n\n**My thinking:** This is a good example of why I should not trust first-pass counts or first-pass PM direction labels. The real signal is cross-venue quality. HL whale conviction is large and mostly aligned bearish outside BTC. PM is small, conflicted, and still sell-heavy on the order side. That makes the PM bullish read lower-trust transition noise, not a regime change.\n\n**Decision:** Keep **ETH short** as the highest-conviction copy-intel bias. Upgrade **SOL short** from secondary to strong because it is now overwhelmingly short by notional instead of balanced. Keep **HYPE short** strong. Treat **BTC** as contested but still secondary-bearish by size. Do **not** let the current PM bullish disagreement overrule the HL board.\n\n**Next:** On the next P2 heartbeat, test whether PM smart-entry should explicitly haircut or suppress bullish copy influence whenever HL notional consensus remains strongly short on ETH/SOL/HYPE while PM is stuck in `sell_heavy_bullish_disagreement`.\n\n## 2026-04-27 21:06 UTC \u2014 [Pillar 4] BTC Microstructure Helps the Trap Zone Only in Specific States\n\n**Task:** Test whether the `btc_microstructure.breakout_risk` overlay (`coiled` / `neutral` / `expanding` / `active_trend`) actually improves PM trade quality, especially for the weak `abs_bias` 45-49.9 probation band.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 72,
+    "research_files": 73,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
