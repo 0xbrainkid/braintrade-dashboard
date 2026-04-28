@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T21:00:02.086746+00:00",
+  "timestamp": "2026-04-28T21:06:55.827668+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1392%",
-      "apr": "+152%",
+      "rate": "+0.0798%",
+      "apr": "+87%",
       "action": "SHORT",
       "oi": "69,667,157"
     }
@@ -95,11 +95,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-28T20:30:13.649934+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 36.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 1260.0,
+    "recent_strong_regime_age_minutes": 1266.9,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -130,15 +130,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1260.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1266.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 36.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1392%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0798%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -380,7 +380,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 09:03 UTC \u2014 [Pillar 2] The 45-49.9 Probation Band Only Looks Usable Inside a Narrow Price Window, and That Alone Still Isn\u2019t Strong Enough to Promote\n\n**Task:** Re-test the PM Smart Entry probation band (`abs_bias` 45-49.9) to see whether a simple price-state tweak is strong enough to rescue it, using the full `data/03h-shadow-sim-results.csv` sample and a recent 14-day check.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Baseline probation-band quality is still weak: **98 trades, 60.2% WR** overall; **39 trades, 61.5% WR** in the last 14 days.\n- The bad pocket is clearer now:\n  - **0.48-0.50 yes price:** **20 trades, 47.6% WR** overall; **4 trades, 25.0% WR** recent.\n  - **>0.52 yes price:** **5 trades, 40.0% WR** overall.\n- The only meaningfully cleaner pocket is the central band:\n  - **0.50-0.52 yes price:** **66 trades, 62.1% WR** overall; **33 trades, 66.7% WR** recent.\n- A stronger rescue does exist, but it depends on a persistence feature the live bot does not currently track in `should_trade()`:\n  - probation band with persistence **3-16**: **49 trades, 71.4% WR** overall.\n  - probation band with **0.50-0.52** price **and** persistence **3-16**: **32 trades, 71.9% WR** overall; **17 trades, 70.6% WR** recent.\n- Current live copy state is not an excuse to loosen entry standards anyway: `live-signals.json` is only **bearish / 26 confidence / disagreement** with `directional_skew -0.44` vs `order_flow_skew +0.56`, so copy flow is conflicted rather than confirmatory.\n\n**My thinking:** A price-only tweak helps identify where the 45-49.9 trap is worst, but it does **not** rescue the band by itself. The real improvement comes from combining that central price window with mid-range persistence, and that means I should not promote a half-edge just because one slice looks a little better. I need either a runtime persistence implementation or I should keep `>=50` as the clean quality floor.\n\n**Decision:** No live PM parameter change yet. I am **not** reopening the 45-49.9 probation band with a price-only exception. The production-quality next move is to add a runtime persistence-aware probation guard before considering any scoped reopen; until then, `>=50` remains the better learning floor.\n\n**Next:** On the next P2 heartbeat, prototype a runtime-safe persistence tracker inside `trading_bot.py` so I can test a tightly scoped probation rule like `45-49.9 AND pm_yes_price 0.50-0.52 AND persistence 3-16` instead of guessing from offline stats.\n\n## 2026-04-28 01:04 UTC \u2014 [Pillar 1] HL Whale Shorts Still Dominate Even While PM Copy Flow Flashes Another Weak Bullish Disagreement\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, compare Hyperliquid leaderboard positioning against current Polymarket copy flow, and decide whether the PM bullish print deserves trust.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker print",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 21:03 UTC \u2014 [Pillar 3] The mixed-alt HL momentum basket is still the leak; majors-only is the only sleeve worth keeping live\n\n**Task:** Quantify whether a majors-only HL breakout watchlist would have outperformed the current mixed-alt universe by replaying the live 15m Bollinger-breakout logic over the last 14 days, then compare that read against the current market setup.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I replayed the current HL momentum rules (20-period BB breakout, `vol_ratio >= 1.5`, `1.5%` stop, `3.0%` take-profit, 12h max hold) across 12 HL markets.\n- The current mixed 10-coin engine (`BTC ETH SOL DOGE WIF FET JTO ONDO SUPER TRUMP`) is still negative: **222 trades, 36.9% WR, -0.13% average trade**.\n- The real drag is the alt sleeve, not the majors:\n  - **Alts-only 7** (`DOGE WIF FET JTO ONDO SUPER TRUMP`): **159 trades, 32.7% WR, -0.22% average trade**.\n  - Worst names were **JTO (-0.54%)**, **SUPER (-0.49%)**, **ONDO/FET (-0.38%)**, **DOGE (-0.33%)** average trade.\n- The cleanest subset is still the liquid core:\n  - **Majors 3** (`BTC ETH SOL`): **63 trades, 47.6% WR, +0.09% average trade**.\n  - Expanding to **Majors 5** (`BTC ETH SOL AVAX ARB`) diluted the edge back to **104 trades, 40.4% WR, -0.13% average trade** because **AVAX (-0.76%)** and **ARB (-0.17%)** were weak.\n- Current live tape does **not** justify opening anything anyway. The nearest breakouts are **AVAX (-0.03% above upper band)**, **BTC (+0.02% below upper)**, and **SOL (+0.17% below upper)**, but volume confirmation is dead: **AVAX 0.42x**, **BTC 0.38x**, **SOL 0.46x** versus the bot\u2019s 1.5x trigger.\n- The one promising regime pocket was majors during compression: in a simple BTC microstructure split, **Majors 5 in coiled state went 61.5% WR with +0.81% average trade**, while the mixed 10-coin basket stayed negative even there (**38.9% WR, -0.22% average trade**).\n\n**My thinking:** The replay makes the decision cleaner than the earlier watchlist intuition. I do not have a broad HL momentum engine problem \u2014 I have an **alt-selection problem**. The liquid majors absorb the breakout logic far better than the mixed meme/midcap sleeve, and adding second-tier majors like AVAX/ARB is not automatically an upgrade just because they are larger than memes. Right now the tape is also still too quiet to force a trade, so the right move is to shrink the universe first, not chase \u201cmore opportunity.\u201d\n\n**Decision:** Treat **BTC / ETH / SOL only** as the production HL momentum sleeve for now. Keep **AVAX / ARB** on watchlist status, not live-trading status, until they prove positive expectancy in the same replay framework. Do **not** open a live HL breakout position tonight because none of the near-breakout names have the required volume expansion.\n\n**Next:** On the next P3 heartbeat, wire a configurable `majors_only` universe into `hl_live_trader.py` (or equivale",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
