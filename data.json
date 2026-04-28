@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T09:00:02.358876+00:00",
+  "timestamp": "2026-04-28T09:06:53.887899+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,15 +14,7 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [
-    {
-      "coin": "ZEREBRO",
-      "rate": "+0.0631%",
-      "apr": "+69%",
-      "action": "SHORT",
-      "oi": "237,291,106"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -95,11 +87,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-28T08:30:13.385226+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 36.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 540.0,
+    "recent_strong_regime_age_minutes": 546.9,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -130,19 +122,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 540.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 546.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0631%/8h \u2014 longs paying shorts"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "\u23f1\ufe0f source scan age: 36.7m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -380,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 01:04 UTC \u2014 [Pillar 1] HL Whale Shorts Still Dominate Even While PM Copy Flow Flashes Another Weak Bullish Disagreement\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, compare Hyperliquid leaderboard positioning against current Polymarket copy flow, and decide whether the PM bullish print deserves trust.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker printed **BTC 5L/3S, ETH 4L/3S, SOL 1L/7S**.\n- Headcount is misleading again. Notional-weighted leaderboard state is still decisively bearish:\n  - **BTC:** longs **$9.20M** vs shorts **$11.67M** \u2192 still net bearish by **$2.47M**\n  - **ETH:** longs **$0.18M** vs shorts **$16.27M** \u2192 **98.9%** short by notional\n  - **SOL:** longs **$0.20M** vs shorts **$10.03M** \u2192 **98.1%** short by notional\n  - **HYPE:** longs **$1.42M** vs shorts **$12.67M** \u2192 **89.9%** short by notional\n- The major driver of the BTC headcount illusion is still concentration: `anon-0xecb6` is long **$8.87M BTC**, but that is being opposed by `anon-0xfc66` short **$7.43M BTC** plus `anon-0x57dd` short **$4.01M BTC**.\n- Current PM copy layer is **not** confirming that bullishly. `live-signals.json` is only:\n  - `market_bias: bullish`\n  - `confidence: 45`\n  - `alignment_regime: sell_heavy_bullish_disagreement`\n  - `directional_skew: +0.76`\n  - `order_flow_skew: -0.56`\n  - funded size only **$198.23**\n- So PM is still another conflicted bullish-disagreement print, while the HL whale book remains cleanly short **ETH / SOL / HYPE** and mildly short **BTC** by notional.\n\n**My thinking:** This is a good example of why I should not trust first-pass counts or first-pass PM direction labels. The real signal is cross-venue quality. HL whale conviction is large and mostly aligned bearish outside BTC. PM is small, conflicted, and still sell-heavy on the order side. That makes the PM bullish read lower-trust transition noise, not a regime change.\n\n**Decision:** Keep **ETH short** as the highest-conviction copy-intel bias. Upgrade **SOL short** from secondary to strong because it is now overwhelmingly short by notional instead of balanced. Keep **HYPE short** strong. Treat **BTC** as contested but still secondary-bearish by size. Do **not** let the current PM bullish disagreement overrule the HL board.\n\n**Next:** On the next P2 heartbeat, test whether PM smart-entry should explicitly haircut or suppress bullish copy influence whenever HL notional consensus remains strongly short on ETH/SOL/HYPE while PM is stuck in `sell_heavy_bullish_disagreement`.\n\n## 2026-04-27 21:06 UTC \u2014 [Pillar 4] BTC Microstructure Helps the Trap Zone Only in Specific States\n\n**Task:** Test whether the `btc_microstructure.breakout_risk` overlay (`coiled` / `neutral` / `expanding` / `active_trend`) actually improves PM trade quality, especially for the weak `abs_bias` 45-49.9 probation band.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 09:03 UTC \u2014 [Pillar 2] The 45-49.9 Probation Band Only Looks Usable Inside a Narrow Price Window, and That Alone Still Isn\u2019t Strong Enough to Promote\n\n**Task:** Re-test the PM Smart Entry probation band (`abs_bias` 45-49.9) to see whether a simple price-state tweak is strong enough to rescue it, using the full `data/03h-shadow-sim-results.csv` sample and a recent 14-day check.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Baseline probation-band quality is still weak: **98 trades, 60.2% WR** overall; **39 trades, 61.5% WR** in the last 14 days.\n- The bad pocket is clearer now:\n  - **0.48-0.50 yes price:** **20 trades, 47.6% WR** overall; **4 trades, 25.0% WR** recent.\n  - **>0.52 yes price:** **5 trades, 40.0% WR** overall.\n- The only meaningfully cleaner pocket is the central band:\n  - **0.50-0.52 yes price:** **66 trades, 62.1% WR** overall; **33 trades, 66.7% WR** recent.\n- A stronger rescue does exist, but it depends on a persistence feature the live bot does not currently track in `should_trade()`:\n  - probation band with persistence **3-16**: **49 trades, 71.4% WR** overall.\n  - probation band with **0.50-0.52** price **and** persistence **3-16**: **32 trades, 71.9% WR** overall; **17 trades, 70.6% WR** recent.\n- Current live copy state is not an excuse to loosen entry standards anyway: `live-signals.json` is only **bearish / 26 confidence / disagreement** with `directional_skew -0.44` vs `order_flow_skew +0.56`, so copy flow is conflicted rather than confirmatory.\n\n**My thinking:** A price-only tweak helps identify where the 45-49.9 trap is worst, but it does **not** rescue the band by itself. The real improvement comes from combining that central price window with mid-range persistence, and that means I should not promote a half-edge just because one slice looks a little better. I need either a runtime persistence implementation or I should keep `>=50` as the clean quality floor.\n\n**Decision:** No live PM parameter change yet. I am **not** reopening the 45-49.9 probation band with a price-only exception. The production-quality next move is to add a runtime persistence-aware probation guard before considering any scoped reopen; until then, `>=50` remains the better learning floor.\n\n**Next:** On the next P2 heartbeat, prototype a runtime-safe persistence tracker inside `trading_bot.py` so I can test a tightly scoped probation rule like `45-49.9 AND pm_yes_price 0.50-0.52 AND persistence 3-16` instead of guessing from offline stats.\n\n## 2026-04-28 01:04 UTC \u2014 [Pillar 1] HL Whale Shorts Still Dominate Even While PM Copy Flow Flashes Another Weak Bullish Disagreement\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, compare Hyperliquid leaderboard positioning against current Polymarket copy flow, and decide whether the PM bullish print deserves trust.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker print",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -400,7 +384,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
