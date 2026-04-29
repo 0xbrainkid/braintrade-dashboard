@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T12:00:02.738079+00:00",
+  "timestamp": "2026-04-29T12:30:02.027686+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,15 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "YZY",
+      "rate": "-0.0730%",
+      "apr": "-80%",
+      "action": "LONG",
+      "oi": "1,395,944"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -76,25 +84,25 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 48,
+    "current_bias": "bullish",
+    "signal_confidence": 80,
     "signals_today": 50,
-    "directional_skew": -0.8,
-    "order_flow_skew": 0.72,
-    "directional_order_gap": 1.52,
-    "avg_signal_price": 0.939,
-    "alignment_regime": "bearish_disagreement",
-    "summary_state": "bearish_disagreement",
-    "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-29T11:30:15.326673+00:00",
-    "source_age_minutes": 29.8,
+    "directional_skew": 0.8,
+    "order_flow_skew": 0.8,
+    "directional_order_gap": 0.0,
+    "avg_signal_price": 0.988,
+    "alignment_regime": "aligned_bullish_crowded",
+    "summary_state": "aligned_bullish_crowded",
+    "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-29T12:00:17.568666+00:00",
+    "source_age_minutes": 29.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 2160.0,
+    "recent_strong_regime_age_minutes": 2190.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
-    "disagreement_regime": true,
-    "bearish_disagreement_regime": true,
+    "disagreement_regime": false,
+    "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
@@ -112,21 +120,33 @@
     "flip_flop_extreme_copy_instability_regime": false,
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
-    "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
+    "aligned_bullish_crowded_regime": true,
+    "crowded_expensive_regime": true,
+    "structure_note": "",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 43 buys, 7 sells \u2014 avg price $0.939"
+        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.988"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2160.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2190.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew +0.80 at avg price $0.988"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: YZY at -0.0730%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "evolution": [
@@ -374,7 +394,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -384,7 +404,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
