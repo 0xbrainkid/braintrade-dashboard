@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T05:00:01.915673+00:00",
+  "timestamp": "2026-04-29T05:08:26.729332+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,8 +17,8 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1102%",
-      "apr": "+121%",
+      "rate": "+0.0852%",
+      "apr": "+93%",
       "action": "SHORT",
       "oi": "69,667,157"
     }
@@ -95,11 +95,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-29T04:30:13.288761+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 38.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 1740.0,
+    "recent_strong_regime_age_minutes": 1748.4,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -130,15 +130,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1740.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1748.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.2m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1102%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0852%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -380,12 +380,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-29 01:06 UTC \u2014 [Pillar 4] Fear & Greed only earns a small fear-side boost; the greed penalty is unproven and should come out\n\n**Task:** Re-test the Fear & Greed overlay against the full `data/03h-shadow-sim-results.csv` sample, check whether it still improves PM trade quality, and tighten the runtime mapping so it only reflects edges the data actually supports.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I matched all **1,168** shadow-sim trades to **20** daily Fear & Greed prints from Alternative.me.\n- The sample still does **not** contain any greed regime days; it is all fear/neutral, so our existing greed-side penalties were not backed by live sample evidence.\n- Across the full sample, day-level Fear & Greed had basically **no explanatory power** for WR on its own (**correlation -0.03**).\n- The usable signal is narrower: on the production-quality strong-bias subset (**|bias| >= 50**), WR was **87.4%** when F&G was **<= 25** versus **80.0%** in neutral conditions and **86.4%** overall.\n- Current live F&G is **26 (Fear)**, which sits just outside the only clearly supported boost zone.\n- I updated `polymarket-assistant/src/fear_greed.py` to remove the unproven greed penalties and shrink the overlay to a conservative asymmetric map: **+0.03 at <=15, +0.02 at 16-25, 0.00 above 25**, with matching mild size multipliers only in fear.\n- Verified the file with `py_compile` and a live script run; it now returns **0.00 / 1.00x** at today\u2019s F&G reading of **26**.\n\n**My thinking:** Fear & Greed is not a standalone regime engine for us; it is a light context feature. The data says it can help slightly when sentiment is washed out, but it does not justify pretending we know how PM behaves in greed when we have not traded enough of that regime. Carrying untested negative branches would just inject fake precision into sizing.\n\n**Decision:** Keep Fear & Greed as a **small fear-only confidence nudge**, not a full-spectrum throttle. Remove the greed penalty logic until the shadow/live sample actually includes enough greed-regime PM trades to validate it.\n\n**Next:** On the next P4 heartbeat, join the same shadow sample to `research/alpha-signals.json` microstructure states so I can test whether **F&G <= 25 AND BTC breakout_risk = coiled** is stronger than using Fear & Greed alone.\n\n## 2026-04-28 21:03 UTC \u2014 [Pillar 3] The mixed-alt HL momentum basket is still the leak; majors-only is the only sleeve worth keeping live\n\n**Task:** Quantify whether a majors-only HL breakout watchlist would have outperformed the current mixed-alt universe by replaying the live 15m Bollinger-breakout logic over the last 14 days, then compare that read against the current market setup.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I replayed the current HL momentum rules (20-period BB breakout, `vol_ratio >= 1.5`, `1.5%` stop, `3.0%` take-profit, 12h max hold) a",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-04-29 05:03 UTC \u2014 [Pillar 1] BTC lost clean bearish whale consensus, but ETH / SOL / HYPE stayed decisively short\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, quantify the current HL leaderboard by notional instead of just headcount, and decide whether the new PM mixed bullish print is strong enough to challenge the whale book.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL scan came in **BTC 4L/5S, ETH 3L/5S, SOL 3L/5S**, but the important shift was inside BTC, not the counts alone.\n- `anon-0xfc66` flipped **BTC SHORT -> LONG** and is now long about **$4.31M BTC** while keeping large shorts in **ETH ($7.25M)**, **SOL ($5.37M)**, and **HYPE ($6.96M)**.\n- `anon-0x8fcc` flipped back to **BTC SHORT ($4.96M)** and `anon-0x3bca` opened a fresh **BTC SHORT ($4.40M)**, so BTC is now a split whale battleground instead of a clean one-way short.\n- Notional-weighted leaderboard state is:\n  - **BTC:** longs **$20.39M** vs shorts **$12.33M** \u2192 net **+$8.06M long** despite bearish headcount\n  - **ETH:** longs **$0.14M** vs shorts **$34.67M** \u2192 overwhelming short consensus\n  - **SOL:** longs **$0.20M** vs shorts **$13.03M** \u2192 overwhelming short consensus\n  - **HYPE:** longs **$1.41M** vs shorts **$11.90M** \u2192 strong short consensus\n- Current PM copy state is only **bullish / 20 confidence / mixed** with high-price flow (`avg_signal_price 0.982`) and moderate funded size (**$692**), which is too weak and noisy to overrule the HL whale posture.\n- I wrote the detailed artifact to `/home/ubuntu/clawd/research/copy-intel-rescan-2026-04-29-0503.md`.\n\n**My thinking:** The real change is not a broad risk-on turn. It is a relative-value rotation where BTC lost its clean bearish alignment because the biggest wallet stayed massively long BTC while other whales reloaded shorts. Meanwhile ETH, SOL, and HYPE remain decisively short by size, not just by trader count. That makes BTC lower-trust directionally, but it does not weaken the broader copy-intel bear case in the weaker beta names.\n\n**Decision:** Keep **ETH short** as the strongest copy-intel signal, keep **SOL short** and **HYPE short** as strong secondaries, and downgrade **BTC** to **split / tactical only** instead of treating it as clean bearish consensus. Do **not** let the current PM mixed bullish print overrule the HL whale book.\n\n**Next:** On the next P2 heartbeat, test whether PM smart-entry should explicitly haircut bullish copy influence whenever HL notional consensus is net long BTC but still overwhelmingly short ETH/SOL/HYPE, so the bot stops flattening this relative-value split into one generic market-wide copy read.\n\n## 2026-04-29 01:06 UTC \u2014 [Pillar 4] Fear & Greed only earns a small fear-side boost; the greed penalty is unproven and should come out\n\n**Task:** Re-test the Fear & Greed overlay against the full `data/03h-shadow-sim-results.csv` sample, check whether it still improves PM",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 73,
+    "research_files": 74,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
