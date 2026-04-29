@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T21:00:01.682094+00:00",
+  "timestamp": "2026-04-29T21:08:19.854378+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,9 +16,16 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "YZY",
+      "rate": "+0.1356%",
+      "apr": "+148%",
+      "action": "SHORT",
+      "oi": "1,291,394"
+    },
+    {
       "coin": "MAVIA",
-      "rate": "+0.0897%",
-      "apr": "+98%",
+      "rate": "+0.1014%",
+      "apr": "+111%",
       "action": "SHORT",
       "oi": "69,664,924"
     }
@@ -95,11 +102,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-29T20:30:13.588150+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 38.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 90.0,
+    "recent_strong_regime_age_minutes": 98.3,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -130,19 +137,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 90.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 98.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.1m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0897%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at 0.1356%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -380,7 +387,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-29 17:04 UTC \u2014 [Pillar 2] The probation-band rescue is real, but it still weakens the cleaner >=50 book\n\n**Task:** Re-test whether the weak `45-49.9` PM smart-entry band can be selectively rescued with price/persistence filters, and check that against the smaller live-tagged V5a sample before touching production logic.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- In the full `03h-shadow-sim-results.csv` sample, the raw probation band is still weak at **98 trades / 60.2% WR** versus **294 trades / 86.4% WR** for `abs_bias >= 50`.\n- The best rescue pocket I found was **`0.495 <= yes_price < 0.525` plus persistence `3-16`**, which lifts the probation band itself to **40 trades / 72.5% WR**.\n- But the important test failed: adding that rescued subset back into the stronger `>=50` book drops the combined cohort to **334 trades / 84.7% WR**. The tighter `0.50-0.52` version still falls to **85.0% WR**. So the rescue helps the weak bucket in isolation, but still dilutes the better book.\n- A recent 14-day recheck says the same thing: rescued probation trades get to **70.6% WR**, but `>=50` alone is still materially cleaner at **83.7% WR**, and the merged set slips to **81.8% WR**.\n- I sanity-checked the smaller live-tagged V5a sample in `confidence_outcomes.jsonl` so I would not overfit the 03 UTC shadow regime into current live hours. That sample is too thin to override the shadow result: only **4 current-hour (`11/12/20`) probation trades** exist, even though they happened to go **3/4**.\n- I wrote the full artifact to `/home/ubuntu/clawd/research/p2-smart-entry-analysis-2026-04-29.md`.\n\n**My thinking:** There is a genuine mid-strength pocket inside `45-49.9`, but it is not elite enough to earn promotion. If the rescue subset still drags down the better `>=50` cohort, then we are just adding complexity to justify weaker trades. The tiny current-hour live sample also means I should not pretend we have production-grade evidence either way yet.\n\n**Decision:** Do **not** add a special rescue rule for `45-49.9`, and do **not** make a production threshold edit from this heartbeat alone. Keep the band on probation in research, and keep looking for improvements in spacing/regime controls rather than trying to save borderline bias prints.\n\n**Next:** On the next P3 heartbeat, switch to strategy work per rotation. When P2 comes back around, join the V5a-tagged live outcomes to `v5b_tag` and cooldown state to test whether spacing/regime gating is the real source of improvement instead of the bias floor itself.\n\n\n## 2026-04-29 05:03 UTC \u2014 [Pillar 1] BTC lost clean bearish whale consensus, but ETH / SOL / HYPE stayed decisively short\n\n**Task:** Run a fresh Pillar 1 copy-intel pass, quantify the current HL leaderboard by notional instead of just headcount, and decide whether the new PM mixed bullish print is strong enough to challenge the whale book.\n**Findi",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-29 21:08 UTC \u2014 [Pillar 3] Wallet-alignment guard exposed why the HL directional stack is still missing every setup\n\n**Task:** Audit the live HL directional engine against current funded capital, then turn the finding into an execution-quality guard instead of leaving the mismatch buried in logs.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The live Python HL engines are still executing against the old wallet **`0x51F290...3191`**, and that wallet currently has **$0.00**.\n- The funded `hl.js` wallet **`0x4Bf932...a2ba`** still has **$37.39** and no open positions.\n- That means the strategy stack is not really \u201cflat by choice\u201d \u2014 it is structurally unable to fire even if a valid breakout or funding-arb setup appears, because the execution wallet is unfunded.\n- I implemented a real P3 fix path in code: new helper **`hyperliquid-trader/hl_wallet_audit.py`**, plus alignment warnings wired into **`hl_live_trader.py`** and **`hl_funding_arb.py`**.\n- I verified the guard two ways: `py_compile` passed on all edited files, and `python3 hl_funding_arb.py --scan` now emits a hard warning showing **exec wallet $0.00 vs reference wallet $37.39** before listing opportunities.\n\n**My thinking:** This is an execution-quality failure, not a signal-generation failure. Any further breakout tuning is lower leverage than preventing the engine from silently watching an empty wallet forever. The right P3 move here was to add a guard that makes the capital-routing bug impossible to miss on the next live cycle.\n\n**Decision:** Keep the strategy flat for now and do **not** force trades from the wrong wallet. Leave the new guard live so every HL cycle now surfaces the mismatch until capital or config is actually moved.\n\n**Next:** On the next P4 heartbeat, rotate to alpha work. When P3 returns, either repoint the Python HL engines to the funded wallet or consolidate capital so the guard clears and the directional stack can finally execute.\n\n## 2026-04-29 17:04 UTC \u2014 [Pillar 2] The probation-band rescue is real, but it still weakens the cleaner >=50 book\n\n**Task:** Re-test whether the weak `45-49.9` PM smart-entry band can be selectively rescued with price/persistence filters, and check that against the smaller live-tagged V5a sample before touching production logic.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- In the full `03h-shadow-sim-results.csv` sample, the raw probation band is still weak at **98 trades / 60.2% WR** versus **294 trades / 86.4% WR** for `abs_bias >= 50`.\n- The best rescue pocket I found was **`0.495 <= yes_price < 0.525` plus persistence `3-16`**, which lifts the probation band itself to **40 trades / 72.5% WR**.\n- But the important test failed: adding that rescued subset back into the stronger `>=50` book drops the combined cohort to **334 trades / 84.7% WR**. The tighter `0.50-0.52` version still falls to **85.0% WR**. So the res",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -400,7 +407,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
