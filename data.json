@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T01:07:01.174962+00:00",
+  "timestamp": "2026-04-29T01:30:02.193690+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,22 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0741%",
+      "apr": "+81%",
+      "action": "SHORT",
+      "oi": "237,106,656"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0503%",
+      "apr": "+55%",
+      "action": "SHORT",
+      "oi": "69,667,157"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -77,29 +92,29 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 24,
+    "signal_confidence": 5,
     "signals_today": 50,
-    "directional_skew": -0.24,
-    "order_flow_skew": 0.12,
-    "directional_order_gap": 0.36,
-    "avg_signal_price": 0.832,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bearish",
-    "summary_text": "Mixed bearish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-29T00:30:13.312143+00:00",
-    "source_age_minutes": 36.8,
+    "directional_skew": -0.12,
+    "order_flow_skew": 0.84,
+    "directional_order_gap": 0.96,
+    "avg_signal_price": 0.872,
+    "alignment_regime": "weak_directional_disagreement",
+    "summary_state": "weak_directional_disagreement",
+    "summary_text": "Weak-direction disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-29T01:00:13.267013+00:00",
+    "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 1507.0,
+    "recent_strong_regime_age_minutes": 1530.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
-    "disagreement_regime": false,
+    "disagreement_regime": true,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_inversion_regime": false,
-    "weak_directional_disagreement_regime": false,
+    "weak_directional_disagreement_regime": true,
     "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
@@ -114,19 +129,27 @@
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": false,
-    "structure_note": "",
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.832"
+        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.872"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1507.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1530.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 36.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: ZEREBRO at 0.0741%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -384,7 +407,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
