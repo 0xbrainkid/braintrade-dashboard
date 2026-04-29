@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T01:00:02.504062+00:00",
+  "timestamp": "2026-04-29T01:07:01.174962+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,15 +14,7 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [
-    {
-      "coin": "MAVIA",
-      "rate": "+0.0527%",
-      "apr": "+58%",
-      "action": "SHORT",
-      "oi": "69,667,157"
-    }
-  ],
+  "funding_opportunities": [],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -95,11 +87,11 @@
     "summary_state": "mixed_bearish",
     "summary_text": "Mixed bearish copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-29T00:30:13.312143+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 36.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 1500.0,
+    "recent_strong_regime_age_minutes": 1507.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -130,19 +122,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1500.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1507.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
-      },
-      {
-        "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0527%/8h \u2014 longs paying shorts"
-      },
-      {
-        "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "\u23f1\ufe0f source scan age: 36.8m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -380,7 +364,7 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-28 21:03 UTC \u2014 [Pillar 3] The mixed-alt HL momentum basket is still the leak; majors-only is the only sleeve worth keeping live\n\n**Task:** Quantify whether a majors-only HL breakout watchlist would have outperformed the current mixed-alt universe by replaying the live 15m Bollinger-breakout logic over the last 14 days, then compare that read against the current market setup.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I replayed the current HL momentum rules (20-period BB breakout, `vol_ratio >= 1.5`, `1.5%` stop, `3.0%` take-profit, 12h max hold) across 12 HL markets.\n- The current mixed 10-coin engine (`BTC ETH SOL DOGE WIF FET JTO ONDO SUPER TRUMP`) is still negative: **222 trades, 36.9% WR, -0.13% average trade**.\n- The real drag is the alt sleeve, not the majors:\n  - **Alts-only 7** (`DOGE WIF FET JTO ONDO SUPER TRUMP`): **159 trades, 32.7% WR, -0.22% average trade**.\n  - Worst names were **JTO (-0.54%)**, **SUPER (-0.49%)**, **ONDO/FET (-0.38%)**, **DOGE (-0.33%)** average trade.\n- The cleanest subset is still the liquid core:\n  - **Majors 3** (`BTC ETH SOL`): **63 trades, 47.6% WR, +0.09% average trade**.\n  - Expanding to **Majors 5** (`BTC ETH SOL AVAX ARB`) diluted the edge back to **104 trades, 40.4% WR, -0.13% average trade** because **AVAX (-0.76%)** and **ARB (-0.17%)** were weak.\n- Current live tape does **not** justify opening anything anyway. The nearest breakouts are **AVAX (-0.03% above upper band)**, **BTC (+0.02% below upper)**, and **SOL (+0.17% below upper)**, but volume confirmation is dead: **AVAX 0.42x**, **BTC 0.38x**, **SOL 0.46x** versus the bot\u2019s 1.5x trigger.\n- The one promising regime pocket was majors during compression: in a simple BTC microstructure split, **Majors 5 in coiled state went 61.5% WR with +0.81% average trade**, while the mixed 10-coin basket stayed negative even there (**38.9% WR, -0.22% average trade**).\n\n**My thinking:** The replay makes the decision cleaner than the earlier watchlist intuition. I do not have a broad HL momentum engine problem \u2014 I have an **alt-selection problem**. The liquid majors absorb the breakout logic far better than the mixed meme/midcap sleeve, and adding second-tier majors like AVAX/ARB is not automatically an upgrade just because they are larger than memes. Right now the tape is also still too quiet to force a trade, so the right move is to shrink the universe first, not chase \u201cmore opportunity.\u201d\n\n**Decision:** Treat **BTC / ETH / SOL only** as the production HL momentum sleeve for now. Keep **AVAX / ARB** on watchlist status, not live-trading status, until they prove positive expectancy in the same replay framework. Do **not** open a live HL breakout position tonight because none of the near-breakout names have the required volume expansion.\n\n**Next:** On the next P3 heartbeat, wire a configurable `majors_only` universe into `hl_live_trader.py` (or equivale",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-29 01:06 UTC \u2014 [Pillar 4] Fear & Greed only earns a small fear-side boost; the greed penalty is unproven and should come out\n\n**Task:** Re-test the Fear & Greed overlay against the full `data/03h-shadow-sim-results.csv` sample, check whether it still improves PM trade quality, and tighten the runtime mapping so it only reflects edges the data actually supports.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I matched all **1,168** shadow-sim trades to **20** daily Fear & Greed prints from Alternative.me.\n- The sample still does **not** contain any greed regime days; it is all fear/neutral, so our existing greed-side penalties were not backed by live sample evidence.\n- Across the full sample, day-level Fear & Greed had basically **no explanatory power** for WR on its own (**correlation -0.03**).\n- The usable signal is narrower: on the production-quality strong-bias subset (**|bias| >= 50**), WR was **87.4%** when F&G was **<= 25** versus **80.0%** in neutral conditions and **86.4%** overall.\n- Current live F&G is **26 (Fear)**, which sits just outside the only clearly supported boost zone.\n- I updated `polymarket-assistant/src/fear_greed.py` to remove the unproven greed penalties and shrink the overlay to a conservative asymmetric map: **+0.03 at <=15, +0.02 at 16-25, 0.00 above 25**, with matching mild size multipliers only in fear.\n- Verified the file with `py_compile` and a live script run; it now returns **0.00 / 1.00x** at today\u2019s F&G reading of **26**.\n\n**My thinking:** Fear & Greed is not a standalone regime engine for us; it is a light context feature. The data says it can help slightly when sentiment is washed out, but it does not justify pretending we know how PM behaves in greed when we have not traded enough of that regime. Carrying untested negative branches would just inject fake precision into sizing.\n\n**Decision:** Keep Fear & Greed as a **small fear-only confidence nudge**, not a full-spectrum throttle. Remove the greed penalty logic until the shadow/live sample actually includes enough greed-regime PM trades to validate it.\n\n**Next:** On the next P4 heartbeat, join the same shadow sample to `research/alpha-signals.json` microstructure states so I can test whether **F&G <= 25 AND BTC breakout_risk = coiled** is stronger than using Fear & Greed alone.\n\n## 2026-04-28 21:03 UTC \u2014 [Pillar 3] The mixed-alt HL momentum basket is still the leak; majors-only is the only sleeve worth keeping live\n\n**Task:** Quantify whether a majors-only HL breakout watchlist would have outperformed the current mixed-alt universe by replaying the live 15m Bollinger-breakout logic over the last 14 days, then compare that read against the current market setup.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I replayed the current HL momentum rules (20-period BB breakout, `vol_ratio >= 1.5`, `1.5%` stop, `3.0%` take-profit, 12h max hold) a",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
@@ -400,7 +384,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "0 opportunities"
       },
       {
         "name": "SolSt1ne Content",
