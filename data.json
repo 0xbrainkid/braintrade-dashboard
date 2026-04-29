@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-29T18:00:02.663599+00:00",
+  "timestamp": "2026-04-29T18:30:03.135415+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "+0.1734%",
-      "apr": "+190%",
+      "rate": "+0.0944%",
+      "apr": "+103%",
       "action": "SHORT",
-      "oi": "1,299,032"
+      "oi": "1,316,600"
     }
   ],
   "daily_pnl": [
@@ -84,32 +84,32 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 0,
+    "current_bias": "bullish",
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": 0.0,
-    "order_flow_skew": 0.0,
-    "directional_order_gap": 0.0,
-    "avg_signal_price": 0.985,
-    "alignment_regime": "persistent_neutral_disagreement",
-    "summary_state": "persistent_neutral_disagreement",
-    "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-29T17:30:14.038213+00:00",
+    "directional_skew": 1.0,
+    "order_flow_skew": -0.6,
+    "directional_order_gap": 1.6,
+    "avg_signal_price": 0.99,
+    "alignment_regime": "sell_heavy_bullish_disagreement",
+    "summary_state": "sell_heavy_bullish_disagreement",
+    "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-29T18:00:14.567238+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-28T00:00:02.808960+00:00",
-    "recent_strong_regime_age_minutes": 2520.0,
+    "recent_strong_regime_age_minutes": 2550.0,
     "recent_strong_regime_source_scan_time": "2026-04-27T23:30:13.156961+00:00",
-    "disagreement_regime": false,
+    "disagreement_regime": true,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
-    "persistent_neutral_disagreement_regime": true,
-    "sell_heavy_bullish_disagreement_regime": false,
+    "persistent_neutral_disagreement_regime": false,
+    "sell_heavy_bullish_disagreement_regime": true,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
@@ -121,24 +121,28 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "",
+    "crowded_expensive_regime": true,
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 25 buys, 25 sells \u2014 avg price $0.985"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.990"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2520.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2550.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew +1.00 at avg price $0.990"
+      },
+      {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at 0.1734%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at 0.0944%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -390,7 +394,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
