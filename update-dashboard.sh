@@ -14,6 +14,7 @@ now = datetime.datetime.now(datetime.timezone.utc)
 
 prev_dashboard = {}
 prev_p1 = {}
+alpha_signal = {}
 try:
     with open('/home/ubuntu/clawd/dashboard/data.json') as f:
         prev_dashboard = json.load(f)
@@ -21,6 +22,12 @@ try:
 except Exception:
     prev_dashboard = {}
     prev_p1 = {}
+
+try:
+    with open('/home/ubuntu/clawd/research/alpha-signals.json') as f:
+        alpha_signal = json.load(f)
+except Exception:
+    alpha_signal = {}
 
 # ── PM Balance (from bot log) ──
 pm_balance = 0
@@ -596,6 +603,37 @@ try:
         })
 except: pass
 
+# ── Alpha Research Snapshot (Pillar 4) ──
+alpha_fng = alpha_signal.get("fear_greed")
+alpha_fng_class = alpha_signal.get("fear_greed_class")
+alpha_fng_ctx = alpha_signal.get("fear_greed_context", {}) or {}
+alpha_micro = alpha_signal.get("btc_microstructure", {}) or {}
+alpha_regime = alpha_signal.get("regime_state", {}) or {}
+alpha_fast = alpha_signal.get("fast_regime", {}) or {}
+alpha_squeeze = alpha_signal.get("funding_squeeze", {}) or {}
+alpha_liq = alpha_signal.get("liquidation_signal", {}) or {}
+alpha_pm_risk = alpha_signal.get("pm_risk_context", {}) or {}
+alpha_btc_classifier = alpha_signal.get("btc_regime_classifier", {}) or {}
+
+alpha_signals_generated = 0
+for candidate in [
+    alpha_btc_classifier.get("state"),
+    alpha_squeeze.get("direction"),
+    alpha_liq.get("direction"),
+    alpha_fng_ctx.get("regime"),
+]:
+    if candidate and str(candidate).lower() not in {"neutral", "none", "mixed_transition"}:
+        alpha_signals_generated += 1
+
+alpha_sources = [
+    {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
+    {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
+    {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities | {alpha_squeeze.get('direction', 'NEUTRAL')}"},
+    {"name": "Fear & Greed Index", "status": "ACTIVE" if alpha_fng is not None else "PLANNED", "last_signal": f"{alpha_fng} ({alpha_fng_class}) | {alpha_fng_ctx.get('regime', 'neutral')}" if alpha_fng is not None else "—"},
+    {"name": "BTC Regime Classifier", "status": "ACTIVE" if alpha_btc_classifier else "BUILDING", "last_signal": f"{alpha_btc_classifier.get('state', '—')} | {alpha_btc_classifier.get('stance', '—')}"},
+    {"name": "Liquidation Cascade Monitor", "status": "ACTIVE" if alpha_liq else "BUILDING", "last_signal": f"{alpha_liq.get('direction', 'neutral')} | adj {alpha_liq.get('pm_adjustment', 0)}"},
+]
+
 try:
     signals_files = glob.glob("/home/ubuntu/clawd/intelligence/copy-signals*.json")
     if signals_files:
@@ -897,18 +935,21 @@ data = {
     
     # ═══ PILLAR 4: Alpha Research Pipeline ═══
     "pillar4": {
-        "completion": 15,
-        "data_sources": 4,
-        "signals_generated": 0,
+        "completion": 35 if alpha_signal else 15,
+        "data_sources": sum(1 for s in alpha_sources if s["status"] == "ACTIVE"),
+        "signals_generated": alpha_signals_generated,
         "research_files": len(glob.glob("/home/ubuntu/clawd/research/*.md")),
-        "sources": [
-            {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
-            {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
-            {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities"},
-            {"name": "SolSt1ne Content", "status": "BUILDING", "last_signal": "—"},
-            {"name": "On-Chain Flows", "status": "PLANNED", "last_signal": "—"},
-            {"name": "Fear & Greed Index", "status": "PLANNED", "last_signal": "—"},
-        ],
+        "btc_regime_classifier": alpha_btc_classifier,
+        "pm_risk_context": alpha_pm_risk,
+        "fear_greed": {
+            "value": alpha_fng,
+            "classification": alpha_fng_class,
+            "context": alpha_fng_ctx,
+        },
+        "btc_microstructure": alpha_micro,
+        "regime_state": alpha_regime,
+        "fast_regime": alpha_fast,
+        "sources": alpha_sources,
     },
 }
 
