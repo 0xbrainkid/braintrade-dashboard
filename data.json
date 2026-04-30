@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-30T21:30:03.067802+00:00",
+  "timestamp": "2026-04-30T22:00:02.683131+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "-0.2253%",
-      "apr": "-247%",
+      "rate": "-0.3500%",
+      "apr": "-383%",
       "action": "LONG",
-      "oi": "1,248,202"
+      "oi": "1,252,324"
     },
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0626%",
-      "apr": "+68%",
+      "coin": "MAVIA",
+      "rate": "+0.0733%",
+      "apr": "+80%",
       "action": "SHORT",
-      "oi": "229,045,780"
+      "oi": "69,653,465"
     }
   ],
   "daily_pnl": [
@@ -92,27 +92,27 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 5,
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": -0.12,
-    "order_flow_skew": 0.72,
-    "directional_order_gap": 0.84,
-    "avg_signal_price": 0.952,
-    "alignment_regime": "disagreement",
-    "summary_state": "disagreement",
-    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-30T21:00:13.555818+00:00",
+    "directional_skew": -1.0,
+    "order_flow_skew": 1.0,
+    "directional_order_gap": 2.0,
+    "avg_signal_price": 0.98,
+    "alignment_regime": "max_gap_all_buy_bearish_disagreement",
+    "summary_state": "max_gap_all_buy_bearish_disagreement",
+    "summary_text": "Max-gap all-buy bearish disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-30T21:30:13.935792+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 1560.0,
+    "recent_strong_regime_age_minutes": 1590.0,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": true,
-    "bearish_disagreement_regime": false,
-    "all_buy_bearish_disagreement_regime": false,
+    "bearish_disagreement_regime": true,
+    "all_buy_bearish_disagreement_regime": true,
     "all_buy_bearish_inversion_regime": false,
-    "max_gap_all_buy_bearish_disagreement_regime": false,
+    "max_gap_all_buy_bearish_disagreement_regime": true,
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
@@ -128,24 +128,32 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
+    "crowded_expensive_regime": true,
     "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 43 buys, 7 sells \u2014 avg price $0.952"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.980"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83e\udde9 max-gap all-buy bearish disagreement: directional skew -1.00, order-flow skew +1.00, avg price $0.980, gap 2.00"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1560.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1590.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.980"
+      },
+      {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at -0.2253%/8h \u2014 shorts paying longs"
+        "text": "Strongest: YZY at -0.3500%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
