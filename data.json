@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-30T05:00:01.921193+00:00",
+  "timestamp": "2026-04-30T05:07:53.030880+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0927%",
-      "apr": "+101%",
+      "rate": "+0.0710%",
+      "apr": "+78%",
       "action": "SHORT",
       "oi": "69,661,465"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0624%",
+      "apr": "+68%",
+      "action": "SHORT",
+      "oi": "231,315,198"
     }
   ],
   "daily_pnl": [
@@ -95,11 +102,11 @@
     "summary_state": "sell_heavy_bullish_disagreement",
     "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-30T04:30:12.500589+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 570.0,
+    "recent_strong_regime_age_minutes": 577.8,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -130,11 +137,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 570.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 577.8m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.7m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -142,11 +149,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0927%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0710%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -384,12 +391,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-30 01:07 UTC \u2014 [Pillar 4] Fear edge stays real, but the first higher-sentiment decay zone needs monitoring before it earns a penalty\n\n**Task:** Re-test the Fear & Greed overlay with a cleaner state split, then harden the alpha pipeline so future P4 work can join sentiment to live microstructure/regime history instead of a single overwritten snapshot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- I matched the full `03h-shadow-sim-results.csv` sample (**1,168 trades across 20 dates**) to the full Alternative.me Fear & Greed history and wrote the artifact to `/home/ubuntu/clawd/research/p4-fear-greed-state-split-2026-04-30.md`.\n- The strongest pocket remains washed-out fear: with **abs_bias >= 50**, **yes_price 0.47-0.53**, and **persistence 3-16**, **F&G <= 15** printed **91.3% WR (103 trades)**.\n- The current conservative fear band **16-25** is still healthy at **86.5% WR (52 trades)**, so the existing fear-only positive overlay is still supported.\n- The first real degradation showed up above **40**: the same clean pocket dropped to **73.3% WR (15 trades)**, concentrated on **2026-04-23 (F&G 46)**. That is a meaningful warning, but still too small to justify a hard confidence penalty on its own.\n- I also upgraded the alpha pipeline in `scripts/alpha-signal-update.sh` so each hourly refresh now appends to **`research/alpha-signals-history.jsonl`** instead of only overwriting `research/alpha-signals.json`.\n\n**My thinking:** The earlier fear-side conclusion was right, but it was still too coarse. This pass says the real edge lives in washed-out fear plus already-clean execution context, while higher sentiment is a degradation watchlist rather than a production short-circuit. The pipeline change matters because P4 research was bottlenecked by having only one live alpha snapshot at a time.\n\n**Decision:** Keep the existing **fear-only boost** live, do **not** add a hard `>40` penalty yet, and start collecting hourly alpha history so the next P4 cycle can test sentiment together with live BTC breakout risk / regime state instead of sentiment alone.\n\n**Next:** On the next P1 heartbeat, rotate back to copy-intel per schedule. When P4 returns, use the new `alpha-signals-history.jsonl` archive to test whether higher-sentiment weak pockets only break when BTC microstructure is `active_trend` / `expanding`, or whether the decay is sentiment-led on its own.\n\n## 2026-04-29 21:08 UTC \u2014 [Pillar 3] Wallet-alignment guard exposed why the HL directional stack is still missing every setup\n\n**Task:** Audit the live HL directional engine against current funded capital, then turn the finding into an execution-quality guard instead of leaving the mismatch buried in logs.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The live Python HL engines are still executing against the old wallet **`0x51F290...3191`**, and that wallet currently has **$0.00**.\n",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-30 05:06 UTC \u2014 [Pillar 1] BTC lost clean bearish consensus again, while ETH and SOL stayed decisively short by whale size\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, compare headcount vs notional consensus, and test whether the current PM bullish disagreement tape is strong enough to override HL whale positioning.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker printed **BTC 4L/6S, ETH 3L/6S, SOL 2L/7S**, but headcount is misleading again.\n- Notional-weighted state is now:\n  - **BTC:** longs **$12.49M** vs shorts **$10.84M** \u2192 net **+$1.65M long** despite bearish trader count\n  - **ETH:** longs **$0.33M** vs shorts **$26.03M** \u2192 overwhelming short consensus\n  - **SOL:** longs **$0.24M** vs shorts **$16.11M** \u2192 overwhelming short consensus\n  - **HYPE:** longs **$2.82M** vs shorts **$4.52M** \u2192 only mild short consensus\n- The important wallet changes were structural, not cosmetic:\n  - `anon-0xfc66` flipped **HYPE SHORT -> LONG** while keeping large **ETH/SOL shorts** and a **BTC long**\n  - `anon-0x3bca` flipped **BTC SHORT -> LONG** and **ETH SHORT -> LONG**\n  - `anon-0x61ce` opened fresh large **BTC short** and **ETH short** exposure\n- Current PM copy surface is still **bullish / 60 confidence / sell_heavy_bullish_disagreement**, but it remains the same low-trust shape: **50 SELL signals, 50 UP signals, avg price 0.99, total_size 0**.\n- I wrote the detailed artifact to `/home/ubuntu/clawd/research/copy-intel-rescan-2026-04-30-0506.md`.\n\n**My thinking:** The live edge is a relative-value book, not a one-line macro call. ETH and SOL are still clean copy-intel shorts because top-wallet size is overwhelmingly one-way there. BTC is different: the crowd count still leans short, but the biggest balance sheet (`anon-0xecb6`) plus `anon-0xfc66` are leaning BTC long hard enough to flip notional net long. PM is not helping because its bullish read is still just high-price zero-spend inversion flow.\n\n**Decision:** Keep **ETH short** and **SOL short** as the strongest Pillar 1 biases, downgrade **BTC** to **split / tactical only**, keep **HYPE** as only a mild short read, and do **not** let the current PM bullish disagreement tape overrule the whale book.\n\n**Next:** On the next P2 heartbeat, test whether PM smart-entry should explicitly haircut or suppress bullish copy influence when PM prints zero-spend `sell_heavy_bullish_disagreement` while HL whale notional remains overwhelmingly short ETH/SOL but split on BTC.\n\n## 2026-04-30 01:07 UTC \u2014 [Pillar 4] Fear edge stays real, but the first higher-sentiment decay zone needs monitoring before it earns a penalty\n\n**Task:** Re-test the Fear & Greed overlay with a cleaner state split, then harden the alpha pipeline so future P4 work can join sentiment to live microstructure/regime history instead of a single overwritten snapshot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n-",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 77,
+    "research_files": 78,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
@@ -404,7 +411,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities"
+        "last_signal": "2 opportunities"
       },
       {
         "name": "SolSt1ne Content",
