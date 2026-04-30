@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-30T13:00:02.508919+00:00",
+  "timestamp": "2026-04-30T13:09:12.397386+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,10 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0951%",
-      "apr": "+104%",
+      "rate": "+0.0870%",
+      "apr": "+95%",
       "action": "SHORT",
       "oi": "69,661,465"
-    },
-    {
-      "coin": "GRIFFAIN",
-      "rate": "-0.0503%",
-      "apr": "-55%",
-      "action": "LONG",
-      "oi": "143,404,454"
     }
   ],
   "daily_pnl": [
@@ -102,11 +95,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-04-30T12:30:14.036300+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 39.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 1050.0,
+    "recent_strong_regime_age_minutes": 1059.2,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -137,19 +130,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1050.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1059.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 39.0m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0951%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.0870%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -387,12 +380,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-30 09:06 UTC \u2014 [Pillar 2] 20 UTC stays on probation because the real leak was expensive fills, not the hour itself\n\n**Task:** Audit whether `20 UTC` still deserves to remain in PM `active_hours` after the recent V5b high-price-cap tightening, and test whether the real edge is hour selection or interaction with cooldown / fill quality.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In the recent tagged sample (`2026-04-01+`, hours `11/12/19/20`), raw `v5a_pass` performance is:\n  - **11 UTC:** 7 trades, **57.1% WR**, **+0.107 avg pnl_pct**\n  - **12 UTC:** 8 trades, **87.5% WR**, **+0.687 avg pnl_pct**\n  - **19 UTC:** 6 trades, **33.3% WR**, **-0.353 avg pnl_pct**\n  - **20 UTC:** 2 trades, **50.0% WR**, **-0.029 avg pnl_pct**\n- The bigger improvement still comes from the **price-cap cut**, not another hour cut:\n  - recent `v5a_pass` all fills: **23 trades, 60.9% WR, +0.177 avg pnl_pct**\n  - with fill cap `<= 0.5355`: **21 trades, 66.7% WR, +0.289 avg pnl_pct**\n- `20 UTC` does **not** fail cleanly enough to remove yet:\n  - the only **losing** 20h trade (`2026-04-01 20:05`, fill **0.5253**) was already **cooldown-blocked**\n  - the only **cooldown-passing** 20h trade (`2026-04-06 20:05`, fill **0.5151**) **won**\n- The more suspicious hour is actually **11 UTC**: after the cap fix it improves to **66.7% WR** on capped fills, but its tiny cooldown-passing subset is only **33.3% WR (3 trades)**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-active-hour-audit-2026-04-30.md`.\n\n**My thinking:** The last P2 change was the right one. The high-price tail was doing more damage than the 20h slot itself. If I cut `20 UTC` now, I\u2019d mostly be deleting a slot because of a loser the cooldown logic already wanted to reject. That is weaker evidence than it looks at first glance.\n\n**Decision:** Keep `active_hours = [11, 12, 20]` unchanged, keep `19 UTC` excluded, and leave **20 UTC on probation instead of cutting it**. No code change this heartbeat because the data supports patience more than another reactive hour filter.\n\n**Next:** On the next P2 heartbeat, audit **11 UTC** against copy-suppression states and V5b tags to see whether its weakness comes from specific regime shapes rather than the hour itself.\n\n## 2026-04-30 05:06 UTC \u2014 [Pillar 1] BTC lost clean bearish consensus again, while ETH and SOL stayed decisively short by whale size\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, compare headcount vs notional consensus, and test whether the current PM bullish disagreement tape is strong enough to override HL whale positioning.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Fresh HL tracker printed **BTC 4L/6S, ETH 3L/6S, SOL 2L/7S**, but headcount is misleading again.\n- Notional-weighted state is now:\n  - **BTC:** longs **$12.49M** vs shorts **$10.84M** \u2192 net **+$1.65M long** despite bearish trader c",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-30 13:04 UTC \u2014 [Pillar 3] I stopped BTC\u2019s regime snapshot from impersonating every alt breakout\n\n**Task:** Audit the HL directional engine for strategy-quality leaks and fix the highest-leverage issue instead of just observing it.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The live HL trader in `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` was applying one global `intelligence/regime-state.json` snapshot to **every coin** it scans.\n- That meant BTC\u2019s market label could incorrectly filter ETH/SOL/DOGE/ONDO breakout signals as if they shared BTC\u2019s exact local structure.\n- I fixed it by adding a **coin-local regime classifier** (`build_local_regime_context`) that derives per-coin `regime`, `trend_pct`, `range_pct`, `atr_pct`, `consistency`, and `dominant` direction from the coin\u2019s own candles.\n- The filter now uses **local coin regime first** and only uses the global market file as a **broader countertrend guard** when a trade is fighting the larger tape without enough breakout/volume strength.\n- Verification passed:\n  - `python3 -m py_compile` succeeded for `hl_live_trader.py`, `hl_funding_arb.py`, and `hl_wallet_audit.py`\n  - live candle sanity check printed:\n    - **BTC:** `RANGE`, trend `+0.32%`, range `0.55%`, atr `0.11%`\n    - **ETH:** `RANGE`, trend `+0.38%`, range `0.51%`, atr `0.14%`\n    - **SOL:** `RANGE`, trend `-0.00%`, range `0.46%`, atr `0.12%`\n    - market snapshot: **`RANGE / UP`**\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-local-regime-filter-2026-04-30.md`.\n\n**My thinking:** This was a real strategy-quality bug, not cosmetic cleanup. A multi-coin breakout engine can use BTC as a market-overseer, but it cannot let BTC\u2019s regime stand in for every alt\u2019s local tape. The old design risked suppressing good alt breakouts or greenlighting weak ones for the wrong reason.\n\n**Decision:** Keep the broad market guard, but make breakout filtering **coin-local first**. No live position change this heartbeat because the highest-value P3 move was improving signal quality before the next real setup appears.\n\n**Next:** On the next P3 heartbeat, replay recent breakout candidates through **old global-only vs new local+market** filtering and measure whether the fix rescues valid alt moves without increasing weak countertrend entries.\n\n## 2026-04-30 09:06 UTC \u2014 [Pillar 2] 20 UTC stays on probation because the real leak was expensive fills, not the hour itself\n\n**Task:** Audit whether `20 UTC` still deserves to remain in PM `active_hours` after the recent V5b high-price-cap tightening, and test whether the real edge is hour selection or interaction with cooldown / fill quality.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In the recent tagged sample (`2026-04-01+`, hours `11/12/19/20`), raw `v5a_pass` performance is:\n  - **11 UTC:** 7 trades, ",
   "pillar4": {
     "completion": 15,
     "data_sources": 4,
     "signals_generated": 0,
-    "research_files": 79,
+    "research_files": 80,
     "sources": [
       {
         "name": "HL Leaderboard Tracker",
@@ -407,7 +400,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities"
+        "last_signal": "1 opportunities"
       },
       {
         "name": "SolSt1ne Content",
