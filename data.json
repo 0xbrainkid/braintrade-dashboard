@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-30T20:00:02.373469+00:00",
+  "timestamp": "2026-04-30T20:30:02.890464+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -14,7 +14,22 @@
   "pm_bot_running": true,
   "hl_bot_running": false,
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "YZY",
+      "rate": "-0.1049%",
+      "apr": "-115%",
+      "action": "LONG",
+      "oi": "1,240,156"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.0705%",
+      "apr": "+77%",
+      "action": "SHORT",
+      "oi": "69,661,465"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -77,24 +92,24 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 36,
+    "signal_confidence": 16,
     "signals_today": 50,
-    "directional_skew": -0.6,
-    "order_flow_skew": 0.8,
-    "directional_order_gap": 1.4,
-    "avg_signal_price": 0.736,
-    "alignment_regime": "bearish_disagreement",
-    "summary_state": "bearish_disagreement",
-    "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-04-30T19:30:13.510120+00:00",
+    "directional_skew": -0.28,
+    "order_flow_skew": 0.84,
+    "directional_order_gap": 1.12,
+    "avg_signal_price": 0.629,
+    "alignment_regime": "disagreement",
+    "summary_state": "disagreement",
+    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-04-30T20:00:14.192108+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 1470.0,
+    "recent_strong_regime_age_minutes": 1500.0,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": true,
-    "bearish_disagreement_regime": true,
+    "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
@@ -118,15 +133,23 @@
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 45 buys, 5 sells \u2014 avg price $0.736"
+        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.629"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1470.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1500.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: YZY at -0.1049%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -447,7 +470,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | SHORT_SQUEEZE"
+        "last_signal": "2 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
