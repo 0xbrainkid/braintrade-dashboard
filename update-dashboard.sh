@@ -625,15 +625,6 @@ for candidate in [
     if candidate and str(candidate).lower() not in {"neutral", "none", "mixed_transition"}:
         alpha_signals_generated += 1
 
-alpha_sources = [
-    {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
-    {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
-    {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities | {alpha_squeeze.get('direction', 'NEUTRAL')}"},
-    {"name": "Fear & Greed Index", "status": "ACTIVE" if alpha_fng is not None else "PLANNED", "last_signal": f"{alpha_fng} ({alpha_fng_class}) | {alpha_fng_ctx.get('regime', 'neutral')}" if alpha_fng is not None else "—"},
-    {"name": "BTC Regime Classifier", "status": "ACTIVE" if alpha_btc_classifier else "BUILDING", "last_signal": f"{alpha_btc_classifier.get('state', '—')} | {alpha_btc_classifier.get('stance', '—')}"},
-    {"name": "Liquidation Cascade Monitor", "status": "ACTIVE" if alpha_liq else "BUILDING", "last_signal": f"{alpha_liq.get('direction', 'neutral')} | adj {alpha_liq.get('pm_adjustment', 0)}"},
-]
-
 try:
     signals_files = glob.glob("/home/ubuntu/clawd/intelligence/copy-signals*.json")
     if signals_files:
@@ -816,6 +807,15 @@ try:
                 "oi": f"{oi:,.0f}"
             })
 except: pass
+
+alpha_sources = [
+    {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
+    {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
+    {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities | {alpha_squeeze.get('direction', 'NEUTRAL')}"},
+    {"name": "Fear & Greed Index", "status": "ACTIVE" if alpha_fng is not None else "PLANNED", "last_signal": f"{alpha_fng} ({alpha_fng_class}) | {alpha_fng_ctx.get('regime', 'neutral')}" if alpha_fng is not None else "—"},
+    {"name": "BTC Regime Classifier", "status": "ACTIVE" if alpha_btc_classifier else "BUILDING", "last_signal": f"{alpha_btc_classifier.get('state', '—')} | {alpha_btc_classifier.get('stance', '—')}"},
+    {"name": "Liquidation Cascade Monitor", "status": "ACTIVE" if alpha_liq else "BUILDING", "last_signal": f"{alpha_liq.get('direction', 'neutral')} | adj {alpha_liq.get('pm_adjustment', 0)}"},
+]
 
 # ── Build Output ──
 
