@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T07:00:02.521528+00:00",
+  "timestamp": "2026-05-01T07:30:02.408474+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.1154%",
-      "apr": "+126%",
-      "action": "SHORT",
-      "oi": "228,946,964"
-    },
-    {
       "coin": "MAVIA",
-      "rate": "+0.1058%",
-      "apr": "+116%",
+      "rate": "+0.1114%",
+      "apr": "+122%",
       "action": "SHORT",
       "oi": "69,653,465"
+    },
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.1051%",
+      "apr": "+115%",
+      "action": "SHORT",
+      "oi": "228,780,754"
     }
   ],
   "daily_pnl": [
@@ -91,31 +91,31 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 1,
+    "current_bias": "bullish",
+    "signal_confidence": 100,
     "signals_today": 50,
-    "directional_skew": 0.04,
-    "order_flow_skew": 0.88,
-    "directional_order_gap": 0.84,
-    "avg_signal_price": 0.67,
-    "alignment_regime": "persistent_neutral_disagreement",
-    "summary_state": "persistent_neutral_disagreement",
-    "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-01T06:30:13.082705+00:00",
+    "directional_skew": 1.0,
+    "order_flow_skew": 0.84,
+    "directional_order_gap": 0.16,
+    "avg_signal_price": 0.959,
+    "alignment_regime": "aligned_bullish_crowded",
+    "summary_state": "aligned_bullish_crowded",
+    "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-01T07:00:14.088107+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-01T02:30:01.438041+00:00",
-    "recent_strong_regime_age_minutes": 270.0,
+    "recent_strong_regime_age_minutes": 300.0,
     "recent_strong_regime_source_scan_time": "2026-05-01T02:00:13.417242+00:00",
-    "disagreement_regime": true,
+    "disagreement_regime": false,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
-    "persistent_neutral_disagreement_regime": true,
+    "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
@@ -127,25 +127,29 @@
     "flip_flop_extreme_copy_instability_regime": false,
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
-    "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
+    "aligned_bullish_crowded_regime": true,
+    "crowded_expensive_regime": true,
+    "structure_note": "",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 47 buys, 3 sells \u2014 avg price $0.670"
+        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.959"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 270.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 300.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew +1.00 at avg price $0.959"
+      },
+      {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1154%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1114%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -460,7 +464,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
