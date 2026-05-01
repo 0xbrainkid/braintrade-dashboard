@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T09:30:01.502444+00:00",
+  "timestamp": "2026-05-01T10:00:01.427577+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,10 +17,17 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1073%",
-      "apr": "+117%",
+      "rate": "+0.1408%",
+      "apr": "+154%",
       "action": "SHORT",
       "oi": "228,538,188"
+    },
+    {
+      "coin": "MAVIA",
+      "rate": "+0.1170%",
+      "apr": "+128%",
+      "action": "SHORT",
+      "oi": "69,653,465"
     }
   ],
   "daily_pnl": [
@@ -84,65 +91,77 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 1,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
-    "directional_skew": -0.04,
-    "order_flow_skew": 0.88,
-    "directional_order_gap": 0.92,
-    "avg_signal_price": 0.678,
-    "alignment_regime": "weak_directional_disagreement",
-    "summary_state": "weak_directional_disagreement",
-    "summary_text": "Weak-direction disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-01T09:00:13.277783+00:00",
+    "directional_skew": -1.0,
+    "order_flow_skew": -0.8,
+    "directional_order_gap": 0.2,
+    "avg_signal_price": 0.991,
+    "alignment_regime": "bearish_crowded_expensive",
+    "summary_state": "bearish_crowded_expensive",
+    "summary_text": "Bearish crowded-expensive copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-01T09:30:12.377949+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
-    "recent_strong_regime_seen_at": "2026-05-01T02:30:01.438041+00:00",
-    "recent_strong_regime_age_minutes": 420.0,
-    "recent_strong_regime_source_scan_time": "2026-05-01T02:00:13.417242+00:00",
-    "disagreement_regime": true,
+    "recent_strong_regime_seen_at": "2026-05-01T10:00:01.427577+00:00",
+    "recent_strong_regime_age_minutes": 0.0,
+    "recent_strong_regime_source_scan_time": "2026-05-01T09:30:12.377949+00:00",
+    "disagreement_regime": false,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
     "max_gap_all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_inversion_regime": false,
-    "weak_directional_disagreement_regime": true,
-    "persistent_neutral_disagreement_regime": true,
+    "weak_directional_disagreement_regime": false,
+    "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
     "flat_order_bearish_disagreement_regime": false,
-    "bearish_crowded_expensive_regime": false,
+    "bearish_crowded_expensive_regime": true,
     "anonymous_zero_spend_bearish_crowded_expensive_regime": false,
     "mixed_transition_after_bearish_crowding_regime": false,
     "flip_flop_extreme_copy_instability_regime": false,
-    "expensive_mixed_bearish_regime": false,
-    "aligned_bearish_crowded_regime": false,
+    "expensive_mixed_bearish_regime": true,
+    "aligned_bearish_crowded_regime": true,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
+    "crowded_expensive_regime": true,
+    "structure_note": "",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 47 buys, 3 sells \u2014 avg price $0.678"
+        "text": "Top traders: 5 buys, 45 sells \u2014 avg price $0.991"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 aligned bearish crowding: directional skew -1.00, order-flow skew -0.80, avg price $0.991"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 420.0m ago"
+        "text": "\ud83d\udd58 stronger regime active since scan 2026-05-01T09:30:12.377949+00:00"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 aligned bearish crowding: directional skew -1.00, order-flow skew -0.80, avg price $0.991"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.991"
+      },
+      {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1073%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1408%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -453,7 +472,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
@@ -463,7 +482,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "1 opportunities | SHORT_SQUEEZE"
+        "last_signal": "2 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
