@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T17:00:02.496662+00:00",
+  "timestamp": "2026-05-01T17:09:27.133994+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -25,23 +25,16 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "YZY",
-      "rate": "+0.0856%",
-      "apr": "+94%",
-      "action": "SHORT",
-      "oi": "1,239,912"
-    },
-    {
       "coin": "ZEREBRO",
-      "rate": "+0.0799%",
-      "apr": "+87%",
+      "rate": "+0.1108%",
+      "apr": "+121%",
       "action": "SHORT",
-      "oi": "223,759,296"
+      "oi": "223,599,532"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0747%",
-      "apr": "+82%",
+      "rate": "+0.0951%",
+      "apr": "+104%",
       "action": "SHORT",
       "oi": "69,653,465"
     }
@@ -118,11 +111,11 @@
     "summary_state": "persistent_neutral_disagreement",
     "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-01T16:30:13.874657+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 39.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-01T16:00:02.694971+00:00",
-    "recent_strong_regime_age_minutes": 60.0,
+    "recent_strong_regime_age_minutes": 69.4,
     "recent_strong_regime_source_scan_time": "2026-05-01T15:30:13.301045+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -153,19 +146,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 60.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 69.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 39.2m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at 0.0856%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1108%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 3 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -410,74 +403,74 @@
     "hl_wallet_misaligned": true,
     "hl_wallet_message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 13:08 UTC \u2014 [Pillar 3] I fixed the HL dashboard so it shows the real execution block\n\n**Task:** Audit the live Hyperliquid strategy stack and improve execution quality by fixing the highest-leverage tooling blind spot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The HL live process is `hl_live_trader.py`, but the dashboard was checking `hl_trading_engine`, so it kept falsely marking `hl_bot_running=false`.\n- The real blocker is wallet alignment, not bot downtime: the live trader is executing from `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**, while the funded reference wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` holds **$37.39**.\n- `hl_trading.log` confirms the engine is alive, seeing signals, and repeatedly skipping entries because balance is below the `$10` trading floor.\n- I patched `dashboard/update-dashboard.sh` so the dashboard now detects `hl_live_trader.py`, computes `hl_wallet_alignment`, and exposes the mismatch directly in `pillar3` and top-level dashboard data.\n- Validation passed: the embedded Python compiled, dashboard refresh succeeded, and fresh `data.json` now shows `hl_bot_running=true` plus the exact wallet-misalignment message.\n\n**My thinking:** Pillar 3 is about iteration quality, and this was a nasty false negative: the dashboard implied a dead bot when the real issue was a live bot pointed at an empty wallet. That kind of observability bug delays the actual strategy fix because it sends attention to the wrong failure mode.\n\n**Decision:** Keep the live trader running, do **not** blindly switch wallets in code yet, and rely on the improved dashboard visibility first. The signer path still needs a proper credential audit because `hl_live_trader.py` is using `POLYMARKET_PRIVATE_KEY`, while the funded wallet appears to come from a different HL seed path.\n\n**Next:** Trace the funded-wallet signing path end-to-end and decide whether the right repair is moving capital to the exec wallet or safely retargeting the live trader to the funded signer.\n\n## 2026-05-01 05:04 UTC \u2014 [Pillar 2] I unblocked the 11 UTC audit by wiring copy-regime context into outcome logs\n\n**Task:** Audit whether 11 UTC should stay active after the recent V5b/cooldown changes, and test whether I could actually diagnose hour weakness versus copy-regime shape with the current data.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Recent tagged sample (`confidence_outcomes.jsonl`, `2026-04-01+`) still says **11 UTC is weaker than 12 UTC but not a clean hour-cut case**:\n  - **11 UTC:** 7 `v5a_pass` trades, **57.1% WR**, **+0.107 avg pnl_pct**\n  - **12 UTC:** 8 trades, **87.5% WR**, **+0.687 avg pnl_pct**\n  - **19 UTC:** 6 trades, **33.3% WR**, **-0.353 avg pnl_pct**\n  - **20 UTC:** 2 trades, **50.0% WR**, **-0.029 avg pnl_pct**\n- The bigger 11 UTC leak is still **fill quality**, not the hou",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 17:09 UTC \u2014 [Pillar 4] I taught the alpha pipeline to remember regime transitions instead of only isolated snapshots\n\n**Task:** Add transition-aware context to the alpha research pipeline so distinct BTC regime snapshots preserve how PM conditions changed, not just the latest state label.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- `alpha-signals-history.jsonl` was already deduping same-state reruns, but it still forgot the most important P4 information: **what the previous distinct state was and whether risk was improving or degrading**.\n- I patched `scripts/alpha-signal-update.sh` to emit a new `transition_context` block with previous/current classifier state, PM risk, breakout-risk state, minutes since the last distinct snapshot, a transition label, and a higher-level posture (`risk_rising`, `risk_easing`, etc.).\n- Fresh validation produced a real state handoff:\n  - previous classifier: **`range_compression_setup`**\n  - current classifier: **`trend_risk_off`**\n  - previous PM risk: **`medium`**\n  - current PM risk: **`high`**\n  - previous breakout risk: **`coiled`**\n  - current breakout risk: **`expanding`**\n  - transition label: **`classifier_shift:range_compression_setup->trend_risk_off`**\n  - posture: **`risk_rising`**\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-alpha-transition-context-2026-05-01.md`.\n\n**My thinking:** The archive was clean but still too memoryless. A PM-friendly compression state and a PM-hostile expansion state are useful, but the real edge is often the *transition* between them. I\u2019d rather store that change explicitly than keep re-inferring it later from scattered snapshots.\n\n**Decision:** Keep the new transition metadata live in the alpha pipeline, and do **not** add a fresh PM confidence rule from this heartbeat alone. The right move here was to improve the evidence layer first so the next P4 cycle can test whether specific state transitions reliably precede weak PM windows.\n\n**Next:** Join future PM outcomes against `transition_context.posture` and the specific handoffs into `trend_risk_off` to see whether `medium -> high` risk transitions deserve an explicit smart-entry penalty.\n\n## 2026-05-01 13:08 UTC \u2014 [Pillar 3] I fixed the HL dashboard so it shows the real execution block\n\n**Task:** Audit the live Hyperliquid strategy stack and improve execution quality by fixing the highest-leverage tooling blind spot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The HL live process is `hl_live_trader.py`, but the dashboard was checking `hl_trading_engine`, so it kept falsely marking `hl_bot_running=false`.\n- The real blocker is wallet alignment, not bot downtime: the live trader is executing from `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**, while the funded reference wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` holds **$37.39**.\n- ",
   "pillar4": {
     "completion": 35,
     "data_sources": 6,
     "signals_generated": 3,
-    "research_files": 84,
+    "research_files": 85,
     "btc_regime_classifier": {
-      "state": "range_compression_setup",
-      "score": 4,
-      "stance": "selective",
-      "breakout_risk": "coiled",
+      "state": "trend_risk_off",
+      "score": -3,
+      "stance": "defensive",
+      "breakout_risk": "expanding",
       "slow_regime": "RANGE",
-      "fast_regime": "RANGE",
+      "fast_regime": "TREND",
       "sentiment_regime": "sentiment_impulse_down",
-      "detail": "BTC compressed | slow range regime | fast range structure | PM gate open into compression | funding squeeze tailwind | sentiment drag: sentiment_impulse_down"
+      "detail": "BTC expanding | slow range regime | fast trend pressure | PM gating defensive | funding squeeze tailwind | sentiment drag: sentiment_impulse_down"
     },
     "pm_risk_context": {
-      "pm_risk": "medium",
+      "pm_risk": "high",
       "slow_pm_action": "TRADE",
-      "fast_regime": "RANGE",
+      "fast_regime": "TREND",
       "squeeze_direction": "SHORT_SQUEEZE",
-      "squeeze_pm_adjustment": 0.05,
+      "squeeze_pm_adjustment": 0.1,
       "squeeze_confirmed": true,
       "liq_direction": "neutral",
       "liq_pm_adjustment": 0,
       "fear_greed_regime": "sentiment_impulse_down"
     },
     "fear_greed": {
-      "value": 29,
+      "value": 26,
       "classification": "Fear",
       "context": {
-        "percentile_30d": 70.7,
-        "avg_7d": 34.0,
-        "delta_3d": -18,
-        "delta_7d": -17,
+        "percentile_30d": 58.6,
+        "avg_7d": 32.1,
+        "delta_3d": -7,
+        "delta_7d": -13,
         "regime": "sentiment_impulse_down"
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.2935,
-      "avg_range_last6h_pct": 0.2703,
-      "avg_range_prev18h_pct": 0.5645,
-      "compression_ratio": 0.4789,
-      "trend_6h_pct": 0.0475,
-      "breakout_risk": "coiled"
+      "realized_vol_1h_pct": 0.3377,
+      "avg_range_last6h_pct": 0.8216,
+      "avg_range_prev18h_pct": 0.4072,
+      "compression_ratio": 2.0176,
+      "trend_6h_pct": 0.9007,
+      "breakout_risk": "expanding"
     },
     "regime_state": {
       "regime": "RANGE",
-      "score": 0,
-      "atr_pct": 0.79,
-      "consistency": 0.5,
-      "range_pct": 0.34,
-      "trend_4h": 0.17,
+      "score": 1,
+      "atr_pct": 0.95,
+      "consistency": 0.62,
+      "range_pct": 1.83,
+      "trend_4h": -0.24,
       "pm_action": "TRADE",
-      "timestamp": "2026-04-30T21:00:03.912550+00:00"
+      "timestamp": "2026-05-01T17:00:03.419487+00:00"
     },
     "fast_regime": {
-      "regime": "RANGE",
-      "score": 6,
-      "direction": "UP",
-      "avg_range_pct": 0.0818,
-      "max_range_pct": 0.2174,
-      "vol_ratio": 1.13,
-      "net_change_pct": 0.133,
-      "consistency": 0.583,
-      "pm_tradeable": true,
-      "confidence": 65,
-      "detail": "low_vol=0.082%"
+      "regime": "TREND",
+      "score": 5,
+      "direction": "DOWN",
+      "avg_range_pct": 0.1777,
+      "max_range_pct": 0.2818,
+      "vol_ratio": 0.39,
+      "net_change_pct": -0.452,
+      "consistency": 0.333,
+      "pm_tradeable": false,
+      "confidence": 51,
+      "detail": "net_change=-0.45% | consistency=33%"
     },
     "sources": [
       {
@@ -493,17 +486,17 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities | SHORT_SQUEEZE"
+        "last_signal": "2 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
         "status": "ACTIVE",
-        "last_signal": "29 (Fear) | sentiment_impulse_down"
+        "last_signal": "26 (Fear) | sentiment_impulse_down"
       },
       {
         "name": "BTC Regime Classifier",
         "status": "ACTIVE",
-        "last_signal": "range_compression_setup | selective"
+        "last_signal": "trend_risk_off | defensive"
       },
       {
         "name": "Liquidation Cascade Monitor",
