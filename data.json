@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T13:08:04.831719+00:00",
+  "timestamp": "2026-05-01T13:08:46.054651+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1005%",
-      "apr": "+110%",
+      "rate": "+0.1017%",
+      "apr": "+111%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0887%",
-      "apr": "+97%",
+      "rate": "+0.0878%",
+      "apr": "+96%",
       "action": "SHORT",
       "oi": "224,335,610"
     }
@@ -111,11 +111,11 @@
     "summary_state": "aligned_bullish_crowded",
     "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-01T12:30:14.757022+00:00",
-    "source_age_minutes": 37.8,
+    "source_age_minutes": 38.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-01T12:30:02.615054+00:00",
-    "recent_strong_regime_age_minutes": 38.0,
+    "recent_strong_regime_age_minutes": 38.7,
     "recent_strong_regime_source_scan_time": "2026-05-01T12:00:14.079298+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 38.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 38.7m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 37.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.5m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -158,7 +158,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1005%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1017%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -407,12 +407,12 @@
     "hl_wallet_misaligned": true,
     "hl_wallet_message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 05:04 UTC \u2014 [Pillar 2] I unblocked the 11 UTC audit by wiring copy-regime context into outcome logs\n\n**Task:** Audit whether 11 UTC should stay active after the recent V5b/cooldown changes, and test whether I could actually diagnose hour weakness versus copy-regime shape with the current data.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Recent tagged sample (`confidence_outcomes.jsonl`, `2026-04-01+`) still says **11 UTC is weaker than 12 UTC but not a clean hour-cut case**:\n  - **11 UTC:** 7 `v5a_pass` trades, **57.1% WR**, **+0.107 avg pnl_pct**\n  - **12 UTC:** 8 trades, **87.5% WR**, **+0.687 avg pnl_pct**\n  - **19 UTC:** 6 trades, **33.3% WR**, **-0.353 avg pnl_pct**\n  - **20 UTC:** 2 trades, **50.0% WR**, **-0.029 avg pnl_pct**\n- The bigger 11 UTC leak is still **fill quality**, not the hour itself:\n  - baseline 11 UTC `v5a_pass`: **57.1% WR**\n  - with `entry_price <= 0.5355`: **66.7% WR** and **+0.291 avg pnl_pct**\n  - the worst 11 UTC loser was still the expensive fill at **0.5457** (`2026-04-02 11:55 UTC`).\n- The current outcome log was missing the exact fields needed for the next real P2 question. Historical rows had hour / OBI / cooldown / F&G, but **did not log** `copy_bias`, `copy_confidence`, `copy_alignment_regime`, or `copy_suppression_reason`.\n- I fixed that in `polymarket-assistant/trading_bot.py`: future `confidence_outcomes.jsonl` rows now snapshot those four copy-intel fields at trade entry. `py_compile` passed.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-11utc-copy-context-audit-2026-05-01.md`.\n\n**My thinking:** The hour itself still looks secondary to price quality. More importantly, the planned \u201c11 UTC vs copy-suppression states\u201d audit was blocked by bad instrumentation, not just thin sample. I\u2019d rather fix the evidence pipeline than make another weak hour cut from guesswork.\n\n**Decision:** Keep **11 UTC active** for now, do **not** cut it like 19 UTC, and start collecting copy-regime context in every new outcome so the next P2 pass can test whether 11 UTC losses cluster in specific disagreement / crowded-expensive / transition-noise states.\n\n**Next:** Once a few new tagged trades land with the new fields, re-run 11 UTC performance by `copy_alignment_regime`, `copy_suppression_reason`, and `v6_cooldown_tag=FIRST` versus non-first trades.\n\n## 2026-05-01 01:04 UTC \u2014 [Pillar 1] BTC whale consensus flipped decisively long while ETH and SOL stayed one-way short\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, quantify notional consensus, and decide whether the old split-BTC read still held.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 6L/2S, ETH 2L/6S, SOL 1L/7S**, but the bigger change was notional, not count.\n- Notional-weighted state is now:\n  - **BTC:** longs **$24.03M** vs shorts **$0.17M** ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 13:08 UTC \u2014 [Pillar 3] I fixed the HL dashboard so it shows the real execution block\n\n**Task:** Audit the live Hyperliquid strategy stack and improve execution quality by fixing the highest-leverage tooling blind spot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The HL live process is `hl_live_trader.py`, but the dashboard was checking `hl_trading_engine`, so it kept falsely marking `hl_bot_running=false`.\n- The real blocker is wallet alignment, not bot downtime: the live trader is executing from `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**, while the funded reference wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` holds **$37.39**.\n- `hl_trading.log` confirms the engine is alive, seeing signals, and repeatedly skipping entries because balance is below the `$10` trading floor.\n- I patched `dashboard/update-dashboard.sh` so the dashboard now detects `hl_live_trader.py`, computes `hl_wallet_alignment`, and exposes the mismatch directly in `pillar3` and top-level dashboard data.\n- Validation passed: the embedded Python compiled, dashboard refresh succeeded, and fresh `data.json` now shows `hl_bot_running=true` plus the exact wallet-misalignment message.\n\n**My thinking:** Pillar 3 is about iteration quality, and this was a nasty false negative: the dashboard implied a dead bot when the real issue was a live bot pointed at an empty wallet. That kind of observability bug delays the actual strategy fix because it sends attention to the wrong failure mode.\n\n**Decision:** Keep the live trader running, do **not** blindly switch wallets in code yet, and rely on the improved dashboard visibility first. The signer path still needs a proper credential audit because `hl_live_trader.py` is using `POLYMARKET_PRIVATE_KEY`, while the funded wallet appears to come from a different HL seed path.\n\n**Next:** Trace the funded-wallet signing path end-to-end and decide whether the right repair is moving capital to the exec wallet or safely retargeting the live trader to the funded signer.\n\n## 2026-05-01 05:04 UTC \u2014 [Pillar 2] I unblocked the 11 UTC audit by wiring copy-regime context into outcome logs\n\n**Task:** Audit whether 11 UTC should stay active after the recent V5b/cooldown changes, and test whether I could actually diagnose hour weakness versus copy-regime shape with the current data.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Recent tagged sample (`confidence_outcomes.jsonl`, `2026-04-01+`) still says **11 UTC is weaker than 12 UTC but not a clean hour-cut case**:\n  - **11 UTC:** 7 `v5a_pass` trades, **57.1% WR**, **+0.107 avg pnl_pct**\n  - **12 UTC:** 8 trades, **87.5% WR**, **+0.687 avg pnl_pct**\n  - **19 UTC:** 6 trades, **33.3% WR**, **-0.353 avg pnl_pct**\n  - **20 UTC:** 2 trades, **50.0% WR**, **-0.029 avg pnl_pct**\n- The bigger 11 UTC leak is still **fill quality**, not the hou",
   "pillar4": {
     "completion": 35,
     "data_sources": 6,
     "signals_generated": 3,
-    "research_files": 83,
+    "research_files": 84,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
