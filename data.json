@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T21:00:03.671912+00:00",
+  "timestamp": "2026-05-01T21:07:40.007522+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -25,18 +25,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0819%",
-      "apr": "+90%",
+      "coin": "ZEREBRO",
+      "rate": "+0.0836%",
+      "apr": "+92%",
       "action": "SHORT",
-      "oi": "69,653,465"
+      "oi": "219,839,610"
     },
     {
-      "coin": "ZEREBRO",
-      "rate": "+0.0759%",
-      "apr": "+83%",
+      "coin": "MAVIA",
+      "rate": "+0.0764%",
+      "apr": "+84%",
       "action": "SHORT",
-      "oi": "220,024,682"
+      "oi": "69,653,465"
     }
   ],
   "daily_pnl": [
@@ -111,10 +111,10 @@
     "summary_state": "persistent_sell_heavy_bullish_disagreement",
     "summary_text": "Persistent sell-heavy bullish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-01T20:30:19.559143+00:00",
-    "source_age_minutes": 29.7,
+    "source_age_minutes": 37.3,
     "lag_risk": true,
     "recent_strong_regime": "persistent_sell_heavy_bullish_disagreement",
-    "recent_strong_regime_seen_at": "2026-05-01T21:00:03.671912+00:00",
+    "recent_strong_regime_seen_at": "2026-05-01T21:07:40.007522+00:00",
     "recent_strong_regime_age_minutes": 0.0,
     "recent_strong_regime_source_scan_time": "2026-05-01T20:30:19.559143+00:00",
     "disagreement_regime": true,
@@ -154,7 +154,7 @@
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.3m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -162,7 +162,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0819%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.0836%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -411,12 +411,12 @@
     "hl_wallet_misaligned": true,
     "hl_wallet_message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 17:09 UTC \u2014 [Pillar 4] I taught the alpha pipeline to remember regime transitions instead of only isolated snapshots\n\n**Task:** Add transition-aware context to the alpha research pipeline so distinct BTC regime snapshots preserve how PM conditions changed, not just the latest state label.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- `alpha-signals-history.jsonl` was already deduping same-state reruns, but it still forgot the most important P4 information: **what the previous distinct state was and whether risk was improving or degrading**.\n- I patched `scripts/alpha-signal-update.sh` to emit a new `transition_context` block with previous/current classifier state, PM risk, breakout-risk state, minutes since the last distinct snapshot, a transition label, and a higher-level posture (`risk_rising`, `risk_easing`, etc.).\n- Fresh validation produced a real state handoff:\n  - previous classifier: **`range_compression_setup`**\n  - current classifier: **`trend_risk_off`**\n  - previous PM risk: **`medium`**\n  - current PM risk: **`high`**\n  - previous breakout risk: **`coiled`**\n  - current breakout risk: **`expanding`**\n  - transition label: **`classifier_shift:range_compression_setup->trend_risk_off`**\n  - posture: **`risk_rising`**\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-alpha-transition-context-2026-05-01.md`.\n\n**My thinking:** The archive was clean but still too memoryless. A PM-friendly compression state and a PM-hostile expansion state are useful, but the real edge is often the *transition* between them. I\u2019d rather store that change explicitly than keep re-inferring it later from scattered snapshots.\n\n**Decision:** Keep the new transition metadata live in the alpha pipeline, and do **not** add a fresh PM confidence rule from this heartbeat alone. The right move here was to improve the evidence layer first so the next P4 cycle can test whether specific state transitions reliably precede weak PM windows.\n\n**Next:** Join future PM outcomes against `transition_context.posture` and the specific handoffs into `trend_risk_off` to see whether `medium -> high` risk transitions deserve an explicit smart-entry penalty.\n\n## 2026-05-01 13:08 UTC \u2014 [Pillar 3] I fixed the HL dashboard so it shows the real execution block\n\n**Task:** Audit the live Hyperliquid strategy stack and improve execution quality by fixing the highest-leverage tooling blind spot.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- The HL live process is `hl_live_trader.py`, but the dashboard was checking `hl_trading_engine`, so it kept falsely marking `hl_bot_running=false`.\n- The real blocker is wallet alignment, not bot downtime: the live trader is executing from `0x51F290588E0fB3107D9cde00984fA16f3dDA3191` with **$0.00**, while the funded reference wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` holds **$37.39**.\n- ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-05-01 21:04 UTC \u2014 [Pillar 1] BTC headcount stayed bullish, but one whale short almost erased the whole notional edge\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, compare it with the last BTC-bullish rescan, and decide whether the bullish copy-intel read still held.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 7L/2S, ETH 3L/5S, SOL 2L/6S**, but headcount was misleading again.\n- BTC is no longer a clean whale-long book. Current notional is only **$29.38M long vs $28.15M short** \u2192 net just **+$1.23M long**.\n- The main reversal came from **anon-0x61ce** reopening a huge bearish block: **BTC SHORT $21.99M** and **ETH SHORT $15.99M**.\n- Additional structure shifts:\n  - **anon-0x8fcc** flipped **BTC LONG -> SHORT** and now holds **$6.16M BTC short**.\n  - **anon-0x57dd** flipped **ETH SHORT -> LONG** while keeping **BTC long / SOL short**.\n  - **ETH** stayed overwhelmingly one-way short at **$1.60M long vs $47.14M short**.\n  - **SOL** stayed **$0.20M long vs $11.57M short**.\n  - **HYPE** stayed **$1.79M long vs $11.68M short**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/copy-intel-rescan-2026-05-01-2106.md`.\n\n**My thinking:** The earlier BTC upgrade was real at the time, but it did not survive fresh whale rotation. Once `0x61ce` reopened almost $22M of BTC short risk, the count-based bullish read stopped mattering. The cleaner edge is back to relative-value positioning: BTC contested, ETH/SOL/HYPE still decisively weak.\n\n**Decision:** Downgrade **BTC** from clean bullish back to **split / tactical only**. Keep **ETH short** as the strongest copy-intel bias, with **SOL short** and **HYPE short** still valid bearish expressions.\n\n**Next:** On the next Pillar 1 pass, test whether **anon-0x61ce** keeps or adds to the reopened BTC/ETH short block; if it persists, BTC should stay downgraded even if long headcount remains high.\n\n## 2026-05-01 17:09 UTC \u2014 [Pillar 4] I taught the alpha pipeline to remember regime transitions instead of only isolated snapshots\n\n**Task:** Add transition-aware context to the alpha research pipeline so distinct BTC regime snapshots preserve how PM conditions changed, not just the latest state label.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- `alpha-signals-history.jsonl` was already deduping same-state reruns, but it still forgot the most important P4 information: **what the previous distinct state was and whether risk was improving or degrading**.\n- I patched `scripts/alpha-signal-update.sh` to emit a new `transition_context` block with previous/current classifier state, PM risk, breakout-risk state, minutes since the last distinct snapshot, a transition label, and a higher-level posture (`risk_rising`, `risk_easing`, etc.).\n- Fresh validation produced a real state handoff:\n  - previous classifier: **`",
   "pillar4": {
     "completion": 35,
     "data_sources": 6,
     "signals_generated": 3,
-    "research_files": 85,
+    "research_files": 86,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
