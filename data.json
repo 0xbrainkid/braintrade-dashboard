@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T17:09:27.133994+00:00",
+  "timestamp": "2026-05-01T17:30:03.050791+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1108%",
-      "apr": "+121%",
+      "rate": "+0.1176%",
+      "apr": "+129%",
       "action": "SHORT",
-      "oi": "223,599,532"
+      "oi": "223,255,414"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.0951%",
-      "apr": "+104%",
+      "rate": "+0.0964%",
+      "apr": "+106%",
       "action": "SHORT",
       "oi": "69,653,465"
     }
@@ -100,23 +100,23 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "neutral",
-    "signal_confidence": 6,
+    "current_bias": "bearish",
+    "signal_confidence": 100,
     "signals_today": 50,
-    "directional_skew": 0.08,
-    "order_flow_skew": -0.08,
-    "directional_order_gap": 0.16,
-    "avg_signal_price": 0.909,
-    "alignment_regime": "persistent_neutral_disagreement",
-    "summary_state": "persistent_neutral_disagreement",
-    "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-01T16:30:13.874657+00:00",
-    "source_age_minutes": 39.2,
+    "directional_skew": -1.0,
+    "order_flow_skew": -0.6,
+    "directional_order_gap": 0.4,
+    "avg_signal_price": 0.992,
+    "alignment_regime": "bearish_crowded_expensive",
+    "summary_state": "bearish_crowded_expensive",
+    "summary_text": "Bearish crowded-expensive copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-01T17:00:13.405178+00:00",
+    "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
-    "recent_strong_regime_seen_at": "2026-05-01T16:00:02.694971+00:00",
-    "recent_strong_regime_age_minutes": 69.4,
-    "recent_strong_regime_source_scan_time": "2026-05-01T15:30:13.301045+00:00",
+    "recent_strong_regime_seen_at": "2026-05-01T17:30:03.050791+00:00",
+    "recent_strong_regime_age_minutes": 0.0,
+    "recent_strong_regime_source_scan_time": "2026-05-01T17:00:13.405178+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
@@ -124,37 +124,45 @@
     "max_gap_all_buy_bearish_disagreement_regime": false,
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
-    "persistent_neutral_disagreement_regime": true,
+    "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
     "flat_order_bearish_disagreement_regime": false,
-    "bearish_crowded_expensive_regime": false,
+    "bearish_crowded_expensive_regime": true,
     "anonymous_zero_spend_bearish_crowded_expensive_regime": false,
     "mixed_transition_after_bearish_crowding_regime": false,
     "flip_flop_extreme_copy_instability_regime": false,
-    "expensive_mixed_bearish_regime": false,
+    "expensive_mixed_bearish_regime": true,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
+    "crowded_expensive_regime": true,
     "structure_note": "",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 23 buys, 27 sells \u2014 avg price $0.909"
+        "text": "Top traders: 10 buys, 40 sells \u2014 avg price $0.992"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 69.4m ago"
+        "text": "\ud83d\udd58 stronger regime active since scan 2026-05-01T17:00:13.405178+00:00"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 aligned bearish crowding: directional skew -1.00, order-flow skew -0.60, avg price $0.992"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 39.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.992"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1108%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1176%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -476,7 +484,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "NEUTRAL consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
