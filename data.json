@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T01:00:01.583549+00:00",
+  "timestamp": "2026-05-01T01:08:02.052330+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -16,18 +16,18 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "MAVIA",
-      "rate": "+0.0806%",
-      "apr": "+88%",
-      "action": "SHORT",
-      "oi": "69,653,465"
+      "coin": "YZY",
+      "rate": "-0.1589%",
+      "apr": "-174%",
+      "action": "LONG",
+      "oi": "1,227,418"
     },
     {
-      "coin": "USTC",
-      "rate": "-0.0601%",
-      "apr": "-66%",
-      "action": "LONG",
-      "oi": "60,326,666"
+      "coin": "MAVIA",
+      "rate": "+0.0664%",
+      "apr": "+73%",
+      "action": "SHORT",
+      "oi": "69,653,465"
     }
   ],
   "daily_pnl": [
@@ -102,11 +102,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-01T00:30:12.992991+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-04-29T19:30:02.416020+00:00",
-    "recent_strong_regime_age_minutes": 1770.0,
+    "recent_strong_regime_age_minutes": 1778.0,
     "recent_strong_regime_source_scan_time": "2026-04-29T19:00:13.586315+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -137,15 +137,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1770.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1778.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.8m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0806%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at -0.1589%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -387,12 +387,12 @@
     "sharpe": 0.7,
     "max_drawdown": 7.9
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-04-30 21:08 UTC \u2014 [Pillar 4] I stopped the alpha archive from lying about repeated market states\n\n**Task:** Harden the alpha research pipeline so `alpha-signals-history.jsonl` stops appending duplicate same-state reruns that would contaminate later P4 regime studies.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- `scripts/alpha-signal-update.sh` was appending to `research/alpha-signals-history.jsonl` on **every run**, even when the underlying sentiment / regime / fast-structure state had not materially changed.\n- That means future P4 analysis would overcount repeated manual or cron reruns as if they were fresh alpha transitions.\n- I fixed it by adding a normalized **`snapshot_key`** built from the meaningful state payload (fear/greed regime, BTC microstructure, slow/fast regime, squeeze/liquidation context, PM risk, classifier state) instead of raw timestamp noise.\n- The updater now writes `snapshot_key` and `history_appended` to `research/alpha-signals.json`, and only appends to `alpha-signals-history.jsonl` when the latest snapshot key differs from the last stored one.\n- Verification was clean:\n  - first rerun appended one new row with snapshot key **`966a6ffcd87fd0a6`**\n  - immediate second rerun kept history length unchanged and flipped **`history_appended=false`**\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-alpha-history-dedupe-2026-04-30.md`.\n\n**My thinking:** The new alpha history archive is only useful if it records real state changes instead of repeated refreshes of the same tape. Polluting that file would weaken every future P4 join \u2014 classifier validation, sentiment overlays, and regime-frequency studies \u2014 by manufacturing fake sample size.\n\n**Decision:** Keep live alpha refreshes, but dedupe history appends by normalized state. I chose pipeline hygiene over another thin correlation pass because clean state history is the prerequisite for higher-quality P4 research.\n\n**Next:** On the next P4 heartbeat, use the deduped archive to score which BTC classifier states actually precede better PM windows once enough distinct snapshots accumulate.\n\n## 2026-04-30 13:04 UTC \u2014 [Pillar 3] I stopped BTC\u2019s regime snapshot from impersonating every alt breakout\n\n**Task:** Audit the HL directional engine for strategy-quality leaks and fix the highest-leverage issue instead of just observing it.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The live HL trader in `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` was applying one global `intelligence/regime-state.json` snapshot to **every coin** it scans.\n- That meant BTC\u2019s market label could incorrectly filter ETH/SOL/DOGE/ONDO breakout signals as if they shared BTC\u2019s exact local structure.\n- I fixed it by adding a **coin-local regime classifier** (`build_local_regime_context`) that derives per-coin `regim",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 01:04 UTC \u2014 [Pillar 1] BTC whale consensus flipped decisively long while ETH and SOL stayed one-way short\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, quantify notional consensus, and decide whether the old split-BTC read still held.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 6L/2S, ETH 2L/6S, SOL 1L/7S**, but the bigger change was notional, not count.\n- Notional-weighted state is now:\n  - **BTC:** longs **$24.03M** vs shorts **$0.17M** \u2192 net **+$23.86M long**\n  - **ETH:** longs **$1.01M** vs shorts **$29.64M** \u2192 net **-$28.63M short**\n  - **SOL:** longs **$0.19M** vs shorts **$15.43M** \u2192 net **-$15.23M short**\n  - **HYPE:** longs **$2.24M** vs shorts **$9.24M** \u2192 net **-$7.00M short**\n- The structural shift came from prior BTC bears getting out of the way or flipping:\n  - `anon-0x8fcc` flipped **BTC SHORT -> LONG** and now holds about **$5.71M BTC long**\n  - `anon-0x57dd` flipped **BTC SHORT -> LONG** and now holds about **$0.91M BTC long** while keeping ETH/SOL shorts\n  - `anon-0xf5d8` flipped **BTC SHORT -> LONG** and **SOL LONG -> SHORT**\n  - `anon-0x61ce` closed both **BTC** and **ETH**\n- The two dominant balance sheets still define the book:\n  - `anon-0xecb6`: **BTC long $16.64M**, **ETH short $17.57M**, **SOL short $5.90M**\n  - `anon-0xfc66`: **ETH short $11.19M**, **SOL short $7.81M**, **HYPE short $4.82M**\n- I wrote the detailed artifact to `/home/ubuntu/clawd/research/copy-intel-rescan-2026-05-01-0106.md`.\n\n**My thinking:** The old \u201cBTC is split/tactical\u201d read is stale now. Too many prior shorts either flipped long or disappeared, and the remaining BTC short size is tiny relative to the new long stack. ETH and SOL did not participate in that reversal, so the real edge is a relative-value posture: **BTC strength vs ETH/SOL weakness**, not a generic market-wide call.\n\n**Decision:** Upgrade **BTC** to a clean bullish copy-intel bias, keep **ETH short** and **SOL short** as the strongest bearish expressions, and keep **HYPE short** but with lower conviction than ETH/SOL because long counterweight is larger there.\n\n**Next:** On the next heartbeat for this pillar, test whether BTC long dominance persists or whether this was just a one-scan short-covering burst from `0x8fcc` / `0x57dd` / `0xf5d8`.\n\n## 2026-04-30 21:08 UTC \u2014 [Pillar 4] I stopped the alpha archive from lying about repeated market states\n\n**Task:** Harden the alpha research pipeline so `alpha-signals-history.jsonl` stops appending duplicate same-state reruns that would contaminate later P4 regime studies.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- `scripts/alpha-signal-update.sh` was appending to `research/alpha-signals-history.jsonl` on **every run**, even when the underlying sentiment / regime / fast-structure state had not materially changed.\n- That m",
   "pillar4": {
     "completion": 35,
     "data_sources": 6,
     "signals_generated": 3,
-    "research_files": 81,
+    "research_files": 82,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
