@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T04:30:01.517863+00:00",
+  "timestamp": "2026-05-01T05:00:02.486276+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -17,17 +17,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.0987%",
-      "apr": "+108%",
+      "rate": "+0.1196%",
+      "apr": "+131%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0514%",
-      "apr": "+56%",
+      "rate": "+0.0818%",
+      "apr": "+90%",
       "action": "SHORT",
-      "oi": "228,975,538"
+      "oi": "228,961,984"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0686%",
+      "apr": "-75%",
+      "action": "LONG",
+      "oi": "2,158,037,356"
     }
   ],
   "daily_pnl": [
@@ -92,28 +99,28 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bearish",
-    "signal_confidence": 48,
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": -0.8,
+    "directional_skew": -1.0,
     "order_flow_skew": 1.0,
-    "directional_order_gap": 1.8,
-    "avg_signal_price": 0.9,
-    "alignment_regime": "bearish_disagreement",
-    "summary_state": "bearish_disagreement",
-    "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-01T04:00:12.369887+00:00",
+    "directional_order_gap": 2.0,
+    "avg_signal_price": 0.97,
+    "alignment_regime": "max_gap_all_buy_bearish_inversion",
+    "summary_state": "max_gap_all_buy_bearish_inversion",
+    "summary_text": "Max-gap all-buy bearish inversion in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-01T04:30:13.067217+00:00",
     "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-01T02:30:01.438041+00:00",
-    "recent_strong_regime_age_minutes": 120.0,
+    "recent_strong_regime_age_minutes": 150.0,
     "recent_strong_regime_source_scan_time": "2026-05-01T02:00:13.417242+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
     "all_buy_bearish_disagreement_regime": false,
-    "all_buy_bearish_inversion_regime": false,
+    "all_buy_bearish_inversion_regime": true,
     "max_gap_all_buy_bearish_disagreement_regime": false,
-    "max_gap_all_buy_bearish_inversion_regime": false,
+    "max_gap_all_buy_bearish_inversion_regime": true,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
     "sell_heavy_bullish_disagreement_regime": false,
@@ -128,28 +135,36 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
+    "crowded_expensive_regime": true,
     "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.900"
+        "text": "Top traders: 50 buys, 0 sells \u2014 avg price $0.970"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83e\udde9 max-gap all-buy bearish inversion: directional skew -1.00, order-flow skew +1.00, avg price $0.970, gap 2.00"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 120.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 150.0m ago"
       },
       {
         "source": "Copy Freshness",
         "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew -1.00 at avg price $0.970"
+      },
+      {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.0987%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1196%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -470,7 +485,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities | SHORT_SQUEEZE"
+        "last_signal": "3 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
