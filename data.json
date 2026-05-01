@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T13:00:02.629437+00:00",
+  "timestamp": "2026-05-01T13:08:04.831719+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -12,27 +12,29 @@
   "total_trades": 273,
   "days_active": 47,
   "pm_bot_running": true,
-  "hl_bot_running": false,
+  "hl_bot_running": true,
+  "hl_wallet_alignment": {
+    "configured_wallet": "0x51F290588E0fB3107D9cde00984fA16f3dDA3191",
+    "configured_balance": 0.0,
+    "reference_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
+    "reference_balance": 37.391639,
+    "min_funded_balance": 10.0,
+    "misaligned": true,
+    "message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved"
+  },
   "hl_positions": [],
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1122%",
-      "apr": "+123%",
+      "rate": "+0.1005%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
-      "coin": "YZY",
-      "rate": "-0.1046%",
-      "apr": "-115%",
-      "action": "LONG",
-      "oi": "1,248,762"
-    },
-    {
       "coin": "ZEREBRO",
-      "rate": "+0.0817%",
-      "apr": "+89%",
+      "rate": "+0.0887%",
+      "apr": "+97%",
       "action": "SHORT",
       "oi": "224,335,610"
     }
@@ -109,11 +111,11 @@
     "summary_state": "aligned_bullish_crowded",
     "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-01T12:30:14.757022+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-01T12:30:02.615054+00:00",
-    "recent_strong_regime_age_minutes": 30.0,
+    "recent_strong_regime_age_minutes": 38.0,
     "recent_strong_regime_source_scan_time": "2026-05-01T12:00:14.079298+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -144,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 30.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 38.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.8m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -156,11 +158,11 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1122%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1005%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -396,7 +398,14 @@
     "win_rate_24h": 0,
     "avg_trade_size": 0.52,
     "sharpe": 0.7,
-    "max_drawdown": 7.9
+    "max_drawdown": 7.9,
+    "hl_bot_running": true,
+    "hl_exec_wallet": "0x51F290588E0fB3107D9cde00984fA16f3dDA3191",
+    "hl_exec_balance": 0.0,
+    "hl_reference_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
+    "hl_reference_balance": 37.391639,
+    "hl_wallet_misaligned": true,
+    "hl_wallet_message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved"
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-01 05:04 UTC \u2014 [Pillar 2] I unblocked the 11 UTC audit by wiring copy-regime context into outcome logs\n\n**Task:** Audit whether 11 UTC should stay active after the recent V5b/cooldown changes, and test whether I could actually diagnose hour weakness versus copy-regime shape with the current data.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Recent tagged sample (`confidence_outcomes.jsonl`, `2026-04-01+`) still says **11 UTC is weaker than 12 UTC but not a clean hour-cut case**:\n  - **11 UTC:** 7 `v5a_pass` trades, **57.1% WR**, **+0.107 avg pnl_pct**\n  - **12 UTC:** 8 trades, **87.5% WR**, **+0.687 avg pnl_pct**\n  - **19 UTC:** 6 trades, **33.3% WR**, **-0.353 avg pnl_pct**\n  - **20 UTC:** 2 trades, **50.0% WR**, **-0.029 avg pnl_pct**\n- The bigger 11 UTC leak is still **fill quality**, not the hour itself:\n  - baseline 11 UTC `v5a_pass`: **57.1% WR**\n  - with `entry_price <= 0.5355`: **66.7% WR** and **+0.291 avg pnl_pct**\n  - the worst 11 UTC loser was still the expensive fill at **0.5457** (`2026-04-02 11:55 UTC`).\n- The current outcome log was missing the exact fields needed for the next real P2 question. Historical rows had hour / OBI / cooldown / F&G, but **did not log** `copy_bias`, `copy_confidence`, `copy_alignment_regime`, or `copy_suppression_reason`.\n- I fixed that in `polymarket-assistant/trading_bot.py`: future `confidence_outcomes.jsonl` rows now snapshot those four copy-intel fields at trade entry. `py_compile` passed.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-11utc-copy-context-audit-2026-05-01.md`.\n\n**My thinking:** The hour itself still looks secondary to price quality. More importantly, the planned \u201c11 UTC vs copy-suppression states\u201d audit was blocked by bad instrumentation, not just thin sample. I\u2019d rather fix the evidence pipeline than make another weak hour cut from guesswork.\n\n**Decision:** Keep **11 UTC active** for now, do **not** cut it like 19 UTC, and start collecting copy-regime context in every new outcome so the next P2 pass can test whether 11 UTC losses cluster in specific disagreement / crowded-expensive / transition-noise states.\n\n**Next:** Once a few new tagged trades land with the new fields, re-run 11 UTC performance by `copy_alignment_regime`, `copy_suppression_reason`, and `v6_cooldown_tag=FIRST` versus non-first trades.\n\n## 2026-05-01 01:04 UTC \u2014 [Pillar 1] BTC whale consensus flipped decisively long while ETH and SOL stayed one-way short\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, quantify notional consensus, and decide whether the old split-BTC read still held.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 6L/2S, ETH 2L/6S, SOL 1L/7S**, but the bigger change was notional, not count.\n- Notional-weighted state is now:\n  - **BTC:** longs **$24.03M** vs shorts **$0.17M** ",
   "pillar4": {
@@ -481,7 +490,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "3 opportunities | SHORT_SQUEEZE"
+        "last_signal": "2 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",

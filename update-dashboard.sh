@@ -8,7 +8,14 @@ cd /home/ubuntu/clawd
 # AI Fund removed from dashboard
 
 python3 << 'PYEOF'
-import json, datetime, os, subprocess, re, glob
+import json, datetime, os, subprocess, re, glob, sys
+
+sys.path.insert(0, '/home/ubuntu/clawd/hyperliquid-trader')
+try:
+    from hl_wallet_audit import audit_wallet_alignment, DEFAULT_FUNDED_WALLET
+except Exception:
+    audit_wallet_alignment = None
+    DEFAULT_FUNDED_WALLET = "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba"
 
 now = datetime.datetime.now(datetime.timezone.utc)
 
@@ -42,6 +49,7 @@ except: pass
 # ── HL Balance + Positions ──
 hl_balance = 0
 hl_positions = []
+hl_wallet_alignment = {}
 try:
     import requests
     # Query BOTH HL wallets and combine
@@ -105,6 +113,16 @@ try:
     # (old single-wallet block removed — both wallets handled above)
 except Exception as e:
     print(f"HL error: {e}")
+
+try:
+    if audit_wallet_alignment:
+        hl_wallet_alignment = audit_wallet_alignment(
+            "0x51F290588E0fB3107D9cde00984fA16f3dDA3191",
+            reference_wallet=DEFAULT_FUNDED_WALLET,
+            min_funded_balance=10.0,
+        )
+except Exception as e:
+    hl_wallet_alignment = {"error": str(e)}
 
 # ── Trade stats from log ──
 today_str = now.strftime("%Y-%m-%d")
@@ -843,6 +861,11 @@ try:
     for k in _pevents: _pevents[k] = _pevents[k][-10:]
 except: pass
 
+hl_bot_running = (
+    subprocess.run(["pgrep", "-f", "hl_live_trader.py"], capture_output=True).returncode == 0
+    or subprocess.run(["pgrep", "-f", "hl_trading_engine"], capture_output=True).returncode == 0
+)
+
 data = {
     "timestamp": now.isoformat(),
     "pm_balance": pm_balance,
@@ -857,7 +880,8 @@ data = {
     "total_trades": total_trades,
     "days_active": (now - datetime.datetime(2026, 3, 15, tzinfo=datetime.timezone.utc)).days,
     "pm_bot_running": subprocess.run(["pgrep", "-f", "trading_bot.py"], capture_output=True).returncode == 0,
-    "hl_bot_running": subprocess.run(["pgrep", "-f", "hl_trading_engine"], capture_output=True).returncode == 0,
+    "hl_bot_running": hl_bot_running,
+    "hl_wallet_alignment": hl_wallet_alignment,
     "hl_positions": hl_positions,
     "funding_opportunities": funding_opps,
     "daily_pnl": daily_pnl,
@@ -928,6 +952,13 @@ data = {
         "avg_trade_size": avg_trade,
         "sharpe": strategies[0]["sharpe"],
         "max_drawdown": round(max_dd, 1),
+        "hl_bot_running": hl_bot_running,
+        "hl_exec_wallet": (hl_wallet_alignment or {}).get("configured_wallet"),
+        "hl_exec_balance": (hl_wallet_alignment or {}).get("configured_balance"),
+        "hl_reference_wallet": (hl_wallet_alignment or {}).get("reference_wallet"),
+        "hl_reference_balance": (hl_wallet_alignment or {}).get("reference_balance"),
+        "hl_wallet_misaligned": (hl_wallet_alignment or {}).get("misaligned", False),
+        "hl_wallet_message": (hl_wallet_alignment or {}).get("message", ""),
     },
     
     # ═══ WORK LOG ═══
