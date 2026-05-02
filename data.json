@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T22:47:00.865509+00:00",
+  "timestamp": "2026-05-02T22:57:09.514345+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1177%",
-      "apr": "+129%",
+      "rate": "+0.1173%",
+      "apr": "+128%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0909%",
-      "apr": "+100%",
+      "rate": "+0.0866%",
+      "apr": "+95%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T22:00:14.909970+00:00",
-    "source_age_minutes": 46.8,
+    "source_age_minutes": 56.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1298.3,
+    "recent_strong_regime_age_minutes": 1308.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1298.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1308.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 46.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 56.9m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1177%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1173%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -406,31 +406,31 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-02T22:44:32.998850+00:00",
-      "age_minutes": 2.5,
+      "last_updated": "2026-05-02T22:56:39.399926+00:00",
+      "age_minutes": 0.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-02T22:46:54.530589+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-02T22:56:58.494282+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
       "ownership_status": "active"
     },
-    "hl_live_status": "wallet_blocked",
-    "hl_live_wallet_blocked": true,
-    "hl_live_balance": 0.0,
+    "hl_live_status": "live",
+    "hl_live_wallet_blocked": false,
+    "hl_live_balance": 37.391639,
     "hl_live_positions_count": 0,
     "hl_live_signals_count": 0,
-    "hl_directional_surface_summary": "hl_live_trader direct state: wallet_blocked",
+    "hl_directional_surface_summary": "hl_live_trader direct state: live",
     "engine_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58676.1,
+      "age_minutes": 58686.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -440,7 +440,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54305.3,
+      "age_minutes": 54315.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -450,7 +450,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12346.8,
+      "age_minutes": 12356.9,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -463,13 +463,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:46 UTC \u2014 [Pillar 2] I added alpha-context attribution to future PM outcome rows\n\n**Task:** Test whether active price-band buckets can be joined to P4 fast-regime / transition posture, and if not, close the instrumentation gap for future realized PM outcomes.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- I attempted to join active-hour + `v5a_pass=true` realized outcomes against `research/alpha-signals-history.jsonl` by timestamp.\n- The join found **17 active-hour V5a rows**, but **all 17 have no alpha context** because the realized outcome sample is from Apr 1-7 while the alpha snapshot archive starts Apr 30.\n- Existing realized data still says:\n  - near-50 bin (`entry <= 0.5049`): **2 trades, 1W/1L, 50.0% WR, -0.010 avg pnl_pct**\n  - sweet spot (`0.505-0.5253`): **12 trades, 10W/2L, 83.3% WR, +0.612 avg pnl_pct**\n  - high tail (`>=0.5355`): **3 trades, 1W/2L, 33.3% WR, -0.378 avg pnl_pct**\n  - fast `HIGH_VOL` realized rows: **0**\n  - PM `high` risk realized rows: **0**\n  - `risk_rising`/high-risk realized rows: **0**\n- I patched `/home/ubuntu/clawd/polymarket-assistant/trading_bot.py` so every future `confidence_outcomes.jsonl` row includes current P4 fields: `alpha_ts`, classifier state/stance, fast regime/tradeable/confidence/vol ratio, PM risk, transition label/posture, breakout risk, and compression ratio.\n- Validation passed:\n  - `python3 -m py_compile trading_bot.py` \u2705\n  - direct `TradingBot().load_alpha_outcome_context()` returned the live context \u2705\n  - restarted only the `pm-bot` screen \u2705\n- Live alpha context currently resolves to **mixed_transition / HIGH_VOL / PM risk high / stable**, with fast confidence **100** and vol ratio **7.22**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-alpha-context-outcome-instrumentation-2026-05-02-2246.md`.\n\n**My thinking:** The existing price-band sample is useful, but it cannot answer the regime-conditioned question yet. Pretending otherwise would be bad research. The right move is attribution: make every future realized trade carry the alpha state that P2 needs, then test the exact interaction instead of raising the global price floor or shipping a blind filter.\n\n**Decision:** Make **no price-band config change**. Keep `min_price=0.50`, `max_price=0.525`. Do **not** ship a regime-conditioned price filter until at least **5 realized active-hour V5a outcome rows** carry `alpha_fast_regime` / `alpha_transition_posture`.\n\n**Next:** On the next Pillar 2 pass after new trades exist, split active-hour V5a outcomes by `alpha_fast_regime`, `alpha_pm_risk`, `alpha_transition_posture`, and price bucket. If near-50 or fair-value entries only fail in high-risk alpha states, ship a surgical filter instead of a blunt price-floor raise.\n\n## 2026-05-02 22:42 UTC \u2014 [Pillar 1] BTC stayed a clean leader-long after the short side cleared\n\n**Task:** Run a fresh HL ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:56 UTC \u2014 [Pillar 3] HL live trader now signs with the funded wallet\n\n**Task:** Repair the HL live-trader wallet blocker by aligning the Python live execution engine with the funded Hyperliquid wallet used by the operational `brainKID/trading/hl.js` CLI.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- `hl_live_trader.py` was signing with `POLYMARKET_PRIVATE_KEY` and hardcoding wallet `0x51F290588E0fB3107D9cde00984fA16f3dDA3191`.\n- The canonical HL CLI derives its wallet from `/home/ubuntu/clawd/brainKID/.evm-seed` and reports address `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba`, balance `37.391639`, and no open positions.\n- Pre-fix telemetry was correctly `wallet_blocked`: configured wallet `$0.00`, reference wallet `$37.39`, `misaligned=true`.\n- I patched `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` to prefer `HYPERLIQUID_SEED_PATH` (default `/home/ubuntu/clawd/brainKID/.evm-seed`), derive the signing account from mnemonic, fall back to private keys only if no seed exists, and set `WALLET` from the derived signer instead of a hardcoded stale address.\n- Validation passed:\n  - `python3 -m py_compile /home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` \u2705\n  - dry import resolved `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba` via `mnemonic` \u2705\n  - restarted only `hl-bot` \u2705\n  - post-restart `hl_live_state.json` now shows `status=live`, `balance=37.391639`, `wallet_blocked=false`, `misaligned=false` \u2705\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-funded-wallet-routing-2026-05-02-2256.md`.\n\n**My thinking:** HL was not down as a process; it was live but pointed at an unfunded signer. That is worse than a crash because it looks healthy while never trading. The fix is to make the active engine use the same funded signing path as the working HL CLI, while keeping an env override for future migration.\n\n**Decision:** Make `/home/ubuntu/clawd/brainKID/.evm-seed` the default HL live-trader signing source. Keep the `$10` min balance floor. Do not open any new HL position during repair; this was infrastructure alignment only.\n\n**Next:** On the next P3 pass, inspect the first funded-wallet live cycles and verify signal generation / order gating with `$37.39` capital. If signals appear, enforce conservative notional sizing before allowing any new HL position.\n\n## 2026-05-02 22:46 UTC \u2014 [Pillar 2] I added alpha-context attribution to future PM outcome rows\n\n**Task:** Test whether active price-band buckets can be joined to P4 fast-regime / transition posture, and if not, close the instrumentation gap for future realized PM outcomes.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- I attempted to join active-hour + `v5a_pass=true` realized outcomes against `research/alpha-signals-history.jsonl` by timestamp.\n- The join found **17 active-hour V5a rows**, but",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 99,
-    "snapshot_age_minutes": 19.0,
+    "research_files": 100,
+    "snapshot_age_minutes": 29.2,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": -1,
