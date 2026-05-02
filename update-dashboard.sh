@@ -825,8 +825,22 @@ momentum_state_health = annotate_state_owner(
     "momentum_strategy.py",
 )
 hl_directional_log_health = load_file_mtime_health("/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log")
+hl_live_state_health = annotate_state_owner(
+    load_state_health("/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json", stale_after_minutes=5),
+    "hl_live_trader.py",
+    "hl_live_trader.py",
+)
+hl_live_state_payload = {}
+try:
+    with open("/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json") as f:
+        loaded_hl_live_state = json.load(f)
+        if isinstance(loaded_hl_live_state, dict):
+            hl_live_state_payload = loaded_hl_live_state
+except Exception:
+    hl_live_state_payload = {}
 hl_stale_components = [
     name for name, health in [
+        ("hl_live_state", hl_live_state_health),
         ("engine_state", engine_state_health),
         ("funding_arb_state", funding_arb_state_health),
         ("momentum_state", momentum_state_health),
@@ -1096,8 +1110,16 @@ data = {
         "hl_wallet_message": (hl_wallet_alignment or {}).get("message", ""),
         "hl_directional_owner": "hl_live_trader.py" if process_running("hl_live_trader.py") else "hl_trading_engine.py" if process_running("hl_trading_engine.py") else "none",
         "hl_directional_log": hl_directional_log_health,
+        "hl_live_state": hl_live_state_health,
+        "hl_live_status": hl_live_state_payload.get("status"),
+        "hl_live_wallet_blocked": hl_live_state_payload.get("wallet_blocked"),
+        "hl_live_balance": hl_live_state_payload.get("balance"),
+        "hl_live_positions_count": hl_live_state_payload.get("positions_count"),
+        "hl_live_signals_count": hl_live_state_payload.get("signals_count"),
         "hl_directional_surface_summary": (
-            "hl_live_trader telemetry fresh"
+            f"hl_live_trader direct state: {hl_live_state_payload.get('status', 'unknown')}"
+            if process_running("hl_live_trader.py") and not hl_live_state_health.get("stale", True)
+            else "hl_live_trader log telemetry fresh; direct state missing/stale"
             if process_running("hl_live_trader.py") and not hl_directional_log_health.get("stale", True)
             else "hl_live_trader running but log telemetry stale"
             if process_running("hl_live_trader.py")
@@ -1113,6 +1135,7 @@ data = {
             "stale: " + ", ".join(
                 f"{name} ({health.get('owner', 'unknown')}={health.get('ownership_status', 'unknown')})"
                 for name, health in [
+                    ("hl_live_state", hl_live_state_health),
                     ("engine_state", engine_state_health),
                     ("funding_arb_state", funding_arb_state_health),
                     ("momentum_state", momentum_state_health),
