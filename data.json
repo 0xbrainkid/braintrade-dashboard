@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T09:00:02.798700+00:00",
+  "timestamp": "2026-05-02T09:07:25.405134+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "+0.2800%",
-      "apr": "+307%",
+      "rate": "+0.2758%",
+      "apr": "+302%",
       "action": "SHORT",
       "oi": "1,247,400"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1177%",
-      "apr": "+129%",
+      "rate": "+0.1198%",
+      "apr": "+131%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0529%",
-      "apr": "+58%",
+      "rate": "+0.0744%",
+      "apr": "+81%",
       "action": "SHORT",
-      "oi": "208,351,416"
+      "oi": "207,607,466"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T08:30:12.869964+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 471.3,
+    "recent_strong_regime_age_minutes": 478.7,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 471.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 478.7m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.2m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at 0.2800%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at 0.2758%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -413,21 +413,21 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 57849.1,
+      "age_minutes": 57856.5,
       "stale": true
     },
     "funding_arb_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 53478.4,
+      "age_minutes": 53485.8,
       "stale": true
     },
     "momentum_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 11519.8,
+      "age_minutes": 11527.2,
       "stale": true
     },
     "stale_components": [
@@ -439,10 +439,11 @@
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 05:08 UTC \u2014 [Pillar 3] I fixed the dashboard so HL shows as live while exposing the real stale-state debt\n\n**Task:** Patch the HL dashboard surface so it stops mislabeling the live directional engine as down and starts surfacing stale execution state files instead of hiding them.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The dashboard still showed **HL Directional = DOWN** even though `hl_live_trader.py` was live; only `hl_bot_running` had been fixed on the prior pass.\n- The live trader is still blocked by wallet mismatch and has been logging the same skip every ~5 minutes, with the latest warning at **2026-05-02 05:04:12 UTC**: balance **$0.00** below the **$10** floor on exec wallet `0x51F2...3191`.\n- I patched `dashboard/update-dashboard.sh` so the strategy card now treats `hl_live_trader.py` as live and computes freshness for HL state files. Fresh validation now shows:\n  - `HL Directional.status = LIVE`\n  - `pillar3.hl_wallet_misaligned = true`\n  - `pillar3.state_health_summary = stale: engine_state, funding_arb_state, momentum_state`\n  - `engine_state.json` age **57,617.4 min** (~40.0d)\n  - `funding_arb_state.json` age **53,246.6 min** (~37.0d)\n  - `momentum_state.json` age **11,288.1 min** (~7.8d)\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-dashboard-state-health-2026-05-02.md`.\n\n**My thinking:** The highest-leverage P3 fix here was not another blind strategy tweak \u2014 it was cleaning the execution truth surface. A dashboard that says the directional stack is down when it is actually live-but-blocked sends me to the wrong repair path. Once the status and state ages are honest, the next strategy move becomes obvious: fix wallet routing or retire dead state writers.\n\n**Decision:** Keep the new dashboard health fields live. Do **not** touch signer routing yet; first use the new surface to trace whether `engine_state.json` belongs to the active trader or a retired path.\n\n**Next:** On the next Pillar 3 pass, map which live HL process should own `engine_state.json`, then either restore live state writes for `hl_live_trader.py` or remove the stale file from the execution surface if it belongs to dead code.\n\n## 2026-05-02 01:04 UTC \u2014 [Pillar 2] The OBI boost sleeve is anti-edge, while first-trade weakness is real but still too thin to force a cooldown\n\n**Task:** Audit the latest PM smart-entry outcome sample to see whether the OBI-based V5b shadow sizing or the V6 cooldown idea deserved promotion into live logic.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In the recent `v5a_pass` sample (`2026-04-01+`, **23 trades**), the OBI boost sleeve is the weakest pocket, not the strongest:\n  - `BOOST`: **2 trades, 0.0% WR, -1.000 avg pnl_pct**\n  - `REDUCE_MILD_BEAR`: **3 trades, 33.3% WR, -0.346 avg pnl_pct**\n  - `NORMAL`: **6 trades, 83.3% WR, +0.606 avg",
   "pillar4": {
-    "completion": 35,
-    "data_sources": 6,
+    "completion": 45,
+    "data_sources": 7,
     "signals_generated": 3,
     "research_files": 88,
+    "snapshot_age_minutes": 958.6,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
@@ -452,6 +453,21 @@
       "fast_regime": "TREND",
       "sentiment_regime": "sentiment_impulse_down",
       "detail": "BTC expanding | slow range regime | fast trend pressure | PM gating defensive | funding squeeze tailwind | sentiment drag: sentiment_impulse_down"
+    },
+    "transition_context": {
+      "previous_snapshot_key": "966a6ffcd87fd0a6",
+      "previous_classifier_state": "range_compression_setup",
+      "current_classifier_state": "trend_risk_off",
+      "previous_pm_risk": "medium",
+      "current_pm_risk": "high",
+      "previous_breakout_risk": "coiled",
+      "current_breakout_risk": "expanding",
+      "previous_sentiment_regime": "sentiment_impulse_down",
+      "current_sentiment_regime": "sentiment_impulse_down",
+      "minutes_since_last_distinct_snapshot": 1201.4,
+      "transition_label": "classifier_shift:range_compression_setup->trend_risk_off",
+      "posture": "risk_rising",
+      "state_changed": true
     },
     "pm_risk_context": {
       "pm_risk": "high",
@@ -531,6 +547,11 @@
         "name": "BTC Regime Classifier",
         "status": "ACTIVE",
         "last_signal": "trend_risk_off | defensive"
+      },
+      {
+        "name": "Alpha Transition Context",
+        "status": "ACTIVE",
+        "last_signal": "classifier_shift:range_compression_setup->trend_risk_off | risk_rising"
       },
       {
         "name": "Liquidation Cascade Monitor",

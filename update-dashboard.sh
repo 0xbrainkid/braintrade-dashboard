@@ -693,6 +693,15 @@ alpha_squeeze = alpha_signal.get("funding_squeeze", {}) or {}
 alpha_liq = alpha_signal.get("liquidation_signal", {}) or {}
 alpha_pm_risk = alpha_signal.get("pm_risk_context", {}) or {}
 alpha_btc_classifier = alpha_signal.get("btc_regime_classifier", {}) or {}
+alpha_transition = alpha_signal.get("transition_context", {}) or {}
+alpha_snapshot_age_minutes = None
+try:
+    alpha_ts = alpha_signal.get("timestamp")
+    if alpha_ts:
+        alpha_dt = datetime.datetime.fromisoformat(alpha_ts.replace("Z", "+00:00"))
+        alpha_snapshot_age_minutes = round((now - alpha_dt).total_seconds() / 60, 1)
+except:
+    alpha_snapshot_age_minutes = None
 
 alpha_signals_generated = 0
 for candidate in [
@@ -907,6 +916,7 @@ alpha_sources = [
     {"name": "Funding Rate Scanner", "status": "ACTIVE", "last_signal": f"{len(funding_opps)} opportunities | {alpha_squeeze.get('direction', 'NEUTRAL')}"},
     {"name": "Fear & Greed Index", "status": "ACTIVE" if alpha_fng is not None else "PLANNED", "last_signal": f"{alpha_fng} ({alpha_fng_class}) | {alpha_fng_ctx.get('regime', 'neutral')}" if alpha_fng is not None else "—"},
     {"name": "BTC Regime Classifier", "status": "ACTIVE" if alpha_btc_classifier else "BUILDING", "last_signal": f"{alpha_btc_classifier.get('state', '—')} | {alpha_btc_classifier.get('stance', '—')}"},
+    {"name": "Alpha Transition Context", "status": "ACTIVE" if alpha_transition else "BUILDING", "last_signal": f"{alpha_transition.get('transition_label', '—')} | {alpha_transition.get('posture', '—')}"},
     {"name": "Liquidation Cascade Monitor", "status": "ACTIVE" if alpha_liq else "BUILDING", "last_signal": f"{alpha_liq.get('direction', 'neutral')} | adj {alpha_liq.get('pm_adjustment', 0)}"},
 ]
 
@@ -1045,11 +1055,13 @@ data = {
     
     # ═══ PILLAR 4: Alpha Research Pipeline ═══
     "pillar4": {
-        "completion": 35 if alpha_signal else 15,
+        "completion": 45 if alpha_transition else (35 if alpha_signal else 15),
         "data_sources": sum(1 for s in alpha_sources if s["status"] == "ACTIVE"),
         "signals_generated": alpha_signals_generated,
         "research_files": len(glob.glob("/home/ubuntu/clawd/research/*.md")),
+        "snapshot_age_minutes": alpha_snapshot_age_minutes,
         "btc_regime_classifier": alpha_btc_classifier,
+        "transition_context": alpha_transition,
         "pm_risk_context": alpha_pm_risk,
         "fear_greed": {
             "value": alpha_fng,
