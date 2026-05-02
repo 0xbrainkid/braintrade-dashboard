@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T23:35:22.949106+00:00",
+  "timestamp": "2026-05-02T23:47:55.078587+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1200%",
+      "rate": "+0.1197%",
       "apr": "+131%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0841%",
-      "apr": "+92%",
+      "rate": "+0.0818%",
+      "apr": "+90%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "aligned_bullish_crowded",
     "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T23:00:15.102191+00:00",
-    "source_age_minutes": 35.1,
+    "source_age_minutes": 47.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1346.6,
+    "recent_strong_regime_age_minutes": 1359.2,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1346.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1359.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 35.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 47.7m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -158,7 +158,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1200%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1197%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -410,15 +410,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-02T23:32:56.951334+00:00",
-      "age_minutes": 2.4,
+      "last_updated": "2026-05-02T23:47:06.187772+00:00",
+      "age_minutes": 0.8,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-02T23:35:12.498739+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-02T23:47:47.941842+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -434,7 +434,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58724.5,
+      "age_minutes": 58737.0,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -444,7 +444,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54353.7,
+      "age_minutes": 54366.2,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -454,7 +454,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12395.1,
+      "age_minutes": 12407.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -467,13 +467,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 23:35 UTC \u2014 [Pillar 4] Low-risk PM state stabilized, but breakout expansion still blocks a full greenlight\n\n**Task:** Refresh P4 alpha after the 22:58 UTC risk-easing snapshot and determine whether BTC resolved back into a fully PM-friendly range setup or stayed in an expanding mixed-transition state.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot is `2026-05-02T23:34:48.124547+00:00`.\n- Classifier stayed **`mixed_transition`**.\n- PM risk stayed **low**.\n- Fast regime stayed **RANGE** and tradeable: `pm_tradeable=true`, vol ratio **0.96 -> 0.56**, confidence **54 -> 62**.\n- Breakout risk stayed **expanding**.\n- Transition posture changed from **risk_easing -> stable** because PM risk stayed low and breakout risk stayed expanding.\n- BTC price cooled slightly: **$78,820.31 -> $78,784.50**.\n- Compression ratio increased again: **1.2995 -> 1.3691**.\n- Slow regime remains **RANGE** with `pm_action=TRADE`, but the classifier keeps reduced stance because expansion has not cleared.\n- Funding squeeze remains max-score `SHORT_SQUEEZE` at **100**, but unconfirmed (`ratio_confirms=false`) and with no PM adjustment.\n- No new 23:34+ PM signal rows appeared in the trading log yet, so there is no fresh shadow tape after this snapshot.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-low-risk-but-expanding-stable-2026-05-02-2335.md`.\n\n**My thinking:** The high-vol danger is gone, but this is still not a clean mean-reversion environment. It is a stable low-risk mixed transition with expanding structure. That means PM can stay eligible under normal bot rules, but alpha does not justify loosening entries.\n\n**Decision:** Keep PM config unchanged. Keep weekend block active. Mark P4 state as **stable low-risk mixed transition, not fully friendly**. Do not widen price bands or lower conviction because fast regime says RANGE.\n\n**Next:** Watch whether breakout risk drops from `expanding` to `neutral/coiled`. That would upgrade PM from reduced/selective to genuinely range-friendly. If expansion persists into weekday active hours, P2 should compare those realized alpha-tagged outcomes separately from clean range setups.\n\n## 2026-05-02 23:32 UTC \u2014 [Pillar 3] HL is funded but now correctly notional-blocked\n\n**Task:** Audit the first funded-wallet HL live cycles after the signer repair and ensure small-account order sizing cannot fire dust / rejected notional orders.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Live state before this pass showed the repaired HL engine running funded: status `live`, cycle `147`, wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba`, balance `$37.391639`, `wallet_blocked=false`, `misaligned=false`, positions `0`, signals `0`.\n- Log audit after the 22:56 funded-wallet restart showed clean cycles: repeated `wallet alignment ok`, bala",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 23:40 UTC \u2014 [Pillar 1] BTC downgraded from clean long to bullish but weakening\n\n**Task:** Re-scan HL top-trader copy intelligence after the prior clean BTC long read and test whether leader distribution finally appeared.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 5L/2S**, **ETH 4L/4S**, **SOL 3L/5S**.\n- Current top-book notional:\n  - **BTC:** longs **$11.72M** vs shorts **$0.45M** \u2192 net **+$11.27M long**\n  - **ETH:** longs **$0.27M** vs shorts **$37.32M** \u2192 net **-$37.05M short**\n  - **SOL:** longs **$0.20M** vs shorts **$11.44M** \u2192 net **-$11.25M short**\n  - **HYPE:** longs **$1.63M** vs shorts **$11.89M** \u2192 net **-$10.26M short**\n- BTC is no longer clean: prior scan **7L/0S**, net **+$12.91M**; current scan **5L/2S**, net **+$11.27M**. Net long fell **$1.64M / 12.7%**.\n- BTC shorts reopened, but only small: `beatmaker1@proton.me` **BTC SHORT $260K** and `anon-0xf5d8` **BTC SHORT $194K**.\n- The bigger issue is leader-long trimming: `anon-0xfc66` still anchors **BTC LONG $5.63M**, but `anon-0xecb6` trimmed **$4.93M -> $4.48M -> $3.72M** across recent scans, down **~24.5%** from the clean-long scan. `anon-0x57dd` is roughly stable.\n- ETH remains the strongest bearish expression by far despite count neutralizing to 4L/4S; notional is still **-$37.05M**.\n- SOL remains bearish by notional and count: **3L/5S**, net **-$11.25M**.\n- HYPE remains bearish by notional: net **-$10.26M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-clean-long-downgrade-2026-05-02-2340.md`.\n\n**My thinking:** BTC did not flip bearish, but the clean bullish copy-intel read is no longer valid. The downgrade criteria were hit: BTC shorts reopened and `anon-0xecb6` materially trimmed the second-largest BTC long. Net remains positive and `anon-0xfc66` has not sold, so this is a downgrade from clean long to crowded bullish but weakening, not a full reversal.\n\n**Decision:** Downgrade **BTC** from **clean bullish copy-intel leader** to **bullish but weakening / no fresh long chase**. Keep **ETH short = strongest bearish expression**. Keep **SOL short = bearish confirmed**. Keep **HYPE short = secondary bearish**. No HL trade opened; copy-intel alone is context, and HL is currently notional-blocked at `$11.22` planned notional.\n\n**Next:** Watch whether `anon-0xfc66` starts trimming BTC. If the anchor long sells or BTC net long drops under `$10M`, downgrade BTC again to neutral/crowded-fade risk. If `anon-0xecb6` rebuilds and shorts close, restore BTC to clean bullish.\n\n## 2026-05-02 23:35 UTC \u2014 [Pillar 4] Low-risk PM state stabilized, but breakout expansion still blocks a full greenlight\n\n**Task:** Refresh P4 alpha after the 22:58 UTC risk-easing snapshot and determine whether BTC resolved back into a fully PM-friendly range setup or stayed in an expanding mixed-transition state.\n\n**Finding:**\n",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 105,
-    "snapshot_age_minutes": 0.6,
+    "research_files": 106,
+    "snapshot_age_minutes": 13.1,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
