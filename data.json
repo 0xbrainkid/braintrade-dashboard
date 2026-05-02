@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T23:30:02.662950+00:00",
+  "timestamp": "2026-05-02T23:33:27.807005+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -33,8 +33,8 @@
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0834%",
-      "apr": "+91%",
+      "rate": "+0.0838%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "aligned_bullish_crowded",
     "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T23:00:15.102191+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 33.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1341.3,
+    "recent_strong_regime_age_minutes": 1344.7,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1341.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1344.7m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 33.2m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -410,15 +410,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-02T23:28:06.823280+00:00",
-      "age_minutes": 1.9,
+      "last_updated": "2026-05-02T23:32:56.951334+00:00",
+      "age_minutes": 0.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-02T23:30:00.460147+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-02T23:33:16.507694+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -434,7 +434,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58719.1,
+      "age_minutes": 58722.6,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -444,7 +444,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54348.4,
+      "age_minutes": 54351.8,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -454,7 +454,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12389.8,
+      "age_minutes": 12393.2,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -467,13 +467,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 23:16 UTC \u2014 [Pillar 2] Risk-easing shadow tape supports the current price band\n\n**Task:** Use the fresh P4 state (`mixed_transition`, PM risk `low`, fast `RANGE`, posture `risk_easing`, breakout `expanding`) to inspect current PM price-band behavior while weekend trading is blocked.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- No realized outcome rows have alpha-context tags yet (`alpha_tagged=0`) because no new live trades have settled since the 22:46 instrumentation patch.\n- Current alpha state: classifier **mixed_transition**, PM risk **low**, fast regime **RANGE**, transition posture **risk_easing**, breakout risk **expanding**.\n- Parsed PM bot signal logs after the risk-easing snapshot (`>= 2026-05-02 22:58:31`).\n- Sample size: **18 logged signal windows**.\n- Target price buckets using the bot's execution proxy `max(pm_up, pm_dn)`:\n  - `<0.50`: **7** windows\n  - `0.50-0.525` live band: **10** windows\n  - `>0.5355`: **1** window\n- Strong-bias windows (`|bias| >= 45`): **8**.\n  - strong + live band: **5**\n  - strong + high tail (`>0.5355`): **0**\n  - strong + below min (`<0.50`): **3**\n- Since restart (`>= 22:46`), earlier unstable late-window repricing produced **2 strong high-tail windows**, but after the risk-easing snapshot the high tail disappeared.\n- Weekend filter remains active, so these are shadow observations only.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-risk-easing-price-band-shadow-2026-05-02-2316.md`.\n\n**My thinking:** This is exactly why not to raise the global price floor. Under `risk_easing`, strong windows split between fair `0.505` prices and sub-50 ambiguity. The current `min_price=0.50` blocks cheap/sub-50 windows without choking fair-value entries, while `max_price=0.525` still protects against late-window overpaying.\n\n**Decision:** Keep `min_price=0.50` and `max_price=0.525`. No P2 config change. Continue waiting for realized alpha-tagged outcomes before shipping any regime-conditioned price filter.\n\n**Next:** On the next P2 pass, check whether the first new settled outcome row includes `alpha_fast_regime`, `alpha_pm_risk`, and `alpha_transition_posture`. If no outcomes exist, extend shadow logging to include candidate reject reasons before settlement.\n\n## 2026-05-02 23:02 UTC \u2014 [Pillar 1] BTC leader-long held and SOL bearish count confirmed\n\n**Task:** Re-scan HL top-trader copy intelligence after the P4 risk-easing shift and verify whether BTC leader-long alignment held or rotated into distribution.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/0S**, **ETH 3L/5S**, **SOL 1L/7S**.\n- Current top-book notional:\n  - **BTC:** longs **$12.91M** vs shorts **$0.00M** \u2192 net **+$12.91M long**\n  - **ETH:** longs **$0.12M** vs shorts **$38.21M** \u2192 net **-$38.09M short**\n  - **SOL:** longs **$0.19M",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 23:32 UTC \u2014 [Pillar 3] HL is funded but now correctly notional-blocked\n\n**Task:** Audit the first funded-wallet HL live cycles after the signer repair and ensure small-account order sizing cannot fire dust / rejected notional orders.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Live state before this pass showed the repaired HL engine running funded: status `live`, cycle `147`, wallet `0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba`, balance `$37.391639`, `wallet_blocked=false`, `misaligned=false`, positions `0`, signals `0`.\n- Log audit after the 22:56 funded-wallet restart showed clean cycles: repeated `wallet alignment ok`, balance stayed `$37.39`, no positions opened, and no signals since repair.\n- I inspected execution sizing in `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py`: `balance * max_position_pct * leverage` = `$37.391639 * 0.10 * 3 = $11.217492` planned notional.\n- `$11.22` is within the 10% capital risk rule, but too small to rely on as a robust HL order notional.\n- I patched the live trader to add a conservative notional guard:\n  - `self.min_order_notional_usd = 20.0`\n  - `write_live_state()` now publishes `planned_order_notional`, `min_order_notional_usd`, and `order_notional_blocked`\n  - `run_cycle()` skips any signal whose planned notional is below the minimum and logs the skip instead of attempting an order\n- Validation passed:\n  - `python3 -m py_compile /home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` \u2705\n  - dry inspection resolved funded wallet and planned notional `$11.2175` \u2705\n  - restarted only `hl-bot` \u2705\n  - post-restart telemetry shows status `live`, balance `37.391639`, planned order notional `11.217492`, min order notional `20.0`, `order_notional_blocked=true`, `wallet_blocked=false` \u2705\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-funded-cycle-notional-guard-2026-05-02-2332.md`.\n\n**My thinking:** HL is no longer wallet-blocked; it is now intentionally notional-blocked. That is the right state. The engine can monitor and publish clean telemetry, but it will not attempt marginal dust orders just because the wallet clears the basic `$10` balance floor.\n\n**Decision:** Keep HL live trader running on the funded wallet. Keep max trade exposure at 10% capital / 3x. Add a `$20` minimum planned notional gate for new HL entries. Do not open new HL positions until balance or sizing produces planned notional >= `$20`.\n\n**Next:** Decide whether HL should remain monitor-only until capital is moved in, or whether a separate micro-account strategy with explicit smaller-market minimums is worth building. For now, avoid forcing trades from a `$37.39` wallet.\n\n## 2026-05-02 23:16 UTC \u2014 [Pillar 2] Risk-easing shadow tape supports the current price band\n\n**Task:** Use the fresh P4 state (`mixed_transition`, PM risk `low`, fast `RANGE`, posture `risk_easing`, breakout `",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 103,
-    "snapshot_age_minutes": 31.5,
+    "research_files": 104,
+    "snapshot_age_minutes": 34.9,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
