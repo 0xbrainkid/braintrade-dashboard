@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T22:00:03.847851+00:00",
+  "timestamp": "2026-05-02T22:05:59.850649+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1202%",
-      "apr": "+132%",
+      "rate": "+0.1214%",
+      "apr": "+133%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1095%",
-      "apr": "+120%",
+      "rate": "+0.1073%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "persistent_neutral_disagreement",
     "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T21:00:17.983413+00:00",
-    "source_age_minutes": 59.8,
+    "source_age_minutes": 65.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1251.3,
+    "recent_strong_regime_age_minutes": 1257.3,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1251.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1257.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 59.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 65.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1202%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1214%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -406,8 +406,8 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-02T21:59:35.730089+00:00",
-      "age_minutes": 0.5,
+      "last_updated": "2026-05-02T22:05:52.804726+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_directional_surface_summary": "hl_live_trader telemetry fresh",
@@ -415,7 +415,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58629.2,
+      "age_minutes": 58635.1,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -425,7 +425,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54258.4,
+      "age_minutes": 54264.3,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -435,7 +435,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12299.8,
+      "age_minutes": 12305.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -448,42 +448,42 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 21:08 UTC \u2014 [Pillar 3] I separated live HL directional telemetry from dead legacy state writers\n\n**Task:** Trace which process actually owns the stale HL state files, decide whether the live directional stack was missing writes or just being mislabeled, and harden the dashboard surface so P3 points at the real failure mode.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The only live HL directional process is **`python3 -u hl_live_trader.py`** in the `hl-bot` screen.\n- `engine_state.json` is written only by **`hl_trading_engine.py`**.\n- `funding_arb_state.json` is written only by **`hl_funding_arb.py`**.\n- `momentum_state.json` is written by **`hl_momentum.py` / `momentum_strategy.py`**.\n- None of those legacy state-writer processes are running, so their stale JSON files are **not** evidence that the active directional bot is broken.\n- The live directional path is healthy from a telemetry standpoint: after my dashboard patch, `pillar3.hl_directional_owner = hl_live_trader.py`, `hl_directional_surface_summary = hl_live_trader telemetry fresh`, and `hl_trading.log` freshness is **0.6 minutes**.\n- The real blocker is still execution-wallet misalignment: `hl_live_trader.py` keeps warning that wallet **`0x51F2...3191`** has **$0.00** and is below the **$10** trading floor.\n- I patched `dashboard/update-dashboard.sh` so Pillar 3 now publishes state-file **owner**, **owner_running**, **ownership_status**, and live `hl_trading.log` freshness, then verified the dashboard refresh end-to-end.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-state-ownership-2026-05-02.md`.\n\n**My thinking:** The dashboard was collapsing two separate realities into one stale-state blob: retired strategy files and a live-but-wallet-blocked directional engine. That blurs the repair path. Once ownership is explicit, the strategy stack reads correctly: the JSON files are legacy debt, while the only live P3 issue is that the active trader is pointed at an empty exec wallet.\n\n**Decision:** Keep the new ownership-aware dashboard surface live. Do **not** treat `engine_state.json` staleness as a live directional outage anymore. For now, keep the legacy files visible but clearly tagged `legacy_inactive` so they stop hijacking diagnosis while still exposing cleanup debt.\n\n**Next:** On the next Pillar 3 pass, either add a dedicated `hl_live_trader` state file/heartbeat for direct cycle telemetry or prune legacy state files from the main execution surface if they are confirmed retired.\n\n## 2026-05-02 17:04 UTC \u2014 [Pillar 2] The first-trade warning is mostly old 19 UTC contamination, not a reason to ship a blanket cooldown\n\n**Task:** Re-test whether the `FIRST`-trade weakness in the PM smart-entry sample deserved a real new filter, and clear the remaining instrumentation gap if the sample was still dirty.\n**Finding:**\n- Both bots are aliv",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:02 UTC \u2014 [Pillar 4] The morning compression setup already degraded into a high-risk mixed transition\n\n**Task:** Refresh the alpha pipeline, scan the live PM weekend tape for a setup worth carrying into the weekday book, and verify whether PM/HL state created a real trade or only a watchlist condition.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot (`2026-05-02T22:04:05Z`) flipped from **`range_compression_setup -> mixed_transition`** with posture **`risk_rising`**.\n- PM risk jumped **low -> high** while the slow detector stayed **RANGE** and the fast detector jumped to **HIGH_VOL** (`pm_tradeable=false`, confidence 100).\n- BTC is still structurally range-ish, but the clean compression edge is gone: **$78,683**, **+0.57% 24h**, **+0.29% 6h trend**, compression ratio **1.19**, breakout risk **neutral**.\n- Funding still leans squeeze-positive (**SHORT_SQUEEZE**, score **100**), but **`ratio_confirms=false`** and **`pm_adjustment=0`**, so it is not usable confirmation for PM entries.\n- Liquidation context is empty (`neutral`, no events), so there is no cascade edge helping the PM tape.\n- Live PM logs kept printing weekend-blocked near-fair-value windows:\n  - `21:59 UTC`: bias **-82.7**, **Y0.485 / N0.515**\n  - `22:03 UTC`: bias **-65.7**, **Y0.505 / N0.495**\n  - `22:04 UTC`: bias **-46.3**, **Y0.505 / N0.495**\n- Those windows were correctly rejected by `WEEKEND_FILTER`, but the key context is that they appeared during a fresh **risk-rising mixed transition**, not the cleaner morning compression state.\n- PM balance probes still show **$0.00 CLOB collateral / ~$1 proxy USDC**, but the live bot explicitly treats that as expected because funds are likely parked in CTF positions and keeps the preserved sizing baseline (`Keeping $400.00`).\n- HL status check: **new wallet $37.39 USDC, no open positions**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-mixed-transition-weekend-scan-2026-05-02-2202.md`.\n\n**My thinking:** This is exactly the kind of regime handoff P4 is supposed to catch. The attractive part of the morning state was compression plus low PM risk. By 22:00 UTC that edge had already degraded into a high-vol mixed tape. The price zone is still useful as a watchlist, but only if fast volatility cools back down before active weekday hours. Right now this is a downgrade, not a green light.\n\n**Decision:** Keep the weekend block and do **not** add any bullish PM boost from tonight's tape. Treat **0.495-0.505** as a conditional re-entry watch zone only if fast regime cools from **HIGH_VOL** back to **RANGE** while slow regime stays **RANGE**.\n\n**Next:** On the next Pillar 4 pass, compare any weekday PM decisions that happen after this `range_compression_setup -> mixed_transition` handoff against decisions taken after `risk_easing` snapshots. If the mixed-transition windows unde",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
-    "signals_generated": 2,
-    "research_files": 92,
-    "snapshot_age_minutes": 772.6,
+    "signals_generated": 1,
+    "research_files": 93,
+    "snapshot_age_minutes": 1.9,
     "btc_regime_classifier": {
-      "state": "range_compression_setup",
-      "score": 4,
-      "stance": "selective",
-      "breakout_risk": "coiled",
+      "state": "mixed_transition",
+      "score": -1,
+      "stance": "reduced",
+      "breakout_risk": "neutral",
       "slow_regime": "RANGE",
-      "fast_regime": "RANGE",
+      "fast_regime": "HIGH_VOL",
       "sentiment_regime": "neutral",
-      "detail": "BTC compressed | slow range regime | fast range structure | PM gate open into compression"
+      "detail": "slow range regime | PM gating defensive"
     },
     "transition_context": {
-      "previous_snapshot_key": "adb035d99a05a2cf",
-      "previous_classifier_state": "trend_risk_off",
-      "current_classifier_state": "range_compression_setup",
-      "previous_pm_risk": "high",
-      "current_pm_risk": "low",
-      "previous_breakout_risk": "expanding",
-      "current_breakout_risk": "coiled",
-      "previous_sentiment_regime": "sentiment_impulse_down",
+      "previous_snapshot_key": "f064dd8cdcd73c85",
+      "previous_classifier_state": "range_compression_setup",
+      "current_classifier_state": "mixed_transition",
+      "previous_pm_risk": "low",
+      "current_pm_risk": "high",
+      "previous_breakout_risk": "coiled",
+      "current_breakout_risk": "neutral",
+      "previous_sentiment_regime": "neutral",
       "current_sentiment_regime": "neutral",
-      "minutes_since_last_distinct_snapshot": 958.6,
-      "transition_label": "classifier_shift:trend_risk_off->range_compression_setup",
-      "posture": "risk_easing",
+      "minutes_since_last_distinct_snapshot": 776.7,
+      "transition_label": "classifier_shift:range_compression_setup->mixed_transition",
+      "posture": "risk_rising",
       "state_changed": true
     },
     "pm_risk_context": {
-      "pm_risk": "low",
+      "pm_risk": "high",
       "slow_pm_action": "TRADE",
-      "fast_regime": "RANGE",
+      "fast_regime": "HIGH_VOL",
       "squeeze_direction": "SHORT_SQUEEZE",
       "squeeze_pm_adjustment": 0,
       "squeeze_confirmed": false,
@@ -503,35 +503,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.3448,
-      "avg_range_last6h_pct": 0.2321,
-      "avg_range_prev18h_pct": 0.5516,
-      "compression_ratio": 0.4208,
-      "trend_6h_pct": -0.1275,
-      "breakout_risk": "coiled"
+      "realized_vol_1h_pct": 0.1288,
+      "avg_range_last6h_pct": 0.2866,
+      "avg_range_prev18h_pct": 0.2413,
+      "compression_ratio": 1.1879,
+      "trend_6h_pct": 0.2908,
+      "breakout_risk": "neutral"
     },
     "regime_state": {
       "regime": "RANGE",
-      "score": 1,
-      "atr_pct": 0.8,
-      "consistency": 0.75,
-      "range_pct": 0.31,
-      "trend_4h": -0.02,
+      "score": 0,
+      "atr_pct": 0.53,
+      "consistency": 0.62,
+      "range_pct": 0.45,
+      "trend_4h": 0.33,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-02T09:00:03.583704+00:00"
+      "timestamp": "2026-05-02T22:00:04.735239+00:00"
     },
     "fast_regime": {
-      "regime": "RANGE",
-      "score": 9,
-      "direction": "NEUTRAL",
-      "avg_range_pct": 0.0307,
-      "max_range_pct": 0.055,
-      "vol_ratio": 0.54,
-      "net_change_pct": 0.098,
-      "consistency": 0.5,
-      "pm_tradeable": true,
-      "confidence": 92,
-      "detail": "low_vol=0.031%"
+      "regime": "HIGH_VOL",
+      "score": 8,
+      "direction": "UP",
+      "avg_range_pct": 0.1524,
+      "max_range_pct": 0.8499,
+      "vol_ratio": 5.34,
+      "net_change_pct": 0.25,
+      "consistency": 0.417,
+      "pm_tradeable": false,
+      "confidence": 100,
+      "detail": "max_range=0.850%"
     },
     "sources": [
       {
@@ -557,12 +557,12 @@
       {
         "name": "BTC Regime Classifier",
         "status": "ACTIVE",
-        "last_signal": "range_compression_setup | selective"
+        "last_signal": "mixed_transition | reduced"
       },
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:trend_risk_off->range_compression_setup | risk_easing"
+        "last_signal": "classifier_shift:range_compression_setup->mixed_transition | risk_rising"
       },
       {
         "name": "Liquidation Cascade Monitor",
