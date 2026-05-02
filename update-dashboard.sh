@@ -19,6 +19,67 @@ except Exception:
 
 now = datetime.datetime.now(datetime.timezone.utc)
 
+
+def process_running(*patterns):
+    return any(
+        subprocess.run(["pgrep", "-f", pattern], capture_output=True).returncode == 0
+        for pattern in patterns
+    )
+
+
+def parse_state_timestamp(raw):
+    if raw in (None, ""):
+        return None
+    if isinstance(raw, (int, float)):
+        try:
+            return datetime.datetime.fromtimestamp(float(raw), tz=datetime.timezone.utc)
+        except Exception:
+            return None
+    if isinstance(raw, str):
+        candidate = raw.strip()
+        if candidate.endswith('Z'):
+            candidate = candidate[:-1] + '+00:00'
+        try:
+            return datetime.datetime.fromisoformat(candidate)
+        except Exception:
+            try:
+                return datetime.datetime.fromtimestamp(float(candidate), tz=datetime.timezone.utc)
+            except Exception:
+                return None
+    return None
+
+
+def load_state_health(path, stale_after_minutes=180):
+    health = {
+        "path": path,
+        "exists": False,
+        "last_updated": None,
+        "age_minutes": None,
+        "stale": True,
+    }
+    try:
+        with open(path) as f:
+            payload = json.load(f)
+        health["exists"] = True
+        ts = None
+        if isinstance(payload, dict):
+            ts = payload.get("timestamp")
+            if ts in (None, ""):
+                ts = payload.get("last_updated")
+        dt = parse_state_timestamp(ts)
+        if dt is not None:
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=datetime.timezone.utc)
+            age_minutes = round((now - dt).total_seconds() / 60, 1)
+            health.update({
+                "last_updated": dt.isoformat(),
+                "age_minutes": age_minutes,
+                "stale": age_minutes >= stale_after_minutes,
+            })
+    except Exception as e:
+        health["error"] = str(e)
+    return health
+
 prev_dashboard = {}
 prev_p1 = {}
 alpha_signal = {}
@@ -696,10 +757,24 @@ p1_evolution = [
 pm_win_rate = (all_wins / (all_wins + all_losses) * 100) if (all_wins + all_losses) > 0 else 0
 pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68 stuck (not trading loss)
 
+hl_directional_running = process_running("hl_trading_engine", "hl_live_trader.py")
+hl_momentum_running = process_running("hl_momentum")
+
+engine_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/engine_state.json")
+funding_arb_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json")
+momentum_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json")
+hl_stale_components = [
+    name for name, health in [
+        ("engine_state", engine_state_health),
+        ("funding_arb_state", funding_arb_state_health),
+        ("momentum_state", momentum_state_health),
+    ] if health.get("stale", True)
+]
+
 strategies = [
     {
         "name": "PM Smart Entry",
-        "status": "LIVE" if subprocess.run(["pgrep", "-f", "trading_bot.py"], capture_output=True).returncode == 0 else "DOWN",
+        "status": "LIVE" if process_running("trading_bot.py") else "DOWN",
         "trades": total_trades,
         "win_rate": round(pm_win_rate, 1),
         "pnl": pm_pnl,
@@ -707,7 +782,7 @@ strategies = [
     },
     {
         "name": "HL Directional",
-        "status": "LIVE" if subprocess.run(["pgrep", "-f", "hl_trading_engine"], capture_output=True).returncode == 0 else "DOWN",
+        "status": "LIVE" if hl_directional_running else "DOWN",
         "trades": len(hl_positions),
         "win_rate": 0,
         "pnl": sum(p["pnl"] for p in hl_positions),
@@ -715,7 +790,7 @@ strategies = [
     },
     {
         "name": "HL Funding Arb",
-        "status": "SHELVED",
+        "status": "SHELVED" if funding_arb_state_health.get("stale", True) else "READY",
         "trades": 0,
         "win_rate": 0,
         "pnl": 0.0,
@@ -723,7 +798,7 @@ strategies = [
     },
     {
         "name": "HL Momentum",
-        "status": "DRY-RUN" if subprocess.run(["pgrep", "-f", "hl_momentum"], capture_output=True).returncode == 0 else "OFF",
+        "status": "DRY-RUN" if hl_momentum_running else ("STALE" if momentum_state_health.get("stale", True) else "OFF"),
         "trades": 0,
         "win_rate": 0,
         "pnl": 0.0,
@@ -861,10 +936,7 @@ try:
     for k in _pevents: _pevents[k] = _pevents[k][-10:]
 except: pass
 
-hl_bot_running = (
-    subprocess.run(["pgrep", "-f", "hl_live_trader.py"], capture_output=True).returncode == 0
-    or subprocess.run(["pgrep", "-f", "hl_trading_engine"], capture_output=True).returncode == 0
-)
+hl_bot_running = hl_directional_running
 
 data = {
     "timestamp": now.isoformat(),
@@ -959,6 +1031,13 @@ data = {
         "hl_reference_balance": (hl_wallet_alignment or {}).get("reference_balance"),
         "hl_wallet_misaligned": (hl_wallet_alignment or {}).get("misaligned", False),
         "hl_wallet_message": (hl_wallet_alignment or {}).get("message", ""),
+        "engine_state": engine_state_health,
+        "funding_arb_state": funding_arb_state_health,
+        "momentum_state": momentum_state_health,
+        "stale_components": hl_stale_components,
+        "state_health_summary": (
+            f"stale: {', '.join(hl_stale_components)}" if hl_stale_components else "all HL state files fresh"
+        ),
     },
     
     # ═══ WORK LOG ═══
