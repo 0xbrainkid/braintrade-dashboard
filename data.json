@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T22:18:50.019628+00:00",
+  "timestamp": "2026-05-02T22:21:10.029503+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1200%",
-      "apr": "+131%",
+      "rate": "+0.1201%",
+      "apr": "+132%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1007%",
-      "apr": "+110%",
+      "rate": "+0.1017%",
+      "apr": "+111%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "persistent_neutral_disagreement",
     "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T21:00:17.983413+00:00",
-    "source_age_minutes": 78.5,
+    "source_age_minutes": 80.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1270.1,
+    "recent_strong_regime_age_minutes": 1272.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1270.1m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1272.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 78.5m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 80.9m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1200%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1201%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -407,14 +407,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-02T22:18:50.590144+00:00",
-      "age_minutes": -0.0,
+      "age_minutes": 2.3,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-02T22:18:50.592030+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-02T22:21:03.393859+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -430,7 +430,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58647.9,
+      "age_minutes": 58650.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -440,7 +440,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54277.2,
+      "age_minutes": 54279.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -450,7 +450,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12318.6,
+      "age_minutes": 12320.9,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -463,13 +463,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:15 UTC \u2014 [Pillar 2] The current PM price band is still the right cut; don't overfit the low-fill tail\n\n**Task:** Retest the live PM smart-entry price band against realized `confidence_outcomes.jsonl` rows and decide whether `min_price=0.50` / `max_price=0.525` needs a change before the next weekday session.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Current live config confirmed in `trading_bot.py`: `min_price=0.50`, `max_price=0.525`, `max_bias=70`, active hours **[11,12,20]**, and V5a pass means `abs(bias_score) >= 45`.\n- Execution detail matters: the filter caps `target_price`, then order placement allows `target_price * 1.02`, so `max_price=0.525` permits normal fills up to about **0.5355**.\n- In 201 realized outcome rows, active hours **[11,12,20]** are **30 trades, 70.0% WR, +0.353 avg pnl_pct**.\n- Active-hour + `v5a_pass=true` is **17 trades, 70.6% WR, +0.364 avg pnl_pct**.\n- Active + V5a + current target band (`0.50 <= target <= 0.525`, fill <= ~0.5355) is **15 trades, 80.0% WR, +0.546 avg pnl_pct, +8.19 sum pnl_pct**.\n- Active + V5a + high tail **>=0.5355** is only **3 trades, 33.3% WR, -0.378 avg**, and the truly high fills above **0.5355** are **0/2**. The current cap already removes that danger zone.\n- Price-bin read inside active + V5a rows:\n  - **0.4950-0.5049:** 2 trades, 50.0% WR, -0.010 avg \u2014 too thin / not compelling\n  - **0.5050-0.5151:** 8 trades, 87.5% WR, +0.704 avg \u2014 core sweet spot\n  - **0.5152-0.5253:** 4 trades, 75.0% WR, +0.428 avg \u2014 still good\n  - **0.5254-0.5355:** 1 trade, 100% WR, +0.867 avg \u2014 single winner, allowed by live slippage cap\n  - **0.5356+:** 2 trades, 0.0% WR, -1.000 avg \u2014 toxic high-price tail\n- By hour on active + V5a rows: **11h 57.1% WR**, **12h 87.5% WR**, **20h 50.0% WR on n=2**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-current-price-band-validation-2026-05-02-2215.md`.\n\n**My thinking:** The band is earning its keep. The real profit center is not blindly cheap entries; it is the 0.505-0.5253 zone where payout is still good but the PM quote is not dead/no-edge. Raising the lower bound off two low-fill rows would be overfitting, especially because live filtering uses the PM target quote, not the final fill. The high tail is the clearer enemy, and the existing cap already handles it.\n\n**Decision:** Make **no code/config change**. Keep `min_price=0.50`, `max_price=0.525`, active hours **[11,12,20]**, and keep **20 UTC** on probation rather than cutting it on n=2.\n\n**Next:** On the next Pillar 2 pass, join price-band buckets to **fast regime** and **transition_context.posture**. If near-50 fills only lose during `risk_rising` / `HIGH_VOL`, ship a regime-conditioned price filter instead of a blunt price-floor raise.\n\n## 2026-05-02 22:07 UTC \u2014 [Pillar 1] BTC copy-intel just got much cleaner because the last meaningful bear exited\n\n**Task:**",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:20 UTC \u2014 [Pillar 3] HL live trader now publishes direct state instead of hiding behind log inference\n\n**Task:** Convert HL directional monitoring from log-only inference into a direct state surface owned by the active live process, then verify the dashboard can distinguish live telemetry from legacy stale files.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- I patched `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` to publish `/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json` atomically each cycle.\n- The new state file is explicitly owned by **`hl_live_trader.py`** and includes timestamp, status, cycle, exec wallet, reference wallet, balance, min trading balance, wallet-blocked flag, positions, signals, and latest wallet-alignment audit.\n- I patched `/home/ubuntu/clawd/dashboard/update-dashboard.sh` to read `hl_live_state.json` with a 5-minute staleness threshold and expose `hl_live_status`, `hl_live_wallet_blocked`, `hl_live_balance`, `hl_live_positions_count`, `hl_live_signals_count`, plus a direct-state-aware summary.\n- Validation passed:\n  - `python3 -m py_compile hl_live_trader.py` \u2705\n  - `bash -n dashboard/update-dashboard.sh` \u2705\n  - restarted only the `hl-bot` screen \u2705\n  - dashboard refresh completed \u2705\n- Fresh live state confirmed:\n  - timestamp **2026-05-02T22:20:19Z**\n  - owner **hl_live_trader.py**\n  - status **wallet_blocked**\n  - cycle **7**\n  - balance **$0.00**\n  - positions **0**\n  - signals **0**\n  - wallet blocked **true**\n- Dashboard now reports **`hl_directional_surface_summary = hl_live_trader direct state: wallet_blocked`** instead of relying only on log freshness.\n- The direct state preserves the real blocker: exec wallet **`0x51F2...3191`** has **$0.00**, while reference wallet **`0x4Bf9...5b0a`** has **$37.39**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-live-state-telemetry-2026-05-02-2220.md`.\n\n**My thinking:** This closes the observability loop. The active HL directional bot is not down and no longer needs to be inferred from `hl_trading.log`; it now publishes first-class state. The stale legacy JSON files can remain visible as legacy debt without hijacking the live diagnosis. The real state is simply: live process, fresh telemetry, wallet-blocked execution.\n\n**Decision:** Keep `hl_live_state.json` as the canonical HL directional telemetry surface. Do **not** delete legacy state files yet; ownership tags already prevent misclassification. Treat HL directional as **wallet_blocked**, not stale or down.\n\n**Next:** On the next Pillar 3 pass, decide and implement the wallet repair path: either point `hl_live_trader.py` at the funded reference wallet or move enough capital into the configured exec wallet.\n\n## 2026-05-02 22:15 UTC \u2014 [Pillar 2] The current PM price band is still the right cut; don't overfit the low-fill tail\n\n**Task:** Retest the liv",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 95,
-    "snapshot_age_minutes": 14.7,
+    "research_files": 96,
+    "snapshot_age_minutes": 17.1,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": -1,
