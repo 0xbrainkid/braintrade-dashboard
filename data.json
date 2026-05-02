@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T22:21:10.029503+00:00",
+  "timestamp": "2026-05-02T22:28:33.770030+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -27,14 +27,14 @@
     {
       "coin": "MAVIA",
       "rate": "+0.1201%",
-      "apr": "+132%",
+      "apr": "+131%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1017%",
-      "apr": "+111%",
+      "rate": "+0.1000%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "199,265,394"
     }
@@ -111,11 +111,11 @@
     "summary_state": "persistent_neutral_disagreement",
     "summary_text": "Persistent neutral disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T21:00:17.983413+00:00",
-    "source_age_minutes": 80.9,
+    "source_age_minutes": 88.3,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1272.4,
+    "recent_strong_regime_age_minutes": 1279.8,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -146,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1272.4m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1279.8m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 80.9m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 88.3m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
@@ -406,14 +406,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-02T22:18:50.590144+00:00",
-      "age_minutes": 2.3,
+      "last_updated": "2026-05-02T22:27:16.876666+00:00",
+      "age_minutes": 1.3,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-02T22:21:03.393859+00:00",
+      "last_updated": "2026-05-02T22:28:30.746917+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -430,7 +430,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58650.3,
+      "age_minutes": 58657.7,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -440,7 +440,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54279.5,
+      "age_minutes": 54286.9,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -450,7 +450,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12320.9,
+      "age_minutes": 12328.3,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -463,13 +463,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:20 UTC \u2014 [Pillar 3] HL live trader now publishes direct state instead of hiding behind log inference\n\n**Task:** Convert HL directional monitoring from log-only inference into a direct state surface owned by the active live process, then verify the dashboard can distinguish live telemetry from legacy stale files.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- I patched `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py` to publish `/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json` atomically each cycle.\n- The new state file is explicitly owned by **`hl_live_trader.py`** and includes timestamp, status, cycle, exec wallet, reference wallet, balance, min trading balance, wallet-blocked flag, positions, signals, and latest wallet-alignment audit.\n- I patched `/home/ubuntu/clawd/dashboard/update-dashboard.sh` to read `hl_live_state.json` with a 5-minute staleness threshold and expose `hl_live_status`, `hl_live_wallet_blocked`, `hl_live_balance`, `hl_live_positions_count`, `hl_live_signals_count`, plus a direct-state-aware summary.\n- Validation passed:\n  - `python3 -m py_compile hl_live_trader.py` \u2705\n  - `bash -n dashboard/update-dashboard.sh` \u2705\n  - restarted only the `hl-bot` screen \u2705\n  - dashboard refresh completed \u2705\n- Fresh live state confirmed:\n  - timestamp **2026-05-02T22:20:19Z**\n  - owner **hl_live_trader.py**\n  - status **wallet_blocked**\n  - cycle **7**\n  - balance **$0.00**\n  - positions **0**\n  - signals **0**\n  - wallet blocked **true**\n- Dashboard now reports **`hl_directional_surface_summary = hl_live_trader direct state: wallet_blocked`** instead of relying only on log freshness.\n- The direct state preserves the real blocker: exec wallet **`0x51F2...3191`** has **$0.00**, while reference wallet **`0x4Bf9...5b0a`** has **$37.39**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-live-state-telemetry-2026-05-02-2220.md`.\n\n**My thinking:** This closes the observability loop. The active HL directional bot is not down and no longer needs to be inferred from `hl_trading.log`; it now publishes first-class state. The stale legacy JSON files can remain visible as legacy debt without hijacking the live diagnosis. The real state is simply: live process, fresh telemetry, wallet-blocked execution.\n\n**Decision:** Keep `hl_live_state.json` as the canonical HL directional telemetry surface. Do **not** delete legacy state files yet; ownership tags already prevent misclassification. Treat HL directional as **wallet_blocked**, not stale or down.\n\n**Next:** On the next Pillar 3 pass, decide and implement the wallet repair path: either point `hl_live_trader.py` at the funded reference wallet or move enough capital into the configured exec wallet.\n\n## 2026-05-02 22:15 UTC \u2014 [Pillar 2] The current PM price band is still the right cut; don't overfit the low-fill tail\n\n**Task:** Retest the liv",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 22:28 UTC \u2014 [Pillar 4] The high-risk mixed transition stabilized, but it did not cool back into a tradeable range\n\n**Task:** Refresh the alpha snapshot after the 22:04 UTC `range_compression_setup -> mixed_transition` downgrade and determine whether the PM environment cooled back toward tradeable range or stayed high-risk.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot (`2026-05-02T22:27:58Z`) stayed **`mixed_transition`**.\n- Transition context is now **`unchanged_distinct_state`** with posture **stable**, not `risk_easing`.\n- PM risk stayed **high**.\n- Slow regime stayed **RANGE**, but fast regime stayed **HIGH_VOL** with `pm_tradeable=false` and confidence **100**.\n- Fast-regime risk intensified slightly: `vol_ratio` rose **5.34 -> 7.22**, avg range rose **0.1524% -> 0.1680%**, and max range stayed **0.8499%**.\n- BTC cooled only marginally: price **$78,683 -> $78,630**, 24h change **+0.569% -> +0.298%**, 6h trend **+0.2908% -> +0.2226%**, while compression ratio rose **1.1879 -> 1.2231**.\n- Funding squeeze stayed max-score (**SHORT_SQUEEZE**, score **100**) but still had **`ratio_confirms=false`** and **`pm_adjustment=0`**, so it is not confirmation-grade.\n- Liquidation context remains neutral/empty.\n- PM 22h weekend tape stayed one-sided near fair value: 54 logged bias/price rows, 24 rows with `abs(bias)>=45`, and **all 24 strong rows were negative bias** around **Y0.505 / N0.495**.\n- Latest strong rows included **-80.7**, **-67.5**, **-49.0**, **-54.1** at the same near-50 band.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-stable-high-risk-mixed-transition-2026-05-02-2228.md`.\n\n**My thinking:** This is not a recovery into the morning compression edge. It is a stable high-risk mixed tape: slow range is still there, but fast volatility stayed elevated and the PM signal keeps leaning hard one way at fair-value prices. That is exactly the kind of setup that tempts entries while the fast tape is still too unstable.\n\n**Decision:** Keep P4 posture **defensive / watchlist-only**. Do **not** add any PM confidence boost from the funding squeeze and do **not** loosen weekend or fast-regime gates. Treat `mixed_transition + high PM risk + strong one-sided bias near 0.50` as a candidate for a future smart-entry penalty test.\n\n**Next:** On the next Pillar 4 pass, watch for fast-regime cooldown. If classifier moves `mixed_transition -> range_compression_setup` or `range_mean_revert_friendly` while PM stays near 0.50, that becomes a viable weekday watchlist. If fast regime stays **HIGH_VOL**, keep filtering.\n\n## 2026-05-02 22:20 UTC \u2014 [Pillar 3] HL live trader now publishes direct state instead of hiding behind log inference\n\n**Task:** Convert HL directional monitoring from log-only inference into a direct state surface owned by the active live process, then verify the dashboard can d",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 96,
-    "snapshot_age_minutes": 17.1,
+    "research_files": 97,
+    "snapshot_age_minutes": 0.6,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": -1,
@@ -481,18 +481,18 @@
       "detail": "slow range regime | PM gating defensive"
     },
     "transition_context": {
-      "previous_snapshot_key": "f064dd8cdcd73c85",
-      "previous_classifier_state": "range_compression_setup",
+      "previous_snapshot_key": "623afb46aa393693",
+      "previous_classifier_state": "mixed_transition",
       "current_classifier_state": "mixed_transition",
-      "previous_pm_risk": "low",
+      "previous_pm_risk": "high",
       "current_pm_risk": "high",
-      "previous_breakout_risk": "coiled",
+      "previous_breakout_risk": "neutral",
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "neutral",
       "current_sentiment_regime": "neutral",
-      "minutes_since_last_distinct_snapshot": 776.7,
-      "transition_label": "classifier_shift:range_compression_setup->mixed_transition",
-      "posture": "risk_rising",
+      "minutes_since_last_distinct_snapshot": 23.9,
+      "transition_label": "unchanged_distinct_state",
+      "posture": "stable",
       "state_changed": true
     },
     "pm_risk_context": {
@@ -518,11 +518,11 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.1288,
-      "avg_range_last6h_pct": 0.2866,
+      "realized_vol_1h_pct": 0.1312,
+      "avg_range_last6h_pct": 0.2951,
       "avg_range_prev18h_pct": 0.2413,
-      "compression_ratio": 1.1879,
-      "trend_6h_pct": 0.2908,
+      "compression_ratio": 1.2231,
+      "trend_6h_pct": 0.2226,
       "breakout_risk": "neutral"
     },
     "regime_state": {
@@ -530,20 +530,20 @@
       "score": 0,
       "atr_pct": 0.53,
       "consistency": 0.62,
-      "range_pct": 0.45,
-      "trend_4h": 0.33,
+      "range_pct": 0.5,
+      "trend_4h": 0.38,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-02T22:00:04.735239+00:00"
+      "timestamp": "2026-05-02T22:15:05.128792+00:00"
     },
     "fast_regime": {
       "regime": "HIGH_VOL",
       "score": 8,
       "direction": "UP",
-      "avg_range_pct": 0.1524,
+      "avg_range_pct": 0.168,
       "max_range_pct": 0.8499,
-      "vol_ratio": 5.34,
-      "net_change_pct": 0.25,
-      "consistency": 0.417,
+      "vol_ratio": 7.22,
+      "net_change_pct": 0.173,
+      "consistency": 0.333,
       "pm_tradeable": false,
       "confidence": 100,
       "detail": "max_range=0.850%"
@@ -577,7 +577,7 @@
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:range_compression_setup->mixed_transition | risk_rising"
+        "last_signal": "unchanged_distinct_state | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",
