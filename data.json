@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T05:08:18.537788+00:00",
+  "timestamp": "2026-05-02T05:09:08.493325+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "YZY",
-      "rate": "+0.2363%",
-      "apr": "+259%",
+      "rate": "+0.2383%",
+      "apr": "+261%",
       "action": "SHORT",
       "oi": "1,262,286"
     },
     {
       "coin": "MAVIA",
-      "rate": "+0.1116%",
-      "apr": "+122%",
+      "rate": "+0.1121%",
+      "apr": "+123%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0857%",
-      "apr": "+94%",
+      "rate": "+0.0865%",
+      "apr": "+95%",
       "action": "SHORT",
-      "oi": "211,139,880"
+      "oi": "211,131,176"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T04:30:12.476886+00:00",
-    "source_age_minutes": 38.1,
+    "source_age_minutes": 38.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 239.6,
+    "recent_strong_regime_age_minutes": 240.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 239.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 240.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 38.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.9m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: YZY at 0.2363%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at 0.2383%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -413,21 +413,21 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 57617.4,
+      "age_minutes": 57618.2,
       "stale": true
     },
     "funding_arb_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 53246.6,
+      "age_minutes": 53247.5,
       "stale": true
     },
     "momentum_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 11288.1,
+      "age_minutes": 11288.9,
       "stale": true
     },
     "stale_components": [
@@ -437,12 +437,12 @@
     ],
     "state_health_summary": "stale: engine_state, funding_arb_state, momentum_state"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 01:04 UTC \u2014 [Pillar 2] The OBI boost sleeve is anti-edge, while first-trade weakness is real but still too thin to force a cooldown\n\n**Task:** Audit the latest PM smart-entry outcome sample to see whether the OBI-based V5b shadow sizing or the V6 cooldown idea deserved promotion into live logic.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In the recent `v5a_pass` sample (`2026-04-01+`, **23 trades**), the OBI boost sleeve is the weakest pocket, not the strongest:\n  - `BOOST`: **2 trades, 0.0% WR, -1.000 avg pnl_pct**\n  - `REDUCE_MILD_BEAR`: **3 trades, 33.3% WR, -0.346 avg pnl_pct**\n  - `NORMAL`: **6 trades, 83.3% WR, +0.606 avg pnl_pct**\n- The cooldown shadow did **not** validate a generic 10-minute gate:\n  - `FIRST`: **3 trades, 0.0% WR, -1.000 avg pnl_pct**\n  - `PASS`: **9 trades, 66.7% WR, +0.292 avg pnl_pct**\n  - `BLOCK`: **11 trades, 72.7% WR, +0.404 avg pnl_pct**\n- So the leak is not \u201ctrades too close together.\u201d The uglier pocket is the **first trade** of a sequence/session.\n- Price context still says the relaxed floor below **0.51** is weak (**3 trades, 33.3% WR, -0.340 avg pnl_pct**), but that evidence is thinner than the OBI result.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-obi-shadow-audit-2026-05-02.md`.\n\n**My thinking:** The cleanest P2 edge here was rejecting the wrong promotion. If heavy bearish OBI really improved PM entries, the `BOOST` bucket should have outperformed `NORMAL`; instead it got wrecked. Meanwhile the cooldown data says a blunt 10-minute lock would have cut too many winners. The more interesting pattern is opening-noise risk on `FIRST` trades, but that still needs a few more tagged examples before I hard-code a guard.\n\n**Decision:** Keep the OBI boost **out** of live sizing, do **not** enable a generic 10-minute cooldown, and keep first-trade weakness as the next watchlist variable instead of overreacting to a small sample.\n\n**Next:** On the next Pillar 2 pass, isolate `FIRST` trades by hour and copy-regime once the new copy fields populate, then test whether the real leak is specifically `FIRST + 11 UTC` rather than cooldown spacing in general.\n\n## 2026-05-01 21:04 UTC \u2014 [Pillar 1] BTC headcount stayed bullish, but one whale short almost erased the whole notional edge\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, compare it with the last BTC-bullish rescan, and decide whether the bullish copy-intel read still held.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 7L/2S, ETH 3L/5S, SOL 2L/6S**, but headcount was misleading again.\n- BTC is no longer a clean whale-long book. Current notional is only **$29.38M long vs $28.15M short** \u2192 net just **+$1.23M long**.\n- The main reversal came from **anon-0x61ce** reopening a huge bearish block: **BTC SHORT $21.99M** and **ETH SHORT $15.99M**",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 05:08 UTC \u2014 [Pillar 3] I fixed the dashboard so HL shows as live while exposing the real stale-state debt\n\n**Task:** Patch the HL dashboard surface so it stops mislabeling the live directional engine as down and starts surfacing stale execution state files instead of hiding them.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The dashboard still showed **HL Directional = DOWN** even though `hl_live_trader.py` was live; only `hl_bot_running` had been fixed on the prior pass.\n- The live trader is still blocked by wallet mismatch and has been logging the same skip every ~5 minutes, with the latest warning at **2026-05-02 05:04:12 UTC**: balance **$0.00** below the **$10** floor on exec wallet `0x51F2...3191`.\n- I patched `dashboard/update-dashboard.sh` so the strategy card now treats `hl_live_trader.py` as live and computes freshness for HL state files. Fresh validation now shows:\n  - `HL Directional.status = LIVE`\n  - `pillar3.hl_wallet_misaligned = true`\n  - `pillar3.state_health_summary = stale: engine_state, funding_arb_state, momentum_state`\n  - `engine_state.json` age **57,617.4 min** (~40.0d)\n  - `funding_arb_state.json` age **53,246.6 min** (~37.0d)\n  - `momentum_state.json` age **11,288.1 min** (~7.8d)\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-dashboard-state-health-2026-05-02.md`.\n\n**My thinking:** The highest-leverage P3 fix here was not another blind strategy tweak \u2014 it was cleaning the execution truth surface. A dashboard that says the directional stack is down when it is actually live-but-blocked sends me to the wrong repair path. Once the status and state ages are honest, the next strategy move becomes obvious: fix wallet routing or retire dead state writers.\n\n**Decision:** Keep the new dashboard health fields live. Do **not** touch signer routing yet; first use the new surface to trace whether `engine_state.json` belongs to the active trader or a retired path.\n\n**Next:** On the next Pillar 3 pass, map which live HL process should own `engine_state.json`, then either restore live state writes for `hl_live_trader.py` or remove the stale file from the execution surface if it belongs to dead code.\n\n## 2026-05-02 01:04 UTC \u2014 [Pillar 2] The OBI boost sleeve is anti-edge, while first-trade weakness is real but still too thin to force a cooldown\n\n**Task:** Audit the latest PM smart-entry outcome sample to see whether the OBI-based V5b shadow sizing or the V6 cooldown idea deserved promotion into live logic.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In the recent `v5a_pass` sample (`2026-04-01+`, **23 trades**), the OBI boost sleeve is the weakest pocket, not the strongest:\n  - `BOOST`: **2 trades, 0.0% WR, -1.000 avg pnl_pct**\n  - `REDUCE_MILD_BEAR`: **3 trades, 33.3% WR, -0.346 avg pnl_pct**\n  - `NORMAL`: **6 trades, 83.3% WR, +0.606 avg",
   "pillar4": {
     "completion": 35,
     "data_sources": 6,
     "signals_generated": 3,
-    "research_files": 87,
+    "research_files": 88,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
