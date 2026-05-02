@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T21:00:04.257265+00:00",
+  "timestamp": "2026-05-02T21:08:17.509454+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,22 +26,22 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1207%",
-      "apr": "+132%",
+      "rate": "+0.1162%",
+      "apr": "+127%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "YZY",
-      "rate": "-0.1099%",
-      "apr": "-120%",
+      "rate": "-0.1044%",
+      "apr": "-114%",
       "action": "LONG",
-      "oi": "1,222,656"
+      "oi": "1,221,854"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1053%",
-      "apr": "+115%",
+      "rate": "+0.0979%",
+      "apr": "+107%",
       "action": "SHORT",
       "oi": "199,269,394"
     }
@@ -118,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T20:30:14.074035+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 38.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1191.3,
+    "recent_strong_regime_age_minutes": 1199.6,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1191.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1199.6m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.1m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1207%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1162%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -409,41 +409,59 @@
     "hl_reference_balance": 37.391639,
     "hl_wallet_misaligned": true,
     "hl_wallet_message": "wallet alignment mismatch: exec 0x51F290588E0fB3107D9cde00984fA16f3dDA3191=$0.00 while reference 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39; live engine will keep skipping entries until capital or wallet config is moved",
+    "hl_directional_owner": "hl_live_trader.py",
+    "hl_directional_log": {
+      "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
+      "exists": true,
+      "last_updated": "2026-05-02T21:07:43.610469+00:00",
+      "age_minutes": 0.6,
+      "stale": false
+    },
+    "hl_directional_surface_summary": "hl_live_trader telemetry fresh",
     "engine_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58569.2,
-      "stale": true
+      "age_minutes": 58577.4,
+      "stale": true,
+      "owner": "hl_trading_engine.py",
+      "owner_running": false,
+      "ownership_status": "legacy_inactive"
     },
     "funding_arb_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54198.4,
-      "stale": true
+      "age_minutes": 54206.6,
+      "stale": true,
+      "owner": "hl_funding_arb.py",
+      "owner_running": false,
+      "ownership_status": "legacy_inactive"
     },
     "momentum_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12239.8,
-      "stale": true
+      "age_minutes": 12248.1,
+      "stale": true,
+      "owner": "hl_momentum.py",
+      "owner_running": false,
+      "ownership_status": "legacy_inactive"
     },
     "stale_components": [
       "engine_state",
       "funding_arb_state",
       "momentum_state"
     ],
-    "state_health_summary": "stale: engine_state, funding_arb_state, momentum_state"
+    "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
   "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 17:04 UTC \u2014 [Pillar 2] The first-trade warning is mostly old 19 UTC contamination, not a reason to ship a blanket cooldown\n\n**Task:** Re-test whether the `FIRST`-trade weakness in the PM smart-entry sample deserved a real new filter, and clear the remaining instrumentation gap if the sample was still dirty.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- In `confidence_outcomes.jsonl` (`v5a_pass=true`), the `FIRST` bucket is still **3 trades, 0.0% WR, -1.000 avg pnl_pct**, but **2 of those 3 losers were at 19 UTC** \u2014 the toxic hour already removed from the live book.\n- The detailed `FIRST` rows are:\n  - `2026-04-01 19:15 UTC` \u2014 **19 UTC**, loss, entry **0.5151**\n  - `2026-04-06 19:05 UTC` \u2014 **19 UTC**, loss, entry **0.5151**\n  - `2026-04-07 11:55 UTC` \u2014 **11 UTC**, loss, entry **0.5049**, F&G **11**, `v5b_tag=NORMAL`\n- Against the **current** active hours `[11, 12, 20]`, only **one** live-hour `FIRST` loser remains, so the sample is far too thin to justify a global opener block.\n- I joined those three losses back to `trading.log` and measured uptime since the prior bot start:\n  - **4.47h**, **1.38h**, **6.22h** respectively\n  - so the `FIRST` losses were **not** just cold-restart artifacts.\n- I patched `polymarket-assistant/trading_bot.py` so future outcome rows now log **`bot_uptime_sec`**, then verified with `python3 -m py_compile` \u2705.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-first-trade-decontamination-2026-05-02.md`.\n\n**My thinking:** The raw `FIRST=0%` headline looks scary, but once I decontaminate it, most of that weakness belongs to a sleeve I already killed. Shipping a blanket first-trade filter now would be classic overfitting. The smarter move is to keep opener risk under surveillance inside the surviving 11/12/20 book and log uptime directly so I can separate fresh-session noise from a real structural leak.\n\n**Decision:** Do **not** add a generic first-trade block or revive the V6 cooldown. Keep the current hour set **[11, 12, 20]** and use the new `bot_uptime_sec` field to test whether any future opener weakness is real inside the live book.\n\n**Next:** On the next Pillar 2 pass, join new outcome rows by **hour + `v6_cooldown_tag` + `bot_uptime_sec` bucket + copy regime/suppression state**. If losses cluster in one opener context, ship a surgical filter instead of a blanket cooldown.\n\n## 2026-05-02 13:06 UTC \u2014 [Pillar 1] BTC copy intel recovered after the whale bear closed out, but ETH/SOL/HYPE stayed decisively weak\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, test whether anon-0x61ce kept the reopened BTC/ETH short block from the last pass, and decide whether BTC should stay downgraded.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 5L/3S, ETH 3L/5S, SOL 2L/6S**.\n- The main bearish overhang from the p",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 91,
-    "snapshot_age_minutes": 712.6,
+    "research_files": 92,
+    "snapshot_age_minutes": 720.9,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,

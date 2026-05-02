@@ -80,6 +80,45 @@ def load_state_health(path, stale_after_minutes=180):
         health["error"] = str(e)
     return health
 
+
+def load_file_mtime_health(path, stale_after_minutes=15):
+    health = {
+        "path": path,
+        "exists": False,
+        "last_updated": None,
+        "age_minutes": None,
+        "stale": True,
+    }
+    try:
+        stat = os.stat(path)
+        dt = datetime.datetime.fromtimestamp(stat.st_mtime, tz=datetime.timezone.utc)
+        age_minutes = round((now - dt).total_seconds() / 60, 1)
+        health.update({
+            "exists": True,
+            "last_updated": dt.isoformat(),
+            "age_minutes": age_minutes,
+            "stale": age_minutes >= stale_after_minutes,
+        })
+    except Exception as e:
+        health["error"] = str(e)
+    return health
+
+
+def annotate_state_owner(health, owner_name, *owner_patterns):
+    annotated = dict(health)
+    owner_running = process_running(*owner_patterns)
+    annotated.update({
+        "owner": owner_name,
+        "owner_running": owner_running,
+        "ownership_status": (
+            "active" if owner_running and not health.get("stale", True)
+            else "stale_but_running" if owner_running
+            else "legacy_inactive" if health.get("exists")
+            else "missing"
+        ),
+    })
+    return annotated
+
 prev_dashboard = {}
 prev_p1 = {}
 alpha_signal = {}
@@ -769,9 +808,23 @@ pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68
 hl_directional_running = process_running("hl_trading_engine", "hl_live_trader.py")
 hl_momentum_running = process_running("hl_momentum")
 
-engine_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/engine_state.json")
-funding_arb_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json")
-momentum_state_health = load_state_health("/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json")
+engine_state_health = annotate_state_owner(
+    load_state_health("/home/ubuntu/clawd/hyperliquid-trader/engine_state.json"),
+    "hl_trading_engine.py",
+    "hl_trading_engine.py",
+)
+funding_arb_state_health = annotate_state_owner(
+    load_state_health("/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json"),
+    "hl_funding_arb.py",
+    "hl_funding_arb.py",
+)
+momentum_state_health = annotate_state_owner(
+    load_state_health("/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json"),
+    "hl_momentum.py",
+    "hl_momentum.py",
+    "momentum_strategy.py",
+)
+hl_directional_log_health = load_file_mtime_health("/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log")
 hl_stale_components = [
     name for name, health in [
         ("engine_state", engine_state_health),
@@ -1041,12 +1094,30 @@ data = {
         "hl_reference_balance": (hl_wallet_alignment or {}).get("reference_balance"),
         "hl_wallet_misaligned": (hl_wallet_alignment or {}).get("misaligned", False),
         "hl_wallet_message": (hl_wallet_alignment or {}).get("message", ""),
+        "hl_directional_owner": "hl_live_trader.py" if process_running("hl_live_trader.py") else "hl_trading_engine.py" if process_running("hl_trading_engine.py") else "none",
+        "hl_directional_log": hl_directional_log_health,
+        "hl_directional_surface_summary": (
+            "hl_live_trader telemetry fresh"
+            if process_running("hl_live_trader.py") and not hl_directional_log_health.get("stale", True)
+            else "hl_live_trader running but log telemetry stale"
+            if process_running("hl_live_trader.py")
+            else "hl_trading_engine active"
+            if process_running("hl_trading_engine.py")
+            else "no live directional process"
+        ),
         "engine_state": engine_state_health,
         "funding_arb_state": funding_arb_state_health,
         "momentum_state": momentum_state_health,
         "stale_components": hl_stale_components,
         "state_health_summary": (
-            f"stale: {', '.join(hl_stale_components)}" if hl_stale_components else "all HL state files fresh"
+            "stale: " + ", ".join(
+                f"{name} ({health.get('owner', 'unknown')}={health.get('ownership_status', 'unknown')})"
+                for name, health in [
+                    ("engine_state", engine_state_health),
+                    ("funding_arb_state", funding_arb_state_health),
+                    ("momentum_state", momentum_state_health),
+                ] if health.get("stale", True)
+            ) if hl_stale_components else "all HL state files fresh"
         ),
     },
     
