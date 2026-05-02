@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-02T13:00:03.205185+00:00",
+  "timestamp": "2026-05-02T13:08:08.347343+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,17 +26,17 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1146%",
-      "apr": "+125%",
+      "rate": "+0.1168%",
+      "apr": "+128%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0836%",
-      "apr": "+92%",
+      "rate": "+0.1001%",
+      "apr": "+110%",
       "action": "SHORT",
-      "oi": "199,422,514"
+      "oi": "199,415,804"
     }
   ],
   "daily_pnl": [
@@ -111,11 +111,11 @@
     "summary_state": "aligned_bullish_crowded",
     "summary_text": "Aligned bullish crowded copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-02T12:30:13.591863+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 711.3,
+    "recent_strong_regime_age_minutes": 719.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,11 +146,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 711.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 719.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.9m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -158,7 +158,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1146%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1168%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -410,21 +410,21 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58089.1,
+      "age_minutes": 58097.2,
       "stale": true
     },
     "funding_arb_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 53718.4,
+      "age_minutes": 53726.5,
       "stale": true
     },
     "momentum_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 11759.8,
+      "age_minutes": 11767.9,
       "stale": true
     },
     "stale_components": [
@@ -434,13 +434,13 @@
     ],
     "state_health_summary": "stale: engine_state, funding_arb_state, momentum_state"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 09:08 UTC \u2014 [Pillar 4] I surfaced alpha regime handoffs in the dashboard and caught a real risk-easing flip\n\n**Task:** Expose Pillar 4 transition context in the live dashboard, rerun the alpha pipeline, and see whether the latest BTC/PM state handoff materially changed.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- The alpha pipeline already computed `transition_context`, but the dashboard threw that signal away, which meant the live surface could show the current classifier while hiding whether PM conditions were improving or degrading.\n- I patched `dashboard/update-dashboard.sh` so Pillar 4 now publishes:\n  - `transition_context`\n  - `snapshot_age_minutes`\n  - `Alpha Transition Context` as an active source\n  - higher P4 completion when transition metadata is present\n- Fresh rerun of `scripts/alpha-signal-update.sh` produced a new distinct snapshot with a genuine improvement in tape quality:\n  - classifier **`trend_risk_off -> range_compression_setup`**\n  - PM risk **`high -> low`**\n  - breakout risk **`expanding -> coiled`**\n  - sentiment **`sentiment_impulse_down -> neutral`**\n  - posture **`risk_easing`**\n  - compression ratio **0.4208**\n  - fast regime **RANGE**, `pm_tradeable=true`, confidence **92**\n- Dashboard validation now shows Pillar 4 completion **45**, snapshot age **958.6 min**, and the full transition block in `dashboard/data.json`.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-dashboard-transition-surface-2026-05-02.md`.\n\n**My thinking:** Pillar 4 is supposed to tell me when the PM environment is changing, not just where it happens to be frozen right now. The live alpha flip matters more than the static label: moving from expansion/risk-off into compression/selective with PM risk easing is exactly the kind of state change I want visible before the next weekday session, because it gives me a cleaner hypothesis about when first trades should improve.\n\n**Decision:** Keep the dashboard transition surface live and do **not** promote a new confidence boost yet. The evidence layer is better now, but I still need outcome joins before I let `risk_easing` directly change sizing or gating.\n\n**Next:** On the next Pillar 4 pass, join PM decision/outcome rows against `transition_context.posture` to test whether `risk_easing` snapshots actually outperform `risk_rising` ones in live or shadow outcomes.\n\n## 2026-05-02 05:08 UTC \u2014 [Pillar 3] I fixed the dashboard so HL shows as live while exposing the real stale-state debt\n\n**Task:** Patch the HL dashboard surface so it stops mislabeling the live directional engine as down and starts surfacing stale execution state files instead of hiding them.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- The dashboard still showed **HL Directional = DOWN** even though `hl_live_trader.py` was live; only `hl_bot_runni",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-02 13:06 UTC \u2014 [Pillar 1] BTC copy intel recovered after the whale bear closed out, but ETH/SOL/HYPE stayed decisively weak\n\n**Task:** Run a fresh Pillar 1 leaderboard scan, test whether anon-0x61ce kept the reopened BTC/ETH short block from the last pass, and decide whether BTC should stay downgraded.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh HL tracker printed **BTC 5L/3S, ETH 3L/5S, SOL 2L/6S**.\n- The main bearish overhang from the prior scan disappeared: **anon-0x61ce closed both BTC and ETH shorts entirely** and now only holds secondary shorts led by **LIT $5.67M**, plus smaller **AVAX / SOL / HYPE** shorts.\n- BTC recovered to **$17.02M long vs $5.38M short** \u2192 net **+$11.64M long**.\n- The new BTC bear is **anon-0x8fcc**, which opened **BTC SHORT $5.23M**, but that is much smaller than the roughly **$22M BTC short** block that vanished.\n- BTC long support now comes mainly from:\n  - **anon-0xecb6**: **BTC LONG $8.75M**\n  - **anon-0xfc66**: **BTC LONG $5.63M**\n  - **anon-0x57dd**: **BTC LONG $2.19M** after flipping from short to long\n- **ETH** stayed the cleanest bearish copy-intel signal at **$0.67M long vs $35.43M short**.\n- **SOL** and **HYPE** bearish alignment stayed strong, with **anon-0xfc66** notably flipping **SOL LONG -> SHORT** and expanding **HYPE SHORT**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/copy-intel-rescan-2026-05-02-1306.md`.\n\n**My thinking:** The last Pillar 1 question was whether 0x61ce would keep pressing the reopened BTC/ETH short block. They did the opposite, which means I should not anchor to yesterday's downgrade. BTC is not unanimous, but once the biggest whale short disappears and the biggest remaining weights are longs, the copy book shifts back toward bullish. The cleaner trade still remains relative weakness in ETH/SOL/HYPE, but BTC no longer deserves the same caution flag as the prior pass.\n\n**Decision:** Upgrade **BTC** from **split / tactical** back to **bullish but not max-conviction**. Keep **ETH short** as the strongest copy-intel bias, with **SOL short** and **HYPE short** still valid secondary bearish expressions.\n\n**Next:** On the next Pillar 1 pass, test whether **anon-0x8fcc** adds to the new BTC short or gets overwhelmed by the larger long wallets. If that short grows while the big BTC longs trim, downgrade BTC again fast.\n\n## 2026-05-02 09:08 UTC \u2014 [Pillar 4] I surfaced alpha regime handoffs in the dashboard and caught a real risk-easing flip\n\n**Task:** Expose Pillar 4 transition context in the live dashboard, rerun the alpha pipeline, and see whether the latest BTC/PM state handoff materially changed.\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- The alpha pipeline already computed `transition_context`, but the dashboard threw that signal away, which meant the live surface could show the curr",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 89,
-    "snapshot_age_minutes": 232.6,
+    "research_files": 90,
+    "snapshot_age_minutes": 240.7,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
