@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T11:36:02.826644+00:00",
+  "timestamp": "2026-05-03T11:46:17.760382+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -33,17 +33,17 @@
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1157%",
-      "apr": "+127%",
+      "rate": "+0.1154%",
+      "apr": "+126%",
       "action": "SHORT",
       "oi": "199,257,774"
     },
     {
       "coin": "TST",
-      "rate": "+0.0974%",
-      "apr": "+107%",
+      "rate": "+0.0828%",
+      "apr": "+91%",
       "action": "SHORT",
-      "oi": "125,006,542"
+      "oi": "126,464,166"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T11:00:14.030468+00:00",
-    "source_age_minutes": 35.8,
+    "source_age_minutes": 46.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2067.3,
+    "recent_strong_regime_age_minutes": 2077.6,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -153,11 +153,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2067.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2077.6m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 35.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 46.1m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -417,14 +417,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T11:35:24.050073+00:00",
-      "age_minutes": 0.6,
+      "last_updated": "2026-05-03T11:44:54.482503+00:00",
+      "age_minutes": 1.4,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T11:35:52.885681+00:00",
+      "last_updated": "2026-05-03T11:46:07.651942+00:00",
       "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -445,7 +445,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59445.1,
+      "age_minutes": 59455.4,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -455,7 +455,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55074.4,
+      "age_minutes": 55084.6,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -465,7 +465,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13115.8,
+      "age_minutes": 13126.1,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -478,13 +478,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 11:33 UTC \u2014 [Pillar 2] Sunday bias flipped positive, pressure cooled\n\n**Task:** Re-check PM smart-entry conditions after BTC held the distribution band and SOL count softened, and decide whether weekend discipline or PM filters should change.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 11:00 UTC: **35**.\n- All 35 blocks were **WEEKEND_FILTER**.\n- Bias distribution cooled: avg |bias| **26.0**, median **19.7**, max **59.7**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **5 / 35** rows.\n- Cap pressure fully cooled: `abs_bias > 70` on **0** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility remains broad: YES price inside live band on **30 / 35** rows.\n- Bias signs flipped strongly positive: **30 positive / 5 negative**.\n- Seven 5-minute windows inspected; only **2** had at least one V5a-eligible blocked row. 11:10 and 11:15 were all in-band/all positive; later in-band windows stayed positive but mostly below V5a.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-bias-flips-positive-pressure-cools-2026-05-03-1133.md`.\n\n**My thinking:** The previous negative-bias spike fully mean-reverted into positive-bias, lower-pressure tape. That confirms the Sunday whipsaw thesis: within an hour, the tape shifted from tempting negative-bias contrarian entries to mostly positive, below-threshold rows. Broad price-band eligibility persists, which would make manual cherry-picking easy and dangerous.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist.\n\n**Next:** Watch whether positive-bias cooling continues into the next hour. First weekday active-hour outcome must be checked for `alpha_*` fields before any alpha-overlay conclusions.\n\n## 2026-05-03 11:24 UTC \u2014 [Pillar 1] BTC holds distribution band; SOL count softened\n\n**Task:** Re-check P1 copy intelligence after P4 mean-reverted to range-friendly neutral, focusing on whether BTC net reclaimed `$15M` or slipped toward `$13M`.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/2S**, **ETH 3L/4S**, **SOL 3L/5S**.\n- Current top-book notional: **BTC +$14.28M net long**, **ETH -$31.56M net short**, **SOL -$11.11M net short**, **HYPE -$10.40M net short**.\n- BTC net remains in the distribution band below `$15M`, but safely above `$13M`: **+$13.73M -> +$13.96M -> +$1",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 11:44 UTC \u2014 [Pillar 3] Micro-drift analyzer shows first constructive edge\n\n**Task:** Implement the micro-drift analyzer promised in the previous P3 pass: extract deduped filtered `<0.15%` breakout rows and compare immediate entry versus +15m delayed-entry returns.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Built `/home/ubuntu/clawd/scripts/analyze_hl_micro_drift.py`.\n- Candidate filter: post-patch `stage=filtered`, `local_regime in {RANGE, MIXED}`, `abs(breakout_pct)<0.15`, deduped by `(stage, coin, side, candle_ts)`.\n- Analyzer fetches HL 15m candles, compares immediate 15m/30m/60m returns against delayed entry at +15m close, and skips delayed entries if +15m pre-move exceeds **0.20%** in signal direction.\n- Ran base scorer first, then the analyzer.\n- Analyzer state: ledger rows **46**, candidates **9**, coins BTC 2, DOGE 1, ETH 3, ONDO 1, SOL 1, TRUMP 1.\n- Immediate-entry results: 15m **9 rows / 66.7% WR / +0.000413 avg**, 30m **7 rows / 57.1% WR / +0.000260 avg**, 60m **7 rows / 42.9% WR / -0.000096 avg**.\n- Delayed-entry results: +15m\u2192+30m **6 rows / 66.7% WR / +0.000365 avg**, +15m\u2192+60m **6 rows / 66.7% WR / +0.000446 avg**, skipped as chase **1**.\n- Regime split at immediate 15m: RANGE **5 rows / 80.0% WR / +0.001083 avg**; MIXED **4 rows / 50.0% WR / -0.000425 avg**.\n- New fresh ETH RANGE long and BTC RANGE long both won at 15m (+0.001597 and +0.001578).\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-micro-drift-analyzer-first-results-2026-05-03-1144.md`.\n\n**My thinking:** This is the first genuinely constructive P3 edge candidate today. The micro-drift subset outperforms pass-filter breakouts materially, especially RANGE + low/no breakout at 15m. Delayed entry is also promising, but the strongest clean signal so far is immediate 15m RANGE micro-drift. n=9 is still small, but this is now a real research track.\n\n**Decision:** Keep HL bot live. Keep all live risk unchanged: `max_position_pct=0.10`, `leverage=3`, `min_order_notional_usd=20.0`. Do not force trades from `$37.39`. Do not loosen pass-filter logic. Continue `hl_range_micro_drift_v0_paper` as paper-only. Narrow early focus to **RANGE + filtered + breakout <0.15%**, with immediate 15m and delayed +15m\u2192+30m/60m scoring. Do not blend MIXED with RANGE for decisions.\n\n**Next:** Let fresh ETH/BTC rows age to 30m/60m, then rerun `analyze_hl_micro_drift.py`. If RANGE remains >70% WR at n>=8, write an implementation patch to log this strategy separately in `hl_micro_drift_signals.jsonl` without live execution.\n\n## 2026-05-03 11:33 UTC \u2014 [Pillar 2] Sunday bias flipped positive, pressure cooled\n\n**Task:** Re-check PM smart-entry conditions after BTC held the distribution band and SOL count softened, and decide whether weekend discipline or PM filters should change.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation po",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 193,
-    "snapshot_age_minutes": 18.7,
+    "research_files": 194,
+    "snapshot_age_minutes": 29.0,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
