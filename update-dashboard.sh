@@ -943,12 +943,13 @@ if _rv:
     })
 _md = _load_last_jsonl('/home/ubuntu/clawd/research/hl_micro_drift_score_history.jsonl')
 if _md:
+    _md15 = ((_md.get('metrics') or {}).get('immediate_15m') or {})
     p3_strategy_branches.append({
         "name": "hl_range_micro_drift_v0_paper",
         "status": "paper_watch",
         "rows": _md.get('rows_total') or _md.get('rows_dedup') or _md.get('n'),
-        "wr_15m": (((_md.get('metrics') or {}).get('15m') or {}).get('wr')),
-        "avg_15m": (((_md.get('metrics') or {}).get('15m') or {}).get('avg_return')),
+        "wr_15m": _md15.get('wr'),
+        "avg_15m": _md15.get('avg_return'),
     })
 
 params_changed = len(p3_changes) + len(p3_strategy_branches)
