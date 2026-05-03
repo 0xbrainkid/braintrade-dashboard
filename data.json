@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T18:45:33.080989+00:00",
+  "timestamp": "2026-05-03T18:51:05.410926+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,7 +26,7 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1064%",
+      "rate": "+0.1069%",
       "apr": "+117%",
       "action": "SHORT",
       "oi": "199,257,774"
@@ -104,11 +104,11 @@
     "summary_state": "max_gap_all_buy_bearish_disagreement",
     "summary_text": "Max-gap all-buy bearish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T18:00:14.013255+00:00",
-    "source_age_minutes": 45.3,
+    "source_age_minutes": 50.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2496.8,
+    "recent_strong_regime_age_minutes": 2502.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -143,11 +143,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2496.8m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2502.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.3m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 50.9m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -155,7 +155,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1064%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1069%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -407,14 +407,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T18:44:33.313426+00:00",
-      "age_minutes": 1.0,
+      "last_updated": "2026-05-03T18:49:57.434632+00:00",
+      "age_minutes": 1.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T18:45:20.505354+00:00",
+      "last_updated": "2026-05-03T18:50:56.033968+00:00",
       "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -435,7 +435,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59874.6,
+      "age_minutes": 59880.2,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -445,7 +445,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55503.9,
+      "age_minutes": 55509.4,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -455,7 +455,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13545.3,
+      "age_minutes": 13550.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -468,13 +468,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:44 UTC \u2014 [Pillar 4] Coil eases, not normalized; BTC reclaim holds\n\n**Task:** Refresh P4 alpha after the 18:14 defensive coiled range snapshot and test whether compression stayed coiled, normalized, or eased while P1 BTC reclaim held.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-03T18:44:41.439439+00:00**.\n- BTC price **$78,704.62**, 24h **+0.374%**; Fear & Greed **47 Neutral**.\n- Alpha schema drift persists: `regime_state` is a raw **RANGE** object while `posture` and `pm_risk` are **null**.\n- BTC microstructure: realized vol 1h **0.1607%**, avg range last 6h **0.2361%**, compression **0.7619**, 6h trend **-0.0539%**, breakout risk **neutral**.\n- Fast regime: **RANGE / DOWN**, avg range **0.0458%**, vol ratio **0.53**, net change **-0.127%**, confidence **82**, pm_tradeable **true**.\n- Funding squeeze remains **NEUTRAL** with score **0** and PM adjustment **0**; liquidation signal remains **neutral** with **0** events.\n- Last 12 alpha snapshots: states **RANGE 12/12**; compression min/max/avg/last **0.7269 / 1.1204 / 0.9231 / 0.7619**; 6h trend min/max/avg/last **-0.0947% / +0.4566% / +0.2117% / -0.0539%**.\n- Compression path: 17:06 **0.7395** coiled \u2192 17:38 **0.8499** incomplete rebound \u2192 18:14 **0.7269** coiled again \u2192 18:44 **0.7619** neutral again, but still below normal **0.90**.\n- Latest P1 overlay still shows BTC reclaim holding: BTC **7L/0S**, net **+$18.74M**; ETH **-$34.81M**, SOL **-$10.91M**, HYPE **-$10.60M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-coil-eases-not-normalized-btc-reclaim-holds-2026-05-03-1844.md`.\n\n**My thinking:** The coil eased but did not normalize. P4 is back to neutral breakout risk, but compression is still sub-0.90 and fast regime is low-vol RANGE/DOWN. P1 BTC reclaim is holding above the `$17M` clean-net line, which removes the prior BTC defensive override, but cross-asset books remain heavily bearish.\n\n**Decision:** Keep PM weekend block active. Keep PM config unchanged. Keep HL live notional-blocked. Remove P1 BTC defensive override while BTC net remains **>$17M**, but keep `8fcc` caveat and cross-asset defensive divergence. Treat P4 as **neutral low-vol range, not normalized**. No trend loosening, no PM alpha overlay, no JTO generic expansion. Continue tracking alpha schema drift: `posture` and `pm_risk` remain null.\n\n**Next:** Check whether compression reclaims **>0.90**. If yes and BTC net remains **>$17M**, return to normal range watch. If compression falls back below **0.75** or BTC net falls below **$15M**, reapply defensive/coiled state.\n\n## 2026-05-03 18:34 UTC \u2014 [Pillar 3] RANGE-vol filtered edge, recent rows pending\n\n**Task:** Score the newer ONDO/ETH/SUPER RANGE-vol filtered rows once outcomes settle, keeping them separate from JTO ST",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:54 UTC \u2014 [Pillar 1] BTC reclaim persists, ecb6 above 5M\n\n**Task:** Verify whether the BTC bullish reclaim persisted after the 18:24 upgrade, focusing on BTC net staying above `$17M`, `beatmaker1` holding long, `anon-0x8fcc` rebuilding toward `$5M`, and cross-asset divergence.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 8L/0S**, **ETH 1L/6S**, **SOL 3L/5S**.\n- Current top-book notional: BTC **+$19.06M net long**, ETH **-$34.15M net short**, SOL **-$10.87M net short**, HYPE **-$10.59M net short**, JTO **+$355 net long only**.\n- BTC reclaim persisted and strengthened vs 18:24: count improved from **7L/0S** to **8L/0S**, net improved from **+$18.74M** to **+$19.06M**, and visible BTC shorts remain **$0**.\n- `anon-0xecb6` BTC LONG rebuilt from **$4.47M** to **$5.12M**, now above the clean `$5M` anchor for this trader.\n- `beatmaker1@proton.me` still holds BTC LONG **$2.46M** after flipping from short earlier.\n- `anon-0xfc66` BTC LONG steady at **$5.63M**; `anon-0x57dd` BTC LONG increased slightly to **$1.52M**.\n- Remaining BTC caveat: `anon-0x8fcc` is still unchanged at **$4.30M LONG**, below the preferred **$5M** anchor.\n- ETH remains high-conviction bearish: **1L/6S**, net **-$34.15M**, with `anon-0x3bca` ETH SHORT still **$1.41M**.\n- SOL remains bearish by notional, count contested: **3L/5S**, net **-$10.87M**.\n- HYPE remains bearish by count and notional: **2L/7S**, net **-$10.59M**.\n- JTO top-trader confirmation remains absent.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-reclaim-persists-ecb6-above-5m-2026-05-03-1854.md`.\n\n**My thinking:** BTC is now more than a one-refresh bounce. Net has held above `$17M` across consecutive P1 checks, visible shorts remain flushed, and `ecb6` rebuilt above `$5M`. The only reason not to call this fully clean is that `8fcc` remains stuck at `$4.30M` instead of rebuilding near/above `$5M`. The combined book is still divergent: BTC is bullish-reclaim/near-clean, while ETH/SOL/HYPE remain heavily bearish.\n\n**Decision:** Upgrade BTC from **bullish reclaim with caveat** to **BTC bullish / near-clean**, with the remaining `8fcc` caveat. Full clean bullish requires either `anon-0x8fcc` near/above **$5M** or one more refresh with BTC net **>$17M** and no shorts. Distribution trigger reinstates if BTC net falls below **$15M**. Hard downgrade remains BTC net **<$10M** or `anon-0x8fcc` flips short above **$2M**. Keep ETH bearish confidence high. Keep SOL bearish by notional, count contested. Keep HYPE bearish confidence high. Keep PM weekend block active; no Sunday exception. Keep HL live notional-blocked; no forced trades from `$37.39`. Do not treat JTO P3 momentum as copy-intel confirmed.\n\n**Next:** Watch whether `anon-0x8fcc` finally rebuilds toward **$5M** and whether BTC stays **8L/0S**. If BTC remains >$17M with no shorts one",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 250,
-    "snapshot_age_minutes": 0.9,
+    "research_files": 251,
+    "snapshot_age_minutes": 6.4,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
