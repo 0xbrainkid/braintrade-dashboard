@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T04:50:55.615636+00:00",
+  "timestamp": "2026-05-03T04:53:35.297610+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,7 +26,7 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1177%",
+      "rate": "+0.1176%",
       "apr": "+129%",
       "action": "SHORT",
       "oi": "69,653,465"
@@ -111,11 +111,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T04:00:13.875958+00:00",
-    "source_age_minutes": 50.7,
+    "source_age_minutes": 53.4,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1662.2,
+    "recent_strong_regime_age_minutes": 1664.9,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1662.2m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1664.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 50.7m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 53.4m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1177%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1176%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -406,14 +406,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T04:50:35.859102+00:00",
-      "age_minutes": 0.3,
+      "last_updated": "2026-05-03T04:53:30.062511+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T04:50:49.967834+00:00",
+      "last_updated": "2026-05-03T04:53:30.062093+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -434,7 +434,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59040.0,
+      "age_minutes": 59042.7,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -444,7 +444,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54669.3,
+      "age_minutes": 54671.9,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -454,7 +454,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12710.7,
+      "age_minutes": 12713.3,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -467,13 +467,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 04:55 UTC \u2014 [Pillar 3] HL paper ledger has no rows because volume is dead, not because logging failed\n\n**Task:** Audit HL signal frequency after wiring the paper ledger and scorer, because no `hl_paper_signals.jsonl` rows have appeared yet.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- HL live bot is alive after the paper-ledger restart at `2026-05-03 03:50:35 UTC`.\n- Post-ledger log audit: **37** recent HL lines, `FILTERED` **0**, `SIGNAL SKIPPED` **0**, live `SIGNAL:` **0**, `Cycle error` **0**, `ERROR` **0**, `Paper signal log failed` **0**.\n- Paper ledger status: `/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl` does not exist yet, rows **0**.\n- Current BB/volume scan across tracked coins shows no trigger candidates.\n- Closest band distances and volume ratios: `SUPER` 0.182% from lower band at **0.14x** vol, `ETH` 0.295% lower at **0.14x**, `BTC` 0.311% lower at **0.08x**, `SOL` 0.312% lower at **0.07x**, `DOGE` 0.527% upper at **0.05x**, `TRUMP` 0.707% lower at **0.03x**.\n- Base live signal requires BB cross plus `vol_ratio >= 1.5x` before the stricter regime filters even run.\n- Current market volume is far below trigger threshold on every tracked coin.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-hl-no-signal-frequency-audit-ultra-low-volume-2026-05-03-0455.md`.\n\n**My thinking:** The absence of HL paper rows is not instrumentation failure. It is a market-state issue: tracked coins are close-ish to bands in a few cases, but volume is dead. The live bot is intentionally silent because the BB strategy is a momentum breakout system and current conditions are low-volume range/chop.\n\n**Decision:** Keep HL live bot running. Keep BB/volume thresholds unchanged. Keep `max_position_pct=0.10`, `leverage=3`, and `min_order_notional_usd=20.0` unchanged. Do not force trades from `$37.39`. Keep waiting for real pass/filtered/notional-blocked paper rows before judging HL BB edge.\n\n**Next:** Check `hl_paper_signals.jsonl` again. If rows are still zero after a higher-volatility period, consider adding a separate `near_miss` ledger stage for band-distance/volume diagnostics, but do not alter live signal thresholds yet.\n\n## 2026-05-03 04:50 UTC \u2014 [Pillar 2] Sunday V5a candidate pressure persists; keep weekend block\n\n**Task:** Re-check P2 live PM filters after the prior Sunday-block audit: verify whether alpha-tagged outcomes appeared, and quantify whether the Sunday stream still looks deceptively tradeable under active-hour filters.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: total realized outcome rows **201**, latest realized outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**, 20 UTC alpha-tagged rows **0**, status remains **DATA_GAP**.\n- PM no-trade rows si",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 04:53 UTC \u2014 [Pillar 4] Range-friendly structure persisted in low-vol neutral tape\n\n**Task:** Check whether the 04:35 `range_mean_revert_friendly` improvement persisted for a second snapshot or flipped back into expansion.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T04:52:31.181922+00:00`.\n- Classifier persisted as **`range_mean_revert_friendly`**.\n- Transition posture is now **stable**.\n- Breakout risk stayed **neutral**.\n- Compression ratio stayed low at **1.1093**.\n- Fast regime stayed **RANGE / NEUTRAL** with avg range **0.041%**, max range **0.0704%**, vol ratio **0.31**, net change **-0.063%**, confidence **81**.\n- PM risk remains **low**.\n- BTC price eased slightly: **$78,213.15 -> $78,158.96**.\n- BTC 24h is nearly flat: **-0.068% -> -0.007%**.\n- BTC 6h trend remains weak: **-0.7863% -> -0.8550%**.\n- The full defensive trigger still does **not** fire because compression is below 1.5, breakout risk is neutral, fast regime is RANGE, and PM risk is low.\n- Fear & Greed remains **47 Neutral / sentiment_impulse_up** at 98.3 percentile.\n- Funding squeeze and liquidation signals remain neutral.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-range-friendly-persists-low-vol-neutral-2026-05-03-0453.md`.\n\n**My thinking:** The range-friendly structure persisted. The tape is low-vol neutral range despite the weak 6h drift. This supports PM mean-reversion conditions structurally, but it is still Sunday and sentiment remains elevated, so this is not a green light to loosen filters or disable weekend blocking.\n\n**Decision:** Keep PM config unchanged. Keep weekend block active. Maintain P4 posture as **range-friendly but fragile**. Do not loosen PM filters because sentiment remains impulse-up and there are still no alpha-tagged realized outcomes. No HL trade; HL remains `notional_blocked`.\n\n**Next:** Watch for a return of `breakout_risk=expanding`. If expansion returns while BTC 6h trend remains below -0.5%, move back to soft defensive caution.\n\n## 2026-05-03 04:55 UTC \u2014 [Pillar 3] HL paper ledger has no rows because volume is dead, not because logging failed\n\n**Task:** Audit HL signal frequency after wiring the paper ledger and scorer, because no `hl_paper_signals.jsonl` rows have appeared yet.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- HL live bot is alive after the paper-ledger restart at `2026-05-03 03:50:35 UTC`.\n- Post-ledger log audit: **37** recent HL lines, `FILTERED` **0**, `SIGNAL SKIPPED` **0**, live `SIGNAL:` **0**, `Cycle error` **0**, `ERROR` **0**, `Paper signal log failed` **0**.\n- Paper ledger status: `/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl` does not exist yet, rows **0**.\n- Current BB/volume scan across tracked coins shows no trigger candidates.\n- Closest band distances and volume r",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 142,
-    "snapshot_age_minutes": 15.8,
+    "research_files": 143,
+    "snapshot_age_minutes": 1.1,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
@@ -485,18 +485,18 @@
       "detail": "slow range regime | fast range structure"
     },
     "transition_context": {
-      "previous_snapshot_key": "98e30d0e13726dd0",
-      "previous_classifier_state": "mixed_transition",
+      "previous_snapshot_key": "cf1c70f0631f32a0",
+      "previous_classifier_state": "range_mean_revert_friendly",
       "current_classifier_state": "range_mean_revert_friendly",
       "previous_pm_risk": "low",
       "current_pm_risk": "low",
-      "previous_breakout_risk": "expanding",
+      "previous_breakout_risk": "neutral",
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "sentiment_impulse_up",
       "current_sentiment_regime": "sentiment_impulse_up",
-      "minutes_since_last_distinct_snapshot": 40.8,
-      "transition_label": "classifier_shift:mixed_transition->range_mean_revert_friendly",
-      "posture": "range_setup_improving",
+      "minutes_since_last_distinct_snapshot": 17.4,
+      "transition_label": "unchanged_distinct_state",
+      "posture": "stable",
       "state_changed": true
     },
     "pm_risk_context": {
@@ -522,35 +522,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.1524,
+      "realized_vol_1h_pct": 0.1528,
       "avg_range_last6h_pct": 0.2716,
       "avg_range_prev18h_pct": 0.2449,
       "compression_ratio": 1.1093,
-      "trend_6h_pct": -0.7863,
+      "trend_6h_pct": -0.855,
       "breakout_risk": "neutral"
     },
     "regime_state": {
       "regime": "RANGE",
       "score": 0,
       "atr_pct": 0.53,
-      "consistency": 0.5,
+      "consistency": 0.62,
       "range_pct": 0.86,
-      "trend_4h": -0.02,
+      "trend_4h": -0.08,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-03T04:30:04.737765+00:00"
+      "timestamp": "2026-05-03T04:45:02.902882+00:00"
     },
     "fast_regime": {
       "regime": "RANGE",
       "score": 8,
       "direction": "NEUTRAL",
-      "avg_range_pct": 0.0446,
-      "max_range_pct": 0.0797,
-      "vol_ratio": 0.34,
-      "net_change_pct": 0.027,
+      "avg_range_pct": 0.041,
+      "max_range_pct": 0.0704,
+      "vol_ratio": 0.31,
+      "net_change_pct": -0.063,
       "consistency": 0.5,
       "pm_tradeable": true,
       "confidence": 81,
-      "detail": "low_vol=0.045%"
+      "detail": "low_vol=0.041%"
     },
     "sources": [
       {
@@ -581,7 +581,7 @@
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:mixed_transition->range_mean_revert_friendly | range_setup_improving"
+        "last_signal": "unchanged_distinct_state | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",
