@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T18:15:25.978397+00:00",
+  "timestamp": "2026-05-03T18:21:09.689746+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,8 +26,8 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1087%",
-      "apr": "+119%",
+      "rate": "+0.1068%",
+      "apr": "+117%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -104,11 +104,11 @@
     "summary_state": "aligned_bullish",
     "summary_text": "Aligned bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T17:30:13.354305+00:00",
-    "source_age_minutes": 45.2,
+    "source_age_minutes": 50.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2466.7,
+    "recent_strong_regime_age_minutes": 2472.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -139,11 +139,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2466.7m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2472.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 50.9m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -151,7 +151,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1087%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1068%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -403,14 +403,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T18:14:39.617995+00:00",
-      "age_minutes": 0.8,
+      "last_updated": "2026-05-03T18:20:39.202511+00:00",
+      "age_minutes": 0.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T18:15:24.091527+00:00",
+      "last_updated": "2026-05-03T18:21:08.278203+00:00",
       "age_minutes": 0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -431,7 +431,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59844.5,
+      "age_minutes": 59850.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55473.8,
+      "age_minutes": 55479.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13515.2,
+      "age_minutes": 13520.9,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -464,13 +464,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:14 UTC \u2014 [Pillar 4] Coiled again, P1 defensive confirmed\n\n**Task:** Refresh P4 alpha after the incomplete 17:38 compression rebound and decide whether the market normalized or re-entered coiled/defensive posture.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-03T18:14:37.896623+00:00**.\n- BTC price **$78,672.47**, 24h **+0.444%**; Fear & Greed **47 Neutral**.\n- Alpha schema drift persists: `regime_state` is a raw **RANGE** object while `posture` and `pm_risk` are **null**.\n- BTC microstructure: realized vol 1h **0.1614%**, avg range last 6h **0.2252%**, compression **0.7269**, 6h trend **-0.0947%**, breakout risk **coiled**.\n- Fast regime: **RANGE / NEUTRAL**, avg range **0.0512%**, vol ratio **0.54**, net change **-0.022%**, confidence **82**, pm_tradeable **true**.\n- Funding squeeze remains **NEUTRAL** with score **0** and PM adjustment **0**; liquidation signal remains **neutral** with **0** events.\n- Last 12 alpha snapshots: states **RANGE 12/12**; PM risk field **None 12/12**; compression min/max/avg/last **0.7269 / 1.1204 / 0.9429 / 0.7269**; 6h trend min/max/avg/last **-0.0947% / +0.4687% / +0.2553% / -0.0947%**.\n- Compression path confirms failed normalization: 17:06 **0.7395** coiled \u2192 17:38 **0.8499** incomplete rebound \u2192 18:14 **0.7269** coiled again.\n- Latest P1 overlay remains defensive: BTC **4L/3S**, net **+$12.34M** below `$15M` but above hard `$10M`; ETH **-$35.65M**, SOL **-$10.89M**, HYPE **-$10.63M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-coiled-again-p1-defensive-confirmed-2026-05-03-1814.md`.\n\n**My thinking:** P4 has moved back into **coiled range** after failing to reclaim normal compression above `0.90`. Fast regime is still RANGE/NEUTRAL and not trend-risk-off, but P1 copy-intel remains distribution/defensive. The combined state is **defensive coiled range**: no breakout confirmation yet, but definitely not a risk-expansion environment.\n\n**Decision:** Keep PM weekend block active. Keep PM config unchanged. Keep HL live notional-blocked. Label P4 combined state: **defensive coiled range**. Maintain P1 defensive override while BTC net remains **<$15M**. No trend loosening, no PM alpha overlay, no JTO generic expansion. Continue tracking alpha schema drift: `posture` and `pm_risk` remain null.\n\n**Next:** Check whether compression stays below **0.75** and whether BTC net breaks **<$10M**. If both happen or fast regime flips TREND with non-neutral funding/liquidations, escalate to defensive/breakdown. If compression reclaims **>0.90** and BTC net reclaims **>$15M**, downgrade back to normal range watch.\n\n## 2026-05-03 18:03 UTC \u2014 [Pillar 3] JTO momentum cluster stale, no fresh rows\n\n**Task:** Run the JTO momentum scorer and add a recency/cluster check: determine w",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:24 UTC \u2014 [Pillar 1] BTC reclaims clean net but 8fcc lags\n\n**Task:** Re-check P1 copy intelligence after BTC distribution accelerated toward the hard downgrade line, focusing on whether it breaks below `$10M` or rapidly reclaims the distribution zone.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/0S**, **ETH 2L/6S**, **SOL 0L/8S**.\n- Current top-book notional: BTC **+$18.74M net long**, ETH **-$34.81M net short**, SOL **-$10.91M net short**, HYPE **-$10.60M net short**, JTO **+$355 net long only**.\n- BTC reversed sharply from the last P1 pass: count improved from **4L/3S** to **7L/0S**, net improved from **+$12.34M** to **+$18.74M**, and visible BTC shorts fell from **$1.05M** to **$0**.\n- `beatmaker1@proton.me` flipped from BTC SHORT **$981K** to BTC LONG **$2.71M**.\n- `anon-0xecb6` rebuilt BTC LONG from **$2.64M** to **$4.47M**.\n- `anon-0x57dd` rebuilt BTC LONG from **$817K** to **$1.49M**.\n- BTC clean-net condition is met: reclaim above **$15M** yes, reclaim above **$17M** yes.\n- Remaining caveat: `anon-0x8fcc` remains **$4.30M LONG**, still below the clean anchor threshold near/above **$5M**.\n- ETH remains high-conviction bearish: **2L/6S**, net **-$34.81M**, with `anon-0x3bca` ETH SHORT still **$1.41M**.\n- SOL is now max bearish by count and notional: **0L/8S**, net **-$10.91M**.\n- HYPE remains bearish by count and notional: **2L/7S**, net **-$10.60M**.\n- JTO top-trader confirmation remains absent.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-reclaims-clean-net-but-8fcc-lags-2026-05-03-1824.md`.\n\n**My thinking:** BTC executed a violent copy-intel reclaim. The hard downgrade did not fire; instead, BTC reclaimed both the `$15M` distribution line and `$17M` clean-net line, with shorts fully flushed and beatmaker flipping long. That removes the immediate P1 defensive override for BTC itself. But it is not full clean bullish yet because `anon-0x8fcc` did not rebuild above the `$5M` anchor and ETH/SOL/HYPE remain deeply net short.\n\n**Decision:** Upgrade BTC from **distribution / defensive** to **bullish reclaim with caveat**. Do not mark full clean bullish until `anon-0x8fcc` rebuilds near/above **$5M** or BTC net remains >$17M across another refresh. Remove immediate BTC hard-downgrade watch unless net falls back below `$15M`. Keep ETH bearish confidence high. Escalate SOL bearish confidence: now **0L/8S**, max bearish by count and notional. Keep HYPE bearish confidence high. Keep PM weekend block active; no Sunday exception. Keep HL live notional-blocked; no forced trades from `$37.39`. Do not treat JTO P3 momentum as copy-intel confirmed.\n\n**Next:** Verify whether this BTC reclaim persists: watch `anon-0x8fcc` toward **$5M**, `beatmaker1` holding the new **$2.71M** long, and BTC net staying above **$17M**. If BTC falls back below **$15M**, reinstate di",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 246,
-    "snapshot_age_minutes": 0.8,
+    "research_files": 247,
+    "snapshot_age_minutes": 6.5,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
