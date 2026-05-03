@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T13:00:03.105666+00:00",
+  "timestamp": "2026-05-03T13:00:23.825106+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,22 +26,22 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1334%",
-      "apr": "+146%",
+      "rate": "+0.1174%",
+      "apr": "+129%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "TST",
-      "rate": "+0.1259%",
-      "apr": "+138%",
+      "rate": "+0.1166%",
+      "apr": "+128%",
       "action": "SHORT",
       "oi": "139,163,336"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1111%",
-      "apr": "+122%",
+      "rate": "+0.1080%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -118,11 +118,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T12:30:15.057924+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 30.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2151.3,
+    "recent_strong_regime_age_minutes": 2151.7,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2151.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2151.7m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 30.1m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1334%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1174%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -414,14 +414,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-03T12:58:59.184783+00:00",
-      "age_minutes": 1.1,
+      "age_minutes": 1.4,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T12:59:57.935097+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-03T13:00:13.281779+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59529.1,
+      "age_minutes": 59529.5,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55158.4,
+      "age_minutes": 55158.7,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -461,7 +461,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13199.8,
+      "age_minutes": 13200.2,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -474,13 +474,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 12:42 UTC \u2014 [Pillar 4] RANGE/NEUTRAL stable after risk easing\n\n**Task:** Refresh P4 alpha after the prior RANGE/UP risk-easing shift, checking whether the fast TREND risk returns or whether BTC consolidates.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T12:42:18.326089+00:00`.\n- Classifier remains **`range_mean_revert_friendly`**.\n- Transition posture is **stable**.\n- PM risk remains **low**.\n- Fast regime cooled from **RANGE / UP** to **RANGE / NEUTRAL** with score **5**, avg range **0.1006%**, max range **0.2345%**, vol ratio **1.85**, net change **+0.018%**, consistency **58.3%**, PM tradeable **true**, confidence **59**.\n- Compression remains elevated but not coiled: **0.9193 -> 1.1560 -> 1.0653 -> 1.1177**.\n- BTC 6h trend is still positive but fading: **+0.7036% -> +0.6108% -> +0.5659%**.\n- BTC price: **$78,731.37**, 24h **+0.668%**.\n- Breakout risk remains **neutral**.\n- Fear & Greed unchanged: **47 Neutral / sentiment_impulse_up**, 98.3 percentile.\n- Funding squeeze remains neutral with `neg_streak=1`, long/short trend **+2.0%**. Liquidation signal remains neutral.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-range-neutral-stable-after-risk-easing-2026-05-03-1242.md`.\n\n**My thinking:** The 11:48 TREND/UP spike has not persisted. BTC is consolidating in a higher range: still structurally constructive, but no longer fast directional. This pairs with P1's latest state: BTC notional remains above the clean threshold, but breadth neutralized to 4L/4S. P4 therefore supports bullish context with caution, not aggressive trend-chasing.\n\n**Decision:** Keep P4 posture **range-friendly / neutral / stable**. Maintain bullish-continuation context only while P1 BTC net stays >$15M. Treat current market as consolidation after impulse, not active trend chase. Keep PM config unchanged. Keep weekend block active. No Sunday exception. No HL live trade while notional guard blocks execution. P3 micro-drift rows from this regime are eligible for paper logging if they meet RANGE and low/no-breakout criteria, but must carry vol bucket tags.\n\n**Next:** Watch whether compression remains above **1.0** with BTC 6h trend fading. If compression stays elevated and fast direction turns UP again, retest trend-risk. If fast remains NEUTRAL, prioritize RANGE micro-drift research over breakout logic.\n\n## 2026-05-03 12:27 UTC \u2014 [Pillar 3] Micro-drift 60m confirms delayed edge\n\n**Task:** Rerun the HL micro-drift analyzer after fresh ETH/BTC RANGE rows aged to 60m, and decide whether the paper strategy merits separate logging implementation.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`, then `/home/ubuntu/clawd/scripts/analyze_hl_micro_drift.py`.\n- Analyzer state: ledger rows **48**, can",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 12:50 UTC \u2014 [Pillar 1] BTC breadth recovered clean bullish\n\n**Task:** Re-check P1 copy intelligence after BTC count neutralized to 4L/4S, focusing on whether breadth recovers or short notional keeps rebuilding.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 2L/4S**, **SOL 3L/4S**.\n- Current top-book notional: **BTC +$17.18M net long**, **ETH -$38.56M net short**, **SOL -$10.92M net short**, **HYPE -$10.38M net short**.\n- BTC improved on both confirmation dimensions: count recovered from **4L/4S** to **7L/1S**, and net increased from **+$16.00M** to **+$17.18M**.\n- `anon-0x8fcc` remains the key BTC confirmation anchor: BTC LONG **$5.12M**, unchanged.\n- BTC large long anchors remain intact: `anon-0xfc66` **$5.63M**, `anon-0xecb6` **$5.61M**, `anon-0x8fcc` **$5.12M**, `anon-0x57dd` **$1.23M**.\n- BTC short risk cooled materially: `beatmaker1@proton.me` BTC SHORT reduced from **$1.22M** to **$0.43M**; no other material BTC shorts remain.\n- ETH remains high-conviction bearish by notional: **2L/4S**, net **-$38.56M**.\n- SOL remains bearish by notional, but count softened: **3L/4S**, net **-$10.92M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-breadth-recovers-clean-bullish-2026-05-03-1250.md`.\n\n**My thinking:** The prior BTC count caution resolved positively. BTC is now clean bullish on both breadth and notional: net is well above the `$15M` threshold, `anon-0x8fcc` stayed long, and the largest short shrank below `$0.5M`. This pairs well with P4's RANGE/NEUTRAL stable consolidation context: bullish continuation is supported, but not a fast trend chase.\n\n**Decision:** Upgrade BTC from **clean bullish with count caution** to **clean bullish confirmed**. Remove the immediate 4L/4S breadth caution unless count neutralizes again. Distribution watch still returns if BTC net falls below **$15M**. Hard downgrade remains BTC net below **$10M** or `anon-0x8fcc` flips short above **$2M**. Keep ETH bearish confidence high. Keep SOL bearish by notional but lower count confidence. No PM Sunday exception. No HL live trade while notional guard blocks execution.\n\n**Next:** Verify whether BTC net holds above **$17M** and whether `beatmaker1@proton.me` stays below **$1M** short. If BTC breadth remains 6L+/2S- with `8fcc` long, bullish continuation context stays clean.\n\n## 2026-05-03 12:42 UTC \u2014 [Pillar 4] RANGE/NEUTRAL stable after risk easing\n\n**Task:** Refresh P4 alpha after the prior RANGE/UP risk-easing shift, checking whether the fast TREND risk returns or whether BTC consolidates.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T12:42:18.326089+00:00`.\n- Classifier remains **`range_mean_revert_friendly`**.\n- Transition posture is **stable**.\n- PM risk remains **low**.\n- Fast regime cooled ",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 203,
-    "snapshot_age_minutes": 17.7,
+    "research_files": 204,
+    "snapshot_age_minutes": 18.1,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
