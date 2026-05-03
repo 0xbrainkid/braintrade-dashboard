@@ -900,8 +900,9 @@ p2_edge_history = [
 ]
 
 # ── Pillar 3: Iteration ──
-# Count parameter changes from memory
-params_changed = 6  # min_price x2, entry_delay, kelly_fraction, conviction_min, divergence_threshold
+# Count shipped parameter changes plus active paper/research branches.
+# The original dashboard hard-coded `6 changes`, which made P3 look stale even
+# while new HL strategy branches were being scored in research/*.jsonl.
 
 p3_changes = [
     {"date": "Mar 16", "param": "min_price", "old": "none", "new": "$0.50", "reason": "Prices <$0.50 = losers"},
@@ -911,6 +912,46 @@ p3_changes = [
     {"date": "Mar 19", "param": "divergence_threshold", "old": "0.0", "new": "0.08", "reason": "SolSt1ne: 8% AI filter"},
     {"date": "Mar 20", "param": "min_price", "old": "$0.65", "new": "$0.50", "reason": "Was blocking all trades"},
 ]
+
+def _load_last_jsonl(path):
+    try:
+        lines = [line.strip() for line in open(path) if line.strip()]
+        return json.loads(lines[-1]) if lines else {}
+    except Exception:
+        return {}
+
+p3_strategy_branches = []
+_jto = _load_last_jsonl('/home/ubuntu/clawd/research/hl_jto_momentum_score_history.jsonl')
+if _jto:
+    _m15 = ((_jto.get('metrics') or {}).get('15m') or {})
+    p3_strategy_branches.append({
+        "name": "hl_jto_strong_trend_momentum_v0_paper",
+        "status": "paper_watch",
+        "rows": _jto.get('rows_dedup'),
+        "wr_15m": _m15.get('wr'),
+        "avg_15m": _m15.get('avg_return'),
+    })
+_rv = _load_last_jsonl('/home/ubuntu/clawd/research/hl_range_vol_filtered_score_history.jsonl')
+if _rv:
+    _all = (((_rv.get('buckets') or {}).get('all') or {}).get('15m') or {})
+    p3_strategy_branches.append({
+        "name": "hl_range_vol_filtered_v0_paper",
+        "status": "paper_low_priority",
+        "rows": ((_rv.get('buckets') or {}).get('all') or {}).get('rows'),
+        "wr_15m": _all.get('wr'),
+        "avg_15m": _all.get('avg_return'),
+    })
+_md = _load_last_jsonl('/home/ubuntu/clawd/research/hl_micro_drift_score_history.jsonl')
+if _md:
+    p3_strategy_branches.append({
+        "name": "hl_range_micro_drift_v0_paper",
+        "status": "paper_watch",
+        "rows": _md.get('rows_total') or _md.get('rows_dedup') or _md.get('n'),
+        "wr_15m": (((_md.get('metrics') or {}).get('15m') or {}).get('wr')),
+        "avg_15m": (((_md.get('metrics') or {}).get('15m') or {}).get('avg_return')),
+    })
+
+params_changed = len(p3_changes) + len(p3_strategy_branches)
 
 win_rate_24h = round(today_wins / (today_wins + today_losses) * 100, 1) if (today_wins + today_losses) > 0 else 0
 win_rate_7d = round(all_wins / (all_wins + all_losses) * 100, 1) if (all_wins + all_losses) > 0 else 0
@@ -1096,6 +1137,7 @@ data = {
         "research_reports": research_count + reports_count,
         "heartbeats_today": 0,  # TODO: count from logs
         "changes": _pevents.get("3", []),
+        "strategy_branches": p3_strategy_branches,
         "win_rate_7d": win_rate_7d,
         "win_rate_24h": win_rate_24h,
         "avg_trade_size": avg_trade,
