@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T02:03:20.032556+00:00",
+  "timestamp": "2026-05-03T02:18:39.171306+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,17 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1158%",
-      "apr": "+127%",
+      "rate": "+0.1229%",
+      "apr": "+135%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0978%",
-      "apr": "+107%",
+      "rate": "+0.1032%",
+      "apr": "+113%",
       "action": "SHORT",
-      "oi": "199,263,990"
+      "oi": "199,257,774"
+    },
+    {
+      "coin": "MEGA",
+      "rate": "-0.0622%",
+      "apr": "-68%",
+      "action": "LONG",
+      "oi": "116,416,734"
     }
   ],
   "daily_pnl": [
@@ -111,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T01:30:16.458901+00:00",
-    "source_age_minutes": 33.1,
+    "source_age_minutes": 48.4,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1494.6,
+    "recent_strong_regime_age_minutes": 1509.9,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -146,19 +153,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1494.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1509.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 33.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 48.4m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1158%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1229%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -406,15 +413,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T02:02:25.906103+00:00",
-      "age_minutes": 0.9,
+      "last_updated": "2026-05-03T02:17:53.755499+00:00",
+      "age_minutes": 0.8,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T02:03:22.020189+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-03T02:18:27.047804+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -434,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58872.4,
+      "age_minutes": 58887.7,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -444,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54501.7,
+      "age_minutes": 54517.0,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -454,7 +461,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12543.1,
+      "age_minutes": 12558.4,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -467,13 +474,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 02:03 UTC \u2014 [Pillar 4] Expansion reached ~2x while BTC turned red\n\n**Task:** Refresh P4 alpha after the 01:17 UTC expanding/sentiment-crowding warning and determine whether the tape cooled or deteriorated further.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot is `2026-05-03T02:02:47.798473+00:00`.\n- Classifier stayed **`mixed_transition`**.\n- PM risk stayed **low**.\n- Fast regime stayed **RANGE** and tradeable: vol ratio stayed **0.87**, confidence rose **64 -> 74**, direction stayed **DOWN**.\n- Breakout risk stayed **expanding**.\n- Compression ratio increased again and is now effectively 2x: **1.7561 -> 1.9996**.\n- BTC price slipped again: **$78,349.82 -> $78,244.99**.\n- BTC 24h change flipped red: **+0.018% -> -0.116%**.\n- 6h trend deteriorated: **-0.1735% -> -0.2631%**.\n- Fear & Greed remains **47 Neutral / sentiment_impulse_up**, still 98.3 percentile.\n- Funding squeeze remains **NEUTRAL**.\n- Transition context remains `unchanged_distinct_state`, posture **stable**, but the level is deteriorating inside that stable label.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-expansion-near-2x-btc-red-2026-05-03-0203.md`.\n\n**My thinking:** The classifier has not flipped to explicit `trend_risk_off`, but internals are clearly worse: expansion near 2x, BTC red on 24h, fast direction down, and hot sentiment. The low PM risk label is not enough to call this friendly. Combined with P1's BTC downgrade after `anon-0x8fcc` reopened a $4.74M short, P4 agrees: no BTC upside chase and no PM filter loosening.\n\n**Decision:** Keep PM config unchanged. Keep weekend block active. Maintain **reduced / crowded-failure caution increasing**. Treat `pm_risk=low` as insufficient for upgrades while `breakout_risk=expanding` and sentiment remains impulse-up. No HL action; HL is `notional_blocked`.\n\n**Next:** Watch for explicit risk-rising trigger: `fast_regime=TREND`, `pm_risk=high`, or BTC 6h trend worse than -0.5% while compression remains >1.5. If triggered, mark PM defensive even if slow regime stays RANGE.\n\n## 2026-05-03 01:48 UTC \u2014 [Pillar 3] Dashboard frontend now renders HL execution mode\n\n**Task:** Update the dashboard frontend to visibly render the HL execution mode now that backend `data.json` exposes `hl_live_execution_mode` and notional gate fields.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Backend dashboard data already includes `hl_live_execution_mode=notional_blocked`, `hl_live_order_notional_blocked=true`, `hl_live_planned_order_notional=11.217492`, `hl_live_min_order_notional_usd=20.0`, and `hl_wallet_misaligned=false`.\n- `/home/ubuntu/clawd/dashboard/index.html` did not display these fields anywhere in Pillar 3.\n- I patched the frontend to add an **HL Execution State** block under Pillar 3 with execution mode pill, execution wallet s",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 02:18 UTC \u2014 [Pillar 1] Restarted HL, BTC big short persists, ETH/SOL bear reads strengthened\n\n**Task:** Restore missing HL live screen, then re-scan HL top-trader copy intelligence after BTC was downgraded to neutral/crowded-fade risk.\n\n**Finding:**\n- Initial health check found `pm-bot` alive but `hl-bot` missing.\n- Restarted `hl-bot` live immediately from `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py`.\n- Post-restart HL live state: status `started`, execution mode `notional_blocked`, balance `37.391639`, `wallet_blocked=false`, `order_notional_blocked=true`.\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 1L/7S**, **SOL 1L/7S**.\n- Current top-book notional:\n  - **BTC:** longs **$13.55M** vs shorts **$4.58M** \u2192 net **+$8.97M long**\n  - **ETH:** longs **$0.02M** vs shorts **$35.02M** \u2192 net **-$35.00M short**\n  - **SOL:** longs **$0.19M** vs shorts **$11.06M** \u2192 net **-$10.87M short**\n  - **HYPE:** longs **$1.64M** vs shorts **$11.78M** \u2192 net **-$10.14M short**\n- BTC count improved to **7L/1S**, but the same large short remains: `anon-0x8fcc` **BTC SHORT $4.58M**.\n- BTC net long remains below the `$10M` recovery threshold: previous **+$9.14M**, current **+$8.97M**.\n- BTC anchor longs remain intact: `anon-0xfc66` **$5.63M**, `anon-0xecb6` **$5.22M**, `anon-0x57dd` **$2.42M**.\n- ETH bearish read strengthened by count: **1L/7S**, net **-$35.00M**.\n- SOL bearish read strengthened by count: **1L/7S**, net **-$10.87M**.\n- HYPE remains secondary bearish: net **-$10.14M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-big-short-persists-eth-sol-bear-confirm-2026-05-03-0218.md`.\n\n**My thinking:** BTC headline count recovered, but the notional problem did not. The `anon-0x8fcc` short is still large enough to keep BTC net long below `$10M`, so BTC stays neutral/crowded-fade risk rather than bullish. ETH and SOL are cleaner bearish copy-intel reads because both count and size agree.\n\n**Decision:** Keep **BTC = neutral / crowded-fade risk** until `anon-0x8fcc` closes or net BTC long recovers above `$10M` with reduced short concentration. Keep **ETH short = strongest bearish expression**. Upgrade **SOL short confidence**: now bearish by both count and notional (`1L/7S`). Keep **HYPE short = secondary bearish**. HL restarted successfully; no trade opened because execution mode is `notional_blocked`.\n\n**Next:** Focus on whether `anon-0x8fcc` grows or closes the BTC short. If it grows while BTC price keeps slipping, BTC moves from neutral/crowded-fade to outright bearish.\n\n## 2026-05-03 02:03 UTC \u2014 [Pillar 4] Expansion reached ~2x while BTC turned red\n\n**Task:** Refresh P4 alpha after the 01:17 UTC expanding/sentiment-crowding warning and determine whether the tape cooled or deteriorated further.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot is `20",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 123,
-    "snapshot_age_minutes": 0.5,
+    "research_files": 124,
+    "snapshot_age_minutes": 15.9,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
@@ -566,7 +573,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities | NEUTRAL"
+        "last_signal": "3 opportunities | NEUTRAL"
       },
       {
         "name": "Fear & Greed Index",
