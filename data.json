@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T23:15:37.219824+00:00",
+  "timestamp": "2026-05-03T23:21:35.184933+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.0985%",
-      "apr": "+108%",
+      "rate": "+0.1007%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "284,044,660"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0685%",
-      "apr": "+75%",
+      "rate": "+0.0663%",
+      "apr": "+73%",
       "action": "SHORT",
       "oi": "199,257,774"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0582%",
-      "apr": "-64%",
+      "rate": "-0.0619%",
+      "apr": "-68%",
       "action": "LONG",
-      "oi": "2,259,332,462"
+      "oi": "2,259,415,968"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T22:30:21.664011+00:00",
-    "source_age_minutes": 45.3,
+    "source_age_minutes": 51.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2766.9,
+    "recent_strong_regime_age_minutes": 2772.9,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2766.9m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2772.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.3m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 51.2m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.0985%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.1007%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -436,14 +436,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T23:14:18.297800+00:00",
-      "age_minutes": 1.3,
+      "last_updated": "2026-05-03T23:19:22.673914+00:00",
+      "age_minutes": 2.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T23:15:34.228062+00:00",
+      "last_updated": "2026-05-03T23:21:34.112976+00:00",
       "age_minutes": 0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -464,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60144.7,
+      "age_minutes": 60150.7,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -474,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55773.9,
+      "age_minutes": 55779.9,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -484,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13815.4,
+      "age_minutes": 13821.3,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -497,13 +497,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 23:22 UTC \u2014 [Pillar 1] BTC max hard defensive: 8fcc short, 61ce doubles\n\n**Task:** Re-check P1 copy intelligence after BTC was hard defensive by net threshold and P4 remained trend-risk-off, focusing on whether `anon-0x8fcc` flips short again and whether `anon-0x61ce` adds to the main BTC short.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 5L/4S**, **ETH 4L/4S**, **SOL 3L/5S**.\n- Current top-book notional: BTC **+$2.73M net long**, ETH **-$34.83M net short**, SOL **-$10.23M net short**, HYPE **-$11.24M net short**, JTO **+$355 net long only**.\n- BTC hard defensive strengthened materially: net fell from **+$9.71M** to **+$2.73M**, far below hard **$10M** line.\n- `anon-0x8fcc` flipped back to BTC SHORT **$2.18M**, crossing the hard short-flip trigger.\n- `anon-0x61ce` BTC SHORT doubled from about **$5.00M** to **$9.99M**.\n- BTC short anchors: `anon-0x61ce` SHORT **$9.99M**, `anon-0x8fcc` SHORT **$2.18M**, tiny shorts from `anon-0xff4c` and `anon-0xc926`.\n- BTC long anchors: `anon-0xecb6` LONG **$8.45M**, `anon-0xfc66` LONG **$3.59M**, `anon-0x57dd` LONG **$2.31M**, `beatmaker1@proton.me` LONG **$299K**, `anon-0xf5d8` LONG **$259K**.\n- Cross-asset defensive pressure remains severe: ETH **-$34.83M** with `anon-0x61ce` also ETH SHORT **$9.99M**, SOL **-$10.23M**, HYPE **-$11.24M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-max-hard-defensive-8fcc-short-61ce-doubles-2026-05-03-2322.md`.\n\n**My thinking:** This is maximum hard defensive again. Both BTC hard triggers are active: net is far below `$10M`, and `8fcc` has flipped short above `$2M`. The real escalation is `61ce` doubling the BTC short to nearly `$10M` while also carrying a nearly `$10M` ETH short. This is coordinated defensive pressure into the P4 fast trend-risk-off/chop context.\n\n**Decision:** Escalate BTC to **maximum hard defensive / copy-intel risk-off**. Hard defensive remains active while either BTC net is **<$10M** or `8fcc` short is **>$2M`; both are true now. Require BTC net **>$10M** and `8fcc` short **<$2M** to clear max hard defensive, **>$15M** to regain constructive, and **>$17M** with anchors holding to regain bullish. Keep ETH bearish very high, SOL/HYPE bearish high, PM weekend block active, PM config unchanged, alpha overlays blocked pending realized `alpha_*`, and HL live notional-blocked.\n\n**Next:** Monitor whether `anon-0x61ce` continues adding above **$10M** BTC/ETH shorts and whether `anon-0xecb6` cuts the remaining BTC long. If `ecb6` cuts while `61ce`/`8fcc` stay short, treat BTC as net-short imminent even before headline net crosses below zero.\n\n## 2026-05-03 23:12 UTC \u2014 [Pillar 4] Trend risk-off persists, fast direction flips down\n\n**Task:** Refresh P4 alpha after fast TREND/UP risk-off and P1 hard defensive returned, checking whether funding/liquidations confirm the move or ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 23:24 UTC \u2014 [Pillar 2] Sunday 23:00 chop to negative in-band under max P1 risk-off\n\n**Task:** Re-check PM smart-entry tape after P1 escalated BTC to maximum hard defensive and P4 stayed trend-risk-off/chop, focusing on whether PM tape gives any reason to loosen weekend/price filters.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 23:00 UTC: **20**, all **WEEKEND_FILTER**.\n- Bias distribution: avg |bias| **33.3**, median **32.5**, max **66.8**, V5a-by-bias **6 / 20**, soft cap **0**, hard cap **0**.\n- Price/sign mix: YES in live band **10 / 20**; signs **15 negative / 5 positive**.\n- Window breakdown: 23:00 mixed chop all in-band but weak; 23:05 mixed-to-negative out-of-band with one V5a row; 23:10 all negative but out-of-band; 23:15 all negative/in-band with max |bias| **66.8** and avg |bias| **57.5**.\n- Exact 23:15 stress rows: biases **-64.2 / -41.1 / -59.4 / -66.8 / -56.2**, all YES **0.505**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-2300-chop-to-negative-inband-under-max-p1-riskoff-2026-05-03-2324.md`.\n\n**My thinking:** The tape evolved from chop to a clean negative, in-band pulse exactly while P1 is maximum hard defensive and P4 is high-risk trend/chop. This is a useful blocked stress sample, but still not a Sunday exception. Earlier negative rows were out-of-band and only later became in-band, confirming the live price floor remains useful.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged: `min_price=0.50`, `max_price=0.525`, `min_bias=45`, `max_bias=70`, active hours unchanged. Do not create Sunday exception despite the 23:15 negative in-band pulse. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist. Treat 23:15 as a high-quality blocked stress sample aligned with max P1 risk-off, not a live-trading mandate.\n\n**Next:** Monitor whether negative in-band pulses recur into Monday active hours and verify the first settled weekday outcome writes `alpha_*`. If the newest outcome lacks `alpha_*`, patch immediately before any alpha-overlay decisions.\n\n## 2026-05-03 23:22 UTC \u2014 [Pillar 1] BTC max hard defensive: 8fcc short, 61ce doubles\n\n**Task:** Re-check P1 copy intelligence after BTC was hard defensive by net threshold and P4 remained trend-risk-off, focusing on whether `anon-0x8fcc` flips short again and whether `anon-0x61ce` adds to the main BTC short.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 5L/4S**, **ETH 4L/4S**, **SOL 3L/5S**.\n- Current top-b",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 287,
-    "snapshot_age_minutes": 3.5,
+    "research_files": 288,
+    "snapshot_age_minutes": 9.5,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
