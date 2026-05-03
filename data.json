@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T00:17:27.964054+00:00",
+  "timestamp": "2026-05-03T00:30:03.249423+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1144%",
-      "apr": "+125%",
+      "rate": "+0.1149%",
+      "apr": "+126%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0980%",
-      "apr": "+107%",
+      "rate": "+0.1001%",
+      "apr": "+110%",
       "action": "SHORT",
       "oi": "199,263,990"
     }
@@ -100,24 +100,24 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bullish",
-    "signal_confidence": 68,
+    "current_bias": "bearish",
+    "signal_confidence": 6,
     "signals_today": 50,
-    "directional_skew": 0.68,
-    "order_flow_skew": 0.84,
-    "directional_order_gap": 0.16,
-    "avg_signal_price": 0.978,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bullish",
-    "summary_text": "Mixed bullish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-02T23:30:14.408066+00:00",
-    "source_age_minutes": 47.2,
+    "directional_skew": -0.16,
+    "order_flow_skew": 0.44,
+    "directional_order_gap": 0.6,
+    "avg_signal_price": 0.939,
+    "alignment_regime": "disagreement",
+    "summary_state": "disagreement",
+    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-03T00:00:14.888521+00:00",
+    "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1388.7,
+    "recent_strong_regime_age_minutes": 1401.3,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
-    "disagreement_regime": false,
+    "disagreement_regime": true,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
@@ -138,23 +138,23 @@
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": false,
-    "structure_note": "",
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 46 buys, 4 sells \u2014 avg price $0.978"
+        "text": "Top traders: 36 buys, 14 sells \u2014 avg price $0.939"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1388.7m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1401.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 47.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1144%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1149%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -406,15 +406,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T00:15:36.682025+00:00",
-      "age_minutes": 1.9,
+      "last_updated": "2026-05-03T00:29:49.476846+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T00:17:17.779268+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-03T00:30:04.860478+00:00",
+      "age_minutes": -0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -430,7 +430,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58766.6,
+      "age_minutes": 58779.2,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -440,7 +440,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54395.8,
+      "age_minutes": 54408.4,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -450,7 +450,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12437.2,
+      "age_minutes": 12449.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -469,7 +469,7 @@
     "data_sources": 7,
     "signals_generated": 1,
     "research_files": 109,
-    "snapshot_age_minutes": 0.5,
+    "snapshot_age_minutes": 13.1,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
@@ -552,7 +552,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BULLISH consensus"
+        "last_signal": "BEARISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
