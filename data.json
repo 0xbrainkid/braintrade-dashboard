@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T18:54:10.198932+00:00",
+  "timestamp": "2026-05-03T18:58:39.614486+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,8 +26,8 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1067%",
-      "apr": "+117%",
+      "rate": "+0.1060%",
+      "apr": "+116%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -104,11 +104,11 @@
     "summary_state": "max_gap_all_buy_bearish_disagreement",
     "summary_text": "Max-gap all-buy bearish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T18:00:14.013255+00:00",
-    "source_age_minutes": 53.9,
+    "source_age_minutes": 58.4,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2505.4,
+    "recent_strong_regime_age_minutes": 2509.9,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -143,11 +143,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2505.4m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2509.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 53.9m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 58.4m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -155,7 +155,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1067%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1060%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -407,15 +407,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T18:54:08.443413+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T18:58:33.091252+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T18:54:08.444608+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T18:58:33.092515+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -435,7 +435,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59883.3,
+      "age_minutes": 59887.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -445,7 +445,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55512.5,
+      "age_minutes": 55517.0,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -455,7 +455,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13553.9,
+      "age_minutes": 13558.4,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -468,13 +468,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:58 UTC \u2014 [Pillar 2] Sunday 18:30 flip-chop before active hour\n\n**Task:** Re-check PM smart-entry conditions after P1 upgraded BTC to bullish / near-clean, focusing on whether pre-19 UTC pressure confirms BTC strength or continues weekend flip-chop.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 18:30 UTC: **20**.\n- All 20 blocks were **WEEKEND_FILTER**.\n- Bias re-strengthened vs 18:00: avg |bias| **37.9**, median **34.8**, max **70.4**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **7 / 20** rows.\n- Cap pressure: `abs_bias > 70` on **1** row and `abs_bias > 80` on **0** rows.\n- Price-band eligibility: YES price inside live band on **15 / 20** rows.\n- Bias signs: **9 positive / 11 negative**.\n- Window detail: 18:30 all positive/all in-band but subthreshold; 18:35 all negative/all in-band with avg |bias| **58.7**; 18:40 all negative but **0/5** in-band; 18:45 mostly positive/all in-band with max **70.4**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-1830-flip-chop-before-active-hour-2026-05-03-1858.md`.\n\n**My thinking:** PM is still flip-chopping right before the 19 UTC active-hour-equivalent window: positive \u2192 strong negative \u2192 negative out-of-band \u2192 mostly positive. That is not clean confirmation of P1 BTC strength, nor clean bearish confirmation from the PM tape. The 18:35 window looked tradeable by raw V5a/price filters, but it immediately lost directional persistence.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Treat 18:30-18:50 as blocked flip-chop despite one strong V5a-like negative window. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist. Respect BTC bullish / near-clean P1 state, but do not override PM Sunday discipline.\n\n**Next:** Focus on 19-20 UTC active-hour-equivalent windows: persistence is the key. If signs keep alternating, weekend filter remains decisively validated. If pressure becomes one-sided and in-band, log it as a blocked Sunday stress sample only \u2014 no config change.\n\n## 2026-05-03 18:54 UTC \u2014 [Pillar 1] BTC reclaim persists, ecb6 above 5M\n\n**Task:** Verify whether the BTC bullish reclaim persisted after the 18:24 upgrade, focusing on BTC net staying above `$17M`, `beatmaker1` holding long, `anon-0x8fcc` rebuilding toward `$5M`, and cross-asset divergence.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 8L/0S**, **E",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 19:03 UTC \u2014 [Pillar 3] RANGE-vol scorer added; dedup cuts edge\n\n**Task:** Build a dedicated scorer/history file for the RANGE-vol filtered branch and verify whether the apparent 1.5-2.2x edge survives deduplication.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Added `/home/ubuntu/clawd/scripts/score_hl_range_vol_filtered.py`.\n- The scorer reads `hl_paper_signals.jsonl`, extracts `stage=filtered` local RANGE volatility candidates, excludes JTO, dedupes by `(coin, side, candle_ts/ts-minute, stage)`, buckets all rows / `vol_1_5_2_2` / `vol_ge_2_2` / `post_1710`, appends to `/home/ubuntu/clawd/research/hl_range_vol_filtered_score_history.jsonl`, and never places orders.\n- Validation passed: `chmod +x`, `python3 -m py_compile`, and scorer execution.\n- Current deduped score: source rows **68**, deduped RANGE-vol rows **11**.\n- All rows: 15m **8 scored / 75.0% WR / +0.000756 avg**, 30m **8 scored / 62.5% WR / +0.001395 avg**, 60m **8 scored / 75.0% WR / +0.000781 avg**.\n- `vol_1_5_2_2` bucket after dedupe: rows **6**, pending 15m **3**; 15m **3 scored / 66.7% WR / +0.000345 avg**, 30m **66.7% WR / +0.002120 avg**, 60m **66.7% WR / +0.001403 avg**.\n- `vol_ge_2_2` bucket after dedupe: rows **5**, pending **0**; 15m **80.0% WR / +0.001003 avg**, 30m **60.0% WR / +0.000961 avg**, 60m **80.0% WR / +0.000408 avg**.\n- Post-17:10 ONDO/ETH/SUPER rows remain pending with all forward returns null.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-range-vol-scorer-added-dedup-cuts-edge-2026-05-03-1903.md`.\n\n**My thinking:** Deduplication materially reduced the apparent 1.5-2.2x edge. The earlier 90.9% WR bucket was inflated by repeated ETH burst rows. After dedupe, the branch is still interesting but weaker and far from live-ready: only 3 scored rows in the target bucket, average 15m return only **+3.45 bps**, and fresh post-17:10 rows are all pending.\n\n**Decision:** Keep HL live risk unchanged and notional-blocked. Do not force trades from `$37.39`. Do not loosen live RANGE filters. Keep `hl_range_vol_1p5_2p2_filtered_v0_paper` watch-only and treat it as broader **hl_range_vol_filtered_v0_paper** until buckets settle. Require fresh post-17:10 rows to score before increasing confidence. Do not prioritize this above JTO momentum or micro-drift yet.\n\n**Next:** Rerun `/home/ubuntu/clawd/scripts/score_hl_range_vol_filtered.py` after forward returns populate. If post-17:10 rows remain pending, inspect the signal writer/scorer pipeline for why recent filtered rows are not getting forward returns.\n\n## 2026-05-03 18:58 UTC \u2014 [Pillar 2] Sunday 18:30 flip-chop before active hour\n\n**Task:** Re-check PM smart-entry conditions after P1 upgraded BTC to bullish / near-clean, focusing on whether pre-19 UTC pressure confirms BTC strength or continues weekend flip-chop.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- R",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 252,
-    "snapshot_age_minutes": 9.5,
+    "research_files": 253,
+    "snapshot_age_minutes": 14.0,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
