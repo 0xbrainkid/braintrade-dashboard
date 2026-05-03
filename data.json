@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T16:15:37.237570+00:00",
+  "timestamp": "2026-05-03T16:20:58.551915+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -25,23 +25,23 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
-      "coin": "REZ",
-      "rate": "-0.1453%",
-      "apr": "-159%",
-      "action": "LONG",
-      "oi": "259,798,338"
+      "coin": "TST",
+      "rate": "+0.1253%",
+      "apr": "+137%",
+      "action": "SHORT",
+      "oi": "206,064,340"
     },
     {
-      "coin": "TST",
-      "rate": "+0.1272%",
-      "apr": "+139%",
-      "action": "SHORT",
-      "oi": "203,222,688"
+      "coin": "REZ",
+      "rate": "-0.1239%",
+      "apr": "-136%",
+      "action": "LONG",
+      "oi": "261,016,050"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1082%",
-      "apr": "+119%",
+      "rate": "+0.1074%",
+      "apr": "+118%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -118,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T15:30:14.378636+00:00",
-    "source_age_minutes": 45.4,
+    "source_age_minutes": 50.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2346.9,
+    "recent_strong_regime_age_minutes": 2352.2,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2346.9m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2352.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.4m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 50.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: REZ at -0.1453%/8h \u2014 shorts paying longs"
+        "text": "Strongest: TST at 0.1253%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -413,14 +413,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T16:15:00.495211+00:00",
-      "age_minutes": 0.6,
+      "last_updated": "2026-05-03T16:20:45.956595+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T16:15:30.012031+00:00",
+      "last_updated": "2026-05-03T16:20:50.252723+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59724.7,
+      "age_minutes": 59730.1,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55353.9,
+      "age_minutes": 55359.3,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -461,7 +461,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13395.4,
+      "age_minutes": 13400.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -474,13 +474,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 16:06 UTC \u2014 [Pillar 1] BTC rebuilds above 15M but not clean\n\n**Task:** Re-check P1 copy intelligence after P4 shifted to low-vol RANGE/DOWN and BTC sat near the `$15M` distribution trigger.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/2S**, **ETH 3L/5S**, **SOL 3L/4S**.\n- Current top-book notional: **BTC +$15.85M net long**, **ETH -$37.55M net short**, **SOL -$10.90M net short**, **HYPE -$10.40M net short**.\n- BTC improved from **+$15.26M** to **+$15.85M**, widening its cushion above `$15M` from **~$0.26M** to **~$0.85M**.\n- BTC breadth softened from **7L/1S** to **6L/2S**, but shorts remain tiny: `anon-0xf5d8` **$53.2K**, `anon-0xc926` **$666**.\n- BTC long anchors: `anon-0xfc66` **$5.63M** unchanged, `anon-0xecb6` **$4.62M** up from **$4.17M**, `anon-0x8fcc` **$4.30M** unchanged and still below **$5M** clean-anchor size, `anon-0x57dd` **$1.13M** slightly up, `beatmaker1@proton.me` flipped back to BTC LONG **$219K**.\n- ETH bearish conviction remains high and strengthened by new large short: **3L/5S**, net **-$37.55M**, with `anon-0x3bca` ETH SHORT **$2.56M** added to the visible short stack.\n- SOL remains bearish by notional: **3L/4S**, net **-$10.90M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-rebuilds-above-15m-but-not-clean-2026-05-03-1606.md`.\n\n**My thinking:** BTC has rebuilt away from the immediate distribution break, but it is still not clean bullish. The rebound came from `ecb6` and small longs, while `8fcc` stayed stuck below the `$5M` clean anchor threshold and total net remains below `$17M`. This is stabilization, not confirmation.\n\n**Decision:** Keep BTC label **bullish but contested / distribution watch**. Do not upgrade until BTC net reclaims **>$17M** and `8fcc` rebuilds near/above **$5M**. Distribution downgrade triggers if BTC net falls below **$15M**. Hard downgrade remains BTC net below **$10M** or `anon-0x8fcc` flips short above **$2M**. Keep ETH bearish confidence high. Keep SOL and HYPE bearish by notional. No PM Sunday exception. No HL live trade while notional guard blocks execution.\n\n**Next:** Watch whether BTC can rebuild above **$16M** then **$17M**, or whether `ecb6` trims again. Also track `anon-0x3bca` ETH SHORT as renewed bearish confirmation.\n\n## 2026-05-03 16:00 UTC \u2014 [Pillar 4] RANGE/DOWN low vol, BTC near trigger\n\n**Task:** Refresh P4 alpha after P3 added copy-intel conflict tags and P1 stayed near the BTC `$15M` distribution line, checking whether calm RANGE persists or defensive posture is needed.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T16:00:24.387590+00:00`.\n- Classifier remains **`range_mean_revert_friendly`**.\n- Transition posture remains **stable**.\n- PM risk remains **low**.\n- Fast regime shifted from **RANGE / NEUTRAL** to **",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 16:18 UTC \u2014 [Pillar 2] Sunday 16 UTC negative pressure persists\n\n**Task:** Re-check PM smart-entry conditions after P1 showed BTC rebuilding away from the `$15M` trigger but still not clean bullish, focusing on whether Sunday in-band negative pressure persists or reverses.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 16:00 UTC: **20**.\n- All 20 blocks were **WEEKEND_FILTER**.\n- Bias distribution remained elevated: avg |bias| **42.9**, median **43.5**, max **78.8**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **8 / 20** rows.\n- Cap pressure returned but did not hard-cap: `abs_bias > 70` on **2** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility was strong: YES price inside live band on **15 / 20** rows.\n- Bias signs were almost entirely negative: **19 negative / 1 positive**.\n- Four 5-minute windows inspected; **3** had at least one V5a-eligible blocked row. 16:05 was all-negative/all-in-band with max |bias| **67.9**; 16:10 was stronger but out-of-band; 16:15 returned in-band.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-16utc-negative-pressure-persists-2026-05-03-1618.md`.\n\n**My thinking:** Negative PM pressure persisted into 16 UTC. It is cleaner than the earlier chop: mostly in-band, mostly negative, and often V5a-eligible. But the calendar layer still dominates. Sunday data is explicitly not a deploy trigger, and P1 says BTC is only bullish-contested rather than clean.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Log this as a weekend stress-test sample: negative/in-band/V5a pressure, correctly blocked. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist.\n\n**Next:** Compare whether pressure survives toward 19-20 UTC active-hour windows. First weekday active-hour outcome must still be checked for `alpha_*` fields before alpha-overlay conclusions.\n\n## 2026-05-03 16:06 UTC \u2014 [Pillar 1] BTC rebuilds above 15M but not clean\n\n**Task:** Re-check P1 copy intelligence after P4 shifted to low-vol RANGE/DOWN and BTC sat near the `$15M` distribution trigger.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/2S**, **ETH 3L/5S**, **SOL 3L/4S**.\n- Current top-book notional: **BTC +$15.85M net long**, **ETH -$37.55M net short**, **SOL -$10.90M net short**, **HYPE -$10.40M net short**.\n- BTC improved from **+$15.26M** to **+$15.85M**, wideni",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 231,
-    "snapshot_age_minutes": 15.2,
+    "research_files": 232,
+    "snapshot_age_minutes": 20.6,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
