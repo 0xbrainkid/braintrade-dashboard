@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T23:36:50.554761+00:00",
+  "timestamp": "2026-05-03T23:45:16.004186+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.1028%",
-      "apr": "+113%",
+      "rate": "+0.1020%",
+      "apr": "+112%",
       "action": "SHORT",
       "oi": "284,044,660"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0714%",
-      "apr": "-78%",
+      "rate": "-0.0726%",
+      "apr": "-80%",
       "action": "LONG",
       "oi": "2,259,294,110"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0656%",
-      "apr": "+72%",
+      "rate": "+0.0715%",
+      "apr": "+78%",
       "action": "SHORT",
-      "oi": "199,257,774"
+      "oi": "199,255,030"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T23:00:13.653467+00:00",
-    "source_age_minutes": 36.6,
+    "source_age_minutes": 45.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2788.1,
+    "recent_strong_regime_age_minutes": 2796.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2788.1m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2796.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 36.6m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 45.0m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.1028%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.1020%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -436,15 +436,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T23:36:38.997105+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-03T23:45:17.871733+00:00",
+      "age_minutes": -0.0,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T23:36:38.996838+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-03T23:45:17.870617+00:00",
+      "age_minutes": -0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -464,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60165.9,
+      "age_minutes": 60174.4,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -474,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55795.2,
+      "age_minutes": 55803.6,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -484,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13836.6,
+      "age_minutes": 13845.0,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -497,13 +497,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 23:30 UTC \u2014 [Pillar 3] JTO scorer adds decay guard, paper-only\n\n**Task:** Add/verify a JTO-specific scorer that reports 15m/30m separately, flags 60m decay, and keeps live gating disabled until deduped n >= 20 with post-fee/slippage edge.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Updated `/home/ubuntu/clawd/scripts/score_hl_jto_momentum.py`.\n- Added explicit output fields: `decay_60m`, `recommended_horizons`, `live_ready`, and `live_block_reason`.\n- Live readiness now requires deduped 15m sample **n >= 20**, positive 15m/30m average return, 15m/30m WR **>=55%**, and no 60m decay.\n- Ran the scorer after patch: HL paper rows **107**, JTO STRONG_TREND deduped rows **4**, all `pass_filter`.\n- Vol buckets: `1.5-2.0x` **3**, `>=2.0x` **1**.\n- Returns: 15m **4 rows / 100.0% WR / +0.006374 avg / +0.005997 median**; 30m **4 rows / 75.0% WR / +0.003699 avg / +0.008803 median**; 60m **4 rows / 25.0% WR / -0.004983 avg / -0.008065 median**.\n- Guard output: `decay_60m=True`, `recommended_horizons=[\"15m\",\"30m\"]`, `live_ready=False`, block reason `paper_only: require deduped n>=20, positive 15m/30m edge, >=55% WR, and no 60m decay`.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-jto-scorer-adds-decay-guard-paper-only-2026-05-03-2330.md`.\n\n**My thinking:** The JTO branch still has the best P3 signal quality, but the decay guard is doing exactly what it should: it prevents accidental live-readiness while 60m reverses hard and sample size is tiny. The interesting edge is short-horizon momentum only, not a broad JTO long or generic volatility branch.\n\n**Decision:** Keep JTO STRONG_TREND paper-only. Use 15m/30m as the only recommended research horizons. Treat 60m as decay/reversal risk. Do not enable live gating until deduped n >= 20 and post-fee/slippage edge survives. Keep generic vol, RANGE-vol, and MIXED branches disabled/paper-only. Keep HL live notional-blocked.\n\n**Next:** Monitor new JTO STRONG_TREND candidates and compare `1.5-2.0x` versus `>=2.0x` vol buckets once n grows. If 60m decay persists, hard-code future JTO exit research around <=30m horizons only.\n\n## 2026-05-03 23:24 UTC \u2014 [Pillar 2] Sunday 23:00 chop to negative in-band under max P1 risk-off\n\n**Task:** Re-check PM smart-entry tape after P1 escalated BTC to maximum hard defensive and P4 stayed trend-risk-off/chop, focusing on whether PM tape gives any reason to loosen weekend/price filters.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 23:00 UTC: **20**, all **WEEKEND_FILTER**.\n- Bias",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 23:44 UTC \u2014 [Pillar 4] Downtrend expansion confirms risk-off without liq\n\n**Task:** Refresh P4 alpha after max P1 hard defensive returned, checking whether fast TREND resolves to RANGE, confirms with funding/liquidations, or continues deteriorating into downside expansion.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-03T23:44:41.846952+00:00**.\n- BTC price **$78,595.01**, 24h **-0.127%**; Fear & Greed **47 Neutral**.\n- Top-level schema drift persists: `regime_state` is raw **RANGE** object while top-level `posture` and `pm_risk` are **null**.\n- Nested context remains defensive: classifier **trend_risk_off**, stance **defensive**, nested PM risk **high**, transition posture **stable**, transition label **unchanged_distinct_state**.\n- BTC microstructure: realized vol 1h **0.2259%**, avg range last 6h **0.5407%**, compression **2.0238**, 6h trend **-0.1661%**, breakout risk **expanding**.\n- Fast regime: **TREND / DOWN**, score **7**, confidence **76**, avg range **0.1733%**, vol ratio **1.30**, net change **-0.849%**, pm_tradeable **false**.\n- Funding squeeze remains **NEUTRAL** with score **0** and PM adjustment **0**; liquidation signal remains **neutral** with **0** events.\n- Last 12 snapshots: slow/top-level states **RANGE 12/12**; compression min/max/avg/last **0.6594 / 2.0238 / 1.1569 / 2.0238**; 6h trend min/max/avg/last **-0.1661% / +0.8174% / +0.2241% / -0.1661%**.\n- Fast path: 22:44 **TREND/UP** score **8** \u2192 23:12 **TREND/DOWN** score **4** \u2192 23:44 **TREND/DOWN** score **7**, net **-0.849%**.\n- Latest P1 overlay remains maximum hard defensive: BTC **5L/4S**, net **+$2.73M**, `8fcc` short trigger active; ETH **-$34.83M**, SOL **-$10.23M**, HYPE **-$11.24M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-downtrend-expansion-confirms-riskoff-without-liq-2026-05-03-2344.md`.\n\n**My thinking:** The earlier fast TREND/UP has fully failed into downside expansion. P4 now agrees with P1 directionally: trend-risk-off remains, PM risk is high, `pm_tradeable=false`, compression is extreme (>2.0), and fast direction is DOWN with stronger confidence. Funding/liquidations are still neutral, so this is not a liquidation cascade signal; it is a clean defensive gating signal.\n\n**Decision:** Keep P4 state **trend_risk_off / high PM risk / downside expansion without liquidation confirmation**. Keep P1 maximum hard defensive overlay active. Do not treat this as a live short trigger; treat it as a no-loosening, risk-gating context. Keep PM weekend block active, PM config unchanged, alpha/context overlays blocked until realized `alpha_*`, and HL live notional-blocked. No live JTO/RANGE-vol/generic-vol expansion.\n\n**Next:** Watch for either liquidation/funding confirmation (turning this into a true downside c",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 289,
-    "snapshot_age_minutes": 24.7,
+    "research_files": 290,
+    "snapshot_age_minutes": 0.6,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
@@ -515,7 +515,7 @@
       "detail": "BTC expanding | slow range regime | fast trend pressure | PM gating defensive"
     },
     "transition_context": {
-      "previous_snapshot_key": "4f88b8b12f5f7feb",
+      "previous_snapshot_key": "f95e81e596f3e941",
       "previous_classifier_state": "trend_risk_off",
       "current_classifier_state": "trend_risk_off",
       "previous_pm_risk": "high",
@@ -524,7 +524,7 @@
       "current_breakout_risk": "expanding",
       "previous_sentiment_regime": "sentiment_impulse_up",
       "current_sentiment_regime": "sentiment_impulse_up",
-      "minutes_since_last_distinct_snapshot": 27.5,
+      "minutes_since_last_distinct_snapshot": 32.6,
       "transition_label": "unchanged_distinct_state",
       "posture": "stable",
       "state_changed": true
@@ -552,35 +552,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.1652,
-      "avg_range_last6h_pct": 0.4385,
+      "realized_vol_1h_pct": 0.2259,
+      "avg_range_last6h_pct": 0.5407,
       "avg_range_prev18h_pct": 0.2672,
-      "compression_ratio": 1.6412,
-      "trend_6h_pct": 0.45,
+      "compression_ratio": 2.0238,
+      "trend_6h_pct": -0.1661,
       "breakout_risk": "expanding"
     },
     "regime_state": {
       "regime": "RANGE",
       "score": 1,
-      "atr_pct": 0.6,
+      "atr_pct": 0.62,
       "consistency": 0.75,
-      "range_pct": 0.64,
-      "trend_4h": 0.31,
+      "range_pct": 0.68,
+      "trend_4h": -0.35,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-03T23:00:04.003803+00:00"
+      "timestamp": "2026-05-03T23:30:03.791123+00:00"
     },
     "fast_regime": {
       "regime": "TREND",
-      "score": 4,
+      "score": 7,
       "direction": "DOWN",
-      "avg_range_pct": 0.1945,
-      "max_range_pct": 0.4277,
-      "vol_ratio": 1.45,
-      "net_change_pct": -0.226,
-      "consistency": 0.417,
+      "avg_range_pct": 0.1733,
+      "max_range_pct": 0.4626,
+      "vol_ratio": 1.3,
+      "net_change_pct": -0.849,
+      "consistency": 0.25,
       "pm_tradeable": false,
-      "confidence": 47,
-      "detail": "net_change=-0.23% | consistency=42%"
+      "confidence": 76,
+      "detail": "net_change=-0.85% | consistency=25%"
     },
     "sources": [
       {
