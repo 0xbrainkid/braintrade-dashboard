@@ -217,7 +217,7 @@ except Exception as e:
 try:
     if audit_wallet_alignment:
         hl_wallet_alignment = audit_wallet_alignment(
-            "0x51F290588E0fB3107D9cde00984fA16f3dDA3191",
+            DEFAULT_FUNDED_WALLET,
             reference_wallet=DEFAULT_FUNDED_WALLET,
             min_funded_balance=10.0,
         )
@@ -1112,12 +1112,16 @@ data = {
         "hl_directional_log": hl_directional_log_health,
         "hl_live_state": hl_live_state_health,
         "hl_live_status": hl_live_state_payload.get("status"),
+        "hl_live_execution_mode": hl_live_state_payload.get("execution_mode"),
         "hl_live_wallet_blocked": hl_live_state_payload.get("wallet_blocked"),
+        "hl_live_order_notional_blocked": hl_live_state_payload.get("order_notional_blocked"),
         "hl_live_balance": hl_live_state_payload.get("balance"),
+        "hl_live_planned_order_notional": hl_live_state_payload.get("planned_order_notional"),
+        "hl_live_min_order_notional_usd": hl_live_state_payload.get("min_order_notional_usd"),
         "hl_live_positions_count": hl_live_state_payload.get("positions_count"),
         "hl_live_signals_count": hl_live_state_payload.get("signals_count"),
         "hl_directional_surface_summary": (
-            f"hl_live_trader direct state: {hl_live_state_payload.get('status', 'unknown')}"
+            f"hl_live_trader direct state: {hl_live_state_payload.get('execution_mode') or hl_live_state_payload.get('status', 'unknown')}"
             if process_running("hl_live_trader.py") and not hl_live_state_health.get("stale", True)
             else "hl_live_trader log telemetry fresh; direct state missing/stale"
             if process_running("hl_live_trader.py") and not hl_directional_log_health.get("stale", True)
