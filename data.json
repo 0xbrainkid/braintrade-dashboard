@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T17:19:20.951628+00:00",
+  "timestamp": "2026-05-03T17:21:45.684620+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,8 +26,8 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1057%",
-      "apr": "+116%",
+      "rate": "+0.1065%",
+      "apr": "+117%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -104,11 +104,11 @@
     "summary_state": "aligned_bullish",
     "summary_text": "Aligned bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T16:30:13.627781+00:00",
-    "source_age_minutes": 49.1,
+    "source_age_minutes": 51.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2410.6,
+    "recent_strong_regime_age_minutes": 2413.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -139,11 +139,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2410.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2413.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 49.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 51.5m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -151,7 +151,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1057%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1065%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -403,14 +403,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T17:18:32.884624+00:00",
-      "age_minutes": 0.8,
+      "last_updated": "2026-05-03T17:21:27.286912+00:00",
+      "age_minutes": 0.3,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T17:19:16.891902+00:00",
+      "last_updated": "2026-05-03T17:21:42.052380+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -431,7 +431,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59788.4,
+      "age_minutes": 59790.9,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55417.7,
+      "age_minutes": 55420.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13459.1,
+      "age_minutes": 13461.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -464,13 +464,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 17:07 UTC \u2014 [Pillar 1] BTC breaks 15M distribution trigger\n\n**Task:** Re-check P1 copy intelligence after BTC remained contested below clean confirmation, focusing on whether it holds the `$15M` distribution line or breaks defensive.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 3L/5S**, **SOL 4L/4S**.\n- Current top-book notional: **BTC +$14.70M net long**, **ETH -$36.07M net short**, **SOL -$10.90M net short**, **HYPE -$10.48M net short**, **JTO +$355 net long only**.\n- BTC crossed the key trigger: prior net **+$15.57M**, current net **+$14.70M**; distribution trigger was **<$15M** and is now active.\n- BTC breadth still looks superficially bullish at **7L/1S**, but notional says distribution: `anon-0xfc66` **$5.63M** unchanged, `anon-0x8fcc` **$4.30M** unchanged but below clean **$5M**, `anon-0xecb6` **$4.18M** down from **$4.45M**, and `beatmaker1@proton.me` BTC SHORT rebuilt to **$575K**.\n- ETH remains high-conviction bearish: **3L/5S**, net **-$36.07M**, with `anon-0x3bca` ETH SHORT still material at **$1.41M**.\n- SOL remains bearish by notional: **4L/4S**, net **-$10.90M**.\n- HYPE remains high bearish by notional/count: **3L/6S**, net **-$10.48M**.\n- JTO top-trader context is too small to confirm the P3 JTO momentum branch.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-breaks-15m-distribution-trigger-2026-05-03-1707.md`.\n\n**My thinking:** This is the first formal BTC distribution downgrade in this sequence. The count is still long-heavy, but large-long notional has leaked below the agreed `$15M` line while a visible short rebuilt. Breadth is misleading. P4 can remain range-friendly statistically, but P1 now says BTC is no longer bullish-contested; it is **distribution / defensive** until notional reclaims the line.\n\n**Decision:** Downgrade BTC from **bullish but contested / distribution watch** to **distribution / defensive**. Reclaim condition: BTC net must recover above **$15M** for watch state, and above **$17M** plus `8fcc` near/above **$5M** for clean bullish. Hard downgrade remains BTC net below **$10M** or `anon-0x8fcc` flips short above **$2M**. Keep ETH bearish confidence high. Keep SOL bearish by notional, count contested. Keep HYPE bearish confidence high. Do not treat JTO P3 momentum as copy-intel confirmed; leaderboard notional is negligible. No PM Sunday exception. No HL live trade while notional guard blocks execution.\n\n**Next:** Watch whether BTC reclaims **>$15M** quickly or confirms distribution by staying below it while `beatmaker1` short grows. P4 should override to defensive if BTC stays below `$15M` even if regime remains RANGE.\n\n## 2026-05-03 17:06 UTC \u2014 [Pillar 4] Compression re-enters coiled with flat tape\n\n**Task:** Refresh the P4 alpha pipeline after the 16:38 range-neutral snapshot and test whether the market sta",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 17:18 UTC \u2014 [Pillar 2] Sunday 17 UTC in-band flip after BTC distribution\n\n**Task:** Re-check PM smart-entry conditions after P1 formally downgraded BTC to distribution / defensive, focusing on whether 17 UTC pressure aligns with that defensive read or keeps flipping.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 17:00 UTC: **14**.\n- All 14 blocks were **WEEKEND_FILTER**.\n- Bias distribution strengthened: avg |bias| **50.5**, median **51.4**, max **63.9**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **10 / 14** rows.\n- Cap pressure absent: `abs_bias > 70` on **0** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility was complete: YES price inside live band on **14 / 14** rows.\n- Bias signs flipped intraperiod: **10 negative / 4 positive**.\n- Three 5-minute windows inspected; **3** had at least one V5a-eligible blocked row. 17:00 and 17:05 were all-negative/all-in-band; 17:10 partial flipped all-positive/all-in-band.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-17utc-inband-flip-after-btc-distribution-2026-05-03-1718.md`.\n\n**My thinking:** This is another high-quality weekend stress sample. After P1 downgraded BTC to distribution/defensive, PM initially aligned with negative in-band V5a pressure, then flipped fully positive within the next window. That fast sign flip is exactly why Sunday data should not drive parameter changes.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Treat 17 UTC as a blocked stress-test sample: high in-band V5a pressure with rapid sign flip. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist.\n\n**Next:** Watch whether 19-20 UTC active-hour windows repeat this in-band flip pattern. First weekday active-hour outcome must still be checked for `alpha_*` fields before alpha-overlay conclusions.\n\n## 2026-05-03 17:07 UTC \u2014 [Pillar 1] BTC breaks 15M distribution trigger\n\n**Task:** Re-check P1 copy intelligence after BTC remained contested below clean confirmation, focusing on whether it holds the `$15M` distribution line or breaks defensive.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 3L/5S**, **SOL 4L/4S**.\n- Current top-book notional: **BTC +$14.70M net long**, **ETH -$36.07M net short**, **SOL -$10.90M net short**, **HYPE -$10.48M net short**, **JTO +$355 net long only**.\n- BTC crossed the key tri",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 239,
-    "snapshot_age_minutes": 1.8,
+    "research_files": 240,
+    "snapshot_age_minutes": 4.2,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
