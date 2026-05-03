@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T12:39:15.625696+00:00",
+  "timestamp": "2026-05-03T12:42:51.909123+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -33,17 +33,17 @@
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1126%",
-      "apr": "+123%",
+      "rate": "+0.1130%",
+      "apr": "+124%",
       "action": "SHORT",
       "oi": "199,257,774"
     },
     {
       "coin": "TST",
-      "rate": "+0.0887%",
-      "apr": "+97%",
+      "rate": "+0.0858%",
+      "apr": "+94%",
       "action": "SHORT",
-      "oi": "136,336,968"
+      "oi": "136,973,138"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T12:00:15.758700+00:00",
-    "source_age_minutes": 39.0,
+    "source_age_minutes": 42.6,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2130.5,
+    "recent_strong_regime_age_minutes": 2134.1,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -153,11 +153,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2130.5m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2134.1m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 39.0m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 42.6m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
@@ -413,15 +413,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T12:38:48.656669+00:00",
-      "age_minutes": 0.4,
+      "last_updated": "2026-05-03T12:42:23.133249+00:00",
+      "age_minutes": 0.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T12:39:17.809846+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-03T12:42:40.586240+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59508.4,
+      "age_minutes": 59512.0,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55137.6,
+      "age_minutes": 55141.2,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -461,7 +461,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13179.0,
+      "age_minutes": 13182.6,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -474,13 +474,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 12:27 UTC \u2014 [Pillar 3] Micro-drift 60m confirms delayed edge\n\n**Task:** Rerun the HL micro-drift analyzer after fresh ETH/BTC RANGE rows aged to 60m, and decide whether the paper strategy merits separate logging implementation.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`, then `/home/ubuntu/clawd/scripts/analyze_hl_micro_drift.py`.\n- Analyzer state: ledger rows **48**, candidates **9**, coins BTC 2, DOGE 1, ETH 3, ONDO 1, SOL 1, TRUMP 1.\n- Immediate-entry results: 15m **9 rows / 66.7% WR / +0.000172 avg**, 30m **9 rows / 66.7% WR / +0.001095 avg**, 60m **9 rows / 55.6% WR / +0.000384 avg**.\n- Delayed-entry results: +15m\u2192+30m **8 rows / 75.0% WR / +0.001152 avg**, +15m\u2192+60m **8 rows / 75.0% WR / +0.000724 avg**, chase-skip **1**.\n- Regime split at immediate 15m: RANGE **5 rows / 80.0% WR / +0.000650 avg**; MIXED **4 rows / 50.0% WR / -0.000425 avg**.\n- Fresh 60m confirmations: ETH RANGE long finished **+0.002805** at 60m and delayed +15\u2192+60 **+0.002329**; BTC RANGE long finished **+0.001324** at 60m and delayed +15\u2192+60 **+0.000789**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-micro-drift-60m-confirms-delayed-edge-2026-05-03-1227.md`.\n\n**My thinking:** This is now a real paper edge candidate. Delayed +15m entry is outperforming immediate entry at both 30m and 60m, and the two fresh RANGE rows improved materially as they aged. Still paper-only because n=9 total and RANGE n=5, but strong enough to justify separate logging.\n\n**Decision:** Keep HL bot live. Keep live risk unchanged: `max_position_pct=0.10`, `leverage=3`, `min_order_notional_usd=20.0`. Do not force trades from `$37.39`. Do not loosen pass-filter logic. Keep `hl_range_micro_drift_v0_paper` paper-only. Next build should add separate logging to `hl_micro_drift_signals.jsonl` for eligible filtered RANGE low/no-breakout candidates.\n\n**Next:** Patch `hl_live_trader.py` or add a sidecar script to write `hl_micro_drift_signals.jsonl` without live execution, then score immediate and delayed horizons separately.\n\n## 2026-05-03 12:24 UTC \u2014 [Pillar 2] Sunday positive bias out-of-band after BTC caution\n\n**Task:** Re-check PM smart-entry conditions after BTC stayed above the clean-bullish notional threshold but count neutralized, and decide whether PM filters or weekend discipline should change.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 12:00 UTC: **22**.\n- All 22 blocks were **WEEKEND_FILTER**.\n- Bias distribution: avg |bia",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 12:42 UTC \u2014 [Pillar 4] RANGE/NEUTRAL stable after risk easing\n\n**Task:** Refresh P4 alpha after the prior RANGE/UP risk-easing shift, checking whether the fast TREND risk returns or whether BTC consolidates.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T12:42:18.326089+00:00`.\n- Classifier remains **`range_mean_revert_friendly`**.\n- Transition posture is **stable**.\n- PM risk remains **low**.\n- Fast regime cooled from **RANGE / UP** to **RANGE / NEUTRAL** with score **5**, avg range **0.1006%**, max range **0.2345%**, vol ratio **1.85**, net change **+0.018%**, consistency **58.3%**, PM tradeable **true**, confidence **59**.\n- Compression remains elevated but not coiled: **0.9193 -> 1.1560 -> 1.0653 -> 1.1177**.\n- BTC 6h trend is still positive but fading: **+0.7036% -> +0.6108% -> +0.5659%**.\n- BTC price: **$78,731.37**, 24h **+0.668%**.\n- Breakout risk remains **neutral**.\n- Fear & Greed unchanged: **47 Neutral / sentiment_impulse_up**, 98.3 percentile.\n- Funding squeeze remains neutral with `neg_streak=1`, long/short trend **+2.0%**. Liquidation signal remains neutral.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-range-neutral-stable-after-risk-easing-2026-05-03-1242.md`.\n\n**My thinking:** The 11:48 TREND/UP spike has not persisted. BTC is consolidating in a higher range: still structurally constructive, but no longer fast directional. This pairs with P1's latest state: BTC notional remains above the clean threshold, but breadth neutralized to 4L/4S. P4 therefore supports bullish context with caution, not aggressive trend-chasing.\n\n**Decision:** Keep P4 posture **range-friendly / neutral / stable**. Maintain bullish-continuation context only while P1 BTC net stays >$15M. Treat current market as consolidation after impulse, not active trend chase. Keep PM config unchanged. Keep weekend block active. No Sunday exception. No HL live trade while notional guard blocks execution. P3 micro-drift rows from this regime are eligible for paper logging if they meet RANGE and low/no-breakout criteria, but must carry vol bucket tags.\n\n**Next:** Watch whether compression remains above **1.0** with BTC 6h trend fading. If compression stays elevated and fast direction turns UP again, retest trend-risk. If fast remains NEUTRAL, prioritize RANGE micro-drift research over breakout logic.\n\n## 2026-05-03 12:27 UTC \u2014 [Pillar 3] Micro-drift 60m confirms delayed edge\n\n**Task:** Rerun the HL micro-drift analyzer after fresh ETH/BTC RANGE rows aged to 60m, and decide whether the paper strategy merits separate logging implementation.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`, then `/home/ubuntu/clawd/scripts/analyze_hl_micro_drift.py`.\n- Analyzer state: ledger rows **48**, can",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 202,
-    "snapshot_age_minutes": 28.4,
+    "research_files": 203,
+    "snapshot_age_minutes": 0.6,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
@@ -492,18 +492,18 @@
       "detail": "slow range regime | fast range structure"
     },
     "transition_context": {
-      "previous_snapshot_key": "f4b666bcb583f525",
-      "previous_classifier_state": "trend_risk_off",
+      "previous_snapshot_key": "e5ab5296ed9e6767",
+      "previous_classifier_state": "range_mean_revert_friendly",
       "current_classifier_state": "range_mean_revert_friendly",
-      "previous_pm_risk": "high",
+      "previous_pm_risk": "low",
       "current_pm_risk": "low",
       "previous_breakout_risk": "neutral",
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "sentiment_impulse_up",
       "current_sentiment_regime": "sentiment_impulse_up",
-      "minutes_since_last_distinct_snapshot": 23.0,
-      "transition_label": "classifier_shift:trend_risk_off->range_mean_revert_friendly",
-      "posture": "risk_easing",
+      "minutes_since_last_distinct_snapshot": 31.4,
+      "transition_label": "unchanged_distinct_state",
+      "posture": "stable",
       "state_changed": true
     },
     "pm_risk_context": {
@@ -529,35 +529,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.1594,
-      "avg_range_last6h_pct": 0.2851,
+      "realized_vol_1h_pct": 0.1582,
+      "avg_range_last6h_pct": 0.2991,
       "avg_range_prev18h_pct": 0.2676,
-      "compression_ratio": 1.0653,
-      "trend_6h_pct": 0.6108,
+      "compression_ratio": 1.1177,
+      "trend_6h_pct": 0.5659,
       "breakout_risk": "neutral"
     },
     "regime_state": {
       "regime": "RANGE",
       "score": 2,
-      "atr_pct": 0.54,
+      "atr_pct": 0.59,
       "consistency": 0.88,
-      "range_pct": 0.53,
-      "trend_4h": 0.16,
+      "range_pct": 0.7,
+      "trend_4h": 0.33,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-03T12:00:05.724513+00:00"
+      "timestamp": "2026-05-03T12:30:04.253738+00:00"
     },
     "fast_regime": {
       "regime": "RANGE",
-      "score": 6,
-      "direction": "UP",
-      "avg_range_pct": 0.0965,
-      "max_range_pct": 0.2513,
-      "vol_ratio": 1.95,
-      "net_change_pct": 0.306,
+      "score": 5,
+      "direction": "NEUTRAL",
+      "avg_range_pct": 0.1006,
+      "max_range_pct": 0.2345,
+      "vol_ratio": 1.85,
+      "net_change_pct": 0.018,
       "consistency": 0.583,
       "pm_tradeable": true,
-      "confidence": 69,
-      "detail": "low_vol=0.097%"
+      "confidence": 59,
+      "detail": "low_vol=0.101%"
     },
     "sources": [
       {
@@ -588,7 +588,7 @@
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:trend_risk_off->range_mean_revert_friendly | risk_easing"
+        "last_signal": "unchanged_distinct_state | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",
