@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T07:15:47.134215+00:00",
+  "timestamp": "2026-05-03T07:20:45.014705+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,14 +26,14 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1159%",
-      "apr": "+127%",
+      "rate": "+0.1166%",
+      "apr": "+128%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0986%",
+      "rate": "+0.0985%",
       "apr": "+108%",
       "action": "SHORT",
       "oi": "199,257,774"
@@ -111,11 +111,11 @@
     "summary_state": "max_gap_all_buy_bearish_inversion",
     "summary_text": "Max-gap all-buy bearish inversion in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T06:30:13.870552+00:00",
-    "source_age_minutes": 45.6,
+    "source_age_minutes": 50.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1807.1,
+    "recent_strong_regime_age_minutes": 1812.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -150,11 +150,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1807.1m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1812.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.6m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 50.5m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -162,7 +162,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1159%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1166%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -414,15 +414,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T07:15:05.769182+00:00",
-      "age_minutes": 0.7,
+      "last_updated": "2026-05-03T07:20:36.511422+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T07:15:48.407047+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-03T07:20:36.511840+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -442,7 +442,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59184.9,
+      "age_minutes": 59189.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -452,7 +452,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54814.1,
+      "age_minutes": 54819.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -462,7 +462,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12855.5,
+      "age_minutes": 12860.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -475,13 +475,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 07:15 UTC \u2014 [Pillar 4] Compression coiled, but risk still low\n\n**Task:** Refresh P4 alpha after the range-friendly setup persisted and check whether the prior vol-ratio uptick became expansion or stayed controlled.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T07:15:17.851769+00:00`.\n- Classifier shifted from **`range_mean_revert_friendly`** to **`range_compression_setup`**.\n- Transition posture remains **stable**.\n- PM risk remains **low**.\n- Breakout risk changed from **neutral** to **coiled**.\n- Compression tightened materially: **1.0256 -> 1.0256 -> 0.9051 -> 0.7398**.\n- BTC 6h trend recovered from weakness into positive: **-0.4841% -> +0.154%**.\n- Fast regime remains range but with upward pressure: **RANGE / UP**, score **7**, avg range **0.0704%**, max range **0.2227%**, vol ratio **1.32**, net change **+0.27%**, confidence **76**.\n- Slow regime remains **RANGE**, PM action **TRADE**.\n- BTC price: **$78,361.34**, 24h **+0.053%**.\n- Fear & Greed unchanged: **47 Neutral / sentiment_impulse_up**, 98.3 percentile.\n- Funding squeeze and liquidation signals remain neutral.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-compression-coiled-but-risk-low-2026-05-03-0715.md`.\n\n**My thinking:** The earlier vol-ratio spike did not become dangerous expansion; BTC compressed further while the 6h trend flipped positive. This is a coiled range-compression setup: good for selectivity, but less forgiving because a break can resolve quickly. P4 does not justify loosening Sunday PM filters, and it also does not justify defensive shutdown.\n\n**Decision:** Keep P4 posture **stable compression / selective**, not defensive. Keep PM config unchanged. Keep weekend block active. No Sunday exception despite PM gate showing open in alpha context. No HL live trade; account remains below min-notional under risk rules.\n\n**Next:** Watch whether coiled compression resolves into breakout risk `expanding` or returns to neutral/range-friendly. If `coiled` becomes `expanding` while fast direction stays UP, compare against P1 BTC short blocker before trusting upside continuation.\n\n## 2026-05-03 07:06 UTC \u2014 [Pillar 3] ONDO 60m loser; fixed HL paper duplicate rows\n\n**Task:** Rerun HL paper-signal scoring after ONDO had enough forward data, inspect new rows, and fix any paper-ledger quality issues.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- Paper ledger before patch had **22** rows: `pass_filter=8`, `notional_blocked=8`, `filtered=6`, with **1** scored 15m row.\n- ONDO short now has 60m score: 15m **-0.003546**, 30m **-0.000507**, 60m **-0.001809** \u2014 loser at all scored horizons.\n- New JTO long pass-filter/notional-blocked rows and ETH filtered rows repeated several times on the same live 1",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 07:23 UTC \u2014 [Pillar 1] BTC short blocker flipped long; clean copy-intel upgrade\n\n**Task:** Re-scan HL top-trader copy intelligence after P4 shifted to coiled compression, focusing on whether `anon-0x8fcc` crossed the short-size downgrade trigger or cut risk.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/2S**, **ETH 5L/2S**, **SOL 2L/6S**.\n- Current top-book notional:\n  - **BTC:** longs **$19.77M** vs shorts **$0.49M** \u2192 net **+$19.27M long**\n  - **ETH:** longs **$0.46M** vs shorts **$32.03M** \u2192 net **-$31.56M short**\n  - **SOL:** longs **$0.24M** vs shorts **$11.03M** \u2192 net **-$10.79M short**\n  - **HYPE:** longs **$1.65M** vs shorts **$11.82M** \u2192 net **-$10.16M short**\n- Critical BTC change: `anon-0x8fcc` flipped from **BTC SHORT $4.81M** to **BTC LONG $4.23M**, removing the main short blocker entirely.\n- BTC net long jumped from **+$13.78M** to **+$19.27M**.\n- BTC long anchors are broad: `anon-0xecb6` **$6.98M**, `anon-0xfc66` **$5.63M**, `anon-0x8fcc` **$4.23M**, `anon-0x57dd` **$2.70M**.\n- BTC shorts are now small/residual: `beatmaker1@proton.me` **$490K**, `anon-0xff4c` **$862**.\n- ETH bearish notional persists but softened: net **-$31.56M**, count **5L/2S**.\n- SOL remains bearish by both count and notional: **2L/6S**, net **-$10.79M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-short-blocker-flips-long-clean-upgrade-2026-05-03-0723.md`.\n\n**My thinking:** This is the first clean BTC copy-intel upgrade in the current cycle. The exact blocker we were watching did not just cut below `$2M`; it flipped long with `$4.23M`. BTC net long is far above the `$10M` threshold and short opposition collapsed to <$0.5M. This aligns with P4's coiled compression/upward fast direction.\n\n**Decision:** Upgrade BTC copy-intel from **cautious bullish / contested** to **bullish confirmed**. Remove `anon-0x8fcc` short-blocker alert. New BTC invalidation: downgrade back to contested if `anon-0x8fcc` flips short again above `$2M`, or if BTC net long falls below `$10M`. Keep **SOL short = cleanest bearish count+notional expression**. Keep **ETH short = bearish by notional only**, lower confidence because count is now 5L/2S. No PM Sunday exception. No HL live trade while notional guard blocks execution.\n\n**Next:** Verify whether `anon-0x8fcc` holds the BTC long through the next compression resolution. If BTC breaks up while `anon-0x8fcc` and anchors stay long, this becomes strongest bullish alignment seen today.\n\n## 2026-05-03 07:15 UTC \u2014 [Pillar 4] Compression coiled, but risk still low\n\n**Task:** Refresh P4 alpha after the range-friendly setup persisted and check whether the prior vol-ratio uptick became expansion or stayed controlled.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T07:15:17.851769+00:",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 159,
-    "snapshot_age_minutes": 0.5,
+    "research_files": 160,
+    "snapshot_age_minutes": 5.5,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
