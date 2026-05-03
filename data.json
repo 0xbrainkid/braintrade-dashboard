@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T22:07:33.899761+00:00",
+  "timestamp": "2026-05-03T22:15:56.049763+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.0956%",
-      "apr": "+105%",
+      "rate": "+0.0982%",
+      "apr": "+108%",
       "action": "SHORT",
       "oi": "284,115,346"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0574%",
-      "apr": "+63%",
+      "rate": "+0.0738%",
+      "apr": "+81%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -111,11 +111,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T21:30:12.985321+00:00",
-    "source_age_minutes": 37.3,
+    "source_age_minutes": 45.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2698.8,
+    "recent_strong_regime_age_minutes": 2707.2,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2698.8m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2707.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 37.3m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 45.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.0956%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.0982%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -429,15 +429,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T22:07:18.717909+00:00",
-      "age_minutes": 0.3,
+      "last_updated": "2026-05-03T22:15:05.688146+00:00",
+      "age_minutes": 0.8,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T22:07:32.675811+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T22:15:49.302138+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -457,7 +457,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60076.7,
+      "age_minutes": 60085.0,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -467,7 +467,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55705.9,
+      "age_minutes": 55714.3,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -477,7 +477,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13747.3,
+      "age_minutes": 13755.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -490,13 +490,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 22:07 UTC \u2014 [Pillar 4] Expanding range, P1 hard defensive overrides\n\n**Task:** Refresh P4 alpha after P1 fired hard defensive triggers, testing whether high compression resolves to breakout or remains range expansion that conflicts with copy-intel risk-off.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-03T22:06:48.311653+00:00**.\n- BTC price **$78,979.78**, 24h **+0.273%**; Fear & Greed **47 Neutral**.\n- Alpha schema drift persists: `regime_state` is raw **RANGE** object while `posture` and `pm_risk` are **null**.\n- BTC microstructure: realized vol 1h **0.1480%**, avg range last 6h **0.3939%**, compression **1.4745**, 6h trend **+0.4142%**, breakout risk **expanding**.\n- Fast regime: **RANGE / NEUTRAL**, avg range **0.1330%**, vol ratio **1.57**, net change **-0.0%**, confidence **47**, pm_tradeable **true**.\n- Funding squeeze remains **NEUTRAL** with score **0** and PM adjustment **0**; liquidation signal remains **neutral** with **0** events.\n- Last 12 alpha snapshots: states **RANGE 12/12**; compression min/max/avg/last **0.6594 / 1.4745 / 0.9087 / 1.4745**; 6h trend min/max/avg/last **-0.0947% / +0.4242% / +0.1486% / +0.4142%**.\n- Compression path: 20:38 **1.1384** normalized RANGE/UP \u2192 21:23 **1.1791** high expansion \u2192 22:07 **1.4745** expanding, highest recent print.\n- Latest P1 overlay remains hard defensive: BTC **5L/3S**, net **+$4.19M** below hard **$10M**; `anon-0x8fcc` short trigger active; ETH **-$32.93M**, SOL **-$10.75M**, HYPE **-$10.83M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-expanding-range-p1-hard-defensive-overrides-2026-05-03-2207.md`.\n\n**My thinking:** P4 shows a large range expansion, but not a confirmed trend breakout: fast regime is still RANGE/NEUTRAL, funding is neutral, liquidations are neutral, and net change is flat. Meanwhile P1 hard defensive triggers remain active. That means the expansion is not actionable as risk-on; it is a conflict state with copy-intel overriding microstructure.\n\n**Decision:** Keep P4 state **expanding range / no confirmed breakout**. Keep P1 **hard defensive override** active while BTC net remains **<$10M** and `8fcc` short is active. Keep PM weekend block active; no Sunday exception. Keep PM config unchanged. Keep HL live notional-blocked. No trend loosening, no PM alpha overlay, no JTO/RANGE-vol live expansion. Continue tracking alpha schema drift.\n\n**Next:** Watch if fast regime flips TREND and whether funding/liquidations confirm; without confirmation, treat expansion as chop. If BTC net reclaims **>$10M** and `8fcc` short falls below **$2M**, downgrade from hard defensive to defensive watch; if BTC net reclaims **>$15M**, remove hard overlay.\n\n## 2026-05-03 21:49 UTC \u2014 [Pillar 3] RANGE-only vol 1.5-2.0x flat, not usable\n\n**T",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 22:14 UTC \u2014 [Pillar 1] BTC reclaims neutral: hard trigger clears but below $15M\n\n**Task:** Re-check P1 copy intelligence after BTC hit hard defensive triggers, focusing on whether `anon-0x8fcc` stayed short and whether BTC net stayed below `$10M`.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/3S**, **ETH 3L/5S**, **SOL 0L/8S**.\n- Current top-book notional: BTC **+$13.51M net long**, ETH **-$35.91M net short**, SOL **-$10.80M net short**, HYPE **-$10.82M net short**, JTO **+$355 net long only**.\n- BTC hard defensive trigger cleared: BTC net reclaimed above **$10M**, and `anon-0x8fcc` reversed back to BTC LONG **$4.78M**.\n- BTC has not reclaimed constructive: net remains below **$15M** and below **$17M** bullish/rebuild line.\n- BTC current anchors: `anon-0xfc66` LONG **$5.63M**, `anon-0xecb6` LONG **$5.32M**, `anon-0x8fcc` LONG **$4.78M**, `anon-0x57dd` LONG **$2.16M**, `beatmaker1@proton.me` LONG **$650K**.\n- BTC current shorts: `anon-0x61ce` SHORT **$5.00M**, `anon-0xf5d8` SHORT **$54K**, `anon-0xc926` SHORT **$1K**.\n- Cross-asset defensive pressure persists: ETH **-$35.91M**, SOL **0L/8S / -$10.80M**, HYPE **-$10.82M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-reclaims-neutral-hard-trigger-clears-but-below-15m-2026-05-03-2214.md`.\n\n**My thinking:** The urgent BTC hard-defensive state cleared quickly: `8fcc` is no longer short and BTC net is back above `$10M`. But this is not a bullish reset. BTC remains below `$15M`, while ETH/SOL/HYPE are still aggressively short. The correct posture is **defensive watch**, not hard risk-off and not risk-on.\n\n**Decision:** Downgrade BTC from **hard defensive / risk-off** to **defensive watch**. Keep P1 defensive overlay active while BTC net remains **<$15M**. Clear hard defensive only because BTC net is now **>$10M** and `8fcc` is not short. Do not move constructive until BTC net reclaims **>$15M**; do not move bullish until **>$17M** with anchors holding. Keep ETH bearish high, SOL bearish very high, and HYPE bearish high. Keep PM weekend block active and HL live notional-blocked.\n\n**Next:** Watch whether BTC net reclaims **>$15M** or fails back below **$10M**. Watch `anon-0x61ce` BTC SHORT **$5.00M** as the new main opposing anchor.\n\n## 2026-05-03 22:07 UTC \u2014 [Pillar 4] Expanding range, P1 hard defensive overrides\n\n**Task:** Refresh P4 alpha after P1 fired hard defensive triggers, testing whether high compression resolves to breakout or remains range expansion that conflicts with copy-intel risk-off.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-03T22:06:48.311653+00:00**.\n- BTC price **$78,979.78**, 24h **+0.273%**; Fear & Greed **47 Neutral**.\n- Alpha schema drift persist",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 278,
-    "snapshot_age_minutes": 0.8,
+    "research_files": 279,
+    "snapshot_age_minutes": 9.1,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
