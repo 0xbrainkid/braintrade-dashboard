@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T03:00:03.356409+00:00",
+  "timestamp": "2026-05-03T03:12:09.059861+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,15 +26,15 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1132%",
-      "apr": "+124%",
+      "rate": "+0.1207%",
+      "apr": "+132%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1027%",
-      "apr": "+112%",
+      "rate": "+0.1047%",
+      "apr": "+115%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -111,11 +111,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T02:30:12.612209+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 41.9,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1551.3,
+    "recent_strong_regime_age_minutes": 1563.4,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1551.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1563.4m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 41.9m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1132%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1207%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -406,15 +406,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T03:00:00.433809+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T03:12:05.674895+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T03:00:00.434611+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T03:12:05.674284+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -428,13 +428,13 @@
     "hl_live_planned_order_notional": 11.217492,
     "hl_live_min_order_notional_usd": 20.0,
     "hl_live_positions_count": 0,
-    "hl_live_signals_count": 1,
+    "hl_live_signals_count": 0,
     "hl_directional_surface_summary": "hl_live_trader direct state: notional_blocked",
     "engine_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 58929.2,
+      "age_minutes": 58941.2,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -444,7 +444,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54558.4,
+      "age_minutes": 54570.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -454,7 +454,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12599.8,
+      "age_minutes": 12611.9,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -467,13 +467,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 03:00 UTC \u2014 [Pillar 1] BTC net recovered above $10M, but the big short persists\n\n**Task:** Re-scan HL top-trader copy intelligence after P4 flagged worsening BTC internals and after the prior P1 read held BTC at neutral/crowded-fade risk.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 2L/6S**, **SOL 1L/7S**.\n- Current top-book notional:\n  - **BTC:** longs **$14.48M** vs shorts **$4.10M** \u2192 net **+$10.38M long**\n  - **ETH:** longs **$0.03M** vs shorts **$34.77M** \u2192 net **-$34.74M short**\n  - **SOL:** longs **$0.19M** vs shorts **$11.07M** \u2192 net **-$10.87M short**\n  - **HYPE:** longs **$1.75M** vs shorts **$11.74M** \u2192 net **-$9.99M short**\n- BTC net long recovered above the `$10M` threshold: prior **+$8.97M**, current **+$10.38M**.\n- BTC long anchors strengthened/held: `anon-0xecb6` BTC LONG **$5.81M**, `anon-0xfc66` BTC LONG **$5.63M**, `anon-0x57dd` BTC LONG **$2.50M**.\n- The large BTC short persists but trimmed: `anon-0x8fcc` BTC SHORT **$4.10M**.\n- ETH remains strongest bearish: **2L/6S**, net **-$34.74M**.\n- SOL remains clean bearish: **1L/7S**, net **-$10.87M**.\n- HYPE remains secondary bearish: net **-$9.99M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-net-recovers-but-short-persists-2026-05-03-0300.md`.\n\n**My thinking:** BTC improved enough to remove the most urgent downgrade condition: net long is back above `$10M` and anchor longs increased. But the short concentration has not disappeared, and P4 remains in expanding/down tape. So BTC improves to **cautious bullish / contested**, not clean bullish.\n\n**Decision:** Upgrade BTC one notch: **neutral/crowded-fade risk \u2192 cautious bullish / contested**. Do **not** chase BTC longs while P4 remains `sentiment_impulse_up + expanding` and BTC 6h trend is near defensive trigger. Keep **ETH short = strongest bearish expression**. Keep **SOL short = high-confidence bearish**. Keep **HYPE short = secondary bearish**. No HL trade opened; HL remains `notional_blocked`.\n\n**Next:** Monitor whether `anon-0x8fcc` continues trimming the BTC short. If the short drops below `$2M` and BTC net long stays above `$10M`, BTC can upgrade to aligned bullish. If the short grows back above `$5M` or BTC net falls below `$10M`, downgrade again.\n\n## 2026-05-03 02:45 UTC \u2014 [Pillar 4] Expansion hit 2.12x and BTC slipped closer to defensive trigger\n\n**Task:** Refresh the alpha/risk stack after the prior warning that `pm_risk=low` was masking worsening internal conditions.\n\n**Finding:**\n- Both bots were alive on check (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T02:44:39.382886+00:00`.\n- Classifier remains **`mixed_transition`** with stance **reduced**.\n- PM headline risk remains **low** and slow regime remains **RANGE / TRADE**.\n- Fast regime remains **RANGE**, direction **DOWN**,",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 03:10 UTC \u2014 [Pillar 2] Built 20 UTC alpha-outcome analyzer, confirmed current data gap\n\n**Task:** Build/verify the 20 UTC-specific analysis path requested after the alpha-overlay data gap: use realized `confidence_outcomes.jsonl` rows only when they carry `alpha_*` attribution, and avoid inferring old rows from sparse alpha history.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `trading_bot.py` already has `load_alpha_outcome_context()` and outcome logging now calls `outcome_entry.update(self.load_alpha_outcome_context())` before appending to `confidence_outcomes.jsonl`.\n- Current realized outcome file status: total rows **201**, alpha-tagged rows **0**, latest outcome **2026-04-07T19:35:15.678249+00:00**, 20 UTC alpha-tagged rows **0**.\n- Reason for zero alpha rows: no realized PM outcomes have settled since the alpha-attribution code path was added / since the alpha archive became usable.\n- Added executable script: `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`.\n- Script reads `confidence_outcomes.jsonl`, filters only rows with `alpha_*` fields, isolates 20 UTC rows, reports WR and avg `pnl_pct`, and buckets by `alpha_transition_posture`, `alpha_breakout_risk`, `alpha_fast_regime`, `alpha_pm_risk`, and `alpha_classifier_state`.\n- Validation output: `rows_total 201`, `rows_alpha_tagged 0`, `rows_20utc_alpha_tagged 0`, `status DATA_GAP: no realized 20 UTC outcomes with alpha_* attribution yet`.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-20utc-alpha-outcome-analyzer-2026-05-03-0310.md`.\n\n**My thinking:** P2 now has the analysis tool ready before the data arrives. The blocker is not analysis plumbing anymore; it is realized alpha-tagged outcomes. Until the bot settles new PM trades, especially active-hour/20 UTC trades, any `sentiment_impulse_up + expanding` overlay would be speculation.\n\n**Decision:** Keep PM config unchanged. Keep `active_hours=[11,12,20]`. Do not add a 20 UTC alpha/copy overlay yet. Use `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py` as the gate before any 20 UTC context rule. Require at least 5 realized active-hour alpha-tagged rows before changing PM filters.\n\n**Next:** Re-run the analyzer after any new settled PM outcomes. If still zero alpha-tagged rows, inspect whether weekend blocking / no-trade state is expected; if new outcomes exist but no alpha fields appear, treat it as instrumentation breakage and patch immediately.\n\n## 2026-05-03 03:00 UTC \u2014 [Pillar 1] BTC net recovered above $10M, but the big short persists\n\n**Task:** Re-scan HL top-trader copy intelligence after P4 flagged worsening BTC internals and after the prior P1 read held BTC at neutral/crowded-fade risk.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/1S**, **ETH 2L/6S**, **SOL 1L/7S**.\n- Current top",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 128,
-    "snapshot_age_minutes": 15.4,
+    "research_files": 129,
+    "snapshot_age_minutes": 27.5,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
