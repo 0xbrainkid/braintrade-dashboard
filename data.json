@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T07:00:02.819334+00:00",
+  "timestamp": "2026-05-03T07:13:57.870541+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -33,8 +33,8 @@
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0869%",
-      "apr": "+95%",
+      "rate": "+0.0990%",
+      "apr": "+108%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -111,11 +111,11 @@
     "summary_state": "max_gap_all_buy_bearish_inversion",
     "summary_text": "Max-gap all-buy bearish inversion in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T06:30:13.870552+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 43.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1791.3,
+    "recent_strong_regime_age_minutes": 1805.2,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -150,11 +150,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1791.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1805.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 43.7m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -414,14 +414,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T06:58:02.059557+00:00",
-      "age_minutes": 2.0,
+      "last_updated": "2026-05-03T07:13:53.028678+00:00",
+      "age_minutes": 0.1,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T06:59:55.060382+00:00",
+      "last_updated": "2026-05-03T07:13:53.029740+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -436,13 +436,13 @@
     "hl_live_planned_order_notional": 11.217492,
     "hl_live_min_order_notional_usd": 20.0,
     "hl_live_positions_count": 0,
-    "hl_live_signals_count": 0,
+    "hl_live_signals_count": 1,
     "hl_directional_surface_summary": "hl_live_trader direct state: notional_blocked",
     "engine_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59169.1,
+      "age_minutes": 59183.1,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -452,7 +452,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54798.4,
+      "age_minutes": 54812.3,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -462,7 +462,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12839.8,
+      "age_minutes": 12853.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -475,13 +475,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 06:48 UTC \u2014 [Pillar 2] Sunday candidates all in price band, negative-bias pressure stays dangerous\n\n**Task:** Re-check live PM smart-entry conditions after the prior Sunday reacceleration audit, with emphasis on whether weekend-filtered rows are still high-quality-looking under weekday rules.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: total realized outcome rows **201**, 20 UTC alpha-tagged rows **0**, status **DATA_GAP**.\n- PM no-trade rows since 06:05 UTC: **35**.\n- All 35 blocks were **WEEKEND_FILTER**.\n- Bias distribution in blocked rows: avg |bias| **45.2**, median |bias| **48.7**, max |bias| **81.5**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **20 / 35** blocked rows.\n- Cap pressure remains dangerous: `abs_bias > 70` on **6** rows and `abs_bias > 80` on **3** rows.\n- Price band was live-tradeable by YES price on **35 / 35** rows.\n- Bias signs skewed heavily negative: **27 negative / 8 positive**.\n- Seven 5-minute windows inspected; 6 had at least one V5a-eligible blocked row. The 06:20 window had max |bias| **81.5**, avg |bias| **74.4**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-negative-bias-pressure-all-in-band-2026-05-03-0648.md`.\n\n**My thinking:** Sunday remains exactly the dangerous pattern: every blocked row was inside the live price band, most were negative-bias YES-only candidates, and over half would pass V5a by bias. That makes the weekend block valuable even when P4 is range-friendly. The heavy negative skew means loosening Sunday would concentrate exposure into one side during a historically poor day.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Keep `min_bias=45`, `max_bias=70`, price band, active hours, and weekend block unchanged. Do not create a Sunday exception. Keep alpha-overlay and 20 UTC changes blocked until realized alpha-tagged rows exist.\n\n**Next:** Continue monitoring for first new realized weekday outcomes and confirm alpha fields are present. If new outcome rows lack `alpha_*`, patch immediately.\n\n## 2026-05-03 06:42 UTC \u2014 [Pillar 1] BTC net surged, but main short is near downgrade trigger\n\n**Task:** Re-scan HL top-trader copy intelligence after P4 confirmed stable range-friendly structure and P1 put BTC on downgrade watch due to count deterioration.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 6L/2S**, **ETH 4L/4S**, **SOL 1L/7S**.\n- Current top-book notional:\n  - **BTC:** longs **$18.82M** vs shorts **$5.04M** \u2192 net **+$13.78M long**\n  - **ETH:** longs **$0.70M** vs shorts **$34.52M** \u2192 net **-$33.83M short**\n  - **SOL:** longs",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 07:06 UTC \u2014 [Pillar 3] ONDO 60m loser; fixed HL paper duplicate rows\n\n**Task:** Rerun HL paper-signal scoring after ONDO had enough forward data, inspect new rows, and fix any paper-ledger quality issues.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- Paper ledger before patch had **22** rows: `pass_filter=8`, `notional_blocked=8`, `filtered=6`, with **1** scored 15m row.\n- ONDO short now has 60m score: 15m **-0.003546**, 30m **-0.000507**, 60m **-0.001809** \u2014 loser at all scored horizons.\n- New JTO long pass-filter/notional-blocked rows and ETH filtered rows repeated several times on the same live 15m candle.\n- Root cause: `log_paper_signal()` dedupe key included live price and reason, so the same active candle could generate repeated rows as price/reason changed slightly.\n- Patched `/home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py`: dedupe key is now `stage:side:coin:candle_ts`; signal tuples now carry optional `candle_ts`; live-state and run-cycle paths tolerate/propagate it.\n- Validation passed: `python3 -m py_compile /home/ubuntu/clawd/hyperliquid-trader/hl_live_trader.py`.\n- Restarted `hl-bot`; post-restart screens show `hl-bot` and `pm-bot` alive.\n- Post-restart HL state: `started`, `execution_mode=notional_blocked`, balance **$37.391639**, cycle `0`, signals `0`.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-ondo-score-jto-dup-dedupe-fix-2026-05-03-0706.md`.\n\n**My thinking:** The paper signal loop is now cleaner. ONDO's first scored signal was a shallow-breakout loser through 60m, and the next JTO/ETH burst exposed duplicate contamination before it became a bigger dataset problem. The right scoring unit is one stage/side/coin/candle, not every small price drift inside that candle.\n\n**Decision:** Keep HL bot live. Keep risk unchanged: `max_position_pct=0.10`, `leverage=3`, `min_order_notional_usd=20.0`. Do not force trades from `$37.39`. Keep watching shallow-breakout rows as a possible weakness bucket, but do not change strategy on n=1. Treat pre-patch JTO/ETH rows as potentially duplicate-contaminated.\n\n**Next:** Score JTO/ETH rows after their 15m horizon elapses and separate pre-dedupe duplicate rows from post-dedupe clean rows in analysis.\n\n## 2026-05-03 06:48 UTC \u2014 [Pillar 2] Sunday candidates all in price band, negative-bias pressure stays dangerous\n\n**Task:** Re-check live PM smart-entry conditions after the prior Sunday reacceleration audit, with emphasis on whether weekend-filtered rows are still high-quality-looking under weekday rules.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 157,
-    "snapshot_age_minutes": 24.8,
+    "research_files": 158,
+    "snapshot_age_minutes": 38.7,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
