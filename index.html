@@ -124,6 +124,14 @@
   .signal-bullish { background: rgba(34,197,94,0.15); color: var(--green); }
   .signal-bearish { background: rgba(239,68,68,0.15); color: var(--red); }
   .signal-neutral { background: rgba(107,114,128,0.15); color: var(--dim); }
+  .mode-pill {
+    display: inline-block; padding: 3px 8px; border-radius: 999px;
+    font-size: 0.75em; font-weight: 700; letter-spacing: 0.3px;
+  }
+  .mode-live { background: rgba(34,197,94,0.15); color: var(--green); }
+  .mode-notional { background: rgba(234,179,8,0.15); color: var(--yellow); }
+  .mode-wallet { background: rgba(239,68,68,0.15); color: var(--red); }
+  .mode-unknown { background: rgba(107,114,128,0.15); color: var(--dim); }
 </style>
 </head>
 <body>
@@ -345,6 +353,10 @@ async function loadData() {
     // ═══ PILLAR 3: CONTINUOUS ITERATION ═══
     const p3 = d.pillar3 || {};
     const p3pct = p3.completion || 70;
+    const hlMode = p3.hl_live_execution_mode || p3.hl_live_status || 'unknown';
+    const hlModeClass = hlMode === 'live_tradeable' ? 'mode-live' : hlMode === 'notional_blocked' ? 'mode-notional' : hlMode === 'wallet_blocked' ? 'mode-wallet' : 'mode-unknown';
+    const hlPlanned = Number(p3.hl_live_planned_order_notional || 0);
+    const hlMinNotional = Number(p3.hl_live_min_order_notional_usd || 0);
     document.getElementById('pillar3').innerHTML = `
       <div class="pillar-header">
         <span class="pillar-title orange">How fast am I learning and adapting?</span>
@@ -368,6 +380,16 @@ async function loadData() {
           <div class="card-value orange">${p3.heartbeats_today || 0}</div>
           <div class="card-sub">Active review cycles</div>
         </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">⚙️ HL Execution State</div>
+        <div class="metric-row"><span class="metric-label">Mode</span><span class="metric-value"><span class="mode-pill ${hlModeClass}">${hlMode}</span></span></div>
+        <div class="metric-row"><span class="metric-label">Exec Wallet</span><span class="metric-value">${(p3.hl_exec_wallet || '—').slice(0, 8)}…${(p3.hl_exec_wallet || '').slice(-4)}</span></div>
+        <div class="metric-row"><span class="metric-label">Exec Balance</span><span class="metric-value">$${Number(p3.hl_exec_balance || p3.hl_live_balance || 0).toFixed(2)}</span></div>
+        <div class="metric-row"><span class="metric-label">Planned Notional</span><span class="metric-value ${p3.hl_live_order_notional_blocked ? 'yellow' : 'green'}">$${hlPlanned.toFixed(2)} / $${hlMinNotional.toFixed(2)}</span></div>
+        <div class="metric-row"><span class="metric-label">Wallet Aligned</span><span class="metric-value ${p3.hl_wallet_misaligned ? 'red' : 'green'}">${p3.hl_wallet_misaligned ? 'NO' : 'YES'}</span></div>
+        <div class="card-sub">${p3.hl_directional_surface_summary || 'HL execution state loading'}</div>
       </div>
 
       <div style="margin-top: 10px;">
