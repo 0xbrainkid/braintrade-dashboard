@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T21:19:08.272353+00:00",
+  "timestamp": "2026-05-03T21:21:46.244105+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,14 +26,14 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.1129%",
-      "apr": "+124%",
+      "rate": "+0.1120%",
+      "apr": "+123%",
       "action": "SHORT",
-      "oi": "289,181,810"
+      "oi": "286,830,120"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0788%",
+      "rate": "+0.0785%",
       "apr": "+86%",
       "action": "SHORT",
       "oi": "199,257,774"
@@ -111,11 +111,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T20:30:14.317425+00:00",
-    "source_age_minutes": 48.9,
+    "source_age_minutes": 51.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2650.4,
+    "recent_strong_regime_age_minutes": 2653.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -146,15 +146,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2650.4m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2653.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 48.9m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 51.5m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.1129%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.1120%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -429,14 +429,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T21:18:20.887786+00:00",
-      "age_minutes": 0.8,
+      "last_updated": "2026-05-03T21:21:13.860967+00:00",
+      "age_minutes": 0.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T21:19:03.476822+00:00",
+      "last_updated": "2026-05-03T21:21:42.446310+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -457,7 +457,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60028.2,
+      "age_minutes": 60030.9,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -467,7 +467,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55657.5,
+      "age_minutes": 55660.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -477,7 +477,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13698.9,
+      "age_minutes": 13701.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -490,13 +490,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 21:18 UTC \u2014 [Pillar 2] Sunday 21 UTC in-band flip after P1/P4 conflict\n\n**Task:** Check PM smart-entry tape after P4 stayed normalized RANGE/UP but P1 reactivated defensive overlay below the `$15M` BTC distribution trigger, focusing on whether PM tape resolves the conflict or stays Sunday-noisy.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 21:00 UTC: **16**.\n- All 16 blocks were **WEEKEND_FILTER**.\n- Bias distribution: avg |bias| **37.5**, median **35.0**, max **66.7**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **7 / 16** rows.\n- Cap pressure absent: `abs_bias > 70` on **0** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility was complete: YES price inside live band on **16 / 16** rows.\n- Bias signs: **11 positive / 5 negative**.\n- Window detail: 21:00 all negative/all in-band; 21:05 all positive/all in-band with avg |bias| **65.7**; 21:10 all positive/all in-band but weaker; 21:15 partial positive/all in-band.\n- Incidental P1 refresh ran in parallel: headline **BTC 5L/3S**, **ETH 3L/5S**, **SOL 1L/7S**, so no clean cross-asset risk-on confirmation.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-21utc-inband-flip-after-p1-p4-conflict-2026-05-03-2118.md`.\n\n**My thinking:** PM tape stayed fully in-band but flipped hard from bearish to bullish in one 5-minute window. The 21:05 window looked strong and in-band, but it followed a negative in-band window and then weakened quickly. This does not resolve the P1/P4 conflict; it confirms the same Sunday pattern: brief clean-looking pulses without persistence.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen **min_price=0.50**, V5a, max-bias, or active-hour filters. Treat 21:00-21:15 as blocked in-band flip tape: valid-looking rows, no persistence. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist. Monday readiness remains the next real P2 checkpoint.\n\n**Next:** Check the first weekday active-hour outcome for `alpha_*` fields. If the next realized row still lacks `alpha_*`, patch instrumentation before drawing alpha-overlay conclusions.\n\n## 2026-05-03 21:04 UTC \u2014 [Pillar 1] BTC reclaim fails, SOL shorts rotate harder\n\n**Task:** Run fresh copy intelligence and test whether BTC reclaimed the `$15M` constructive line after the prior defensive/distribution conflict.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Ran `/home/ubuntu/clawd/scripts/copy-intel-tracker.py`; output",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 21:22 UTC \u2014 [Pillar 3] Fresh generic vol bucket mixed: BTC win, ETH loss\n\n**Task:** Score the fresh 20:26 BTC and 20:36 ETH RANGE-vol 1.5-2.0x rows after forward returns populated, then decide whether the generic vol branch deserves a dedicated scorer or should stay ad-hoc.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- Generic scorer after backfill: rows scored 15m **71**; `1.5-2.0x` vol bucket **25 rows / 72.0% WR / +0.001734 avg**; `2.0-2.5x` **34.8% WR / -0.000487 avg**; `>=2.5x` **30.4% WR / +0.000091 avg**; `MIXED` remains toxic at **14 rows / 14.3% WR / -0.001472 avg**.\n- Re-ran deduped generic `1.5 <= vol_ratio < 2.0` check.\n- Deduped pool: **14 rows**, stages filtered **11** / pass_filter **3**, regimes RANGE **8** / MIXED **3** / STRONG_TREND **3**.\n- Deduped returns after backfill: 15m **14 rows / 50.0% WR / +0.000901 avg**, 30m **57.1% WR / +0.001582 avg**, 60m **13 rows / 46.2% WR / -0.001215 avg**.\n- Fresh rows: BTC long 20:26 RANGE vol **1.5491** won modestly (**+0.001433 15m / +0.000165 30m / +0.001052 60m**); ETH long 20:36 RANGE vol **1.7169** lost hard (**-0.004829 15m / -0.003376 30m**, 60m pending).\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-fresh-generic-vol-bucket-mixed-btc-win-eth-loss-2026-05-03-2122.md`.\n\n**My thinking:** The fresh sample is mixed: BTC won modestly, ETH lost hard. The generic non-deduped bucket still looks attractive, but the deduped all-stage bucket remains only 50% WR at 15m and negative by 60m. This is not robust enough for a dedicated live branch.\n\n**Decision:** Do not add a dedicated generic-vol scorer yet. Keep using ad-hoc dedupe checks until n increases and a narrower rule emerges. Keep JTO STRONG_TREND momentum as the higher-priority P3 branch. Keep RANGE-vol filtered and micro-drift paper-only. Treat MIXED regime as an exclusion candidate for any future HL branch. Do not force live trades from `$37.39`; HL live remains notional-blocked.\n\n**Next:** Isolate **RANGE-only 1.5-2.0x** separately from MIXED and STRONG_TREND to see whether the broad bucket can be decomposed into one usable sub-branch.\n\n## 2026-05-03 21:18 UTC \u2014 [Pillar 2] Sunday 21 UTC in-band flip after P1/P4 conflict\n\n**Task:** Check PM smart-entry tape after P4 stayed normalized RANGE/UP but P1 reactivated defensive overlay below the `$15M` BTC distribution trigger, focusing on whether PM tape resolves the conflict or stays Sunday-noisy.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- ",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 272,
-    "snapshot_age_minutes": 16.5,
+    "research_files": 273,
+    "snapshot_age_minutes": 19.1,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
