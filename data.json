@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T07:45:23.376972+00:00",
+  "timestamp": "2026-05-03T07:47:14.500075+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,14 +26,14 @@
   "funding_opportunities": [
     {
       "coin": "MAVIA",
-      "rate": "+0.1184%",
+      "rate": "+0.1183%",
       "apr": "+130%",
       "action": "SHORT",
       "oi": "69,653,465"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0964%",
+      "rate": "+0.0966%",
       "apr": "+106%",
       "action": "SHORT",
       "oi": "199,257,774"
@@ -111,11 +111,11 @@
     "summary_state": "max_gap_all_buy_bearish_disagreement",
     "summary_text": "Max-gap all-buy bearish disagreement in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T07:00:13.055403+00:00",
-    "source_age_minutes": 45.2,
+    "source_age_minutes": 47.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 1836.7,
+    "recent_strong_regime_age_minutes": 1838.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -150,11 +150,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1836.7m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 1838.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 47.0m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -162,7 +162,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: MAVIA at 0.1184%/8h \u2014 longs paying shorts"
+        "text": "Strongest: MAVIA at 0.1183%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -414,15 +414,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T07:44:55.527448+00:00",
-      "age_minutes": 0.5,
+      "last_updated": "2026-05-03T07:47:03.689346+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T07:45:24.605433+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-03T07:47:06.974937+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -442,7 +442,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59214.5,
+      "age_minutes": 59216.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -452,7 +452,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 54843.7,
+      "age_minutes": 54845.6,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -462,7 +462,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 12885.1,
+      "age_minutes": 12887.0,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -475,35 +475,35 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 07:48 UTC \u2014 [Pillar 3] Post-dedupe paper signals show mixed pass-filter edge\n\n**Task:** Score JTO/ETH/SOL/DOGE/ONDO paper rows after the HL paper-ledger dedupe patch, and separate pre-patch duplicate contamination from cleaner post-patch signal rows.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- Paper ledger now has **36** rows: `pass_filter=12`, `notional_blocked=12`, `filtered=12`.\n- Aggregate scored rows, excluding `notional_blocked` duplicates: 15m **22 rows / 68.2% WR / +0.000382 avg**, 30m **21 rows / 81.0% WR / +0.000831 avg**, 60m **1 row / 0% WR / -0.001809 avg**.\n- At 15m, `pass_filter` is weak: **11 rows / 45.5% WR / -0.000118 avg**. `filtered` rows outperform: **11 rows / 90.9% WR / +0.000882 avg**.\n- At 30m, `pass_filter` improves to **63.6% WR / +0.000425 avg**, while `filtered` remains **100% WR / +0.001278 avg**.\n- Original ONDO short remains a loser through 60m: 15m **-0.003546**, 30m **-0.000507**, 60m **-0.001809**.\n- Cleaner post-patch rows from/after 07:06:10: ETH filtered long won at 15m/30m; JTO pass-filter long lost at 15m/30m; SOL pass-filter was flat-to-slightly-positive; SOL filtered won slightly; DOGE filtered lost; ONDO long rows are too fresh for scoring.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-post-dedupe-paper-signals-mixed-pass-filter-2026-05-03-0748.md`.\n\n**My thinking:** This is useful but noisy. The filters are doing real work: filtered rows are outperforming pass-filter rows in this sample, which means some rejected signals moved directionally right but the rejections also caught the DOGE shallow breakout loss. The pass-filter set is not strong enough for live capital even if account size allowed it.\n\n**Decision:** Keep HL bot live. Keep risk unchanged: `max_position_pct=0.10`, `leverage=3`, `min_order_notional_usd=20.0`. Do not force trades from `$37.39`. Do not loosen HL filters based on early 30m positives. Treat pre-dedupe repeated JTO/ETH rows as duplicate-contaminated; prioritize post-07:06:10 rows going forward.\n\n**Next:** Score the new ONDO long at 15m/30m and re-evaluate post-dedupe-only pass-filter performance. If JTO/ONDO pass-filter rows remain weak while filtered rows keep outperforming, draft a stricter confirmation rule before changing live execution.\n\n## 2026-05-03 07:35 UTC \u2014 [Pillar 2] Sunday pressure flipped positive, price-band quality fragmented\n\n**Task:** Re-check live PM smart-entry conditions after BTC copy-intel upgraded to bullish confirmed, and determine whether Sunday/weekend discipline should change.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/script",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 07:47 UTC \u2014 [Pillar 4] Coil resolved back to range-friendly with bullish tilt\n\n**Task:** Refresh P4 alpha after BTC copy-intel upgraded to bullish confirmed and check whether coiled compression resolved into dangerous expansion or back into stable range.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Fresh alpha snapshot: `2026-05-03T07:46:47.386157+00:00`.\n- Classifier shifted from **`range_compression_setup`** back to **`range_mean_revert_friendly`**.\n- Transition posture remains **stable**.\n- PM risk remains **low**.\n- Breakout risk moved from **coiled** back to **neutral**.\n- Compression remains tight but no longer coiled: **0.9051 -> 0.7398 -> 0.7712**.\n- BTC 6h trend remains positive: **+0.154% -> +0.171%**.\n- Fast regime remains **RANGE / UP** with score **6**, avg range **0.0868%**, max range **0.2227%**, vol ratio **1.82**, net change **+0.27%**, confidence **69**.\n- Slow regime remains **RANGE**, PM action **TRADE**.\n- BTC price: **$78,375.48**, 24h **+0.183%**.\n- Fear & Greed unchanged: **47 Neutral / sentiment_impulse_up**, 98.3 percentile.\n- Funding squeeze and liquidation signals remain neutral.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-coil-resolved-back-to-range-friendly-2026-05-03-0747.md`.\n\n**My thinking:** The coiled state did not become dangerous expansion. It resolved back to range-friendly while retaining upward fast direction and positive 6h trend. This aligns with the P1 BTC copy-intel upgrade: market structure and top-trader positioning are now pointing in the same direction. The one caution is fast vol ratio at **1.82**, which is elevated despite neutral breakout risk.\n\n**Decision:** Keep P4 posture **range-friendly with bullish tilt**, not defensive. Keep PM config unchanged. Keep weekend block active despite bullish P1/P4 alignment. No Sunday exception. No HL live trade while notional guard blocks execution.\n\n**Next:** Watch whether vol ratio >1.8 persists and whether breakout risk returns to `expanding`. If breakout risk expands while P1 remains bullish confirmed, distinguish bullish continuation from whipsaw before any strategy change.\n\n## 2026-05-03 07:48 UTC \u2014 [Pillar 3] Post-dedupe paper signals show mixed pass-filter edge\n\n**Task:** Score JTO/ETH/SOL/DOGE/ONDO paper rows after the HL paper-ledger dedupe patch, and separate pre-patch duplicate contamination from cleaner post-patch signal rows.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- Paper ledger now has **36** rows: `pass_filter=12`, `notional_blocked=12`, `filtered=12`.\n- Aggregate scored rows, excluding `notional_blocked` duplicates: 15m **22 rows / 68.2% WR / +0.000382 avg**, 30m **21 rows / 81.0% WR / +0.000831 avg**, 60m **1 row / 0% WR / -0.001809 avg**.\n- At 15m, `pass_filter` is weak: **1",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 162,
-    "snapshot_age_minutes": 30.1,
+    "research_files": 163,
+    "snapshot_age_minutes": 0.5,
     "btc_regime_classifier": {
-      "state": "range_compression_setup",
-      "score": 4,
-      "stance": "selective",
-      "breakout_risk": "coiled",
+      "state": "range_mean_revert_friendly",
+      "score": 2,
+      "stance": "normal",
+      "breakout_risk": "neutral",
       "slow_regime": "RANGE",
       "fast_regime": "RANGE",
       "sentiment_regime": "sentiment_impulse_up",
-      "detail": "BTC compressed | slow range regime | fast range structure | PM gate open into compression"
+      "detail": "slow range regime | fast range structure"
     },
     "transition_context": {
-      "previous_snapshot_key": "6d234e9d675c4684",
-      "previous_classifier_state": "range_mean_revert_friendly",
-      "current_classifier_state": "range_compression_setup",
+      "previous_snapshot_key": "e548fc15b9070599",
+      "previous_classifier_state": "range_compression_setup",
+      "current_classifier_state": "range_mean_revert_friendly",
       "previous_pm_risk": "low",
       "current_pm_risk": "low",
-      "previous_breakout_risk": "neutral",
-      "current_breakout_risk": "coiled",
+      "previous_breakout_risk": "coiled",
+      "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "sentiment_impulse_up",
       "current_sentiment_regime": "sentiment_impulse_up",
-      "minutes_since_last_distinct_snapshot": 40.0,
-      "transition_label": "classifier_shift:range_mean_revert_friendly->range_compression_setup",
+      "minutes_since_last_distinct_snapshot": 31.5,
+      "transition_label": "classifier_shift:range_compression_setup->range_mean_revert_friendly",
       "posture": "stable",
       "state_changed": true
     },
@@ -530,12 +530,12 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.1455,
-      "avg_range_last6h_pct": 0.1984,
+      "realized_vol_1h_pct": 0.146,
+      "avg_range_last6h_pct": 0.2068,
       "avg_range_prev18h_pct": 0.2681,
-      "compression_ratio": 0.7398,
-      "trend_6h_pct": 0.154,
-      "breakout_risk": "coiled"
+      "compression_ratio": 0.7712,
+      "trend_6h_pct": 0.171,
+      "breakout_risk": "neutral"
     },
     "regime_state": {
       "regime": "RANGE",
@@ -543,22 +543,22 @@
       "atr_pct": 0.58,
       "consistency": 0.5,
       "range_pct": 0.49,
-      "trend_4h": 0.24,
+      "trend_4h": 0.3,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-03T07:15:03.939632+00:00"
+      "timestamp": "2026-05-03T07:45:02.650086+00:00"
     },
     "fast_regime": {
       "regime": "RANGE",
-      "score": 7,
+      "score": 6,
       "direction": "UP",
-      "avg_range_pct": 0.0704,
+      "avg_range_pct": 0.0868,
       "max_range_pct": 0.2227,
-      "vol_ratio": 1.32,
+      "vol_ratio": 1.82,
       "net_change_pct": 0.27,
       "consistency": 0.5,
       "pm_tradeable": true,
-      "confidence": 76,
-      "detail": "low_vol=0.070%"
+      "confidence": 69,
+      "detail": "low_vol=0.087%"
     },
     "sources": [
       {
@@ -584,12 +584,12 @@
       {
         "name": "BTC Regime Classifier",
         "status": "ACTIVE",
-        "last_signal": "range_compression_setup | selective"
+        "last_signal": "range_mean_revert_friendly | normal"
       },
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:range_mean_revert_friendly->range_compression_setup | stable"
+        "last_signal": "classifier_shift:range_compression_setup->range_mean_revert_friendly | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",
