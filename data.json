@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T17:46:02.385969+00:00",
+  "timestamp": "2026-05-03T17:50:41.183981+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,7 +26,7 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1102%",
+      "rate": "+0.1101%",
       "apr": "+121%",
       "action": "SHORT",
       "oi": "199,257,774"
@@ -104,11 +104,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T17:00:14.294223+00:00",
-    "source_age_minutes": 45.8,
+    "source_age_minutes": 50.4,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2437.3,
+    "recent_strong_regime_age_minutes": 2442.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -139,15 +139,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2437.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2442.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 50.4m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1102%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1101%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -399,15 +399,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T17:45:01.068640+00:00",
-      "age_minutes": 1.0,
+      "last_updated": "2026-05-03T17:50:28.845912+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T17:45:48.467445+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-03T17:50:43.891829+00:00",
+      "age_minutes": -0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -427,7 +427,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59815.1,
+      "age_minutes": 59819.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -437,7 +437,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55444.4,
+      "age_minutes": 55449.0,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -447,7 +447,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13485.8,
+      "age_minutes": 13490.4,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -460,13 +460,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 17:47 UTC \u2014 [Pillar 1] BTC distribution accelerates to 4L/3S\n\n**Task:** Re-check P1 copy intelligence after BTC broke the `$15M` distribution trigger, focusing on whether it quickly reclaimed the line or confirmed distribution.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 4L/3S**, **ETH 2L/6S**, **SOL 3L/5S**.\n- Current top-book notional: BTC **+$12.34M net long**, ETH **-$35.65M net short**, SOL **-$10.89M net short**, HYPE **-$10.63M net short**, JTO **+$355 net long only**.\n- BTC deterioration since the last P1 pass: count shifted from **7L/1S** to **4L/3S**, net dropped from **+$14.70M** to **+$12.34M**, shorts expanded from **$0.58M** to **$1.05M**.\n- `anon-0xecb6` BTC LONG cut from **$4.18M** to **$2.64M**.\n- `beatmaker1@proton.me` BTC SHORT increased from **$575K** to **$981K**.\n- `anon-0xf5d8` and `anon-0xff4c` are now small BTC shorts.\n- Key BTC anchors: `anon-0xfc66` BTC LONG still **$5.63M**; `anon-0x8fcc` BTC LONG still **$4.30M**, below clean **$5M** anchor level.\n- Hard downgrade trigger **BTC net <$10M** has not fired yet, but distance is now only about **$2.34M**.\n- ETH remains high-conviction bearish: **2L/6S**, net **-$35.65M**, with `anon-0x3bca` ETH SHORT still **$1.41M**.\n- SOL remains bearish by notional and now count: **3L/5S**, net **-$10.89M**.\n- HYPE remains high bearish by notional/count: **2L/7S**, net **-$10.63M**.\n- JTO top-trader confirmation remains absent.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-distribution-accelerates-4l3s-2026-05-03-1747.md`.\n\n**My thinking:** BTC distribution is accelerating, not reclaiming. The important shift is no longer just notional below `$15M`; the count has also degraded to **4L/3S**, the largest visible BTC long `ecb6` cut hard, and beatmaker's short nearly doubled. This confirms P1 defensive override for P4/PM context.\n\n**Decision:** Keep BTC state **distribution / defensive**. Escalate watch: BTC is now approaching the hard downgrade line. Hard downgrade remains BTC net **<$10M** or `anon-0x8fcc` flips short above **$2M**. Reclaim condition remains BTC net **>$15M** for watch state, and **>$17M** plus `8fcc` near/above **$5M** for clean bullish. Keep ETH bearish confidence high. Keep SOL bearish by notional and now count. Keep HYPE bearish confidence high. Keep PM weekend block active; no Sunday exception. Keep HL live notional-blocked; no forced trades from `$37.39`. Do not treat JTO P3 momentum as copy-intel confirmed.\n\n**Next:** Watch for the hard trigger: BTC net **<$10M**, `anon-0x8fcc` flip, or continued `ecb6` trimming. If BTC reclaims **>$15M** quickly, downgrade severity back to distribution watch; otherwise keep defensive override active.\n\n## 2026-05-03 17:38 UTC \u2014 [Pillar 4] Compression rebounds but P1 defensive override stays\n\n**Task:** Refresh alpha after the 17:06 coiled-comp",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 17:52 UTC \u2014 [Pillar 2] Sunday 17:30 pressure chop after BTC distribution\n\n**Task:** Re-check PM smart-entry conditions after P1 BTC distribution accelerated to 4L/3S, focusing on whether PM pressure confirms defensive direction or remains weekend chop.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 17:30 UTC: **20**.\n- All 20 blocks were **WEEKEND_FILTER**.\n- Bias softened vs 17:00: avg |bias| **29.5**, median **28.3**, max **75.5**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **5 / 20** rows.\n- Cap pressure: `abs_bias > 70` on **1** row, `abs_bias > 80` on **0** rows.\n- Price-band eligibility weakened: YES price inside live band on **10 / 20** rows.\n- Bias signs: **14 positive / 5 negative / 1 zero**.\n- Window detail: 17:30 weak mixed/all in-band; 17:35 strong positive but **0/5** in-band; 17:40 moderate positive/all in-band with marginal V5a; 17:45 weak positive and **0/5** in-band.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-1730-pressure-chop-after-btc-distribution-2026-05-03-1752.md`.\n\n**My thinking:** PM did not produce clean defensive confirmation after BTC copy-intel worsened. It stayed choppy: sign flipped positive, pressure strength pulsed for one window, and price oscillated just below/inside the live band. The weekend filter again prevented taking a noisy setup that looked compelling for only one 5-minute slice.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Treat 17:30-17:50 as blocked weekend chop: one strong positive out-of-band pulse, otherwise weak/mixed. Keep P1 defensive overlay active because BTC top-trader net remains below `$15M` and deteriorating. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist.\n\n**Next:** Focus on 19-20 UTC: compare whether active-hour pressure becomes persistent and in-band or continues the same flip/pulse pattern. First weekday active-hour outcome must still be checked for `alpha_*` fields before alpha-overlay conclusions.\n\n## 2026-05-03 17:47 UTC \u2014 [Pillar 1] BTC distribution accelerates to 4L/3S\n\n**Task:** Re-check P1 copy intelligence after BTC broke the `$15M` distribution trigger, focusing on whether it quickly reclaimed the line or confirmed distribution.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 4L/3S**, **ETH 2L/6S**, **SOL 3L/5S**.\n- Current top-book notional: BTC **+$12.34M net long**",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 243,
-    "snapshot_age_minutes": 7.6,
+    "research_files": 244,
+    "snapshot_age_minutes": 12.3,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
