@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T23:21:35.184933+00:00",
+  "timestamp": "2026-05-03T23:30:02.575699+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.1007%",
-      "apr": "+110%",
+      "rate": "+0.1018%",
+      "apr": "+112%",
       "action": "SHORT",
       "oi": "284,044,660"
     },
     {
+      "coin": "BLAST",
+      "rate": "-0.0685%",
+      "apr": "-75%",
+      "action": "LONG",
+      "oi": "2,259,415,968"
+    },
+    {
       "coin": "ZEREBRO",
-      "rate": "+0.0663%",
+      "rate": "+0.0668%",
       "apr": "+73%",
       "action": "SHORT",
       "oi": "199,257,774"
-    },
-    {
-      "coin": "BLAST",
-      "rate": "-0.0619%",
-      "apr": "-68%",
-      "action": "LONG",
-      "oi": "2,259,415,968"
     }
   ],
   "daily_pnl": [
@@ -108,23 +108,23 @@
     "completion": 60,
     "traders_tracked": 0,
     "current_bias": "bullish",
-    "signal_confidence": 20,
+    "signal_confidence": 21,
     "signals_today": 50,
-    "directional_skew": 0.2,
-    "order_flow_skew": 0.12,
-    "directional_order_gap": 0.08,
-    "avg_signal_price": 0.834,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bullish",
-    "summary_text": "Mixed bullish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-03T22:30:21.664011+00:00",
-    "source_age_minutes": 51.2,
+    "directional_skew": 0.36,
+    "order_flow_skew": -0.68,
+    "directional_order_gap": 1.04,
+    "avg_signal_price": 0.991,
+    "alignment_regime": "disagreement",
+    "summary_state": "disagreement",
+    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-03T23:00:13.653467+00:00",
+    "source_age_minutes": 29.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2772.9,
+    "recent_strong_regime_age_minutes": 2781.3,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
-    "disagreement_regime": false,
+    "disagreement_regime": true,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
@@ -145,23 +145,23 @@
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
     "crowded_expensive_regime": false,
-    "structure_note": "",
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 28 buys, 22 sells \u2014 avg price $0.834"
+        "text": "Top traders: 8 buys, 42 sells \u2014 avg price $0.991"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2772.9m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2781.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 51.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.1007%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.1018%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -436,15 +436,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T23:19:22.673914+00:00",
-      "age_minutes": 2.2,
+      "last_updated": "2026-05-03T23:29:25.557099+00:00",
+      "age_minutes": 0.6,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T23:21:34.112976+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T23:29:57.183821+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -464,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60150.7,
+      "age_minutes": 60159.1,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -474,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55779.9,
+      "age_minutes": 55788.4,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -484,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13821.3,
+      "age_minutes": 13829.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -503,7 +503,7 @@
     "data_sources": 7,
     "signals_generated": 2,
     "research_files": 288,
-    "snapshot_age_minutes": 9.5,
+    "snapshot_age_minutes": 17.9,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
