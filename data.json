@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T14:54:45.863557+00:00",
+  "timestamp": "2026-05-03T14:58:34.915073+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -25,32 +25,32 @@
   "hl_positions": [],
   "funding_opportunities": [
     {
+      "coin": "YZY",
+      "rate": "-0.1088%",
+      "apr": "-119%",
+      "action": "LONG",
+      "oi": "1,206,724"
+    },
+    {
       "coin": "ZEREBRO",
-      "rate": "+0.0956%",
+      "rate": "+0.0961%",
       "apr": "+105%",
       "action": "SHORT",
       "oi": "199,257,774"
     },
     {
-      "coin": "YZY",
-      "rate": "-0.0736%",
-      "apr": "-81%",
-      "action": "LONG",
-      "oi": "1,206,868"
-    },
-    {
       "coin": "REZ",
-      "rate": "-0.0603%",
-      "apr": "-66%",
+      "rate": "-0.0582%",
+      "apr": "-64%",
       "action": "LONG",
-      "oi": "298,133,692"
+      "oi": "297,773,294"
     },
     {
       "coin": "TST",
-      "rate": "+0.0531%",
-      "apr": "+58%",
+      "rate": "+0.0554%",
+      "apr": "+61%",
       "action": "SHORT",
-      "oi": "163,566,826"
+      "oi": "164,742,686"
     }
   ],
   "daily_pnl": [
@@ -125,11 +125,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T14:00:18.545414+00:00",
-    "source_age_minutes": 54.5,
+    "source_age_minutes": 58.3,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2266.0,
+    "recent_strong_regime_age_minutes": 2269.8,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -160,15 +160,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2266.0m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2269.8m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 54.5m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 58.3m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0956%/8h \u2014 longs paying shorts"
+        "text": "Strongest: YZY at -0.1088%/8h \u2014 shorts paying longs"
       },
       {
         "source": "Market Sentiment",
@@ -420,14 +420,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-03T14:54:32.704859+00:00",
+      "last_updated": "2026-05-03T14:58:23.269453+00:00",
       "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T14:54:35.894033+00:00",
+      "last_updated": "2026-05-03T14:58:25.711936+00:00",
       "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -448,7 +448,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59643.9,
+      "age_minutes": 59647.7,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -458,7 +458,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55273.1,
+      "age_minutes": 55276.9,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -468,7 +468,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13314.5,
+      "age_minutes": 13318.3,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -481,13 +481,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 14:58 UTC \u2014 [Pillar 2] Sunday pressure thinned after BTC edge watch\n\n**Task:** Re-check PM smart-entry conditions after P1 showed BTC breadth 8L/0S but net only ~$130K above the `$15M` distribution trigger, and decide whether PM filters or weekend discipline should change.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 14:30 UTC: **21**.\n- All 21 blocks were **WEEKEND_FILTER**.\n- Bias distribution thinned materially: avg |bias| **21.6**, median **18.6**, max **76.6**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **3 / 21** rows.\n- Cap pressure persists but is sparse: `abs_bias > 70` on **2** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility was rare: YES price inside live band on **5 / 21** rows.\n- Bias signs were balanced/choppy: **11 positive / 10 negative**.\n- Five 5-minute windows inspected; **3** had at least one V5a-eligible blocked row. 14:30 was weak/mixed/in-band; the strongest 14:45-14:50 rows were out-of-band.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-pressure-thins-after-btc-edge-watch-2026-05-03-1458.md`.\n\n**My thinking:** After the 14 UTC hard-cap burst, PM pressure thinned again. The only in-band window was weak and mixed, while the strongest bias rows stayed out-of-band. Combined with P1's BTC distribution watch, this is not a tradable setup \u2014 it's Sunday chop with occasional out-of-band extremes.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Treat sparse `abs_bias >70` Sunday rows as cap-validation, not deploy evidence. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist.\n\n**Next:** Watch whether 15 UTC produces true in-band + V5a alignment or remains out-of-band extremes. First weekday active-hour outcome must still be checked for `alpha_*` fields before alpha-overlay conclusions.\n\n## 2026-05-03 14:56 UTC \u2014 [Pillar 1] BTC shorts flushed but net below clean threshold\n\n**Task:** Re-check P1 copy intelligence after BTC sat just above the `$15M` distribution line, focusing on whether breadth/net reclaims clean bullish confirmation or breaks down.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 8L/0S**, **ETH 2L/5S**, **SOL 2L/6S**.\n- Current top-book notional: **BTC +$15.13M net long**, **ETH -$35.59M net short**, **SOL -$10.91M net short**, **HYPE -$10.26M net short**.\n- BTC breadth improved sharply from **6L/2S** ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 15:00 UTC \u2014 [Pillar 3] New SOL micro-drift row awaits maturity\n\n**Task:** Use the new rolling micro-drift score history to detect whether strict RANGE paper rows increased or metrics materially changed.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `score_hl_paper_signals.py`, `write_hl_micro_drift_signals.py`, and `score_hl_micro_drift_signals.py`.\n- Dedicated micro ledger increased from **5** to **6** rows; new coin added: **SOL 1**.\n- New micro row: **2026-05-03T14:51:47.957513+00:00**, SOL long, breakout_pct **0.0154**, vol_ratio **2.9207** (`>=2.5x`), trend bucket **extended_>=0.35%**, fast direction **UP**; forward 15m/30m/60m metrics are not mature yet.\n- Scored metrics are unchanged because the new SOL row has no forward outcomes yet: immediate 15m **5 rows / 80.0% WR / +0.001074 avg**, immediate 30m **5 rows / 60.0% WR / +0.001157 avg**, immediate 60m **5 rows / 80.0% WR / +0.000837 avg**, delayed +15\u2192+30 **5 rows / 80.0% WR / +0.000083 avg**, delayed +15\u2192+60 **5 rows / 20.0% WR / -0.000237 avg**.\n- History comparison: history rows **2**, row count delta **+1**, metric deltas all **0.0** because SOL is not mature.\n- Base HL paper ledger: source rows **54**, scored 15m rows **44**, `filtered` **23 rows / 69.6% WR / +0.000343 avg**, `pass_filter` **15 rows / 33.3% WR / -0.000446 avg**, RANGE **18 rows / 77.8% WR / +0.000803 avg**, MIXED **10 rows / 20.0% WR / -0.001195 avg**.\n- HL live state remains blocked: balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, execution mode **notional_blocked**, positions **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-micro-drift-new-sol-row-awaits-maturity-2026-05-03-1500.md`.\n\n**My thinking:** The rolling history did its job: it caught a real n increase without changing scored conclusions prematurely. The new SOL row is notable because it appears during P1's max bearish SOL leaderboard state, yet the paper micro-drift side is long. That conflict should be tagged and watched rather than pooled blindly.\n\n**Decision:** Keep `hl_range_micro_drift_v0_paper` paper-only. Keep HL live risk unchanged and blocked by notional guard. Do not force trades from `$37.39`. Do not loosen pass-filter breakout logic. Keep scoring priority: immediate 15m/30m first, delayed +15m\u2192+30m second, delayed +15m\u2192+60m as decay check. Mark the new SOL row as conflict-watch because P1 SOL is **0L/8S bearish** while the micro-drift row is **long**.\n\n**Next:** Rescore after the SOL row matures at 15m/30m/60m and compare against history. If SOL loses while P1 remains max bearish, add a copy-intel conflict tag/gate to the micro-drift ledger before accumulating more rows.\n\n## 2026-05-03 14:58 UTC \u2014 [Pillar 2] Sunday pressure thinned after BTC edge watch\n\n**Task:** Re-check PM smart-entry conditions after P1 showed BTC breadth 8L/0S but net only ~$",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 220,
-    "snapshot_age_minutes": 7.4,
+    "research_files": 221,
+    "snapshot_age_minutes": 11.3,
     "btc_regime_classifier": {
       "state": "range_mean_revert_friendly",
       "score": 2,
