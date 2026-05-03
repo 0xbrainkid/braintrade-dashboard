@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T18:21:09.689746+00:00",
+  "timestamp": "2026-05-03T18:23:11.099494+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,8 +26,8 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1068%",
-      "apr": "+117%",
+      "rate": "+0.1057%",
+      "apr": "+116%",
       "action": "SHORT",
       "oi": "199,257,774"
     }
@@ -104,11 +104,11 @@
     "summary_state": "aligned_bullish",
     "summary_text": "Aligned bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-03T17:30:13.354305+00:00",
-    "source_age_minutes": 50.9,
+    "source_age_minutes": 53.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2472.4,
+    "recent_strong_regime_age_minutes": 2474.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -139,11 +139,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2472.4m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2474.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 50.9m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 53.0m \u2014 lag risk"
       },
       {
         "source": "Copy Structure",
@@ -151,7 +151,7 @@
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1068%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1057%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -404,14 +404,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-03T18:20:39.202511+00:00",
-      "age_minutes": 0.5,
+      "age_minutes": 2.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-03T18:21:08.278203+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-03T18:23:05.797413+00:00",
+      "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -431,7 +431,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 59850.3,
+      "age_minutes": 59852.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -441,7 +441,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55479.5,
+      "age_minutes": 55481.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -451,7 +451,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13520.9,
+      "age_minutes": 13522.9,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -464,13 +464,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:24 UTC \u2014 [Pillar 1] BTC reclaims clean net but 8fcc lags\n\n**Task:** Re-check P1 copy intelligence after BTC distribution accelerated toward the hard downgrade line, focusing on whether it breaks below `$10M` or rapidly reclaims the distribution zone.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/0S**, **ETH 2L/6S**, **SOL 0L/8S**.\n- Current top-book notional: BTC **+$18.74M net long**, ETH **-$34.81M net short**, SOL **-$10.91M net short**, HYPE **-$10.60M net short**, JTO **+$355 net long only**.\n- BTC reversed sharply from the last P1 pass: count improved from **4L/3S** to **7L/0S**, net improved from **+$12.34M** to **+$18.74M**, and visible BTC shorts fell from **$1.05M** to **$0**.\n- `beatmaker1@proton.me` flipped from BTC SHORT **$981K** to BTC LONG **$2.71M**.\n- `anon-0xecb6` rebuilt BTC LONG from **$2.64M** to **$4.47M**.\n- `anon-0x57dd` rebuilt BTC LONG from **$817K** to **$1.49M**.\n- BTC clean-net condition is met: reclaim above **$15M** yes, reclaim above **$17M** yes.\n- Remaining caveat: `anon-0x8fcc` remains **$4.30M LONG**, still below the clean anchor threshold near/above **$5M**.\n- ETH remains high-conviction bearish: **2L/6S**, net **-$34.81M**, with `anon-0x3bca` ETH SHORT still **$1.41M**.\n- SOL is now max bearish by count and notional: **0L/8S**, net **-$10.91M**.\n- HYPE remains bearish by count and notional: **2L/7S**, net **-$10.60M**.\n- JTO top-trader confirmation remains absent.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-reclaims-clean-net-but-8fcc-lags-2026-05-03-1824.md`.\n\n**My thinking:** BTC executed a violent copy-intel reclaim. The hard downgrade did not fire; instead, BTC reclaimed both the `$15M` distribution line and `$17M` clean-net line, with shorts fully flushed and beatmaker flipping long. That removes the immediate P1 defensive override for BTC itself. But it is not full clean bullish yet because `anon-0x8fcc` did not rebuild above the `$5M` anchor and ETH/SOL/HYPE remain deeply net short.\n\n**Decision:** Upgrade BTC from **distribution / defensive** to **bullish reclaim with caveat**. Do not mark full clean bullish until `anon-0x8fcc` rebuilds near/above **$5M** or BTC net remains >$17M across another refresh. Remove immediate BTC hard-downgrade watch unless net falls back below `$15M`. Keep ETH bearish confidence high. Escalate SOL bearish confidence: now **0L/8S**, max bearish by count and notional. Keep HYPE bearish confidence high. Keep PM weekend block active; no Sunday exception. Keep HL live notional-blocked; no forced trades from `$37.39`. Do not treat JTO P3 momentum as copy-intel confirmed.\n\n**Next:** Verify whether this BTC reclaim persists: watch `anon-0x8fcc` toward **$5M**, `beatmaker1` holding the new **$2.71M** long, and BTC net staying above **$17M**. If BTC falls back below **$15M**, reinstate di",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-03 18:28 UTC \u2014 [Pillar 2] Sunday 18 UTC negative-soft after BTC reclaim\n\n**Task:** Re-check PM smart-entry conditions after P1 BTC upgraded to bullish reclaim with caveat, focusing on whether PM pressure confirms the BTC reclaim or remains weekend noise before 19-20 UTC.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 18:00 UTC: **20**.\n- All 20 blocks were **WEEKEND_FILTER**.\n- Bias softened: avg |bias| **26.2**, median **26.2**, max **50.3**.\n- Would-have-passed V5a by bias only (`abs_bias >= 45`): **1 / 20** rows.\n- Cap pressure absent: `abs_bias > 70` on **0** rows and `abs_bias > 80` on **0** rows.\n- Price-band eligibility: YES price inside live band on **15 / 20** rows.\n- Bias signs: **20 negative / 0 positive**.\n- Window detail: 18:00 all negative/all in-band with max **50.3** and avg **41.1**; 18:05 all negative but **0/5** in-band; 18:10 and 18:15 all negative/all in-band but subthreshold.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-sunday-18utc-negative-soft-after-btc-reclaim-2026-05-03-1828.md`.\n\n**My thinking:** After BTC copy-intel reclaimed sharply, PM pressure did **not** flip bullish; it stayed uniformly negative but mostly below V5a strength. This is a useful contradiction: P1 says BTC risk improved, but PM tape is still soft/negative and Sunday-blocked. The weekend filter continues to do its job by preventing low-conviction negative entries outside active hours.\n\n**Decision:** Keep weekend block active. Keep PM config unchanged. Do not create a Sunday exception. Do not loosen V5a, max-bias, price-band, or active-hour filters. Treat 18:00-18:20 as blocked negative-soft tape: one marginal V5a window, then subthreshold pressure. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist. Respect P1 BTC reclaim, but do not let it override PM Sunday discipline.\n\n**Next:** Focus on 19-20 UTC active-hour-equivalent windows: check whether negative pressure becomes persistent and V5a/in-band, or whether it remains subthreshold. First weekday active-hour outcome must still be checked for `alpha_*` fields before alpha-overlay conclusions.\n\n## 2026-05-03 18:24 UTC \u2014 [Pillar 1] BTC reclaims clean net but 8fcc lags\n\n**Task:** Re-check P1 copy intelligence after BTC distribution accelerated toward the hard downgrade line, focusing on whether it breaks below `$10M` or rapidly reclaims the distribution zone.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 7L/0S**, **ETH 2L/6S**, **SOL 0L/8S**.",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 247,
-    "snapshot_age_minutes": 6.5,
+    "research_files": 248,
+    "snapshot_age_minutes": 8.6,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
