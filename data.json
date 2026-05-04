@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-04T17:27:31.692663+00:00",
+  "timestamp": "2026-05-04T17:30:03.683613+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,14 +26,14 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.1117%",
-      "apr": "+122%",
+      "rate": "+0.1108%",
+      "apr": "+121%",
       "action": "SHORT",
       "oi": "198,375,140"
     },
     {
       "coin": "TST",
-      "rate": "+0.0772%",
+      "rate": "+0.0776%",
       "apr": "+85%",
       "action": "SHORT",
       "oi": "270,687,890"
@@ -100,24 +100,24 @@
   "pillar1": {
     "completion": 60,
     "traders_tracked": 0,
-    "current_bias": "bearish",
-    "signal_confidence": 36,
+    "current_bias": "bullish",
+    "signal_confidence": 60,
     "signals_today": 50,
-    "directional_skew": -0.36,
-    "order_flow_skew": -0.12,
-    "directional_order_gap": 0.24,
-    "avg_signal_price": 0.932,
-    "alignment_regime": "mixed",
-    "summary_state": "mixed_bearish",
-    "summary_text": "Mixed bearish copy flow \u2014 lagging source",
-    "source_scan_time": "2026-05-04T16:30:14.964537+00:00",
-    "source_age_minutes": 57.3,
+    "directional_skew": 1.0,
+    "order_flow_skew": -1.0,
+    "directional_order_gap": 2.0,
+    "avg_signal_price": 0.99,
+    "alignment_regime": "sell_heavy_bullish_disagreement",
+    "summary_state": "sell_heavy_bullish_disagreement",
+    "summary_text": "Sell-heavy bullish disagreement in copy flow \u2014 lagging source",
+    "source_scan_time": "2026-05-04T17:00:22.111431+00:00",
+    "source_age_minutes": 29.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 3858.8,
+    "recent_strong_regime_age_minutes": 3861.3,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
-    "disagreement_regime": false,
+    "disagreement_regime": true,
     "bearish_disagreement_regime": false,
     "all_buy_bearish_disagreement_regime": false,
     "all_buy_bearish_inversion_regime": false,
@@ -125,7 +125,7 @@
     "max_gap_all_buy_bearish_inversion_regime": false,
     "weak_directional_disagreement_regime": false,
     "persistent_neutral_disagreement_regime": false,
-    "sell_heavy_bullish_disagreement_regime": false,
+    "sell_heavy_bullish_disagreement_regime": true,
     "persistent_sell_heavy_bullish_disagreement_regime": false,
     "soft_flat_order_bearish_disagreement_regime": false,
     "persistent_soft_flat_order_bearish_disagreement_regime": false,
@@ -137,24 +137,28 @@
     "expensive_mixed_bearish_regime": false,
     "aligned_bearish_crowded_regime": false,
     "aligned_bullish_crowded_regime": false,
-    "crowded_expensive_regime": false,
-    "structure_note": "",
+    "crowded_expensive_regime": true,
+    "structure_note": "Order-side flow and directional flow are materially different \u2014 use directional fields for bias",
     "insights": [
       {
         "source": "Copy Scanner",
-        "text": "Top traders: 22 buys, 28 sells \u2014 avg price $0.932"
+        "text": "Top traders: 0 buys, 50 sells \u2014 avg price $0.990"
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3858.8m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3861.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 57.3m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 29.7m \u2014 lag risk"
+      },
+      {
+        "source": "Copy Structure",
+        "text": "\ud83d\udcb8 crowded regime: directional skew +1.00 at avg price $0.990"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.1117%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.1108%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -430,7 +434,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 7.8,
+        "source_age_minutes": 10.3,
         "source_stale": false
       }
     ],
@@ -439,13 +443,13 @@
       "decision": "review",
       "error_tail": [],
       "execution_mode": "notional_blocked",
-      "last_cycle": "2026-05-04 17:26:25,011 - INFO - \ud83d\udcb0 Cycle 7860 | Balance: $37.39 | Positions: none | Signals: 0",
+      "last_cycle": "2026-05-04 17:29:23,585 - INFO - \ud83d\udcb0 Cycle 7872 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 1.1,
+      "log_age_minutes": 0.7,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 7.8,
+      "paper_age_minutes": 10.4,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -468,7 +472,7 @@
       "signals_count": 0,
       "state_age_minutes": 0.2,
       "status": "FRESH",
-      "timestamp": "2026-05-04T17:27:33.763765+00:00"
+      "timestamp": "2026-05-04T17:30:06.290571+00:00"
     },
     "win_rate_7d": 56.2,
     "win_rate_24h": 0,
@@ -486,15 +490,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-04T17:26:25.012633+00:00",
-      "age_minutes": 1.1,
+      "last_updated": "2026-05-04T17:29:23.584894+00:00",
+      "age_minutes": 0.7,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-04T17:27:23.923452+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-04T17:29:52.761440+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -514,7 +518,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 61236.6,
+      "age_minutes": 61239.2,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -524,7 +528,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 56865.9,
+      "age_minutes": 56868.4,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -534,7 +538,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 14907.3,
+      "age_minutes": 14909.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -552,8 +556,8 @@
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 435,
-    "snapshot_age_minutes": 4.6,
+    "research_files": 436,
+    "snapshot_age_minutes": 7.1,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -6,
@@ -636,7 +640,7 @@
       {
         "name": "HL Leaderboard Tracker",
         "status": "ACTIVE",
-        "last_signal": "BEARISH consensus"
+        "last_signal": "BULLISH consensus"
       },
       {
         "name": "PM Leaderboard Scraper",
