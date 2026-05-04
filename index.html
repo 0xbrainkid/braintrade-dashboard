@@ -393,6 +393,29 @@ async function loadData() {
       </div>
 
       <div style="margin-top: 10px;">
+        <div class="card-title">🧪 HL Paper Strategy Branches</div>
+        ${(p3.strategy_branches || []).map(b => {
+          const status = b.status || 'paper';
+          const statusClass = status === 'BLOCK_LIVE' ? 'red' : status === 'ready_review' ? 'green' : 'yellow';
+          const wr = b.wr_15m === null || b.wr_15m === undefined ? '—' : `${b.wr_15m}%`;
+          const avg = b.avg_15m === null || b.avg_15m === undefined ? '—' : `${Number(b.avg_15m).toFixed(4)}`;
+          const details = [
+            b.candidate_filter ? `filter: ${b.candidate_filter}` : '',
+            b.broad_pass_filter_is_live_quality === false ? 'broad pass_filter: NOT live quality' : '',
+            b.block_reason || ''
+          ].filter(Boolean).join(' | ');
+          return `
+            <div class="evolution-item">
+              <span class="evo-date ${statusClass}">${status}</span>
+              <span class="evo-text">${b.name || 'branch'} — rows ${b.rows ?? '—'} | 15m WR ${wr} | avg ${avg}</span>
+              <span class="evo-impact ${statusClass}">${b.live_ready === false ? 'BLOCK' : 'WATCH'}</span>
+              ${details ? `<div class="card-sub" style="width:100%;margin-top:4px;">${details}</div>` : ''}
+            </div>
+          `;
+        }).join('') || '<div class="card-sub">No paper branches tracked</div>'}
+      </div>
+
+      <div style="margin-top: 10px;">
         <div class="card-title">🔧 Recent Changes</div>
         ${(p3.changes || []).map(c => `
           <div class="evolution-item">
