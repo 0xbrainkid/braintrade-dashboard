@@ -399,9 +399,11 @@ async function loadData() {
           const statusClass = status === 'BLOCK_LIVE' ? 'red' : status === 'ready_review' ? 'green' : 'yellow';
           const wr = b.wr_15m === null || b.wr_15m === undefined ? '—' : `${b.wr_15m}%`;
           const avg = b.avg_15m === null || b.avg_15m === undefined ? '—' : `${Number(b.avg_15m).toFixed(4)}`;
+          const sourceAge = b.source_age_minutes === null || b.source_age_minutes === undefined ? '' : `source age: ${b.source_age_minutes}m${b.source_stale ? ' STALE' : ''}`;
           const details = [
             b.candidate_filter ? `filter: ${b.candidate_filter}` : '',
             b.broad_pass_filter_is_live_quality === false ? 'broad pass_filter: NOT live quality' : '',
+            sourceAge,
             b.block_reason || ''
           ].filter(Boolean).join(' | ');
           return `

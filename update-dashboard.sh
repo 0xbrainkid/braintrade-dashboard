@@ -960,6 +960,15 @@ except Exception:
     _p3_v2_guard = {}
 if _p3_v2_guard:
     _v2m15 = ((_p3_v2_guard.get('metrics') or {}).get('15m') or {})
+    _v2_source = _p3_v2_guard.get('source') or '/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl'
+    _v2_source_age_minutes = None
+    _v2_source_stale = True
+    try:
+        _v2_mtime = datetime.datetime.fromtimestamp(os.path.getmtime(_v2_source), tz=datetime.timezone.utc)
+        _v2_source_age_minutes = round((now - _v2_mtime).total_seconds() / 60, 1)
+        _v2_source_stale = _v2_source_age_minutes > 120
+    except Exception:
+        pass
     p3_strategy_branches.append({
         "name": "hl_pass_filter_v2_jto_strong_guard",
         "status": "BLOCK_LIVE" if not _p3_v2_guard.get('live_ready') else "ready_review",
@@ -971,6 +980,8 @@ if _p3_v2_guard:
         "candidate_filter": _p3_v2_guard.get('candidate_filter'),
         "explicit_exclusions": _p3_v2_guard.get('explicit_exclusions'),
         "broad_pass_filter_is_live_quality": _p3_v2_guard.get('broad_pass_filter_is_live_quality'),
+        "source_age_minutes": _v2_source_age_minutes,
+        "source_stale": _v2_source_stale,
     })
 
 params_changed = len(p3_changes) + len(p3_strategy_branches)
