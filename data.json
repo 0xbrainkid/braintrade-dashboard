@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-04T03:30:03.787297+00:00",
+  "timestamp": "2026-05-04T03:38:58.310950+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,22 +26,22 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.0972%",
-      "apr": "+106%",
+      "rate": "+0.0962%",
+      "apr": "+105%",
       "action": "SHORT",
       "oi": "281,509,376"
     },
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0868%",
-      "apr": "+95%",
+      "rate": "+0.0859%",
+      "apr": "+94%",
       "action": "SHORT",
       "oi": "199,255,030"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0674%",
-      "apr": "-74%",
+      "rate": "-0.0660%",
+      "apr": "-72%",
       "action": "LONG",
       "oi": "2,261,562,696"
     }
@@ -118,11 +118,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T03:00:15.445648+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 38.7,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 3021.3,
+    "recent_strong_regime_age_minutes": 3030.2,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3021.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3030.2m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 38.7m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.0972%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.0962%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -436,15 +436,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-04T03:29:37.749254+00:00",
-      "age_minutes": 0.4,
+      "last_updated": "2026-05-04T03:36:19.366658+00:00",
+      "age_minutes": 2.6,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-04T03:29:55.627244+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-04T03:38:58.403014+00:00",
+      "age_minutes": -0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -464,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60399.2,
+      "age_minutes": 60408.1,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -474,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 56028.4,
+      "age_minutes": 56037.3,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -484,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 14069.8,
+      "age_minutes": 14078.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -497,13 +497,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 03:34 UTC \u2014 [Pillar 3] Broad pass-filter is toxic, V2 exclusion confirmed\n\n**Task:** Inspect why broad HL `pass_filter` continues generating weak rows after adding the paper-only V2 scorer, instead of re-scoring stale V2 candidates.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- HL paper rows total **143**; deduped broad `pass_filter` rows **35**.\n- Broad composition: JTO **6**, ETH **6**, ONDO **5**, SOL **5**, WIF **4**, DOGE **3**, BTC **3**, TRUMP **2**, FET **1**; longs **27**, shorts **8**; local regimes MIXED **17**, STRONG_TREND **6**, TREND **6**, RANGE **6**.\n- V2 JTO-long-STRONG subset remains best but tiny: n **4**, 15m **100.0% WR / +0.006374 avg**, 30m **75.0% WR / +0.003699 avg**, 60m **25.0% WR / -0.004983 avg**.\n- Non-JTO rows are toxic: n **29**, 15m **13.6% WR / -0.001650 avg**, 30m **18.2% WR / -0.003626 avg**, 60m **22.7% WR / -0.003168 avg**.\n- Shorts are uniformly bad: n **8**, 15m **14.3% WR / -0.003041 avg**, 30m **0.0% WR / -0.006373 avg**, 60m **0.0% WR / -0.008148 avg**.\n- RANGE/MIXED/UNKNOWN-ish rows are also bad: n **29**, 15m **19.0% WR / -0.001511 avg**, 30m **23.8% WR / -0.002958 avg**, 60m **23.8% WR / -0.002541 avg**.\n- Worst non-V2 30m examples include ONDO long STRONG_TREND **-1.6362%**, DOGE short MIXED **-1.3622%**, ETH short RANGE **-1.3256%**, TRUMP long MIXED **-1.0181%**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-broad-pass-filter-is-toxic-v2-exclusion-confirmed-2026-05-04-0334.md`.\n\n**My thinking:** The generic pass_filter is not just weak; it is anti-edge outside the narrow V2 branch. Non-JTO, shorts, and non-STRONG regimes all lose across 15m/30m/60m. The only survivor remains JTO long local STRONG_TREND, still paper-only because n=4 and 60m decay is clear.\n\n**Decision:** Keep broad pass_filter out of live execution. Keep `pass_filter_v2` as the only P3 candidate filter: JTO + long + local STRONG_TREND. Explicitly exclude NON_JTO, SHORT, RANGE, MIXED, and TREND-not-STRONG from live consideration. Keep 15m/30m monitored, 60m decay-risk, and live readiness blocked until deduped n>=20 with positive post-fee/slippage edge and HL notional unblocked. Do not patch HL live execution.\n\n**Next:** Add a compact report mode to `score_hl_pass_filter_v2.py` or write a guard file consumed by dashboard/research so broad pass_filter cannot be mistaken as live-quality.\n\n## 2026-05-04 03:28 UTC \u2014 [Pillar 2] 03 UTC TREND/UP pulse fades, validates disabled hour\n\n**Task:** Re-check PM smart-entry tape after BTC P1 became fragile-but-constructive and P4 cooled to TREND/UP with PM STOP, looking for any evidence to loosen overnight filters.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 03:38 UTC \u2014 [Pillar 4] TREND/UP loses impulse, but PM STOP persists\n\n**Task:** Refresh P4 alpha after broad pass-filter was confirmed toxic and P1 BTC reclaim became fragile/ecb6-concentrated, checking whether TREND/UP is cooling enough for PM or still gated.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P4**.\n- Ran fresh `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Current alpha timestamp: **2026-05-04T03:38:24.446603+00:00**.\n- BTC price **$80,031.29**, 24h **+2.353%**; Fear & Greed **40 Fear**.\n- Top-level `regime_state` is **TREND**; top-level `posture` and `pm_risk` remain **null**.\n- Nested classifier remains defensive: state **trend_risk_off**, stance **defensive**, slow regime **TREND**, fast regime **TREND**, nested PM risk **high**, slow PM action **STOP**, transition posture **stable**.\n- BTC microstructure: realized vol 1h **0.3917%**, avg range last 6h **0.9492%**, compression **3.1703**, 6h trend **+1.5219%**, breakout risk **active_trend**.\n- Fast regime cooled in intensity but remains non-tradeable: **TREND / UP**, score **4** down from 7, confidence **47** down from 77, avg range **0.2411%**, vol ratio **1.52**, net change **+0.111%**, consistency **0.333**, pm_tradeable **false**.\n- Funding remains **LONG_SQUEEZE** with score **24**, L/S trend **-6.2%**, ratio_confirms **false**, PM adjustment **0**; liquidations neutral.\n- Last 12 snapshots: states RANGE **8**, None **2**, TREND **2**; compression min/max/avg/last **1.1791 / 3.2918 / 2.2959 / 3.1703**; 6h trend last **+1.5219%**.\n- Latest P1 overlay remains fragile BTC constructive / cross-asset bearish: BTC **+$17.79M**, ETH **-$13.61M**, SOL **-$8.90M**, HYPE **-$10.78M**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p4-trend-up-loses-impulse-but-pm-stop-persists-2026-05-04-0338.md`.\n\n**My thinking:** The fast impulse is fading: BTC slipped from $80.35K to $80.03K, fast score dropped from **7 \u2192 4**, confidence from **77 \u2192 47**, and net change to only **+0.111%**. But this is not a PM green light. The slow regime is still TREND, compression remains extreme at **3.17**, breakout risk is active_trend, and slow PM action remains **STOP**.\n\n**Decision:** Keep P4 as **TREND/UP active_trend, PM STOP**. Mark impulse as **cooling but not tradeable**. Do not loosen PM filters/hours while compression remains **>3.0**, slow PM action is **STOP**, and `pm_tradeable=false`. Keep BTC constructive but fragile; broader posture defensive-divergent. Keep alpha/context overlays blocked until realized `alpha_*`, and HL live notional-blocked.\n\n**Next:** Watch whether compression finally falls below **1.5** and fast regime returns to RANGE. If BTC net also holds above **+$17M** and ETH/SOL/HYPE shorts cover, then posture can shift toward constructive. Otherwise keep PM gated.\n\n## 2026-05-04 03:34 UTC \u2014 [Pillar 3] Broad pass-filter is toxic, V2",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 317,
-    "snapshot_age_minutes": 17.2,
+    "research_files": 318,
+    "snapshot_age_minutes": 0.6,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -6,
@@ -515,7 +515,7 @@
       "detail": "BTC active_trend | slow trend regime | fast trend pressure | PM gating defensive"
     },
     "transition_context": {
-      "previous_snapshot_key": "a8b895467e3dc4e7",
+      "previous_snapshot_key": "847cbfe2a07263fa",
       "previous_classifier_state": "trend_risk_off",
       "current_classifier_state": "trend_risk_off",
       "previous_pm_risk": "high",
@@ -524,7 +524,7 @@
       "current_breakout_risk": "active_trend",
       "previous_sentiment_regime": "neutral",
       "current_sentiment_regime": "neutral",
-      "minutes_since_last_distinct_snapshot": 27.8,
+      "minutes_since_last_distinct_snapshot": 25.5,
       "transition_label": "unchanged_distinct_state",
       "posture": "stable",
       "state_changed": true
@@ -552,35 +552,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.3877,
+      "realized_vol_1h_pct": 0.3917,
       "avg_range_last6h_pct": 0.9492,
       "avg_range_prev18h_pct": 0.2994,
       "compression_ratio": 3.1703,
-      "trend_6h_pct": 1.9268,
+      "trend_6h_pct": 1.5219,
       "breakout_risk": "active_trend"
     },
     "regime_state": {
       "regime": "TREND",
       "score": 4,
-      "atr_pct": 0.94,
-      "consistency": 0.62,
-      "range_pct": 2.07,
-      "trend_4h": 2.07,
+      "atr_pct": 0.95,
+      "consistency": 0.5,
+      "range_pct": 2.05,
+      "trend_4h": 2.01,
       "pm_action": "STOP",
-      "timestamp": "2026-05-04T03:00:05.325381+00:00"
+      "timestamp": "2026-05-04T03:30:04.522301+00:00"
     },
     "fast_regime": {
       "regime": "TREND",
-      "score": 7,
+      "score": 4,
       "direction": "UP",
-      "avg_range_pct": 0.2713,
+      "avg_range_pct": 0.2411,
       "max_range_pct": 0.482,
       "vol_ratio": 1.52,
-      "net_change_pct": 0.523,
-      "consistency": 0.5,
+      "net_change_pct": 0.111,
+      "consistency": 0.333,
       "pm_tradeable": false,
-      "confidence": 77,
-      "detail": "net_change=+0.52% | consistency=50%"
+      "confidence": 47,
+      "detail": "net_change=+0.11% | consistency=33%"
     },
     "sources": [
       {
