@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-04T04:00:03.066645+00:00",
+  "timestamp": "2026-05-04T04:07:12.816077+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,17 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "TST",
-      "rate": "+0.1064%",
-      "apr": "+117%",
+      "rate": "+0.0910%",
+      "apr": "+100%",
       "action": "SHORT",
-      "oi": "281,505,448"
+      "oi": "281,450,310"
     },
     {
-      "coin": "MAVIA",
-      "rate": "-0.0910%",
-      "apr": "-100%",
+      "coin": "ZEREBRO",
+      "rate": "+0.0782%",
+      "apr": "+86%",
+      "action": "SHORT",
+      "oi": "199,255,030"
+    },
+    {
+      "coin": "BLAST",
+      "rate": "-0.0557%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "37,368,341"
+      "oi": "2,262,064,254"
     }
   ],
   "daily_pnl": [
@@ -111,11 +118,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T03:30:14.208255+00:00",
-    "source_age_minutes": 29.8,
+    "source_age_minutes": 37.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 3051.3,
+    "recent_strong_regime_age_minutes": 3058.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -146,19 +153,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3051.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3058.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 29.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 37.0m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: TST at 0.1064%/8h \u2014 longs paying shorts"
+        "text": "Strongest: TST at 0.0910%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
-        "text": "1 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
+        "text": "1 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -429,15 +436,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-04T03:59:18.766619+00:00",
-      "age_minutes": 0.7,
+      "last_updated": "2026-05-04T04:05:15.004096+00:00",
+      "age_minutes": 2.0,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-04T04:00:01.572973+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-04T04:07:01.732283+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -457,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60429.1,
+      "age_minutes": 60436.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -467,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 56058.4,
+      "age_minutes": 56065.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -477,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 14099.8,
+      "age_minutes": 14107.0,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -490,13 +497,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 03:51 UTC \u2014 [Pillar 2] 03 UTC flips from negative to extreme positive stress\n\n**Task:** Re-check PM smart-entry tape after P1 downgraded BTC to constructive/watch with `8fcc` short conflict, validating whether disabled 03 UTC remains too unstable for expansion.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 03:30 UTC: **20**, all **OUTSIDE_ACTIVE_HOURS (03 UTC)**.\n- Bias distribution: avg |bias| **43.2**, median **45.5**, max **87.9**, V5a-by-bias **10 / 20**, soft cap **2**, hard cap **1**.\n- Price/sign mix: YES in live band **20 / 20** at avg **0.505**; signs **7 positive / 13 negative**.\n- Window sequence: 03:30 weak/chop max **44.1**; 03:35 strong negative max **64.5**; 03:40 negative continues max **64.8**; 03:45 violent positive flip max **87.9**.\n- Exact V5a rows: negative **-48.5 / -50.9 / -64.5 / -49.3 / -64.8 / -47.0**, then positive flip **+66.7 / +87.9 / +76.1 / +61.8**, all YES **0.505**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-03utc-flip-from-negative-to-extreme-positive-stress-2026-05-04-0351.md`.\n\n**My thinking:** This is the cleanest disabled-hour stress proof so far: the same in-band YES price produced sustained negative signals, then flipped into a hard-cap positive impulse within minutes. Even if the price filter passed, signal direction was unstable and P1/P4 context was conflicted.\n\n**Decision:** Keep 03 UTC disabled. Keep active hours unchanged. Keep PM config unchanged: `min_price=0.50`, `max_price=0.525`, `min_bias=45`, `max_bias=70`. Keep hard cap at `max_bias=70`; do not relax it. Keep alpha/context overlays blocked until realized `alpha_*`. Do not loosen filters while P4 is TREND/UP with PM STOP and P1 has `8fcc` short conflict. Treat 03 UTC as a blocked high-stress tape, not an expansion candidate.\n\n**Next:** Stop debating 03 UTC expansion unless settled outcomes somehow appear. Priority remains first approved active-hour trade attribution: immediately verify `alpha_*` fields in `confidence_outcomes.jsonl` after settlement.\n\n## 2026-05-04 03:50 UTC \u2014 [Pillar 1] 8fcc flips short, BTC reclaim downgraded\n\n**Task:** Run fresh P1 copy intelligence after P4 showed TREND/UP losing impulse but PM STOP persisted, checking whether fragile BTC bullish reclaim holds or breaks.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracker output: **BTC 4L/4S**, **ETH 5L/3S**, **SOL 3L/5S**.\n- Current top-book notional: BTC **+$15.11M net long**, ETH **-$13.39M net short**, SOL **-$8.65M net short**, HYPE **-$10.70M net",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 03:58 UTC \u2014 [Pillar 3] V2 guard file added: BLOCK_LIVE\n\n**Task:** Add a compact guard/report output to `score_hl_pass_filter_v2.py` so dashboard/research cannot mistake broad `pass_filter` rows for live-quality signals.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Updated `/home/ubuntu/clawd/scripts/score_hl_pass_filter_v2.py`.\n- New output file: `/home/ubuntu/clawd/research/hl_pass_filter_v2_guard.json`.\n- The guard explicitly states `status=BLOCK_LIVE`, `live_ready=false`, `broad_pass_filter_is_live_quality=false`, candidate filter `coin=JTO AND side=long AND local_regime=STRONG_TREND`, and exclusions **NON_JTO**, **SHORT**, **RANGE**, **MIXED**, **TREND_NOT_STRONG**, **60M_HOLD**.\n- Ran the updated scorer successfully: source rows **143**, broad pass_filter dedup rows **35**, V2 dedup rows **4**.\n- V2 metrics remain: 15m **100.0% WR / +0.006374 avg**, 30m **75.0% WR / +0.003699 avg**, 60m **25.0% WR / -0.004983 avg**.\n- Broad pass_filter guard metrics: 15m **29.6% WR / -0.000381 avg**, 30m **29.6% WR / -0.002377 avg**, 60m **22.2% WR / -0.003398 avg**.\n- Non-V2 guard metrics: 15m **17.4% WR / -0.001556 avg**, 30m **21.7% WR / -0.003434 avg**, 60m **21.7% WR / -0.003122 avg**.\n- Shorts remain hard-excluded: 30m and 60m both **0.0% WR**.\n- Weak-regime rows remain hard-excluded: 15m **19.0% WR**, 30m/60m **23.8% WR**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-v2-guard-file-added-block-live-2026-05-04-0358.md`.\n\n**My thinking:** This closes the failure mode where broad pass_filter statistics could be read as deployable. The guard makes the research state machine explicit: only JTO long local STRONG_TREND is worth monitoring, and even that is blocked from live due to tiny n and 60m decay.\n\n**Decision:** Keep P3 **paper-only**. Use `/home/ubuntu/clawd/research/hl_pass_filter_v2_guard.json` as the canonical P3 live-readiness guard. Keep broad pass_filter marked **not live quality**. Keep exclusions hard: NON_JTO, SHORT, RANGE, MIXED, TREND_NOT_STRONG, 60M_HOLD. Do not modify HL live execution. Keep HL live notional-blocked.\n\n**Next:** Either add dashboard consumption of `hl_pass_filter_v2_guard.json` or wait for fresh HL paper rows. If V2 n remains 4, do not repeat scoring without a new integration or new data.\n\n## 2026-05-04 03:51 UTC \u2014 [Pillar 2] 03 UTC flips from negative to extreme positive stress\n\n**Task:** Re-check PM smart-entry tape after P1 downgraded BTC to constructive/watch with `8fcc` short conflict, validating whether disabled 03 UTC remains too unstable for expansion.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**,",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
-    "research_files": 320,
-    "snapshot_age_minutes": 21.6,
+    "research_files": 321,
+    "snapshot_age_minutes": 28.8,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -6,
@@ -589,7 +596,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "2 opportunities | LONG_SQUEEZE"
+        "last_signal": "3 opportunities | LONG_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
