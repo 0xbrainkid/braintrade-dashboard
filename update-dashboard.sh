@@ -952,6 +952,27 @@ if _md:
         "avg_15m": _md15.get('avg_return'),
     })
 
+_p3_v2_guard = {}
+try:
+    with open('/home/ubuntu/clawd/research/hl_pass_filter_v2_guard.json') as _gf:
+        _p3_v2_guard = json.load(_gf)
+except Exception:
+    _p3_v2_guard = {}
+if _p3_v2_guard:
+    _v2m15 = ((_p3_v2_guard.get('metrics') or {}).get('15m') or {})
+    p3_strategy_branches.append({
+        "name": "hl_pass_filter_v2_jto_strong_guard",
+        "status": "BLOCK_LIVE" if not _p3_v2_guard.get('live_ready') else "ready_review",
+        "rows": _p3_v2_guard.get('v2_rows_dedup'),
+        "wr_15m": _v2m15.get('wr'),
+        "avg_15m": _v2m15.get('avg_return'),
+        "live_ready": _p3_v2_guard.get('live_ready'),
+        "block_reason": _p3_v2_guard.get('reason'),
+        "candidate_filter": _p3_v2_guard.get('candidate_filter'),
+        "explicit_exclusions": _p3_v2_guard.get('explicit_exclusions'),
+        "broad_pass_filter_is_live_quality": _p3_v2_guard.get('broad_pass_filter_is_live_quality'),
+    })
+
 params_changed = len(p3_changes) + len(p3_strategy_branches)
 
 win_rate_24h = round(today_wins / (today_wins + today_losses) * 100, 1) if (today_wins + today_losses) > 0 else 0
