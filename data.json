@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-04T00:45:19.644170+00:00",
+  "timestamp": "2026-05-04T00:52:03.581687+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -26,24 +26,24 @@
   "funding_opportunities": [
     {
       "coin": "ZEREBRO",
-      "rate": "+0.0873%",
-      "apr": "+96%",
+      "rate": "+0.0900%",
+      "apr": "+99%",
       "action": "SHORT",
       "oi": "199,255,030"
     },
     {
       "coin": "TST",
-      "rate": "+0.0835%",
-      "apr": "+91%",
+      "rate": "+0.0837%",
+      "apr": "+92%",
       "action": "SHORT",
       "oi": "283,532,618"
     },
     {
       "coin": "BLAST",
-      "rate": "-0.0528%",
-      "apr": "-58%",
+      "rate": "-0.0561%",
+      "apr": "-61%",
       "action": "LONG",
-      "oi": "2,258,253,192"
+      "oi": "2,257,733,172"
     }
   ],
   "daily_pnl": [
@@ -118,11 +118,11 @@
     "summary_state": "mixed_bullish",
     "summary_text": "Mixed bullish copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T00:00:14.994047+00:00",
-    "source_age_minutes": 45.1,
+    "source_age_minutes": 51.8,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 2856.6,
+    "recent_strong_regime_age_minutes": 2863.3,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": false,
     "bearish_disagreement_regime": false,
@@ -153,15 +153,15 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2856.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 2863.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 45.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 51.8m \u2014 lag risk"
       },
       {
         "source": "Funding Intel",
-        "text": "Strongest: ZEREBRO at 0.0873%/8h \u2014 longs paying shorts"
+        "text": "Strongest: ZEREBRO at 0.0900%/8h \u2014 longs paying shorts"
       },
       {
         "source": "Market Sentiment",
@@ -436,15 +436,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-04T00:42:39.997634+00:00",
-      "age_minutes": 2.7,
+      "last_updated": "2026-05-04T00:51:19.325093+00:00",
+      "age_minutes": 0.7,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-04T00:45:20.532175+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-04T00:52:02.664457+00:00",
+      "age_minutes": 0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -464,7 +464,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 60234.4,
+      "age_minutes": 60241.2,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -474,7 +474,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 55863.7,
+      "age_minutes": 55870.4,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -484,7 +484,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 13905.1,
+      "age_minutes": 13911.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -497,13 +497,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 00:43 UTC \u2014 [Pillar 2] 00 UTC negative stress validates hour block\n\n**Task:** Re-check PM smart-entry tape through the first Monday hour after P1 remained hard defensive/easing and P4 shifted to mixed-transition/risk-easing, focusing on whether 00 UTC should remain blocked.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows **0**.\n- Re-ran `/home/ubuntu/clawd/scripts/analyze_20utc_alpha_outcomes.py`: rows **201**, alpha-tagged **0**, 20 UTC alpha-tagged **0**, status **DATA_GAP**.\n- PM no-trade rows since 00:00 UTC: **40**, all **OUTSIDE_ACTIVE_HOURS (00 UTC)**.\n- Bias distribution: avg |bias| **27.2**, median **19.8**, max **77.8**, V5a-by-bias **11 / 40**, soft cap **1**, hard cap **0**.\n- Price/sign mix: YES in live band **35 / 40**; signs **32 negative / 8 positive**.\n- Window breakdown: 00:00 negative/in-band; 00:10 negative/in-band; 00:15 negative/out-of-band; 00:20 strongest stress window all negative/in-band with avg |bias| **61.5** and max **77.8**; 00:25-00:40 mostly weak/choppy except one 00:39 row.\n- Exact V5a-quality rows included 00:04 **-46.9**, 00:13 **-46.2**, 00:18-00:19 out-of-band negatives, 00:22-00:24 in-band negatives **-66.6 / -61.0 / -45.2 / -56.8 / -77.8**, and 00:39 **-57.8**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-00utc-negative-stress-validates-hour-block-2026-05-04-0043.md`.\n\n**My thinking:** 00 UTC produced a clean negative stress sequence aligned with defensive context, especially 00:20. But this is exactly why the hour filter exists: 00 UTC is outside active hours and historically weak. A strong blocked sample is not evidence to expand hours; it is evidence to keep collecting data until realized outcomes prove otherwise.\n\n**Decision:** Keep active hours unchanged; do **not** add 00 UTC. Keep PM config unchanged: `min_price=0.50`, `max_price=0.525`, `min_bias=45`, `max_bias=70`, active hours unchanged. Keep alpha/context overlays blocked until realized `alpha_*` outcome rows exist. Treat 00:20 as a high-quality blocked stress sample, not a live signal. First actionable Monday readiness check remains an approved active-hour settled trade/outcome.\n\n**Next:** Watch the approach to the first approved active hour. If no active-hour trade occurs, keep logging blocked context; if a trade settles, verify `alpha_*` fields immediately.\n\n## 2026-05-04 00:28 UTC \u2014 [Pillar 1] BTC net reclaims slight positive but hard defensive persists\n\n**Task:** Re-check P1 copy intelligence after BTC net flipped short and P4 shifted to risk-easing/mixed-transition, focusing on whether BTC stays net short or reclaims enough to clear maximum hard defensive.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P1**.\n- Fresh tracke",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-04 00:48 UTC \u2014 [Pillar 3] Fresh midnight shorts fail by 30m\n\n**Task:** Score fresh HL paper candidates after midnight and test whether downside P1/P4 context created a usable short-side P3 branch.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`; generic scorer updated **12** rows.\n- HL paper ledger now has **119** rows; **110** rows have 15m forward returns.\n- Overall paper scoring: `filtered` **49 rows / 49.0% WR / -0.000089 avg**, `pass_filter` **35 rows / 34.3% WR / -0.000245 avg**, `notional_blocked` **26 rows / 26.9% WR / -0.000296 avg**.\n- By regime: STRONG_TREND **66.7% WR / +0.003573 avg**, TREND **46.2% WR / -0.000171 avg**, RANGE **43.2% WR / -0.000234 avg**, MIXED **35.7% WR / -0.000839 avg**.\n- Fresh rows since 00:00 UTC: **10**; stages filtered **4** / pass_filter **3** / notional_blocked **3**; regimes MIXED **5**, TREND **2**, None duplicates **3**.\n- Fresh returns: 15m **10 rows / 50.0% WR / -0.000670 avg**, 30m **10 rows / 20.0% WR / -0.002889 avg**, 60m pending.\n- Fresh pass-filter shorts failed by 30m: TRUMP short **-0.000086**, WIF short **-0.006536**, DOGE short **-0.005566**.\n- Fresh JTO row was **MIXED short**, not STRONG_TREND long, and lost: 15m **-0.001202**, 30m **-0.004731**.\n- JTO STRONG_TREND scorer unchanged: deduped rows **4**, 15m **100% WR / +0.006374 avg**, 30m **75% WR / +0.003699 avg**, 60m decay active, `live_ready=False`.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-fresh-midnight-shorts-fail-by-30m-2026-05-04-0048.md`.\n\n**My thinking:** Fresh midnight downside context did **not** produce a usable short branch. The fresh shorts were roughly coin-flip at 15m and clearly negative by 30m. WIF/DOGE TREND shorts failed hard despite matching the macro defensive tape, which confirms we should not infer a live short strategy from P1/P4 alone.\n\n**Decision:** Do not create any short-side HL live branch from midnight data. Keep JTO STRONG_TREND long as the only promising P3 pocket, still paper-only. Keep MIXED excluded/suspect. Keep generic 1.5-2.0x ad-hoc only; aggregate edge weakened after fresh rows. Keep HL live notional-blocked.\n\n**Next:** Inspect 60m returns for these 10 fresh midnight rows after they populate. If 60m remains negative, document midnight short-side decay as another explicit exclusion.\n\n## 2026-05-04 00:43 UTC \u2014 [Pillar 2] 00 UTC negative stress validates hour block\n\n**Task:** Re-check PM smart-entry tape through the first Monday hour after P1 remained hard defensive/easing and P4 shifted to mixed-transition/risk-easing, focusing on whether 00 UTC should remain blocked.\n\n**Finding:**\n- Both bots are alive (`pm-bot`, `hl-bot`).\n- Rotation pointed to **P2**.\n- `confidence_outcomes.jsonl` remains unchanged: rows **201**, latest outcome **2026-04-07T19:35:15.678249+00:00**, alpha-tagged rows *",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 1,
-    "research_files": 296,
-    "snapshot_age_minutes": 24.1,
+    "research_files": 297,
+    "snapshot_age_minutes": 30.9,
     "btc_regime_classifier": {
       "state": "mixed_transition",
       "score": 1,
