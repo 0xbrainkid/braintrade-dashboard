@@ -357,6 +357,8 @@ async function loadData() {
     const hlModeClass = hlMode === 'live_tradeable' ? 'mode-live' : hlMode === 'notional_blocked' ? 'mode-notional' : hlMode === 'wallet_blocked' ? 'mode-wallet' : 'mode-unknown';
     const hlPlanned = Number(p3.hl_live_planned_order_notional || 0);
     const hlMinNotional = Number(p3.hl_live_min_order_notional_usd || 0);
+    const paperHealth = p3.paper_health || {};
+    const paperStatusClass = (paperHealth.status || '').startsWith('INVESTIGATE') ? 'red' : paperHealth.status === 'FRESH' ? 'green' : 'yellow';
     document.getElementById('pillar3').innerHTML = `
       <div class="pillar-header">
         <span class="pillar-title orange">How fast am I learning and adapting?</span>
@@ -389,6 +391,9 @@ async function loadData() {
         <div class="metric-row"><span class="metric-label">Exec Balance</span><span class="metric-value">$${Number(p3.hl_exec_balance || p3.hl_live_balance || 0).toFixed(2)}</span></div>
         <div class="metric-row"><span class="metric-label">Planned Notional</span><span class="metric-value ${p3.hl_live_order_notional_blocked ? 'yellow' : 'green'}">$${hlPlanned.toFixed(2)} / $${hlMinNotional.toFixed(2)}</span></div>
         <div class="metric-row"><span class="metric-label">Wallet Aligned</span><span class="metric-value ${p3.hl_wallet_misaligned ? 'red' : 'green'}">${p3.hl_wallet_misaligned ? 'NO' : 'YES'}</span></div>
+        <div class="metric-row"><span class="metric-label">Paper Health</span><span class="metric-value ${paperStatusClass}">${paperHealth.status || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Paper Source Age</span><span class="metric-value ${paperHealth.paper_stale ? 'yellow' : 'green'}">${paperHealth.paper_age_minutes ?? '—'}m${paperHealth.paper_stale ? ' STALE' : ''}</span></div>
+        <div class="metric-row"><span class="metric-label">Paper Decision</span><span class="metric-value ${paperHealth.decision === 'do_not_restart' ? 'green' : 'yellow'}">${paperHealth.decision || '—'}</span></div>
         <div class="card-sub">${p3.hl_directional_surface_summary || 'HL execution state loading'}</div>
       </div>
 

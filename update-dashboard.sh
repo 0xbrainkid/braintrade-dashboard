@@ -952,6 +952,16 @@ if _md:
         "avg_15m": _md15.get('avg_return'),
     })
 
+_p3_paper_health = {}
+try:
+    _health_script = '/home/ubuntu/clawd/scripts/check_hl_paper_health.py'
+    if os.path.exists(_health_script):
+        subprocess.run([_health_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/hl_paper_health.json') as _hf:
+        _p3_paper_health = json.load(_hf)
+except Exception:
+    _p3_paper_health = {}
+
 _p3_v2_guard = {}
 try:
     with open('/home/ubuntu/clawd/research/hl_pass_filter_v2_guard.json') as _gf:
@@ -1171,6 +1181,7 @@ data = {
         "heartbeats_today": 0,  # TODO: count from logs
         "changes": _pevents.get("3", []),
         "strategy_branches": p3_strategy_branches,
+        "paper_health": _p3_paper_health,
         "win_rate_7d": win_rate_7d,
         "win_rate_24h": win_rate_24h,
         "avg_trade_size": avg_trade,
