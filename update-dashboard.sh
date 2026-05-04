@@ -962,6 +962,32 @@ try:
 except Exception:
     _p3_paper_health = {}
 
+_p3_suppressor_labels = {}
+try:
+    with open('/home/ubuntu/clawd/research/hl_paper_suppressor_labels.json') as _sf:
+        _p3_suppressor_labels = json.load(_sf)
+except Exception:
+    _p3_suppressor_labels = {}
+if _p3_suppressor_labels:
+    _labels = _p3_suppressor_labels.get('labels') or {}
+    _trump = _labels.get('SUPPRESS_TRUMP_TREND_UP') or {}
+    _ondo = _labels.get('WATCH_ONDO_REQUIRE_30M_CONFIRMATION') or {}
+    _wif = _labels.get('SUPPRESS_WIF_MIXED_LOW_BREAKOUT') or {}
+    p3_strategy_branches.append({
+        "name": "hl_paper_suppressor_labels_v0",
+        "status": _p3_suppressor_labels.get('decision') or "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
+        "rows": _p3_suppressor_labels.get('rows_scored_15m'),
+        "labels": _labels,
+        "recent_labeled_rows": _p3_suppressor_labels.get('recent_since_1745') or [],
+        "trump_trend_up_wr_15m": _trump.get('wr15'),
+        "trump_trend_up_avg_15m": _trump.get('avg15'),
+        "trump_trend_up_wr_30m": _trump.get('wr30'),
+        "ondo_watch_wr_15m": _ondo.get('wr15'),
+        "ondo_watch_wr_30m": _ondo.get('wr30'),
+        "wif_mixed_low_breakout_wr_15m": _wif.get('wr15'),
+        "block_reason": "paper-only diagnostics; no live execution changes",
+    })
+
 _p3_v2_guard = {}
 try:
     with open('/home/ubuntu/clawd/research/hl_pass_filter_v2_guard.json') as _gf:
@@ -1182,6 +1208,7 @@ data = {
         "changes": _pevents.get("3", []),
         "strategy_branches": p3_strategy_branches,
         "paper_health": _p3_paper_health,
+        "paper_suppressor_labels": _p3_suppressor_labels,
         "win_rate_7d": win_rate_7d,
         "win_rate_24h": win_rate_24h,
         "avg_trade_size": avg_trade,
