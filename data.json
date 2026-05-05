@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-05T17:48:02.443317+00:00",
+  "timestamp": "2026-05-05T17:50:11.912150+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -23,7 +23,15 @@
     "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39"
   },
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "TST",
+      "rate": "+0.0501%",
+      "apr": "+55%",
+      "action": "SHORT",
+      "oi": "260,710,378"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -96,11 +104,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 1307.8,
+    "source_age_minutes": 1310.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 5319.3,
+    "recent_strong_regime_age_minutes": 5321.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +139,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5319.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5321.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 1307.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 1310.0m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: TST at 0.0501%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -584,7 +600,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 5.5,
+        "source_age_minutes": 7.6,
         "source_stale": false
       }
     ],
@@ -595,11 +611,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": "2026-05-05 17:47:58,079 - INFO - \ud83d\udcb0 Cycle 96 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.1,
+      "log_age_minutes": 2.3,
       "min_order_notional_usd": 20.0,
       "no_signal_window": true,
       "order_notional_blocked": true,
-      "paper_age_minutes": 5.5,
+      "paper_age_minutes": 7.7,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -613,7 +629,7 @@
       "signals_count": 0,
       "state_age_minutes": 0.1,
       "status": "FRESH",
-      "timestamp": "2026-05-05T17:48:04.755468+00:00"
+      "timestamp": "2026-05-05T17:50:14.514411+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -804,14 +820,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-05T17:47:58.077585+00:00",
-      "age_minutes": 0.1,
+      "age_minutes": 2.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-05T17:47:58.075841+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-05T17:50:09.882669+00:00",
+      "age_minutes": 0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -831,7 +847,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 62697.1,
+      "age_minutes": 62699.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -841,7 +857,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 58326.4,
+      "age_minutes": 58328.5,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -851,7 +867,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 16367.8,
+      "age_minutes": 16370.0,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -864,13 +880,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-05 17:48 UTC \u2014 [Pillar 1] BTC short pressure explodes; ETH count improves, not notional\n\n**Task:** Run P1 copy-intelligence rotation after P4 remained trend_risk_off despite fast RANGE returning. Verify the 17:24 restart is still alive and reassess P1 risk before 19 UTC.\n\n**Finding:**\n- Both bots remain alive after the 17:24:50 restart: `134330.pm-bot`, `134333.hl-bot`, `134332 python3 -u trading_bot.py`, `134336 python3 -u hl_live_trader.py`.\n- Process age ~**1357s** (~22.6 minutes), so the restart is holding across multiple cycles.\n- Rotation pointed to **P1**.\n- Ran `/home/ubuntu/clawd/scripts/copy-intel-tracker.py`.\n- Fresh leaderboard state: **BTC 3L/5S**, long **$1.89M**, short **$12.29M**, net **-$10.40M**; **ETH 6L/2S**, long **$4.34M**, short **$30.80M**, net **-$26.45M**; **SOL 2L/6S**, long **$2.1K**, short **$4.93M**, net **-$4.93M**; **HYPE 3L/6S**, long **$1.45M**, short **$11.13M**, net **-$9.68M**.\n- BTC deteriorated materially again: prior BTC net **-$4.64M \u2192 -$10.40M**. `anon-0xecb6` BTC short expanded **$3.26M \u2192 $5.92M**; `anon-0xfc66` BTC short expanded **$2.08M \u2192 $3.34M**; `beatmaker1@proton.me` BTC short expanded **$1.89M \u2192 $2.89M**. BTC long side shrank; `anon-0x57dd` BTC long **$1.89M**.\n- ETH count improved but notional did not: headline **6L/2S**, but net remains **-$26.45M** because shorts are concentrated. `anon-0xecb6` ETH short **$23.93M**; `anon-0xfc66` ETH short **$6.87M**. Long side mostly `anon-0x57dd` **$4.22M**, plus small longs.\n- SOL remains one-sided short: net **-$4.93M**, led by `anon-0xecb6` **$4.35M**.\n- HYPE remains one-sided short: net **-$9.68M**, led by `anon-0xfc66` **$5.85M**, `anon-0xdf9e` **$2.85M**, `anon-0xecb6` **$2.24M**.\n- PM17 bridge has **35** parsed `INFO` rows, all outside canonical hours. Latest 17 UTC rows are clean-looking negatives at Y **0.505** such as **17:42:31 -65.1**, **17:43:01 -51.0**, **17:43:31 -67.8**, **17:44:01 -52.5**, **17:44:31 -48.7**, but 17 UTC is closed.\n- HL live remains **notional_blocked**: balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-btc-short-pressure-explodes-eth-count-improves-not-notional-2026-05-05-1748.md`.\n\n**My thinking:** P1 is worsening into the 19 UTC prep window. BTC short pressure exploded from -$4.6M to -$10.4M, while ETH remains structurally net short despite more long accounts by count. This is broad defensive and argues strongly against any loosening.\n\n**Decision:** Keep P1 **broad defensive / no green light**. Treat BTC below **-$10M** as severe again. Do not relax PM filters, hours, caps, or sizing. Keep 19 UTC enabled in code but strict and defensive. Do not open 17 UTC, 16 UTC, or any outside hour. Keep canonical PM hours `[11, 12, 19, 20]` only. Keep YES-only / no-NO-trade behavior. Keep P4 trend_risk_off veto ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-05 17:51 UTC \u2014 [Pillar 2] 17 UTC nine clean hypotheticals, still zero orders\n\n**Task:** Run P2 smart-entry rotation after P1 showed BTC short pressure exploding below -$10M. Verify bots, audit 17 UTC outside-hour behavior, and confirm no accidental orders.\n\n**Finding:**\n- Both bots remain alive after the 17:24:50 restart: `134330.pm-bot`, `134333.hl-bot`, `134332 python3 -u trading_bot.py`, `134336 python3 -u hl_live_trader.py`.\n- Process age ~**1485s** (~24.8 minutes), so the restart is holding across multiple cycles.\n- Rotation pointed to **P2**.\n- PM outcome quality unchanged/stable: rows **201**, missing `bias_score` rows **0**, `alpha_context_rows` **0**, `alpha_context_status=READY_AWAITING_NEW_REALIZED_ROWS`.\n- Canonical realized hour quality unchanged: 11 UTC n **11**, WR **72.7%**, avg pnl_pct **+0.408527**; 12 UTC n **17**, WR **70.6%**, avg pnl_pct **+0.361659**; 19 UTC n **7**, WR **28.6%**, avg pnl_pct **-0.445314**; 20 UTC n **2**, WR **50.0%**, avg pnl_pct **-0.029300**.\n- Source active hours remain canonical at line 65: `self.active_hours = [11, 12, 19, 20]`.\n- 17 UTC audit: **40** parsed rows, all `INFO`, all blocked by `OUTSIDE_ACTIVE_HOURS (17 UTC)`. Bias mix **23 negative / 17 positive**.\n- Clean hypotheticals expanded to **9** at Y **0.505**: **17:39:30 -51.7**, **17:42:31 -65.1**, **17:43:01 -51.0**, **17:43:31 -67.8**, **17:44:01 -52.5**, **17:44:31 -48.7**, **17:47:33 -68.8**, **17:48:03 -61.6**, **17:48:33 -53.1**.\n- Soft-cap rows **0**, hard-cap rows **0**. Earlier below-min rows at Y **0.475** were correctly non-actionable even hypothetically.\n- No PM buys, outcomes, wins, losses, redeems, price-too-low, price-too-high, bias-too-weak, signal inversion, or risk-alert rows in 17 UTC. `OUTSIDE_ACTIVE_HOURS` count in 17 UTC: **40**.\n- HL live remains **notional_blocked**: timestamp **2026-05-05T17:49:26.108251+00:00**, balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-17utc-nine-clean-hypotheticals-still-zero-orders-2026-05-05-1751.md`.\n\n**My thinking:** 17 UTC is now producing tempting negative rows, but this is exactly why outside-hour discipline matters. P1 is severely defensive (BTC below -$10M), P4 remains trend_risk_off, and 17 UTC is not a live hour. The hour gate prevented expansion into a risky, unapproved window.\n\n**Decision:** Keep 17 UTC closed. Keep 16 UTC closed. Keep canonical active hours `[11, 12, 19, 20]` only. Do not open 08/09/10/13/14/15/16/17 or any outside hour. Keep PM filters unchanged: `min_price=0.50`, `max_price=0.525`, `bias_threshold=45`, `max_bias=70`. Preserve 70-80 soft cap and >80 hard cap. Keep YES-only / no-NO-trade behavior. Do not promote 17 UTC without paper outcome scoring plus P1/P4 repair. Keep 19 UTC enabled in code but strict and defensive. Keep HL live **no",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 740,
-    "snapshot_age_minutes": 3.1,
+    "research_files": 741,
+    "snapshot_age_minutes": 5.3,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
@@ -963,7 +979,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | SHORT_SQUEEZE"
+        "last_signal": "1 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
