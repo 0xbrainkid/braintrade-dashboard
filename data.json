@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-05T21:17:18.594980+00:00",
+  "timestamp": "2026-05-05T21:25:20.093657+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 1517.1,
+    "source_age_minutes": 1525.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 5528.6,
+    "recent_strong_regime_age_minutes": 5536.6,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5528.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5536.6m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 1517.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 1525.1m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -584,7 +584,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 11.6,
+        "source_age_minutes": 19.7,
         "source_stale": false
       }
     ],
@@ -593,13 +593,13 @@
       "decision": "review",
       "error_tail": [],
       "execution_mode": "notional_blocked",
-      "last_cycle": "2026-05-05 21:15:17,333 - INFO - \ud83d\udcb0 Cycle 204 | Balance: $37.39 | Positions: none | Signals: 1",
+      "last_cycle": "2026-05-05 21:24:00,699 - INFO - \ud83d\udcb0 Cycle 240 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.4,
+      "log_age_minutes": 1.4,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 11.7,
+      "paper_age_minutes": 19.7,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -622,7 +622,7 @@
       "signals_count": 0,
       "state_age_minutes": 0.1,
       "status": "FRESH",
-      "timestamp": "2026-05-05T21:17:20.903253+00:00"
+      "timestamp": "2026-05-05T21:25:22.392989+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -812,14 +812,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-05T21:16:54.469876+00:00",
-      "age_minutes": 0.4,
+      "last_updated": "2026-05-05T21:24:00.699001+00:00",
+      "age_minutes": 1.3,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-05T21:17:12.790413+00:00",
+      "last_updated": "2026-05-05T21:25:13.851508+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -840,7 +840,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 62906.4,
+      "age_minutes": 62914.4,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -850,7 +850,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 58535.6,
+      "age_minutes": 58543.7,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -860,7 +860,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 16577.1,
+      "age_minutes": 16585.1,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -873,13 +873,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-05 21:16 UTC \u2014 [Pillar 4] Alpha refresh still defensive; PM quiet\n\n**Task:** Run P4 alpha-research rotation after P3 confirmed HL remains notional-blocked and PM is quiet post-patch. Verify bots first, refresh alpha context, and check for post-patch PM risk/order events.\n\n**Finding:**\n- Bots alive at start: PM `140075.pm-bot`, `140077 python3 -u trading_bot.py`, process age ~**1118s**; HL `139142.hl-bot`, `139145 python3 -u hl_live_trader.py`, process age ~**3049s**.\n- Rotation pointed to **P4**.\n- Ran `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Fresh alpha snapshot timestamp **2026-05-05T21:16:37.936658+00:00**.\n- BTC **$81,622.74**, 24h **+1.866%**.\n- Fear & Greed **50 Neutral**; 30d percentile **100%**, 7d avg **36.7**, 3d delta **+11**, 7d delta **+17**, sentiment regime **sentiment_impulse_up**.\n- BTC microstructure: realized vol 1h **0.2041%**, avg range last 6h **0.3895%** vs prev 18h **0.4741%**, compression ratio **0.8216**, trend 6h **+0.1197%**, breakout risk **neutral**.\n- Slow regime state remains stale but defensive: timestamp **2026-05-04T20:45:03.353758+00:00**, regime **STRONG_TREND**, score **6**, PM action **STOP**.\n- Fast regime remains PM-tradeable range structure: **RANGE**, score **4**, direction **NEUTRAL**, confidence **46**, avg range **0.1205%**, max range **0.1935%**, vol ratio **1.3**, net change **-0.004%**, detail **low_vol=0.120%**.\n- Funding squeeze remains unconfirmed: **SHORT_SQUEEZE**, score **24**, ratio_confirms **false**, PM adjustment **0**.\n- Liquidation signal remains bearish/tailwind conflict: direction **bearish**, strength **0.3**, PM adjustment **+0.5**, events BTC short cascade + ETH cascade contagion.\n- PM risk context remains **high**: slow_pm_action **STOP**, fast_regime **RANGE**, squeeze_confirmed **false**, liquidation direction **bearish**.\n- BTC regime classifier remains defensive: state **trend_risk_off**, score **-2**, stance **defensive**, detail **slow trend regime | fast range structure | PM gating defensive | liquidation tailwind**.\n- Transition context stable: previous/current classifier **trend_risk_off**, PM risk **high**, breakout risk **neutral**, sentiment **sentiment_impulse_up**, minutes since last distinct snapshot **19.1**, label **unchanged_distinct_state**.\n- Last 120 alpha snapshots remain mostly RANGE fast-regime: RANGE **80**, TREND **35**, HIGH_VOL **5**.\n- PM post-patch risk/order audit: count **0**; no `SIGNAL_INVERSION_COOLDOWN`, `RISK ALERT`, `LIVE ORDER`, `TRADE SIGNAL`, `TRADE FAILED`, `BOUGHT`, outcomes, wins, losses, or redeems after 20:58. Postpatch parsed decisions **15**, all no-order/no-risk through **21:14:38**.\n- HL state remains **notional_blocked**: timestamp **2026-05-05T21:16:29.114968+00:00**, balance **$37.391639**, planned notional **$11.217492**, min order notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-05 21:24 UTC \u2014 [Pillar 1] Copy BTC worsens; PM post-patch quiet outside active hours\n\n**Task:** Run P1 copy-intelligence rotation after P4 confirmed alpha posture stayed defensive. Verify bots first, refresh leaderboard pressure, and confirm patched PM behavior after 20:58.\n\n**Finding:**\n- Bots alive at start: PM `140075.pm-bot`, `140077 python3 -u trading_bot.py`, process age ~**1589s**; HL `139142.hl-bot`, `139145 python3 -u hl_live_trader.py`, process age ~**3521s**.\n- Rotation pointed to **P1**.\n- Ran `/home/ubuntu/clawd/scripts/copy-intel-tracker.py`.\n- Fresh leaderboard state: **BTC 5L/3S**, long **$1.89M**, short **$13.18M**, net **-$11.29M**; **ETH 4L/3S**, long **$3.69M**, short **$34.58M**, net **-$30.89M**; **SOL 1L/7S**, long **$4.8K**, short **$7.38M**, net **-$7.37M**; **HYPE 3L/6S**, long **$1.47M**, short **$11.42M**, net **-$9.95M**.\n- Change vs 21:00 P1 snapshot: BTC worsened sharply **-$4.93M \u2192 -$11.29M** (**-$6.37M delta**) as `anon-0x8fcc` added/appeared with **$4.52M** short and `anon-0xecb6` short grew to **$5.71M**; ETH worsened slightly **-$30.68M \u2192 -$30.89M**; SOL improved modestly **-$7.60M \u2192 -$7.37M** but remains extremely one-sided short; HYPE worsened **-$9.86M \u2192 -$9.95M**.\n- Top hostile positions: BTC shorts `anon-0xecb6` **$5.71M**, `anon-0x8fcc` **$4.52M**, `anon-0xfc66` **$2.95M**; ETH shorts `anon-0xecb6` **$26.62M**, `anon-0xfc66` **$7.91M**; SOL shorts `anon-0xecb6` **$6.04M**, `anon-0x57dd` **$967K**; HYPE shorts `anon-0xfc66` **$5.78M**, `anon-0xdf9e` **$2.85M**, `anon-0xecb6` **$2.55M**.\n- PM post-patch risk/order audit remains clean: count **0**; no `SIGNAL_INVERSION_COOLDOWN`, `RISK ALERT`, `LIVE ORDER`, `TRADE SIGNAL`, `TRADE_FAILED`, `BOUGHT`, outcomes, wins, losses, or redeems after 20:58.\n- PM postpatch parsed decisions **24**, all no-order/no-risk.\n- Clean negative-bias rows appeared after active hour ended: **21:19:09 -48.5 Y0.505**, **21:19:39 -50.7 Y0.505**, **21:22:39 -59.8 Y0.505**. Correct behavior is no trade because 21 UTC is outside canonical active hours `[11,12,19,20]`.\n- HL state remains **notional_blocked**: timestamp **2026-05-05T21:24:30.337816+00:00**, balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-2124-copy-btc-worsens-pm-postpatch-quiet-outside-hours-2026-05-05-2124.md`.\n\n**My thinking:** Copy-intel moved more hostile, especially BTC. This is not a green-light environment: BTC flipped from merely net-short to aggressively net-short, while ETH/SOL/HYPE remain deeply short. PM patch remains stable and quiet; the clean 21 UTC negative rows are useful shadow data but must not be traded outside canonical hours.\n\n**Decision:** Keep P1 **hostile / defensive / no green light**. Keep PM strict: no trades outside `[11, 12, 19, 20]`. Keep patched PM process `140075.pm",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 791,
-    "snapshot_age_minutes": 0.7,
+    "research_files": 792,
+    "snapshot_age_minutes": 8.7,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -2,
