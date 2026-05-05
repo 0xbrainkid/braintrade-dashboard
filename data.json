@@ -1,14 +1,14 @@
 {
-  "timestamp": "2026-05-05T08:20:36.351652+00:00",
+  "timestamp": "2026-05-05T08:21:41.670282+00:00",
   "pm_balance": 0.0,
-  "hl_balance": 0,
+  "hl_balance": 37.391639,
   "today_pnl": 0,
   "pm_pnl": -1009.32,
-  "hl_pnl": -391.0,
+  "hl_pnl": -353.61,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -1400.32,
+  "all_time_pnl": -1362.93,
   "total_trades": 273,
   "days_active": 51,
   "pm_bot_running": true,
@@ -23,7 +23,22 @@
     "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39"
   },
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "ZEREBRO",
+      "rate": "+0.0697%",
+      "apr": "+76%",
+      "action": "SHORT",
+      "oi": "197,993,414"
+    },
+    {
+      "coin": "TST",
+      "rate": "+0.0527%",
+      "apr": "+58%",
+      "action": "SHORT",
+      "oi": "270,600,638"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -96,11 +111,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 740.4,
+    "source_age_minutes": 741.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 4751.9,
+    "recent_strong_regime_age_minutes": 4753.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +146,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 4751.9m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 4753.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 740.4m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 741.5m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: ZEREBRO at 0.0697%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 2 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -584,7 +607,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 8.4,
+        "source_age_minutes": 9.5,
         "source_stale": false
       }
     ],
@@ -592,17 +615,23 @@
       "balance": 37.391639,
       "decision": "review",
       "error_tail": [
-        "2026-05-05 08:20:35,185 - ERROR - Scan error WIF: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
-        "2026-05-05 08:20:36,599 - ERROR - Scan error SUPER: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
+        "2026-05-05 08:21:00,973 - ERROR - Scan error JTO: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:01,776 - ERROR - Scan error TRUMP: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:13,604 - ERROR - Scan error DOGE: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:13,652 - ERROR - Scan error WIF: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:14,444 - ERROR - Scan error ONDO: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:14,484 - ERROR - Scan error SUPER: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:27,585 - ERROR - Scan error ONDO: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+        "2026-05-05 08:21:27,631 - ERROR - Scan error SUPER: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))"
       ],
       "execution_mode": "notional_blocked",
       "last_cycle": "2026-05-05 08:19:07,955 - INFO - \ud83d\udcb0 Cycle 372 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.0,
+      "log_age_minutes": 0.3,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 8.4,
+      "paper_age_minutes": 9.5,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -610,7 +639,7 @@
       "positions_count": 0,
       "recent_30m_alignment_lines": 5,
       "recent_30m_cycles": 10,
-      "recent_30m_errors": 2,
+      "recent_30m_errors": 20,
       "recent_30m_signal_lines": 36,
       "signal_tail": [
         "2026-05-05 08:13:18,084 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: LONG WIF notional $11.22 < min $20.00 | Balance: $37.39",
@@ -624,8 +653,8 @@
       ],
       "signals_count": 0,
       "state_age_minutes": 0.0,
-      "status": "FRESH",
-      "timestamp": "2026-05-05T08:20:37.151151+00:00"
+      "status": "INVESTIGATE_ERRORS",
+      "timestamp": "2026-05-05T08:21:44.055178+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -815,14 +844,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-05T08:20:36.599068+00:00",
-      "age_minutes": -0.0,
+      "last_updated": "2026-05-05T08:21:27.630631+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-05T08:20:36.959718+00:00",
+      "last_updated": "2026-05-05T08:21:42.381002+00:00",
       "age_minutes": -0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -843,7 +872,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 62129.7,
+      "age_minutes": 62130.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -853,7 +882,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 57758.9,
+      "age_minutes": 57760.0,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -863,7 +892,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 15800.4,
+      "age_minutes": 15801.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -882,7 +911,7 @@
     "data_sources": 7,
     "signals_generated": 3,
     "research_files": 637,
-    "snapshot_age_minutes": 3.7,
+    "snapshot_age_minutes": 4.7,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -2,
@@ -975,7 +1004,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | SHORT_SQUEEZE"
+        "last_signal": "2 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
