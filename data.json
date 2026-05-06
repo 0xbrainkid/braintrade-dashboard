@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-06T01:11:04.060691+00:00",
+  "timestamp": "2026-05-06T01:13:22.462444+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 1750.8,
+    "source_age_minutes": 1753.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 5762.3,
+    "recent_strong_regime_age_minutes": 5764.6,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5762.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5764.6m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 1750.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 1753.1m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -584,7 +584,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 1.1,
+        "source_age_minutes": 3.4,
         "source_stale": false
       }
     ],
@@ -595,11 +595,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": "2026-05-06 01:10:49,779 - INFO - \ud83d\udcb0 Cycle 108 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.3,
+      "log_age_minutes": 2.6,
       "min_order_notional_usd": 20.0,
       "no_signal_window": true,
       "order_notional_blocked": true,
-      "paper_age_minutes": 1.1,
+      "paper_age_minutes": 3.4,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -611,9 +611,9 @@
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 0,
-      "state_age_minutes": 0.0,
+      "state_age_minutes": 0.2,
       "status": "FRESH",
-      "timestamp": "2026-05-06T01:11:05.706706+00:00"
+      "timestamp": "2026-05-06T01:13:24.620431+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -804,14 +804,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-06T01:10:49.778538+00:00",
-      "age_minutes": 0.2,
+      "age_minutes": 2.5,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-06T01:11:03.908990+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-06T01:13:12.590379+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -831,7 +831,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 63140.2,
+      "age_minutes": 63142.5,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -841,7 +841,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 58769.4,
+      "age_minutes": 58771.7,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -851,7 +851,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 16810.8,
+      "age_minutes": 16813.1,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -864,13 +864,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-06 01:09 UTC \u2014 [Pillar 3] No post-restart signals; FET/SOL still rejected\n\n**Task:** Run P3 strategy-development rotation after P2 confirmed 01 UTC positive/NO-side rows were blocked. Verify bots first, re-score FET/SOL once 60m outcomes mature, and verify no new post-restart HL paper signals appear.\n\n**Finding:**\n- Restarted bots remain alive after 00:44 LIVE restart: PM `147307.pm-bot`, `147309 python3 -u trading_bot.py`, process age ~**1505s**; HL `147310.hl-bot`, `147313 python3 -u hl_live_trader.py`, process age ~**1505s**.\n- Rotation pointed to **P3**.\n- Ran `/home/ubuntu/clawd/scripts/check_hl_paper_health.py` and `/home/ubuntu/clawd/scripts/score_hl_paper_signals.py`.\n- HL health remains **FRESH**: timestamp **2026-05-06T01:09:53.652678+00:00**, log age **1.9m**, state age **0.0m**, paper age **10.5m**, recent 30m cycles **8**, recent 30m errors **0**, recent 30m signal lines **0**, recent 30m alignment lines **5**, `no_signal_window=true`.\n- HL live remains **notional_blocked**: timestamp **2026-05-06T01:09:52.390097+00:00**, cycle **104**, balance **$37.391639**, planned notional **$11.217492**, min order notional **$20.00**, positions **0**, signals_count **0**.\n- Paper scoring updated **1** row; rows_total **295**, rows_scored_15m **286**.\n- No post-00:44 restart paper signals: POST_RESTART_0044 count **0**. No post-01:00 paper signals: POST0100_ANY count **0**.\n- FET post-00:20 remains failed at 30m; 60m still pending: count **3**, 15m WR **100%**, avg **+0.001201**; 30m WR **0%**, avg **-0.004556**.\n- SOL post-00:20 remains failed; 60m still pending: count **1**, 15m WR **0%**, avg **-0.002823**; 30m WR **0%**, avg **-0.002950**.\n- SUPER got worse with fresh 60m scoring: post-12h count **8**, 15m WR **12.5%**, avg **-0.001565**; 30m WR **37.5%**, avg **-0.001984**; 60m WR **37.5%**, avg **-0.001081**.\n- DOGE/SOL/WIF historical cluster remains paper-positive but stale and degraded by the failed SOL short filter row: count **14**, 15m WR **64.3%**, avg **+0.000603**; 30m WR **78.6%**, avg **+0.003457**; 60m WR **92.3%**, avg **+0.004528**.\n- Broader HL paper remains weak: pass_filter n **94**, WR **37.2%**, avg **-0.000635**; notional_blocked n **86**, WR **34.9%**, avg **-0.000686**; filtered n **106**, WR **48.1%**, avg **+0.000251**.\n- Coin branches post-12h: FET count **11**, 15m WR **54.5%**, avg **-0.003241**; 30m WR **45.5%**, avg **-0.005446**; 60m avg **-0.001099**. SOL count **6**, 15m WR **50.0%**, avg **-0.000107**; 30m WR **83.3%**, avg **+0.001172**; 60m WR **100%**, avg **+0.006800**. BTC/ETH remain weak; BTC 30m WR **0%**, ETH 30m WR **30%**.\n- PM 01 UTC risk/order count remains **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p3-0109-no-postrestart-signals-fet-sol-still-rejected-2026-05-06-0109.md`.\n\n**My thinking:** No fresh HL signals appeared after the 00:44 restart or after 01:00. FET and SOL remain reje",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-06 01:12 UTC \u2014 [Pillar 4] Trend risk-off persists; no fresh HL signals\n\n**Task:** Run P4 alpha-research rotation after P3 confirmed no post-restart HL signals and FET/SOL remain rejected. Verify bots first, refresh alpha context, and verify whether fast TREND / high PM risk persists while HL has no fresh signals.\n\n**Finding:**\n- Restarted bots remain alive after 00:44 LIVE restart: PM `147307.pm-bot`, `147309 python3 -u trading_bot.py`, process age ~**1664s**; HL `147310.hl-bot`, `147313 python3 -u hl_live_trader.py`, process age ~**1664s**.\n- Rotation pointed to **P4**.\n- Ran `/home/ubuntu/clawd/scripts/alpha-signal-update.sh`.\n- Fresh alpha snapshot **2026-05-06T01:12:38.008157+00:00**. BTC **$81,159.99**, 24h **+1.156%**, F&G **46 Fear**.\n- BTC microstructure: realized vol 1h **0.2182%**, avg range last 6h **0.5463%** vs prev 18h **0.4606%**, compression ratio **1.1862**, trend 6h **-0.547%**, breakout risk **neutral**.\n- Fast regime remains **TREND**: score **3**, confidence **34**, avg range **0.1573%**, max range **0.3240%**, vol ratio **0.92**, net change **+0.004%**, direction **NEUTRAL**, `pm_tradeable=false`, detail **net_change=+0.00% | consistency=42%**.\n- Slow regime remains stale/defensive: **STRONG_TREND**, score **6**, PM action **STOP**, timestamp **2026-05-04T20:45:03.353758+00:00**.\n- BTC regime classifier remains **trend_risk_off**: score **-5**, stance **defensive**, detail **slow trend regime | fast trend pressure | PM gating defensive | liquidation tailwind | sentiment drag: euphoria_fade_watch**.\n- PM risk context remains **high**: fast_regime **TREND**, slow_pm_action **STOP**, squeeze unconfirmed, liquidation direction **bearish**.\n- Funding remains unconfirmed **SHORT_SQUEEZE**, score **24**, ratio_confirms **false**, PM adjustment **0**. Liquidation signal remains **bearish**, strength **0.3**, PM adjustment **+0.5**.\n- Transition is stable risk-off: `unchanged_distinct_state`, current classifier **trend_risk_off**, PM risk **high**, sentiment **euphoria_fade_watch**.\n- Last 120 alpha snapshots: classifier **trend_risk_off 118**, range_mean_revert_friendly **2**; fast regime RANGE **78**, TREND **37**, HIGH_VOL **5**; PM risk high **118**.\n- HL paper context: no paper rows after the 00:44 restart; no paper rows after 01:00. FET post-00:20 remains failed at 30m: count **3**, 15m WR **100%**, avg **+0.001201**, but 30m WR **0%**, avg **-0.004556**. SOL post-00:20 remains failed: count **1**, 15m/30m WR **0%**, avg **-0.002823/-0.002950**.\n- PM 01 UTC risk/order count remains **0**.\n- PM post-01:08 decisions **5**: positive/NO-side rows **+72.0**, **+76.6**, **+79.2**, weak **+31.8**, then **+45.8**, all Y0.505 and outside active hours.\n- HL remains **notional_blocked**: timestamp **2026-05-06T01:12:29.519031+00:00**, balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_c",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 831,
-    "snapshot_age_minutes": 9.4,
+    "research_files": 832,
+    "snapshot_age_minutes": 0.7,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -5,
@@ -882,7 +882,7 @@
       "detail": "slow trend regime | fast trend pressure | PM gating defensive | liquidation tailwind | sentiment drag: euphoria_fade_watch"
     },
     "transition_context": {
-      "previous_snapshot_key": "433badcd40a92065",
+      "previous_snapshot_key": "a6e05105060eb9ac",
       "previous_classifier_state": "trend_risk_off",
       "current_classifier_state": "trend_risk_off",
       "previous_pm_risk": "high",
@@ -891,7 +891,7 @@
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "euphoria_fade_watch",
       "current_sentiment_regime": "euphoria_fade_watch",
-      "minutes_since_last_distinct_snapshot": 17.0,
+      "minutes_since_last_distinct_snapshot": 11.0,
       "transition_label": "unchanged_distinct_state",
       "posture": "stable",
       "state_changed": true
@@ -919,11 +919,11 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.2165,
-      "avg_range_last6h_pct": 0.5235,
+      "realized_vol_1h_pct": 0.2182,
+      "avg_range_last6h_pct": 0.5463,
       "avg_range_prev18h_pct": 0.4606,
-      "compression_ratio": 1.1367,
-      "trend_6h_pct": -0.6945,
+      "compression_ratio": 1.1862,
+      "trend_6h_pct": -0.547,
       "breakout_risk": "neutral"
     },
     "regime_state": {
@@ -940,14 +940,14 @@
       "regime": "TREND",
       "score": 3,
       "direction": "NEUTRAL",
-      "avg_range_pct": 0.1664,
+      "avg_range_pct": 0.1573,
       "max_range_pct": 0.324,
-      "vol_ratio": 1.02,
-      "net_change_pct": -0.02,
+      "vol_ratio": 0.92,
+      "net_change_pct": 0.004,
       "consistency": 0.417,
       "pm_tradeable": false,
-      "confidence": 35,
-      "detail": "net_change=-0.02% | consistency=42%"
+      "confidence": 34,
+      "detail": "net_change=+0.00% | consistency=42%"
     },
     "sources": [
       {
