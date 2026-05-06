@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-06T04:44:17.689289+00:00",
+  "timestamp": "2026-05-06T04:46:44.572380+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 1964.1,
+    "source_age_minutes": 1966.5,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 5975.6,
+    "recent_strong_regime_age_minutes": 5978.0,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5975.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5978.0m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 1964.1m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 1966.5m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -584,7 +584,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 26.1,
+        "source_age_minutes": 28.6,
         "source_stale": false
       }
     ],
@@ -595,11 +595,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": "2026-05-06 04:44:17,189 - INFO - \ud83d\udcb0 Cycle 120 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.0,
+      "log_age_minutes": 0.8,
       "min_order_notional_usd": 20.0,
       "no_signal_window": true,
       "order_notional_blocked": true,
-      "paper_age_minutes": 26.2,
+      "paper_age_minutes": 28.6,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -613,7 +613,7 @@
       "signals_count": 0,
       "state_age_minutes": 0.0,
       "status": "FRESH",
-      "timestamp": "2026-05-06T04:44:19.766351+00:00"
+      "timestamp": "2026-05-06T04:46:46.699983+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -803,14 +803,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-06T04:44:17.189807+00:00",
-      "age_minutes": 0.0,
+      "last_updated": "2026-05-06T04:45:55.749845+00:00",
+      "age_minutes": 0.8,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-06T04:44:17.189593+00:00",
+      "last_updated": "2026-05-06T04:46:44.351427+00:00",
       "age_minutes": 0.0,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -831,7 +831,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 63353.4,
+      "age_minutes": 63355.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -841,7 +841,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 58982.6,
+      "age_minutes": 58985.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -851,7 +851,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 17024.1,
+      "age_minutes": 17026.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -864,13 +864,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-06 04:43 UTC \u2014 [Pillar 1] BTC cover partial; SOL shorts worsen\n\n**Task:** Run P1 after P4 confirmed low-vol RANGE but persistent risk-off/high. Re-check copy-intel under stabilized low-vol RANGE and verify whether BTC shorts compress after the failed 04 UTC YES cluster, or whether SOL/BTC short veto persists.\n\n**Finding:**\n- Canonical LIVE bots remain alive after 04:15 restart: PM `152404.pm-bot`, `152406 python3 -u trading_bot.py`, age ~1679s; HL `152407.hl-bot`, `152410 python3 -u hl_live_trader.py`, age ~1679s. No `active-dual-trader.py` process present.\n- Rotation pointed to **P1**.\n- Ran `/home/ubuntu/clawd/scripts/copy-intel-tracker.py`.\n- Fresh scan headline: **BTC 4L/3S | ETH 4L/4S | SOL 0L/8S**.\n- Aggregated positions: **BTC** 4L/3S, long **$1.56M**, short **$21.31M**, net **-$19.75M**; **ETH** 4L/4S, net **-$31.18M**; **SOL** 0L/8S, net **-$7.73M**; **HYPE** net **-$9.59M**; **DOGE** net **-$3.39M**; **WIF** net **-$370.93K**; **FET** net **-$41.93K**; **SUPER** net **-$14.90** only.\n- BTC improved modestly vs 04:31: net **-$20.51M \u2192 -$19.75M**, long count **3 \u2192 4**, short count **4 \u2192 3**. `anon-0xf5d8` flipped/added **$302.66K LONG**, `anon-0x57dd` long increased to **$755.34K**, but `anon-0xecb6` still holds **$11.71M SHORT**, `anon-0xfc66` **$5.26M SHORT**, `anon-0x8fcc` **$4.34M SHORT**.\n- ETH slightly worsened vs 04:31: **-$31.15M \u2192 -$31.18M**; still deeply net short. `anon-0xecb6` remains **$27.43M SHORT**.\n- SOL worsened again: **-$7.67M \u2192 -$7.73M**, still **0L/8S**. `anon-0xecb6` increased to **$5.27M SHORT** and `beatmaker1` increased to **$726.34K SHORT**.\n- HYPE improved modestly but remains **-$9.59M** net short. DOGE worsened; WIF improved slightly but remains net short; FET/SUPER remain short-only.\n- P4 context: BTC **$81,361.74**, classifier **trend_risk_off**, fast **RANGE DOWN**, `pm_tradeable=true`, breakout risk **neutral**, PM risk **high**, slow PM action **STOP**.\n- PM post-restart rows **22**, all off-hour. 04 UTC YES-shadow cluster already rejected in P3: scored all rows WR **10%**, clean YES WR **25%**; latest row at 04:42:42 bias **-57.8**, Y0.505 remains off-hour.\n- PM 04 UTC risk/order events: **0**.\n- HL remains **notional_blocked**: timestamp **2026-05-06T04:43:34.580041+00:00**, cycle **117**, balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p1-0443-btc-cover-partial-sol-shorts-worsen-2026-05-06-0443.md`.\n\n**My thinking:** BTC short compression is real but partial. The veto remains SOL: zero longs, eight shorts, and worsening net short notional. Until SOL stops worsening and BTC/ETH compression is broader, low-vol RANGE is only a watchlist condition, not a tradeable green light.\n\n**Decision:** Keep P1 **hostile / defensive / no green light**. Mark BTC cover as watchlist improvement onl",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-06 04:46 UTC \u2014 [Pillar 2] 04 UTC clean YES cluster confirmed bad\n\n**Task:** Run P2 after P1 found partial BTC cover but worsening SOL shorts. Score later 04:33/04:34/04:42 YES shadows as outcomes mature and confirm the off-hour cluster remains unpromotable.\n\n**Finding:**\n- Canonical LIVE bots remain alive after 04:15 restart: PM `152404.pm-bot`, `152406 python3 -u trading_bot.py`, age ~1826s; HL `152407.hl-bot`, `152410 python3 -u hl_live_trader.py`, age ~1826s. No `active-dual-trader.py` process present.\n- Rotation pointed to **P2**.\n- PM post-04:15 restart parsed rows: **25**, all hour **04 UTC**.\n- Clean negative YES candidates: **9**: 04:22:38 **-57.5**, 04:24:08 **-49.1**, 04:28:39 **-67.9**, 04:29:09 **-59.2**, 04:33:10 **-48.9**, 04:33:40 **-50.9**, 04:34:10 **-56.7**, 04:34:40 **-63.5**, 04:42:42 **-57.8** (pending 5m at query time).\n- Soft-cap abs 70-80 rows: **1** \u2014 04:32:40 bias **-76.5**, Y **0.505**, blocked `OUTSIDE_ACTIVE_HOURS (04 UTC)`. Hard-cap rows: **0**.\n- Weak rows: **15**. Positive/NO-side rows: **0**. Price-ok rows: **25**.\n- PM 04 UTC risk/order events: **0**. No live orders, no trade signals, no failures/outcomes/redeems, no explicit soft/hard cap event because outside-hours veto triggered first.\n- Source checks pass: active hours `[11, 12, 19, 20]`, outside-hours veto, min/max price, `max_bias=70`, soft/hard cap, YES-only, NO-trade guard, and signal-inversion cooldown present.\n- 5m proxy scoring now strongly rejects 04 UTC: all scored rows n **20**, WR **20.0%**, avg BTC return **-0.000367**; clean YES rows scored n **8**, WR **12.5%**, avg **-0.000325**; late clean YES rows from 04:33/04:34 n **4**, WR **0.0%**, avg **-0.000235**.\n- The only clean YES win remains the tiny 04:22:38 +0.000174; everything clean after that scored as loss.\n- HL remains **notional_blocked**: timestamp **2026-05-06T04:46:00.129125+00:00**, cycle **127**, balance **$37.391639**, planned notional **$11.217492**, min notional **$20.00**, positions **0**, signals_count **0**.\n- I wrote the artifact to `/home/ubuntu/clawd/research/p2-0446-04utc-clean-yes-cluster-confirmed-bad-2026-05-06-0446.md`.\n\n**My thinking:** 04 UTC is dead for now. The later clean YES shadows failed 4/4, clean YES WR is 12.5%, and all rows are only 20% WR. This validates the outside-hours veto and reinforces no 04 UTC expansion.\n\n**Decision:** Keep PM strict: `[11, 12, 19, 20]` only. No 04 UTC expansion. Keep outside-hours veto as first-line protection. Keep soft cap and hard cap unchanged: `70-80` shadow/soft zone, `>80` blocked. Keep `min_price=0.50`, `max_price=0.525`, `bias_threshold=45`, `max_bias=70`. Keep signal-inversion cooldown intact. Keep HL **notional_blocked**. Continue canonical bot checks every heartbeat after recurring disappearance incidents.\n\n**Next:** Run P3 next. Re-score HL paper and verify there is still no post-04:15 HL confirmation while the PM 04 UTC c",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 877,
-    "snapshot_age_minutes": 3.2,
+    "research_files": 878,
+    "snapshot_age_minutes": 5.7,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
