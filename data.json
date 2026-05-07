@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-07T06:12:57.153121+00:00",
+  "timestamp": "2026-05-07T06:13:27.708901+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 3492.7,
+    "source_age_minutes": 3493.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 7504.2,
+    "recent_strong_regime_age_minutes": 7504.7,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 7504.2m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 7504.7m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 3492.7m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 3493.2m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -584,7 +584,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 1.1,
+        "source_age_minutes": 1.6,
         "source_stale": false
       }
     ],
@@ -595,11 +595,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": null,
       "live_fresh": true,
-      "log_age_minutes": 1.4,
+      "log_age_minutes": 1.9,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 1.2,
+      "paper_age_minutes": 1.7,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -611,9 +611,9 @@
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 0,
-      "state_age_minutes": 0.1,
+      "state_age_minutes": 0.2,
       "status": "FRESH",
-      "timestamp": "2026-05-07T06:12:59.243876+00:00"
+      "timestamp": "2026-05-07T06:13:29.875205+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -804,13 +804,13 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-07T06:11:33.559613+00:00",
-      "age_minutes": 1.4,
+      "age_minutes": 1.9,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-07T06:12:51.678934+00:00",
+      "last_updated": "2026-05-07T06:13:20.373742+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -831,7 +831,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 64882.0,
+      "age_minutes": 64882.6,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -841,7 +841,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 60511.3,
+      "age_minutes": 60511.8,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -851,7 +851,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 18552.7,
+      "age_minutes": 18553.2,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -864,13 +864,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-05-06 17:05 UTC \u2014 [Pillar 2] HL filter mixed, PM off-hour inversion hold\n\n**Task:** Run P2 Smart Entry after P1 found top-wallet copy hostile. Re-score recent HL paper/pass-filter rows, re-check PM realized quality, and decide whether any parameter should loosen for 17-20 UTC.\n\n**Finding:**\n- Step 0 passed: canonical LIVE screens are alive, `161459.pm-bot` and `161462.hl-bot`.\n- Re-ran `scripts/score_hl_paper_signals.py`: rows_updated **41**, rows_total **339**, rows_scored_15m **330**.\n- Aggregate HL still does not justify live promotion: `pass_filter` **n=110, WR 37.3%, avg -0.000596**; `notional_blocked` **n=102, WR 35.3%, avg -0.000636**; `filtered` remains better at **n=118, WR 46.6%, avg +0.000035**.\n- Fresh rows since 13:05 produced **18** HL paper rows: **7 pass_filter**, **7 notional_blocked**, **4 filtered**, all under `STRONG_TREND/DOWN` market regime.\n- Fresh pass/notional candidates were mixed: SUPER short **+0.0705% 15m**, TRUMP short **+0.1769%**, DOGE short **+0.7747%**, JTO long **+4.8808%**, BTC short **-0.3542%**, ONDO long **-1.4074%**, FET long **-0.9731%**.\n- The fresh pass/notional headline looks okay only because of one JTO outlier: **n=7, WR 57.1%, avg +0.004526**; excluding JTO, **n=6, WR 50.0%, avg -0.002854**.\n- ONDO/FET remain bad promotion candidates: ONDO historical coin bucket **n=26, WR 42.3%, avg -0.001105** and today's ONDO long lost **-1.4074%** at 15m; FET historical bucket **n=24, WR 33.3%, avg -0.002676** and today's FET long lost **-0.9731%**.\n- PM outcome quality still has no new realized rows (`alpha_context_status=READY_AWAITING_NEW_REALIZED_ROWS`, latest realized row 2026-04-07). Static realized edge remains concentrated in **11 UTC WR 72.7% avg +0.4085%** and **12 UTC WR 70.6% avg +0.3617%**; **19 UTC remains weak at WR 28.6% avg -0.4453%**.\n- Live PM 13:05-17:05 stayed clean: `OUTSIDE_ACTIVE_HOURS` only (**13 UTC 33**, **14 UTC 42**, **15 UTC 52**, **16 UTC 50**, **17 UTC 6**), **0 orders/buys**, but two signal-inversion brakes fired at **15:47 (-59.8 \u2192 73.2)** and **16:07 (-35.5 \u2192 68.0)**.\n- Artifact: `/home/ubuntu/clawd/research/p2-1705-hl-filter-mixed-pm-offhour-inversion-hold-2026-05-06-1705.md`.\n\n**My thinking:** The bot is doing the right defensive thing. Fresh HL pass_filter was not broadly good; the only exciting row was JTO, while ONDO/FET \u2014 the names most likely to tempt loosened long rules \u2014 failed hard. PM has lots of high-bias off-hour prints but also fresh inversion brakes, and realized data still says the real edge is 11/12 UTC, not 17 UTC.\n\n**Decision:** No live loosening. Keep PM `[11, 12, 19, 20]`, YES-only, with 19/20 treated as low-priority until fresh realized rows improve. Keep HL flat/notional-blocked; do not promote ONDO/FET. Track JTO as a separate outlier, not as permission for broad counter-market longs.\n\n**Next:** Run P3 next. Build/test a paper-only suppressor tweak: block FET ",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-05-07 06:12 UTC \u2014 [Pillar 3] FET longs suppressed, JTO continuation isolated\n\n**Task:** Run P3 Strategy Development: restart any missing live bots, review HL strategy branches, test the requested FET/ONDO/JTO paper-only suppressor tweak, and decide whether anything deserves live promotion.\n\n**Finding:** Step 0 found both canonical screens missing, so I restarted them LIVE immediately: PM `3136.pm-bot` running `trading_bot.py`, HL `3165.hl-bot` running `hl_live_trader.py`. HL is fresh with balance **$37.391639**, **0 positions**, **0 current signals**, and execution mode **notional_blocked** because planned notional is **$11.217492 < $20**. Re-scored HL ledger: **352 rows**, **343 scored**, `pass_filter` remains weak at **n=113, WR 37.2%, avg -0.000629**; `notional_blocked` is **n=106, WR 35.8%, avg -0.000640**; `filtered` remains best at **n=124, WR 46.0%, avg -0.000015**. FET long pass-filter rows are toxic: **n=5, WR 20.0%, avg -0.6255% at 15m**, with the latest two FET longs losing **-0.7202%** and **-0.9731%** at 15m. Blocking FET longs improves pass_filter from **avg -0.000629 \u2192 -0.000368**. ONDO longs are mixed (**n=7, WR 42.9%, avg -0.000156 15m; 60m avg +0.003910**) so they stay confirmation-only. JTO longs are the only promising branch (**n=18, WR 61.1%, avg +0.2126% 15m; WR 66.7%, avg +0.3096% 30m**) but decay at 60m (**WR 22.2%**).\n\n**My thinking:** The broad HL breakout engine is still not good enough to fund or force live trades. The signal quality problem is selective: FET longs are a clear avoid, ONDO needs delayed confirmation instead of first-breakout chasing, and JTO has edge only if treated as a fast continuation scalp rather than a hold.\n\n**Decision:** No live promotion. I updated `scripts/score_hl_paper_signals.py` diagnostics to tag `SUPPRESS_FET_LONGS_COPY_HOSTILE`, `WATCH_ONDO_REQUIRE_30M_CONFIRMATION`, and `WATCH_JTO_15_30M_CONTINUATION_ONLY`; verified with `py_compile` and reran the scorer. Keep FET longs suppressed in paper analysis, keep ONDO long confirmation-only, and evaluate JTO with a strict 15-30m horizon. Artifact: `/home/ubuntu/clawd/research/p3-0612-fet-long-suppressor-jto-continuation-watch-2026-05-07.md`. Dashboard update ran successfully.\n\n**Next:** Run P4 next. Refresh alpha/regime inputs and test whether current risk-off/slow-regime state supports or vetoes the JTO 15-30m continuation watch before any bot filter change touches live execution.\n\n\n## 2026-05-06 17:05 UTC \u2014 [Pillar 2] HL filter mixed, PM off-hour inversion hold\n\n**Task:** Run P2 Smart Entry after P1 found top-wallet copy hostile. Re-score recent HL paper/pass-filter rows, re-check PM realized quality, and decide whether any parameter should loosen for 17-20 UTC.\n\n**Finding:**\n- Step 0 passed: canonical LIVE screens are alive, `161459.pm-bot` and `161462.hl-bot`.\n- Re-ran `scripts/score_hl_paper_signals.py`: rows_updated **41**, rows_total **339**,",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 923,
-    "snapshot_age_minutes": 1264.4,
+    "research_files": 924,
+    "snapshot_age_minutes": 1264.9,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -5,
