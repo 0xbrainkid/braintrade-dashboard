@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-07T14:12:04.548544+00:00",
+  "timestamp": "2026-05-07T18:12:52.680226+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -23,7 +23,15 @@
     "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39"
   },
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "TST",
+      "rate": "+0.0545%",
+      "apr": "+60%",
+      "action": "SHORT",
+      "oi": "200,489,740"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -96,11 +104,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 3971.8,
+    "source_age_minutes": 4212.6,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 7983.3,
+    "recent_strong_regime_age_minutes": 8224.1,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +139,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 7983.3m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 8224.1m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 3971.8m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 4212.6m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: TST at 0.0545%/8h \u2014 longs paying shorts"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "0 coins with negative funding (bearish), 1 positive (bullish) \u2014 market leans bullish"
       }
     ],
     "evolution": [
@@ -584,24 +600,22 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 13.3,
+        "source_age_minutes": 1.6,
         "source_stale": false
       }
     ],
     "paper_health": {
       "balance": 37.391639,
       "decision": "review",
-      "error_tail": [
-        "2026-05-07 13:43:42,845 - ERROR - fin=1 opcode=8 data=b'\\x03\\xe8Expired' - goodbye"
-      ],
+      "error_tail": [],
       "execution_mode": "notional_blocked",
-      "last_cycle": "2026-05-07 14:12:00,079 - INFO - \ud83d\udcb0 Cycle 864 | Balance: $37.39 | Positions: none | Signals: 0",
+      "last_cycle": "2026-05-07 18:12:43,585 - INFO - \ud83d\udcb0 Cycle 1848 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 0.1,
+      "log_age_minutes": 0.2,
       "min_order_notional_usd": 20.0,
-      "no_signal_window": false,
+      "no_signal_window": true,
       "order_notional_blocked": true,
-      "paper_age_minutes": 13.4,
+      "paper_age_minutes": 1.6,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -609,22 +623,13 @@
       "positions_count": 0,
       "recent_30m_alignment_lines": 6,
       "recent_30m_cycles": 11,
-      "recent_30m_errors": 1,
-      "recent_30m_signal_lines": 77,
-      "signal_tail": [
-        "2026-05-07 13:59:09,856 - INFO - \u23ed\ufe0f FILTERED SHORT SOL @ $88.6 | SOL local MIXED breakout 0.15% < 0.15%",
-        "2026-05-07 13:59:12,388 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: SHORT FET notional $11.22 < min $20.00 | Balance: $37.39",
-        "2026-05-07 13:59:27,100 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: SHORT SOL notional $11.22 < min $20.00 | Balance: $37.39",
-        "2026-05-07 13:59:27,100 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: SHORT FET notional $11.22 < min $20.00 | Balance: $37.39",
-        "2026-05-07 13:59:38,882 - INFO - \u23ed\ufe0f FILTERED SHORT SOL @ $88.6 | SOL local MIXED breakout 0.13% < 0.15%",
-        "2026-05-07 13:59:41,314 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: SHORT FET notional $11.22 < min $20.00 | Balance: $37.39",
-        "2026-05-07 13:59:52,981 - INFO - \u23ed\ufe0f FILTERED SHORT SOL @ $88.6 | SOL local MIXED breakout 0.14% < 0.15%",
-        "2026-05-07 13:59:55,334 - INFO - \u23ed\ufe0f SIGNAL SKIPPED: SHORT FET notional $11.22 < min $20.00 | Balance: $37.39"
-      ],
+      "recent_30m_errors": 0,
+      "recent_30m_signal_lines": 0,
+      "signal_tail": [],
       "signals_count": 0,
-      "state_age_minutes": 0.1,
+      "state_age_minutes": 0.2,
       "status": "FRESH",
-      "timestamp": "2026-05-07T14:12:06.716327+00:00"
+      "timestamp": "2026-05-07T18:12:55.732240+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -814,15 +819,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-07T14:12:00.078276+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-07T18:12:43.585575+00:00",
+      "age_minutes": 0.2,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-07T14:12:00.076199+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-07T18:12:43.585345+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -842,7 +847,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 65361.2,
+      "age_minutes": 65602.0,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -852,7 +857,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 60990.4,
+      "age_minutes": 61231.2,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -862,7 +867,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 19031.8,
+      "age_minutes": 19272.6,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -875,13 +880,13 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-07 14:09 UTC \u2014 [Pillar 1] Auros distorts bullish counts; core copy still short\n\n**Task:** Run P1 Copy Intelligence after the P4 sentiment impulse and test whether top-trader BTC/ETH/SOL positioning confirms enough to relax copy vetoes.\n\n**Finding:** Step 0 passed: canonical LIVE screens are alive (`3136.pm-bot`, `11205.hl-bot`). Ran `scripts/copy-intel-tracker.py`; headline count improved to **BTC 5L/4S, ETH 4L/4S, SOL 5L/4S**, but the improvement is dominated by a new **Auros** row with **BTC LONG $39.533M**, **ETH LONG $5.386M**, and **SOL LONG $4.750M** inside a broad hedged book that also shorts HYPE/PUMP/FARTCOIN/ENA/kPEPE/ZEC/ASTER and many alts. All-in notional is BTC **+$29.111M**, ETH **-$25.433M**, SOL **-$2.028M**, HYPE **-$13.672M**, DOGE **-$6.172M**. Excluding Auros, the core copy book is still sharply risk-off: BTC **-$10.422M**, ETH **-$30.818M**, SOL **-$6.778M**, HYPE **-$8.791M**, DOGE **-$3.594M**. ONDO/FET/JTO remain copy-hostile: ONDO **0L/$0 vs 3S/$0.899M**, FET **0L/$0 vs 2S/$0.320M**, JTO **1 tiny long/$355 vs 1S/$0.333M**. Current funding extremes are STBL/VINE/TST crowd-long and BLUR/MEGA crowd-short; no clean BTC/ETH/SOL squeeze permission. Artifact: `/home/ubuntu/clawd/research/p1-1409-auros-distorts-bullish-counts-core-copy-still-short-2026-05-07.md`.\n\n**My thinking:** The raw count is lying by omission. Auros is large enough to make BTC look bullish, but the position set reads like a hedged market-maker/portfolio book, not a clean discretionary leader to copy. The wallets with clearer directional information (`anon-0xfc66`, `anon-0xecb6`, `anon-0x8fcc`, `beatmaker1`) still lean short majors and short the exact paper-long candidates we were watching.\n\n**Decision:** Keep copy veto active. No PM YES loosening, no HL BTC/SOL major-long promotion, and no live promotion for ONDO/FET/JTO longs. Treat SUI/XRP as shadow outliers only; they do not override risk-off BTC/ETH/SOL/HYPE/DOGE leadership.\n\n**Next:** Run P2 next. Add/test an Auros-adjusted or hedged-book penalty in smart-entry scoring so copy counts cannot flip bullish unless non-market-maker directional notional confirms.\n\n\n## 2026-05-07 10:11 UTC \u2014 [Pillar 4] Sentiment impulse, STOP/liquidation veto still binding\n\n**Task:** Refresh the P4 alpha pipeline and test whether the current regime supports or vetoes the P3 JTO 15-30m continuation watch before any bot filter change touches live execution.\n\n**Finding:** Step 0 passed: canonical LIVE screens are alive (`3136.pm-bot`, `3165.hl-bot`). Ran `scripts/alpha-signal-update.sh`; snapshot `5223f02db9d7a46c` appended at **2026-05-07T10:11:06.570554+00:00**. BTC is **$80923.57**, **-1.373% 24h**. Fear & Greed improved to **47 Neutral** and sentiment shifted **euphoria_fade_watch \u2192 sentiment_impulse_up**, but the stack is still defensive: slow regime remains **STRONG_TREND / pm_action=STOP** from **2026-05-04T20:45:03.353758+",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n## 2026-05-07 18:09 UTC \u2014 [Pillar 2] Countertrend JTO flush says no smart-entry loosening\n\n**Task:** Run P2 Smart Entry after P1 kept copy veto active; re-score HL paper/pass-filter quality, apply a reliability \u00d7 edge read to latest trades, check PM realized/hour quality, and test whether any parameter should loosen.\n\n**Finding:** Step 0 passed: canonical LIVE screens are alive (`3136.pm-bot`, `11205.hl-bot`). Re-ran `scripts/score_hl_paper_signals.py`: **415 rows total**, **406 scored**. Aggregate HL remains non-promotable: `pass_filter` **n=135, WR 36.3%, avg -0.0739% 15m**, `notional_blocked` **n=128, WR 35.2%, avg -0.0755%**, while `filtered` is still better at **n=143, WR 47.6%, avg +0.0163%**. Fresh rows since 14:09 were worse: **13** scored rows under `STRONG_TREND/DOWN`; `pass_filter` **n=5, WR 0.0%, avg -0.9976%**, `notional_blocked` same, and `filtered` **n=3, WR 33.3%, avg +0.1633%**. The key failure was the 15:55 JTO local-uptrend long against market `STRONG_TREND/DOWN`: **-4.3855% 15m**, **-3.2671% 30m**, then a late 60m rebound. Parameter test: baseline `pass_filter` reliability\u00d7edge (WR \u00d7 avg bp) **-2.68**; removing local-vs-market countertrend rows in `STRONG_TREND` improves it to **-1.61**, while the vetoed subset alone is **n=47, WR 36.2%, avg -0.129%, score -4.68**. PM realized quality still has **0 new rows** (`READY_AWAITING_NEW_REALIZED_ROWS`); static edge remains 11/12 UTC, while 19 UTC is weak and 20 UTC tiny. Live PM correctly stayed `OUTSIDE_ACTIVE_HOURS` through 18 UTC despite high positive bias prints around **75-76**. Artifact: `/home/ubuntu/clawd/research/p2-1809-countertrend-jto-flush-no-loosening-2026-05-07.md`.\n\n**My thinking:** The filter is still selecting the wrong kind of breakout. JTO looked like the promising outlier yesterday, but today it showed the trap: a local continuation signal fighting a market-wide strong downtrend can get flushed hard before any rebound appears. That is not a live scalp edge; it is a reversal-risk pattern that needs its own confirmation logic. PM is also telling the same story: high bias outside validated hours is noise until realized rows prove otherwise.\n\n**Decision:** No live loosening. Keep PM active hours unchanged; do **not** add 18 UTC and do not rehabilitate 19/20 UTC without fresh realized wins. Keep HL flat/notional-blocked. Add the next paper-only smart-entry candidate: veto pass_filter continuation when `market_regime=STRONG_TREND` and `local_dominant` opposes `market_dominant`, unless a separate reversal-confirmation module exists.\n\n**Next:** Run P3 next. Turn this P2 finding into strategy work: prototype/backtest a reversal-confirmation module for countertrend local breakouts instead of letting them through the continuation engine.\n\n\n## 2026-05-07 14:09 UTC \u2014 [Pillar 1] Auros distorts bullish counts; core copy still short\n\n**Task:** Run P1 Copy Intelligence after the P4 sentiment i",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 926,
-    "snapshot_age_minutes": 241.0,
+    "research_files": 927,
+    "snapshot_age_minutes": 481.8,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -2,
@@ -974,7 +979,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | SHORT_SQUEEZE"
+        "last_signal": "1 opportunities | SHORT_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
