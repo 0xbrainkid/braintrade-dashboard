@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-07T06:13:27.708901+00:00",
+  "timestamp": "2026-05-07T10:11:47.311276+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 3493.2,
+    "source_age_minutes": 3731.6,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 7504.7,
+    "recent_strong_regime_age_minutes": 7743.1,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 7504.7m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 7743.1m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 3493.2m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 3731.6m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -584,36 +584,45 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 1.6,
+        "source_age_minutes": 79.4,
         "source_stale": false
       }
     ],
     "paper_health": {
       "balance": 37.391639,
       "decision": "review",
-      "error_tail": [],
+      "error_tail": [
+        "2026-05-07 09:46:55,685 - ERROR - Scan error DOGE: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:47:07,344 - ERROR - Scan error TRUMP: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:47:37,864 - ERROR - Scan error BTC: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:47:47,912 - ERROR - Scan error ETH: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:47:58,432 - ERROR - Scan error DOGE: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:48:08,490 - ERROR - Scan error WIF: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:48:18,850 - ERROR - Scan error JTO: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)",
+        "2026-05-07 09:48:29,284 - ERROR - Scan error SUPER: HTTPSConnectionPool(host='api.hyperliquid.xyz', port=443): Read timed out. (read timeout=10)"
+      ],
       "execution_mode": "notional_blocked",
-      "last_cycle": null,
+      "last_cycle": "2026-05-07 10:10:26,373 - INFO - \ud83d\udcb0 Cycle 984 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": 1.9,
+      "log_age_minutes": 1.4,
       "min_order_notional_usd": 20.0,
-      "no_signal_window": false,
+      "no_signal_window": true,
       "order_notional_blocked": true,
-      "paper_age_minutes": 1.7,
+      "paper_age_minutes": 79.4,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
       "planned_order_notional": 11.217492,
       "positions_count": 0,
-      "recent_30m_alignment_lines": 1,
-      "recent_30m_cycles": 0,
-      "recent_30m_errors": 0,
+      "recent_30m_alignment_lines": 6,
+      "recent_30m_cycles": 10,
+      "recent_30m_errors": 41,
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 0,
       "state_age_minutes": 0.2,
-      "status": "FRESH",
-      "timestamp": "2026-05-07T06:13:29.875205+00:00"
+      "status": "INVESTIGATE_ERRORS",
+      "timestamp": "2026-05-07T10:11:49.427409+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -803,14 +812,14 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-07T06:11:33.559613+00:00",
-      "age_minutes": 1.9,
+      "last_updated": "2026-05-07T10:10:26.372523+00:00",
+      "age_minutes": 1.3,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-07T06:13:20.373742+00:00",
+      "last_updated": "2026-05-07T10:11:38.883192+00:00",
       "age_minutes": 0.1,
       "stale": false,
       "owner": "hl_live_trader.py",
@@ -831,7 +840,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 64882.6,
+      "age_minutes": 65120.9,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -841,7 +850,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 60511.8,
+      "age_minutes": 60750.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -851,7 +860,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 18553.2,
+      "age_minutes": 18791.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -864,25 +873,25 @@
     ],
     "state_health_summary": "stale: engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-05-07 06:12 UTC \u2014 [Pillar 3] FET longs suppressed, JTO continuation isolated\n\n**Task:** Run P3 Strategy Development: restart any missing live bots, review HL strategy branches, test the requested FET/ONDO/JTO paper-only suppressor tweak, and decide whether anything deserves live promotion.\n\n**Finding:** Step 0 found both canonical screens missing, so I restarted them LIVE immediately: PM `3136.pm-bot` running `trading_bot.py`, HL `3165.hl-bot` running `hl_live_trader.py`. HL is fresh with balance **$37.391639**, **0 positions**, **0 current signals**, and execution mode **notional_blocked** because planned notional is **$11.217492 < $20**. Re-scored HL ledger: **352 rows**, **343 scored**, `pass_filter` remains weak at **n=113, WR 37.2%, avg -0.000629**; `notional_blocked` is **n=106, WR 35.8%, avg -0.000640**; `filtered` remains best at **n=124, WR 46.0%, avg -0.000015**. FET long pass-filter rows are toxic: **n=5, WR 20.0%, avg -0.6255% at 15m**, with the latest two FET longs losing **-0.7202%** and **-0.9731%** at 15m. Blocking FET longs improves pass_filter from **avg -0.000629 \u2192 -0.000368**. ONDO longs are mixed (**n=7, WR 42.9%, avg -0.000156 15m; 60m avg +0.003910**) so they stay confirmation-only. JTO longs are the only promising branch (**n=18, WR 61.1%, avg +0.2126% 15m; WR 66.7%, avg +0.3096% 30m**) but decay at 60m (**WR 22.2%**).\n\n**My thinking:** The broad HL breakout engine is still not good enough to fund or force live trades. The signal quality problem is selective: FET longs are a clear avoid, ONDO needs delayed confirmation instead of first-breakout chasing, and JTO has edge only if treated as a fast continuation scalp rather than a hold.\n\n**Decision:** No live promotion. I updated `scripts/score_hl_paper_signals.py` diagnostics to tag `SUPPRESS_FET_LONGS_COPY_HOSTILE`, `WATCH_ONDO_REQUIRE_30M_CONFIRMATION`, and `WATCH_JTO_15_30M_CONTINUATION_ONLY`; verified with `py_compile` and reran the scorer. Keep FET longs suppressed in paper analysis, keep ONDO long confirmation-only, and evaluate JTO with a strict 15-30m horizon. Artifact: `/home/ubuntu/clawd/research/p3-0612-fet-long-suppressor-jto-continuation-watch-2026-05-07.md`. Dashboard update ran successfully.\n\n**Next:** Run P4 next. Refresh alpha/regime inputs and test whether current risk-off/slow-regime state supports or vetoes the JTO 15-30m continuation watch before any bot filter change touches live execution.\n\n\n## 2026-05-06 17:05 UTC \u2014 [Pillar 2] HL filter mixed, PM off-hour inversion hold\n\n**Task:** Run P2 Smart Entry after P1 found top-wallet copy hostile. Re-score recent HL paper/pass-filter rows, re-check PM realized quality, and decide whether any parameter should loosen for 17-20 UTC.\n\n**Finding:**\n- Step 0 passed: canonical LIVE screens are alive, `161459.pm-bot` and `161462.hl-bot`.\n- Re-ran `scripts/score_hl_paper_signals.py`: rows_updated **41**, rows_total **339**,",
+  "worklog": "# brainTrade Work Log\n*Check this anytime to see what I'm doing and how I'm thinking.*\n\n\n## 2026-05-07 10:11 UTC \u2014 [Pillar 4] Sentiment impulse, STOP/liquidation veto still binding\n\n**Task:** Refresh the P4 alpha pipeline and test whether the current regime supports or vetoes the P3 JTO 15-30m continuation watch before any bot filter change touches live execution.\n\n**Finding:** Step 0 passed: canonical LIVE screens are alive (`3136.pm-bot`, `3165.hl-bot`). Ran `scripts/alpha-signal-update.sh`; snapshot `5223f02db9d7a46c` appended at **2026-05-07T10:11:06.570554+00:00**. BTC is **$80923.57**, **-1.373% 24h**. Fear & Greed improved to **47 Neutral** and sentiment shifted **euphoria_fade_watch \u2192 sentiment_impulse_up**, but the stack is still defensive: slow regime remains **STRONG_TREND / pm_action=STOP** from **2026-05-04T20:45:03.353758+00:00**, fast regime is **RANGE/DOWN** with net **-0.315%**, classifier is **trend_risk_off score -2 stance defensive**, funding squeeze is unconfirmed (`ratio_confirms=False`), and liquidation overlay is **bearish strength 0.3**. Re-ran `scripts/score_hl_jto_momentum.py`: deduped JTO remains **n=4**, 15m WR **100%** avg **+0.6374%**, 30m WR **75%** avg **+0.3699%**, but 60m WR **25%** avg **-0.4983%** with `live_ready=False`.\n\n**My thinking:** Sentiment impulse is the only constructive input, and it is not enough. A RANGE/DOWN fast tape under stale slow STOP plus bearish liquidation events is exactly where a small-sample JTO continuation edge can become overfit. The 15-30m JTO data is worth tracking, but the 60m decay says this is a scalp-only pattern, not a regime permission slip.\n\n**Decision:** No live filter or sizing change. Keep PM/HL defensive. JTO stays paper-only and horizon-capped to 15-30m; require fresh slow-regime data, copy-friendly majors, and a much larger deduped JTO sample before promotion. Artifact: `/home/ubuntu/clawd/research/p4-1011-sentiment-impulse-but-stop-liq-veto-jto-paper-only-2026-05-07.md`.\n\n**Next:** Run P1 next. Re-check top-trader BTC/ETH/SOL positioning after this sentiment shift; if copy leadership remains net short, keep the P4 sentiment impulse treated as a fade/squeeze risk rather than a bullish permission signal.\n\n\n## 2026-05-07 06:12 UTC \u2014 [Pillar 3] FET longs suppressed, JTO continuation isolated\n\n**Task:** Run P3 Strategy Development: restart any missing live bots, review HL strategy branches, test the requested FET/ONDO/JTO paper-only suppressor tweak, and decide whether anything deserves live promotion.\n\n**Finding:** Step 0 found both canonical screens missing, so I restarted them LIVE immediately: PM `3136.pm-bot` running `trading_bot.py`, HL `3165.hl-bot` running `hl_live_trader.py`. HL is fresh with balance **$37.391639**, **0 positions**, **0 current signals**, and execution mode **notional_blocked** because planned notional is **$11.217492 < $20**. Re-scored HL ledger: **352 rows**, **343 scored**, `pass_filter` remains weak at **n=113, WR 37.2%, avg -0.000629**; `no",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 4,
-    "research_files": 924,
-    "snapshot_age_minutes": 1264.9,
+    "research_files": 925,
+    "snapshot_age_minutes": 0.7,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
-      "score": -5,
+      "score": -2,
       "stance": "defensive",
       "breakout_risk": "neutral",
       "slow_regime": "STRONG_TREND",
-      "fast_regime": "TREND",
-      "sentiment_regime": "euphoria_fade_watch",
-      "detail": "slow trend regime | fast trend pressure | PM gating defensive | liquidation tailwind | sentiment drag: euphoria_fade_watch"
+      "fast_regime": "RANGE",
+      "sentiment_regime": "sentiment_impulse_up",
+      "detail": "slow trend regime | fast range structure | PM gating defensive | liquidation tailwind"
     },
     "transition_context": {
-      "previous_snapshot_key": "efa8be367b8521d3",
+      "previous_snapshot_key": "4d5bd2cb67d11141",
       "previous_classifier_state": "trend_risk_off",
       "current_classifier_state": "trend_risk_off",
       "previous_pm_risk": "high",
@@ -890,40 +899,40 @@
       "previous_breakout_risk": "neutral",
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "euphoria_fade_watch",
-      "current_sentiment_regime": "euphoria_fade_watch",
-      "minutes_since_last_distinct_snapshot": 80.2,
-      "transition_label": "unchanged_distinct_state",
+      "current_sentiment_regime": "sentiment_impulse_up",
+      "minutes_since_last_distinct_snapshot": 1502.5,
+      "transition_label": "sentiment_shift:euphoria_fade_watch->sentiment_impulse_up",
       "posture": "stable",
       "state_changed": true
     },
     "pm_risk_context": {
       "pm_risk": "high",
       "slow_pm_action": "STOP",
-      "fast_regime": "TREND",
+      "fast_regime": "RANGE",
       "squeeze_direction": "SHORT_SQUEEZE",
       "squeeze_pm_adjustment": 0,
       "squeeze_confirmed": false,
       "liq_direction": "bearish",
       "liq_pm_adjustment": 0.5,
-      "fear_greed_regime": "euphoria_fade_watch"
+      "fear_greed_regime": "sentiment_impulse_up"
     },
     "fear_greed": {
-      "value": 46,
-      "classification": "Fear",
+      "value": 47,
+      "classification": "Neutral",
       "context": {
-        "percentile_30d": 87.9,
-        "avg_7d": 39.6,
-        "delta_3d": -1,
-        "delta_7d": 20,
-        "regime": "euphoria_fade_watch"
+        "percentile_30d": 93.1,
+        "avg_7d": 42.1,
+        "delta_3d": 7,
+        "delta_7d": 18,
+        "regime": "sentiment_impulse_up"
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.2681,
-      "avg_range_last6h_pct": 0.44,
-      "avg_range_prev18h_pct": 0.544,
-      "compression_ratio": 0.8088,
-      "trend_6h_pct": 0.3567,
+      "realized_vol_1h_pct": 0.2658,
+      "avg_range_last6h_pct": 0.4023,
+      "avg_range_prev18h_pct": 0.5067,
+      "compression_ratio": 0.794,
+      "trend_6h_pct": -0.0687,
       "breakout_risk": "neutral"
     },
     "regime_state": {
@@ -937,17 +946,17 @@
       "timestamp": "2026-05-04T20:45:03.353758+00:00"
     },
     "fast_regime": {
-      "regime": "TREND",
+      "regime": "RANGE",
       "score": 5,
-      "direction": "UP",
-      "avg_range_pct": 0.1788,
-      "max_range_pct": 0.4024,
-      "vol_ratio": 2.32,
-      "net_change_pct": 0.401,
-      "consistency": 0.667,
-      "pm_tradeable": false,
-      "confidence": 61,
-      "detail": "net_change=+0.40% | consistency=67%"
+      "direction": "DOWN",
+      "avg_range_pct": 0.1078,
+      "max_range_pct": 0.222,
+      "vol_ratio": 1.22,
+      "net_change_pct": -0.315,
+      "consistency": 0.333,
+      "pm_tradeable": true,
+      "confidence": 56,
+      "detail": "low_vol=0.108%"
     },
     "sources": [
       {
@@ -968,7 +977,7 @@
       {
         "name": "Fear & Greed Index",
         "status": "ACTIVE",
-        "last_signal": "46 (Fear) | euphoria_fade_watch"
+        "last_signal": "47 (Neutral) | sentiment_impulse_up"
       },
       {
         "name": "BTC Regime Classifier",
@@ -978,7 +987,7 @@
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "unchanged_distinct_state | stable"
+        "last_signal": "sentiment_shift:euphoria_fade_watch->sentiment_impulse_up | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",
