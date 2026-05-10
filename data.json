@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-10T15:12:30.548590+00:00",
+  "timestamp": "2026-05-10T15:14:14.441387+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -96,11 +96,11 @@
     "summary_state": "disagreement",
     "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-04T20:00:13.979250+00:00",
-    "source_age_minutes": 8352.3,
+    "source_age_minutes": 8354.0,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-02T01:08:44.042465+00:00",
-    "recent_strong_regime_age_minutes": 12363.8,
+    "recent_strong_regime_age_minutes": 12365.5,
     "recent_strong_regime_source_scan_time": "2026-05-02T00:30:12.522907+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +131,11 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 12363.8m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 12365.5m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 8352.3m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 8354.0m \u2014 lag risk"
       }
     ],
     "evolution": [
@@ -348,7 +348,7 @@
       "min_realized_n": 10,
       "outcome_freshness": {
         "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 787.62,
+        "last_age_hours": 787.65,
         "last_ts": "2026-04-07T19:35:15.678249+00:00",
         "rows": 201,
         "stale": true,
@@ -992,7 +992,7 @@
       "source_outcome_rows": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
       "source_quality": "/home/ubuntu/clawd/research/pm_outcome_quality_bias_score.json",
       "source_shadow": "/home/ubuntu/clawd/research/pm_outside_shadow_watch.json",
-      "timestamp": "2026-05-10T15:12:33.942892+00:00"
+      "timestamp": "2026-05-10T15:14:17.849467+00:00"
     }
   },
   "pillar3": {
@@ -1127,13 +1127,13 @@
             "vol_ratio_lt": 1.8
           },
           "fast_regime": "RANGE",
-          "fast_vol_ratio": 1.18,
+          "fast_vol_ratio": 1.47,
           "pm_risk": "high",
           "sentiment_cap": "euphoria_fade_watch",
           "slow_stop": true
         },
         "source_health": {
-          "age_minutes": 6.8,
+          "age_minutes": 8.5,
           "exists": true,
           "last_updated": "2026-05-10T15:05:47.154291+00:00",
           "new_rows_since_previous_score": 0,
@@ -1181,7 +1181,21 @@
           }
         },
         "live_ready": false,
-        "block_reason": "paper branch requires n>=50, 30m WR>=62%, avg>=+0.12%, non-negative side buckets, plus P1/P4 vetoes must clear"
+        "live_block_details": {
+          "blockers": [
+            "no_new_qualifying_rows",
+            "market_regime_not_range_recently",
+            "fast_range_high_conf_streak_lt_3",
+            "audit_n_ok",
+            "audit_avg_ok"
+          ],
+          "current_fast_range_high_conf_streak": 0,
+          "ready": false,
+          "recent_market_range_rows_last_100": 0,
+          "recent_strict_range_lowvol_rows_last_100": 0,
+          "required_fast_range_high_conf_streak": 3
+        },
+        "block_reason": "paper branch requires fresh/growing source, recent market RANGE rows, 3-snapshot high-conf fast RANGE streak, n>=50, 30m WR>=62%, avg>=+0.12%, non-negative side buckets, plus P1/P4 vetoes must clear"
       },
       {
         "name": "hl_paper_suppressor_labels_v0",
@@ -1378,7 +1392,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 6.7,
+        "source_age_minutes": 8.5,
         "source_stale": false
       }
     ],
@@ -1387,13 +1401,13 @@
       "decision": "review",
       "error_tail": [],
       "execution_mode": "notional_blocked",
-      "last_cycle": "2026-05-10 15:10:25,964 - INFO - \ud83d\udcb0 Cycle 3444 | Balance: $37.39 | Positions: none | Signals: 0",
+      "last_cycle": "2026-05-10 15:13:20,845 - INFO - \ud83d\udcb0 Cycle 3456 | Balance: $37.39 | Positions: none | Signals: 0",
       "live_fresh": true,
-      "log_age_minutes": -0.0,
+      "log_age_minutes": 0.0,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 6.8,
+      "paper_age_minutes": 8.5,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": false,
       "paper_stale_threshold_minutes": 120,
@@ -1402,21 +1416,21 @@
       "recent_30m_alignment_lines": 6,
       "recent_30m_cycles": 10,
       "recent_30m_errors": 0,
-      "recent_30m_signal_lines": 59,
+      "recent_30m_signal_lines": 75,
       "signal_tail": [
-        "2026-05-10 15:11:05,711 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,333.7 | ETH local RANGE breakout 0.09% < 0.25%",
-        "2026-05-10 15:11:21,364 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,333.7 | ETH local RANGE breakout 0.09% < 0.25%",
-        "2026-05-10 15:11:36,246 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.2 | ETH local RANGE breakout 0.11% < 0.25%",
-        "2026-05-10 15:11:51,210 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.4 | ETH local RANGE breakout 0.12% < 0.25%",
-        "2026-05-10 15:12:05,603 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.1 | ETH local RANGE breakout 0.10% < 0.25%",
-        "2026-05-10 15:12:05,910 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.1 | SOL local RANGE breakout 0.03% < 0.25%",
-        "2026-05-10 15:12:19,674 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.1 | ETH local RANGE breakout 0.10% < 0.25%",
-        "2026-05-10 15:12:19,982 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.1 | SOL local RANGE breakout 0.01% < 0.25%"
+        "2026-05-10 15:13:32,351 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.5 | ETH local RANGE breakout 0.12% < 0.25%",
+        "2026-05-10 15:13:32,693 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.2 | SOL local RANGE breakout 0.11% < 0.25%",
+        "2026-05-10 15:13:46,970 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.7 | ETH local RANGE breakout 0.13% < 0.25%",
+        "2026-05-10 15:13:47,292 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.2 | SOL local RANGE breakout 0.10% < 0.25%",
+        "2026-05-10 15:14:01,361 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.7 | ETH local RANGE breakout 0.13% < 0.25%",
+        "2026-05-10 15:14:01,677 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.2 | SOL local RANGE breakout 0.12% < 0.25%",
+        "2026-05-10 15:14:15,369 - INFO - \u23ed\ufe0f FILTERED LONG ETH @ $2,334.7 | ETH local RANGE breakout 0.13% < 0.25%",
+        "2026-05-10 15:14:15,680 - INFO - \u23ed\ufe0f FILTERED LONG SOL @ $94.2 | SOL local RANGE breakout 0.14% < 0.25%"
       ],
       "signals_count": 0,
-      "state_age_minutes": 0.2,
+      "state_age_minutes": -0.0,
       "status": "FRESH",
-      "timestamp": "2026-05-10T15:12:34.149411+00:00"
+      "timestamp": "2026-05-10T15:14:18.130866+00:00"
     },
     "paper_suppressor_labels": {
       "decision": "PAPER_ONLY_DO_NOT_CHANGE_LIVE_EXECUTION",
@@ -1606,15 +1620,15 @@
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
-      "last_updated": "2026-05-10T15:12:19.981442+00:00",
-      "age_minutes": 0.2,
+      "last_updated": "2026-05-10T15:14:15.679751+00:00",
+      "age_minutes": -0.0,
       "stale": false
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
-      "last_updated": "2026-05-10T15:12:22.562921+00:00",
-      "age_minutes": 0.1,
+      "last_updated": "2026-05-10T15:14:04.018672+00:00",
+      "age_minutes": 0.2,
       "stale": false,
       "owner": "hl_live_trader.py",
       "owner_running": true,
@@ -1634,7 +1648,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 69741.6,
+      "age_minutes": 69743.3,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -1644,7 +1658,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 65370.8,
+      "age_minutes": 65372.6,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -1654,7 +1668,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-04-24T09:00:14.419733+00:00",
-      "age_minutes": 23412.3,
+      "age_minutes": 23414.0,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -1673,7 +1687,7 @@
     "data_sources": 7,
     "signals_generated": 4,
     "research_files": 968,
-    "snapshot_age_minutes": 15.5,
+    "snapshot_age_minutes": 0.5,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
@@ -1685,7 +1699,7 @@
       "detail": "slow trend regime | fast range structure | PM gating defensive | liquidation tailwind | sentiment drag: euphoria_fade_watch"
     },
     "transition_context": {
-      "previous_snapshot_key": "652e107304f26571",
+      "previous_snapshot_key": "9e06400a95d76414",
       "previous_classifier_state": "trend_risk_off",
       "current_classifier_state": "trend_risk_off",
       "previous_pm_risk": "high",
@@ -1694,7 +1708,7 @@
       "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "euphoria_fade_watch",
       "current_sentiment_regime": "euphoria_fade_watch",
-      "minutes_since_last_distinct_snapshot": 8.2,
+      "minutes_since_last_distinct_snapshot": 16.8,
       "transition_label": "unchanged_distinct_state",
       "posture": "stable",
       "state_changed": true
@@ -1722,11 +1736,11 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.0892,
-      "avg_range_last6h_pct": 0.2182,
-      "avg_range_prev18h_pct": 0.224,
-      "compression_ratio": 0.9741,
-      "trend_6h_pct": 0.1528,
+      "realized_vol_1h_pct": 0.0863,
+      "avg_range_last6h_pct": 0.2216,
+      "avg_range_prev18h_pct": 0.2143,
+      "compression_ratio": 1.034,
+      "trend_6h_pct": 0.2595,
       "breakout_risk": "neutral"
     },
     "regime_state": {
@@ -1741,16 +1755,16 @@
     },
     "fast_regime": {
       "regime": "RANGE",
-      "score": 7,
+      "score": 6,
       "direction": "NEUTRAL",
-      "avg_range_pct": 0.0699,
+      "avg_range_pct": 0.0936,
       "max_range_pct": 0.213,
-      "vol_ratio": 1.18,
-      "net_change_pct": -0.022,
-      "consistency": 0.25,
+      "vol_ratio": 1.47,
+      "net_change_pct": 0.09,
+      "consistency": 0.417,
       "pm_tradeable": true,
-      "confidence": 75,
-      "detail": "low_vol=0.070%"
+      "confidence": 67,
+      "detail": "low_vol=0.094%"
     },
     "sources": [
       {

@@ -991,6 +991,7 @@ if _range_lowvol:
         "source_health": _range_lowvol.get('source_health'),
         "filter_diagnostics": _range_lowvol.get('filter_diagnostics'),
         "live_ready": _range_lowvol.get('live_ready'),
+        "live_block_details": _range_lowvol.get('live_block_details'),
         "block_reason": _range_lowvol.get('live_block_reason'),
     })
 
