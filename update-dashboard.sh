@@ -818,6 +818,19 @@ try:
 except Exception:
     p2_hour_gate_score = {}
 
+_p2_live_alignment = p2_hour_gate_score.get('live_alignment') or {}
+_p2_extra_risk = _p2_live_alignment.get('extra_hour_risk') or {}
+p2_hour_gate_summary = {
+    "recommended_active_hours": p2_hour_gate_score.get('recommended_active_hours'),
+    "recommended_confirmation_only_hours": p2_hour_gate_score.get('recommended_confirmation_only_hours'),
+    "live_alignment_status": _p2_live_alignment.get('status'),
+    "live_extra_hours": _p2_live_alignment.get('live_extra_hours'),
+    "extra_hour_risk": _p2_extra_risk,
+    "outcome_freshness": p2_hour_gate_score.get('outcome_freshness'),
+    "alpha_context_status": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('status'),
+    "alpha_context_rows": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('alpha_context_rows'),
+}
+
 hl_directional_running = process_running("hl_trading_engine", "hl_live_trader.py")
 hl_momentum_running = process_running("hl_momentum")
 
@@ -1240,6 +1253,7 @@ data = {
         "completion": _pscores.get("p2", 55),
         "strategies": strategies,
         "edge_history": _pevents.get("2", []),
+        "hour_gate_summary": p2_hour_gate_summary,
         "hour_gate_score": p2_hour_gate_score,
     },
     
