@@ -1182,6 +1182,52 @@ try:
             })
 except: pass
 
+p1_copy_gate_summary = {"posture": "UNKNOWN", "blockers": ["leaderboard_state_unavailable"]}
+try:
+    _leaderboard_state_path = '/home/ubuntu/clawd/research/leaderboard-state.json'
+    _auros = '0x023a3d058020fb76cca98f01b3c48c8938a22355'
+    with open(_leaderboard_state_path) as _lf:
+        _leaderboard_state = json.load(_lf)
+    def _coin_summary(_coin):
+        _long_count = _short_count = 0
+        _long_notional = _short_notional = 0.0
+        for _addr, _wallet in (_leaderboard_state or {}).items():
+            if str(_addr).lower() == _auros.lower():
+                continue
+            _pos = ((_wallet or {}).get('positions') or {}).get(_coin)
+            if not _pos:
+                continue
+            _notional = float(_pos.get('notional') or 0)
+            if _pos.get('side') == 'LONG':
+                _long_count += 1; _long_notional += _notional
+            elif _pos.get('side') == 'SHORT':
+                _short_count += 1; _short_notional += _notional
+        return {
+            "long_count": _long_count,
+            "short_count": _short_count,
+            "long_notional": round(_long_notional, 2),
+            "short_notional": round(_short_notional, 2),
+            "net_notional": round(_long_notional - _short_notional, 2),
+        }
+    _copy_core = {c: _coin_summary(c) for c in ['BTC', 'ETH', 'SOL', 'HYPE']}
+    _copy_blockers = []
+    if _copy_core['BTC']['net_notional'] <= 0:
+        _copy_blockers.append('btc_ex_auros_net_not_positive')
+    if _copy_core['ETH']['long_count'] == 0 or _copy_core['ETH']['net_notional'] < -10000000:
+        _copy_blockers.append('eth_hard_defensive')
+    if _copy_core['SOL']['net_notional'] < -10000000:
+        _copy_blockers.append('sol_hard_defensive')
+    if _copy_core['HYPE']['net_notional'] < 0:
+        _copy_blockers.append('hype_defensive')
+    p1_copy_gate_summary = {
+        "posture": "DEFENSIVE" if _copy_blockers else "MIXED_OR_SUPPORTIVE",
+        "blockers": _copy_blockers,
+        "ex_auros_core": _copy_core,
+        "requires_to_relax": ["BTC ex-Auros net > 0", "SOL ex-Auros net > -$10M", "ETH not unanimous/near-unanimous hard short"],
+    }
+except Exception as _e:
+    p1_copy_gate_summary = {"posture": "UNKNOWN", "blockers": ["leaderboard_state_unavailable"], "error": str(_e)}
+
 alpha_sources = [
     {"name": "HL Leaderboard Tracker", "status": "ACTIVE", "last_signal": p1_bias.upper() + " consensus"},
     {"name": "PM Leaderboard Scraper", "status": "ACTIVE", "last_signal": "Top 20 profit leaders tracked"},
@@ -1307,6 +1353,7 @@ data = {
         "crowded_expensive_regime": p1_crowded_expensive,
         "structure_note": p1_structure_note,
         "insights": p1_insights,
+        "copy_gate_summary": p1_copy_gate_summary,
         "evolution": _pevents.get("1", []),
     },
     
