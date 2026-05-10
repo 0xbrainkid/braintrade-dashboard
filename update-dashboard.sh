@@ -988,6 +988,7 @@ if _range_lowvol:
         "exception_avg_30m": _exception.get('avg'),
         "exception_promotion_audit": _range_lowvol.get('p4_exception_promotion_audit'),
         "p4_context": _range_lowvol.get('p4_context'),
+        "source_health": _range_lowvol.get('source_health'),
         "live_ready": _range_lowvol.get('live_ready'),
         "block_reason": _range_lowvol.get('live_block_reason'),
     })
