@@ -805,6 +805,19 @@ p1_evolution = [
 pm_win_rate = (all_wins / (all_wins + all_losses) * 100) if (all_wins + all_losses) > 0 else 0
 pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68 stuck (not trading loss)
 
+p2_hour_gate_score = {}
+try:
+    _quality_script = '/home/ubuntu/clawd/scripts/analyze_pm_outcome_quality.py'
+    _outside_script = '/home/ubuntu/clawd/scripts/analyze_pm_outside_shadow.py'
+    _hour_script = '/home/ubuntu/clawd/scripts/score_pm_hour_gates.py'
+    for _script in [_quality_script, _outside_script, _hour_script]:
+        if os.path.exists(_script):
+            subprocess.run([_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/pm_hour_gate_score.json') as _hgf:
+        p2_hour_gate_score = json.load(_hgf)
+except Exception:
+    p2_hour_gate_score = {}
+
 hl_directional_running = process_running("hl_trading_engine", "hl_live_trader.py")
 hl_momentum_running = process_running("hl_momentum")
 
@@ -1223,6 +1236,7 @@ data = {
         "completion": _pscores.get("p2", 55),
         "strategies": strategies,
         "edge_history": _pevents.get("2", []),
+        "hour_gate_score": p2_hour_gate_score,
     },
     
     # ═══ PILLAR 3: Continuous Iteration ═══
