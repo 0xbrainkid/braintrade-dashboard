@@ -952,6 +952,32 @@ if _md:
         "avg_15m": _md15.get('avg_return'),
     })
 
+_range_lowvol = {}
+try:
+    _range_lowvol_script = '/home/ubuntu/clawd/scripts/score_hl_range_lowvol_v0.py'
+    if os.path.exists(_range_lowvol_script):
+        subprocess.run([_range_lowvol_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/hl_range_lowvol_v0_score.json') as _rlf:
+        _range_lowvol = json.load(_rlf)
+except Exception:
+    _range_lowvol = {}
+if _range_lowvol:
+    _rl30 = ((_range_lowvol.get('metrics') or {}).get('30m') or {})
+    _exception = (((_range_lowvol.get('p4_exception_test_30m') or {}).get('fast_range_lowvol_slowstop_euphoria_long_copy_disagrees')) or {})
+    p3_strategy_branches.append({
+        "name": "hl_range_lowvol_v0_exception_paper",
+        "status": "paper_only_macro_capped",
+        "rows": _range_lowvol.get('rows_total'),
+        "wr_30m": _rl30.get('wr'),
+        "avg_30m": _rl30.get('avg'),
+        "exception_n": _exception.get('n'),
+        "exception_wr_30m": _exception.get('wr'),
+        "exception_avg_30m": _exception.get('avg'),
+        "p4_context": _range_lowvol.get('p4_context'),
+        "live_ready": _range_lowvol.get('live_ready'),
+        "block_reason": _range_lowvol.get('live_block_reason'),
+    })
+
 _p3_paper_health = {}
 try:
     _health_script = '/home/ubuntu/clawd/scripts/check_hl_paper_health.py'
