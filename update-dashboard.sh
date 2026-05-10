@@ -1241,11 +1241,18 @@ try:
         "eth_not_near_unanimous_short": not (_copy_core['ETH']['short_count'] >= 6 and _copy_core['ETH']['long_notional'] < 100000),
         "hype_ex_auros_net_nonnegative": _copy_core['HYPE']['net_notional'] >= 0,
     }
+    _relaxation_gaps = {
+        "btc_net_gap_to_positive": round(max(0, 0 - _copy_core['BTC']['net_notional']), 2),
+        "sol_gap_to_minus_10m": round(max(0, -10000000 - _copy_core['SOL']['net_notional']), 2),
+        "hype_gap_to_nonnegative": round(max(0, 0 - _copy_core['HYPE']['net_notional']), 2),
+        "eth_short_notional_remaining": round(_copy_core['ETH']['short_notional'], 2),
+    }
     p1_copy_gate_summary = {
         "posture": "DEFENSIVE" if _copy_blockers else "MIXED_OR_SUPPORTIVE",
         "blockers": _copy_blockers,
         "ex_auros_core": _copy_core,
         "relaxation_progress": _relax_checks,
+        "relaxation_gaps": _relaxation_gaps,
         "relaxation_score": sum(1 for _ok in _relax_checks.values() if _ok),
         "requires_to_relax": ["BTC ex-Auros net > 0", "SOL ex-Auros net > -$10M", "ETH not unanimous/near-unanimous hard short"],
     }
