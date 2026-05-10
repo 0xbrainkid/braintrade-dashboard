@@ -1256,6 +1256,8 @@ p4_trade_gate_summary = {
     "local_range_trend_audit": _p4_lrt_audit,
     "local_range_trend_blockers": ((_local_range_trend.get('live_block_details') or {}).get('blockers') if isinstance(_local_range_trend, dict) else None),
     "local_range_trend_preferred_horizon": ((_local_range_trend.get('live_block_details') or {}).get('preferred_horizon_watch') if isinstance(_local_range_trend, dict) else None),
+    "copy_gate_posture": (p1_copy_gate_summary or {}).get('posture'),
+    "copy_gate_blockers": (p1_copy_gate_summary or {}).get('blockers'),
     "transition_stability_recommendation": p4_transition_stability.get('recommendation'),
     "transition_stability_blockers": p4_transition_stability.get('blockers'),
     "range_friendly_streak": p4_transition_stability.get('range_friendly_streak'),
