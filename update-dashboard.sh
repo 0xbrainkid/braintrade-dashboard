@@ -1180,6 +1180,23 @@ alpha_sources = [
     {"name": "Liquidation Cascade Monitor", "status": "ACTIVE" if alpha_liq else "BUILDING", "last_signal": f"{alpha_liq.get('direction', 'neutral')} | adj {alpha_liq.get('pm_adjustment', 0)}"},
 ]
 
+_p4_range_blocks = (_range_lowvol.get('live_block_details') or {}) if isinstance(_range_lowvol, dict) else {}
+_p4_lrt_audit = (_local_range_trend.get('promotion_audit') or {}) if isinstance(_local_range_trend, dict) else {}
+p4_trade_gate_summary = {
+    "posture": "BLOCK_LIVE",
+    "primary_reasons": [
+        "pm_risk_high" if alpha_pm_risk.get('pm_risk') == 'high' else None,
+        "slow_stop" if alpha_pm_risk.get('slow_pm_action') == 'STOP' else None,
+        "classifier_defensive" if alpha_btc_classifier.get('stance') == 'defensive' else None,
+        "euphoria_fade_cap" if alpha_fng_ctx.get('regime') == 'euphoria_fade_watch' else None,
+    ],
+    "fast_regime_confidence": alpha_fast.get('confidence'),
+    "fast_range_high_conf_lowvol_streak": ((_range_lowvol.get('p4_context') or {}).get('fast_range_persistence') or {}).get('fast_range_high_conf_lowvol_streak') if isinstance(_range_lowvol, dict) else None,
+    "range_lowvol_blockers": _p4_range_blocks.get('blockers'),
+    "local_range_trend_audit": _p4_lrt_audit,
+}
+p4_trade_gate_summary["primary_reasons"] = [x for x in p4_trade_gate_summary["primary_reasons"] if x]
+
 # ── Build Output ──
 
 # ── Read dynamic pillar data ──
@@ -1367,6 +1384,7 @@ data = {
         "btc_microstructure": alpha_micro,
         "regime_state": alpha_regime,
         "fast_regime": alpha_fast,
+        "trade_gate_summary": p4_trade_gate_summary,
         "sources": alpha_sources,
     },
 }
