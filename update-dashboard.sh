@@ -1042,6 +1042,7 @@ if _local_range_trend:
         "wr_60m": ((_local_range_trend.get('metrics') or {}).get('60m') or {}).get('wr'),
         "avg_60m": ((_local_range_trend.get('metrics') or {}).get('60m') or {}).get('avg'),
         "promotion_audit": _local_range_trend.get('promotion_audit'),
+        "maturity": _local_range_trend.get('maturity'),
         "source_health": _local_range_trend.get('source_health'),
         "live_ready": _local_range_trend.get('live_ready'),
         "live_block_details": _local_range_trend.get('live_block_details'),
