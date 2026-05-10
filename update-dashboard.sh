@@ -990,6 +990,20 @@ if _md:
         "avg_15m": _md15.get('avg_return'),
     })
 
+_hl_paper_backfill_status = {"ran": False, "rows_updated": None, "error": None}
+try:
+    _paper_backfill_script = '/home/ubuntu/clawd/scripts/score_hl_paper_signals.py'
+    if os.path.exists(_paper_backfill_script):
+        _pbf = subprocess.run([_paper_backfill_script], capture_output=True, text=True, timeout=25)
+        _hl_paper_backfill_status["ran"] = True
+        _hl_paper_backfill_status["returncode"] = _pbf.returncode
+        _m = re.search(r'rows_updated\s+(\d+)', (_pbf.stdout or ''))
+        _hl_paper_backfill_status["rows_updated"] = int(_m.group(1)) if _m else None
+        if _pbf.returncode != 0:
+            _hl_paper_backfill_status["error"] = (_pbf.stderr or _pbf.stdout or '')[-500:]
+except Exception as _e:
+    _hl_paper_backfill_status = {"ran": False, "rows_updated": None, "error": str(_e)}
+
 _range_lowvol = {}
 try:
     _range_lowvol_script = '/home/ubuntu/clawd/scripts/score_hl_range_lowvol_v0.py'
@@ -1387,6 +1401,7 @@ data = {
         "changes": _pevents.get("3", []),
         "strategy_branches": p3_strategy_branches,
         "paper_health": _p3_paper_health,
+        "hl_paper_backfill": _hl_paper_backfill_status,
         "paper_suppressor_labels": _p3_suppressor_labels,
         "win_rate_7d": win_rate_7d,
         "win_rate_24h": win_rate_24h,
