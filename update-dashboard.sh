@@ -1196,6 +1196,8 @@ p4_trade_gate_summary = {
     "fast_range_high_conf_lowvol_streak": ((_range_lowvol.get('p4_context') or {}).get('fast_range_persistence') or {}).get('fast_range_high_conf_lowvol_streak') if isinstance(_range_lowvol, dict) else None,
     "range_lowvol_blockers": _p4_range_blocks.get('blockers'),
     "local_range_trend_audit": _p4_lrt_audit,
+    "local_range_trend_blockers": ((_local_range_trend.get('live_block_details') or {}).get('blockers') if isinstance(_local_range_trend, dict) else None),
+    "local_range_trend_preferred_horizon": ((_local_range_trend.get('live_block_details') or {}).get('preferred_horizon_watch') if isinstance(_local_range_trend, dict) else None),
 }
 p4_trade_gate_summary["primary_reasons"] = [x for x in p4_trade_gate_summary["primary_reasons"] if x]
 
