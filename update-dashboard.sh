@@ -1008,6 +1008,33 @@ if _range_lowvol:
         "block_reason": _range_lowvol.get('live_block_reason'),
     })
 
+_local_range_trend = {}
+try:
+    _local_range_trend_script = '/home/ubuntu/clawd/scripts/score_hl_local_range_trend_v0.py'
+    if os.path.exists(_local_range_trend_script):
+        subprocess.run([_local_range_trend_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/hl_local_range_trend_v0_score.json') as _lrtf:
+        _local_range_trend = json.load(_lrtf)
+except Exception:
+    _local_range_trend = {}
+if _local_range_trend:
+    _lrt30 = ((_local_range_trend.get('metrics') or {}).get('30m') or {})
+    p3_strategy_branches.append({
+        "name": "hl_local_range_trend_v0_paper",
+        "status": "paper_only_new_branch",
+        "rows": _local_range_trend.get('rows_total'),
+        "wr_15m": ((_local_range_trend.get('metrics') or {}).get('15m') or {}).get('wr'),
+        "avg_15m": ((_local_range_trend.get('metrics') or {}).get('15m') or {}).get('avg'),
+        "wr_30m": _lrt30.get('wr'),
+        "avg_30m": _lrt30.get('avg'),
+        "wr_60m": ((_local_range_trend.get('metrics') or {}).get('60m') or {}).get('wr'),
+        "avg_60m": ((_local_range_trend.get('metrics') or {}).get('60m') or {}).get('avg'),
+        "promotion_audit": _local_range_trend.get('promotion_audit'),
+        "source_health": _local_range_trend.get('source_health'),
+        "live_ready": _local_range_trend.get('live_ready'),
+        "block_reason": _local_range_trend.get('live_block_reason'),
+    })
+
 _p3_paper_health = {}
 try:
     _health_script = '/home/ubuntu/clawd/scripts/check_hl_paper_health.py'
