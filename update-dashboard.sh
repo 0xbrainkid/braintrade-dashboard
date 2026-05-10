@@ -1033,6 +1033,7 @@ if _local_range_trend:
         "promotion_audit": _local_range_trend.get('promotion_audit'),
         "source_health": _local_range_trend.get('source_health'),
         "live_ready": _local_range_trend.get('live_ready'),
+        "live_block_details": _local_range_trend.get('live_block_details'),
         "block_reason": _local_range_trend.get('live_block_reason'),
     })
 
