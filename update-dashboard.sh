@@ -122,6 +122,7 @@ def annotate_state_owner(health, owner_name, *owner_patterns):
 prev_dashboard = {}
 prev_p1 = {}
 alpha_signal = {}
+p4_transition_stability = {}
 try:
     with open('/home/ubuntu/clawd/dashboard/data.json') as f:
         prev_dashboard = json.load(f)
@@ -135,6 +136,15 @@ try:
         alpha_signal = json.load(f)
 except Exception:
     alpha_signal = {}
+
+try:
+    _p4_stability_script = '/home/ubuntu/clawd/scripts/analyze_p4_alpha_transition_stability.py'
+    if os.path.exists(_p4_stability_script):
+        subprocess.run([_p4_stability_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/p4-alpha-transition-stability.json') as f:
+        p4_transition_stability = json.load(f)
+except Exception:
+    p4_transition_stability = {}
 
 # ── PM Balance (from bot log) ──
 pm_balance = 0
@@ -1198,6 +1208,10 @@ p4_trade_gate_summary = {
     "local_range_trend_audit": _p4_lrt_audit,
     "local_range_trend_blockers": ((_local_range_trend.get('live_block_details') or {}).get('blockers') if isinstance(_local_range_trend, dict) else None),
     "local_range_trend_preferred_horizon": ((_local_range_trend.get('live_block_details') or {}).get('preferred_horizon_watch') if isinstance(_local_range_trend, dict) else None),
+    "transition_stability_recommendation": p4_transition_stability.get('recommendation'),
+    "transition_stability_blockers": p4_transition_stability.get('blockers'),
+    "range_friendly_streak": p4_transition_stability.get('range_friendly_streak'),
+    "high_risk_streak": p4_transition_stability.get('high_risk_streak'),
 }
 p4_trade_gate_summary["primary_reasons"] = [x for x in p4_trade_gate_summary["primary_reasons"] if x]
 
@@ -1379,6 +1393,7 @@ data = {
         "snapshot_age_minutes": alpha_snapshot_age_minutes,
         "btc_regime_classifier": alpha_btc_classifier,
         "transition_context": alpha_transition,
+        "transition_stability": p4_transition_stability,
         "pm_risk_context": alpha_pm_risk,
         "fear_greed": {
             "value": alpha_fng,
