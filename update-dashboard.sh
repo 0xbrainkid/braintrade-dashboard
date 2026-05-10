@@ -838,6 +838,7 @@ p2_hour_gate_summary = {
     "extra_hour_risk": _p2_extra_risk,
     "live_edit_gate": p2_hour_gate_score.get('live_edit_gate'),
     "outcome_freshness": p2_hour_gate_score.get('outcome_freshness'),
+    "outcome_pipeline_health": p2_hour_gate_score.get('outcome_pipeline_health'),
     "alpha_context_status": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('status'),
     "alpha_context_rows": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('alpha_context_rows'),
 }
