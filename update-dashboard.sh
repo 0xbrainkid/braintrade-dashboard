@@ -1293,6 +1293,7 @@ p4_trade_gate_summary = {
     "transition_live_clearance_progress": p4_transition_stability.get('live_clearance_progress'),
     "transition_live_clearance_score": p4_transition_stability.get('live_clearance_score'),
     "transition_live_clearance_total": p4_transition_stability.get('live_clearance_total'),
+    "transition_clearance_delta_vs_previous_snapshot": p4_transition_stability.get('clearance_delta_vs_previous_snapshot'),
     "defensive_streak": p4_transition_stability.get('defensive_streak'),
     "range_friendly_streak": p4_transition_stability.get('range_friendly_streak'),
     "high_risk_streak": p4_transition_stability.get('high_risk_streak'),
