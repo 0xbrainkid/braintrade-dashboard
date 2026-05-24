@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-24T18:01:25.425152+00:00",
+  "timestamp": "2026-05-24T21:58:31.379086+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -23,7 +23,15 @@
     "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39"
   },
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "SUPER",
+      "rate": "-0.5757%",
+      "apr": "-630%",
+      "action": "LONG",
+      "oi": "4,895,342"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -96,11 +104,11 @@
     "summary_state": "max_gap_all_buy_bearish_inversion",
     "summary_text": "Max-gap all-buy bearish inversion in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-24T09:58:25.918346+00:00",
-    "source_age_minutes": 483.0,
+    "source_age_minutes": 720.1,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-22T05:59:52.598867+00:00",
-    "recent_strong_regime_age_minutes": 3601.5,
+    "recent_strong_regime_age_minutes": 3838.6,
     "recent_strong_regime_source_scan_time": "2026-05-21T17:57:53.577971+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -135,11 +143,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3601.5m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 3838.6m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 483.0m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 720.1m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: SUPER at -0.5757%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "copy_gate_summary": {
@@ -422,10 +438,10 @@
         "weekend_filter_share_recent_no_trade": 0.0
       },
       "outcome_freshness": {
-        "file_age_hours": 1126.44,
+        "file_age_hours": 1130.39,
         "file_mtime": "2026-04-07T19:35:15.677422+00:00",
         "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 1126.44,
+        "last_age_hours": 1130.39,
         "last_ts": "2026-04-07T19:35:15.678249+00:00",
         "rows": 201,
         "stale": true,
@@ -438,7 +454,7 @@
         "recent_trade_like_lines": 0,
         "recent_weekend_filter_lines": 0,
         "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 9374.8,
+        "trading_log_age_minutes": 9611.9,
         "trading_log_exists": true
       },
       "alpha_context_status": "READY_AWAITING_NEW_REALIZED_ROWS",
@@ -523,10 +539,10 @@
       "min_good_wr": 60.0,
       "min_realized_n": 10,
       "outcome_freshness": {
-        "file_age_hours": 1126.44,
+        "file_age_hours": 1130.39,
         "file_mtime": "2026-04-07T19:35:15.677422+00:00",
         "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 1126.44,
+        "last_age_hours": 1130.39,
         "last_ts": "2026-04-07T19:35:15.678249+00:00",
         "rows": 201,
         "stale": true,
@@ -539,7 +555,7 @@
         "recent_trade_like_lines": 0,
         "recent_weekend_filter_lines": 0,
         "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 9374.8,
+        "trading_log_age_minutes": 9611.9,
         "trading_log_exists": true
       },
       "reason": "hour scorer is research-only; realized data still old/thin for 19/20, outside-hour labels are unavailable, and alpha-context split waits for new realized rows",
@@ -1180,7 +1196,7 @@
       "source_outcome_rows": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
       "source_quality": "/home/ubuntu/clawd/research/pm_outcome_quality_bias_score.json",
       "source_shadow": "/home/ubuntu/clawd/research/pm_outside_shadow_watch.json",
-      "timestamp": "2026-05-24T18:01:29.190862+00:00"
+      "timestamp": "2026-05-24T21:58:35.395007+00:00"
     }
   },
   "pillar3": {
@@ -1307,22 +1323,22 @@
           }
         },
         "p4_context": {
-          "classifier": "range_compression_setup",
+          "classifier": "mixed_transition",
           "fast_range_persistence": {
             "fast_range_high_conf_lowvol_streak": 0,
-            "fast_range_streak": 1,
+            "fast_range_streak": 0,
             "high_conf_threshold": 90,
             "latest_high_conf_rows": [],
             "vol_ratio_lt": 1.8
           },
-          "fast_regime": "RANGE",
-          "fast_vol_ratio": 0.97,
-          "pm_risk": "low",
+          "fast_regime": "TREND",
+          "fast_vol_ratio": 1.74,
+          "pm_risk": "high",
           "sentiment_cap": "neutral",
           "slow_stop": false
         },
         "source_health": {
-          "age_minutes": 9120.9,
+          "age_minutes": 9358.0,
           "exists": true,
           "last_updated": "2026-05-18T10:00:43.466452+00:00",
           "new_rows_since_previous_score": 0,
@@ -1380,7 +1396,7 @@
             "audit_avg_ok"
           ],
           "current_fast_range_high_conf_streak": 0,
-          "current_fast_vol_ratio": 0.97,
+          "current_fast_vol_ratio": 1.74,
           "ready": false,
           "recent_market_range_rows_last_100": 92,
           "recent_strict_range_lowvol_rows_last_100": 15,
@@ -1746,7 +1762,7 @@
           "rows_total": 38
         },
         "source_health": {
-          "age_minutes": 9120.9,
+          "age_minutes": 9358.0,
           "exists": true,
           "last_updated": "2026-05-18T10:00:43.466452+00:00",
           "new_rows_since_previous_score": 0,
@@ -1973,7 +1989,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 9120.7,
+        "source_age_minutes": 9357.8,
         "source_stale": true
       }
     ],
@@ -1984,11 +2000,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": null,
       "live_fresh": false,
-      "log_age_minutes": 9374.3,
+      "log_age_minutes": 9611.4,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 9120.9,
+      "paper_age_minutes": 9358.0,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": true,
       "paper_stale_threshold_minutes": 120,
@@ -2000,9 +2016,9 @@
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 1,
-      "state_age_minutes": 9374.3,
+      "state_age_minutes": 9611.4,
       "status": "INVESTIGATE_LIVE_STALE",
-      "timestamp": "2026-05-24T18:01:39.429385+00:00"
+      "timestamp": "2026-05-24T21:58:45.518285+00:00"
     },
     "hl_paper_backfill": {
       "ran": true,
@@ -2199,14 +2215,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.435825+00:00",
-      "age_minutes": 9374.0,
+      "age_minutes": 9611.1,
       "stale": true
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.436914+00:00",
-      "age_minutes": 9374.0,
+      "age_minutes": 9611.1,
       "stale": true,
       "owner": "hl_live_trader.py",
       "owner_running": false,
@@ -2226,7 +2242,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 90070.5,
+      "age_minutes": 90307.6,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -2236,7 +2252,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 85699.8,
+      "age_minutes": 85936.9,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -2246,7 +2262,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-05-22T17:57:58.791798+00:00",
-      "age_minutes": 2883.4,
+      "age_minutes": 3120.5,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -2260,104 +2276,104 @@
     ],
     "state_health_summary": "stale: hl_live_state (hl_live_trader.py=legacy_inactive), engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n\n## 2026-05-24 17:56 UTC \u2014 [Pillar 3] Canonical emitter wired, stale source still blocks\n\n**Task:** Follow P3 by confirming retired bot screens stayed stopped, implementing the read-only canonical HL paper-signal emitter requested by the prior heartbeat, and refreshing branch scoring to see whether any HL strategy can be promoted.\n**Finding:** No retired `pm-bot` or `hl-bot` screens were listed. Added `scripts/emit_hl_canonical_paper_signals.py`, emitted `research/hl_canonical_paper_signals.jsonl`, and wrote `research/hl_canonical_paper_signals_audit.json` without touching the legacy paper ledger. The emitter converted **1,240** source rows into **817** canonical signal rows, excluded **396** `notional_blocked` execution mirrors, quarantined **0** missing-feature rows, found **1** duplicate signal ID, and confirmed the latest signal is still **2026-05-18T05:45:15.920692+00:00** with **0** rows in the last 24h and **18** in the last 7d. Existing deduped scoring remains weak: **817** rows, 30m **45.9% WR / -0.000377 avg**, and `pass_filter` 30m **40.6% WR / -0.000792 avg**. `hl_local_range_trend_v0` still has a promising but thin aligned 15m cohort (**18 rows / 72.2% WR / +0.001739 avg**) with weak 60m follow-through (**33.3% WR**). `range_down_mixed_short_v1` remains stale and tiny: **13** all candidates, **7** capped, **1** post-retirement, **0** recent 48h.\n**My thinking:** The data plumbing risk is now lower because execution mirrors no longer have to be manually filtered out for research, and the canonical artifact proves the existing signal rows are feature-complete. But this is not a strategy greenlight: the source has not produced fresh rows, the broad paper set is negative at the 30m decision horizon, and the best-looking branch still has sample-size and 60m-decay problems.\n**Decision:** No live trade, no retired bot restart, no HL config promotion. Treat `research/hl_canonical_paper_signals.jsonl` as the canonical P3 research input going forward, but require fresh post-retirement rows before retesting promotion.\n**Next:** Wire dashboard freshness counts from `research/hl_canonical_paper_signals_audit.json`, then update P3 branch scorers to read the canonical ledger directly instead of reimplementing dedupe logic against the mixed legacy paper file.\n\n## 2026-05-24 13:56 UTC \u2014 [Pillar 2] 03 UTC threshold sensitivity still proxy-only\n\n**Task:** Follow P2 by confirming retired bot screens stayed stopped, refreshing Smart Entry outcome/hour-gate/03 UTC artifacts, and testing whether the 03 UTC proxy should loosen its bias/persistence thresholds.\n**Finding:** No retired `pm-bot` or `hl-bot` screens were listed. Refreshed PM outcome quality, outside-hour shadow watch, 03 UTC extraction/replay, and hour-gate scoring. Official scorer remains `NO_LIVE_CONFIG_CHANGE_RESEARCH_ONLY` with recommended active hours **11/12** only and **19/20** confirmation-only/watch. Realized outcomes are still **201** rows with latest **2026-04-07",
+  "worklog": "# brainTrade Work Log\n\n## 2026-05-24 21:56 UTC \u2014 [Pillar 4] Fast trend risk reclaimed, range clearance reset\n\n**Task:** Follow P4 by confirming retired bot screens stayed stopped, refreshing the alpha-signal pipeline, and auditing whether the prior range-compression setup persisted enough to clear the alpha research gate.\n**Finding:** No retired `pm-bot` or `hl-bot` screens were listed. Refreshed `research/alpha-signals.json` at **2026-05-24T21:57:35.475107+00:00** and reran the P4 transition-stability audit at **2026-05-24T21:57:47.471127+00:00**. The prior 10/11 clearance read failed: current clearance is **7/11**, recommendation **BLOCK_LIVE**, with blockers **fast_not_range_tradeable**, **current_pm_risk_high**, **current_state_not_range_friendly**, and **range_friendly_streak_lt_3**. Slow regime remains **RANGE / TRADE**, but fast regime flipped to **TREND / DOWN**, **pm_tradeable=false**, vol ratio **1.74**, net change **-0.622%**, classifier **mixed_transition**, stance **reduced**, PM risk **high**. Last 48h history is **4** rows: classifier **mixed_transition 3 / range_compression_setup 1**, PM risk **high 3 / low 1**, range-friendly streak **0**, high-risk streak **1**. Artifact written to `research/p4-fast-trend-risk-reclaim-blocks-range-clearance-2026-05-24-2156.md`.\n**My thinking:** This is not a clean range-compression continuation. The slow detector is permissive, but the fast layer reclaimed control and invalidated the one-print improvement. Bullish liquidation tailwind is useful context, but in this snapshot it is weaker than fast trend pressure and should not offset the high PM risk classification.\n**Decision:** No live trade, no retired bot restart, no alpha confidence boost, and no range-clearance promotion. Keep P4 in **BLOCK_LIVE** until fast regime returns to RANGE and the range-friendly streak rebuilds to at least **3** consecutive snapshots.\n**Next:** Test whether fast-trend DOWN snapshots with bullish short-cascade tailwinds mean-revert or continue over the next 1-3 hours; if continuation dominates, add a warning tag for `bullish_liq_tailwind_while_fast_down`.\n\n## 2026-05-24 17:56 UTC \u2014 [Pillar 3] Canonical emitter wired, stale source still blocks\n\n**Task:** Follow P3 by confirming retired bot screens stayed stopped, implementing the read-only canonical HL paper-signal emitter requested by the prior heartbeat, and refreshing branch scoring to see whether any HL strategy can be promoted.\n**Finding:** No retired `pm-bot` or `hl-bot` screens were listed. Added `scripts/emit_hl_canonical_paper_signals.py`, emitted `research/hl_canonical_paper_signals.jsonl`, and wrote `research/hl_canonical_paper_signals_audit.json` without touching the legacy paper ledger. The emitter converted **1,240** source rows into **817** canonical signal rows, excluded **396** `notional_blocked` execution mirrors, quarantined **0** missing-feature rows, found **1** duplicate signal ID, and confirmed the latest signal is still **2026-05-18T05:45:15.9",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
-    "signals_generated": 3,
-    "research_files": 1027,
-    "snapshot_age_minutes": 723.7,
+    "signals_generated": 2,
+    "research_files": 1028,
+    "snapshot_age_minutes": 0.9,
     "btc_regime_classifier": {
-      "state": "range_compression_setup",
-      "score": 5,
-      "stance": "selective",
-      "breakout_risk": "coiled",
+      "state": "mixed_transition",
+      "score": -1,
+      "stance": "reduced",
+      "breakout_risk": "neutral",
       "slow_regime": "RANGE",
-      "fast_regime": "RANGE",
+      "fast_regime": "TREND",
       "sentiment_regime": "neutral",
-      "detail": "BTC compressed | slow range regime | fast range structure | PM gate open into compression | liquidation tailwind"
+      "detail": "slow range regime | fast trend pressure | PM gating defensive | liquidation tailwind"
     },
     "transition_context": {
-      "previous_snapshot_key": "654f0ece40ccbcc5",
-      "previous_classifier_state": "mixed_transition",
-      "current_classifier_state": "range_compression_setup",
-      "previous_pm_risk": "high",
-      "current_pm_risk": "low",
+      "previous_snapshot_key": "d1d17e65a41c9722",
+      "previous_classifier_state": "range_compression_setup",
+      "current_classifier_state": "mixed_transition",
+      "previous_pm_risk": "low",
+      "current_pm_risk": "high",
       "previous_breakout_risk": "coiled",
-      "current_breakout_risk": "coiled",
+      "current_breakout_risk": "neutral",
       "previous_sentiment_regime": "neutral",
       "current_sentiment_regime": "neutral",
-      "minutes_since_last_distinct_snapshot": 960.0,
-      "transition_label": "classifier_shift:mixed_transition->range_compression_setup",
-      "posture": "risk_easing",
+      "minutes_since_last_distinct_snapshot": 959.9,
+      "transition_label": "classifier_shift:range_compression_setup->mixed_transition",
+      "posture": "risk_rising",
       "state_changed": true
     },
     "transition_stability": {
       "blockers": [
+        "fast_not_range_tradeable",
+        "current_pm_risk_high",
+        "current_state_not_range_friendly",
         "range_friendly_streak_lt_3"
       ],
       "clearance_delta_vs_previous_snapshot": {
-        "current_score": 10,
-        "newly_blocked": [],
-        "newly_cleared": [
-          "high_risk_streak_lt_2",
+        "current_score": 7,
+        "newly_blocked": [
+          "fast_range_tradeable",
           "pm_risk_not_high",
-          "slow_range_trade",
           "state_range_friendly"
         ],
-        "previous_score": 6,
-        "score_change": 4
+        "newly_cleared": [],
+        "previous_score": 10,
+        "score_change": -3
       },
       "counts_48h": {
         "breakout_risk": {
-          "active_trend": 1,
-          "coiled": 3
+          "coiled": 3,
+          "neutral": 1
         },
         "classifier": {
-          "mixed_transition": 2,
-          "range_compression_setup": 1,
-          "range_mean_revert_friendly": 1
+          "mixed_transition": 3,
+          "range_compression_setup": 1
         },
         "pm_risk": {
-          "high": 2,
-          "low": 2
+          "high": 3,
+          "low": 1
         },
         "sentiment_regime": {
-          "neutral": 3,
-          "washed_out_rebound_watch": 1
+          "neutral": 4
         }
       },
       "current": {
-        "breakout_risk": "coiled",
-        "fast_pm_tradeable": true,
-        "fast_regime": "RANGE",
-        "fast_vol_ratio": 0.97,
-        "pm_risk": "low",
+        "breakout_risk": "neutral",
+        "fast_pm_tradeable": false,
+        "fast_regime": "TREND",
+        "fast_vol_ratio": 1.74,
+        "pm_risk": "high",
         "sentiment_regime": "neutral",
         "slow_pm_action": "TRADE",
         "slow_regime": "RANGE",
-        "stance": "selective",
-        "state": "range_compression_setup"
+        "stance": "reduced",
+        "state": "mixed_transition"
       },
       "defensive_streak": 0,
-      "first_48h_ts": "2026-05-22T21:57:31.772121+00:00",
-      "high_risk_streak": 0,
+      "first_48h_ts": "2026-05-23T13:57:31.563759+00:00",
+      "high_risk_streak": 1,
       "history_path": "/home/ubuntu/clawd/research/alpha-signals-history.jsonl",
-      "last_48h_ts": "2026-05-24T05:57:42.004650+00:00",
+      "last_48h_ts": "2026-05-24T21:57:35.475107+00:00",
       "live_clearance_progress": {
         "breakout_not_expanding": true,
         "classifier_not_defensive": true,
-        "fast_range_tradeable": true,
+        "fast_range_tradeable": false,
         "fast_vol_lt_1_8": true,
         "high_risk_streak_lt_2": true,
-        "pm_risk_not_high": true,
+        "pm_risk_not_high": false,
         "range_friendly_streak_ge_3": false,
         "sentiment_not_fade_or_down": true,
         "slow_range_trade": true,
-        "state_range_friendly": true,
+        "state_range_friendly": false,
         "transition_chop_lt_4": true
       },
-      "live_clearance_score": 10,
+      "live_clearance_score": 7,
       "live_clearance_total": 11,
       "next_clearance_requirements": [
         "slow regime must be RANGE with pm_action TRADE",
@@ -2370,17 +2386,17 @@
         "sentiment regime must exit euphoria_fade_watch/sentiment_impulse_down",
         "high-risk streak must reset below 2 snapshots"
       ],
-      "range_friendly_streak": 1,
+      "range_friendly_streak": 0,
       "recommendation": "BLOCK_LIVE",
       "rows_48h": 4,
-      "rows_total": 255,
-      "timestamp": "2026-05-24T18:01:25.463699+00:00",
+      "rows_total": 256,
+      "timestamp": "2026-05-24T21:58:31.413478+00:00",
       "transition_state_changes_48h": 2
     },
     "pm_risk_context": {
-      "pm_risk": "low",
+      "pm_risk": "high",
       "slow_pm_action": "TRADE",
-      "fast_regime": "RANGE",
+      "fast_regime": "TREND",
       "squeeze_direction": "LONG_SQUEEZE",
       "squeeze_pm_adjustment": 0,
       "squeeze_confirmed": false,
@@ -2400,40 +2416,42 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.4804,
-      "avg_range_last6h_pct": 0.2916,
-      "avg_range_prev18h_pct": 0.5962,
-      "compression_ratio": 0.4891,
-      "trend_6h_pct": 0.0915,
-      "breakout_risk": "coiled"
+      "realized_vol_1h_pct": 0.2419,
+      "avg_range_last6h_pct": 0.3917,
+      "avg_range_prev18h_pct": 0.3734,
+      "compression_ratio": 1.0491,
+      "trend_6h_pct": -0.236,
+      "breakout_risk": "neutral"
     },
     "regime_state": {
       "regime": "RANGE",
-      "score": 0,
-      "atr_pct": 0.93,
+      "score": 1,
+      "atr_pct": 0.87,
       "consistency": 0.62,
-      "range_pct": 0.4,
-      "trend_4h": -0.01,
+      "range_pct": 0.76,
+      "trend_4h": -0.64,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-24T05:57:43.836149+00:00"
+      "timestamp": "2026-05-24T21:57:37.350832+00:00"
     },
     "fast_regime": {
-      "regime": "RANGE",
-      "score": 8,
-      "direction": "NEUTRAL",
-      "avg_range_pct": 0.0535,
-      "max_range_pct": 0.1748,
-      "vol_ratio": 0.97,
-      "net_change_pct": 0.047,
-      "consistency": 0.25,
-      "pm_tradeable": true,
-      "confidence": 84,
-      "detail": "low_vol=0.054%"
+      "regime": "TREND",
+      "score": 6,
+      "direction": "DOWN",
+      "avg_range_pct": 0.1629,
+      "max_range_pct": 0.3727,
+      "vol_ratio": 1.74,
+      "net_change_pct": -0.622,
+      "consistency": 0.417,
+      "pm_tradeable": false,
+      "confidence": 68,
+      "detail": "net_change=-0.62% | consistency=42%"
     },
     "trade_gate_summary": {
       "posture": "BLOCK_LIVE",
-      "primary_reasons": [],
-      "fast_regime_confidence": 84,
+      "primary_reasons": [
+        "pm_risk_high"
+      ],
+      "fast_regime_confidence": 68,
       "fast_range_high_conf_lowvol_streak": 0,
       "range_lowvol_blockers": [
         "source_stale",
@@ -2485,57 +2503,57 @@
       ],
       "transition_stability_recommendation": "BLOCK_LIVE",
       "transition_stability_blockers": [
+        "fast_not_range_tradeable",
+        "current_pm_risk_high",
+        "current_state_not_range_friendly",
         "range_friendly_streak_lt_3"
       ],
       "transition_counts_48h": {
         "breakout_risk": {
-          "active_trend": 1,
-          "coiled": 3
+          "coiled": 3,
+          "neutral": 1
         },
         "classifier": {
-          "mixed_transition": 2,
-          "range_compression_setup": 1,
-          "range_mean_revert_friendly": 1
+          "mixed_transition": 3,
+          "range_compression_setup": 1
         },
         "pm_risk": {
-          "high": 2,
-          "low": 2
+          "high": 3,
+          "low": 1
         },
         "sentiment_regime": {
-          "neutral": 3,
-          "washed_out_rebound_watch": 1
+          "neutral": 4
         }
       },
       "transition_live_clearance_progress": {
         "breakout_not_expanding": true,
         "classifier_not_defensive": true,
-        "fast_range_tradeable": true,
+        "fast_range_tradeable": false,
         "fast_vol_lt_1_8": true,
         "high_risk_streak_lt_2": true,
-        "pm_risk_not_high": true,
+        "pm_risk_not_high": false,
         "range_friendly_streak_ge_3": false,
         "sentiment_not_fade_or_down": true,
         "slow_range_trade": true,
-        "state_range_friendly": true,
+        "state_range_friendly": false,
         "transition_chop_lt_4": true
       },
-      "transition_live_clearance_score": 10,
+      "transition_live_clearance_score": 7,
       "transition_live_clearance_total": 11,
       "transition_clearance_delta_vs_previous_snapshot": {
-        "current_score": 10,
-        "newly_blocked": [],
-        "newly_cleared": [
-          "high_risk_streak_lt_2",
+        "current_score": 7,
+        "newly_blocked": [
+          "fast_range_tradeable",
           "pm_risk_not_high",
-          "slow_range_trade",
           "state_range_friendly"
         ],
-        "previous_score": 6,
-        "score_change": 4
+        "newly_cleared": [],
+        "previous_score": 10,
+        "score_change": -3
       },
       "defensive_streak": 0,
-      "range_friendly_streak": 1,
-      "high_risk_streak": 0
+      "range_friendly_streak": 0,
+      "high_risk_streak": 1
     },
     "sources": [
       {
@@ -2551,7 +2569,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | LONG_SQUEEZE"
+        "last_signal": "1 opportunities | LONG_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
@@ -2561,12 +2579,12 @@
       {
         "name": "BTC Regime Classifier",
         "status": "ACTIVE",
-        "last_signal": "range_compression_setup | selective"
+        "last_signal": "mixed_transition | reduced"
       },
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:mixed_transition->range_compression_setup | risk_easing"
+        "last_signal": "classifier_shift:range_compression_setup->mixed_transition | risk_rising"
       },
       {
         "name": "Liquidation Cascade Monitor",
