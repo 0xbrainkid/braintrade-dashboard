@@ -1008,7 +1008,7 @@ _hl_canonical_paper_audit = {}
 try:
     _canonical_emit_script = '/home/ubuntu/clawd/scripts/emit_hl_canonical_paper_signals.py'
     if os.path.exists(_canonical_emit_script):
-        subprocess.run([_canonical_emit_script], capture_output=True, timeout=10)
+        subprocess.run(['python3', _canonical_emit_script], capture_output=True, timeout=10)
     with open('/home/ubuntu/clawd/research/hl_canonical_paper_signals_audit.json') as _caf:
         _hl_canonical_paper_audit = json.load(_caf)
 except Exception as _e:
