@@ -824,7 +824,8 @@ try:
     _label_script = '/home/ubuntu/clawd/scripts/build_pm_smart_entry_label_collector.py'
     for _script in [_quality_script, _outside_script, _hour_script, _label_script]:
         if os.path.exists(_script):
-            subprocess.run([_script], capture_output=True, timeout=10)
+            _cmd = [_script] if os.access(_script, os.X_OK) else [sys.executable, _script]
+            subprocess.run(_cmd, capture_output=True, timeout=10)
     with open('/home/ubuntu/clawd/research/pm_hour_gate_score.json') as _hgf:
         p2_hour_gate_score = json.load(_hgf)
 except Exception:
