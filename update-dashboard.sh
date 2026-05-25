@@ -1004,6 +1004,16 @@ try:
 except Exception as _e:
     _hl_paper_backfill_status = {"ran": False, "rows_updated": None, "error": str(_e)}
 
+_hl_canonical_paper_audit = {}
+try:
+    _canonical_emit_script = '/home/ubuntu/clawd/scripts/emit_hl_canonical_paper_signals.py'
+    if os.path.exists(_canonical_emit_script):
+        subprocess.run([_canonical_emit_script], capture_output=True, timeout=10)
+    with open('/home/ubuntu/clawd/research/hl_canonical_paper_signals_audit.json') as _caf:
+        _hl_canonical_paper_audit = json.load(_caf)
+except Exception as _e:
+    _hl_canonical_paper_audit = {"error": str(_e)}
+
 _range_lowvol = {}
 try:
     _range_lowvol_script = '/home/ubuntu/clawd/scripts/score_hl_range_lowvol_v0.py'
@@ -1414,6 +1424,7 @@ data = {
         "heartbeats_today": 0,  # TODO: count from logs
         "changes": _pevents.get("3", []),
         "strategy_branches": p3_strategy_branches,
+        "canonical_paper_audit": _hl_canonical_paper_audit,
         "paper_health": _p3_paper_health,
         "hl_paper_backfill": _hl_paper_backfill_status,
         "paper_suppressor_labels": _p3_suppressor_labels,
