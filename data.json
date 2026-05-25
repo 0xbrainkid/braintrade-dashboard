@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-25T17:59:29.837969+00:00",
+  "timestamp": "2026-05-25T21:57:43.717914+00:00",
   "pm_balance": 0.0,
   "hl_balance": 37.391639,
   "today_pnl": 0,
@@ -23,7 +23,15 @@
     "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$37.39"
   },
   "hl_positions": [],
-  "funding_opportunities": [],
+  "funding_opportunities": [
+    {
+      "coin": "PURR",
+      "rate": "-0.0824%",
+      "apr": "-90%",
+      "action": "LONG",
+      "oi": "66,795,616"
+    }
+  ],
   "daily_pnl": [
     {
       "date": "2026-03-23",
@@ -94,13 +102,13 @@
     "avg_signal_price": 0.669,
     "alignment_regime": "disagreement",
     "summary_state": "disagreement",
-    "summary_text": "Disagreement regime in copy flow",
+    "summary_text": "Disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-05-25T17:58:18.967665+00:00",
-    "source_age_minutes": 1.2,
-    "lag_risk": false,
+    "source_age_minutes": 239.4,
+    "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-05-22T05:59:52.598867+00:00",
-    "recent_strong_regime_age_minutes": 5039.6,
+    "recent_strong_regime_age_minutes": 5277.9,
     "recent_strong_regime_source_scan_time": "2026-05-21T17:57:53.577971+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": false,
@@ -131,11 +139,19 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5039.6m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 5277.9m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 1.2m"
+        "text": "\u23f1\ufe0f source scan age: 239.4m \u2014 lag risk"
+      },
+      {
+        "source": "Funding Intel",
+        "text": "Strongest: PURR at -0.0824%/8h \u2014 shorts paying longs"
+      },
+      {
+        "source": "Market Sentiment",
+        "text": "1 coins with negative funding (bearish), 0 positive (bullish) \u2014 market leans bearish"
       }
     ],
     "copy_gate_summary": {
@@ -356,828 +372,310 @@
       }
     ],
     "hour_gate_summary": {
-      "recommended_active_hours": [
-        "11",
-        "12"
-      ],
-      "recommended_confirmation_only_hours": [
-        "19",
-        "20"
-      ],
-      "live_alignment_status": "DIVERGED_RESEARCH_ONLY",
-      "live_extra_hours": [
-        "19",
-        "20"
-      ],
-      "extra_hour_risk": {
-        "19": {
-          "realized_avg_pnl_pct": -0.445314,
-          "realized_n": 7,
-          "realized_wr": 28.6,
-          "recommendation": "SHADOW_ONLY",
-          "severity": "WATCH_HIGH_RISK_THIN_SAMPLE",
-          "status": "INSUFFICIENT_REALIZED"
+      "recommended_active_hours": null,
+      "recommended_confirmation_only_hours": null,
+      "live_alignment_status": null,
+      "live_extra_hours": null,
+      "extra_hour_risk": {},
+      "live_edit_gate": null,
+      "outcome_freshness": null,
+      "outcome_pipeline_health": null,
+      "alpha_context_status": null,
+      "alpha_context_rows": null,
+      "label_collector": {
+        "decision": "NO_LIVE_CONFIG_CHANGE_RESEARCH_ONLY",
+        "totals": {
+          "alpha_context_labels": 669,
+          "labels": 2266,
+          "post_retirement_labels": 60,
+          "realized_post_retirement_labels": 0,
+          "shadow_03_post_retirement_labels": 60
         },
-        "20": {
-          "realized_avg_pnl_pct": -0.0293,
-          "realized_n": 2,
-          "realized_wr": 50.0,
-          "recommendation": "SHADOW_ONLY",
-          "severity": "WATCH_NEGATIVE_AVG_THIN_SAMPLE",
-          "status": "INSUFFICIENT_REALIZED"
+        "promotion_gate": {
+          "blockers": [
+            "realized_post_retirement_labels_zero",
+            "shadow_03_proxy_not_realized_execution",
+            "legacy_bots_retired_no_live_config_mutation"
+          ],
+          "ready": false
+        },
+        "shadow_03_preferred_descriptor": {
+          "all": {
+            "avg_pnl_pct": null,
+            "n": 169,
+            "resolved": 167,
+            "wr": 86.8
+          },
+          "definition": "60 <= abs_bias <= 80, price_state in {pinned_normal, neighbor}, persistence >= 3, no bias flip",
+          "post_retirement": {
+            "avg_pnl_pct": null,
+            "n": 7,
+            "resolved": 7,
+            "wr": 100.0
+          },
+          "post_retirement_by_alpha_classifier": {
+            "range_mean_revert_friendly": {
+              "avg_pnl_pct": null,
+              "n": 7,
+              "resolved": 7,
+              "wr": 100.0
+            }
+          },
+          "post_retirement_by_alpha_pm_risk": {
+            "medium": {
+              "avg_pnl_pct": null,
+              "n": 7,
+              "resolved": 7,
+              "wr": 100.0
+            }
+          }
+        }
+      }
+    },
+    "hour_gate_score": {},
+    "label_collector": {
+      "by_alpha_classifier": {
+        "MISSING": {
+          "avg_pnl_pct": null,
+          "n": 59,
+          "resolved": 59,
+          "wr": 72.9
+        },
+        "mixed_transition": {
+          "avg_pnl_pct": null,
+          "n": 55,
+          "resolved": 55,
+          "wr": 70.9
+        },
+        "range_compression_setup": {
+          "avg_pnl_pct": null,
+          "n": 113,
+          "resolved": 110,
+          "wr": 59.1
+        },
+        "range_mean_revert_friendly": {
+          "avg_pnl_pct": null,
+          "n": 60,
+          "resolved": 60,
+          "wr": 66.7
+        },
+        "trend_risk_off": {
+          "avg_pnl_pct": null,
+          "n": 382,
+          "resolved": 380,
+          "wr": 65.5
         }
       },
-      "live_edit_gate": {
-        "blockers": [
-          "outcome_rows_stale",
-          "alpha_context_rows_zero",
-          "live_extra_hours_research_only",
-          "19_not_mechanical_cut_candidate",
-          "20_not_mechanical_cut_candidate"
-        ],
-        "mechanical_cut_candidates": [],
-        "ready": false,
-        "requires": [
-          "outcome_freshness.stale=false",
-          "weekend_filter inactive or no longer suppressing trades",
-          "alpha_context_rows>0 for conditional split",
-          "extra hour severity CUT_CANDIDATE or explicit operator override"
-        ],
-        "resume_trigger_status": {
-          "alpha_context_rows_gt_0": false,
-          "confidence_outcomes_mtime_advanced": false,
-          "outcome_freshness_non_stale": false,
-          "weekend_filter_no_longer_dominant": true
+      "by_alpha_pm_risk": {
+        "high": {
+          "avg_pnl_pct": null,
+          "n": 496,
+          "resolved": 494,
+          "wr": 67.0
         },
-        "resume_triggers": [
-          "confidence_outcomes.jsonl mtime advances",
-          "outcome_freshness.stale=false",
-          "weekend_filter no longer dominates recent trading.log",
-          "alpha_context_rows>0"
-        ],
-        "wait_state": "WAIT_FOR_FRESH_REALIZED_ROWS",
-        "weekend_filter_share_recent_no_trade": 0.0
+        "medium": {
+          "avg_pnl_pct": null,
+          "n": 173,
+          "resolved": 170,
+          "wr": 61.8
+        }
       },
-      "outcome_freshness": {
-        "file_age_hours": 1150.4,
-        "file_mtime": "2026-04-07T19:35:15.677422+00:00",
-        "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 1150.4,
-        "last_ts": "2026-04-07T19:35:15.678249+00:00",
-        "rows": 201,
-        "stale": true,
-        "stale_after_hours": 24
+      "by_source": {
+        "realized": {
+          "avg_pnl_pct": 0.088876,
+          "n": 201,
+          "resolved": 201,
+          "wr": 56.2
+        },
+        "shadow_03_proxy": {
+          "avg_pnl_pct": null,
+          "n": 2065,
+          "resolved": 2059,
+          "wr": 66.0
+        }
       },
-      "outcome_pipeline_health": {
-        "latest_log_ts": "2026-05-18 05:46:42,538",
-        "likely_reason": "outcome_rows_stale",
-        "recent_no_trade_lines": 80,
-        "recent_trade_like_lines": 0,
-        "recent_weekend_filter_lines": 0,
-        "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 10812.8,
-        "trading_log_exists": true
+      "by_source_hour": {
+        "realized|00": {
+          "avg_pnl_pct": -1.0,
+          "n": 2,
+          "resolved": 2,
+          "wr": 0.0
+        },
+        "realized|01": {
+          "avg_pnl_pct": -1.0,
+          "n": 1,
+          "resolved": 1,
+          "wr": 0.0
+        },
+        "realized|02": {
+          "avg_pnl_pct": 0.8674,
+          "n": 1,
+          "resolved": 1,
+          "wr": 100.0
+        },
+        "realized|04": {
+          "avg_pnl_pct": -1.0,
+          "n": 2,
+          "resolved": 2,
+          "wr": 0.0
+        },
+        "realized|05": {
+          "avg_pnl_pct": -0.365433,
+          "n": 3,
+          "resolved": 3,
+          "wr": 33.3
+        },
+        "realized|09": {
+          "avg_pnl_pct": 0.031347,
+          "n": 19,
+          "resolved": 19,
+          "wr": 52.6
+        },
+        "realized|10": {
+          "avg_pnl_pct": -0.130567,
+          "n": 9,
+          "resolved": 9,
+          "wr": 44.4
+        },
+        "realized|11": {
+          "avg_pnl_pct": 0.381878,
+          "n": 23,
+          "resolved": 23,
+          "wr": 69.6
+        },
+        "realized|12": {
+          "avg_pnl_pct": 0.487231,
+          "n": 35,
+          "resolved": 35,
+          "wr": 77.1
+        },
+        "realized|13": {
+          "avg_pnl_pct": -0.016233,
+          "n": 6,
+          "resolved": 6,
+          "wr": 50.0
+        },
+        "realized|14": {
+          "avg_pnl_pct": -0.43183,
+          "n": 10,
+          "resolved": 10,
+          "wr": 30.0
+        },
+        "realized|15": {
+          "avg_pnl_pct": -0.111133,
+          "n": 15,
+          "resolved": 15,
+          "wr": 46.7
+        },
+        "realized|16": {
+          "avg_pnl_pct": -0.0435,
+          "n": 4,
+          "resolved": 4,
+          "wr": 50.0
+        },
+        "realized|17": {
+          "avg_pnl_pct": 0.09582,
+          "n": 5,
+          "resolved": 5,
+          "wr": 60.0
+        },
+        "realized|18": {
+          "avg_pnl_pct": -0.137156,
+          "n": 9,
+          "resolved": 9,
+          "wr": 44.4
+        },
+        "realized|19": {
+          "avg_pnl_pct": 0.149318,
+          "n": 22,
+          "resolved": 22,
+          "wr": 59.1
+        },
+        "realized|20": {
+          "avg_pnl_pct": 0.256357,
+          "n": 14,
+          "resolved": 14,
+          "wr": 64.3
+        },
+        "realized|21": {
+          "avg_pnl_pct": -0.038608,
+          "n": 12,
+          "resolved": 12,
+          "wr": 50.0
+        },
+        "realized|22": {
+          "avg_pnl_pct": -0.071667,
+          "n": 6,
+          "resolved": 6,
+          "wr": 50.0
+        },
+        "realized|23": {
+          "avg_pnl_pct": -0.377533,
+          "n": 3,
+          "resolved": 3,
+          "wr": 33.3
+        },
+        "shadow_03_proxy|03": {
+          "avg_pnl_pct": null,
+          "n": 2065,
+          "resolved": 2059,
+          "wr": 66.0
+        }
       },
-      "alpha_context_status": "READY_AWAITING_NEW_REALIZED_ROWS",
-      "alpha_context_rows": 0
-    },
-    "hour_gate_score": {
-      "alpha_context_breakdown": {
-        "alpha_context_rows": 0,
-        "by_classifier_state": {},
-        "by_fast_regime": {},
-        "by_hour": {},
-        "by_hour_and_classifier": {},
-        "by_pm_risk": {},
-        "status": "READY_AWAITING_NEW_REALIZED_ROWS"
-      },
-      "bad_wr": 45.0,
-      "current_active_hours": [
-        "11",
-        "12",
-        "19",
-        "20"
-      ],
       "decision": "NO_LIVE_CONFIG_CHANGE_RESEARCH_ONLY",
-      "live_alignment": {
-        "extra_hour_risk": {
-          "19": {
-            "realized_avg_pnl_pct": -0.445314,
-            "realized_n": 7,
-            "realized_wr": 28.6,
-            "recommendation": "SHADOW_ONLY",
-            "severity": "WATCH_HIGH_RISK_THIN_SAMPLE",
-            "status": "INSUFFICIENT_REALIZED"
-          },
-          "20": {
-            "realized_avg_pnl_pct": -0.0293,
-            "realized_n": 2,
-            "realized_wr": 50.0,
-            "recommendation": "SHADOW_ONLY",
-            "severity": "WATCH_NEGATIVE_AVG_THIN_SAMPLE",
-            "status": "INSUFFICIENT_REALIZED"
+      "output_labels": "/home/ubuntu/clawd/research/pm_smart_entry_labels.jsonl",
+      "promotion_gate": {
+        "blockers": [
+          "realized_post_retirement_labels_zero",
+          "shadow_03_proxy_not_realized_execution",
+          "legacy_bots_retired_no_live_config_mutation"
+        ],
+        "ready": false
+      },
+      "retirement_cutoff": "2026-05-18T00:00:00+00:00",
+      "schema_version": 1,
+      "shadow_03_preferred_descriptor": {
+        "all": {
+          "avg_pnl_pct": null,
+          "n": 169,
+          "resolved": 167,
+          "wr": 86.8
+        },
+        "definition": "60 <= abs_bias <= 80, price_state in {pinned_normal, neighbor}, persistence >= 3, no bias flip",
+        "post_retirement": {
+          "avg_pnl_pct": null,
+          "n": 7,
+          "resolved": 7,
+          "wr": 100.0
+        },
+        "post_retirement_by_alpha_classifier": {
+          "range_mean_revert_friendly": {
+            "avg_pnl_pct": null,
+            "n": 7,
+            "resolved": 7,
+            "wr": 100.0
           }
         },
-        "live_extra_hours": [
-          "19",
-          "20"
-        ],
-        "model_missing_hours": [],
-        "note": "research-only diff; does not mutate trading_bot.py",
-        "status": "DIVERGED_RESEARCH_ONLY"
-      },
-      "live_edit_gate": {
-        "blockers": [
-          "outcome_rows_stale",
-          "alpha_context_rows_zero",
-          "live_extra_hours_research_only",
-          "19_not_mechanical_cut_candidate",
-          "20_not_mechanical_cut_candidate"
-        ],
-        "mechanical_cut_candidates": [],
-        "ready": false,
-        "requires": [
-          "outcome_freshness.stale=false",
-          "weekend_filter inactive or no longer suppressing trades",
-          "alpha_context_rows>0 for conditional split",
-          "extra hour severity CUT_CANDIDATE or explicit operator override"
-        ],
-        "resume_trigger_status": {
-          "alpha_context_rows_gt_0": false,
-          "confidence_outcomes_mtime_advanced": false,
-          "outcome_freshness_non_stale": false,
-          "weekend_filter_no_longer_dominant": true
-        },
-        "resume_triggers": [
-          "confidence_outcomes.jsonl mtime advances",
-          "outcome_freshness.stale=false",
-          "weekend_filter no longer dominates recent trading.log",
-          "alpha_context_rows>0"
-        ],
-        "wait_state": "WAIT_FOR_FRESH_REALIZED_ROWS",
-        "weekend_filter_share_recent_no_trade": 0.0
-      },
-      "min_good_wr": 60.0,
-      "min_realized_n": 10,
-      "outcome_freshness": {
-        "file_age_hours": 1150.4,
-        "file_mtime": "2026-04-07T19:35:15.677422+00:00",
-        "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 1150.4,
-        "last_ts": "2026-04-07T19:35:15.678249+00:00",
-        "rows": 201,
-        "stale": true,
-        "stale_after_hours": 24
-      },
-      "outcome_pipeline_health": {
-        "latest_log_ts": "2026-05-18 05:46:42,538",
-        "likely_reason": "outcome_rows_stale",
-        "recent_no_trade_lines": 80,
-        "recent_trade_like_lines": 0,
-        "recent_weekend_filter_lines": 0,
-        "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 10812.8,
-        "trading_log_exists": true
-      },
-      "reason": "hour scorer is research-only; realized data still old/thin for 19/20, outside-hour labels are unavailable, and alpha-context split waits for new realized rows",
-      "recommended_active_hours": [
-        "11",
-        "12"
-      ],
-      "recommended_confirmation_only_hours": [
-        "19",
-        "20"
-      ],
-      "scores": [
-        {
-          "current_active": false,
-          "hour": "00",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
+        "post_retirement_by_alpha_pm_risk": {
+          "medium": {
             "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=507, v5a=215, neg=240, pos=267, hard_cap=12"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 12,
-            "n": 507,
-            "negative": 240,
-            "positive": 267,
-            "price_in_band": 454,
-            "soft_cap": 28,
-            "v5a_qualified": 215
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "01",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=473, v5a=194, neg=225, pos=248, hard_cap=16"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 16,
-            "n": 473,
-            "negative": 225,
-            "positive": 248,
-            "price_in_band": 388,
-            "soft_cap": 25,
-            "v5a_qualified": 194
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "02",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=472, v5a=191, neg=279, pos=193, hard_cap=13"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 13,
-            "n": 472,
-            "negative": 279,
-            "positive": 193,
-            "price_in_band": 412,
-            "soft_cap": 21,
-            "v5a_qualified": 191
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "03",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=504, v5a=182, neg=253, pos=251, hard_cap=16"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 16,
-            "n": 504,
-            "negative": 253,
-            "positive": 251,
-            "price_in_band": 434,
-            "soft_cap": 23,
-            "v5a_qualified": 182
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "04",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=491, v5a=175, neg=192, pos=298, hard_cap=11"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 11,
-            "n": 491,
-            "negative": 192,
-            "positive": 298,
-            "price_in_band": 391,
-            "soft_cap": 23,
-            "v5a_qualified": 175
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "05",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=468, v5a=190, neg=250, pos=217, hard_cap=14"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 14,
-            "n": 468,
-            "negative": 250,
-            "positive": 217,
-            "price_in_band": 388,
-            "soft_cap": 35,
-            "v5a_qualified": 190
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "06",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=494, v5a=187, neg=254, pos=239, hard_cap=9"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 9,
-            "n": 494,
-            "negative": 254,
-            "positive": 239,
-            "price_in_band": 450,
-            "soft_cap": 35,
-            "v5a_qualified": 187
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "07",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=510, v5a=185, neg=272, pos=237, hard_cap=5"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 5,
-            "n": 510,
-            "negative": 272,
-            "positive": 237,
-            "price_in_band": 470,
-            "soft_cap": 30,
-            "v5a_qualified": 185
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "08",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=450, v5a=180, neg=219, pos=230, hard_cap=16"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 16,
-            "n": 450,
-            "negative": 219,
-            "positive": 230,
-            "price_in_band": 386,
-            "soft_cap": 27,
-            "v5a_qualified": 180
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "09",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=495, v5a=217, neg=313, pos=182, hard_cap=7"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 7,
-            "n": 495,
-            "negative": 313,
-            "positive": 182,
-            "price_in_band": 420,
-            "soft_cap": 32,
-            "v5a_qualified": 217
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "10",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=491, v5a=193, neg=224, pos=267, hard_cap=8"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 8,
-            "n": 491,
-            "negative": 224,
-            "positive": 267,
-            "price_in_band": 401,
-            "soft_cap": 33,
-            "v5a_qualified": 193
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": true,
-          "hour": "11",
-          "realized": {
-            "avg_abs_bias": 53.427,
-            "avg_entry_price": 0.5179,
-            "avg_pnl_pct": 0.408527,
-            "n": 11,
-            "wr": 72.7
-          },
-          "reasons": [
-            "realized n=11 WR=72.7% avg=0.408527",
-            "no shadow rows"
-          ],
-          "recommendation": "ALLOW",
-          "shadow": {
-            "hard_cap": 0,
-            "n": 0,
-            "negative": 0,
-            "positive": 0,
-            "price_in_band": 0,
-            "soft_cap": 0,
-            "v5a_qualified": 0
-          },
-          "status": "REALIZED_GOOD"
-        },
-        {
-          "current_active": true,
-          "hour": "12",
-          "realized": {
-            "avg_abs_bias": 51.724,
-            "avg_entry_price": 0.5178,
-            "avg_pnl_pct": 0.361659,
-            "n": 17,
-            "wr": 70.6
-          },
-          "reasons": [
-            "realized n=17 WR=70.6% avg=0.361659",
-            "no shadow rows"
-          ],
-          "recommendation": "ALLOW",
-          "shadow": {
-            "hard_cap": 0,
-            "n": 0,
-            "negative": 0,
-            "positive": 0,
-            "price_in_band": 0,
-            "soft_cap": 0,
-            "v5a_qualified": 0
-          },
-          "status": "REALIZED_GOOD"
-        },
-        {
-          "current_active": false,
-          "hour": "13",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=327, v5a=141, neg=203, pos=124, hard_cap=9"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 9,
-            "n": 327,
-            "negative": 203,
-            "positive": 124,
-            "price_in_band": 239,
-            "soft_cap": 26,
-            "v5a_qualified": 141
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "14",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=320, v5a=124, neg=163, pos=157, hard_cap=14"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 14,
-            "n": 320,
-            "negative": 163,
-            "positive": 157,
-            "price_in_band": 300,
-            "soft_cap": 21,
-            "v5a_qualified": 124
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "15",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=354, v5a=155, neg=170, pos=184, hard_cap=12"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 12,
-            "n": 354,
-            "negative": 170,
-            "positive": 184,
-            "price_in_band": 293,
-            "soft_cap": 36,
-            "v5a_qualified": 155
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "16",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=339, v5a=138, neg=160, pos=178, hard_cap=8"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 8,
-            "n": 339,
-            "negative": 160,
-            "positive": 178,
-            "price_in_band": 274,
-            "soft_cap": 23,
-            "v5a_qualified": 138
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "17",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=355, v5a=136, neg=128, pos=226, hard_cap=7"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 7,
-            "n": 355,
-            "negative": 128,
-            "positive": 226,
-            "price_in_band": 323,
-            "soft_cap": 22,
-            "v5a_qualified": 136
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "18",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=435, v5a=141, neg=194, pos=241, hard_cap=10"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 10,
-            "n": 435,
-            "negative": 194,
-            "positive": 241,
-            "price_in_band": 335,
-            "soft_cap": 20,
-            "v5a_qualified": 141
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": true,
-          "hour": "19",
-          "realized": {
-            "avg_abs_bias": 53.714,
-            "avg_entry_price": 0.5122,
-            "avg_pnl_pct": -0.445314,
             "n": 7,
-            "wr": 28.6
-          },
-          "reasons": [
-            "realized n=7 below min 10",
-            "no shadow rows"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 0,
-            "n": 0,
-            "negative": 0,
-            "positive": 0,
-            "price_in_band": 0,
-            "soft_cap": 0,
-            "v5a_qualified": 0
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": true,
-          "hour": "20",
-          "realized": {
-            "avg_abs_bias": 60.35,
-            "avg_entry_price": 0.5202,
-            "avg_pnl_pct": -0.0293,
-            "n": 2,
-            "wr": 50.0
-          },
-          "reasons": [
-            "realized n=2 below min 10",
-            "no shadow rows"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 0,
-            "n": 0,
-            "negative": 0,
-            "positive": 0,
-            "price_in_band": 0,
-            "soft_cap": 0,
-            "v5a_qualified": 0
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "21",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=368, v5a=134, neg=214, pos=154, hard_cap=18"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 18,
-            "n": 368,
-            "negative": 214,
-            "positive": 154,
-            "price_in_band": 368,
-            "soft_cap": 14,
-            "v5a_qualified": 134
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "22",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=393, v5a=163, neg=217, pos=175, hard_cap=12"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 12,
-            "n": 393,
-            "negative": 217,
-            "positive": 175,
-            "price_in_band": 378,
-            "soft_cap": 25,
-            "v5a_qualified": 163
-          },
-          "status": "INSUFFICIENT_REALIZED"
-        },
-        {
-          "current_active": false,
-          "hour": "23",
-          "realized": {
-            "avg_abs_bias": null,
-            "avg_entry_price": null,
-            "avg_pnl_pct": null,
-            "n": 0,
-            "wr": null
-          },
-          "reasons": [
-            "realized n=0 below min 10",
-            "shadow n=412, v5a=169, neg=220, pos=192, hard_cap=14"
-          ],
-          "recommendation": "SHADOW_ONLY",
-          "shadow": {
-            "hard_cap": 14,
-            "n": 412,
-            "negative": 220,
-            "positive": 192,
-            "price_in_band": 402,
-            "soft_cap": 26,
-            "v5a_qualified": 169
-          },
-          "status": "INSUFFICIENT_REALIZED"
+            "resolved": 7,
+            "wr": 100.0
+          }
         }
-      ],
-      "source_outcome_rows": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
-      "source_quality": "/home/ubuntu/clawd/research/pm_outcome_quality_bias_score.json",
-      "source_shadow": "/home/ubuntu/clawd/research/pm_outside_shadow_watch.json",
-      "timestamp": "2026-05-25T17:59:33.828134+00:00"
+      },
+      "source_alpha_history": "/home/ubuntu/clawd/research/alpha-signals-history.jsonl",
+      "source_realized": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
+      "source_shadow_03": "/home/ubuntu/clawd/data/03h-shadow-sim-results.csv",
+      "timestamp": "2026-05-25T21:57:27.324089+00:00",
+      "totals": {
+        "alpha_context_labels": 669,
+        "labels": 2266,
+        "post_retirement_labels": 60,
+        "realized_post_retirement_labels": 0,
+        "shadow_03_post_retirement_labels": 60
+      }
     }
   },
   "pillar3": {
@@ -1313,7 +811,7 @@
             "vol_ratio_lt": 1.8
           },
           "fast_regime": "RANGE",
-          "fast_vol_ratio": 0.7,
+          "fast_vol_ratio": 0.64,
           "pm_risk": "low",
           "sentiment_cap": "neutral",
           "slow_stop": false
@@ -1324,8 +822,8 @@
           "canonical_rows": 817,
           "execution_rows_excluded": 396,
           "exists": true,
-          "last_updated": "2026-05-25T17:59:44.101414+00:00",
-          "latest_signal_age_minutes": 10814.5,
+          "last_updated": "2026-05-25T21:58:00.711598+00:00",
+          "latest_signal_age_minutes": 11052.7,
           "latest_signal_ts": "2026-05-18T05:45:15.920692+00:00",
           "new_rows_since_previous_score": 0,
           "path": "/home/ubuntu/clawd/research/hl_canonical_paper_signals.jsonl",
@@ -1385,7 +883,7 @@
             "audit_avg_ok"
           ],
           "current_fast_range_high_conf_streak": 0,
-          "current_fast_vol_ratio": 0.7,
+          "current_fast_vol_ratio": 0.64,
           "ready": false,
           "recent_market_range_rows_last_100": 92,
           "recent_strict_range_lowvol_rows_last_100": 15,
@@ -1756,8 +1254,8 @@
           "canonical_rows": 817,
           "execution_rows_excluded": 396,
           "exists": true,
-          "last_updated": "2026-05-25T17:59:44.101414+00:00",
-          "latest_signal_age_minutes": 10814.5,
+          "last_updated": "2026-05-25T21:58:00.711598+00:00",
+          "latest_signal_age_minutes": 11052.8,
           "latest_signal_ts": "2026-05-18T05:45:15.920692+00:00",
           "new_rows_since_previous_score": 0,
           "path": "/home/ubuntu/clawd/research/hl_canonical_paper_signals.jsonl",
@@ -1986,7 +1484,7 @@
           "60M_HOLD"
         ],
         "broad_pass_filter_is_live_quality": false,
-        "source_age_minutes": 10558.8,
+        "source_age_minutes": 10797.0,
         "source_stale": true
       }
     ],
@@ -2029,7 +1527,7 @@
       "rows_last_7d": 0,
       "rows_total": 1240,
       "source_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
-      "timestamp": "2026-05-25T17:59:44.103304+00:00"
+      "timestamp": "2026-05-25T21:58:00.712471+00:00"
     },
     "paper_health": {
       "balance": 37.391639,
@@ -2038,11 +1536,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": null,
       "live_fresh": false,
-      "log_age_minutes": 10812.3,
+      "log_age_minutes": 11050.6,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 10559.0,
+      "paper_age_minutes": 10797.3,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": true,
       "paper_stale_threshold_minutes": 120,
@@ -2054,9 +1552,9 @@
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 1,
-      "state_age_minutes": 10812.3,
+      "state_age_minutes": 11050.6,
       "status": "INVESTIGATE_LIVE_STALE",
-      "timestamp": "2026-05-25T17:59:44.371777+00:00"
+      "timestamp": "2026-05-25T21:58:00.982909+00:00"
     },
     "hl_paper_backfill": {
       "ran": true,
@@ -2253,14 +1751,14 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.435825+00:00",
-      "age_minutes": 10812.1,
+      "age_minutes": 11050.3,
       "stale": true
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.436914+00:00",
-      "age_minutes": 10812.1,
+      "age_minutes": 11050.3,
       "stale": true,
       "owner": "hl_live_trader.py",
       "owner_running": false,
@@ -2280,7 +1778,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 91508.6,
+      "age_minutes": 91746.8,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -2290,7 +1788,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 87137.8,
+      "age_minutes": 87376.1,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -2300,7 +1798,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-05-22T17:57:58.791798+00:00",
-      "age_minutes": 4321.5,
+      "age_minutes": 4559.7,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -2320,7 +1818,7 @@
     "data_sources": 7,
     "signals_generated": 2,
     "research_files": 1031,
-    "snapshot_age_minutes": 241.9,
+    "snapshot_age_minutes": 0.3,
     "btc_regime_classifier": {
       "state": "range_compression_setup",
       "score": 4,
@@ -2332,18 +1830,18 @@
       "detail": "BTC compressed | slow range regime | fast range structure | PM gate open into compression"
     },
     "transition_context": {
-      "previous_snapshot_key": "fcf18e1fd428400e",
-      "previous_classifier_state": "mixed_transition",
+      "previous_snapshot_key": "ee63cab4e1a064ff",
+      "previous_classifier_state": "range_compression_setup",
       "current_classifier_state": "range_compression_setup",
-      "previous_pm_risk": "high",
+      "previous_pm_risk": "low",
       "current_pm_risk": "low",
-      "previous_breakout_risk": "neutral",
+      "previous_breakout_risk": "coiled",
       "current_breakout_risk": "coiled",
       "previous_sentiment_regime": "neutral",
       "current_sentiment_regime": "neutral",
-      "minutes_since_last_distinct_snapshot": 960.1,
-      "transition_label": "classifier_shift:mixed_transition->range_compression_setup",
-      "posture": "risk_easing",
+      "minutes_since_last_distinct_snapshot": 479.8,
+      "transition_label": "unchanged_distinct_state",
+      "posture": "stable",
       "state_changed": true
     },
     "transition_stability": {
@@ -2353,36 +1851,32 @@
       "clearance_delta_vs_previous_snapshot": {
         "current_score": 10,
         "newly_blocked": [],
-        "newly_cleared": [
-          "fast_range_tradeable",
-          "pm_risk_not_high",
-          "state_range_friendly"
-        ],
-        "previous_score": 7,
-        "score_change": 3
+        "newly_cleared": [],
+        "previous_score": 10,
+        "score_change": 0
       },
       "counts_48h": {
         "breakout_risk": {
-          "coiled": 2,
+          "coiled": 3,
           "neutral": 1
         },
         "classifier": {
           "mixed_transition": 1,
-          "range_compression_setup": 2
+          "range_compression_setup": 3
         },
         "pm_risk": {
           "high": 1,
-          "low": 2
+          "low": 3
         },
         "sentiment_regime": {
-          "neutral": 3
+          "neutral": 4
         }
       },
       "current": {
         "breakout_risk": "coiled",
         "fast_pm_tradeable": true,
         "fast_regime": "RANGE",
-        "fast_vol_ratio": 0.7,
+        "fast_vol_ratio": 0.64,
         "pm_risk": "low",
         "sentiment_regime": "neutral",
         "slow_pm_action": "TRADE",
@@ -2394,7 +1888,7 @@
       "first_48h_ts": "2026-05-24T05:57:42.004650+00:00",
       "high_risk_streak": 0,
       "history_path": "/home/ubuntu/clawd/research/alpha-signals-history.jsonl",
-      "last_48h_ts": "2026-05-25T13:57:38.574502+00:00",
+      "last_48h_ts": "2026-05-25T21:57:27.211471+00:00",
       "live_clearance_progress": {
         "breakout_not_expanding": true,
         "classifier_not_defensive": true,
@@ -2421,11 +1915,11 @@
         "sentiment regime must exit euphoria_fade_watch/sentiment_impulse_down",
         "high-risk streak must reset below 2 snapshots"
       ],
-      "range_friendly_streak": 1,
+      "range_friendly_streak": 2,
       "recommendation": "BLOCK_LIVE",
-      "rows_48h": 3,
-      "rows_total": 257,
-      "timestamp": "2026-05-25T17:59:29.872909+00:00",
+      "rows_48h": 4,
+      "rows_total": 258,
+      "timestamp": "2026-05-25T21:57:43.753628+00:00",
       "transition_state_changes_48h": 2
     },
     "pm_risk_context": {
@@ -2451,35 +1945,35 @@
       }
     },
     "btc_microstructure": {
-      "realized_vol_1h_pct": 0.2899,
-      "avg_range_last6h_pct": 0.2549,
-      "avg_range_prev18h_pct": 0.4548,
-      "compression_ratio": 0.5606,
-      "trend_6h_pct": -0.0751,
+      "realized_vol_1h_pct": 0.204,
+      "avg_range_last6h_pct": 0.2676,
+      "avg_range_prev18h_pct": 0.387,
+      "compression_ratio": 0.6915,
+      "trend_6h_pct": -0.3489,
       "breakout_risk": "coiled"
     },
     "regime_state": {
       "regime": "RANGE",
       "score": 0,
-      "atr_pct": 0.73,
-      "consistency": 0.5,
-      "range_pct": 0.35,
-      "trend_4h": -0.26,
+      "atr_pct": 0.66,
+      "consistency": 0.62,
+      "range_pct": 0.6,
+      "trend_4h": -0.23,
       "pm_action": "TRADE",
-      "timestamp": "2026-05-25T13:57:40.482227+00:00"
+      "timestamp": "2026-05-25T21:57:29.662299+00:00"
     },
     "fast_regime": {
       "regime": "RANGE",
       "score": 7,
-      "direction": "NEUTRAL",
-      "avg_range_pct": 0.0632,
-      "max_range_pct": 0.1244,
-      "vol_ratio": 0.7,
-      "net_change_pct": -0.032,
-      "consistency": 0.417,
+      "direction": "UP",
+      "avg_range_pct": 0.0668,
+      "max_range_pct": 0.1187,
+      "vol_ratio": 0.64,
+      "net_change_pct": 0.132,
+      "consistency": 0.5,
       "pm_tradeable": true,
       "confidence": 73,
-      "detail": "low_vol=0.063%"
+      "detail": "low_vol=0.067%"
     },
     "trade_gate_summary": {
       "posture": "BLOCK_LIVE",
@@ -2541,19 +2035,19 @@
       ],
       "transition_counts_48h": {
         "breakout_risk": {
-          "coiled": 2,
+          "coiled": 3,
           "neutral": 1
         },
         "classifier": {
           "mixed_transition": 1,
-          "range_compression_setup": 2
+          "range_compression_setup": 3
         },
         "pm_risk": {
           "high": 1,
-          "low": 2
+          "low": 3
         },
         "sentiment_regime": {
-          "neutral": 3
+          "neutral": 4
         }
       },
       "transition_live_clearance_progress": {
@@ -2574,16 +2068,12 @@
       "transition_clearance_delta_vs_previous_snapshot": {
         "current_score": 10,
         "newly_blocked": [],
-        "newly_cleared": [
-          "fast_range_tradeable",
-          "pm_risk_not_high",
-          "state_range_friendly"
-        ],
-        "previous_score": 7,
-        "score_change": 3
+        "newly_cleared": [],
+        "previous_score": 10,
+        "score_change": 0
       },
       "defensive_streak": 0,
-      "range_friendly_streak": 1,
+      "range_friendly_streak": 2,
       "high_risk_streak": 0
     },
     "sources": [
@@ -2600,7 +2090,7 @@
       {
         "name": "Funding Rate Scanner",
         "status": "ACTIVE",
-        "last_signal": "0 opportunities | LONG_SQUEEZE"
+        "last_signal": "1 opportunities | LONG_SQUEEZE"
       },
       {
         "name": "Fear & Greed Index",
@@ -2615,7 +2105,7 @@
       {
         "name": "Alpha Transition Context",
         "status": "ACTIVE",
-        "last_signal": "classifier_shift:mixed_transition->range_compression_setup | risk_easing"
+        "last_signal": "unchanged_distinct_state | stable"
       },
       {
         "name": "Liquidation Cascade Monitor",

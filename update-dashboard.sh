@@ -816,17 +816,25 @@ pm_win_rate = (all_wins / (all_wins + all_losses) * 100) if (all_wins + all_loss
 pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68 stuck (not trading loss)
 
 p2_hour_gate_score = {}
+p2_label_collector = {}
 try:
     _quality_script = '/home/ubuntu/clawd/scripts/analyze_pm_outcome_quality.py'
     _outside_script = '/home/ubuntu/clawd/scripts/analyze_pm_outside_shadow.py'
     _hour_script = '/home/ubuntu/clawd/scripts/score_pm_hour_gates.py'
-    for _script in [_quality_script, _outside_script, _hour_script]:
+    _label_script = '/home/ubuntu/clawd/scripts/build_pm_smart_entry_label_collector.py'
+    for _script in [_quality_script, _outside_script, _hour_script, _label_script]:
         if os.path.exists(_script):
             subprocess.run([_script], capture_output=True, timeout=10)
     with open('/home/ubuntu/clawd/research/pm_hour_gate_score.json') as _hgf:
         p2_hour_gate_score = json.load(_hgf)
 except Exception:
     p2_hour_gate_score = {}
+
+try:
+    with open('/home/ubuntu/clawd/research/pm_smart_entry_label_collector.json') as _p2_lcf:
+        p2_label_collector = json.load(_p2_lcf)
+except Exception:
+    p2_label_collector = {}
 
 _p2_live_alignment = p2_hour_gate_score.get('live_alignment') or {}
 _p2_extra_risk = _p2_live_alignment.get('extra_hour_risk') or {}
@@ -841,6 +849,12 @@ p2_hour_gate_summary = {
     "outcome_pipeline_health": p2_hour_gate_score.get('outcome_pipeline_health'),
     "alpha_context_status": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('status'),
     "alpha_context_rows": (p2_hour_gate_score.get('alpha_context_breakdown') or {}).get('alpha_context_rows'),
+    "label_collector": {
+        "decision": p2_label_collector.get("decision"),
+        "totals": p2_label_collector.get("totals"),
+        "promotion_gate": p2_label_collector.get("promotion_gate"),
+        "shadow_03_preferred_descriptor": p2_label_collector.get("shadow_03_preferred_descriptor"),
+    },
 }
 
 hl_directional_running = process_running("hl_trading_engine", "hl_live_trader.py")
@@ -1414,6 +1428,7 @@ data = {
         "edge_history": _pevents.get("2", []),
         "hour_gate_summary": p2_hour_gate_summary,
         "hour_gate_score": p2_hour_gate_score,
+        "label_collector": p2_label_collector,
     },
     
     # ═══ PILLAR 3: Continuous Iteration ═══
