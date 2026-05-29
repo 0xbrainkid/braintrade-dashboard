@@ -817,12 +817,14 @@ pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68
 
 p2_hour_gate_score = {}
 p2_label_collector = {}
+p2_03utc_bias_comparator = {}
 try:
     _quality_script = '/home/ubuntu/clawd/scripts/analyze_pm_outcome_quality.py'
     _outside_script = '/home/ubuntu/clawd/scripts/analyze_pm_outside_shadow.py'
     _hour_script = '/home/ubuntu/clawd/scripts/score_pm_hour_gates.py'
     _label_script = '/home/ubuntu/clawd/scripts/build_pm_smart_entry_label_collector.py'
-    for _script in [_quality_script, _outside_script, _hour_script, _label_script]:
+    _bias_comparator_script = '/home/ubuntu/clawd/scripts/analyze_pm_03utc_bias_comparator.py'
+    for _script in [_quality_script, _outside_script, _hour_script, _label_script, _bias_comparator_script]:
         if os.path.exists(_script):
             _cmd = [_script] if os.access(_script, os.X_OK) else [sys.executable, _script]
             subprocess.run(_cmd, capture_output=True, timeout=10)
@@ -837,8 +839,16 @@ try:
 except Exception:
     p2_label_collector = {}
 
+try:
+    with open('/home/ubuntu/clawd/research/pm_03utc_bias_comparator.json') as _p2_bcf:
+        p2_03utc_bias_comparator = json.load(_p2_bcf)
+except Exception:
+    p2_03utc_bias_comparator = {}
+
 _p2_live_alignment = p2_hour_gate_score.get('live_alignment') or {}
 _p2_extra_risk = _p2_live_alignment.get('extra_hour_risk') or {}
+_p2_03_bands = p2_03utc_bias_comparator.get('bands') or {}
+_p2_03_best_band = (p2_03utc_bias_comparator.get('promotion_gate') or {}).get('best_proxy_band')
 p2_hour_gate_summary = {
     "recommended_active_hours": p2_hour_gate_score.get('recommended_active_hours'),
     "recommended_confirmation_only_hours": p2_hour_gate_score.get('recommended_confirmation_only_hours'),
@@ -855,6 +865,19 @@ p2_hour_gate_summary = {
         "totals": p2_label_collector.get("totals"),
         "promotion_gate": p2_label_collector.get("promotion_gate"),
         "shadow_03_preferred_descriptor": p2_label_collector.get("shadow_03_preferred_descriptor"),
+    },
+    "shadow_03_bias_comparator": {
+        "decision": p2_03utc_bias_comparator.get("decision"),
+        "definition_common_gate": p2_03utc_bias_comparator.get("definition_common_gate"),
+        "post_retirement_realized_rows": p2_03utc_bias_comparator.get("post_retirement_realized_rows"),
+        "common_gate_rows": p2_03utc_bias_comparator.get("common_gate_rows"),
+        "best_proxy_band": _p2_03_best_band,
+        "best_proxy_band_stats": _p2_03_bands.get(_p2_03_best_band) if _p2_03_best_band else None,
+        "watch_bands": {
+            "45_60": _p2_03_bands.get("45_60"),
+            "60_80": _p2_03_bands.get("60_80"),
+        },
+        "promotion_gate": p2_03utc_bias_comparator.get("promotion_gate"),
     },
 }
 
@@ -1430,6 +1453,7 @@ data = {
         "hour_gate_summary": p2_hour_gate_summary,
         "hour_gate_score": p2_hour_gate_score,
         "label_collector": p2_label_collector,
+        "shadow_03_bias_comparator": p2_03utc_bias_comparator,
     },
     
     # ═══ PILLAR 3: Continuous Iteration ═══
