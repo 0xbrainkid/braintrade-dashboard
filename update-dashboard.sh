@@ -1112,6 +1112,28 @@ if _local_range_trend:
         "block_reason": _local_range_trend.get('live_block_reason'),
     })
 
+_short_aligned_replay = {}
+try:
+    _short_aligned_replay_script = '/home/ubuntu/clawd/scripts/replay_hl_short_aligned_from_binance.py'
+    if os.path.exists(_short_aligned_replay_script):
+        subprocess.run(['python3', _short_aligned_replay_script], capture_output=True, timeout=20)
+    with open('/home/ubuntu/clawd/research/hl_short_aligned_binance_replay.json') as _sarf:
+        _short_aligned_replay = json.load(_sarf)
+except Exception as _e:
+    _short_aligned_replay = {"error": str(_e)}
+if _short_aligned_replay:
+    _sar30 = ((_short_aligned_replay.get('horizons') or {}).get('30m') or {})
+    p3_strategy_branches.append({
+        "name": "hl_short_aligned_binance_replay_bridge",
+        "status": "research_only_public_candle_bridge",
+        "rows": _short_aligned_replay.get('candidate_rows'),
+        "wr_30m": _sar30.get('wr'),
+        "avg_30m": _sar30.get('avg'),
+        "latest_candidate_ts": _short_aligned_replay.get('latest_candidate_ts'),
+        "diagnostics": _short_aligned_replay.get('diagnostics'),
+        "promotion_audit": _short_aligned_replay.get('promotion_audit'),
+    })
+
 _p3_paper_health = {}
 try:
     _health_script = '/home/ubuntu/clawd/scripts/check_hl_paper_health.py'
@@ -1466,6 +1488,7 @@ data = {
         "strategy_branches": p3_strategy_branches,
         "canonical_paper_audit": _hl_canonical_paper_audit,
         "paper_health": _p3_paper_health,
+        "short_aligned_binance_replay": _short_aligned_replay,
         "hl_paper_backfill": _hl_paper_backfill_status,
         "paper_suppressor_labels": _p3_suppressor_labels,
         "win_rate_7d": win_rate_7d,
