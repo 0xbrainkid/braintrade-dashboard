@@ -370,6 +370,17 @@ async function loadData() {
     // ═══ PILLAR 2: EDGE DEVELOPMENT ═══
     const p2 = d.pillar2 || {};
     const p2pct = p2.completion || 85;
+    const hgs = p2.hour_gate_summary || {};
+    const p2Shadow03 = hgs.shadow_03_bias_comparator || p2.shadow_03_bias_comparator || {};
+    const p2Best03 = p2Shadow03.best_proxy_band_stats || {};
+    const p2Promo = p2Shadow03.promotion_gate || {};
+    const p2Fresh = hgs.outcome_freshness || {};
+    const p2Labels = hgs.label_collector || p2.label_collector || {};
+    const p2Totals = p2Labels.totals || {};
+    const p2Blockers = [
+      ...((p2Promo.blockers || []).slice(0, 3)),
+      ...(((hgs.live_edit_gate || {}).blockers || []).slice(0, 3))
+    ];
     document.getElementById('pillar2').innerHTML = `
       <div class="pillar-header">
         <span class="pillar-title purple">How sharp are my trading strategies?</span>
@@ -390,6 +401,26 @@ async function loadData() {
           </tr>
         `).join('') || '<tr><td colspan="6" class="card-sub">Loading strategies...</td></tr>'}
       </table>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">03 UTC Smart Entry Gate</div>
+        <div class="insight">
+          <div class="label">${p2Shadow03.best_proxy_band || 'proxy band'} · ${p2Shadow03.decision || 'research only'}</div>
+          <div class="detail">
+            common rows ${p2Shadow03.common_gate_rows ?? 'n/a'} · best rows ${p2Best03.n ?? 'n/a'} ·
+            WR ${p2Best03.wr ?? 'n/a'}% · Wilson low ${p2Best03.wilson_low ?? 'n/a'} ·
+            realized post-retirement ${p2Shadow03.post_retirement_realized_rows ?? p2Totals.realized_post_retirement_labels ?? 'n/a'}
+          </div>
+        </div>
+        <div class="insight">
+          <div class="label">Freshness</div>
+          <div class="detail">
+            realized rows ${p2Fresh.rows ?? 'n/a'} · last ${p2Fresh.last_ts || 'n/a'} ·
+            age ${p2Fresh.last_age_hours ?? 'n/a'}h · alpha context ${hgs.alpha_context_rows ?? 0}
+          </div>
+        </div>
+        <div class="card-sub">${p2Blockers.length ? p2Blockers.join(' · ') : 'No P2 blockers reported'}</div>
+      </div>
 
       <div style="margin-top: 10px;">
         <div class="card-title">🔬 Edge Metrics Over Time</div>
