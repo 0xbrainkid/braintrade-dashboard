@@ -132,6 +132,38 @@
   .mode-notional { background: rgba(234,179,8,0.15); color: var(--yellow); }
   .mode-wallet { background: rgba(239,68,68,0.15); color: var(--red); }
   .mode-unknown { background: rgba(107,114,128,0.15); color: var(--dim); }
+  .p4-state-panel {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(13,17,23,0.75);
+  }
+  .p4-state-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.8em;
+  }
+  .p4-bucket {
+    font-weight: 700;
+    color: var(--yellow);
+  }
+  .p4-bucket.tradeable { color: var(--green); }
+  .p4-bucket.blocked { color: var(--red); }
+  .p4-state-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+    gap: 8px;
+  }
+  .p4-blockers {
+    color: var(--dim);
+    font-size: 0.75em;
+    margin-top: 8px;
+    line-height: 1.45;
+  }
 </style>
 </head>
 <body>
@@ -223,11 +255,32 @@ async function loadData() {
     // Pillar 4: Alpha Research Pipeline
     if (d.pillar4) {
       const p = d.pillar4;
+      const gate = p.trade_gate_summary || {};
+      const stability = p.transition_stability || {};
+      const bucket = gate.expansion_resolution_bucket || stability.expansion_resolution_bucket || 'unknown';
+      const bucketLabel = bucket.replaceAll('_', ' ').toUpperCase();
+      const recommendation = gate.transition_stability_recommendation || stability.recommendation || 'UNKNOWN';
+      const clearanceScore = gate.transition_live_clearance_score ?? stability.live_clearance_score ?? '—';
+      const clearanceTotal = gate.transition_live_clearance_total ?? stability.live_clearance_total ?? '—';
+      const bucketClass = bucket === 'resolved_range_tradeable' ? 'tradeable' : (recommendation === 'BLOCK_LIVE' ? 'blocked' : '');
+      const blockers = gate.transition_stability_blockers || stability.blockers || [];
       let html = `<div class="progress-bar"><div class="progress-fill" style="width:${p.completion}%;background:var(--green)">${p.completion}%</div></div>`;
       html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;">`;
       html += `<div class="stat-box"><div class="stat-value">${p.data_sources||0}</div><div class="stat-label">Data Sources</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${p.signals_generated||0}</div><div class="stat-label">Signals Generated</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${p.research_files||0}</div><div class="stat-label">Research Files</div></div>`;
+      html += `</div>`;
+      html += `<div class="p4-state-panel">`;
+      html += `<div class="p4-state-head"><span>Expansion Resolution</span><span class="p4-bucket ${bucketClass}">${bucketLabel}</span></div>`;
+      html += `<div class="p4-state-grid">`;
+      html += `<div class="stat-box"><div class="stat-value">${recommendation}</div><div class="stat-label">Gate</div></div>`;
+      html += `<div class="stat-box"><div class="stat-value">${clearanceScore}/${clearanceTotal}</div><div class="stat-label">Clearance</div></div>`;
+      html += `<div class="stat-box"><div class="stat-value">${gate.hours_since_last_expansion ?? stability.hours_since_last_expansion ?? '—'}h</div><div class="stat-label">Since Expansion</div></div>`;
+      html += `<div class="stat-box"><div class="stat-value">${gate.range_friendly_streak ?? stability.range_friendly_streak ?? '—'}/${gate.high_risk_streak ?? stability.high_risk_streak ?? '—'}</div><div class="stat-label">Range / Risk Streak</div></div>`;
+      html += `</div>`;
+      if (blockers.length) {
+        html += `<div class="p4-blockers">Blockers: ${blockers.slice(0, 6).join(', ')}${blockers.length > 6 ? ' +' + (blockers.length - 6) + ' more' : ''}</div>`;
+      }
       html += `</div>`;
       if (p.sources && p.sources.length) {
         html += '<table style="margin-top:10px"><tr><th>Source</th><th>Status</th><th>Last Signal</th></tr>';
