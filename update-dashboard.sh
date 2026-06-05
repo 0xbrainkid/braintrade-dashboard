@@ -1360,6 +1360,7 @@ p4_trade_gate_summary = {
     "copy_gate_blockers": (p1_copy_gate_summary or {}).get('blockers'),
     "transition_stability_recommendation": p4_transition_stability.get('recommendation'),
     "transition_stability_blockers": p4_transition_stability.get('blockers'),
+    "transition_blocker_attribution": p4_transition_stability.get('blocker_attribution'),
     "transition_counts_48h": p4_transition_stability.get('counts_48h'),
     "transition_live_clearance_progress": p4_transition_stability.get('live_clearance_progress'),
     "transition_live_clearance_score": p4_transition_stability.get('live_clearance_score'),

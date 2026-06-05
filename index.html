@@ -264,6 +264,9 @@ async function loadData() {
       const clearanceTotal = gate.transition_live_clearance_total ?? stability.live_clearance_total ?? '—';
       const bucketClass = bucket === 'resolved_range_tradeable' ? 'tradeable' : (recommendation === 'BLOCK_LIVE' ? 'blocked' : '');
       const blockers = gate.transition_stability_blockers || stability.blockers || [];
+      const attribution = gate.transition_blocker_attribution || stability.blocker_attribution || {};
+      const attributionCounts = attribution.counts || {};
+      const attributionText = Object.entries(attributionCounts).map(([k, v]) => `${k.replaceAll('_', ' ')}: ${v}`).join(' · ');
       let html = `<div class="progress-bar"><div class="progress-fill" style="width:${p.completion}%;background:var(--green)">${p.completion}%</div></div>`;
       html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;">`;
       html += `<div class="stat-box"><div class="stat-value">${p.data_sources||0}</div><div class="stat-label">Data Sources</div></div>`;
@@ -277,7 +280,11 @@ async function loadData() {
       html += `<div class="stat-box"><div class="stat-value">${clearanceScore}/${clearanceTotal}</div><div class="stat-label">Clearance</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${gate.hours_since_last_expansion ?? stability.hours_since_last_expansion ?? '—'}h</div><div class="stat-label">Since Expansion</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${gate.range_friendly_streak ?? stability.range_friendly_streak ?? '—'}/${gate.high_risk_streak ?? stability.high_risk_streak ?? '—'}</div><div class="stat-label">Range / Risk Streak</div></div>`;
+      html += `<div class="stat-box"><div class="stat-value">${(attribution.primary_group || '—').replaceAll('_', ' ')}</div><div class="stat-label">Primary Block</div></div>`;
       html += `</div>`;
+      if (attributionText) {
+        html += `<div class="p4-blockers">Groups: ${attributionText}</div>`;
+      }
       if (blockers.length) {
         html += `<div class="p4-blockers">Blockers: ${blockers.slice(0, 6).join(', ')}${blockers.length > 6 ? ' +' + (blockers.length - 6) + ' more' : ''}</div>`;
       }
