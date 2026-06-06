@@ -431,6 +431,12 @@ async function loadData() {
             common dates ${p2Gate03.common_gate_distinct_dates ?? 'n/a'} · source age ${p2Gate03.source_age_hours ?? 'n/a'}h ·
             cluster warning ${p2Gate03.cluster_warning_active ? 'active' : 'clear'}
           </div>
+          <div class="detail">
+            evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·
+            rows Δ ${p2Gate03.diff_vs_previous?.common_gate_rows_delta ?? 'n/a'} ·
+            dates Δ ${p2Gate03.diff_vs_previous?.common_gate_distinct_dates_delta ?? 'n/a'} ·
+            realized Δ ${p2Gate03.diff_vs_previous?.post_retirement_realized_rows_delta ?? 'n/a'}
+          </div>
         </div>
         <div class="insight">
           <div class="label">Freshness</div>
