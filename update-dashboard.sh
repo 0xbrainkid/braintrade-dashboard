@@ -1126,6 +1126,10 @@ except Exception as _e:
     _short_aligned_replay = {"error": str(_e)}
 if _short_aligned_replay:
     _sar30 = ((_short_aligned_replay.get('horizons') or {}).get('30m') or {})
+    _sar_dedupe = _short_aligned_replay.get('dedupe_summary') or {}
+    _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
+    _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
+    _sar_current30 = _sar_promo.get('current_30m') or _sar30
     p3_strategy_branches.append({
         "name": "hl_short_aligned_binance_replay_bridge",
         "status": "research_only_public_candle_bridge",
@@ -1133,9 +1137,41 @@ if _short_aligned_replay:
         "wr_30m": _sar30.get('wr'),
         "avg_30m": _sar30.get('avg'),
         "latest_candidate_ts": _short_aligned_replay.get('latest_candidate_ts'),
+        "unique_candidate_rows": _sar_dedupe.get('unique_candidate_rows'),
+        "latest_unique_candidate_ts": _sar_dedupe.get('latest_unique_candidate_ts'),
+        "deduped_30m_wr": _sar_deduped30.get('wr'),
+        "deduped_30m_rxe_bp": _sar_deduped30.get('rxe_bp'),
+        "current_30m_n": _sar_current30.get('n'),
+        "current_30m_wr": _sar_current30.get('wr'),
+        "current_30m_rxe_bp": _sar_current30.get('rxe_bp'),
+        "promotion_blockers": _sar_promo.get('blockers'),
         "diagnostics": _short_aligned_replay.get('diagnostics'),
         "promotion_audit": _short_aligned_replay.get('promotion_audit'),
     })
+
+p3_short_aligned_replay_watch = {}
+if _short_aligned_replay:
+    _sar_dedupe = _short_aligned_replay.get('dedupe_summary') or {}
+    _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
+    _sar_current30 = _sar_promo.get('current_30m') or (((_short_aligned_replay.get('horizons') or {}).get('30m')) or {})
+    _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
+    p3_short_aligned_replay_watch = {
+        "state": _sar_promo.get('state') or "BLOCK_LIVE",
+        "decision": _sar_promo.get('decision') or "research_only",
+        "current_candidate_rows": _short_aligned_replay.get('candidate_rows'),
+        "unique_candidate_rows": _sar_dedupe.get('unique_candidate_rows'),
+        "unique_candidate_ledger_rows": _sar_dedupe.get('unique_candidate_ledger_rows'),
+        "latest_candidate_ts": _short_aligned_replay.get('latest_candidate_ts'),
+        "latest_unique_candidate_ts": _sar_dedupe.get('latest_unique_candidate_ts'),
+        "current_30m": _sar_current30,
+        "deduped_30m": _sar_deduped30,
+        "duplicate_replay_rows_removed": _sar_dedupe.get('duplicate_replay_rows_removed'),
+        "observed_candidate_rows_with_replays": _sar_dedupe.get('observed_candidate_rows_with_replays'),
+        "promotion_blockers": _sar_promo.get('blockers') or [],
+        "thresholds": _sar_promo.get('thresholds') or {},
+        "watch_counter": _short_aligned_replay.get('watch_counter') or {},
+        "ledger_path": _sar_dedupe.get('unique_candidate_ledger_path') or _short_aligned_replay.get('unique_candidate_ledger_path'),
+    }
 
 _p3_paper_health = {}
 try:
@@ -1498,6 +1534,7 @@ data = {
         "canonical_paper_audit": _hl_canonical_paper_audit,
         "paper_health": _p3_paper_health,
         "short_aligned_binance_replay": _short_aligned_replay,
+        "short_aligned_replay_watch": p3_short_aligned_replay_watch,
         "hl_paper_backfill": _hl_paper_backfill_status,
         "paper_suppressor_labels": _p3_suppressor_labels,
         "win_rate_7d": win_rate_7d,

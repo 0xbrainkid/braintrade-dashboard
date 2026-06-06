@@ -454,6 +454,15 @@ async function loadData() {
     const hlPlanned = Number(p3.hl_live_planned_order_notional || 0);
     const hlMinNotional = Number(p3.hl_live_min_order_notional_usd || 0);
     const paperHealth = p3.paper_health || {};
+    const replayWatch = p3.short_aligned_replay_watch || {};
+    const replayCurrent30 = replayWatch.current_30m || {};
+    const replayDeduped30 = replayWatch.deduped_30m || {};
+    const replayStateClass = replayWatch.state === 'BLOCK_LIVE' ? 'red' : replayWatch.state === 'ready_review' ? 'green' : 'yellow';
+    const replayCurrentWr = replayCurrent30.wr === null || replayCurrent30.wr === undefined ? '—' : `${replayCurrent30.wr}%`;
+    const replayDedupedWr = replayDeduped30.wr === null || replayDeduped30.wr === undefined ? '—' : `${replayDeduped30.wr}%`;
+    const replayCurrentRxe = replayCurrent30.rxe_bp === null || replayCurrent30.rxe_bp === undefined ? '—' : `${Number(replayCurrent30.rxe_bp).toFixed(2)} bp`;
+    const replayDedupedRxe = replayDeduped30.rxe_bp === null || replayDeduped30.rxe_bp === undefined ? '—' : `${Number(replayDeduped30.rxe_bp).toFixed(2)} bp`;
+    const replayBlockers = (replayWatch.promotion_blockers || []).join(', ');
     const paperStatusClass = (paperHealth.status || '').startsWith('INVESTIGATE') ? 'red' : paperHealth.status === 'FRESH' ? 'green' : 'yellow';
     document.getElementById('pillar3').innerHTML = `
       <div class="pillar-header">
@@ -494,6 +503,18 @@ async function loadData() {
       </div>
 
       <div style="margin-top: 10px;">
+        <div class="card-title">Short-Aligned Replay Watch</div>
+        <div class="metric-row"><span class="metric-label">State</span><span class="metric-value ${replayStateClass}">${replayWatch.state || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Current Strict Rows</span><span class="metric-value ${(replayWatch.current_candidate_rows || 0) >= 30 ? 'green' : 'yellow'}">${replayWatch.current_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_current_n ?? 30}</span></div>
+        <div class="metric-row"><span class="metric-label">Unique Ledger Rows</span><span class="metric-value ${(replayWatch.unique_candidate_rows || 0) >= 50 ? 'green' : 'yellow'}">${replayWatch.unique_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_deduped_n ?? 50}</span></div>
+        <div class="metric-row"><span class="metric-label">Current 30m</span><span class="metric-value ${(replayCurrent30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayCurrent30.n ?? '—'} rows | ${replayCurrentWr} | ${replayCurrentRxe}</span></div>
+        <div class="metric-row"><span class="metric-label">Deduped 30m</span><span class="metric-value ${(replayDeduped30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayDeduped30.n ?? '—'} rows | ${replayDedupedWr} | ${replayDedupedRxe}</span></div>
+        <div class="metric-row"><span class="metric-label">Latest Unique</span><span class="metric-value">${replayWatch.latest_unique_candidate_ts || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Replay Duplicates</span><span class="metric-value">${replayWatch.duplicate_replay_rows_removed ?? '—'} removed / ${replayWatch.observed_candidate_rows_with_replays ?? '—'} observed</span></div>
+        <div class="card-sub">${replayBlockers || replayWatch.decision || 'Replay bridge awaiting fresh candidates'}</div>
+      </div>
+
+      <div style="margin-top: 10px;">
         <div class="card-title">🧪 HL Paper Strategy Branches</div>
         ${(p3.strategy_branches || []).map(b => {
           const status = b.status || 'paper';
@@ -510,6 +531,8 @@ async function loadData() {
             : '';
           const details = [
             b.candidate_filter ? `filter: ${b.candidate_filter}` : '',
+            b.unique_candidate_rows === null || b.unique_candidate_rows === undefined ? '' : `unique rows: ${b.unique_candidate_rows}`,
+            b.deduped_30m_wr === null || b.deduped_30m_wr === undefined ? '' : `deduped 30m: ${b.deduped_30m_wr}% / ${Number(b.deduped_30m_rxe_bp || 0).toFixed(2)} bp`,
             b.broad_pass_filter_is_live_quality === false ? 'broad pass_filter: NOT live quality' : '',
             suppressorDetails,
             sourceAge,
