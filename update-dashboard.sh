@@ -1405,6 +1405,7 @@ p4_trade_gate_summary = {
     "transition_live_clearance_score": p4_transition_stability.get('live_clearance_score'),
     "transition_live_clearance_total": p4_transition_stability.get('live_clearance_total'),
     "transition_clearance_delta_vs_previous_snapshot": p4_transition_stability.get('clearance_delta_vs_previous_snapshot'),
+    "transition_source_freshness": p4_transition_stability.get('source_freshness'),
     "expansion_cooling_required": p4_transition_stability.get('expansion_cooling_required'),
     "last_expansion_flag_ts": p4_transition_stability.get('last_expansion_flag_ts'),
     "snapshots_since_last_expansion": p4_transition_stability.get('snapshots_since_last_expansion'),
