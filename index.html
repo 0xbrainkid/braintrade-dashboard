@@ -380,6 +380,7 @@ async function loadData() {
     const hgs = p2.hour_gate_summary || {};
     const p2Shadow03 = hgs.shadow_03_bias_comparator || p2.shadow_03_bias_comparator || {};
     const p2Best03 = p2Shadow03.best_proxy_band_stats || {};
+    const p2Gate03 = p2Shadow03.gate_health || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
@@ -417,6 +418,10 @@ async function loadData() {
             common rows ${p2Shadow03.common_gate_rows ?? 'n/a'} · best rows ${p2Best03.n ?? 'n/a'} ·
             WR ${p2Best03.wr ?? 'n/a'}% · Wilson low ${p2Best03.wilson_low ?? 'n/a'} ·
             realized post-retirement ${p2Shadow03.post_retirement_realized_rows ?? p2Totals.realized_post_retirement_labels ?? 'n/a'}
+          </div>
+          <div class="detail">
+            common dates ${p2Gate03.common_gate_distinct_dates ?? 'n/a'} · source age ${p2Gate03.source_age_hours ?? 'n/a'}h ·
+            cluster warning ${p2Gate03.cluster_warning_active ? 'active' : 'clear'}
           </div>
         </div>
         <div class="insight">

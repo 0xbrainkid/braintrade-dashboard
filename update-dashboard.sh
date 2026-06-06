@@ -875,8 +875,11 @@ p2_hour_gate_summary = {
         "best_proxy_band_stats": _p2_03_bands.get(_p2_03_best_band) if _p2_03_best_band else None,
         "watch_bands": {
             "45_60": _p2_03_bands.get("45_60"),
+            "45_70": _p2_03_bands.get("45_70"),
             "60_80": _p2_03_bands.get("60_80"),
         },
+        "gate_health": p2_03utc_bias_comparator.get("gate_health"),
+        "latest_gate_health_artifact": p2_03utc_bias_comparator.get("latest_gate_health_artifact"),
         "promotion_gate": p2_03utc_bias_comparator.get("promotion_gate"),
     },
 }
