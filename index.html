@@ -271,6 +271,10 @@ async function loadData() {
       const freshnessSummary = freshness.summary || {};
       const freshnessText = freshnessSummary.total_count ? `${freshnessSummary.fresh_count}/${freshnessSummary.total_count}` : '—';
       const staleSources = freshnessSummary.stale_sources || [];
+      const distinctGap = freshness.distinct_snapshot_gap || {};
+      const distinctGapText = distinctGap.status
+        ? `${distinctGap.status.replaceAll('_', ' ')}${distinctGap.age_minutes != null ? ' · ' + distinctGap.age_minutes + 'm' : ''}`
+        : '';
       let html = `<div class="progress-bar"><div class="progress-fill" style="width:${p.completion}%;background:var(--green)">${p.completion}%</div></div>`;
       html += `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;">`;
       html += `<div class="stat-box"><div class="stat-value">${p.data_sources||0}</div><div class="stat-label">Data Sources</div></div>`;
@@ -295,6 +299,9 @@ async function loadData() {
       }
       if (staleSources.length) {
         html += `<div class="p4-blockers">Stale inputs: ${staleSources.join(', ')}</div>`;
+      }
+      if (distinctGapText) {
+        html += `<div class="p4-blockers">Distinct gap: ${distinctGapText}</div>`;
       }
       html += `</div>`;
       if (p.sources && p.sources.length) {
