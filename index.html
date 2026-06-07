@@ -264,6 +264,7 @@ async function loadData() {
       const clearanceTotal = gate.transition_live_clearance_total ?? stability.live_clearance_total ?? '—';
       const bucketClass = bucket === 'resolved_range_tradeable' ? 'tradeable' : (recommendation === 'BLOCK_LIVE' ? 'blocked' : '');
       const blockers = gate.transition_stability_blockers || stability.blockers || [];
+      const blockerAges = gate.transition_blocker_active_age || stability.blocker_active_age || {};
       const attribution = gate.transition_blocker_attribution || stability.blocker_attribution || {};
       const attributionCounts = attribution.counts || {};
       const attributionText = Object.entries(attributionCounts).map(([k, v]) => `${k.replaceAll('_', ' ')}: ${v}`).join(' · ');
@@ -296,6 +297,19 @@ async function loadData() {
       }
       if (blockers.length) {
         html += `<div class="p4-blockers">Blockers: ${blockers.slice(0, 6).join(', ')}${blockers.length > 6 ? ' +' + (blockers.length - 6) + ' more' : ''}</div>`;
+      }
+      const ageFocus = ['current_pm_risk_high', 'fast_not_range_tradeable', 'range_friendly_streak_lt_3'];
+      const ageText = ageFocus
+        .filter((name) => blockerAges[name])
+        .map((name) => {
+          const age = blockerAges[name];
+          const label = name.replaceAll('_', ' ');
+          const limited = age.window_limited ? '+' : '';
+          return `${label}: ${limited}${age.active_hours}h / ${age.snapshots_active} snaps`;
+        })
+        .join(' · ');
+      if (ageText) {
+        html += `<div class="p4-blockers">Blocker age: ${ageText}</div>`;
       }
       if (staleSources.length) {
         html += `<div class="p4-blockers">Stale inputs: ${staleSources.join(', ')}</div>`;
