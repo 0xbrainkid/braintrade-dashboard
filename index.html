@@ -489,6 +489,12 @@ async function loadData() {
     const replayDedupedRxe = replayDeduped30.rxe_bp === null || replayDeduped30.rxe_bp === undefined ? '—' : `${Number(replayDeduped30.rxe_bp).toFixed(2)} bp`;
     const replayNonDogeWr = replayNonDoge30.wr === null || replayNonDoge30.wr === undefined ? '—' : `${replayNonDoge30.wr}%`;
     const replayNonDogeRxe = replayNonDoge30.rxe_bp === null || replayNonDoge30.rxe_bp === undefined ? '—' : `${Number(replayNonDoge30.rxe_bp).toFixed(2)} bp`;
+    const replaySetupAudit = replayCoinAudit.setup_funnel_audit || {};
+    const replaySolSetup = replaySetupAudit.SOL || {};
+    const replayEthSetup = replaySetupAudit.ETH || {};
+    const replayCandidateScope = ((replayCoinAudit.scan_scope || {}).candidate_coins_scanned || []).join(', ') || '—';
+    const replaySolStage = replaySolSetup.dominant_failure_stage || '—';
+    const replayEthStage = replayEthSetup.dominant_failure_stage || '—';
     const replayBlockers = (replayWatch.promotion_blockers || []).join(', ');
     const paperStatusClass = (paperHealth.status || '').startsWith('INVESTIGATE') ? 'red' : paperHealth.status === 'FRESH' ? 'green' : 'yellow';
     document.getElementById('pillar3').innerHTML = `
@@ -537,8 +543,11 @@ async function loadData() {
         <div class="metric-row"><span class="metric-label">Current 30m</span><span class="metric-value ${(replayCurrent30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayCurrent30.n ?? '—'} rows | ${replayCurrentWr} | ${replayCurrentRxe}</span></div>
         <div class="metric-row"><span class="metric-label">Deduped 30m</span><span class="metric-value ${(replayDeduped30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayDeduped30.n ?? '—'} rows | ${replayDedupedWr} | ${replayDedupedRxe}</span></div>
         <div class="metric-row"><span class="metric-label">Unique Coins</span><span class="metric-value ${replayCoinAudit.doge_only_unique_evidence ? 'yellow' : 'green'}">${replayPresentCoins}</span></div>
+        <div class="metric-row"><span class="metric-label">Candidate Scope</span><span class="metric-value">${replayCandidateScope}</span></div>
         <div class="metric-row"><span class="metric-label">Absent Coins</span><span class="metric-value">${replayAbsentCoins}</span></div>
         <div class="metric-row"><span class="metric-label">Non-DOGE 30m</span><span class="metric-value ${(replayNonDoge30.n || 0) > 0 ? 'green' : 'yellow'}">${replayNonDoge30.n || 0} rows | ${replayNonDogeWr} | ${replayNonDogeRxe}</span></div>
+        <div class="metric-row"><span class="metric-label">SOL Setup Funnel</span><span class="metric-value ${(replaySolSetup.strict_candidate_rows || 0) > 0 ? 'green' : 'yellow'}">${replaySolSetup.market_down_setup_windows ?? '—'} setup | ${replaySolSetup.strict_candidate_rows ?? '—'} strict | ${replaySolStage}</span></div>
+        <div class="metric-row"><span class="metric-label">ETH Setup Funnel</span><span class="metric-value ${(replayEthSetup.strict_candidate_rows || 0) > 0 ? 'green' : 'yellow'}">${replayEthSetup.market_down_setup_windows ?? '—'} setup | ${replayEthSetup.strict_candidate_rows ?? '—'} strict | ${replayEthStage}</span></div>
         <div class="metric-row"><span class="metric-label">Latest Unique</span><span class="metric-value">${replayWatch.latest_unique_candidate_ts || '—'}</span></div>
         <div class="metric-row"><span class="metric-label">Replay Duplicates</span><span class="metric-value">${replayWatch.duplicate_replay_rows_removed ?? '—'} removed / ${replayWatch.observed_candidate_rows_with_replays ?? '—'} observed</span></div>
         <div class="card-sub">${replayCoinAudit.promotion_blocker || replayBlockers || replayWatch.decision || 'Replay bridge awaiting fresh candidates'}</div>
