@@ -1128,6 +1128,7 @@ if _short_aligned_replay:
     _sar30 = ((_short_aligned_replay.get('horizons') or {}).get('30m') or {})
     _sar_dedupe = _short_aligned_replay.get('dedupe_summary') or {}
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
+    _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
     _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
     _sar_current30 = _sar_promo.get('current_30m') or _sar30
@@ -1146,6 +1147,7 @@ if _short_aligned_replay:
         "current_30m_wr": _sar_current30.get('wr'),
         "current_30m_rxe_bp": _sar_current30.get('rxe_bp'),
         "coin_filter_audit": _sar_coin_audit,
+        "eth_cluster_quality_audit": _sar_eth_quality,
         "promotion_blockers": _sar_promo.get('blockers'),
         "diagnostics": _short_aligned_replay.get('diagnostics'),
         "promotion_audit": _short_aligned_replay.get('promotion_audit'),
@@ -1155,6 +1157,7 @@ p3_short_aligned_replay_watch = {}
 if _short_aligned_replay:
     _sar_dedupe = _short_aligned_replay.get('dedupe_summary') or {}
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
+    _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
     _sar_current30 = _sar_promo.get('current_30m') or (((_short_aligned_replay.get('horizons') or {}).get('30m')) or {})
     _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
@@ -1172,6 +1175,7 @@ if _short_aligned_replay:
         "observed_candidate_rows_with_replays": _sar_dedupe.get('observed_candidate_rows_with_replays'),
         "promotion_blockers": _sar_promo.get('blockers') or [],
         "coin_filter_audit": _sar_coin_audit,
+        "eth_cluster_quality_audit": _sar_eth_quality,
         "thresholds": _sar_promo.get('thresholds') or {},
         "watch_counter": _short_aligned_replay.get('watch_counter') or {},
         "ledger_path": _sar_dedupe.get('unique_candidate_ledger_path') or _short_aligned_replay.get('unique_candidate_ledger_path'),

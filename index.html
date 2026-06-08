@@ -497,6 +497,8 @@ async function loadData() {
     const replayCurrent30 = replayWatch.current_30m || {};
     const replayDeduped30 = replayWatch.deduped_30m || {};
     const replayCoinAudit = replayWatch.coin_filter_audit || {};
+    const replayEthQuality = replayWatch.eth_cluster_quality_audit || {};
+    const replayEthQuality30 = replayEthQuality.metrics_30m || {};
     const replayPresentCoins = (replayCoinAudit.present_unique_coins || []).join(', ') || 'none';
     const replayAbsentCoins = (replayCoinAudit.absent_unique_coins || []).join(', ') || 'none';
     const replayNonDoge30 = replayCoinAudit.non_doge_30m || {};
@@ -507,6 +509,9 @@ async function loadData() {
     const replayDedupedRxe = replayDeduped30.rxe_bp === null || replayDeduped30.rxe_bp === undefined ? '—' : `${Number(replayDeduped30.rxe_bp).toFixed(2)} bp`;
     const replayNonDogeWr = replayNonDoge30.wr === null || replayNonDoge30.wr === undefined ? '—' : `${replayNonDoge30.wr}%`;
     const replayNonDogeRxe = replayNonDoge30.rxe_bp === null || replayNonDoge30.rxe_bp === undefined ? '—' : `${Number(replayNonDoge30.rxe_bp).toFixed(2)} bp`;
+    const replayEthQualityWr = replayEthQuality30.wr === null || replayEthQuality30.wr === undefined ? '—' : `${replayEthQuality30.wr}%`;
+    const replayEthQualityRxe = replayEthQuality30.rxe_bp === null || replayEthQuality30.rxe_bp === undefined ? '—' : `${Number(replayEthQuality30.rxe_bp).toFixed(2)} bp`;
+    const replayEthNoBestRxe = replayEthQuality.rxe_without_best_30m_bp === null || replayEthQuality.rxe_without_best_30m_bp === undefined ? '—' : `${Number(replayEthQuality.rxe_without_best_30m_bp).toFixed(2)} bp`;
     const replaySetupAudit = replayCoinAudit.setup_funnel_audit || {};
     const replaySolSetup = replaySetupAudit.SOL || {};
     const replayEthSetup = replaySetupAudit.ETH || {};
@@ -566,6 +571,9 @@ async function loadData() {
         <div class="metric-row"><span class="metric-label">Non-DOGE 30m</span><span class="metric-value ${(replayNonDoge30.n || 0) > 0 ? 'green' : 'yellow'}">${replayNonDoge30.n || 0} rows | ${replayNonDogeWr} | ${replayNonDogeRxe}</span></div>
         <div class="metric-row"><span class="metric-label">SOL Setup Funnel</span><span class="metric-value ${(replaySolSetup.strict_candidate_rows || 0) > 0 ? 'green' : 'yellow'}">${replaySolSetup.market_down_setup_windows ?? '—'} setup | ${replaySolSetup.strict_candidate_rows ?? '—'} strict | ${replaySolStage}</span></div>
         <div class="metric-row"><span class="metric-label">ETH Setup Funnel</span><span class="metric-value ${(replayEthSetup.strict_candidate_rows || 0) > 0 ? 'green' : 'yellow'}">${replayEthSetup.market_down_setup_windows ?? '—'} setup | ${replayEthSetup.strict_candidate_rows ?? '—'} strict | ${replayEthStage}</span></div>
+        <div class="metric-row"><span class="metric-label">ETH Quality</span><span class="metric-value ${replayEthQuality.decision === 'WATCH_FOR_PROMOTION_REVIEW' ? 'green' : 'yellow'}">${replayEthQuality.rows ?? 0} rows | ${replayEthQualityWr} | ${replayEthQualityRxe}</span></div>
+        <div class="metric-row"><span class="metric-label">ETH No-Best 30m</span><span class="metric-value ${(replayEthQuality.rxe_without_best_30m_bp || 0) > 0 ? 'green' : 'yellow'}">${replayEthNoBestRxe} | loss streak ${replayEthQuality.max_loss_streak ?? '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">ETH Last Candidate</span><span class="metric-value ${(replayEthQuality.window || {}).latest_age_days <= 2 ? 'green' : 'yellow'}">${(replayEthQuality.window || {}).last_ts || '—'} | ${(replayEthQuality.window || {}).latest_age_days ?? '—'}d</span></div>
         <div class="metric-row"><span class="metric-label">Latest Unique</span><span class="metric-value">${replayWatch.latest_unique_candidate_ts || '—'}</span></div>
         <div class="metric-row"><span class="metric-label">Replay Duplicates</span><span class="metric-value">${replayWatch.duplicate_replay_rows_removed ?? '—'} removed / ${replayWatch.observed_candidate_rows_with_replays ?? '—'} observed</span></div>
         <div class="card-sub">${replayCoinAudit.promotion_blocker || replayBlockers || replayWatch.decision || 'Replay bridge awaiting fresh candidates'}</div>
