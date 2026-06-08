@@ -367,6 +367,12 @@ async function loadData() {
     // ═══ PILLAR 1: COPY INTELLIGENCE ═══
     const p1 = d.pillar1 || {};
     const p1pct = p1.completion || 80;
+    const p1Ledger = p1.copy_relaxation_ledger || {};
+    const p1BtcClear = p1Ledger.btc_ex_auros_clearance || {};
+    const p1Fc66 = ((p1Ledger.tracked_wallets || {}).fc66_btc) || {};
+    const p1ExBtc = ((p1Ledger.ex_auros || {}).BTC) || {};
+    const p1ClearClass = p1BtcClear.state === 'DURABLE_POSITIVE' ? 'green' : p1BtcClear.state === 'FRAGILE_POSITIVE' ? 'yellow' : 'red';
+    const fmtUsd0 = (v) => Number.isFinite(Number(v)) ? '$' + Number(v).toLocaleString(undefined, {maximumFractionDigits: 0}) : '—';
     document.getElementById('pillar1').innerHTML = `
       <div class="pillar-header">
         <span class="pillar-title cyan">How well do I understand what winning traders do?</span>
@@ -389,6 +395,19 @@ async function loadData() {
           <div class="card-title">Signals Today</div>
           <div class="card-value cyan">${p1.signals_today || 0}</div>
           <div class="card-sub">Fed into trading decisions</div>
+        </div>
+        <div class="card">
+          <div class="card-title">BTC Copy Clearance</div>
+          <div class="card-value ${p1ClearClass}" style="font-size:22px;">${p1BtcClear.state || 'UNKNOWN'}</div>
+          <div class="card-sub">Ex-Auros cushion ${fmtUsd0(p1BtcClear.cushion_usd)} · streak ${p1BtcClear.positive_streak || 0}/${p1BtcClear.required_positive_streak || 2}</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">P1 Copy-Risk Gate</div>
+        <div class="insight">
+          <div class="label">${p1Ledger.gate_score || 0}/${p1Ledger.gate_total || 8} gates · ${p1Ledger.full_relaxation_pass ? 'RELAXATION_PASS' : 'COPY_VETO_ACTIVE'}</div>
+          <div class="detail">BTC ex-Auros net ${fmtUsd0(p1ExBtc.net_notional)}; fc66 BTC ${p1Fc66.side || '—'} ${fmtUsd0(p1Fc66.notional)}. ${(p1BtcClear.interpretation || 'Waiting for durable copy clearance.')}</div>
         </div>
       </div>
 
