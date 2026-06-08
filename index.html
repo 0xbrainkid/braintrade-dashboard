@@ -454,9 +454,13 @@ async function loadData() {
           </div>
           <div class="detail">
             evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·
+            tune state ${p2Gate03.stale_evidence_guard?.state || 'n/a'} ·
             rows Δ ${p2Gate03.diff_vs_previous?.common_gate_rows_delta ?? 'n/a'} ·
             dates Δ ${p2Gate03.diff_vs_previous?.common_gate_distinct_dates_delta ?? 'n/a'} ·
             realized Δ ${p2Gate03.diff_vs_previous?.post_retirement_realized_rows_delta ?? 'n/a'}
+          </div>
+          <div class="detail">
+            ${p2Gate03.stale_evidence_guard?.reason || 'fresh evidence required before tuning'}
           </div>
         </div>
         <div class="insight">
