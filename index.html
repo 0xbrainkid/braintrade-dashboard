@@ -483,6 +483,10 @@ async function loadData() {
             cluster warning ${p2Gate03.cluster_warning_active ? 'active' : 'clear'}
           </div>
           <div class="detail">
+            last 03 UTC source ${p2Gate03.days_since_last_03utc_source ?? 'n/a'}d ago ·
+            last realized outcome ${p2Gate03.days_since_last_realized_outcome ?? 'n/a'}d ago
+          </div>
+          <div class="detail">
             evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·
             tune state ${p2Gate03.stale_evidence_guard?.state || 'n/a'} ·
             rows Δ ${p2Gate03.diff_vs_previous?.common_gate_rows_delta ?? 'n/a'} ·
