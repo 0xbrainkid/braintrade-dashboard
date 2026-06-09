@@ -550,6 +550,7 @@ async function loadData() {
     const paperHealth = p3.paper_health || {};
     const replayWatch = p3.short_aligned_replay_watch || {};
     const replayFreshness = replayWatch.setup_freshness_audit || {};
+    const replayStagnation = replayWatch.candidate_stagnation_audit || {};
     const replayCurrent30 = replayWatch.current_30m || {};
     const replayDeduped30 = replayWatch.deduped_30m || {};
     const replayCoinAudit = replayWatch.coin_filter_audit || {};
@@ -577,6 +578,7 @@ async function loadData() {
     const replayBlockers = (replayWatch.promotion_blockers || []).join(', ');
     const replayFreshnessLabel = replayFreshness.label || replayWatch.setup_freshness_label || '—';
     const replayFreshnessHours = replayFreshness.hours_since_latest_known_candidate === null || replayFreshness.hours_since_latest_known_candidate === undefined ? '—' : Number(replayFreshness.hours_since_latest_known_candidate).toFixed(2);
+    const replayStagnationHours = replayStagnation.hours_same_latest_candidate === null || replayStagnation.hours_same_latest_candidate === undefined ? '—' : Number(replayStagnation.hours_same_latest_candidate).toFixed(2);
     const paperStatusClass = (paperHealth.status || '').startsWith('INVESTIGATE') ? 'red' : paperHealth.status === 'FRESH' ? 'green' : 'yellow';
     document.getElementById('pillar3').innerHTML = `
       <div class="pillar-header">
@@ -620,6 +622,7 @@ async function loadData() {
         <div class="card-title">Short-Aligned Replay Watch</div>
         <div class="metric-row"><span class="metric-label">State</span><span class="metric-value ${replayStateClass}">${replayWatch.state || '—'}</span></div>
         <div class="metric-row"><span class="metric-label">Setup Freshness</span><span class="metric-value ${replayFreshness.stale ? 'red' : 'green'}">${replayFreshnessLabel} | ${replayFreshnessHours}h</span></div>
+        <div class="metric-row"><span class="metric-label">Replay Stagnation</span><span class="metric-value ${replayStagnation.state === 'REPLAY_LATEST_UNCHANGED_GT_48H' ? 'red' : 'green'}">${replayStagnation.state || '—'} | ${replayStagnationHours}h | ${replayStagnation.consecutive_replay_runs_same_latest ?? 0} runs</span></div>
         <div class="metric-row"><span class="metric-label">Current Strict Rows</span><span class="metric-value ${(replayWatch.current_candidate_rows || 0) >= 30 ? 'green' : 'yellow'}">${replayWatch.current_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_current_n ?? 30}</span></div>
         <div class="metric-row"><span class="metric-label">Unique Ledger Rows</span><span class="metric-value ${(replayWatch.unique_candidate_rows || 0) >= 50 ? 'green' : 'yellow'}">${replayWatch.unique_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_deduped_n ?? 50}</span></div>
         <div class="metric-row"><span class="metric-label">Current 30m</span><span class="metric-value ${(replayCurrent30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayCurrent30.n ?? '—'} rows | ${replayCurrentWr} | ${replayCurrentRxe}</span></div>

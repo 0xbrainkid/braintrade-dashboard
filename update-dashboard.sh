@@ -1130,6 +1130,7 @@ if _short_aligned_replay:
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
     _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_freshness = _short_aligned_replay.get('setup_freshness_audit') or _sar_dedupe.get('setup_freshness_audit') or {}
+    _sar_stagnation = _short_aligned_replay.get('candidate_stagnation_audit') or _sar_dedupe.get('candidate_stagnation_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
     _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
     _sar_current30 = _sar_promo.get('current_30m') or _sar30
@@ -1141,6 +1142,7 @@ if _short_aligned_replay:
         "avg_30m": _sar30.get('avg'),
         "latest_candidate_ts": _short_aligned_replay.get('latest_candidate_ts'),
         "setup_freshness_audit": _sar_freshness,
+        "candidate_stagnation_audit": _sar_stagnation,
         "setup_freshness_label": _sar_freshness.get('label'),
         "unique_candidate_rows": _sar_dedupe.get('unique_candidate_rows'),
         "latest_unique_candidate_ts": _sar_dedupe.get('latest_unique_candidate_ts'),
@@ -1162,6 +1164,7 @@ if _short_aligned_replay:
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
     _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_freshness = _short_aligned_replay.get('setup_freshness_audit') or _sar_dedupe.get('setup_freshness_audit') or {}
+    _sar_stagnation = _short_aligned_replay.get('candidate_stagnation_audit') or _sar_dedupe.get('candidate_stagnation_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
     _sar_current30 = _sar_promo.get('current_30m') or (((_short_aligned_replay.get('horizons') or {}).get('30m')) or {})
     _sar_deduped30 = _sar_promo.get('deduped_30m') or ((_sar_dedupe.get('deduped_horizons') or {}).get('30m') or {})
@@ -1174,6 +1177,7 @@ if _short_aligned_replay:
         "latest_candidate_ts": _short_aligned_replay.get('latest_candidate_ts'),
         "latest_unique_candidate_ts": _sar_dedupe.get('latest_unique_candidate_ts'),
         "setup_freshness_audit": _sar_freshness,
+        "candidate_stagnation_audit": _sar_stagnation,
         "setup_freshness_label": _sar_freshness.get('label'),
         "current_30m": _sar_current30,
         "deduped_30m": _sar_deduped30,
