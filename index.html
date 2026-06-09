@@ -452,6 +452,8 @@ async function loadData() {
     const p2Shadow03 = hgs.shadow_03_bias_comparator || p2.shadow_03_bias_comparator || {};
     const p2Best03 = p2Shadow03.best_proxy_band_stats || {};
     const p2Gate03 = p2Shadow03.gate_health || {};
+    const p2FreshClasses = p2Gate03.source_freshness_classes || {};
+    const p2FreshClassMap = p2FreshClasses.classes || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
@@ -497,6 +499,13 @@ async function loadData() {
           <div class="detail">
             last 03 UTC source ${p2Gate03.days_since_last_03utc_source ?? 'n/a'}d ago ·
             last realized outcome ${p2Gate03.days_since_last_realized_outcome ?? 'n/a'}d ago
+          </div>
+          <div class="detail">
+            source classes:
+            shadow ${p2FreshClassMap.shadow_proxy?.state || 'n/a'} ${p2FreshClassMap.shadow_proxy?.age_days ?? 'n/a'}d ·
+            realized ${p2FreshClassMap.realized_outcomes?.state || 'n/a'} ${p2FreshClassMap.realized_outcomes?.age_days ?? 'n/a'}d ·
+            hour gate ${p2FreshClassMap.hour_gate_outcomes?.state || 'n/a'} ${p2FreshClassMap.hour_gate_outcomes?.age_days ?? 'n/a'}d ·
+            ${p2FreshClasses.proxy_newer_than_realized ? 'proxy newer than realized' : 'proxy/realized age aligned'}
           </div>
           <div class="detail">
             evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·
