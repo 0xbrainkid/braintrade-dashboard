@@ -266,6 +266,7 @@ async function loadData() {
       const blockers = gate.transition_stability_blockers || stability.blockers || [];
       const blockerAges = gate.transition_blocker_active_age || stability.blocker_active_age || {};
       const blockerReset = gate.transition_blocker_reset || stability.blocker_reset || {};
+      const resetFollowThrough = gate.transition_blocker_reset_follow_through || stability.blocker_reset_follow_through || {};
       const attribution = gate.transition_blocker_attribution || stability.blocker_attribution || {};
       const attributionCounts = attribution.counts || {};
       const attributionText = Object.entries(attributionCounts).map(([k, v]) => `${k.replaceAll('_', ' ')}: ${v}`).join(' · ');
@@ -292,6 +293,7 @@ async function loadData() {
       html += `<div class="stat-box"><div class="stat-value">${gate.range_friendly_streak ?? stability.range_friendly_streak ?? '—'}/${gate.high_risk_streak ?? stability.high_risk_streak ?? '—'}</div><div class="stat-label">Range / Risk Streak</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${(attribution.primary_group || '—').replaceAll('_', ' ')}</div><div class="stat-label">Primary Block</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${(blockerReset.status || '—').replaceAll('_', ' ')}</div><div class="stat-label">Reset State</div></div>`;
+      html += `<div class="stat-box"><div class="stat-value">${(resetFollowThrough.status || '—').replaceAll('_', ' ')}</div><div class="stat-label">Reset Follow</div></div>`;
       html += `<div class="stat-box"><div class="stat-value">${freshnessText}</div><div class="stat-label">Fresh Sources</div></div>`;
       html += `</div>`;
       if (attributionText) {
@@ -321,6 +323,16 @@ async function loadData() {
         if (resetBits.length) {
           html += `<div class="p4-blockers">Reset detector: ${resetBits.join(' · ')}</div>`;
         }
+      }
+      if (resetFollowThrough.status) {
+        const firstReset = resetFollowThrough.first_reset_snapshot || {};
+        const followBits = [];
+        if (resetFollowThrough.reset_events_48h != null) followBits.push(`events: ${resetFollowThrough.reset_events_48h}`);
+        if (firstReset.directional_read) followBits.push(firstReset.directional_read.replaceAll('_', ' '));
+        if ((firstReset.outcomes || []).length) {
+          followBits.push(firstReset.outcomes.map((o) => `${o.minutes_after}m ${o.return_pct != null ? o.return_pct + '%' : o.status}`).join(', '));
+        }
+        html += `<div class="p4-blockers">Reset follow-through: ${followBits.join(' · ') || resetFollowThrough.status.replaceAll('_', ' ')}</div>`;
       }
       if (staleSources.length) {
         html += `<div class="p4-blockers">Stale inputs: ${staleSources.join(', ')}</div>`;

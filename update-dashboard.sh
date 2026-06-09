@@ -1425,6 +1425,7 @@ p4_trade_gate_summary = {
     "transition_blocker_attribution": p4_transition_stability.get('blocker_attribution'),
     "transition_blocker_active_age": p4_transition_stability.get('blocker_active_age'),
     "transition_blocker_reset": p4_transition_stability.get('blocker_reset'),
+    "transition_blocker_reset_follow_through": p4_transition_stability.get('blocker_reset_follow_through'),
     "transition_counts_48h": p4_transition_stability.get('counts_48h'),
     "transition_live_clearance_progress": p4_transition_stability.get('live_clearance_progress'),
     "transition_live_clearance_score": p4_transition_stability.get('live_clearance_score'),
