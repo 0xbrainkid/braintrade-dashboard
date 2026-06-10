@@ -466,6 +466,8 @@ async function loadData() {
     const p2FreshClassMap = p2FreshClasses.classes || {};
     const p2DateConcentration = p2Gate03.date_concentration_audit || {};
     const p2BestConcentration = p2Gate03.best_proxy_band_concentration || {};
+    const p2DirectionConcentration = p2Gate03.direction_concentration_audit || {};
+    const p2BestDirectionConcentration = p2Gate03.best_proxy_band_direction_concentration || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
@@ -517,6 +519,12 @@ async function loadData() {
           <div class="detail">
             best band concentration: ${p2BestConcentration.state || 'n/a'} · dates ${p2BestConcentration.distinct_dates ?? 'n/a'} ·
             top share ${p2BestConcentration.max_date_share ?? 'n/a'}
+          </div>
+          <div class="detail">
+            direction concentration: ${p2DirectionConcentration.state || 'n/a'} ·
+            YES ${p2DirectionConcentration.directions?.YES ?? 'n/a'} / NO ${p2DirectionConcentration.directions?.NO ?? 'n/a'} ·
+            best band ${p2BestDirectionConcentration.state || 'n/a'} ·
+            top share ${p2BestDirectionConcentration.top_direction_share ?? 'n/a'}
           </div>
           <div class="detail">
             last 03 UTC source ${p2Gate03.days_since_last_03utc_source ?? 'n/a'}d ago ·
