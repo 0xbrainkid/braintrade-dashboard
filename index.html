@@ -574,6 +574,8 @@ async function loadData() {
     const replayDeduped30 = replayWatch.deduped_30m || {};
     const replayCoinAudit = replayWatch.coin_filter_audit || {};
     const replayEthQuality = replayWatch.eth_cluster_quality_audit || {};
+    const replayCoinBuckets = replayWatch.coin_timestamp_bucket_audit || {};
+    const replayCoinBucketMap = replayCoinBuckets.by_coin || {};
     const replayEthQuality30 = replayEthQuality.metrics_30m || {};
     const replayPresentCoins = (replayCoinAudit.present_unique_coins || []).join(', ') || 'none';
     const replayAbsentCoins = (replayCoinAudit.absent_unique_coins || []).join(', ') || 'none';
@@ -598,6 +600,14 @@ async function loadData() {
     const replayFreshnessLabel = replayFreshness.label || replayWatch.setup_freshness_label || '—';
     const replayFreshnessHours = replayFreshness.hours_since_latest_known_candidate === null || replayFreshness.hours_since_latest_known_candidate === undefined ? '—' : Number(replayFreshness.hours_since_latest_known_candidate).toFixed(2);
     const replayStagnationHours = replayStagnation.hours_same_latest_candidate === null || replayStagnation.hours_same_latest_candidate === undefined ? '—' : Number(replayStagnation.hours_same_latest_candidate).toFixed(2);
+    const replayFreshCoinList = (replayCoinBuckets.fresh_coins || []).join(', ') || 'none';
+    const replayStaleCoinList = (replayCoinBuckets.stale_or_absent_coins || []).join(', ') || 'none';
+    const replayBucketRows = ['DOGE', 'SOL', 'ETH'].map(coin => {
+      const b = replayCoinBucketMap[coin] || {};
+      const age = b.hours_since_latest === null || b.hours_since_latest === undefined ? '—' : Number(b.hours_since_latest).toFixed(2);
+      const klass = b.state === 'FRESH_COIN_FLOW' ? 'green' : 'yellow';
+      return '<div class="metric-row"><span class="metric-label">' + coin + ' Bucket Age</span><span class="metric-value ' + klass + '">' + (b.rows ?? 0) + ' rows | ' + (b.bucket_count ?? 0) + ' buckets | ' + age + 'h | ' + (b.state || '—') + '</span></div>';
+    }).join('');
     const paperStatusClass = (paperHealth.status || '').startsWith('INVESTIGATE') ? 'red' : paperHealth.status === 'FRESH' ? 'green' : 'yellow';
     document.getElementById('pillar3').innerHTML = `
       <div class="pillar-header">
@@ -642,6 +652,10 @@ async function loadData() {
         <div class="metric-row"><span class="metric-label">State</span><span class="metric-value ${replayStateClass}">${replayWatch.state || '—'}</span></div>
         <div class="metric-row"><span class="metric-label">Setup Freshness</span><span class="metric-value ${replayFreshness.stale ? 'red' : 'green'}">${replayFreshnessLabel} | ${replayFreshnessHours}h</span></div>
         <div class="metric-row"><span class="metric-label">Replay Stagnation</span><span class="metric-value ${replayStagnation.state === 'REPLAY_LATEST_UNCHANGED_GT_48H' ? 'red' : 'green'}">${replayStagnation.state || '—'} | ${replayStagnationHours}h | ${replayStagnation.consecutive_replay_runs_same_latest ?? 0} runs</span></div>
+        <div class="metric-row"><span class="metric-label">Coin Buckets</span><span class="metric-value ${replayCoinBuckets.state === 'COIN_FRESHNESS_CLEAR' ? 'green' : 'yellow'}">${replayCoinBuckets.state || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Fresh Coins</span><span class="metric-value">${replayFreshCoinList}</span></div>
+        <div class="metric-row"><span class="metric-label">Stale/Absent Coins</span><span class="metric-value">${replayStaleCoinList}</span></div>
+        ${replayBucketRows}
         <div class="metric-row"><span class="metric-label">Current Strict Rows</span><span class="metric-value ${(replayWatch.current_candidate_rows || 0) >= 30 ? 'green' : 'yellow'}">${replayWatch.current_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_current_n ?? 30}</span></div>
         <div class="metric-row"><span class="metric-label">Unique Ledger Rows</span><span class="metric-value ${(replayWatch.unique_candidate_rows || 0) >= 50 ? 'green' : 'yellow'}">${replayWatch.unique_candidate_rows ?? '—'} / ${(replayWatch.thresholds || {}).min_deduped_n ?? 50}</span></div>
         <div class="metric-row"><span class="metric-label">Current 30m</span><span class="metric-value ${(replayCurrent30.wr || 0) >= 62 ? 'green' : 'yellow'}">${replayCurrent30.n ?? '—'} rows | ${replayCurrentWr} | ${replayCurrentRxe}</span></div>
