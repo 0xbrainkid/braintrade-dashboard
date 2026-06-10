@@ -461,6 +461,8 @@ async function loadData() {
     const p2Gate03 = p2Shadow03.gate_health || {};
     const p2FreshClasses = p2Gate03.source_freshness_classes || {};
     const p2FreshClassMap = p2FreshClasses.classes || {};
+    const p2DateConcentration = p2Gate03.date_concentration_audit || {};
+    const p2BestConcentration = p2Gate03.best_proxy_band_concentration || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
@@ -502,6 +504,16 @@ async function loadData() {
           <div class="detail">
             common dates ${p2Gate03.common_gate_distinct_dates ?? 'n/a'} · source age ${p2Gate03.source_age_hours ?? 'n/a'}h ·
             cluster warning ${p2Gate03.cluster_warning_active ? 'active' : 'clear'}
+          </div>
+          <div class="detail">
+            date concentration: ${p2DateConcentration.state || 'n/a'} · top ${p2DateConcentration.top_date || 'n/a'}
+            ${p2DateConcentration.top_date_rows ?? 'n/a'}/${p2DateConcentration.rows ?? 'n/a'} ·
+            max share ${p2DateConcentration.max_date_share ?? 'n/a'} ·
+            required dates ${p2DateConcentration.required_distinct_dates ?? 'n/a'}
+          </div>
+          <div class="detail">
+            best band concentration: ${p2BestConcentration.state || 'n/a'} · dates ${p2BestConcentration.distinct_dates ?? 'n/a'} ·
+            top share ${p2BestConcentration.max_date_share ?? 'n/a'}
           </div>
           <div class="detail">
             last 03 UTC source ${p2Gate03.days_since_last_03utc_source ?? 'n/a'}d ago ·
