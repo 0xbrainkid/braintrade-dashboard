@@ -329,7 +329,10 @@ async function loadData() {
         const latestReset = resetEventTable.last_events[resetEventTable.last_events.length - 1];
         const resetAge = resetEventTable.latest_event_age_hours != null ? `${resetEventTable.latest_event_age_hours}h ago` : 'age n/a';
         const focusReset = (latestReset.focus_reset || []).length ? `focus: ${latestReset.focus_reset.join(', ')}` : 'no focus reset';
-        html += `<div class="p4-blockers">Last reset event: ${resetAge} · ${focusReset} · ${latestReset.classifier_state || 'unknown'} / ${latestReset.pm_risk || 'unknown'} · total ${resetEventTable.events_total || 0}</div>`;
+        const resetOutcome = (latestReset.outcomes || []).length
+          ? ` · ${(latestReset.directional_read || 'pending').replaceAll('_', ' ')} · ${latestReset.outcomes.map((o) => `${o.minutes_after}m ${o.return_pct != null ? o.return_pct + '%' : o.status}`).join(', ')}`
+          : '';
+        html += `<div class="p4-blockers">Last reset event: ${resetAge} · ${focusReset} · ${latestReset.classifier_state || 'unknown'} / ${latestReset.pm_risk || 'unknown'}${resetOutcome} · total ${resetEventTable.events_total || 0}</div>`;
       }
       if (resetFollowThrough.status) {
         const firstReset = resetFollowThrough.first_reset_snapshot || {};
