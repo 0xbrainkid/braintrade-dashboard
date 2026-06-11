@@ -1130,6 +1130,7 @@ if _short_aligned_replay:
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
     _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_coin_buckets = _short_aligned_replay.get('coin_timestamp_bucket_audit') or _sar_dedupe.get('coin_timestamp_bucket_audit') or {}
+    _sar_fresh_two_day = _short_aligned_replay.get('fresh_two_day_candidate_audit') or _sar_dedupe.get('fresh_two_day_candidate_audit') or {}
     _sar_freshness = _short_aligned_replay.get('setup_freshness_audit') or _sar_dedupe.get('setup_freshness_audit') or {}
     _sar_stagnation = _short_aligned_replay.get('candidate_stagnation_audit') or _sar_dedupe.get('candidate_stagnation_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
@@ -1155,6 +1156,7 @@ if _short_aligned_replay:
         "coin_filter_audit": _sar_coin_audit,
         "eth_cluster_quality_audit": _sar_eth_quality,
         "coin_timestamp_bucket_audit": _sar_coin_buckets,
+        "fresh_two_day_candidate_audit": _sar_fresh_two_day,
         "promotion_blockers": _sar_promo.get('blockers'),
         "diagnostics": _short_aligned_replay.get('diagnostics'),
         "promotion_audit": _short_aligned_replay.get('promotion_audit'),
@@ -1166,6 +1168,7 @@ if _short_aligned_replay:
     _sar_coin_audit = _short_aligned_replay.get('coin_filter_audit') or _sar_dedupe.get('coin_filter_audit') or {}
     _sar_eth_quality = _short_aligned_replay.get('eth_cluster_quality_audit') or _sar_dedupe.get('eth_cluster_quality_audit') or {}
     _sar_coin_buckets = _short_aligned_replay.get('coin_timestamp_bucket_audit') or _sar_dedupe.get('coin_timestamp_bucket_audit') or {}
+    _sar_fresh_two_day = _short_aligned_replay.get('fresh_two_day_candidate_audit') or _sar_dedupe.get('fresh_two_day_candidate_audit') or {}
     _sar_freshness = _short_aligned_replay.get('setup_freshness_audit') or _sar_dedupe.get('setup_freshness_audit') or {}
     _sar_stagnation = _short_aligned_replay.get('candidate_stagnation_audit') or _sar_dedupe.get('candidate_stagnation_audit') or {}
     _sar_promo = _short_aligned_replay.get('promotion_audit') or {}
@@ -1190,6 +1193,7 @@ if _short_aligned_replay:
         "coin_filter_audit": _sar_coin_audit,
         "eth_cluster_quality_audit": _sar_eth_quality,
         "coin_timestamp_bucket_audit": _sar_coin_buckets,
+        "fresh_two_day_candidate_audit": _sar_fresh_two_day,
         "thresholds": _sar_promo.get('thresholds') or {},
         "watch_counter": _short_aligned_replay.get('watch_counter') or {},
         "ledger_path": _sar_dedupe.get('unique_candidate_ledger_path') or _short_aligned_replay.get('unique_candidate_ledger_path'),
