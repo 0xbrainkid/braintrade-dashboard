@@ -469,10 +469,12 @@ async function loadData() {
     const p2DirectionConcentration = p2Gate03.direction_concentration_audit || {};
     const p2BestDirectionConcentration = p2Gate03.best_proxy_band_direction_concentration || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
+    const p2CompactBlockers = p2Gate03.compact_blocker_labels || p2Shadow03.compact_blocker_labels || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
     const p2Totals = p2Labels.totals || {};
     const p2Blockers = [
+      ...((p2CompactBlockers.labels || []).slice(0, 4)),
       ...((p2Promo.blockers || []).slice(0, 3)),
       ...(((hgs.live_edit_gate || {}).blockers || []).slice(0, 3))
     ];
@@ -536,6 +538,10 @@ async function loadData() {
             realized ${p2FreshClassMap.realized_outcomes?.state || 'n/a'} ${p2FreshClassMap.realized_outcomes?.age_days ?? 'n/a'}d ·
             hour gate ${p2FreshClassMap.hour_gate_outcomes?.state || 'n/a'} ${p2FreshClassMap.hour_gate_outcomes?.age_days ?? 'n/a'}d ·
             ${p2FreshClasses.proxy_newer_than_realized ? 'proxy newer than realized' : 'proxy/realized age aligned'}
+          </div>
+          <div class="detail">
+            blockers: ${(p2CompactBlockers.labels || []).join(' · ') || 'none'} ·
+            primary ${p2CompactBlockers.primary || 'n/a'}
           </div>
           <div class="detail">
             evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·

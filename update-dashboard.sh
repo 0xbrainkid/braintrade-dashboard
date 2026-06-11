@@ -879,6 +879,7 @@ p2_hour_gate_summary = {
             "60_80": _p2_03_bands.get("60_80"),
         },
         "gate_health": p2_03utc_bias_comparator.get("gate_health"),
+        "compact_blocker_labels": (p2_03utc_bias_comparator.get("gate_health") or {}).get("compact_blocker_labels"),
         "latest_gate_health_artifact": p2_03utc_bias_comparator.get("latest_gate_health_artifact"),
         "promotion_gate": p2_03utc_bias_comparator.get("promotion_gate"),
     },
