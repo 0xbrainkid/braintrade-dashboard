@@ -595,6 +595,7 @@ async function loadData() {
     const replayEthQuality = replayWatch.eth_cluster_quality_audit || {};
     const replayCoinBuckets = replayWatch.coin_timestamp_bucket_audit || {};
     const replayFreshTwoDay = replayWatch.fresh_two_day_candidate_audit || {};
+    const replaySetupTrend = replayWatch.setup_funnel_trend_audit || {};
     const replayCoinBucketMap = replayCoinBuckets.by_coin || {};
     const replayFreshTwoDayMap = replayFreshTwoDay.by_coin || {};
     const replayEthQuality30 = replayEthQuality.metrics_30m || {};
@@ -621,6 +622,7 @@ async function loadData() {
     const replayFreshnessLabel = replayFreshness.label || replayWatch.setup_freshness_label || '—';
     const replayFreshnessHours = replayFreshness.hours_since_latest_known_candidate === null || replayFreshness.hours_since_latest_known_candidate === undefined ? '—' : Number(replayFreshness.hours_since_latest_known_candidate).toFixed(2);
     const replayStagnationHours = replayStagnation.hours_same_latest_candidate === null || replayStagnation.hours_same_latest_candidate === undefined ? '—' : Number(replayStagnation.hours_same_latest_candidate).toFixed(2);
+    const replayLastIntersection = replaySetupTrend.last_nonzero_intersection || {};
     const replayFreshCoinList = (replayCoinBuckets.fresh_coins || []).join(', ') || 'none';
     const replayStaleCoinList = (replayCoinBuckets.stale_or_absent_coins || []).join(', ') || 'none';
     const replayFreshTwoDayCoinList = (replayFreshTwoDay.fresh_candidate_coins || []).join(', ') || 'none';
@@ -683,6 +685,7 @@ async function loadData() {
         <div class="metric-row"><span class="metric-label">Replay Stagnation</span><span class="metric-value ${replayStagnation.state === 'REPLAY_LATEST_UNCHANGED_GT_48H' ? 'red' : 'green'}">${replayStagnation.state || '—'} | ${replayStagnationHours}h | ${replayStagnation.consecutive_replay_runs_same_latest ?? 0} runs</span></div>
         <div class="metric-row"><span class="metric-label">Coin Buckets</span><span class="metric-value ${replayCoinBuckets.state === 'COIN_FRESHNESS_CLEAR' ? 'green' : 'yellow'}">${replayCoinBuckets.state || '—'}</span></div>
         <div class="metric-row"><span class="metric-label">Fresh 48h Flow</span><span class="metric-value ${replayFreshTwoDay.state === 'TWO_DAY_FLOW_CLEAR' ? 'green' : 'yellow'}">${replayFreshTwoDay.state || '—'} | ${replayFreshTwoDay.fresh_unique_candidates_total ?? 0} rows | ${replayFreshTwoDayCoinList}</span></div>
+        <div class="metric-row"><span class="metric-label">Setup Funnel Trend</span><span class="metric-value ${(replaySetupTrend.zero_intersection_streak || 0) >= 3 ? 'red' : 'yellow'}">zero intersection ${replaySetupTrend.zero_intersection_streak ?? '—'} runs | zero strict ${replaySetupTrend.zero_strict_candidate_streak ?? '—'} runs | last ${replayLastIntersection.timestamp || '—'}</span></div>
         ${replayFreshTwoDayRows}
         <div class="metric-row"><span class="metric-label">Fresh Coins</span><span class="metric-value">${replayFreshCoinList}</span></div>
         <div class="metric-row"><span class="metric-label">Stale/Absent Coins</span><span class="metric-value">${replayStaleCoinList}</span></div>
