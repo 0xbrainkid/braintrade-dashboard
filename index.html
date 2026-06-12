@@ -470,6 +470,7 @@ async function loadData() {
     const p2BestDirectionConcentration = p2Gate03.best_proxy_band_direction_concentration || {};
     const p2Promo = p2Shadow03.promotion_gate || {};
     const p2CompactBlockers = p2Gate03.compact_blocker_labels || p2Shadow03.compact_blocker_labels || {};
+    const p2ZeroRealizedStreak = p2Gate03.zero_realized_streak || p2Shadow03.zero_realized_streak || {};
     const p2Fresh = hgs.outcome_freshness || {};
     const p2Labels = hgs.label_collector || p2.label_collector || {};
     const p2Totals = p2Labels.totals || {};
@@ -546,6 +547,7 @@ async function loadData() {
           <div class="detail">
             evidence ${p2Gate03.diff_vs_previous?.evidence_status || 'n/a'} ·
             tune state ${p2Gate03.stale_evidence_guard?.state || 'n/a'} ·
+            zero-realized runs ${p2ZeroRealizedStreak.consecutive_runs ?? 'n/a'} ·
             rows Δ ${p2Gate03.diff_vs_previous?.common_gate_rows_delta ?? 'n/a'} ·
             dates Δ ${p2Gate03.diff_vs_previous?.common_gate_distinct_dates_delta ?? 'n/a'} ·
             realized Δ ${p2Gate03.diff_vs_previous?.post_retirement_realized_rows_delta ?? 'n/a'}
