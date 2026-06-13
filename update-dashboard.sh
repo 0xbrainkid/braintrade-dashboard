@@ -818,13 +818,15 @@ pm_pnl = pm_balance - 1009.32  # PM capital: $488 original + $1000 new - $478.68
 p2_hour_gate_score = {}
 p2_label_collector = {}
 p2_03utc_bias_comparator = {}
+p2_03utc_acquisition_gap = {}
 try:
     _quality_script = '/home/ubuntu/clawd/scripts/analyze_pm_outcome_quality.py'
     _outside_script = '/home/ubuntu/clawd/scripts/analyze_pm_outside_shadow.py'
     _hour_script = '/home/ubuntu/clawd/scripts/score_pm_hour_gates.py'
     _label_script = '/home/ubuntu/clawd/scripts/build_pm_smart_entry_label_collector.py'
     _bias_comparator_script = '/home/ubuntu/clawd/scripts/analyze_pm_03utc_bias_comparator.py'
-    for _script in [_quality_script, _outside_script, _hour_script, _label_script, _bias_comparator_script]:
+    _acquisition_gap_script = '/home/ubuntu/clawd/scripts/audit_pm_03utc_acquisition_gap.py'
+    for _script in [_quality_script, _outside_script, _hour_script, _label_script, _bias_comparator_script, _acquisition_gap_script]:
         if os.path.exists(_script):
             _cmd = [_script] if os.access(_script, os.X_OK) else [sys.executable, _script]
             subprocess.run(_cmd, capture_output=True, timeout=30)
@@ -844,6 +846,12 @@ try:
         p2_03utc_bias_comparator = json.load(_p2_bcf)
 except Exception:
     p2_03utc_bias_comparator = {}
+
+try:
+    with open('/home/ubuntu/clawd/research/pm_03utc_acquisition_gap.json') as _p2_agf:
+        p2_03utc_acquisition_gap = json.load(_p2_agf)
+except Exception:
+    p2_03utc_acquisition_gap = {}
 
 _p2_live_alignment = p2_hour_gate_score.get('live_alignment') or {}
 _p2_extra_risk = _p2_live_alignment.get('extra_hour_risk') or {}
@@ -883,6 +891,12 @@ p2_hour_gate_summary = {
         "zero_realized_streak": (p2_03utc_bias_comparator.get("gate_health") or {}).get("zero_realized_streak"),
         "latest_gate_health_artifact": p2_03utc_bias_comparator.get("latest_gate_health_artifact"),
         "promotion_gate": p2_03utc_bias_comparator.get("promotion_gate"),
+    },
+    "shadow_03_acquisition_gap": {
+        "decision": p2_03utc_acquisition_gap.get("decision"),
+        "coverage": p2_03utc_acquisition_gap.get("coverage"),
+        "blockers": p2_03utc_acquisition_gap.get("blockers"),
+        "next_data_target": p2_03utc_acquisition_gap.get("next_data_target"),
     },
 }
 
@@ -1568,6 +1582,7 @@ data = {
         "hour_gate_score": p2_hour_gate_score,
         "label_collector": p2_label_collector,
         "shadow_03_bias_comparator": p2_03utc_bias_comparator,
+        "shadow_03_acquisition_gap": p2_03utc_acquisition_gap,
     },
     
     # ═══ PILLAR 3: Continuous Iteration ═══
