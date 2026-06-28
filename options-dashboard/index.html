@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>brainTrade Options Dashboard</title>
+<meta http-equiv="refresh" content="300">
+<style>
+  :root {
+    --bg: #080a0f;
+    --panel: #10141d;
+    --panel2: #151b27;
+    --border: #273041;
+    --text: #f3f6fb;
+    --muted: #8b95a7;
+    --green: #18c37e;
+    --red: #ff4d61;
+    --yellow: #f5c542;
+    --blue: #58a6ff;
+    --cyan: #23c9d3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 14px;
+  }
+  .shell { max-width: 1280px; margin: 0 auto; padding: 18px; }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 8px 0 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  h1 { margin: 0; font-size: 22px; letter-spacing: 0; }
+  .subtitle { margin-top: 4px; color: var(--muted); font-size: 13px; }
+  .status { text-align: right; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .live { color: var(--green); font-weight: 800; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .card, .panel {
+    background: linear-gradient(180deg, var(--panel2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .card { padding: 16px; min-height: 104px; }
+  .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .value { margin-top: 8px; font-size: 26px; font-weight: 850; letter-spacing: 0; }
+  .sub { margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .blue { color: var(--blue); }
+  .cyan { color: var(--cyan); }
+  .section-title {
+    margin: 24px 0 10px;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 850;
+  }
+  .panel { overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; background: rgba(255,255,255,.02); }
+  tr:last-child td { border-bottom: 0; }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .02em;
+  }
+  .tag.short { color: var(--yellow); background: rgba(245,197,66,.12); border: 1px solid rgba(245,197,66,.22); }
+  .tag.open { color: var(--green); background: rgba(24,195,126,.11); border: 1px solid rgba(24,195,126,.22); }
+  .risk {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .risk .card { min-height: 92px; }
+  .note {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    line-height: 1.55;
+    background: rgba(255,255,255,.025);
+  }
+  @media (max-width: 960px) {
+    .grid, .risk { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .panel { overflow-x: auto; }
+  }
+  @media (max-width: 620px) {
+    .shell { padding: 14px; }
+    .topbar { display: block; }
+    .status { text-align: left; margin-top: 10px; }
+    .grid, .risk { grid-template-columns: 1fr; }
+    .value { font-size: 23px; }
+    th, td { padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div>
+      <h1>brainTrade Options Dashboard</h1>
+      <div class="subtitle">Options income ledger · delayed bid/ask tracking · capital $138,000</div>
+    </div>
+    <div class="status">
+      <div><span class="live">● TRACKING</span></div>
+      <div id="quote-status">Loading quotes...</div>
+    </div>
+  </div>
+
+  <div class="grid" id="summary"></div>
+
+  <div class="section-title">Open Option Trades</div>
+  <div class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Trade</th>
+          <th>Qty</th>
+          <th>Entry</th>
+          <th>Bid / Ask</th>
+          <th>Mark</th>
+          <th>P&L Mid</th>
+          <th>Close P&L</th>
+          <th>Breakeven</th>
+          <th>DTE</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="trade-rows"></tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Risk</div>
+  <div class="risk" id="risk"></div>
+
+  <div class="note">
+    Quotes are delayed public market data. P&L is marked to option mid when bid/ask exists. Close P&L assumes buying back short options at ask, or selling long options at bid. Use broker marks for execution decisions.
+  </div>
+</div>
+
+<script>
+const fmtUsd = (n, d = 0) => (Number.isFinite(n) ? n : 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d });
+const fmtNum = (n, d = 2) => Number.isFinite(n) ? n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) : '—';
+const cls = n => n >= 0 ? 'green' : 'red';
+const norm = s => String(s || '').toLowerCase();
+
+async function getJson(path) {
+  const r = await fetch(path + '?v=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error(path + ' ' + r.status);
+  return r.json();
+}
+
+function optionKey(t) {
+  return [t.expiry, norm(t.optionType), Number(t.strike)].join('|');
+}
+
+function dte(expiry) {
+  const end = new Date(expiry + 'T20:00:00Z').getTime();
+  return Math.max(0, Math.ceil((end - Date.now()) / 86400000));
+}
+
+function calcTrade(t, q) {
+  const opt = q?.options?.[optionKey(t)] || {};
+  const bid = Number(opt.bid);
+  const ask = Number(opt.ask);
+  const last = Number(opt.last);
+  const hasBidAsk = Number.isFinite(bid) && Number.isFinite(ask) && ask > 0;
+  const mark = hasBidAsk ? (bid + ask) / 2 : (Number.isFinite(last) ? last : Number(t.premium));
+  const closeMark = t.side === 'sell' ? (Number.isFinite(ask) ? ask : mark) : (Number.isFinite(bid) ? bid : mark);
+  const dir = t.side === 'sell' ? 1 : -1;
+  const contracts = Number(t.quantity);
+  const mult = Number(t.multiplier || 100);
+  const entryCredit = Number(t.premium) * contracts * mult * dir;
+  const pnlMid = (Number(t.premium) - mark) * contracts * mult * dir;
+  const pnlClose = (Number(t.premium) - closeMark) * contracts * mult * dir;
+  const assignmentNotional = Number(t.strike) * contracts * mult;
+  const maxProfit = t.side === 'sell' ? Number(t.premium) * contracts * mult : Infinity;
+  const maxLoss = norm(t.optionType) === 'put' && t.side === 'sell'
+    ? (Number(t.strike) - Number(t.premium)) * contracts * mult
+    : NaN;
+  const breakeven = norm(t.optionType) === 'put'
+    ? Number(t.strike) - Number(t.premium)
+    : Number(t.strike) + Number(t.premium);
+  const stock = Number(q?.last);
+  const moneyness = norm(t.optionType) === 'put' ? stock - Number(t.strike) : Number(t.strike) - stock;
+  return { opt, bid, ask, last, mark, closeMark, entryCredit, pnlMid, pnlClose, assignmentNotional, maxProfit, maxLoss, breakeven, stock, moneyness, dte: dte(t.expiry) };
+}
+
+function card(label, value, sub, klass = '') {
+  return '<div class="card"><div class="label">' + label + '</div><div class="value ' + klass + '">' + value + '</div><div class="sub">' + sub + '</div></div>';
+}
+
+function render(tradesData, quotesData) {
+  const trades = tradesData.trades.filter(t => t.status === 'open');
+  const rows = trades.map(t => ({ trade: t, quote: quotesData.quotes[t.symbol], calc: calcTrade(t, quotesData.quotes[t.symbol]) }));
+  const capital = Number(tradesData.capital);
+  const totalMid = rows.reduce((s, r) => s + r.calc.pnlMid, 0);
+  const totalClose = rows.reduce((s, r) => s + r.calc.pnlClose, 0);
+  const totalCredit = rows.reduce((s, r) => s + Math.max(0, r.calc.entryCredit), 0);
+  const assignment = rows.reduce((s, r) => s + r.calc.assignmentNotional, 0);
+  const maxLoss = rows.reduce((s, r) => s + (Number.isFinite(r.calc.maxLoss) ? r.calc.maxLoss : 0), 0);
+
+  document.getElementById('summary').innerHTML = [
+    card('Capital', fmtUsd(capital), 'Allocated options capital'),
+    card('Open P&L', fmtUsd(totalMid), fmtUsd(totalClose) + ' close estimate', cls(totalMid)),
+    card('Premium Collected', fmtUsd(totalCredit), fmtUsd(totalCredit / capital * 100, 2) + ' of capital', 'blue'),
+    card('Assignment Notional', fmtUsd(assignment), fmtUsd(assignment / capital * 100, 1) + ' of allocated capital', assignment > capital ? 'yellow' : 'green')
+  ].join('');
+
+  document.getElementById('trade-rows').innerHTML = rows.map(({ trade: t, calc: c }) => {
+    const spread = Number.isFinite(c.bid) && Number.isFinite(c.ask) ? fmtUsd(c.bid, 2) + ' / ' + fmtUsd(c.ask, 2) : '—';
+    const status = c.moneyness >= 0 ? '<span class="tag open">OTM</span>' : '<span class="tag short">ITM</span>';
+    return '<tr>' +
+      '<td><strong>' + t.symbol + ' ' + t.expiry + ' ' + fmtNum(t.strike, 0) + 'P</strong><br><span class="sub"><span class="tag short">SHORT PUT</span> ' + (c.stock ? 'Stock ' + fmtUsd(c.stock, 2) : '') + '</span></td>' +
+      '<td>' + t.quantity + '</td>' +
+      '<td>' + fmtUsd(t.premium, 2) + '</td>' +
+      '<td>' + spread + '</td>' +
+      '<td>' + fmtUsd(c.mark, 2) + '</td>' +
+      '<td class="' + cls(c.pnlMid) + '"><strong>' + fmtUsd(c.pnlMid) + '</strong></td>' +
+      '<td class="' + cls(c.pnlClose) + '">' + fmtUsd(c.pnlClose) + '</td>' +
+      '<td>' + fmtUsd(c.breakeven, 2) + '</td>' +
+      '<td>' + c.dte + '</td>' +
+      '<td>' + status + '</td>' +
+    '</tr>';
+  }).join('');
+
+  document.getElementById('risk').innerHTML = [
+    card('Max Profit', fmtUsd(totalCredit), 'If short options expire worthless', 'green'),
+    card('Max Loss at Zero', fmtUsd(maxLoss), 'Cash-secured short put worst case', 'red'),
+    card('Capital Gap', fmtUsd(Math.max(0, assignment - capital)), 'Assignment notional above allocated capital', assignment > capital ? 'yellow' : 'green')
+  ].join('');
+
+  const asOf = quotesData.asOf ? new Date(quotesData.asOf) : new Date();
+  document.getElementById('quote-status').textContent = 'Quotes: ' + asOf.toLocaleString([], { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) + ' · ' + (quotesData.source || 'delayed');
+}
+
+Promise.all([getJson('trades.json'), getJson('quotes.json')])
+  .then(([trades, quotes]) => render(trades, quotes))
+  .catch(err => {
+    document.getElementById('quote-status').textContent = 'Load error: ' + err.message;
+    document.getElementById('summary').innerHTML = card('Error', 'Data unavailable', err.message, 'red');
+  });
+</script>
+</body>
+</html>
