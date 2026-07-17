@@ -1356,15 +1356,24 @@ except: pass
 
 p1_copy_gate_summary = {"posture": "UNKNOWN", "blockers": ["leaderboard_state_unavailable"]}
 p1_copy_relaxation_ledger = {}
+p1_copy_dispersion = {}
 try:
     _p1_ledger_script = '/home/ubuntu/clawd/scripts/update_p1_copy_relaxation_ledger.py'
     if os.path.exists(_p1_ledger_script):
         subprocess.run(["python3", _p1_ledger_script], capture_output=True, timeout=10)
+    _p1_dispersion_script = '/home/ubuntu/clawd/scripts/score_p1_copy_dispersion.py'
+    if os.path.exists(_p1_dispersion_script):
+        subprocess.run(["python3", _p1_dispersion_script], capture_output=True, timeout=10)
     try:
         with open('/home/ubuntu/clawd/research/p1-copy-relaxation-latest.json') as _p1lf:
             p1_copy_relaxation_ledger = json.load(_p1lf)
     except Exception:
         p1_copy_relaxation_ledger = {}
+    try:
+        with open('/home/ubuntu/clawd/research/p1-copy-dispersion-latest.json') as _p1df:
+            p1_copy_dispersion = json.load(_p1df)
+    except Exception:
+        p1_copy_dispersion = {}
     _leaderboard_state_path = '/home/ubuntu/clawd/research/leaderboard-state.json'
     _auros = '0x023a3d058020fb76cca98f01b3c48c8938a22355'
     with open(_leaderboard_state_path) as _lf:
@@ -1570,6 +1579,7 @@ data = {
         "insights": p1_insights,
         "copy_gate_summary": p1_copy_gate_summary,
         "copy_relaxation_ledger": p1_copy_relaxation_ledger,
+        "copy_dispersion": p1_copy_dispersion,
         "evolution": _pevents.get("1", []),
     },
     
