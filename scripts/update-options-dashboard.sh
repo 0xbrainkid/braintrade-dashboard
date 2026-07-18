@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd /home/ubuntu/clawd/dashboard
-node scripts/update-options-quotes.mjs
-
-if git diff --quiet -- options-dashboard/quotes.json; then
-  exit 0
-fi
-
-git add options-dashboard/quotes.json
-git commit -m "Update options quotes"
-git push origin main
+# brainai.bot/fund1-dashboard is served from the canonical Fund1 source tree.
+# Do not update the stale dashboard/options-dashboard copy from this directory.
+exec /home/ubuntu/clawd/agents/polymarket/fund1-dashboard/scripts/update-options-live.sh
