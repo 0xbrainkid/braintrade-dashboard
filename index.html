@@ -586,6 +586,12 @@ async function loadData() {
     const hlPlanned = Number(p3.hl_live_planned_order_notional || 0);
     const hlMinNotional = Number(p3.hl_live_min_order_notional_usd || 0);
     const paperHealth = p3.paper_health || {};
+    const momentumEpisodes = p3.momentum_episode_summary || {};
+    const momentumGate = momentumEpisodes.combined_promotion_gate || {};
+    const momentumDelayGate = momentumEpisodes.exit_delay_promotion_gate || {};
+    const momentumBoundaryGate = momentumEpisodes.boundary_cost_promotion_gate || {};
+    const momentumBlockers = momentumGate.blockers || [];
+    const momentumGateClass = momentumGate.pass ? 'green' : 'yellow';
     const replayWatch = p3.short_aligned_replay_watch || {};
     const replayFreshness = replayWatch.setup_freshness_audit || {};
     const replayStagnation = replayWatch.candidate_stagnation_audit || {};
@@ -663,6 +669,15 @@ async function loadData() {
           <div class="card-value orange">${p3.heartbeats_today || 0}</div>
           <div class="card-sub">Active review cycles</div>
         </div>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <div class="card-title">Momentum Exit Promotion Gate</div>
+        <div class="metric-row"><span class="metric-label">Decision</span><span class="metric-value ${momentumGateClass}">${momentumGate.decision || momentumEpisodes.decision || '—'}</span></div>
+        <div class="metric-row"><span class="metric-label">Episodes</span><span class="metric-value ${(momentumEpisodes.episodes || 0) >= 20 ? 'green' : 'yellow'}">${momentumEpisodes.episodes ?? 0} / 20</span></div>
+        <div class="metric-row"><span class="metric-label">+1m Delay Gate</span><span class="metric-value ${momentumDelayGate.pass ? 'green' : 'yellow'}">${momentumDelayGate.pass ? 'PASS' : (momentumDelayGate.status || 'BLOCKED')}</span></div>
+        <div class="metric-row"><span class="metric-label">15 bps Cost Gate</span><span class="metric-value ${momentumBoundaryGate.pass ? 'green' : 'yellow'}">${momentumBoundaryGate.pass ? 'PASS' : (momentumBoundaryGate.status || 'BLOCKED')}</span></div>
+        <div class="card-sub">Blockers: ${momentumBlockers.join(' · ') || 'none'}</div>
       </div>
 
       <div style="margin-top: 10px;">

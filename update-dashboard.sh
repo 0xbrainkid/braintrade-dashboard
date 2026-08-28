@@ -1016,6 +1016,18 @@ def _load_last_jsonl(path):
         return {}
 
 p3_strategy_branches = []
+try:
+    with open('/home/ubuntu/clawd/research/p3-momentum-episode-summary.json') as _f:
+        p3_momentum_episode_summary = json.load(_f)
+except Exception as _e:
+    p3_momentum_episode_summary = {
+        "decision": "SUMMARY_UNAVAILABLE",
+        "combined_promotion_gate": {
+            "pass": False,
+            "blockers": ["momentum_episode_summary_unavailable"],
+        },
+        "load_error": str(_e),
+    }
 _jto = _load_last_jsonl('/home/ubuntu/clawd/research/hl_jto_momentum_score_history.jsonl')
 if _jto:
     _m15 = ((_jto.get('metrics') or {}).get('15m') or {})
@@ -1603,6 +1615,7 @@ data = {
         "heartbeats_today": 0,  # TODO: count from logs
         "changes": _pevents.get("3", []),
         "strategy_branches": p3_strategy_branches,
+        "momentum_episode_summary": p3_momentum_episode_summary,
         "canonical_paper_audit": _hl_canonical_paper_audit,
         "paper_health": _p3_paper_health,
         "short_aligned_binance_replay": _short_aligned_replay,
