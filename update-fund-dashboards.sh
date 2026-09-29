@@ -2,6 +2,9 @@
 # Update BTC analysis on fund1-dashboard and mcfund-dashboard
 # Runs daily via cron at 08:00 UTC
 
+node /home/ubuntu/clawd/agents/polymarket/fund1-dashboard/scripts/validate-fund-dashboard.mjs \
+  /home/ubuntu/clawd/agents/polymarket/fund1-dashboard/index.html || exit 1
+
 python3 << 'PYEOF'
 import requests, json, datetime, re, os
 
@@ -173,6 +176,9 @@ update_dashboard(MCFUND)
 
 print(f"BTC ${price:,.0f} ({change_pct:+.1f}%) | Bias: {bias} | F&G: {fear_greed} | RSI: {rsi:.0f}")
 PYEOF
+
+node /home/ubuntu/clawd/agents/polymarket/fund1-dashboard/scripts/validate-fund-dashboard.mjs \
+  /home/ubuntu/clawd/agents/polymarket/fund1-dashboard/index.html || exit 1
 
 # Push to GitHub
 cd /home/ubuntu/clawd/agents/polymarket/fund1-dashboard
