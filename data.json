@@ -1,26 +1,26 @@
 {
-  "timestamp": "2026-10-05T16:02:37.393627+00:00",
+  "timestamp": "2026-10-05T16:16:27.487109+00:00",
   "pm_balance": 0.0,
-  "hl_balance": 92.160922,
+  "hl_balance": 92.097712,
   "today_pnl": 0,
   "pm_pnl": -1009.32,
-  "hl_pnl": -298.84,
+  "hl_pnl": -298.9,
   "today_trades": 0,
   "today_wins": 0,
   "today_losses": 0,
-  "all_time_pnl": -1308.16,
+  "all_time_pnl": -1308.22,
   "total_trades": 273,
   "days_active": 204,
   "pm_bot_running": false,
   "hl_bot_running": false,
   "hl_wallet_alignment": {
     "configured_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
-    "configured_balance": 92.160922,
+    "configured_balance": 92.097712,
     "reference_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
     "reference_balance": null,
     "min_funded_balance": 10.0,
     "misaligned": false,
-    "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$92.16"
+    "message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$92.10"
   },
   "hl_positions": [
     {
@@ -28,7 +28,7 @@
       "side": "LONG",
       "size": 0.00294,
       "entry": 64570.0,
-      "pnl": 60.61104,
+      "pnl": 60.54783,
       "leverage": 10,
       "wallet": "new"
     }
@@ -106,11 +106,11 @@
     "summary_state": "bearish_disagreement",
     "summary_text": "Bearish disagreement regime in copy flow \u2014 lagging source",
     "source_scan_time": "2026-07-24T05:58:15.840663+00:00",
-    "source_age_minutes": 105724.4,
+    "source_age_minutes": 105738.2,
     "lag_risk": true,
     "recent_strong_regime": "bearish_crowded_expensive",
     "recent_strong_regime_seen_at": "2026-07-22T01:59:12.118720+00:00",
-    "recent_strong_regime_age_minutes": 108843.4,
+    "recent_strong_regime_age_minutes": 108857.3,
     "recent_strong_regime_source_scan_time": "2026-07-20T05:58:56.433298+00:00",
     "disagreement_regime": true,
     "bearish_disagreement_regime": true,
@@ -141,61 +141,59 @@
       },
       {
         "source": "Copy Transition",
-        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 108843.4m ago"
+        "text": "\ud83d\udd58 last stronger regime bearish_crowded_expensive seen 108857.3m ago"
       },
       {
         "source": "Copy Freshness",
-        "text": "\u23f1\ufe0f source scan age: 105724.4m \u2014 lag risk"
+        "text": "\u23f1\ufe0f source scan age: 105738.2m \u2014 lag risk"
       }
     ],
     "copy_gate_summary": {
-      "posture": "DEFENSIVE",
-      "blockers": [
-        "sol_hard_defensive"
-      ],
+      "posture": "MIXED_OR_SUPPORTIVE",
+      "blockers": [],
       "ex_auros_core": {
         "BTC": {
-          "long_count": 1,
-          "short_count": 4,
-          "long_notional": 38639328.0,
-          "short_notional": 12297843.62,
-          "net_notional": 26341484.38
+          "long_count": 3,
+          "short_count": 2,
+          "long_notional": 41142486.34,
+          "short_notional": 10058196.78,
+          "net_notional": 31084289.55
         },
         "ETH": {
-          "long_count": 3,
+          "long_count": 2,
           "short_count": 4,
-          "long_notional": 94765797.47,
-          "short_notional": 65265922.13,
-          "net_notional": 29499875.34
+          "long_notional": 94812300.41,
+          "short_notional": 63944706.1,
+          "net_notional": 30867594.31
         },
         "SOL": {
-          "long_count": 1,
-          "short_count": 4,
-          "long_notional": 4044549.31,
-          "short_notional": 15058899.67,
-          "net_notional": -11014350.37
+          "long_count": 2,
+          "short_count": 3,
+          "long_notional": 4118557.92,
+          "short_notional": 13556749.08,
+          "net_notional": -9438191.17
         },
         "HYPE": {
-          "long_count": 4,
-          "short_count": 2,
-          "long_notional": 16649577.63,
-          "short_notional": 8237378.06,
-          "net_notional": 8412199.57
+          "long_count": 3,
+          "short_count": 3,
+          "long_notional": 16824472.33,
+          "short_notional": 7801070.22,
+          "net_notional": 9023402.11
         }
       },
       "relaxation_progress": {
         "btc_ex_auros_net_positive": true,
-        "sol_ex_auros_net_gt_minus_10m": false,
+        "sol_ex_auros_net_gt_minus_10m": true,
         "eth_not_near_unanimous_short": true,
         "hype_ex_auros_net_nonnegative": true
       },
       "relaxation_gaps": {
         "btc_net_gap_to_positive": 0,
-        "sol_gap_to_minus_10m": 1014350.37,
+        "sol_gap_to_minus_10m": 0,
         "hype_gap_to_nonnegative": 0,
-        "eth_short_notional_remaining": 65265922.13
+        "eth_short_notional_remaining": 63944706.1
       },
-      "relaxation_score": 3,
+      "relaxation_score": 4,
       "requires_to_relax": [
         "BTC ex-Auros net > 0",
         "SOL ex-Auros net > -$10M",
@@ -205,14 +203,13 @@
     "copy_relaxation_ledger": {
       "blockers": [
         "ecb6_btc_short_below_2m",
-        "pm_copy_confidence_above_50_and_fresh",
-        "sol_ex_auros_not_hard_defensive"
+        "pm_copy_confidence_above_50_and_fresh"
       ],
       "btc_ex_auros_clearance": {
-        "cushion_usd": 26341484.38,
+        "cushion_usd": 31084289.55,
         "fragile": false,
         "interpretation": "positive ex-Auros BTC below cushion or without persistence is not copy-risk clearance",
-        "positive_streak": 459,
+        "positive_streak": 460,
         "required_cushion_usd": 250000,
         "required_positive_streak": 2,
         "state": "DURABLE_POSITIVE"
@@ -224,73 +221,73 @@
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 38639328.0,
+              "notional": 38724660.0,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 8048678.52,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
-              "name": "beatmaker1@proton.me",
-              "notional": 1995896.79,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
-              "name": "anon-0xfc66",
-              "notional": 1255068.39,
+              "notional": 8546406.72,
               "side": "SHORT"
             },
             {
               "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
               "name": "anon-0xf5d8",
-              "notional": 998199.91,
+              "notional": 2396909.34,
+              "side": "LONG"
+            },
+            {
+              "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
+              "name": "anon-0xfc66",
+              "notional": 1511790.06,
               "side": "SHORT"
+            },
+            {
+              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
+              "name": "beatmaker1@proton.me",
+              "notional": 20917.0,
+              "side": "LONG"
             }
           ],
-          "long_count": 1,
-          "long_notional": 38639328.0,
-          "net_notional": 26341484.38,
-          "short_count": 4,
-          "short_notional": 12297843.62
+          "long_count": 3,
+          "long_notional": 41142486.34,
+          "net_notional": 31084289.55,
+          "short_count": 2,
+          "short_notional": 10058196.78
         },
         "DOGE": {
           "largest": [
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 5288384.51,
+              "notional": 5383005.36,
               "side": "SHORT"
             },
             {
               "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
               "name": "anon-0xf5d8",
-              "notional": 1939.15,
+              "notional": 2956.18,
               "side": "LONG"
             }
           ],
           "long_count": 1,
-          "long_notional": 1939.15,
-          "net_notional": -5286445.36,
+          "long_notional": 2956.18,
+          "net_notional": -5380049.18,
           "short_count": 1,
-          "short_notional": 5288384.51
+          "short_notional": 5383005.36
         },
         "ETH": {
           "largest": [
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 93969205.0,
+              "notional": 94710528.0,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 35745664.58,
+              "notional": 33884923.64,
               "side": "SHORT"
             },
             {
@@ -302,40 +299,40 @@
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 6549052.62,
+              "notional": 6350527.33,
               "side": "SHORT"
             },
             {
-              "addr": "0xc926ddba8b7617dbc65712f20cf8e1b58b8598d3",
-              "name": "anon-0xc926",
-              "notional": 689386.19,
-              "side": "LONG"
+              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
+              "name": "beatmaker1@proton.me",
+              "notional": 975689.94,
+              "side": "SHORT"
             }
           ],
-          "long_count": 3,
-          "long_notional": 94765797.47,
-          "net_notional": 29499875.34,
+          "long_count": 2,
+          "long_notional": 94812300.41,
+          "net_notional": 30867594.31,
           "short_count": 4,
-          "short_notional": 65265922.13
+          "short_notional": 63944706.1
         },
         "HYPE": {
           "largest": [
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 14278056.9,
+              "notional": 14233157.35,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 7718491.8,
+              "notional": 7222476.33,
               "side": "SHORT"
             },
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 1927364.87,
+              "notional": 2488371.66,
               "side": "LONG"
             },
             {
@@ -345,17 +342,17 @@
               "side": "SHORT"
             },
             {
-              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
-              "name": "beatmaker1@proton.me",
-              "notional": 393391.03,
+              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+              "name": "anon-0xf5d8",
+              "notional": 102943.32,
               "side": "LONG"
             }
           ],
-          "long_count": 4,
-          "long_notional": 16649577.63,
-          "net_notional": 8412199.57,
-          "short_count": 2,
-          "short_notional": 8237378.06
+          "long_count": 3,
+          "long_notional": 16824472.33,
+          "net_notional": 9023402.11,
+          "short_count": 3,
+          "short_notional": 7801070.22
         },
         "SOL": {
           "largest": [
@@ -368,33 +365,33 @@
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 6276570.21,
+              "notional": 5731301.21,
               "side": "SHORT"
             },
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 4044549.31,
+              "notional": 4034342.23,
+              "side": "LONG"
+            },
+            {
+              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+              "name": "anon-0xf5d8",
+              "notional": 84215.68,
               "side": "LONG"
             },
             {
               "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
               "name": "beatmaker1@proton.me",
-              "notional": 955288.19,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
-              "name": "anon-0xf5d8",
-              "notional": 26318.16,
+              "notional": 24724.76,
               "side": "SHORT"
             }
           ],
-          "long_count": 1,
-          "long_notional": 4044549.31,
-          "net_notional": -11014350.37,
-          "short_count": 4,
-          "short_notional": 15058899.67
+          "long_count": 2,
+          "long_notional": 4118557.92,
+          "net_notional": -9438191.17,
+          "short_count": 3,
+          "short_notional": 13556749.08
         }
       },
       "doge_decision": "separate from BTC relaxation; do not let DOGE-only replay evidence clear SOL/ETH/BTC copy risk",
@@ -405,73 +402,73 @@
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 38639328.0,
+              "notional": 38724660.0,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 8048678.52,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
-              "name": "beatmaker1@proton.me",
-              "notional": 1995896.79,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
-              "name": "anon-0xfc66",
-              "notional": 1255068.39,
+              "notional": 8546406.72,
               "side": "SHORT"
             },
             {
               "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
               "name": "anon-0xf5d8",
-              "notional": 998199.91,
+              "notional": 2396909.34,
+              "side": "LONG"
+            },
+            {
+              "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
+              "name": "anon-0xfc66",
+              "notional": 1511790.06,
               "side": "SHORT"
+            },
+            {
+              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
+              "name": "beatmaker1@proton.me",
+              "notional": 20917.0,
+              "side": "LONG"
             }
           ],
-          "long_count": 1,
-          "long_notional": 38639328.0,
-          "net_notional": 26341484.38,
-          "short_count": 4,
-          "short_notional": 12297843.62
+          "long_count": 3,
+          "long_notional": 41142486.34,
+          "net_notional": 31084289.55,
+          "short_count": 2,
+          "short_notional": 10058196.78
         },
         "DOGE": {
           "largest": [
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 5288384.51,
+              "notional": 5383005.36,
               "side": "SHORT"
             },
             {
               "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
               "name": "anon-0xf5d8",
-              "notional": 1939.15,
+              "notional": 2956.18,
               "side": "LONG"
             }
           ],
           "long_count": 1,
-          "long_notional": 1939.15,
-          "net_notional": -5286445.36,
+          "long_notional": 2956.18,
+          "net_notional": -5380049.18,
           "short_count": 1,
-          "short_notional": 5288384.51
+          "short_notional": 5383005.36
         },
         "ETH": {
           "largest": [
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 93969205.0,
+              "notional": 94710528.0,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 35745664.58,
+              "notional": 33884923.64,
               "side": "SHORT"
             },
             {
@@ -483,40 +480,40 @@
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 6549052.62,
+              "notional": 6350527.33,
               "side": "SHORT"
             },
             {
-              "addr": "0xc926ddba8b7617dbc65712f20cf8e1b58b8598d3",
-              "name": "anon-0xc926",
-              "notional": 689386.19,
-              "side": "LONG"
+              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
+              "name": "beatmaker1@proton.me",
+              "notional": 975689.94,
+              "side": "SHORT"
             }
           ],
-          "long_count": 3,
-          "long_notional": 94765797.47,
-          "net_notional": 29499875.34,
+          "long_count": 2,
+          "long_notional": 94812300.41,
+          "net_notional": 30867594.31,
           "short_count": 4,
-          "short_notional": 65265922.13
+          "short_notional": 63944706.1
         },
         "HYPE": {
           "largest": [
             {
               "addr": "0x020ca66c30bec2c4fe3861a94e4db4a498a35872",
               "name": "MachiBigBrother",
-              "notional": 14278056.9,
+              "notional": 14233157.35,
               "side": "LONG"
             },
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 7718491.8,
+              "notional": 7222476.33,
               "side": "SHORT"
             },
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 1927364.87,
+              "notional": 2488371.66,
               "side": "LONG"
             },
             {
@@ -526,17 +523,17 @@
               "side": "SHORT"
             },
             {
-              "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
-              "name": "beatmaker1@proton.me",
-              "notional": 393391.03,
+              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+              "name": "anon-0xf5d8",
+              "notional": 102943.32,
               "side": "LONG"
             }
           ],
-          "long_count": 4,
-          "long_notional": 16649577.63,
-          "net_notional": 8412199.57,
-          "short_count": 2,
-          "short_notional": 8237378.06
+          "long_count": 3,
+          "long_notional": 16824472.33,
+          "net_notional": 9023402.11,
+          "short_count": 3,
+          "short_notional": 7801070.22
         },
         "SOL": {
           "largest": [
@@ -549,37 +546,37 @@
             {
               "addr": "0xecb63caa47c7c4e77f60f1ce858cf28dc2b82b00",
               "name": "anon-0xecb6",
-              "notional": 6276570.21,
+              "notional": 5731301.21,
               "side": "SHORT"
             },
             {
               "addr": "0xfc667adba8d4837586078f4fdcdc29804337ca06",
               "name": "anon-0xfc66",
-              "notional": 4044549.31,
+              "notional": 4034342.23,
+              "side": "LONG"
+            },
+            {
+              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
+              "name": "anon-0xf5d8",
+              "notional": 84215.68,
               "side": "LONG"
             },
             {
               "addr": "0x7b7f72a28fe109fa703eeed7984f2a8a68fedee2",
               "name": "beatmaker1@proton.me",
-              "notional": 955288.19,
-              "side": "SHORT"
-            },
-            {
-              "addr": "0xf5d81a135f756ca16544e53c20fc20643ec3ad53",
-              "name": "anon-0xf5d8",
-              "notional": 26318.16,
+              "notional": 24724.76,
               "side": "SHORT"
             }
           ],
-          "long_count": 1,
-          "long_notional": 4044549.31,
-          "net_notional": -11014350.37,
-          "short_count": 4,
-          "short_notional": 15058899.67
+          "long_count": 2,
+          "long_notional": 4118557.92,
+          "net_notional": -9438191.17,
+          "short_count": 3,
+          "short_notional": 13556749.08
         }
       },
       "full_relaxation_pass": false,
-      "gate_score": 5,
+      "gate_score": 6,
       "gate_total": 8,
       "gates": {
         "btc_ex_auros_net_above_0": true,
@@ -588,7 +585,7 @@
         "fc66_btc_short_below_5m": true,
         "hype_ex_auros_not_defensive": true,
         "pm_copy_confidence_above_50_and_fresh": false,
-        "sol_ex_auros_not_hard_defensive": false,
+        "sol_ex_auros_not_hard_defensive": true,
         "total_btc_net_above_0": true
       },
       "pm_copy": {
@@ -597,18 +594,18 @@
         "data_quality": "fresh",
         "fresh": false,
         "market_bias": "bearish",
-        "source_age_minutes": 105724.8
+        "source_age_minutes": 105738.7
       },
-      "timestamp": "2026-10-05T16:03:06.213050+00:00",
+      "timestamp": "2026-10-05T16:16:59.325123+00:00",
       "tracked_wallets": {
         "ecb6_btc": {
           "name": "anon-0xecb6",
-          "notional": 8048678.52,
+          "notional": 8546406.72,
           "side": "SHORT"
         },
         "fc66_btc": {
           "name": "anon-0xfc66",
-          "notional": 1255068.39,
+          "notional": 1511790.06,
           "side": "SHORT"
         }
       }
@@ -617,56 +614,80 @@
       "current": {
         "blockers": [
           "ecb6_btc_short_below_2m",
-          "pm_copy_confidence_above_50_and_fresh",
-          "sol_ex_auros_not_hard_defensive"
+          "pm_copy_confidence_above_50_and_fresh"
         ],
-        "btc_net": 26341484.38,
-        "cross_asset_hedge_net": 26897724.54,
-        "dispersion_net": 53239208.92,
+        "btc_net": 31084289.55,
+        "cross_asset_hedge_net": 30452805.25,
+        "dispersion_net": 61537094.8,
         "ecb6_btc": {
           "name": "anon-0xecb6",
-          "notional": 8048678.52,
+          "notional": 8546406.72,
           "side": "SHORT"
         },
-        "eth_net": 29499875.34,
+        "eth_net": 30867594.31,
         "fc66_btc": {
           "name": "anon-0xfc66",
-          "notional": 1255068.39,
+          "notional": 1511790.06,
           "side": "SHORT"
         },
-        "gate_score": 5,
+        "gate_score": 6,
         "gate_total": 8,
-        "hedge_to_btc_ratio": 1.0211,
-        "hype_net": 8412199.57,
+        "hedge_to_btc_ratio": 0.9797,
+        "hype_net": 9023402.11,
         "pm_copy": {
           "confidence": 50.0,
           "copy_scan_time": "2026-07-24T05:58:15.840663+00:00",
           "data_quality": "fresh",
           "fresh": false,
           "market_bias": "bearish",
-          "source_age_minutes": 105724.8
+          "source_age_minutes": 105738.7
         },
-        "sol_net": -11014350.37,
+        "sol_net": -9438191.17,
         "state": "BROAD_COPY_SUPPORT",
-        "timestamp": "2026-10-05T16:03:06.213050+00:00"
+        "timestamp": "2026-10-05T16:16:59.325123+00:00"
       },
       "decision_rule": "BTC net support only relaxes copy risk when dispersion_net >= 0 or cross-asset blockers clear; hard dispersion means BTC-long/alt-short pair pressure, not broad risk-on.",
       "delta": {
-        "btc_net": 0.0,
-        "cross_asset_hedge_net": 0.0,
-        "dispersion_net": 0.0,
-        "eth_net": 0.0,
-        "hype_net": 0.0,
-        "sol_net": 0.0
+        "btc_net": 4742805.17,
+        "cross_asset_hedge_net": 3555080.71,
+        "dispersion_net": 8297885.88,
+        "eth_net": 1367718.97,
+        "hype_net": 611202.54,
+        "sol_net": 1576159.2
       },
-      "generated_at": "2026-10-05T16:03:07.573340+00:00",
+      "generated_at": "2026-10-05T16:17:01.904394+00:00",
       "hedge_rotation": {
         "adverse_rotation_ratio": null,
-        "alt_short_added": 0.0,
-        "blocker_reasons": [],
+        "alt_short_added": 94620.85,
+        "blocker_reasons": [
+          {
+            "coin": "BTC",
+            "current_short": 8546406.72,
+            "previous_short": 8048678.52,
+            "reason": "BTC_SHORT_EXPANDED",
+            "short_added": 497728.2,
+            "wallet": "anon-0xecb6"
+          },
+          {
+            "coin": "DOGE",
+            "current_short": 5383005.36,
+            "previous_short": 5288384.51,
+            "reason": "ALT_SHORT_ADDED_DURING_BTC_REPAIR_CHECK",
+            "short_added": 94620.85,
+            "wallet": "anon-0xecb6"
+          },
+          {
+            "coin": "BTC",
+            "current_short": 1511790.06,
+            "previous_short": 1255068.39,
+            "reason": "BTC_SHORT_EXPANDED",
+            "short_added": 256721.67,
+            "wallet": "anon-0xfc66"
+          }
+        ],
         "blocker_threshold": 0.25,
-        "blocks_btc_cover_repair": false,
-        "btc_short_added": 0.0,
+        "blocks_btc_cover_repair": true,
+        "btc_short_added": 754449.87,
         "btc_short_covered": 0.0,
         "interpretation": "BTC short cover is not copy repair when more than 25% of covered BTC short is re-added as ETH/SOL/HYPE/DOGE short exposure.",
         "wallets": [
@@ -674,30 +695,30 @@
             "adverse_rotation_ratio": null,
             "alt_detail": {
               "DOGE": {
-                "current_short": 5288384.51,
+                "current_short": 5383005.36,
                 "previous_short": 5288384.51,
-                "short_added": 0.0
+                "short_added": 94620.85
               },
               "ETH": {
-                "current_short": 35745664.58,
+                "current_short": 33884923.64,
                 "previous_short": 35745664.58,
                 "short_added": 0.0
               },
               "HYPE": {
-                "current_short": 7718491.8,
+                "current_short": 7222476.33,
                 "previous_short": 7718491.8,
                 "short_added": 0.0
               },
               "SOL": {
-                "current_short": 6276570.21,
+                "current_short": 5731301.21,
                 "previous_short": 6276570.21,
                 "short_added": 0.0
               }
             },
-            "alt_short_added": 0.0,
-            "btc_current_short": 8048678.52,
+            "alt_short_added": 94620.85,
+            "btc_current_short": 8546406.72,
             "btc_previous_short": 8048678.52,
-            "btc_short_added": 0.0,
+            "btc_short_added": 497728.2,
             "btc_short_covered": 0.0,
             "wallet": "anon-0xecb6"
           },
@@ -710,7 +731,7 @@
                 "short_added": 0.0
               },
               "ETH": {
-                "current_short": 6549052.62,
+                "current_short": 6350527.33,
                 "previous_short": 6549052.62,
                 "short_added": 0.0
               },
@@ -726,9 +747,9 @@
               }
             },
             "alt_short_added": 0.0,
-            "btc_current_short": 1255068.39,
+            "btc_current_short": 1511790.06,
             "btc_previous_short": 1255068.39,
-            "btc_short_added": 0.0,
+            "btc_short_added": 256721.67,
             "btc_short_covered": 0.0,
             "wallet": "anon-0xfc66"
           }
@@ -764,11 +785,11 @@
           "data_quality": "fresh",
           "fresh": false,
           "market_bias": "bearish",
-          "source_age_minutes": 105709.4
+          "source_age_minutes": 105724.8
         },
         "sol_net": -11014350.37,
         "state": "BROAD_COPY_SUPPORT",
-        "timestamp": "2026-10-05T15:47:41.428914+00:00"
+        "timestamp": "2026-10-05T16:03:06.213050+00:00"
       }
     },
     "evolution": [
@@ -850,7 +871,7 @@
         "status": "DOWN",
         "trades": 1,
         "win_rate": 0,
-        "pnl": 60.61104,
+        "pnl": 60.54783,
         "sharpe": 0.0
       },
       {
@@ -990,10 +1011,10 @@
         "weekend_filter_share_recent_no_trade": 0.0
       },
       "outcome_freshness": {
-        "file_age_hours": 4340.46,
+        "file_age_hours": 4340.69,
         "file_mtime": "2026-04-07T19:35:15.677422+00:00",
         "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 4340.46,
+        "last_age_hours": 4340.69,
         "last_ts": "2026-04-07T19:35:15.678249+00:00",
         "rows": 201,
         "stale": true,
@@ -1006,7 +1027,7 @@
         "recent_trade_like_lines": 0,
         "recent_weekend_filter_lines": 0,
         "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 202216.0,
+        "trading_log_age_minutes": 202229.9,
         "trading_log_exists": true
       },
       "alpha_context_status": "READY_AWAITING_NEW_REALIZED_ROWS",
@@ -1609,8 +1630,8 @@
             "top_date": "2026-09-30",
             "top_date_rows": 24
           },
-          "days_since_last_03utc_source": 0.5,
-          "days_since_last_realized_outcome": 180.85,
+          "days_since_last_03utc_source": 0.51,
+          "days_since_last_realized_outcome": 180.86,
           "diff_vs_previous": {
             "common_gate_distinct_dates_delta": 0.0,
             "common_gate_rows_delta": 0.0,
@@ -1621,8 +1642,8 @@
             "new_distinct_03utc_date": false,
             "new_post_retirement_realized_rows": false,
             "post_retirement_realized_rows_delta": 0.0,
-            "previous_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1547.json",
-            "source_age_hours_delta": 0.25
+            "previous_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1602.json",
+            "source_age_hours_delta": 0.23
           },
           "direction_concentration_audit": {
             "blocker": false,
@@ -1701,26 +1722,26 @@
             "top_direction_share": 0.6487
           },
           "post_retirement_realized_rows": 0,
-          "source_age_hours": 11.96,
+          "source_age_hours": 12.19,
           "source_freshness_classes": {
             "classes": {
               "hour_gate_outcomes": {
-                "age_days": 180.85,
-                "age_hours": 4340.46,
+                "age_days": 180.86,
+                "age_hours": 4340.69,
                 "role": "hour-gate scorer realized outcome feed",
                 "rows": 201,
                 "state": "STALE"
               },
               "realized_outcomes": {
-                "age_days": 180.85,
-                "age_hours": 4340.46,
+                "age_days": 180.86,
+                "age_hours": 4340.69,
                 "role": "canonical Smart Entry realized outcome labels",
                 "rows": 201,
                 "state": "STALE"
               },
               "shadow_proxy": {
-                "age_days": 0.5,
-                "age_hours": 11.96,
+                "age_days": 0.51,
+                "age_hours": 12.19,
                 "role": "03 UTC shadow proxy replay labels, not realized fills",
                 "rows": 1178,
                 "state": "FRESH"
@@ -1744,16 +1765,16 @@
           },
           "zero_realized_streak": {
             "active": true,
-            "consecutive_runs": 4975,
-            "interpretation": "Zero post-retirement realized rows for 4975 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
+            "consecutive_runs": 4976,
+            "interpretation": "Zero post-retirement realized rows for 4976 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
             "last_nonzero": null,
-            "prior_history_rows_checked": 4974,
+            "prior_history_rows_checked": 4975,
             "prior_zero_timestamps_sample": [
+              "2026-10-05T16:02:44.965106+00:00",
               "2026-10-05T15:47:20.934310+00:00",
               "2026-10-05T15:31:08.329030+00:00",
               "2026-10-05T15:16:45.829359+00:00",
-              "2026-10-05T15:03:12.273585+00:00",
-              "2026-10-05T14:47:02.915883+00:00"
+              "2026-10-05T15:03:12.273585+00:00"
             ],
             "since_timestamp": "2026-05-29T05:58:12.558720+00:00",
             "state": "REALIZED_FROZEN"
@@ -1780,21 +1801,21 @@
         },
         "zero_realized_streak": {
           "active": true,
-          "consecutive_runs": 4975,
-          "interpretation": "Zero post-retirement realized rows for 4975 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
+          "consecutive_runs": 4976,
+          "interpretation": "Zero post-retirement realized rows for 4976 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
           "last_nonzero": null,
-          "prior_history_rows_checked": 4974,
+          "prior_history_rows_checked": 4975,
           "prior_zero_timestamps_sample": [
+            "2026-10-05T16:02:44.965106+00:00",
             "2026-10-05T15:47:20.934310+00:00",
             "2026-10-05T15:31:08.329030+00:00",
             "2026-10-05T15:16:45.829359+00:00",
-            "2026-10-05T15:03:12.273585+00:00",
-            "2026-10-05T14:47:02.915883+00:00"
+            "2026-10-05T15:03:12.273585+00:00"
           ],
           "since_timestamp": "2026-05-29T05:58:12.558720+00:00",
           "state": "REALIZED_FROZEN"
         },
-        "latest_gate_health_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1602.json",
+        "latest_gate_health_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1616.json",
         "promotion_gate": {
           "best_proxy_band": "45_70",
           "blockers": [
@@ -2143,10 +2164,10 @@
       "min_good_wr": 60.0,
       "min_realized_n": 10,
       "outcome_freshness": {
-        "file_age_hours": 4340.46,
+        "file_age_hours": 4340.69,
         "file_mtime": "2026-04-07T19:35:15.677422+00:00",
         "first_ts": "2026-03-20T15:10:16.013540+00:00",
-        "last_age_hours": 4340.46,
+        "last_age_hours": 4340.69,
         "last_ts": "2026-04-07T19:35:15.678249+00:00",
         "rows": 201,
         "stale": true,
@@ -2159,7 +2180,7 @@
         "recent_trade_like_lines": 0,
         "recent_weekend_filter_lines": 0,
         "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log",
-        "trading_log_age_minutes": 202216.0,
+        "trading_log_age_minutes": 202229.9,
         "trading_log_exists": true
       },
       "reason": "hour scorer is research-only; realized data still old/thin for 19/20, outside-hour labels are unavailable, and alpha-context split waits for new realized rows",
@@ -2804,7 +2825,7 @@
       "source_outcome_rows": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
       "source_quality": "/home/ubuntu/clawd/research/pm_outcome_quality_bias_score.json",
       "source_shadow": "/home/ubuntu/clawd/research/pm_outside_shadow_watch.json",
-      "timestamp": "2026-10-05T16:02:44.626686+00:00"
+      "timestamp": "2026-10-05T16:16:35.138378+00:00"
     },
     "label_collector": {
       "by_alpha_classifier": {
@@ -3065,7 +3086,7 @@
       "source_alpha_history": "/home/ubuntu/clawd/research/alpha-signals-history.jsonl",
       "source_realized": "/home/ubuntu/clawd/polymarket-assistant/confidence_outcomes.jsonl",
       "source_shadow_03": "/home/ubuntu/clawd/data/03h-shadow-sim-results.csv",
-      "timestamp": "2026-10-05T16:02:44.842224+00:00",
+      "timestamp": "2026-10-05T16:16:35.358224+00:00",
       "totals": {
         "alpha_context_labels": 1178,
         "labels": 1379,
@@ -3804,8 +3825,8 @@
           "top_date": "2026-09-30",
           "top_date_rows": 24
         },
-        "days_since_last_03utc_source": 0.5,
-        "days_since_last_realized_outcome": 180.85,
+        "days_since_last_03utc_source": 0.51,
+        "days_since_last_realized_outcome": 180.86,
         "diff_vs_previous": {
           "common_gate_distinct_dates_delta": 0.0,
           "common_gate_rows_delta": 0.0,
@@ -3816,8 +3837,8 @@
           "new_distinct_03utc_date": false,
           "new_post_retirement_realized_rows": false,
           "post_retirement_realized_rows_delta": 0.0,
-          "previous_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1547.json",
-          "source_age_hours_delta": 0.25
+          "previous_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1602.json",
+          "source_age_hours_delta": 0.23
         },
         "direction_concentration_audit": {
           "blocker": false,
@@ -3896,26 +3917,26 @@
           "top_direction_share": 0.6487
         },
         "post_retirement_realized_rows": 0,
-        "source_age_hours": 11.96,
+        "source_age_hours": 12.19,
         "source_freshness_classes": {
           "classes": {
             "hour_gate_outcomes": {
-              "age_days": 180.85,
-              "age_hours": 4340.46,
+              "age_days": 180.86,
+              "age_hours": 4340.69,
               "role": "hour-gate scorer realized outcome feed",
               "rows": 201,
               "state": "STALE"
             },
             "realized_outcomes": {
-              "age_days": 180.85,
-              "age_hours": 4340.46,
+              "age_days": 180.86,
+              "age_hours": 4340.69,
               "role": "canonical Smart Entry realized outcome labels",
               "rows": 201,
               "state": "STALE"
             },
             "shadow_proxy": {
-              "age_days": 0.5,
-              "age_hours": 11.96,
+              "age_days": 0.51,
+              "age_hours": 12.19,
               "role": "03 UTC shadow proxy replay labels, not realized fills",
               "rows": 1178,
               "state": "FRESH"
@@ -3939,22 +3960,22 @@
         },
         "zero_realized_streak": {
           "active": true,
-          "consecutive_runs": 4975,
-          "interpretation": "Zero post-retirement realized rows for 4975 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
+          "consecutive_runs": 4976,
+          "interpretation": "Zero post-retirement realized rows for 4976 consecutive comparator runs; proxy replay cannot drive a Smart Entry tune.",
           "last_nonzero": null,
-          "prior_history_rows_checked": 4974,
+          "prior_history_rows_checked": 4975,
           "prior_zero_timestamps_sample": [
+            "2026-10-05T16:02:44.965106+00:00",
             "2026-10-05T15:47:20.934310+00:00",
             "2026-10-05T15:31:08.329030+00:00",
             "2026-10-05T15:16:45.829359+00:00",
-            "2026-10-05T15:03:12.273585+00:00",
-            "2026-10-05T14:47:02.915883+00:00"
+            "2026-10-05T15:03:12.273585+00:00"
           ],
           "since_timestamp": "2026-05-29T05:58:12.558720+00:00",
           "state": "REALIZED_FROZEN"
         }
       },
-      "latest_gate_health_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1602.json",
+      "latest_gate_health_artifact": "/home/ubuntu/clawd/research/p2-smart-entry-gate-health-2026-10-05-1616.json",
       "post_retirement_realized_rows": 0,
       "promotion_gate": {
         "best_proxy_band": "45_70",
@@ -3972,7 +3993,7 @@
         "ready": false
       },
       "source_labels": "/home/ubuntu/clawd/research/pm_smart_entry_labels.jsonl",
-      "timestamp": "2026-10-05T16:02:44.965106+00:00"
+      "timestamp": "2026-10-05T16:16:35.546887+00:00"
     },
     "shadow_03_acquisition_gap": {
       "blockers": [
@@ -4520,7 +4541,7 @@
         "trading_log": "/home/ubuntu/clawd/polymarket-assistant/trading.log"
       },
       "task": "P2 non-live 03 UTC Smart Entry acquisition-gap audit",
-      "timestamp": "2026-10-05T16:02:47.810884+00:00"
+      "timestamp": "2026-10-05T16:16:38.699419+00:00"
     }
   },
   "pillar3": {
@@ -4667,8 +4688,8 @@
           "canonical_rows": 817,
           "execution_rows_excluded": 396,
           "exists": true,
-          "last_updated": "2026-10-05T16:02:52.573129+00:00",
-          "latest_signal_age_minutes": 202217.6,
+          "last_updated": "2026-10-05T16:16:44.011893+00:00",
+          "latest_signal_age_minutes": 202231.5,
           "latest_signal_ts": "2026-05-18T05:45:15.920692+00:00",
           "new_rows_since_previous_score": 0,
           "path": "/home/ubuntu/clawd/research/hl_canonical_paper_signals.jsonl",
@@ -5099,8 +5120,8 @@
           "canonical_rows": 817,
           "execution_rows_excluded": 396,
           "exists": true,
-          "last_updated": "2026-10-05T16:02:52.573129+00:00",
-          "latest_signal_age_minutes": 202217.7,
+          "last_updated": "2026-10-05T16:16:44.011893+00:00",
+          "latest_signal_age_minutes": 202231.6,
           "latest_signal_ts": "2026-05-18T05:45:15.920692+00:00",
           "new_rows_since_previous_score": 0,
           "path": "/home/ubuntu/clawd/research/hl_canonical_paper_signals.jsonl",
@@ -5142,10 +5163,10 @@
         "avg_30m": null,
         "latest_candidate_ts": null,
         "setup_freshness_audit": {
-          "days_since_latest_known_candidate": 20.06,
+          "days_since_latest_known_candidate": 20.07,
           "decision_priority": "block_before_wr_or_rxe_discussion",
           "hours_since_current_run_candidate": null,
-          "hours_since_latest_known_candidate": 481.55,
+          "hours_since_latest_known_candidate": 481.78,
           "interpretation": "strict setup has not refreshed inside 48h; treat positive replay averages as stale cluster evidence",
           "label": "STALE_SETUP_CLUSTER",
           "latest_candidate_ts_current_run": null,
@@ -5170,13 +5191,6 @@
           "last_nonzero_strict_candidate": null,
           "purpose": "show whether the P3 branch is failing at setup formation before WR/RXE review",
           "recent_tail": [
-            {
-              "candidate_rows": 0,
-              "local_range_windows": 944,
-              "market_down_setup_windows": 0,
-              "strict_candidate_rows": 0,
-              "timestamp": "2026-10-05T14:16:54.819849+00:00"
-            },
             {
               "candidate_rows": 0,
               "local_range_windows": 944,
@@ -5225,6 +5239,13 @@
               "market_down_setup_windows": 0,
               "strict_candidate_rows": 0,
               "timestamp": "2026-10-05T16:02:56.997147+00:00"
+            },
+            {
+              "candidate_rows": 0,
+              "local_range_windows": 934,
+              "market_down_setup_windows": 0,
+              "strict_candidate_rows": 0,
+              "timestamp": "2026-10-05T16:16:49.590304+00:00"
             }
           ],
           "runs_scored": 24,
@@ -5311,7 +5332,7 @@
             "DOGE": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 192,
+              "local_range_windows": 191,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -5320,7 +5341,7 @@
             "ETH": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 431,
+              "local_range_windows": 430,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -5329,7 +5350,7 @@
             "SOL": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 314,
+              "local_range_windows": 313,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -5431,7 +5452,7 @@
           "window": {
             "first_ts": "2026-06-01T12:45:00+00:00",
             "last_ts": "2026-08-28T10:00:00+00:00",
-            "latest_age_days": 38.25,
+            "latest_age_days": 38.26,
             "span_hours": 2109.25
           }
         },
@@ -5579,9 +5600,9 @@
                   "wr": 66.7
                 }
               },
-              "days_since_latest": 20.06,
+              "days_since_latest": 20.07,
               "first_ts": "2026-06-01T07:00:00+00:00",
-              "hours_since_latest": 481.55,
+              "hours_since_latest": 481.78,
               "latest_ts": "2026-09-15T14:30:00+00:00",
               "rows": 29,
               "stale_after_hours": 48.0,
@@ -5692,9 +5713,9 @@
                   "wr": 0.0
                 }
               },
-              "days_since_latest": 38.25,
+              "days_since_latest": 38.26,
               "first_ts": "2026-06-01T12:45:00+00:00",
-              "hours_since_latest": 918.05,
+              "hours_since_latest": 918.28,
               "latest_ts": "2026-08-28T10:00:00+00:00",
               "rows": 15,
               "stale_after_hours": 48.0,
@@ -5742,9 +5763,9 @@
                   "wr": 50.0
                 }
               },
-              "days_since_latest": 55.72,
+              "days_since_latest": 55.73,
               "first_ts": "2026-06-28T17:45:00+00:00",
-              "hours_since_latest": 1337.3,
+              "hours_since_latest": 1337.53,
               "latest_ts": "2026-08-10T22:45:00+00:00",
               "rows": 5,
               "stale_after_hours": 48.0,
@@ -5781,19 +5802,19 @@
           "by_coin": {
             "DOGE": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 481.55,
+              "hours_since_latest": 481.78,
               "latest_ts": "2026-09-15T14:30:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             },
             "ETH": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 918.05,
+              "hours_since_latest": 918.28,
               "latest_ts": "2026-08-28T10:00:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             },
             "SOL": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 1337.3,
+              "hours_since_latest": 1337.53,
               "latest_ts": "2026-08-10T22:45:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             }
@@ -5823,48 +5844,48 @@
         ],
         "diagnostics": {
           "evaluated_windows": 2592,
-          "local_range": 937,
+          "local_range": 934,
           "local_range_and_market_strong_trend": 19,
           "local_range_market_strong_down": 0,
           "local_range_market_strong_down_local_down": 0,
           "local_regime_counts": {
             "DOGE:MIXED": 88,
-            "DOGE:RANGE": 192,
+            "DOGE:RANGE": 191,
             "DOGE:STRONG_TREND": 198,
-            "DOGE:TREND": 386,
+            "DOGE:TREND": 387,
             "ETH:MIXED": 26,
-            "ETH:RANGE": 431,
+            "ETH:RANGE": 430,
             "ETH:STRONG_TREND": 75,
-            "ETH:TREND": 332,
+            "ETH:TREND": 333,
             "SOL:MIXED": 73,
-            "SOL:RANGE": 314,
+            "SOL:RANGE": 313,
             "SOL:STRONG_TREND": 130,
-            "SOL:TREND": 347
+            "SOL:TREND": 348
           },
           "market_dominant_counts": {
-            "DOWN": 1089,
-            "UP": 1503
+            "DOWN": 1092,
+            "UP": 1500
           },
           "market_regime_counts": {
             "MIXED": 36,
-            "RANGE": 1509,
+            "RANGE": 1506,
             "STRONG_TREND": 258,
-            "TREND": 789
+            "TREND": 792
           },
           "market_strong_trend": 258,
           "market_strong_trend_down": 108,
           "setup_funnel_by_coin": {
             "DOGE": {
               "evaluated_windows": 864,
-              "local_range": 192
+              "local_range": 191
             },
             "ETH": {
               "evaluated_windows": 864,
-              "local_range": 431
+              "local_range": 430
             },
             "SOL": {
               "evaluated_windows": 864,
-              "local_range": 314
+              "local_range": 313
             }
           }
         },
@@ -6400,7 +6421,7 @@
       "rows_last_7d": 0,
       "rows_total": 1240,
       "source_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
-      "timestamp": "2026-10-05T16:02:52.574704+00:00"
+      "timestamp": "2026-10-05T16:16:44.012986+00:00"
     },
     "paper_health": {
       "balance": 37.391639,
@@ -6409,11 +6430,11 @@
       "execution_mode": "notional_blocked",
       "last_cycle": null,
       "live_fresh": false,
-      "log_age_minutes": 202215.7,
+      "log_age_minutes": 202229.6,
       "min_order_notional_usd": 20.0,
       "no_signal_window": false,
       "order_notional_blocked": true,
-      "paper_age_minutes": 201962.4,
+      "paper_age_minutes": 201976.3,
       "paper_path": "/home/ubuntu/clawd/hyperliquid-trader/hl_paper_signals.jsonl",
       "paper_stale": true,
       "paper_stale_threshold_minutes": 120,
@@ -6425,9 +6446,9 @@
       "recent_30m_signal_lines": 0,
       "signal_tail": [],
       "signals_count": 1,
-      "state_age_minutes": 202215.7,
+      "state_age_minutes": 202229.6,
       "status": "INVESTIGATE_LIVE_STALE",
-      "timestamp": "2026-10-05T16:03:05.361033+00:00"
+      "timestamp": "2026-10-05T16:16:58.549869+00:00"
     },
     "short_aligned_binance_replay": {
       "by_coin_15m": {},
@@ -6514,7 +6535,7 @@
           "DOGE": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 192,
+            "local_range_windows": 191,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -6523,7 +6544,7 @@
           "ETH": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 431,
+            "local_range_windows": 430,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -6532,7 +6553,7 @@
           "SOL": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 314,
+            "local_range_windows": 313,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -6691,9 +6712,9 @@
                 "wr": 66.7
               }
             },
-            "days_since_latest": 20.06,
+            "days_since_latest": 20.07,
             "first_ts": "2026-06-01T07:00:00+00:00",
-            "hours_since_latest": 481.55,
+            "hours_since_latest": 481.78,
             "latest_ts": "2026-09-15T14:30:00+00:00",
             "rows": 29,
             "stale_after_hours": 48.0,
@@ -6804,9 +6825,9 @@
                 "wr": 0.0
               }
             },
-            "days_since_latest": 38.25,
+            "days_since_latest": 38.26,
             "first_ts": "2026-06-01T12:45:00+00:00",
-            "hours_since_latest": 918.05,
+            "hours_since_latest": 918.28,
             "latest_ts": "2026-08-28T10:00:00+00:00",
             "rows": 15,
             "stale_after_hours": 48.0,
@@ -6854,9 +6875,9 @@
                 "wr": 50.0
               }
             },
-            "days_since_latest": 55.72,
+            "days_since_latest": 55.73,
             "first_ts": "2026-06-28T17:45:00+00:00",
-            "hours_since_latest": 1337.3,
+            "hours_since_latest": 1337.53,
             "latest_ts": "2026-08-10T22:45:00+00:00",
             "rows": 5,
             "stale_after_hours": 48.0,
@@ -6967,7 +6988,7 @@
             "DOGE": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 192,
+              "local_range_windows": 191,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -6976,7 +6997,7 @@
             "ETH": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 431,
+              "local_range_windows": 430,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -6985,7 +7006,7 @@
             "SOL": {
               "dominant_failure_stage": "no_local_range_market_strong_down_setup",
               "evaluated_windows": 864,
-              "local_range_windows": 314,
+              "local_range_windows": 313,
               "market_down_setup_windows": 0,
               "no_setup_windows": true,
               "strict_candidate_rows": 0,
@@ -7144,9 +7165,9 @@
                   "wr": 66.7
                 }
               },
-              "days_since_latest": 20.06,
+              "days_since_latest": 20.07,
               "first_ts": "2026-06-01T07:00:00+00:00",
-              "hours_since_latest": 481.55,
+              "hours_since_latest": 481.78,
               "latest_ts": "2026-09-15T14:30:00+00:00",
               "rows": 29,
               "stale_after_hours": 48.0,
@@ -7257,9 +7278,9 @@
                   "wr": 0.0
                 }
               },
-              "days_since_latest": 38.25,
+              "days_since_latest": 38.26,
               "first_ts": "2026-06-01T12:45:00+00:00",
-              "hours_since_latest": 918.05,
+              "hours_since_latest": 918.28,
               "latest_ts": "2026-08-28T10:00:00+00:00",
               "rows": 15,
               "stale_after_hours": 48.0,
@@ -7307,9 +7328,9 @@
                   "wr": 50.0
                 }
               },
-              "days_since_latest": 55.72,
+              "days_since_latest": 55.73,
               "first_ts": "2026-06-28T17:45:00+00:00",
-              "hours_since_latest": 1337.3,
+              "hours_since_latest": 1337.53,
               "latest_ts": "2026-08-10T22:45:00+00:00",
               "rows": 5,
               "stale_after_hours": 48.0,
@@ -7489,7 +7510,7 @@
           "window": {
             "first_ts": "2026-06-01T12:45:00+00:00",
             "last_ts": "2026-08-28T10:00:00+00:00",
-            "latest_age_days": 38.25,
+            "latest_age_days": 38.26,
             "span_hours": 2109.25
           }
         },
@@ -7501,19 +7522,19 @@
           "by_coin": {
             "DOGE": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 481.55,
+              "hours_since_latest": 481.78,
               "latest_ts": "2026-09-15T14:30:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             },
             "ETH": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 918.05,
+              "hours_since_latest": 918.28,
               "latest_ts": "2026-08-28T10:00:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             },
             "SOL": {
               "fresh_unique_candidates_48h": 0,
-              "hours_since_latest": 1337.3,
+              "hours_since_latest": 1337.53,
               "latest_ts": "2026-08-10T22:45:00+00:00",
               "state": "NO_FRESH_TWO_DAY_FLOW"
             }
@@ -7534,10 +7555,10 @@
         "latest_unique_candidate_ts": "2026-08-10T22:45:00+00:00",
         "observed_candidate_rows_with_replays": 10593,
         "setup_freshness_audit": {
-          "days_since_latest_known_candidate": 20.06,
+          "days_since_latest_known_candidate": 20.07,
           "decision_priority": "block_before_wr_or_rxe_discussion",
           "hours_since_current_run_candidate": null,
-          "hours_since_latest_known_candidate": 481.55,
+          "hours_since_latest_known_candidate": 481.78,
           "interpretation": "strict setup has not refreshed inside 48h; treat positive replay averages as stale cluster evidence",
           "label": "STALE_SETUP_CLUSTER",
           "latest_candidate_ts_current_run": null,
@@ -7552,48 +7573,48 @@
       },
       "diagnostics": {
         "evaluated_windows": 2592,
-        "local_range": 937,
+        "local_range": 934,
         "local_range_and_market_strong_trend": 19,
         "local_range_market_strong_down": 0,
         "local_range_market_strong_down_local_down": 0,
         "local_regime_counts": {
           "DOGE:MIXED": 88,
-          "DOGE:RANGE": 192,
+          "DOGE:RANGE": 191,
           "DOGE:STRONG_TREND": 198,
-          "DOGE:TREND": 386,
+          "DOGE:TREND": 387,
           "ETH:MIXED": 26,
-          "ETH:RANGE": 431,
+          "ETH:RANGE": 430,
           "ETH:STRONG_TREND": 75,
-          "ETH:TREND": 332,
+          "ETH:TREND": 333,
           "SOL:MIXED": 73,
-          "SOL:RANGE": 314,
+          "SOL:RANGE": 313,
           "SOL:STRONG_TREND": 130,
-          "SOL:TREND": 347
+          "SOL:TREND": 348
         },
         "market_dominant_counts": {
-          "DOWN": 1089,
-          "UP": 1503
+          "DOWN": 1092,
+          "UP": 1500
         },
         "market_regime_counts": {
           "MIXED": 36,
-          "RANGE": 1509,
+          "RANGE": 1506,
           "STRONG_TREND": 258,
-          "TREND": 789
+          "TREND": 792
         },
         "market_strong_trend": 258,
         "market_strong_trend_down": 108,
         "setup_funnel_by_coin": {
           "DOGE": {
             "evaluated_windows": 864,
-            "local_range": 192
+            "local_range": 191
           },
           "ETH": {
             "evaluated_windows": 864,
-            "local_range": 431
+            "local_range": 430
           },
           "SOL": {
             "evaluated_windows": 864,
-            "local_range": 314
+            "local_range": 313
           }
         }
       },
@@ -7684,7 +7705,7 @@
         "window": {
           "first_ts": "2026-06-01T12:45:00+00:00",
           "last_ts": "2026-08-28T10:00:00+00:00",
-          "latest_age_days": 38.25,
+          "latest_age_days": 38.26,
           "span_hours": 2109.25
         }
       },
@@ -7696,19 +7717,19 @@
         "by_coin": {
           "DOGE": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 481.55,
+            "hours_since_latest": 481.78,
             "latest_ts": "2026-09-15T14:30:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           },
           "ETH": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 918.05,
+            "hours_since_latest": 918.28,
             "latest_ts": "2026-08-28T10:00:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           },
           "SOL": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 1337.3,
+            "hours_since_latest": 1337.53,
             "latest_ts": "2026-08-10T22:45:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           }
@@ -7804,10 +7825,10 @@
       "sample_tail": [],
       "script": "/home/ubuntu/clawd/scripts/replay_hl_short_aligned_from_binance.py",
       "setup_freshness_audit": {
-        "days_since_latest_known_candidate": 20.06,
+        "days_since_latest_known_candidate": 20.07,
         "decision_priority": "block_before_wr_or_rxe_discussion",
         "hours_since_current_run_candidate": null,
-        "hours_since_latest_known_candidate": 481.55,
+        "hours_since_latest_known_candidate": 481.78,
         "interpretation": "strict setup has not refreshed inside 48h; treat positive replay averages as stale cluster evidence",
         "label": "STALE_SETUP_CLUSTER",
         "latest_candidate_ts_current_run": null,
@@ -7823,13 +7844,6 @@
         "last_nonzero_strict_candidate": null,
         "purpose": "show whether the P3 branch is failing at setup formation before WR/RXE review",
         "recent_tail": [
-          {
-            "candidate_rows": 0,
-            "local_range_windows": 944,
-            "market_down_setup_windows": 0,
-            "strict_candidate_rows": 0,
-            "timestamp": "2026-10-05T14:16:54.819849+00:00"
-          },
           {
             "candidate_rows": 0,
             "local_range_windows": 944,
@@ -7878,6 +7892,13 @@
             "market_down_setup_windows": 0,
             "strict_candidate_rows": 0,
             "timestamp": "2026-10-05T16:02:56.997147+00:00"
+          },
+          {
+            "candidate_rows": 0,
+            "local_range_windows": 934,
+            "market_down_setup_windows": 0,
+            "strict_candidate_rows": 0,
+            "timestamp": "2026-10-05T16:16:49.590304+00:00"
           }
         ],
         "runs_scored": 24,
@@ -7891,10 +7912,10 @@
         "ETH": 900,
         "SOL": 900
       },
-      "timestamp": "2026-10-05T16:02:56.997147+00:00",
+      "timestamp": "2026-10-05T16:16:49.590304+00:00",
       "unique_candidate_ledger_path": "/home/ubuntu/clawd/research/hl_short_aligned_binance_replay_unique_candidates.jsonl",
       "watch_counter": {
-        "days_since_latest_candidate_known": 20.06,
+        "days_since_latest_candidate_known": 20.07,
         "interpretation": "no_setup",
         "latest_candidate_ts_current_run": null,
         "latest_candidate_ts_history": "2026-09-15T14:30:00+00:00",
@@ -7914,10 +7935,10 @@
       "latest_candidate_ts": null,
       "latest_unique_candidate_ts": "2026-08-10T22:45:00+00:00",
       "setup_freshness_audit": {
-        "days_since_latest_known_candidate": 20.06,
+        "days_since_latest_known_candidate": 20.07,
         "decision_priority": "block_before_wr_or_rxe_discussion",
         "hours_since_current_run_candidate": null,
-        "hours_since_latest_known_candidate": 481.55,
+        "hours_since_latest_known_candidate": 481.78,
         "interpretation": "strict setup has not refreshed inside 48h; treat positive replay averages as stale cluster evidence",
         "label": "STALE_SETUP_CLUSTER",
         "latest_candidate_ts_current_run": null,
@@ -7947,13 +7968,6 @@
             "local_range_windows": 944,
             "market_down_setup_windows": 0,
             "strict_candidate_rows": 0,
-            "timestamp": "2026-10-05T14:16:54.819849+00:00"
-          },
-          {
-            "candidate_rows": 0,
-            "local_range_windows": 944,
-            "market_down_setup_windows": 0,
-            "strict_candidate_rows": 0,
             "timestamp": "2026-10-05T14:31:31.629891+00:00"
           },
           {
@@ -7997,6 +8011,13 @@
             "market_down_setup_windows": 0,
             "strict_candidate_rows": 0,
             "timestamp": "2026-10-05T16:02:56.997147+00:00"
+          },
+          {
+            "candidate_rows": 0,
+            "local_range_windows": 934,
+            "market_down_setup_windows": 0,
+            "strict_candidate_rows": 0,
+            "timestamp": "2026-10-05T16:16:49.590304+00:00"
           }
         ],
         "runs_scored": 24,
@@ -8106,7 +8127,7 @@
           "DOGE": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 192,
+            "local_range_windows": 191,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -8115,7 +8136,7 @@
           "ETH": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 431,
+            "local_range_windows": 430,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -8124,7 +8145,7 @@
           "SOL": {
             "dominant_failure_stage": "no_local_range_market_strong_down_setup",
             "evaluated_windows": 864,
-            "local_range_windows": 314,
+            "local_range_windows": 313,
             "market_down_setup_windows": 0,
             "no_setup_windows": true,
             "strict_candidate_rows": 0,
@@ -8226,7 +8247,7 @@
         "window": {
           "first_ts": "2026-06-01T12:45:00+00:00",
           "last_ts": "2026-08-28T10:00:00+00:00",
-          "latest_age_days": 38.25,
+          "latest_age_days": 38.26,
           "span_hours": 2109.25
         }
       },
@@ -8374,9 +8395,9 @@
                 "wr": 66.7
               }
             },
-            "days_since_latest": 20.06,
+            "days_since_latest": 20.07,
             "first_ts": "2026-06-01T07:00:00+00:00",
-            "hours_since_latest": 481.55,
+            "hours_since_latest": 481.78,
             "latest_ts": "2026-09-15T14:30:00+00:00",
             "rows": 29,
             "stale_after_hours": 48.0,
@@ -8487,9 +8508,9 @@
                 "wr": 0.0
               }
             },
-            "days_since_latest": 38.25,
+            "days_since_latest": 38.26,
             "first_ts": "2026-06-01T12:45:00+00:00",
-            "hours_since_latest": 918.05,
+            "hours_since_latest": 918.28,
             "latest_ts": "2026-08-28T10:00:00+00:00",
             "rows": 15,
             "stale_after_hours": 48.0,
@@ -8537,9 +8558,9 @@
                 "wr": 50.0
               }
             },
-            "days_since_latest": 55.72,
+            "days_since_latest": 55.73,
             "first_ts": "2026-06-28T17:45:00+00:00",
-            "hours_since_latest": 1337.3,
+            "hours_since_latest": 1337.53,
             "latest_ts": "2026-08-10T22:45:00+00:00",
             "rows": 5,
             "stale_after_hours": 48.0,
@@ -8576,19 +8597,19 @@
         "by_coin": {
           "DOGE": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 481.55,
+            "hours_since_latest": 481.78,
             "latest_ts": "2026-09-15T14:30:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           },
           "ETH": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 918.05,
+            "hours_since_latest": 918.28,
             "latest_ts": "2026-08-28T10:00:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           },
           "SOL": {
             "fresh_unique_candidates_48h": 0,
-            "hours_since_latest": 1337.3,
+            "hours_since_latest": 1337.53,
             "latest_ts": "2026-08-10T22:45:00+00:00",
             "state": "NO_FRESH_TWO_DAY_FLOW"
           }
@@ -8612,7 +8633,7 @@
         "min_deduped_n": 50
       },
       "watch_counter": {
-        "days_since_latest_candidate_known": 20.06,
+        "days_since_latest_candidate_known": 20.07,
         "interpretation": "no_setup",
         "latest_candidate_ts_current_run": null,
         "latest_candidate_ts_history": "2026-09-15T14:30:00+00:00",
@@ -8809,24 +8830,24 @@
     "max_drawdown": 7.9,
     "hl_bot_running": false,
     "hl_exec_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
-    "hl_exec_balance": 92.160922,
+    "hl_exec_balance": 92.097712,
     "hl_reference_wallet": "0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba",
     "hl_reference_balance": null,
     "hl_wallet_misaligned": false,
-    "hl_wallet_message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$92.16",
+    "hl_wallet_message": "wallet alignment ok: exec 0x4Bf93279060fB5f71D40Ee7165D9f17535b0a2ba=$92.10",
     "hl_directional_owner": "none",
     "hl_directional_log": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_trading.log",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.435825+00:00",
-      "age_minutes": 202215.2,
+      "age_minutes": 202229.1,
       "stale": true
     },
     "hl_live_state": {
       "path": "/home/ubuntu/clawd/hyperliquid-trader/hl_live_state.json",
       "exists": true,
       "last_updated": "2026-05-18T05:47:23.436914+00:00",
-      "age_minutes": 202215.2,
+      "age_minutes": 202229.1,
       "stale": true,
       "owner": "hl_live_trader.py",
       "owner_running": false,
@@ -8846,7 +8867,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/engine_state.json",
       "exists": true,
       "last_updated": "2026-03-23T04:50:54.229963+00:00",
-      "age_minutes": 282911.7,
+      "age_minutes": 282925.6,
       "stale": true,
       "owner": "hl_trading_engine.py",
       "owner_running": false,
@@ -8856,7 +8877,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/funding_arb_state.json",
       "exists": true,
       "last_updated": "2026-03-26T05:41:40.350108+00:00",
-      "age_minutes": 278541.0,
+      "age_minutes": 278554.8,
       "stale": true,
       "owner": "hl_funding_arb.py",
       "owner_running": false,
@@ -8866,7 +8887,7 @@
       "path": "/home/ubuntu/clawd/hyperliquid-trader/momentum_state.json",
       "exists": true,
       "last_updated": "2026-08-28T16:44:39.359904+00:00",
-      "age_minutes": 54678.0,
+      "age_minutes": 54691.8,
       "stale": true,
       "owner": "hl_momentum.py",
       "owner_running": false,
@@ -8880,13 +8901,13 @@
     ],
     "state_health_summary": "stale: hl_live_state (hl_live_trader.py=legacy_inactive), engine_state (hl_trading_engine.py=legacy_inactive), funding_arb_state (hl_funding_arb.py=legacy_inactive), momentum_state (hl_momentum.py=legacy_inactive)"
   },
-  "worklog": "# brainTrade Work Log\n\n## 2026-10-05 16:01 UTC \u2014 [Pillar 4] Fast downtrend and expanding compression retain defensive block\n\n**Fresh P4 pair and structure:** Alpha **15:59:00 UTC** and public BTC depth **15:59:08 UTC** are eight seconds apart. Slow regime is RANGE/TRADE, but fast regime is TREND/DOWN, **not tradeable**, with volatility ratio **1.09x**; PM risk is **high**, classifier `trend_risk_off/defensive`, compression **expanding 1.3594**, and liquidation **neutral**. Structural clearance rises **2/11\u21923/11** only because fast volatility cools below 1.8x. High-risk streak is **3**, friendly streak **0**, and classifier churn **15 transitions/48h** versus registered maximum **3**. Earliest churn-only clearance without new transitions is **2026-10-07 08:44 UTC**, not an execution schedule.\n\n**Depth and forward calibration:** BTC depth flips from first BID_HEAVY to **BALANCED**, mean imbalance **+0.135364 <0.15**, with mixed 5/10/25-bp signs and directional streak **1**. Regime/depth alignment remains unresolved (**3 bearish / 0 bullish / 3 neutral**); there is no liquidation confirmation. The **170 settled directional buckets** show signed 5m mean **\u22120.003520%**, 95% CI **[\u22120.022937,+0.016054]%**, and 15m mean **+0.000204%**, CI **[\u22120.029464,+0.029613]%**. Both cross zero; this balanced print is not a directional observation. The prior BID_HEAVY print\u2019s 60-minute BTC mark falls **0.4276%**, context only, not a qualifying repeat signal.\n\n**Release/reset gates and decision:** Frozen **19-event** low-compression third-print cohort has **negative leave-best-out after 5-bp cost** at 30m (**\u22120.023267%**) and 60m (**\u22120.021556%**). The **30-reset** cohort averages **\u22120.0978%** at 60m. Active-trend release has only **2 settled/1 pending** events and is underpowered. Compression-persistence helper returns `validation_pass=false`: it selected old alpha rows with depth gaps over 2,000 minutes, so it is **excluded**. Frozen structure, depth persistence, calibration, release, and reset gates fail; **`BLOCK_LIVE`**, zero live/shadow alpha weight, no trade or retired-bot restart. Next evidence requires all 11 structural gates, sustained same-sign depth above 0.15, liquidation alignment, date-robust positive directional calibration, and positive after-cost leave-best-out release/reset outcomes.\n\n**Immutable evidence (SHA-256):** `alpha-signals.json` `0afa25e63843f7f095ebb49892fd709e7af0e88cdf2206f21aad914d9b371419`; `p4-orderbook-imbalance-context-latest.json` `0d0762ee7c4549556bd8f350174245a76bd8b84cf212f856d38f9bf37af19aa0`; `p4-alpha-transition-stability.json` `89a68a1364a04aba8d53a612bf3d2e5104ac69dcd981839edc4ce6c2b1a046d9`; `p4-transition-clearance-schedule.json` `01e49a09c696da78393343d37c1ff77a71411831cae92bae0599cfc540e3a0b2`; `p4-regime-depth-consistency.json` `2c3182ab08d40ff6e7d77f495362cd824fc2d8dc48b1ce10f11074f721224bd2`; `p4-directional-sign-calibration.json` `0bb512a2f09345eaa96b322ddbc9dd558bdf9dbb21bca80a105301d58d0cba98`; `p4-low-compression",
+  "worklog": "# brainTrade Work Log\n\n## 2026-10-05 16:15 UTC \u2014 [Pillar 1] Two short-to-long flips lift net BTC, but concentration and forward gates block copy weight\n\n**Fresh fixed-universe scan and attribution:** Public Hyperliquid top-20 scan at **16:14:12 UTC** fetched **20/20** accounts, **59.85 minutes** after the prior scan (within 120-minute guard). BTC is **3 longs / 2 shorts**, **$41.142M** long, **$10.058M** short, **+$31.084M net** versus +$26.341M prior. The **+$4.743M** net change reconciles entirely to matched wallets; **zero** entering/exiting-account membership effect. f5d8 flips short\u2192long (**+$3.395M signed**), and beatmaker flips short\u2192long (**+$2.017M**); ecb6 (**\u2212$0.498M**) and fc66 (**\u2212$0.257M**) add shorts. Absolute long notional rises about **$2.503M**, while absolute shorts fall about **$2.240M** despite those two short adds. The static 3L/2S count is not broad fresh long conviction.\n\n**Breadth, concentration, and validation:** Machi holds **94.12%** of BTC long notional; the full-universe +$31.084M net turns roughly **\u2212$7.640M** excluding that anchor, a concentration sensitivity rather than a substitute universe. Short notional is **84.97% ecb6 / 15.03% fc66**, effective short breadth **1.34**. The structured bearish audit returns `validation_pass=false`: the full universe is net long, and two independent shorts above 20% share are absent. Its bearish formation claim is excluded. Registered denominator guard finds **no new candidate**, no absolute-short-add confirmation (absolute shorts fell **$2.240M**), and no valid bearish formation. Source-reliability and walk-forward hit weights fail their combined stability/accuracy improvement gates, so no adaptive weight change.\n\n**Forward evidence and decision:** No discrete event type clears the frozen **n\u226520, dates\u226510, positive-median and strictly-positive date-bootstrap lower-bound** gate. The separately frozen \u2265$10M new-entry cohort remains **4 observations / 4 dates**, **\u22120.23784%** mean with date-bootstrap CI **[\u22120.443736,+0.026797]%**, `VALID` ledger but not review-ready. Static net long, flips, and an anchor-excluded net short cannot override incomplete breadth, persistence, cross-asset and forward evidence. **`ZERO_DIRECTIONAL_WEIGHT` / zero live and shadow copy execution weight; no trade or retired-bot restart.** Require independent material participation, sustained cadence-valid absolute flow, cross-asset confirmation, and date-robust positive event expectancy before weight review.\n\n**Immutable evidence (SHA-256):** `leaderboard-btc-legs-history.jsonl` `821fbb789ebe688eff6b8478586b6835b657e78feec180424060b4a74a982d08`; `p1-latest-btc-net-change-attribution.json` `42c923f8c58b3fa934eaba366cafd099cc4a369e2891beff9e5a873fb1006cf6`; `p1-notional-breadth-latest.json` `1b98b445b4d4e1be2ba29cb056460c5decdc0f8adcc7f9ccb907df065ac9f565`; `p1-concentration-adjusted-breadth-latest.json` `3e7b0c10271093f61e4bc83ae2f569254036ab2bd3dc538c602df305f6ec573b`; `p1-breadth-denominator-guard.json` `fe",
   "pillar4": {
     "completion": 45,
     "data_sources": 7,
     "signals_generated": 2,
     "research_files": 1535,
-    "snapshot_age_minutes": 3.6,
+    "snapshot_age_minutes": 17.4,
     "btc_regime_classifier": {
       "state": "trend_risk_off",
       "score": -3,
@@ -9347,7 +9368,7 @@
       "snapshots_since_last_expansion": 0,
       "source_freshness": {
         "alpha_snapshot": {
-          "age_minutes": 3.6,
+          "age_minutes": 17.5,
           "fresh": true,
           "source": "alpha-signals",
           "stale_after_minutes": 180,
@@ -9385,7 +9406,7 @@
           "total_count": 4
         }
       },
-      "timestamp": "2026-10-05T16:02:37.473609+00:00",
+      "timestamp": "2026-10-05T16:16:27.578023+00:00",
       "transition_state_changes_48h": 15
     },
     "pm_risk_context": {
@@ -9492,10 +9513,8 @@
         "excess_60m_wr_decay"
       ],
       "local_range_trend_preferred_horizon": "30m",
-      "copy_gate_posture": "DEFENSIVE",
-      "copy_gate_blockers": [
-        "sol_hard_defensive"
-      ],
+      "copy_gate_posture": "MIXED_OR_SUPPORTIVE",
+      "copy_gate_blockers": [],
       "transition_stability_recommendation": "BLOCK_LIVE",
       "transition_stability_blockers": [
         "fast_not_range_tradeable",
@@ -9895,7 +9914,7 @@
       },
       "transition_source_freshness": {
         "alpha_snapshot": {
-          "age_minutes": 3.6,
+          "age_minutes": 17.5,
           "fresh": true,
           "source": "alpha-signals",
           "stale_after_minutes": 180,
